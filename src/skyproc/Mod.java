@@ -21,9 +21,10 @@ import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 
 /**
- * A mod is a collection of GRUPs which contain records.
- * Mods are used to create patches by creating an empty one, adding records,
- * and then calling its export function.
+ * A mod is a collection of GRUPs which contain records. Mods are used to create
+ * patches by creating an empty one, adding records, and then calling its export
+ * function.
+ *
  * @author Justin Swanson
  */
 public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
@@ -50,6 +51,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      * Creates an empty Mod with the name and master flag set to match info.
+     *
      * @see ModListing
      * @param info ModListing object containing name and master flag.
      */
@@ -91,8 +93,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      * Creates an empty Mod with the name and master flag set to parameters.
+     *
      * @param name String to set the Mod name to.
-     * @param master Sets the Mod's master flag (which appends ".esp" and ".esm" to the modname as appropriate)
+     * @param master Sets the Mod's master flag (which appends ".esp" and ".esm"
+     * to the modname as appropriate)
      */
     public Mod(String name, Boolean master) {
         this(new ModListing(name, master));
@@ -104,7 +108,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      * Returns the ModListing associated with the nth master of this mod.
-     * Changing values on the returned ModListing will affect the mod it is tied to.
+     * Changing values on the returned ModListing will affect the mod it is tied
+     * to.
+     *
      * @param i The index of the master to return.
      * @return The ModListing object associated with the Nth master
      */
@@ -145,20 +151,24 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
         for (ModListing m : in.header.masters) {
             header.masters.add(m);
         }
-        header.masters.add(in.modInfo);
+        if (!in.equals(SPGlobal.getGlobalPatch())) {
+            header.masters.add(in.modInfo);
+        }
     }
 
     /**
      * Makes a copy of the Major Record and loads it into the mod, giving a new
-     * Major Record a FormID originating from the mod.
-     * This function also automatically adds the new copied record to
-     * the mod.  This makes two separate records independent of each other.<br><br>
+     * Major Record a FormID originating from the mod. This function also
+     * automatically adds the new copied record to the mod. This makes two
+     * separate records independent of each other.<br><br>
      *
-     * This function requires there to be a GlobalDB set, as it adds the necessary masters from it.<br><br>
+     * This function requires there to be a GlobalDB set, as it adds the
+     * necessary masters from it.<br><br>
      *
-     * NOTE: The record returned can only be determined by the compiler to be a Major Record.
-     * You must cast it yourself to be the correct type of major record.<br>
-     * ex.  NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
+     * NOTE: The record returned can only be determined by the compiler to be a
+     * Major Record. You must cast it yourself to be the correct type of major
+     * record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
+     *
      * @param m Major Record to make a copy of and add to the mod.
      * @return The copied record.
      */
@@ -170,7 +180,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * This function requires there to be a GlobalDB set, as it adds the necessary masters from it.<br><br>
+     * This function requires there to be a GlobalDB set, as it adds the
+     * necessary masters from it.<br><br>
      *
      * @param g GRUP to make a copy of.
      * @return ArrayList of duplicated Major Records.
@@ -185,7 +196,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      *
-     * This function requires there to be a GlobalDB set, as it adds the necessary masters from it.
+     * This function requires there to be a GlobalDB set, as it adds the
+     * necessary masters from it.
+     *
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
@@ -262,9 +275,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Returns the ModListings of all the masters of the mod.
-     * Note that changing any ModListings will have an effect on their
-     * associated mods.
+     * Returns the ModListings of all the masters of the mod. Note that changing
+     * any ModListings will have an effect on their associated mods.
+     *
      * @see ModListing
      * @return The ModListings of all the masters of the mod.
      */
@@ -277,7 +290,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Clears all GRUPS in the Mod except for the GRUPs specified in the parameter.
+     * Clears all GRUPS in the Mod except for the GRUPs specified in the
+     * parameter.
+     *
      * @param grup_type Any amount of GRUPs to keep, separated by commas
      */
     public void keep(GRUP_TYPE... grup_type) {
@@ -293,12 +308,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * This function will merge all GRUPs from the rhs mod into the calling mod.<br>
-     * Any records already in the mod will be overwritten by the version from rhs.<br><br>
-     * NOTE:  Merging will NOT add records from a mod with a matching ModListing.  This
-     * is to prevent patches taking in information from old versions of themselves.
+     * This function will merge all GRUPs from the rhs mod into the calling
+     * mod.<br> Any records already in the mod will be overwritten by the
+     * version from rhs.<br><br> NOTE: Merging will NOT add records from a mod
+     * with a matching ModListing. This is to prevent patches taking in
+     * information from old versions of themselves.
+     *
      * @param rhs Mod whose GRUPs to add in.
-     * @param grup_types Any amount of GRUPs to merge in, separated by commas.  Leave this empty if you want all GRUPs merged.
+     * @param grup_types Any amount of GRUPs to merge in, separated by commas.
+     * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Mod rhs, GRUP_TYPE... grup_types) {
         if (grup_types.length == 0) {
@@ -319,12 +337,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Iterates through each mod in the ArrayList, in order, and merges them in one by one.<br>
-     * This means any conflicting records within the list will end up with the last mod's version.<br><br>
-     * NOTE:  Merging will NOT add records from a mod with a matching ModListing.  This
-     * is to prevent patches taking in information from old versions of themselves.
+     * Iterates through each mod in the ArrayList, in order, and merges them in
+     * one by one.<br> This means any conflicting records within the list will
+     * end up with the last mod's version.<br><br> NOTE: Merging will NOT add
+     * records from a mod with a matching ModListing. This is to prevent patches
+     * taking in information from old versions of themselves.
+     *
      * @param in ArrayList of mods to merge in.
-     * @param grup_types Any amount of GRUPs to merge in, separated by commas.  Leave this empty if you want all GRUPs merged.
+     * @param grup_types Any amount of GRUPs to merge in, separated by commas.
+     * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(ArrayList<Mod> in, GRUP_TYPE... grup_types) {
         for (Mod m : in) {
@@ -333,13 +354,16 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * NOTE:  To sort the mods in load order, use a TreeSet.<br>
-     * Iterates through each mod in the Set and merges them in one by one.<br>
-     * This means any conflicting records within the set will end up with the last mod's version.<br><br>
-     * NOTE:  Merging will NOT add records from a mod with a matching ModListing.  This
-     * is to prevent patches taking in information from old versions of themselves.
+     * NOTE: To sort the mods in load order, use a TreeSet.<br> Iterates through
+     * each mod in the Set and merges them in one by one.<br> This means any
+     * conflicting records within the set will end up with the last mod's
+     * version.<br><br> NOTE: Merging will NOT add records from a mod with a
+     * matching ModListing. This is to prevent patches taking in information
+     * from old versions of themselves.
+     *
      * @param in Set of mods to merge in.
-     * @param grup_types Any amount of GRUPs to merge in, separated by commas.  Leave this empty if you want all GRUPs merged.
+     * @param grup_types Any amount of GRUPs to merge in, separated by commas.
+     * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Collection<Mod> in, GRUP_TYPE... grup_types) {
         for (Mod m : in) {
@@ -348,12 +372,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Iterates through each mod in the SPDatabase, in load order, and merges them in one by one.<br>
-     * This means any conflicting records within the database will end up with the last mod's version.<br><br>
-     * NOTE:  Merging will NOT add records from a mod with a matching ModListing.  This
-     * is to prevent patches taking in information from old versions of themselves.
+     * Iterates through each mod in the SPDatabase, in load order, and merges
+     * them in one by one.<br> This means any conflicting records within the
+     * database will end up with the last mod's version.<br><br> NOTE: Merging
+     * will NOT add records from a mod with a matching ModListing. This is to
+     * prevent patches taking in information from old versions of themselves.
+     *
      * @param db The SPDatabase to merge in.
-     * @param grup_types Any amount of GRUPs to merge in, separated by commas.  Leave this empty if you want all GRUPs merged.
+     * @param grup_types Any amount of GRUPs to merge in, separated by commas.
+     * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(SPDatabase db, GRUP_TYPE... grup_types) {
         addAsOverrides(db.modLookup.values(), grup_types);
@@ -387,16 +414,19 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      * Exports the mod to the path designated by SPGlobal.pathToData.
+     *
      * @see SPGlobal
-     * @throws IOException If there are any unforseen disk errors exporting the data.
+     * @throws IOException If there are any unforseen disk errors exporting the
+     * data.
      */
     public void export() throws IOException {
         export(SPGlobal.pathToData);
     }
 
     /**
-     * Exports the mod to the path given by the parameter.
-     * (You shouldn't include the mod name in the string)
+     * Exports the mod to the path given by the parameter. (You shouldn't
+     * include the mod name in the string)
+     *
      * @param path
      * @throws IOException
      */
@@ -474,6 +504,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     /**
      * Sets the author name of the mod.
+     *
      * @param in Your name here.
      */
     public void setAuthor(String in) {
@@ -489,9 +520,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Returns whether the given flag is on or off. <br> <br>
-     * An example use of this function is as follows: <br>
-     * boolean isaMasterMod = myMod.isFlag(Mod_Flags.MASTER);
+     * Returns whether the given flag is on or off. <br> <br> An example use of
+     * this function is as follows: <br> boolean isaMasterMod =
+     * myMod.isFlag(Mod_Flags.MASTER);
+     *
      * @see Mod_Flags
      * @param flag Mod_Flags enum to check.
      * @return True if the given flag is on in the mod.
@@ -501,9 +533,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Sets the given flag in the mod. <br> <br>
-     * An example of using this function to set its master flag is as follows: <br>
+     * Sets the given flag in the mod. <br> <br> An example of using this
+     * function to set its master flag is as follows: <br>
      * myMod.setFlag(Mod_Flags.MASTER, true);
+     *
      * @see Mod_Flags
      * @param flag Mod_Flags enum to set.
      * @param on What to set the flag to.
@@ -641,9 +674,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * Returns the datestamp of when the mod was last modified,
-     * which also is used for load order. A larger datestamp means later
-     * in load order.
+     * Returns the datestamp of when the mod was last modified, which also is
+     * used for load order. A larger datestamp means later in load order.
+     *
      * @return The datestamp of when the mod was last modified.
      */
     public long getDate() {
@@ -687,13 +720,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * A compare function used for sorting Mods in load order. <br>
-     * .esp > .esm <br>
-     * later date > earlier date <br>
+     * A compare function used for sorting Mods in load order. <br> .esp > .esm
+     * <br> later date > earlier date <br>
+     *
      * @param o Another Mod object
-     * @return 1: Mod is later in the load order <br>
-     * -1: Mod is earlier in the load order <br>
-     * 0: Mod is equal in load order (should not happen)
+     * @return 1: Mod is later in the load order <br> -1: Mod is earlier in the
+     * load order <br> 0: Mod is equal in load order (should not happen)
      */
     @Override
     public int compareTo(Object o) {
@@ -717,10 +749,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * An equals function that compares only mod name.
-     * It does NOT compare mod contents.
+     * An equals function that compares only mod name. It does NOT compare mod
+     * contents.
+     *
      * @param obj
-     * @return True if obj is a mod with the same name and suffix (Skyrim.esm == Skyrim.esm)
+     * @return True if obj is a mod with the same name and suffix (Skyrim.esm ==
+     * Skyrim.esm)
      */
     @Override
     public boolean equals(Object obj) {
@@ -738,7 +772,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * A custom hash function that takes the mod header into account for better hashing.
+     * A custom hash function that takes the mod header into account for better
+     * hashing.
+     *
      * @return
      */
     @Override
@@ -946,18 +982,18 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public enum Mod_Flags {
 
         /**
-         * Master flag determines whether a mod is labeled
-         * as a master plugin and receives a ".esm" suffix.
+         * Master flag determines whether a mod is labeled as a master plugin
+         * and receives a ".esm" suffix.
          */
         MASTER(0),
         /**
-         * String Tabled flag determines whether names and descriptions are stored
-         * inside the mod itself, or in external STRINGS files. <br><br>
+         * String Tabled flag determines whether names and descriptions are
+         * stored inside the mod itself, or in external STRINGS files. <br><br>
          *
-         * In general, it is suggested to disable this flag for most patches, as the only benefit of
-         * external STRINGS files is easy multi-language support.  Skyproc can offer
-         * this same multilanguage support without external STRINGS files.  See SPGlobal.language for
-         * more information.
+         * In general, it is suggested to disable this flag for most patches, as
+         * the only benefit of external STRINGS files is easy multi-language
+         * support. Skyproc can offer this same multilanguage support without
+         * external STRINGS files. See SPGlobal.language for more information.
          *
          * @see SPGlobal
          */
