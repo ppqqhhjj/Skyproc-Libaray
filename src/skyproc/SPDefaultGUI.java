@@ -9,11 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import levgui.ImagePane;
-import levgui.LLabel;
-import levgui.LTextPane;
-import levgui.resources.LFonts;
-import levgui.resources.LImages;
+import lev.gui.ImagePane;
+import lev.gui.LLabel;
+import lev.gui.LTextPane;
+import lev.gui.resources.LFonts;
+import lev.gui.resources.LImages;
 
 /**
  *

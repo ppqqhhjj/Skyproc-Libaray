@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package levgui.resources;
+package lev.gui.resources;
 
 import java.awt.Font;
 import java.awt.FontFormatException;

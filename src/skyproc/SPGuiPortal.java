@@ -1,6 +1,6 @@
 package skyproc;
 
-import levgui.ProgressBar;
+import lev.gui.ProgressBar;
 
 /**
  * A boundary class that will eventually offer an interface to the the LevGUI library.
