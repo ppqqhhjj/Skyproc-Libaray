@@ -164,7 +164,7 @@ public class Ln {
     }
 
     public static void makeDirs(File file) {
-	makeDirs(file.getPath());
+        makeDirs(file.getPath());
     }
 
     public static void makeDirs(String file) {
@@ -183,39 +183,26 @@ public class Ln {
         }
     }
 
-    public static void moveFile(File src, File dest, boolean eraseOldDirs) {
-	makeDirs(dest);
-	src.renameTo(dest);
-	if (eraseOldDirs) {
-
-	}
+    public static File moveFile(File src, File dest, boolean eraseOldDirs) {
+        makeDirs(dest);
+        src.renameTo(dest);
+        if (eraseOldDirs) {
+        }
+        return dest;
     }
 
-    public static ArrayList<File> generateFileList(File src, int minDepth, int maxDepth) {
+    public static ArrayList<File> generateFileList(File src, int minDepth, int maxDepth, boolean addDirs) {
         ArrayList<File> out = new ArrayList<File>();
-//	if (avPackages.isDirectory()) {
-//	    for (File packageFolder : avPackages.listFiles()) {
-//		if (packageFolder.isDirectory()) { // Bellyaches Animals
-//		    for (File variantSet : packageFolder.listFiles()) {
-//			if (variantSet.isDirectory()) { // Horker
-//			    for (File variant : variantSet.listFiles()) {
-//				if (variant.isDirectory()) {
-//				    for (File file : variant.listFiles()) {
-//					if (file.isFile()) {
-//					    if (file.getPath().endsWith(".dds")) {
-//						Ln.moveFile(file, new File(file.getPath().substring(0, 6) + "textures\\" + file.getPath().substring(6)), false);
-//					    } else if (file.getPath().endsWith(".nif")) {
-//						Ln.moveFile(file, new File(file.getPath().substring(0, 6) + "meshes\\" + file.getPath().substring(6)), false);
-//					    }
-//					}
-//				    }
-//				}
-//			    }
-//			}
-//		    }
-//		}
-//	    }
-//	}
+        if (src.isDirectory()) {
+            for (File f : src.listFiles()) {
+                if (minDepth <= 0 && (f.isFile() || addDirs)) {
+                    out.add(f);
+                }
+                if (f.isDirectory() && maxDepth != 0) {
+                    out.addAll(generateFileList(f, minDepth - 1, maxDepth - 1, addDirs));
+                }
+            }
+        }
         return out;
     }
 
@@ -233,6 +220,29 @@ public class Ln {
             output = output + (char) input[i];
         }
         return output;
+    }
+
+    public static boolean isFileCaseInsensitive(File test) {
+        return !getFilepathCaseInsensitive(test).getPath().equals("");
+    }
+
+    public static File getFilepathCaseInsensitive(File test) {
+        File dir = null;
+        int index = test.getPath().lastIndexOf('\\');
+        if (index != -1) {
+            dir = new File(test.getPath().substring(0, index));
+        } else {
+            dir = new File("");
+        }
+
+        if (dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                if (test.getName().toUpperCase().equals(file.getName().toUpperCase())) {
+                    return file;
+                }
+            }
+        }
+        return new File("");
     }
 
     public static int arrayToInt(int[] input) {
@@ -262,8 +272,6 @@ public class Ln {
         }
         return output;
     }
-
-
 
     public static String arrayPrintInts(int[] input) {
         String output = "";
@@ -340,10 +348,11 @@ public class Ln {
 
         String[] split = input.split(remove);
 
-        /*Debug.GUIdebug.w("remove", "input is ", input, " remove is ", remove);
-        for (String s: split) {
-        Debug.GUIdebug.w("remove", "s is ", s);
-        } */
+        /*
+         * Debug.GUIdebug.w("remove", "input is ", input, " remove is ",
+         * remove); for (String s: split) { Debug.GUIdebug.w("remove", "s is ",
+         * s); }
+         */
 
         String output = "";
         for (String s : split) {
@@ -469,14 +478,14 @@ public class Ln {
 
         //Load and convert
         for (int i = 0; i < hex.length(); i = i + 2) {
-            tempOutput[counter++] = (byte)(int)Integer.valueOf(hex.substring(i, i + 2), 16);
+            tempOutput[counter++] = (byte) (int) Integer.valueOf(hex.substring(i, i + 2), 16);
         }
         byte[] output = new byte[counter];
         System.arraycopy(tempOutput, 0, output, 0, counter);
         return output;
     }
 
-    public static int bToUInt (byte in) {
+    public static int bToUInt(byte in) {
         return 0x000000FF & (int) in;
     }
 
@@ -606,6 +615,7 @@ public class Ln {
     /**
      * A simple comparison function that compares two files byte by byte, and
      * reports the positions of any differences (eg. file1[i] != file2[i]).
+     *
      * @param testFile File to test to keyFile.
      * @param keyFile Validation file to be used as a desired example.
      * @param numErrorsToPrint Number of differences to print.

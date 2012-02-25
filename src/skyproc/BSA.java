@@ -7,10 +7,7 @@ package skyproc;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
@@ -26,6 +23,7 @@ import skyproc.exceptions.BadParameter;
  */
 public class BSA {
 
+    public static ArrayList<BSA> BSAs = new ArrayList<BSA>();
     private static String header = "BSA";
     String filePath;
     int offset;
@@ -38,7 +36,7 @@ public class BSA {
     Map<String, Map<String, BSAFileRef>> folders;
     LFileChannel in = new LFileChannel();
 
-    public BSA(String filePath) throws FileNotFoundException, IOException, BadParameter {
+    BSA(String filePath, boolean load) throws FileNotFoundException, IOException, BadParameter {
         this.filePath = filePath;
         in.openFile(filePath);
         if (!in.readInString(0, 3).equals("BSA") || in.readInInt(1, 4) != 104) {
@@ -60,7 +58,13 @@ public class BSA {
             SPGlobal.log(header, "totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
             SPGlobal.log(header, "fileFlags: " + fileFlags.toString());
         }
-        loadFolders();
+        if (load) {
+            loadFolders();
+        }
+    }
+
+    public BSA(String filePath) throws FileNotFoundException, IOException, BadParameter {
+        this(filePath, true);
     }
 
     final void loadFolders() throws IOException {
@@ -86,11 +90,11 @@ public class BSA {
             for (int j = 0; j < count; j++) {
                 BSAFileRef f = new BSAFileRef();
                 f.size = in.readInInt(8, 4); // Skip Hash
-                f.offset = in.readInLong(0, 4);
+                f.dataOffset = in.readInLong(0, 4);
                 fileName = fileNames.extractString();
                 files.put(fileName.toUpperCase(), f);
                 if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-                    SPGlobal.log(header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.offset));
+                    SPGlobal.log(header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
                     fileCounter++;
                 }
             }
@@ -101,12 +105,56 @@ public class BSA {
     }
 
     public LShrinkArray getFile(String filePath) throws IOException, DataFormatException {
-        filePath = filePath.toUpperCase();
         BSAFileRef ref;
         if ((ref = getFileRef(filePath)) != null) {
-            return extractFile(ref.offset, ref.size);
+            in.pos(ref.dataOffset);
+            LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0,  ref.size));
+            if (archiveFlags.is(2)) {
+                out.correctForCompression();
+            }
+            return out;
         }
         return new LShrinkArray(new byte[0]);
+    }
+
+    public String getFilename(String filePath) throws IOException {
+        BSAFileRef ref;
+        if ((ref = getFileRef(filePath)) != null) {
+            in.pos(ref.nameOffset);
+            return in.readString();
+        }
+        return "";
+    }
+
+    public static String getUsedFilename(String filePath) throws IOException {
+        String out;
+        File file = new File(filePath);
+        if (!(file = Ln.getFilepathCaseInsensitive(file)).getPath().equals("")) {
+            return file.getName();
+        }
+        for (BSA b : BSAs) {
+            out = b.getFilename(filePath);
+            if (!out.equals("")) {
+                return out;
+            }
+        }
+        return "";
+    }
+
+    static public LShrinkArray getUsedFile(String filePath) throws IOException, DataFormatException {
+        File outsideBSA = new File(SPGlobal.pathToData + filePath);
+        if (outsideBSA.isFile()) {
+            SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from outside BSA.");
+            return new LShrinkArray(outsideBSA);
+        } else {
+            for (BSA b : BSAs) {
+                if (b.contains(BSA.FileType.NIF) && b.hasFile(filePath)) {
+                    SPGlobal.log(header, "  Nif " + filePath + " loaded from BSA " + b.getFilePath());
+                    return b.getFile(filePath);
+                }
+            }
+        }
+        return null;
     }
 
     BSAFileRef getFileRef(String filePath) {
@@ -127,7 +175,7 @@ public class BSA {
         return getFileRef(filePath) != null;
     }
 
-    public String getFilePath () {
+    public String getFilePath() {
         return filePath.substring(0, filePath.length());
     }
 
@@ -140,12 +188,12 @@ public class BSA {
         }
     }
 
-    public Set<String> getFolders () {
+    public Set<String> getFolders() {
         return folders.keySet();
     }
 
-    public Map<String, ArrayList<String>> getFiles () {
-        Map<String, ArrayList<String>> out = new HashMap<String, ArrayList<String>> (folders.size());
+    public Map<String, ArrayList<String>> getFiles() {
+        Map<String, ArrayList<String>> out = new HashMap<String, ArrayList<String>>(folders.size());
         for (String folder : folders.keySet()) {
             out.put(folder, new ArrayList<String>(folders.get(folder).values().size()));
             for (String file : folders.get(folder).keySet()) {
@@ -155,27 +203,31 @@ public class BSA {
         return out;
     }
 
-    LShrinkArray extractFile(long offset, int size) throws IOException, DataFormatException {
-        in.pos(offset);
-        LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0, size));
-        if (archiveFlags.is(2)) {
-            out.correctForCompression();
-        }
-        return out;
-    }
-
     public boolean contains(FileType fileType) {
         return fileFlags.is(fileType.ordinal());
     }
 
-    public static ArrayList<BSA> loadInBSAs(FileType ... types) {
+    public boolean containsAny(FileType[] fileTypes) {
+        for (FileType f : fileTypes) {
+            if (contains(f)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ArrayList<BSA> loadInBSAs(FileType... types) {
         File data = new File(SPGlobal.pathToData);
         ArrayList<BSA> out = new ArrayList<BSA>();
         for (File f : data.listFiles()) {
             if (f.isFile() && f.getPath().toUpperCase().endsWith(".BSA")) {
                 try {
-                    out.add(new BSA(f.getPath()));
-                    SPGlobal.log(header, "Loaded BSA: " + f.getPath());
+                    BSA tmp = new BSA(f.getPath(), false);
+                    if (tmp.containsAny(types)) {
+                        tmp.loadFolders();
+                        out.add(tmp);
+                        SPGlobal.log(header, "Loaded BSA: " + f.getPath());
+                    }
                 } catch (Exception e) {
                     SPGlobal.logException(e);
                     SPGlobal.logError(header, "Error loading in BSA file: " + f.getPath());
@@ -188,10 +240,12 @@ public class BSA {
     class BSAFileRef {
 
         int size;
-        long offset;
+        long nameOffset;
+        long dataOffset;
     }
 
     public enum FileType {
+
         NIF,
         DDS,
         XML,

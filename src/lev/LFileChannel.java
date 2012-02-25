@@ -73,6 +73,22 @@ public class LFileChannel {
         return buf;
     }
 
+    public String readString() throws IOException {
+        return Ln.arrayToString(readUntil(0));
+    }
+
+    public byte[] readUntil(int delimiter) throws IOException {
+        byte[] buffer = new byte[1000];
+        int counter = 0;
+        int in;
+        while ((in = read()) != 0) {
+            buffer[counter++] = (byte) in;
+        }
+        byte[] out = new byte[counter];
+        System.arraycopy(buffer, 0, out, 0, counter);
+        return out;
+    }
+
     final public void offset(final int skip) throws IOException {
         if (returnBack != 0) {
             returnBack += skip;
