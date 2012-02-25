@@ -1,0 +1,629 @@
+package skyproc;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import lev.LFileChannel;
+import lev.Ln;
+import lev.LShrinkArray;
+import skyproc.MajorRecord.Mask;
+import skyproc.exceptions.BadMod;
+import skyproc.SubStringPointer.Files;
+
+/**
+ * Used to import data from files into Mod objects that are ready to be
+ * manipulated/exported.
+ * @author Justin Swanson
+ */
+public class SPImporter {
+
+    private static String header = "Importer";
+//    ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
+    Map<Type, Mask> masks = new EnumMap<Type, Mask>(Type.class);
+
+    /**
+     * A placeholder constructor not meant to be called.<br>
+     * An SPImporter object should only be instantiated as an extended class that overrides
+     * the importControl() function.
+     */
+    public SPImporter() {
+    }
+
+    /**
+     * This function can be used in conjunction with runBackgroundImport() to create
+     * import functionality in a separate thread, as to not halt GUI response while importing.<br>
+     * Override this function in an extended SPImporter class,
+     * and add custom code to it for use with runBackgroundImport().
+     */
+    public void importControl() {
+
+    }
+
+    /**
+     * Creates a new thread and runs any code in importControl in the background.
+     * This is useful for GUI programs where you don't want the program to freeze while
+     * it processes. <br>
+     * <br>
+     * NOTE:  You MUST override importControl() with custom code telling the program
+     * what you want it to do in the background.
+     */
+    public void runBackgroundImport() {
+        (new Thread(new StartImportThread())).start();
+    }
+
+    private class StartImportThread implements Runnable {
+
+        @Override
+        public void run() {
+            importControl();
+        }
+
+        public void main(String args[]) {
+            (new Thread(new StartImportThread())).start();
+        }
+    }
+
+    /**
+     * Adds the specified mask to SPImporter as a filter.<br><br>
+     * Once the importer has imported every record type allowed in the mask, it will
+     * move on to the next record in the GRUP.
+     * @param m Mask filter to add to the importer
+     */
+    public void addMask(Mask m) {
+	masks.put(m.type, m);
+    }
+
+    /**
+     * Loads in plugins.txt and reads in the mods the user has active and returns
+     * an ArrayList of the ModListings in load order.  If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br>
+     * If any mods on the list are not present in the data folder, they will be skipped.<br><br>
+     * If the program cannot locate plugins.txt, it will prompt the user to locate
+     * the file themselves.  Once they do, it will create a file and use that as a
+     * reference for future patch generations.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pluginsListPath<br>
+     * - pathToData<br>
+     * - pluginListBackupPath
+     * @see SPGlobal
+     * @return An ArrayList of ModListings of all active mods present in the data folder.
+     * @throws java.io.IOException
+     */
+    static public ArrayList<ModListing> getActiveModList() throws java.io.IOException {
+        SPGlobal.sync(true);
+        SPGlobal.newSyncLog("Get Active Mod List.txt");
+        String header = "IMPORT MODS";
+        BufferedReader ModFile;
+        String dataFolder = System.getenv("LOCALAPPDATA");
+
+        try {
+            // If XP
+            if (dataFolder == null) {
+                SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
+                dataFolder = System.getenv("APPDATA");
+
+                // If Messed Up
+                if (dataFolder == null) {
+                    SPGlobal.logError(header, "Can't locate local app data folder.");
+                    dataFolder = manualFindList();
+                } else {
+
+                    SPGlobal.logSync(header, "APPDATA returned: ", dataFolder, "     Shaving off the \\Application Data.");
+                    dataFolder = dataFolder.substring(0, dataFolder.indexOf("\\Application Data"));
+                    SPGlobal.logSync(header, "path now reads: ", dataFolder, "     appending \\Local Settings\\Application Data");
+                    dataFolder = dataFolder + "\\Local Settings\\Application Data";
+                    SPGlobal.logSync(header, "path now reads: ", dataFolder);
+                    dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
+                    SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file found in: ", dataFolder);
+                }
+            } else {
+                dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
+                SPGlobal.logSync(header, SPGlobal.gameName + " Plugin list file thought to be in: ", dataFolder);
+            }
+
+            //Open Plugin file
+            ModFile = new BufferedReader(new FileReader(dataFolder));
+
+        } catch (java.io.IOException e) {
+            throw e;
+        }
+
+        try {
+            //Get to the first mod
+            String line = ModFile.readLine();
+            ArrayList<ModDater> lines = new ArrayList<ModDater>();
+            SPGlobal.logSync(header, "Loading in Active Plugins");
+            File pluginName;
+
+            while (line != null) {
+                pluginName = new File(SPGlobal.pathToData + line);
+                if (!SPGlobal.modsToSkip.contains(new ModListing(line))) {
+                    if (pluginName.isFile()) {
+                        SPGlobal.logSync(header, "Adding mod: " + line);
+                        lines.add(new ModDater(line, pluginName.lastModified()));
+                    } else if (SPGlobal.logging()) {
+                        SPGlobal.logSync(header, "Mod didn't exist: ", line);
+                    }
+                } else if (SPGlobal.logging()) {
+                    SPGlobal.logSync(header, "Mod was on the list to skip: " + line);
+                }
+                line = ModFile.readLine();
+            }
+
+            SPGlobal.sync(false);
+            return sortModListings(lines);
+
+        } catch (java.io.FileNotFoundException e) {
+            SPGlobal.logError(header, "Error opening Plugin file!");
+            SPGlobal.sync(false);
+            throw e;
+        } catch (java.io.IOException e) {
+            SPGlobal.logError(header, "Error reading from Plugin file!");
+            SPGlobal.sync(false);
+            throw e;
+        }
+
+    }
+
+    /**
+     * Will scan the data folder and ModListings for all .esp and .esm files,
+     * regardless of if they are active.  It will return a complete list in load
+     * order.  If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pathToData
+     * @see SPGlobal
+     * @return ArrayList of ModListings of all mods present in the data folder.
+     */
+    static public ArrayList<ModListing> getModList() {
+        SPGlobal.newSyncLog("Get All Present Mod List.txt");
+        File directory = new File(SPGlobal.pathToData);
+        ArrayList<ModDater> out = new ArrayList<ModDater>();
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            for (File f : files) {
+                String name = f.getName();
+                if (name.contains(".esp") || name.contains(".esm")) {
+                    if (!SPGlobal.modsToSkip.contains(new ModListing(name))) {
+                        out.add(new ModDater(name, f.lastModified()));
+                    } else if (SPGlobal.logging()) {
+                        SPGlobal.logSync(header, "Mod was on the list to skip: " + name);
+                    }
+                }
+            }
+        }
+        return sortModListings(out);
+    }
+
+    static ArrayList<ModListing> sortModListings(ArrayList<ModDater> lines) {
+        SPGlobal.sync(true);
+        //Read it in
+        Map<Long, ModDater> esms = new TreeMap<Long, ModDater>();
+        Map<Long, ModDater> esps = new TreeMap<Long, ModDater>();
+
+        for (ModDater line : lines) {
+            if (line.modName.contains(".esm")) {
+                esms.put(line.date, line);
+            } else {
+                esps.put(line.date, line);
+            }
+        }
+
+        SPGlobal.flush();
+
+        ArrayList<ModListing> listing = new ArrayList<ModListing>();
+        for (ModDater m : esms.values()) {
+            listing.add(new ModListing(m.modName));
+        }
+        for (ModDater m : esps.values()) {
+            listing.add(new ModListing(m.modName));
+        }
+
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(header, "=========  Final sorted load order : ==========");
+            int counter = 0;
+            for (ModListing m : listing) {
+                SPGlobal.logSync(header, Ln.prettyPrintHex(counter++) + " Name: " + m.print());
+            }
+        }
+
+        SPGlobal.sync(false);
+        return listing;
+    }
+
+    static String manualFindList() throws java.io.IOException {
+        try {
+            String fileLocation = "Cancelled";
+            String header = "MANUAL-FIND-PLUGIN";
+            // Check for save file
+            File f = new File(SPGlobal.pluginListBackupPath);
+            if (f.isFile()) {
+                BufferedReader pluginLocation = new BufferedReader(new FileReader(f));
+                fileLocation = pluginLocation.readLine();
+                SPGlobal.logSync(header, "Backup file has file location: ", fileLocation);
+                return fileLocation;
+            }
+
+            // Open diaSPGlobal.log box
+
+            JOptionPane.showMessageDialog(null, "The application is having trouble locating your active plugins file.\n"
+                    + "Please locate this yourself.\n\n"
+                    + "Usually in /Users/****Username****/AppData/Local/" + SPGlobal.gameName + "/Plugins.txt\n"
+                    + "(You might have to enable visibility of hidden folders)");
+
+            JFileChooser fd = new JFileChooser(".");
+            int returnVal = fd.showOpenDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                // Save file location
+                f = fd.getSelectedFile();
+                fileLocation = f.getPath();
+                //fileLocation = fileLocation + fd.getSelectedFile().getName();
+                SPGlobal.logSync(header, "User chose file location: ", fileLocation);
+                BufferedWriter pluginLocation = new BufferedWriter(new FileWriter(SPGlobal.pluginListBackupPath));
+                pluginLocation.write(fileLocation);
+                pluginLocation.close();
+            }
+            return fileLocation;
+        } catch (java.io.IOException e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Imports all mods in the user's Data/ folder, no matter if they are
+     * currently active or not.  Imports all GRUPs currently supported by SkyProc.
+     * If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br><br>
+     * NOTE: It is suggested for speed reasons to only import the GRUP types you are interested in
+     * by using other import functions.
+     * @return A set of Mods with all their data imported and ready to be manipulated.
+     */
+    public Set<Mod> importAllMods() {
+        return importAllMods(GRUP_TYPE.values());
+    }
+
+    /**
+     * Imports all mods in the user's Data/ folder, no matter if they are
+     * currently active or not.  Imports only GRUPS specified in the parameter.
+     *   If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pathToData
+     * @see SPGlobal
+     * @param grup_targets Any amount of GRUP targets, separated by commas, that you
+     * wish to import.
+     * @return A set of Mods with specified GRUPs imported and ready to be manipulated.
+     */
+    public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) {
+        return importMods(getModList(), SPGlobal.pathToData, grup_targets);
+    }
+
+    /**
+     * Loads in plugins.txt and reads in the mods the user has active, and loads only those
+     * that are also present in the data folder.  Imports all GRUPs currently supported by SkyProc.
+     * If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br><br>
+     * If the program cannot locate plugins.txt, it will prompt the user to locate
+     * the file themselves.  Once they do, it will create a file and use that as a
+     * reference for future patch generations.<br><br>
+     * NOTE: It is suggested for speed reasons to only import the GRUP types you are interested in
+     * by using other import functions.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pluginsListPath<br>
+     * - pathToData<br>
+     * - pluginListBackupPath
+     * @see SPGlobal
+     * @return A set of Mods with all their data imported and ready to be manipulated.
+     * @throws IOException
+     */
+    public Set<Mod> importActiveMods() throws IOException {
+        return importActiveMods(GRUP_TYPE.values());
+    }
+
+    /**
+     * Loads in plugins.txt and reads in the mods the user has active, and loads only those
+     * that are also present in the data folder.  Imports only GRUPS specified in the parameter.
+     *   If a mod being read in fits the
+     * criteria of isModToSkip(), then it will be omitted in the results.<br><br>
+     * If the program cannot locate plugins.txt, it will prompt the user to locate
+     * the file themselves.  Once they do, it will create a file and use that as a
+     * reference for future patch generations.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pluginsListPath<br>
+     * - pathToData<br>
+     * - pluginListBackupPath
+     * @see SPGlobal
+     * @param grup_targets Any amount of GRUP targets, separated by commas, that you
+     * wish to import.
+     * @return A set of Mods with specified GRUPs imported and ready to be manipulated.
+     * @throws IOException
+     */
+    public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException {
+        return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
+    }
+
+    /**
+     * Looks for mods that match the given ModListings inside the data folder.  It imports any
+     * that are properly located, and loads in only GRUPS specified in the parameter.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pathToData<br>
+     * @see SPGlobal
+     * @param mods ModListings to look for and import from the data folder.
+     * @param grup_targets Any amount of GRUP targets, separated by commas, that you
+     * wish to import.
+     * @return A set of Mods with specified GRUPs imported and ready to be manipulated.
+     */
+    public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) {
+        return importMods(mods, SPGlobal.pathToData, grup_targets);
+    }
+
+    /**
+     * Looks for mods that match the given ModListings inside the data folder.  It imports any
+     * that are properly located, and loads ALL GRUPs supported by SkyProc.<br><br>
+     * NOTE: It is suggested for speed reasons to only import the GRUP types you are interested in
+     * by using other import functions.<br><br>
+     * Related settings in SPGlobal:<br>
+     * - pathToData
+     * @see SPGlobal
+     * @param mods ModListings to look for and import from the data folder.
+     * @return A set of Mods with all GRUPs imported and ready to be manipulated.
+     */
+    public Set<Mod> importMods(ArrayList<ModListing> mods) {
+        return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
+    }
+
+    /**
+     * Looks for mods that match the given ModListings in the path specified.  It imports any
+     * that are properly located, and loads ALL GRUPs supported by SkyProc.<br><br>
+     * NOTE: It is suggested for speed reasons to only import the GRUP types you are interested in
+     * by using other import functions.
+     * @param mods ModListings to look for and import from the data folder.
+     * @param path Path from patch location to where to load mods from.
+     * @return A set of Mods with all GRUPs imported and ready to be manipulated.
+     */
+    public Set<Mod> importMods(ArrayList<ModListing> mods, String path) {
+        return importMods(mods, path, GRUP_TYPE.values());
+    }
+
+    /**
+     * Looks for mods that match the given ModListings in the path specified.  It imports any
+     * that are properly located, and loads in only GRUPS specified in the parameter.
+     * @param mods ModListings to look for and import from the data folder.
+     * @param path Path from patch location to where to load mods from.
+     * @param grup_targets Any amount of GRUP targets, separated by commas, that you
+     * wish to import.
+     * @return A set of Mods with specified GRUPs imported and ready to be manipulated.
+     */
+    public Set<Mod> importMods(ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
+
+        SPGlobal.sync(true);
+        if (SPGlobal.logging()) {
+            SPGlobal.logMain(header, "Starting import of targets: ");
+            String grups = "";
+            for (GRUP_TYPE g : grup_targets) {
+                grups += "   " + g.toString() + " ";
+            }
+            SPGlobal.logMain(header, grups);
+            SPGlobal.logMain(header, "In mods: ");
+            for (ModListing m : mods) {
+                SPGlobal.logMain(header, "   " + m.print());
+            }
+
+        }
+        String header = "Import Mods";
+        String debugPath = "Mod Import/";
+
+        Set<Mod> outSet = new TreeSet<Mod>();
+
+        SPGuiPortal.progress.setMax(mods.size() * grup_targets.length + 1, "Importing plugins.");
+
+        for (int i = 0; i < mods.size(); i++) {
+            String mod = mods.get(i).print();
+            if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
+                SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
+                SPGuiPortal.progress.setStatus("(" + Integer.toString(i + 1) + "/" + Integer.toString(mods.size()) + ") " + mod);
+                try {
+                    outSet.add(importMod(new ModListing(mod), path, grup_targets));
+                } catch (BadMod ex) {
+                    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
+                    SPGlobal.logError(header, "  " + ex.toString());
+                } catch (Exception e) {
+                    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
+                    SPGlobal.logError(header, "  Message: " + e);
+                    SPGlobal.logError(header, "  Stack: ");
+                    for (StackTraceElement s : e.getStackTrace()) {
+                        SPGlobal.logError(header, "  " + s.toString());
+                    }
+                }
+            }
+        }
+
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Done Importing Mods.");
+            SPGlobal.logMain(header, "Done Importing Mods.");
+        }
+        SPGlobal.sync(false);
+        return outSet;
+    }
+
+    /**
+     * Looks for a mod matching the ModListing inside the given path.  If properly located, it
+     * imports only GRUPS specified in the parameter.
+     * @param listing Mod name and suffix to look for.
+     * @param path Path to look for the mod data.
+     * @param grup_targets Any amount of GRUP targets, separated by commas, that you
+     * wish to import.
+     * @return A mod with the specified GRUPs imported and ready to be manipulated.
+     * @throws BadMod If SkyProc runs into any unexpected data structures, or has any error importing
+     * a mod at all.
+     */
+    public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
+        return importMod(listing, path, new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets)));
+    }
+
+    /**
+     * Looks for a mod matching the ModListing inside the given path.  If properly located, it
+     * imports only GRUPS specified in the parameter.
+     * @param listing Mod name and suffix to look for.
+     * @param path Path to look for the mod data.
+     * @param grup_targets An ArrayList of GRUP targets that you
+     * wish to import.
+     * @return A mod with the specified GRUPs imported and ready to be manipulated.
+     * @throws BadMod If SkyProc runs into any unexpected data structures, or has any error importing
+     * a mod at all.
+     */
+    public Mod importMod(ModListing listing, String path, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
+        try {
+            int numTargets = grup_targets.size();
+            int targetsFound = 0;
+
+            SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
+            LFileChannel input = new LFileChannel(path + listing.print());
+            File mod = new File(SPGlobal.pathToData + listing.print());
+            listing.setDate(mod.lastModified());
+            Mod plugin = new Mod(listing, mod.lastModified(), extractHeaderInfo(input));
+
+            if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
+                importStrings(plugin);
+            }
+
+            ArrayList<Type> typeTargets = new ArrayList<Type>();
+            for (GRUP_TYPE g : grup_targets) {
+                typeTargets.add(Type.toRecord(g));
+            }
+
+            Type result;
+            while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
+                SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
+                plugin.parseData(result, extractGRUPData(input), masks);
+                typeTargets.remove(result);
+                SPGlobal.flush();
+                if (grup_targets.isEmpty()) {
+                    break;
+                }
+
+                SPGuiPortal.progress.incrementBar();
+                targetsFound++;
+            }
+
+            while (targetsFound < numTargets) {
+                SPGuiPortal.progress.incrementBar();
+                targetsFound++;
+            }
+
+            plugin.fetchStringPointers();
+            plugin.standardizeMasters();
+            input.close();
+
+            SPGlobal.getDB().add(plugin);
+            return plugin;
+        } catch (Exception e) {
+            SPGlobal.logException(e);
+            throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
+        }
+    }
+
+    static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
+        if (Ln.arrayToString(in.readInInts(0, 4)).equals("TES4")) {
+            int size = Ln.arrayToInt(in.readInInts(0, 4)) + 24;  // +24 for TES4 extra info
+            in.offset(-8); // To start of TES4 header
+            return in.readInByteBuffer(0, size);
+        } else {
+            throw new BadMod("Mod did not have TES4 at the start of the file.");
+        }
+    }
+
+    static void importStrings(Mod mod) {
+        String header = "Importing Strings";
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Importing Strings");
+        }
+        for (Files f : SubStringPointer.Files.values()) {
+            try {
+                importStrings(mod, f);
+            } catch (Exception e) {
+                SPGlobal.logError(header, "Error Importing Strings " + f + ": " + e);
+            }
+        }
+    }
+
+    static void importStrings(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException {
+
+        // Open file
+        LFileChannel istream = new LFileChannel(pathToStringFile(plugin, file));
+
+        // Read header
+        int numRecords = istream.readInInt(0, 4);
+        int recordsSize = numRecords * 8 + 8;
+        LShrinkArray in = new LShrinkArray(istream.readInByteBuffer(4, recordsSize));
+
+        // Read entry pairs
+        for (int i = 0; i < numRecords; i++) {
+            plugin.strings.get(file).put(in.extractInt(4),
+                    in.extractInt(4) + recordsSize);
+        }
+    }
+
+    static String pathToStringFile(Mod plugin, SubStringPointer.Files file) {
+        return SPGlobal.pathToData + "Strings/" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + SPGlobal.language + "." + file;
+    }
+
+    static Type scanToRecordStart(LFileChannel in, ArrayList<Type> target) throws java.io.IOException {
+        Type type;
+        int size;
+
+        while (in.available() >= 12) {
+            size = Ln.arrayToInt(in.readInInts(4, 4));
+            try {
+                type = Type.valueOf(Ln.arrayToString(in.readInInts(0, 4)));
+                for (Type t : target) {
+                    if (t.equals(type)) {
+                        in.offset(-12); // Go to start of GRUP
+                        return type;
+                    }
+                }
+            } catch (java.lang.IllegalArgumentException e) {
+                // In case the GRUP type isn't in program yet, we want to continue
+            }
+            // else skip GRUP
+            in.offset(size - 12);  // -12 for parts already read in
+        }
+
+        return Type.NULL;
+    }
+
+    static ByteBuffer extractGRUPData(LFileChannel in) throws IOException {
+        int size = Ln.arrayToInt(in.readInInts(4, 4));
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Extract GRUP size: " + Ln.prettyPrintHex(size));
+        }
+        in.offset(-8); // Back to start of GRUP
+        return in.readInByteBuffer(0, size);
+    }
+
+    // Internal Classes
+    static class ModDater {
+
+        String modName;
+        long date;
+
+        ModDater(String modName, long date) {
+            this.modName = modName;
+            this.date = date;
+        }
+    }
+}

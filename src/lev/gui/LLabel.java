@@ -1,0 +1,95 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package levgui;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.JLabel;
+
+/**
+ *
+ * @author Justin Swanson
+ */
+public class LLabel extends LComponent {
+
+    JLabel mainText;
+    JLabel shadow;
+    JLabel shadow2;
+    JLabel shadow3;
+    int shadowSpacing = 2;
+
+    public LLabel(String text, Font font, Color c) {
+	mainText = new JLabel(text);
+	mainText.setFont(font);
+	mainText.setForeground(c);
+	mainText.setSize(mainText.getPreferredSize());
+	mainText.setFocusable(false);
+	mainText.setVisible(true);
+	add(mainText);
+	setSize(mainText.getPreferredSize());
+    }
+
+    public void addShadow() {
+	shadow = copyLabel(mainText);
+	shadow.setForeground(Color.BLACK);
+	shadow2 = copyLabel(shadow);
+	shadow3 = copyLabel(shadow);
+	shadow.setLocation(shadowSpacing, shadowSpacing);
+	shadow2.setLocation(0, shadowSpacing);
+	shadow3.setLocation(shadowSpacing, 0);
+	add(shadow);
+	add(shadow2);
+	add(shadow3);
+	setSize(getWidth() + shadowSpacing, getHeight() + shadowSpacing);
+    }
+
+    private JLabel copyLabel (JLabel input) {
+	JLabel output = new JLabel(input.getText());
+	output.setFont(input.getFont());
+	output.setForeground(input.getForeground());
+	output.setSize(output.getPreferredSize());
+	output.setVisible(true);
+	return output;
+    }
+
+    public String getText () {
+	return mainText.getText();
+    }
+
+    public void setText (String input) {
+	mainText.setText(input);
+	mainText.setSize(mainText.getPreferredSize());
+	if (shadow != null) {
+	    shadow.setText(input);
+	    shadow2.setText(input);
+	    shadow3.setText(input);
+	    shadow.setSize(shadow.getPreferredSize());
+	    shadow2.setSize(shadow2.getPreferredSize());
+	    shadow3.setSize(shadow3.getPreferredSize());
+	}
+	setSize(getPreferredSize());
+    }
+
+    public void setFontColor (Color c) {
+        mainText.setForeground(c);
+    }
+
+    @Override
+    public Dimension getPreferredSize () {
+	if (shadow == null)
+	    return mainText.getSize();
+	else
+	    return new Dimension (mainText.getWidth() + shadowSpacing, mainText.getHeight() + shadowSpacing);
+    }
+
+    @Override
+    public void setForeground(Color c) {
+        mainText.setForeground(c);
+        mainText.repaint();
+    }
+
+
+}
