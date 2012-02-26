@@ -76,11 +76,11 @@ class SubFormArray extends SubRecord {
     @Override
     Boolean isValid() {
         for (FormID ID : IDs) {
-            if (!ID.isValid()) {
-                return false;
+            if (ID.isValid()) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
