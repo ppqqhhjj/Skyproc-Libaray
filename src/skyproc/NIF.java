@@ -18,7 +18,7 @@ public class NIF {
     private static String header = "NIF";
     int numBlocks;
     ArrayList<String> blockTypes;
-    ArrayList<Node> blocks;
+    ArrayList<Node> nodes;
     long headerOffset;
 
     public NIF(LShrinkArray in) throws BadParameter {
@@ -63,45 +63,60 @@ public class NIF {
 
 
         //Blocks list
-        blocks = new ArrayList<Node>(numBlocks);
+        nodes = new ArrayList<Node>(numBlocks);
         for (int i = 0; i < numBlocks; i++) {
-            blocks.add(new Node(NodeType.getValue(in.extractInt(2))));
+            nodes.add(new Node(NodeType.getValue(in.extractInt(2))));
         }
 
         //Block lengths
         for (int i = 0; i < numBlocks; i++) {
-            blocks.get(i).size = in.extractInt(4);
+            nodes.get(i).size = in.extractInt(4);
         }
 
         if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
             SPGlobal.logSync(header, "Block headers: ");
             for (int i = 0; i < numBlocks; i++) {
-                SPGlobal.logSync(header, "  Type: " + blocks.get(i).type + ", length: " + Ln.prettyPrintHex(blocks.get(i).size));
+                SPGlobal.logSync(header, "  Type: " + nodes.get(i).type + ", length: " + Ln.prettyPrintHex(nodes.get(i).size));
             }
         }
 
         //Strings
         int numStrings = in.extractInt(4);
         in.skip(4); // max Length string
+        ArrayList<String> strings = new ArrayList<String>(numStrings);
         for (int i = 0; i < numStrings; i++) {
-            in.skip(in.extractInt(4));
+            strings.add(in.extractString(in.extractInt(4)));
+        }
+        int j = 0;
+        for (int i = 0 ; i < numBlocks && j < strings.size() ; i++) {
+            if (nodes.get(i).type == NodeType.NiNode || nodes.get(i).type == NodeType.NiTriShape) {
+                nodes.get(i).title = strings.get(j++);
+            }
         }
         in.skip(4); // unknown int
 
         for (int i = 0; i < numBlocks; i++) {
-            blocks.get(i).data = new LShrinkArray(in, blocks.get(i).size);
-            in.skip(blocks.get(i).size);
+            nodes.get(i).data = new LShrinkArray(in, nodes.get(i).size);
+            in.skip(nodes.get(i).size);
         }
     }
 
-    class Node {
+    public class Node {
 
-        NodeType type;
+        public String title;
+        public NodeType type;
         int size;
-        LShrinkArray data;
+        public LShrinkArray data;
 
         Node(NodeType n) {
             type = n;
+        }
+
+        Node (Node in) {
+            this.title = in.title;
+            this.type = in.type;
+            this.size = in.size;
+            this.data = new LShrinkArray(in.data);
         }
     }
 
@@ -127,23 +142,27 @@ public class NIF {
         }
     }
 
-    public ArrayList<NodeType> getBlocks() {
-        ArrayList<NodeType> out = new ArrayList<NodeType>(blocks.size());
-        for (int i = 0; i < blocks.size(); i++) {
-            out.add(blocks.get(i).type);
+    public ArrayList<NodeType> getNodeTypes() {
+        ArrayList<NodeType> out = new ArrayList<NodeType>(nodes.size());
+        for (int i = 0; i < nodes.size(); i++) {
+            out.add(nodes.get(i).type);
         }
         return out;
     }
 
-    public LShrinkArray getBlock(int i) {
-        return new LShrinkArray(blocks.get(i).data);
+    public Node getNode(int i) {
+        return new Node(nodes.get(i));
     }
 
-    public ArrayList<LShrinkArray> getBlocks(NodeType type) {
-        ArrayList<LShrinkArray> out = new ArrayList<LShrinkArray>();
-        for (int i = 0; i < blocks.size(); i++) {
-            if (blocks.get(i).type == type) {
-                out.add(getBlock(i));
+    public String getNodeTitle(int i) {
+        return nodes.get(i).title;
+    }
+
+    public ArrayList<Node> getNode(NodeType type) {
+        ArrayList<Node> out = new ArrayList<Node>();
+        for (int i = 0; i < nodes.size(); i++) {
+            if (nodes.get(i).type == type) {
+                out.add(getNode(i));
             }
         }
         return out;

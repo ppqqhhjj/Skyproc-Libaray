@@ -146,7 +146,7 @@ public class ARMA extends MajorRecord {
         }
     }
 
-    public class AltTexture implements Serializable {
+    static public class AltTexture implements Serializable {
 
         String name;
         FormID texture = new FormID();
