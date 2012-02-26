@@ -6,6 +6,7 @@ import java.util.zip.DataFormatException;
 import lev.LExportParser;
 import lev.Ln;
 import lev.LShrinkArray;
+import skyproc.LVLN.LVLO;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.NotFound;
@@ -15,7 +16,7 @@ import skyproc.exceptions.NotFound;
  * spawn.  Each entry contains a FormID of an actor, a level, and a count to spawn.
  * @author Justin Swanson
  */
-public class LVLN extends Actor implements Iterable {
+public class LVLN extends Actor implements Iterable<LVLO> {
 
     private static final Type[] type = {Type.LVLN};
     SubList<LVLO> entries = new SubList<LVLO>(Type.LLCT, 1, new LVLO());
@@ -109,7 +110,7 @@ public class LVLN extends Actor implements Iterable {
      * @return An iterator that steps through each entry in the LVLN.
      */
     @Override
-    public Iterator iterator() {
+    public Iterator<LVLO> iterator() {
         return entries.iterator();
     }
 
@@ -123,7 +124,6 @@ public class LVLN extends Actor implements Iterable {
         int count = 0;
         byte[] fluff1 = new byte[2];
         byte[] fluff2 = new byte[2];
-        Actor actor;
         SubData COED = new SubData(Type.COED);
         private static final Type[] types = {Type.LVLO, Type.COED};
 
@@ -190,26 +190,6 @@ public class LVLN extends Actor implements Iterable {
 
         /**
          *
-         * @param in Actor to set the entry reference to.
-         */
-        public void setActor(Actor in) {
-            actor = in;
-        }
-
-        /**
-         *
-         * @return The actor this entry references to.
-         */
-        public Actor getActor() {
-            return actor;
-        }
-
-        Boolean hasActor() {
-            return actor != null;
-        }
-
-        /**
-         *
          * @param in The number to set the spawn count to.
          */
         public void setCount(int in) {
@@ -230,9 +210,6 @@ public class LVLN extends Actor implements Iterable {
          */
         @Override
         public String print() {
-            if (hasActor()) {
-                logSync(getTypes().toString(), "   Name: " + actor);
-            }
             logSync(getTypes().toString(), "   FormID: " + super.toString() + ", Level: " + level + ", Count: " + count);
             logSync(getTypes().toString(), "   -----------");
             return "";
