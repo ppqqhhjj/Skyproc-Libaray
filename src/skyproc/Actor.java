@@ -13,6 +13,10 @@ public abstract class Actor extends MajorRecordNamed implements Serializable {
         super();
     }
 
+    Actor (Mod mod) {
+        super(mod);
+    }
+
     int getTrueLevel(int depth) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -16,6 +16,11 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
         subRecords.add(FULL);
     }
 
+    MajorRecordNamed (Mod mod) {
+        super(mod);
+        subRecords.add(FULL);
+    }
+
     /**
      * Returns the in-game name of the Major Record.
      * @return

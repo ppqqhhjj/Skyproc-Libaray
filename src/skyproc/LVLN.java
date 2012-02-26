@@ -34,12 +34,7 @@ public class LVLN extends Actor implements Iterable {
      */
     LVLN() {
         super();
-        subRecords.add(objectBounds);
-        subRecords.add(chanceNone);
-        subRecords.add(LVLNflags);
-        subRecords.add(entries);
-        subRecords.add(MODL);
-        subRecords.add(MODT);
+        init();
     }
 
     /**
@@ -47,8 +42,17 @@ public class LVLN extends Actor implements Iterable {
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      */
     public LVLN(Mod modToOriginateFrom) {
-        this();
-        setForm(modToOriginateFrom.getNextID());
+        super(modToOriginateFrom);
+        init();
+    }
+
+    final void init() {
+        subRecords.add(objectBounds);
+        subRecords.add(chanceNone);
+        subRecords.add(LVLNflags);
+        subRecords.add(entries);
+        subRecords.add(MODL);
+        subRecords.add(MODT);
     }
 
     @Override
@@ -141,7 +145,7 @@ public class LVLN extends Actor implements Iterable {
          * that the FormID associated truly points to a correct record.  You will have to
          * confirm the accuracy yourself for now.
          */
-        public LVLO(FormID id, int level, int count) throws NotFound {
+        public LVLO(FormID id, int level, int count) {
             this();
             this.ID = id;
             this.count = count;

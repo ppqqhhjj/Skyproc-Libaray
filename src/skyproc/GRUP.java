@@ -18,6 +18,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * A GRUP is a collection of Major Records.
+ *
  * @param <T> The type of Major Record a GRUP contains.
  * @author Justin Swanson
  */
@@ -37,10 +38,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
         this.prototype = prototype;
     }
 
-    void parseData(ByteBuffer in, Mask mask) throws BadRecord, DataFormatException, BadParameter  {
+    void parseData(ByteBuffer in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
         parseData(new LShrinkArray(in), mask);
     }
-
 
     @Override
     Type[] getTypes() {
@@ -49,7 +49,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      *
-     * @return An enum constant representing the type of record the GRUP contains.
+     * @return An enum constant representing the type of record the GRUP
+     * contains.
      */
     public Type getContainedType() {
         return prototype.getTypes()[0];
@@ -57,7 +58,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      *
-     * @return A generic title of the GRUP.  (eg. "Skyrim.esm - LVLN GRUP")
+     * @return A generic title of the GRUP. (eg. "Skyrim.esm - LVLN GRUP")
      */
     @Override
     public String toString() {
@@ -69,7 +70,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return True if GRUP has records. (size > 0)
      */
     @Override
-     Boolean isValid() {
+    Boolean isValid() {
         return !isEmpty();
     }
 
@@ -87,7 +88,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+        super.parseData(in);
         in.skip(4); // GRUP type
         grupType = in.extract(4);
         dateStamp = in.extract(4);
@@ -115,7 +116,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
                     logSync(toString(), "=============== DONE ==============");
                 }
             } catch (java.nio.BufferUnderflowException e) {
-                 handleBadRecord(item, e.toString());
+                handleBadRecord(item, e.toString());
             } catch (BadRecord e) {
                 handleBadRecord(item, e.toString());
             }
@@ -131,6 +132,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      * Prints contents of GRUP to the asynchronous log.
+     *
      * @return Returns the empty string.
      */
     @Override
@@ -194,8 +196,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      * Removes a record from the GRUP.
+     *
      * @param id The FormID of the record to remove.
-     * @return Returns true if a record was removed; False if no record with id was contained.
+     * @return Returns true if a record was removed; False if no record with id
+     * was contained.
      */
     public boolean removeRecord(FormID id) {
         if (mapRecords.containsKey(id)) {
@@ -209,8 +213,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      * Removes a record from the GRUP.
+     *
      * @param item Major Record to remove. Removal is based on FormID match.
-     * @return Returns true if a record was removed; False if no record with id was contained.
+     * @return Returns true if a record was removed; False if no record with id
+     * was contained.
      */
     public boolean removeRecord(T item) {
         return removeRecord(item.getForm());
@@ -229,8 +235,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     /**
-     * Adds a record to the group, and does the following:
-     * 1) Standardizes the record's FormIDs to the database the GRUP is contained in.
+     * Adds a record to the group, and does the following: 1) Standardizes the
+     * record's FormIDs to the database the GRUP is contained in.
+     *
      * @param item Record to add to the GRUP.
      */
     public void addRecord(T item) {
@@ -242,8 +249,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
         listRecords.add(item);
     }
 
-    void addRecord (Object item) {
-        addRecord((T)item);
+    void addRecord(Object item) {
+        addRecord((T) item);
     }
 
     /**
@@ -270,12 +277,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return Major Record with FormID == id.
      * @throws NotFound
      */
-    public MajorRecord get(FormID id) throws NotFound {
-        if (mapRecords.containsKey(id)) {
-            return mapRecords.get(id);
-        } else {
-            throw new NotFound("Could not find " + id + " in " + toString());
-        }
+    public MajorRecord get(FormID id) {
+        return mapRecords.get(id);
     }
 
     /**
@@ -292,8 +295,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     /**
-     * Takes all records from rhs and adds them to the GRUP.  Any conflicting
+     * Takes all records from rhs and adds them to the GRUP. Any conflicting
      * records (those whose FormIDs match) will be replaced with rhs's version.
+     *
      * @param rhs GRUP to copy records from.
      */
     public void merge(GRUP<T> rhs) {
@@ -336,7 +340,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     /**
      *
-     * @return An iterator that steps through each record in the GRUP, in the order they were added.
+     * @return An iterator that steps through each record in the GRUP, in the
+     * order they were added.
      */
     @Override
     public Iterator<T> iterator() {
@@ -344,5 +349,4 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
         temp.addAll(listRecords);
         return temp.iterator();
     }
-
 }

@@ -86,7 +86,7 @@ public class SubForm extends SubRecord {
 
     SubForm(Type type, FormID form) {
         this(type);
-        copyForm(form);
+        setForm(form);
     }
 
     @Override
