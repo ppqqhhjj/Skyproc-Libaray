@@ -6,7 +6,10 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lev.debug.LDebug;
+import skyproc.exceptions.BadMod;
 
 /**
  * Global variables/settings of SkyProc.
@@ -51,7 +54,8 @@ public class SPGlobal {
         return globalDatabase;
     }
 
-    static Mod globalPatch;
+    static Mod globalPatchOut;
+    static Mod globalConsistencyPatch;
 
     /**
      * Creating your patch ahead of time, and setting it as the Global Patch
@@ -59,20 +63,28 @@ public class SPGlobal {
      * @param patch Mod to set as the global patch.
      */
     public static void setGlobalPatch(Mod patch) {
-        if (globalPatch != null) {
-            modsToSkip.remove(globalPatch.getInfo());
+        if (globalPatchOut != null) {
+            modsToSkip.remove(globalPatchOut.getInfo());
         }
-        globalPatch = patch;
-        globalPatch.modInfo.setDate(Long.MAX_VALUE);
-        modsToSkip.add(globalPatch.getInfo());
+        globalPatchOut = patch;
+        globalPatchOut.modInfo.setDate(Long.MAX_VALUE);
+        modsToSkip.add(globalPatchOut.getInfo());
+	
+	// Import old patch for consistency
+	SPImporter importer = new SPImporter();
+	try {
+	    globalConsistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, null);
+	} catch (BadMod ex) {
+	    logError("SPGlobal", "Error importing global consistency patch: " + patch);
+	}
     }
-
+   
     /**
      *
      * @return the set Global Patch, or null if one hasn' been set.
      */
     public static Mod getGlobalPatch() {
-        return globalPatch;
+        return globalPatchOut;
     }
 
     static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
