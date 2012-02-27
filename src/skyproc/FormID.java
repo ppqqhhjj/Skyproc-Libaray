@@ -12,8 +12,10 @@ import lev.LExportParser;
 import lev.Ln;
 
 /**
- * This class represents a FormID that distinguishes one record from another.  The FormID is value unique
- * across all mods.  This class supports automatic mod index correction.
+ * This class represents a FormID that distinguishes one record from another.
+ * The FormID is value unique across all mods. This class supports automatic mod
+ * index correction.
+ *
  * @author Justin Swanson
  */
 public class FormID implements Serializable {
@@ -31,8 +33,10 @@ public class FormID implements Serializable {
 
     /**
      *
-     * @param id String containing the last 6 digits of a FormID.  Acceptable forms: "000123", "00 01 23", "0x00 0x01 0x23".
-     * @param master String containing the mod it originates from.  Eg. "Skyrim.esm"
+     * @param id String containing the last 6 digits of a FormID. Acceptable
+     * forms: "000123", "00 01 23", "0x00 0x01 0x23".
+     * @param master String containing the mod it originates from. Eg.
+     * "Skyrim.esm"
      */
     public FormID(String id, String master) {
         this(id, new ModListing(master));
@@ -44,7 +48,8 @@ public class FormID implements Serializable {
 
     /**
      *
-     * @param id String containing the last 6 digits of a FormID.  Acceptable forms: "000123", "00 01 23", "0x00 0x01 0x23".
+     * @param id String containing the last 6 digits of a FormID. Acceptable
+     * forms: "000123", "00 01 23", "0x00 0x01 0x23".
      * @param master The mod from which this formID originates.
      */
     public FormID(String id, ModListing master) {
@@ -64,8 +69,6 @@ public class FormID implements Serializable {
     public FormID(int[] id, ModListing master) {
         this(Ln.toByteArray(id), master);
     }
-
-
 
     FormID(int id, ModListing master) {
         setInternal(Ln.toByteArray(id));
@@ -93,14 +96,12 @@ public class FormID implements Serializable {
             form = new byte[4];
             System.arraycopy(id, 0, form, 0, id.length);
         }
-        valid = true;
+        valid = !equals(NULL);
 //	}
     }
 
     void export(LExportParser out) throws IOException {
-        if (isValid()) {
-            out.write(getInternal(true), 4);
-        }
+        out.write(getInternal(true), 4);
     }
 
     String getArrayStr(Boolean masterIndex) {
@@ -120,14 +121,10 @@ public class FormID implements Serializable {
     }
 
     byte[] getInternal(Boolean masterIndex) {
-        if (isValid()) {
-            if (!masterIndex || master == null) {
-                return Arrays.copyOfRange(form, 0, 3);
-            } else {
-                return form;
-            }
+        if (!masterIndex || master == null) {
+            return Arrays.copyOfRange(form, 0, 3);
         } else {
-            return null;
+            return form;
         }
     }
 
@@ -141,7 +138,8 @@ public class FormID implements Serializable {
 
     /**
      *
-     * @return A string representation of this FormID, with the master name printed instead of numerical mod index.
+     * @return A string representation of this FormID, with the master name
+     * printed instead of numerical mod index.
      */
     public String getFormStr() {
         if (master == null) {
@@ -191,7 +189,7 @@ public class FormID implements Serializable {
                 return;
             }
         }
-        form[3] = (byte)masters.size();
+        form[3] = (byte) masters.size();
     }
 
     Boolean isValid() {
@@ -238,5 +236,4 @@ public class FormID implements Serializable {
         hash = 97 * hash + (this.master != null ? this.master.hashCode() : 0);
         return hash;
     }
-
 }

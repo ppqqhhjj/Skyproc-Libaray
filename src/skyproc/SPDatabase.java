@@ -7,9 +7,10 @@ import java.util.TreeMap;
 import skyproc.exceptions.Uninitialized;
 
 /**
- * An organized set of Mods forces load order.  It is somewhat unnecessary at
- * the moment, but it will offer more powerful and unique functionality later
- * on as SkyProc develops.
+ * An organized set of Mods forces load order. It is somewhat unnecessary at the
+ * moment, but it will offer more powerful and unique functionality later on as
+ * SkyProc develops.
+ *
  * @author Justin Swanson
  */
 public class SPDatabase implements Iterable<Mod> {
@@ -36,8 +37,9 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Returns the modindex matching the ModListing.  -1 if no Mod contained matches
-     * the ModListing.
+     * Returns the modindex matching the ModListing. -1 if no Mod contained
+     * matches the ModListing.
+     *
      * @param listing ModListing object to query for.
      * @return Mod's index in the load order.
      */
@@ -82,20 +84,22 @@ public class SPDatabase implements Iterable<Mod> {
 
     /**
      * Querys the Global Database and returns whether the FormID exists.<br>
-     * NOTE: it is recommended you use the version that only searches in specific
-     * GRUPs for speed reasons.
+     * NOTE: it is recommended you use the version that only searches in
+     * specific GRUPs for speed reasons.
+     *
      * @param query FormID to look for.
      * @return True if FormID exists in the database.
-     * @throws Uninitialized  If the Global Database is not initialized.
+     * @throws Uninitialized If the Global Database is not initialized.
      */
     static public boolean queryMajor(FormID query) {
         return queryMajor(query, SPGlobal.getDB());
     }
 
     /**
-     * Querys the Database and returns whether the FormID exists.<br>
-     * NOTE: it is recommended you use the version that only searches in specific
-     * GRUPs for speed reasons.
+     * Querys the Database and returns whether the FormID exists.<br> NOTE: it
+     * is recommended you use the version that only searches in specific GRUPs
+     * for speed reasons.
+     *
      * @param query FormID to look for.
      * @param database Database to query
      * @return True if FormID exists in the database.
@@ -105,8 +109,9 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Global Database and returns whether the FormID exists.  It limits its
-     * search to the given GRUP types for speed reasons.
+     * Querys the Global Database and returns whether the FormID exists. It
+     * limits its search to the given GRUP types for speed reasons.
+     *
      * @param query FormID to look for.
      * @param grup_types GRUPs to look in.
      * @return True if FormID exists in the database.
@@ -116,8 +121,9 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Database and returns whether the FormID exists.  It limits its
+     * Querys the Database and returns whether the FormID exists. It limits its
      * search to the given GRUP types for speed reasons.
+     *
      * @param query FormID to look for.
      * @param database Database to query
      * @param grup_types GRUPs to look in.
@@ -128,31 +134,36 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Global Database and returns the first record that matches the FormID.  It limits its
-     * search to the given GRUP types for speed reasons.
+     * Querys the Global Database and returns the first record that matches the
+     * FormID. It limits its search to the given GRUP types for speed reasons.
+     *
      * @param query FormID to look for.
-     * @return The first MajorRecord that matches, or MajorRecord.NULL if none were found.
-     * @throws Uninitialized  If the Global Database is not initialized.
+     * @return The first MajorRecord that matches, or MajorRecord.NULL if none
+     * were found.
+     * @throws Uninitialized If the Global Database is not initialized.
      */
     static public MajorRecord getMajor(FormID query) {
         return getMajor(query, SPGlobal.getDB());
     }
 
     /**
-     * Querys the Database and returns the first record that matches the FormID.  It limits its
-     * search to the given GRUP types for speed reasons.
+     * Querys the Database and returns the first record that matches the FormID.
+     * It limits its search to the given GRUP types for speed reasons.
+     *
      * @param query FormID to look for.
      * @param database Database to query
-     * @return The first MajorRecord that matches, or MajorRecord.NULL if none were found.
+     * @return The first MajorRecord that matches, or MajorRecord.NULL if none
+     * were found.
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database) {
         return getMajor(query, database, GRUP_TYPE.values());
     }
 
     /**
-     * Querys the Global Database and returns the first record that matches the FormID. <br>
-     * NOTE: it is recommended you use the version that only searches in specific
-     * GRUPs for speed reasons.
+     * Querys the Global Database and returns the first record that matches the
+     * FormID. <br> NOTE: it is recommended you use the version that only
+     * searches in specific GRUPs for speed reasons.
+     *
      * @param query FormID to look for.
      * @param grup_types GRUPs to look in.
      * @return The first MajorRecord that matches, or null if none were found.
@@ -162,9 +173,10 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Database and returns the first record that matches the FormID. <br>
-     * NOTE: it is recommended you use the version that only searches in specific
-     * GRUPs for speed reasons.
+     * Querys the Database and returns the first record that matches the FormID.
+     * <br> NOTE: it is recommended you use the version that only searches in
+     * specific GRUPs for speed reasons.
+     *
      * @param query FormID to look for.
      * @param database Database to query
      * @param grup_types GRUPs to look in.
@@ -172,19 +184,21 @@ public class SPDatabase implements Iterable<Mod> {
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
         MajorRecord out;
-        Mod m = database.modLookup.get(query.getMaster());
-        if (m != null) {
-            for (GRUP_TYPE g : grup_types) {
-                GRUP grup = m.GRUPs.get(Type.toRecord(g));
-                if(grup.mapRecords.containsKey(query)){
-                    return (MajorRecord)grup.mapRecords.get(query);
-                }
+        if (query.getMaster() != null) {
+            Mod m = database.modLookup.get(query.getMaster());
+            if (m != null) {
+                for (GRUP_TYPE g : grup_types) {
+                    GRUP grup = m.GRUPs.get(Type.toRecord(g));
+                    if (grup.mapRecords.containsKey(query)) {
+                        return (MajorRecord) grup.mapRecords.get(query);
+                    }
 //                Iterator<MajorRecord> iter = m.GRUPs.get(Type.toRecord(g)).iterator();
 //                while (iter.hasNext()) {
 //                    if ((out = iter.next()).getForm().equals(query)) {
 //                        return out;
 //                    }
 //                }
+                }
             }
         }
         return null;
@@ -205,8 +219,9 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Adds a mod to the database.  If there is a mod with a matching
-     * ModListing already in the database, it will be replaced.
+     * Adds a mod to the database. If there is a mod with a matching ModListing
+     * already in the database, it will be replaced.
+     *
      * @param m Mod to add to the database.
      */
     public void add(Mod m) {
@@ -215,8 +230,9 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Adds a set of mods to the database.  If there are any mods with matching
+     * Adds a set of mods to the database. If there are any mods with matching
      * ModListings already in the database, they will be replaced
+     *
      * @param modSet Set of mods to add into the database.
      */
     public void add(Set<Mod> modSet) {
@@ -233,7 +249,6 @@ public class SPDatabase implements Iterable<Mod> {
     public Iterator<Mod> iterator() {
         return modLookup.values().iterator();
     }
-
 //    /**
 //     * Iterator over all mods in the database, in load order.
 //     */

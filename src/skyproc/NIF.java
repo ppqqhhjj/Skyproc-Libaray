@@ -57,15 +57,22 @@ public class NIF {
             String blockType = in.extractString(in.extractInt(4));
             blockTypes.add(blockType);
             if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
-                SPGlobal.logSync(header, "  Added block type: " + blockType);
+                SPGlobal.logSync(header, "  Added block type[" + i + "]: " + blockType);
             }
         }
 
 
         //Blocks list
+        if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Block Type list: ");
+        }
         nodes = new ArrayList<Node>(numBlocks);
         for (int i = 0; i < numBlocks; i++) {
-            nodes.add(new Node(NodeType.getValue(in.extractInt(2))));
+            int type = in.extractInt(2);
+            nodes.add(new Node(NodeType.avValueOf(blockTypes.get(type))));
+            if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+                SPGlobal.logSync(header, "  Block list[" + i + "] has block type: " + type + ", " + blockTypes.get(type));
+            }
         }
 
         //Block lengths
@@ -76,11 +83,14 @@ public class NIF {
         if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
             SPGlobal.logSync(header, "Block headers: ");
             for (int i = 0; i < numBlocks; i++) {
-                SPGlobal.logSync(header, "  Type: " + nodes.get(i).type + ", length: " + Ln.prettyPrintHex(nodes.get(i).size));
+                SPGlobal.logSync(header, "  [" + i + "]: " + nodes.get(i).type + ", length: " + Ln.prettyPrintHex(nodes.get(i).size));
             }
         }
 
         //Strings
+        if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Block Titles: ");
+        }
         int numStrings = in.extractInt(4);
         in.skip(4); // max Length string
         ArrayList<String> strings = new ArrayList<String>(numStrings);
@@ -88,9 +98,13 @@ public class NIF {
             strings.add(in.extractString(in.extractInt(4)));
         }
         int j = 0;
-        for (int i = 0 ; i < numBlocks && j < strings.size() ; i++) {
-            if (nodes.get(i).type == NodeType.NiNode || nodes.get(i).type == NodeType.NiTriShape) {
+        for (int i = 0; i < numBlocks && j < strings.size(); i++) {
+            NodeType type = nodes.get(i).type;
+            if (type == NodeType.NINODE || type == NodeType.NITRISHAPE || type == NodeType.BSINVMARKER) {
                 nodes.get(i).title = strings.get(j++);
+                if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+                    SPGlobal.log(header, "  [" + i + "]: " + nodes.get(i).type + ", string: " + nodes.get(i).title);
+                }
             }
         }
         in.skip(4); // unknown int
@@ -112,7 +126,7 @@ public class NIF {
             type = n;
         }
 
-        Node (Node in) {
+        Node(Node in) {
             this.title = in.title;
             this.type = in.type;
             this.size = in.size;
@@ -122,21 +136,22 @@ public class NIF {
 
     public enum NodeType {
 
-        NiNode,
-        NiTriShape,
-        NiTriShapeData,
-        NiSkinInstance,
-        NiSkinData,
-        NiSkinPartition,
-        BSLightingShaderProperty,
-        BSShaderTextureSet,
-        NiAlphaProperty,
+        NINODE,
+        BSINVMARKER,
+        NITRISHAPE,
+        NITRISHAPEDATA,
+        NISKININSTANCE,
+        NISKINDATA,
+        NISKINPARTITION,
+        BSLIGHTINGSHADERPROPERTY,
+        BSSHADERTEXTURESET,
+        NIALPHAPROPERTY,
         UNKNOWN;
 
-        public static NodeType getValue(int in) {
-            if (in < NodeType.values().length) {
-                return NodeType.values()[in];
-            } else {
+        public static NodeType avValueOf(String in) {
+            try {
+                return valueOf(in.toUpperCase());
+            } catch (IllegalArgumentException e) {
                 return UNKNOWN;
             }
         }

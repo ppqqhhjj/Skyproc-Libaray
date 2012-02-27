@@ -14,6 +14,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * A SubRecord containing a FormID at the start of its structure.
+ *
  * @author Justin Swanson
  */
 public class SubForm extends SubRecord {
@@ -64,7 +65,9 @@ public class SubForm extends SubRecord {
     }
 
     /**
-     * Returns the FormID object of the Sub Record.  Note that any changes made to this FormID will be reflected in the Sub Record also.
+     * Returns the FormID object of the Sub Record. Note that any changes made
+     * to this FormID will be reflected in the Sub Record also.
+     *
      * @return The FormID object of the Sub Record.
      */
     public FormID getForm() {
@@ -144,7 +147,9 @@ public class SubForm extends SubRecord {
     @Override
     void export(LExportParser out, Mod srcMod) throws IOException {
         super.export(out, srcMod);
-        ID.export(out);
+        if (isValid()) {
+            ID.export(out);
+        }
     }
 
     @Override
@@ -159,6 +164,7 @@ public class SubForm extends SubRecord {
 
     /**
      * Takes the FormID into the equals calculations
+     *
      * @param obj Another SubFormRecord
      * @return
      */
@@ -179,6 +185,7 @@ public class SubForm extends SubRecord {
 
     /**
      * Takes the FormID into the hashcode calculations
+     *
      * @return
      */
     @Override
