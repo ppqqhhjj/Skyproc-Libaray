@@ -63,28 +63,28 @@ public class TXST extends MajorRecord {
         switch (i) {
             case 0:
                 setColorMap(path);
-                return;
+                break;
             case 1:
                 setNormalMap(path);
-                return;
+                break;
             case 2:
                 setMaskMap(path);
-                return;
+                break;
             case 3:
                 setToneMap(path);
-                return;
+                break;
             case 4:
                 setDetailMap(path);
-                return;
+                break;
             case 5:
                 setEnvironmentMap(path);
-                return;
+                break;
             case 6:
                 set6thMap(path);
-                return;
+                break;
             case 7:
                 setSpecularityMap(path);
-                return;
+                break;
         }
     }
 

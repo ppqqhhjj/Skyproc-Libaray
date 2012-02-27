@@ -70,7 +70,7 @@ public class NIF {
         for (int i = 0; i < numBlocks; i++) {
             int type = in.extractInt(2);
             nodes.add(new Node(NodeType.avValueOf(blockTypes.get(type))));
-            if (SPGlobal.logging()) {
+            if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
                 SPGlobal.logSync(header, "  Block list[" + i + "] has block type: " + type + ", " + blockTypes.get(type));
             }
         }
@@ -88,6 +88,9 @@ public class NIF {
         }
 
         //Strings
+        if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+            SPGlobal.logSync(header, "Block Titles: ");
+        }
         int numStrings = in.extractInt(4);
         in.skip(4); // max Length string
         ArrayList<String> strings = new ArrayList<String>(numStrings);
@@ -96,8 +99,12 @@ public class NIF {
         }
         int j = 0;
         for (int i = 0; i < numBlocks && j < strings.size(); i++) {
-            if (nodes.get(i).type == NodeType.NINODE || nodes.get(i).type == NodeType.NITRISHAPE) {
+            NodeType type = nodes.get(i).type;
+            if (type == NodeType.NINODE || type == NodeType.NITRISHAPE || type == NodeType.BSINVMARKER) {
                 nodes.get(i).title = strings.get(j++);
+                if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+                    SPGlobal.log(header, "  [" + i + "]: " + nodes.get(i).type + ", string: " + nodes.get(i).title);
+                }
             }
         }
         in.skip(4); // unknown int
