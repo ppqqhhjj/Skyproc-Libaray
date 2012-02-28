@@ -56,39 +56,39 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param info ModListing object containing name and master flag.
      */
     public Mod(ModListing info) {
-        init(info, Long.MAX_VALUE - indexCount--);
-        SPGlobal.getDB().add(this);
+	init(info, Long.MAX_VALUE - indexCount--);
+	SPGlobal.getDB().add(this);
     }
 
     Mod(ModListing info, long inputDate, ByteBuffer headerInfo) throws BadRecord, DataFormatException, BadParameter {
-        this(info, inputDate);
-        logSync("MOD", "Parsing header");
-        header.parseData(headerInfo);
+	this(info, inputDate);
+	logSync("MOD", "Parsing header");
+	header.parseData(headerInfo);
     }
 
     Mod(ModListing info, long inputDate) {
-        init(info, inputDate);
+	init(info, inputDate);
     }
 
     final void init(ModListing info, long inputDate) {
-        this.modInfo = info;
-        this.modInfo.date = inputDate;
-        this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
-        this.setFlag(Mod_Flags.STRING_TABLED, true);
-        strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
-        strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
-        strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
-        GRUPs.put(LLists.getContainedType(), LLists);
-        GRUPs.put(NPCs.getContainedType(), NPCs);
-        GRUPs.put(perks.getContainedType(), perks);
-        GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
-        GRUPs.put(spells.getContainedType(), spells);
-        GRUPs.put(races.getContainedType(), races);
-        GRUPs.put(armors.getContainedType(), armors);
-        GRUPs.put(armatures.getContainedType(), armatures);
-        GRUPs.put(textures.getContainedType(), textures);
-        GRUPs.put(weapons.getContainedType(), weapons);
-        GRUPs.put(keywords.getContainedType(), keywords);
+	this.modInfo = info;
+	this.modInfo.date = inputDate;
+	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
+	this.setFlag(Mod_Flags.STRING_TABLED, true);
+	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
+	strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
+	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
+	GRUPs.put(LLists.getContainedType(), LLists);
+	GRUPs.put(NPCs.getContainedType(), NPCs);
+	GRUPs.put(perks.getContainedType(), perks);
+	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
+	GRUPs.put(spells.getContainedType(), spells);
+	GRUPs.put(races.getContainedType(), races);
+	GRUPs.put(armors.getContainedType(), armors);
+	GRUPs.put(armatures.getContainedType(), armatures);
+	GRUPs.put(textures.getContainedType(), textures);
+	GRUPs.put(weapons.getContainedType(), weapons);
+	GRUPs.put(keywords.getContainedType(), keywords);
     }
 
     /**
@@ -99,11 +99,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * to the modname as appropriate)
      */
     public Mod(String name, Boolean master) {
-        this(new ModListing(name, master));
+	this(new ModListing(name, master));
     }
 
     void addMaster(ModListing input) {
-        header.addMaster(input);
+	header.addMaster(input);
     }
 
     /**
@@ -115,11 +115,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the Nth master
      */
     public ModListing getNthMaster(int i) {
-        if (header.getMasters().size() > i) {
-            return header.getMasters().get(i);
-        } else {
-            return getInfo();
-        }
+	if (header.getMasters().size() > i) {
+	    return header.getMasters().get(i);
+	} else {
+	    return getInfo();
+	}
     }
 
     /**
@@ -127,7 +127,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The number of masters in the mod.
      */
     public int numMasters() {
-        return header.getMasters().size();
+	return header.getMasters().size();
     }
 
     /**
@@ -135,25 +135,52 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return True if no GRUP in the mod has any records.
      */
     public Boolean isEmpty() {
-        for (GRUP g : GRUPs.values()) {
-            if (g.numRecords() > 0) {
-                return false;
-            }
-        }
-        return true;
+	for (GRUP g : GRUPs.values()) {
+	    if (g.numRecords() > 0) {
+		return false;
+	    }
+	}
+	return true;
     }
 
-    FormID getNextID() {
-        return new FormID(header.HEDR.nextID++, getInfo());
+    FormID getNextID(String edid) {
+	// If not global patch, just give next id
+	if (!equals(SPGlobal.getGlobalPatch())) {
+	    return new FormID(header.HEDR.nextID++, getInfo());
+
+	// If global patch, check for consistency
+	} else {
+	    // If has an EDID match, grab old FormID
+	    if (SPGlobal.edidToForm.containsKey(edid)) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logSync(getName(), "Assigning old FormID " + SPGlobal.edidToForm.get(edid) + " for EDID " + edid);
+		}
+		return SPGlobal.edidToForm.get(edid);
+	    } else {
+
+		//Find next open FormID
+		FormID possibleID = new FormID(header.HEDR.nextID++, getInfo());
+		for (int i = 0 ; i < SPGlobal.edidToForm.size() ; i++) {
+		    if (!SPGlobal.edidToForm.containsValue(possibleID)) {
+			break;
+		    }
+		    possibleID = new FormID(header.HEDR.nextID++, getInfo());
+		}
+		if (SPGlobal.logging()) {
+		    SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
+		}
+		return possibleID;
+	    }
+	}
     }
 
     void mergeMasters(Mod in) {
-        for (ModListing m : in.header.masters) {
-            header.masters.add(m);
-        }
-        if (!in.equals(SPGlobal.getGlobalPatch())) {
-            header.masters.add(in.modInfo);
-        }
+	for (ModListing m : in.header.masters) {
+	    header.masters.add(m);
+	}
+	if (!in.equals(SPGlobal.getGlobalPatch())) {
+	    header.masters.add(in.modInfo);
+	}
     }
 
     /**
@@ -173,10 +200,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The copied record.
      */
     public MajorRecord makeCopy(MajorRecord m) {
-        mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
-        m = m.copyOf(this);
-        GRUPs.get(m.getTypes()[0]).addRecord(m);
-        return m;
+	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	m = m.copyOf(this);
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	return m;
     }
 
     /**
@@ -187,11 +214,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return ArrayList of duplicated Major Records.
      */
     public ArrayList<MajorRecord> makeCopy(GRUP g) {
-        ArrayList<MajorRecord> out = new ArrayList<MajorRecord>();
-        for (Object m : g) {
-            out.add(makeCopy((MajorRecord) m));
-        }
-        return out;
+	ArrayList<MajorRecord> out = new ArrayList<MajorRecord>();
+	for (Object o : g) {
+	    MajorRecord m = (MajorRecord) o;
+	    out.add(makeCopy(m));
+	}
+	return out;
     }
 
     /**
@@ -202,8 +230,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-        GRUPs.get(m.getTypes()[0]).addRecord(m);
-        mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
     }
 
     /**
@@ -211,54 +239,54 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public void print() {
 
-        newSyncLog("Mod Export/" + getName() + ".txt");
+	newSyncLog("Mod Export/" + getName() + ".txt");
 
-        if (!getMastersStrings().isEmpty()) {
-            logSync(getName(), "=======================================================================");
-            logSync(getName(), "======================= Printing Mod Masters ==========================");
-            logSync(getName(), "=======================================================================");
-            for (String s : getMastersStrings()) {
-                logSync(getName(), s);
-            }
-        }
-        for (GRUP g : GRUPs.values()) {
-            g.toString();
-        }
-        logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
+	if (!getMastersStrings().isEmpty()) {
+	    logSync(getName(), "=======================================================================");
+	    logSync(getName(), "======================= Printing Mod Masters ==========================");
+	    logSync(getName(), "=======================================================================");
+	    for (String s : getMastersStrings()) {
+		logSync(getName(), s);
+	    }
+	}
+	for (GRUP g : GRUPs.values()) {
+	    g.toString();
+	}
+	logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
     }
 
     void standardizeMasters() {
-        logSync("Standardizing", getName());
-        for (GRUP g : GRUPs.values()) {
-            g.standardizeMasters();
-        }
+	logSync("Standardizing", getName());
+	for (GRUP g : GRUPs.values()) {
+	    g.standardizeMasters();
+	}
     }
 
     void fetchExceptions(SPDatabase database) {
-        for (GRUP g : GRUPs.values()) {
-            g.fetchExceptions(database);
-        }
+	for (GRUP g : GRUPs.values()) {
+	    g.fetchExceptions(database);
+	}
     }
 
     void fetchStringPointers() throws IOException {
-        Map<SubStringPointer.Files, LFileChannel> streams = null;
-        if (this.isFlag(Mod_Flags.STRING_TABLED)) {
-            streams = new EnumMap<SubStringPointer.Files, LFileChannel>(SubStringPointer.Files.class);
-            for (Files f : SubStringPointer.Files.values()) {
-                addStream(streams, f);
-            }
-        }
-        for (GRUP g : GRUPs.values()) {
-            g.fetchStringPointers(this, streams);
-        }
+	Map<SubStringPointer.Files, LFileChannel> streams = null;
+	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
+	    streams = new EnumMap<SubStringPointer.Files, LFileChannel>(SubStringPointer.Files.class);
+	    for (Files f : SubStringPointer.Files.values()) {
+		addStream(streams, f);
+	    }
+	}
+	for (GRUP g : GRUPs.values()) {
+	    g.fetchStringPointers(this, streams);
+	}
     }
 
     void addStream(Map<SubStringPointer.Files, LFileChannel> streams, SubStringPointer.Files file) {
-        try {
-            streams.put(file, new LFileChannel(SPImporter.pathToStringFile(this, file)));
-        } catch (FileNotFoundException ex) {
-            logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
-        }
+	try {
+	    streams.put(file, new LFileChannel(SPImporter.pathToStringFile(this, file)));
+	} catch (FileNotFoundException ex) {
+	    logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
+	}
     }
 
     /**
@@ -267,11 +295,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The names of all the masters of the mod.
      */
     public ArrayList<String> getMastersStrings() {
-        ArrayList<String> out = new ArrayList<String>();
-        for (ModListing m : header.getMasters()) {
-            out.add(m.print());
-        }
-        return out;
+	ArrayList<String> out = new ArrayList<String>();
+	for (ModListing m : header.getMasters()) {
+	    out.add(m.print());
+	}
+	return out;
     }
 
     /**
@@ -282,11 +310,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The ModListings of all the masters of the mod.
      */
     public ArrayList<ModListing> getMasters() {
-        ArrayList<ModListing> out = new ArrayList<ModListing>();
-        for (ModListing m : header.getMasters()) {
-            out.add(m);
-        }
-        return out;
+	ArrayList<ModListing> out = new ArrayList<ModListing>();
+	for (ModListing m : header.getMasters()) {
+	    out.add(m);
+	}
+	return out;
     }
 
     /**
@@ -296,15 +324,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param grup_type Any amount of GRUPs to keep, separated by commas
      */
     public void keep(GRUP_TYPE... grup_type) {
-        ArrayList<Type> grups = new ArrayList<Type>();
-        for (GRUP_TYPE t : grup_type) {
-            grups.add(Type.toRecord(t));
-        }
-        for (GRUP g : GRUPs.values()) {
-            if (!grups.contains(g.getContainedType())) {
-                g.clear();
-            }
-        }
+	ArrayList<Type> grups = new ArrayList<Type>();
+	for (GRUP_TYPE t : grup_type) {
+	    grups.add(Type.toRecord(t));
+	}
+	for (GRUP g : GRUPs.values()) {
+	    if (!grups.contains(g.getContainedType())) {
+		g.clear();
+	    }
+	}
     }
 
     /**
@@ -319,21 +347,21 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Mod rhs, GRUP_TYPE... grup_types) {
-        if (grup_types.length == 0) {
-            grup_types = GRUP_TYPE.values();
-        }
-        ArrayList<Type> grups = new ArrayList<Type>();
-        for (GRUP_TYPE t : grup_types) {
-            grups.add(Type.toRecord(t));
-        }
-        if (!this.equals(rhs)) {
-            mergeMasters(rhs);
-            for (Type t : GRUPs.keySet()) {
-                if (grups.contains(t)) {
-                    GRUPs.get(t).merge(rhs.GRUPs.get(t));
-                }
-            }
-        }
+	if (grup_types.length == 0) {
+	    grup_types = GRUP_TYPE.values();
+	}
+	ArrayList<Type> grups = new ArrayList<Type>();
+	for (GRUP_TYPE t : grup_types) {
+	    grups.add(Type.toRecord(t));
+	}
+	if (!this.equals(rhs)) {
+	    mergeMasters(rhs);
+	    for (Type t : GRUPs.keySet()) {
+		if (grups.contains(t)) {
+		    GRUPs.get(t).merge(rhs.GRUPs.get(t));
+		}
+	    }
+	}
     }
 
     /**
@@ -348,9 +376,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(ArrayList<Mod> in, GRUP_TYPE... grup_types) {
-        for (Mod m : in) {
-            addAsOverrides(m, grup_types);
-        }
+	for (Mod m : in) {
+	    addAsOverrides(m, grup_types);
+	}
     }
 
     /**
@@ -366,9 +394,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Collection<Mod> in, GRUP_TYPE... grup_types) {
-        for (Mod m : in) {
-            addAsOverrides(m, grup_types);
-        }
+	for (Mod m : in) {
+	    addAsOverrides(m, grup_types);
+	}
     }
 
     /**
@@ -383,7 +411,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(SPDatabase db, GRUP_TYPE... grup_types) {
-        addAsOverrides(db.modLookup.values(), grup_types);
+	addAsOverrides(db.modLookup.values(), grup_types);
     }
 
     /**
@@ -391,25 +419,25 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The number of records contained in all the GRUPs in the mod.
      */
     public int numRecords() {
-        int sum = 0;
-        for (GRUP g : GRUPs.values()) {
-            if (g.numRecords() != 0) {
-                sum += g.numRecords() + 1;
-            }
-        }
-        return sum;
+	int sum = 0;
+	for (GRUP g : GRUPs.values()) {
+	    if (g.numRecords() != 0) {
+		sum += g.numRecords() + 1;
+	    }
+	}
+	return sum;
     }
 
     int getTotalLength() {
-        return getContentLength() + header.getTotalLength(this);
+	return getContentLength() + header.getTotalLength(this);
     }
 
     int getContentLength() {
-        int sum = 0;
-        for (GRUP g : GRUPs.values()) {
-            sum += g.getTotalLength(this);
-        }
-        return sum;
+	int sum = 0;
+	for (GRUP g : GRUPs.values()) {
+	    sum += g.getTotalLength(this);
+	}
+	return sum;
     }
 
     /**
@@ -420,7 +448,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * data.
      */
     public void export() throws IOException {
-        export(SPGlobal.pathToData);
+	export(SPGlobal.pathToData);
     }
 
     /**
@@ -431,75 +459,75 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @throws IOException
      */
     public void export(String path) throws IOException {
-        export(new LExportParser(path + getName()), this);
+	export(new LExportParser(path + getName()), this);
     }
 
     @Override
     void export(LExportParser out, Mod srcMod) throws IOException {
-        header.setNumRecords(numRecords());
-        header.export(out, srcMod);
+	header.setNumRecords(numRecords());
+	header.export(out, srcMod);
 
-        standardizeMasters();
-        if (logging()) {
-            logSync(this.getName(), "Exporting " + this.numRecords() + " records.");
-        }
-        for (GRUP g : GRUPs.values()) {
-            g.export(out, srcMod);
-        }
+	standardizeMasters();
+	if (logging()) {
+	    logSync(this.getName(), "Exporting " + this.numRecords() + " records.");
+	}
+	for (GRUP g : GRUPs.values()) {
+	    g.export(out, srcMod);
+	}
 
-        if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-            exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
-            exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
-            exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
-        }
-        out.close();
+	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
+	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
+	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
+	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
+	}
+	out.close();
     }
 
     int addOutString(String in, SubStringPointer.Files file) {
-        switch (file) {
-            case DLSTRINGS:
-                return addOutString(in, outDLStrings);
-            case ILSTRINGS:
-                return addOutString(in, outILStrings);
-            default:
-                return addOutString(in, outStrings);
-        }
+	switch (file) {
+	    case DLSTRINGS:
+		return addOutString(in, outDLStrings);
+	    case ILSTRINGS:
+		return addOutString(in, outILStrings);
+	    default:
+		return addOutString(in, outStrings);
+	}
     }
 
     int addOutString(String in, ArrayList<String> list) {
-        if (!list.contains(in)) {
-            list.add(in);
-        }
-        return list.indexOf(in) + 1;  // To prevent indexing starting at 0
+	if (!list.contains(in)) {
+	    list.add(in);
+	}
+	return list.indexOf(in) + 1;  // To prevent indexing starting at 0
     }
 
     void exportStringsFile(ArrayList<String> list, SubStringPointer.Files file) throws FileNotFoundException, IOException {
-        int stringLength = 0;
-        for (String s : list) {
-            stringLength += s.length() + 1;
+	int stringLength = 0;
+	for (String s : list) {
+	    stringLength += s.length() + 1;
 
-        }
-        int outLength = stringLength + 8 * list.size() + 8;
-        LExportParser out = new LExportParser(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
+	}
+	int outLength = stringLength + 8 * list.size() + 8;
+	LExportParser out = new LExportParser(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
 
-        out.write(list.size(), 4);
-        out.write(stringLength, 4);
+	out.write(list.size(), 4);
+	out.write(stringLength, 4);
 
-        int i = 1;  // To prevent indexing starting at 0
-        int offset = 0;
-        for (String s : list) {
-            out.write(i++, 4);
-            out.write(offset, 4);
-            offset += s.length() + 1;
-        }
+	int i = 1;  // To prevent indexing starting at 0
+	int offset = 0;
+	for (String s : list) {
+	    out.write(i++, 4);
+	    out.write(offset, 4);
+	    offset += s.length() + 1;
+	}
 
-        for (String s : list) {
-            out.write(s);
-            out.write(0, 1);  // Null terminator
-        }
+	for (String s : list) {
+	    out.write(s);
+	    out.write(0, 1);  // Null terminator
+	}
 
-        list.clear();
-        out.close();
+	list.clear();
+	out.close();
     }
 
     /**
@@ -508,15 +536,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param in Your name here.
      */
     public void setAuthor(String in) {
-        header.setAuthor(in);
+	header.setAuthor(in);
     }
 
     void parseData(Type type, ByteBuffer data, Map<Type, Mask> masks) throws BadRecord, DataFormatException, BadParameter {
-        if (masks.containsKey(type)) {
-            GRUPs.get(type).parseData(data, masks.get(type));
-        } else {
-            GRUPs.get(type).parseData(data);
-        }
+	if (masks.containsKey(type)) {
+	    GRUPs.get(type).parseData(data, masks.get(type));
+	} else {
+	    GRUPs.get(type).parseData(data);
+	}
     }
 
     /**
@@ -529,7 +557,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return True if the given flag is on in the mod.
      */
     public boolean isFlag(Mod_Flags flag) {
-        return header.flags.is(flag.value);
+	return header.flags.is(flag.value);
     }
 
     /**
@@ -542,10 +570,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param on What to set the flag to.
      */
     public final void setFlag(Mod_Flags flag, boolean on) {
-        header.flags.set(flag.value, on);
-        if (flag == Mod_Flags.MASTER) {
-            getInfo().setMasterTag(on);
-        }
+	header.flags.set(flag.value, on);
+	if (flag == Mod_Flags.MASTER) {
+	    getInfo().setMasterTag(on);
+	}
     }
 
     // Get Set
@@ -555,7 +583,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Leveled List records.
      */
     public GRUP<LVLN> getLeveledLists() {
-        return LLists;
+	return LLists;
     }
 
     /**
@@ -564,7 +592,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing NPC records.
      */
     public GRUP<NPC_> getNPCs() {
-        return NPCs;
+	return NPCs;
     }
 
     /**
@@ -573,7 +601,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Image Space records.
      */
     public GRUP<IMGS> getImageSpaces() {
-        return imageSpaces;
+	return imageSpaces;
     }
 
     /**
@@ -582,7 +610,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Perk records.
      */
     public GRUP<PERK> getPerks() {
-        return perks;
+	return perks;
     }
 
     /**
@@ -591,7 +619,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Spell records.
      */
     public GRUP<SPEL> getSpells() {
-        return spells;
+	return spells;
     }
 
     /**
@@ -600,7 +628,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Race records
      */
     public GRUP<RACE> getRaces() {
-        return races;
+	return races;
     }
 
     /**
@@ -609,7 +637,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armor records
      */
     public GRUP<ARMO> getArmors() {
-        return armors;
+	return armors;
     }
 
     /**
@@ -618,7 +646,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armature records
      */
     public GRUP<ARMA> getArmatures() {
-        return armatures;
+	return armatures;
     }
 
     /**
@@ -627,7 +655,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Texture records
      */
     public GRUP<TXST> getTextureSets() {
-        return textures;
+	return textures;
     }
 
     /**
@@ -636,7 +664,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Weapon records
      */
     public GRUP<WEAP> getWeapons() {
-        return weapons;
+	return weapons;
     }
 
     /**
@@ -645,7 +673,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Keyword records
      */
     public GRUP<KYWD> getKeywords() {
-        return keywords;
+	return keywords;
     }
 
     /**
@@ -653,7 +681,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The name of the mod (including suffix)
      */
     public String getName() {
-        return modInfo.print();
+	return modInfo.print();
     }
 
     /**
@@ -662,7 +690,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the mod.
      */
     public ModListing getInfo() {
-        return modInfo;
+	return modInfo;
     }
 
     /**
@@ -670,7 +698,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The name of the mod (without suffix)
      */
     public String getNameNoSuffix() {
-        return getName().substring(0, getName().indexOf(".es"));
+	return getName().substring(0, getName().indexOf(".es"));
     }
 
     /**
@@ -680,43 +708,43 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return The datestamp of when the mod was last modified.
      */
     public long getDate() {
-        return getInfo().date;
+	return getInfo().date;
     }
 
     void newSyncLog(String fileName) {
-        SPGlobal.newSyncLog(fileName);
+	SPGlobal.newSyncLog(fileName);
     }
 
     boolean logging() {
-        return SPGlobal.logging();
+	return SPGlobal.logging();
     }
 
     final void logMain(String header, String... log) {
-        SPGlobal.logMain(header, log);
+	SPGlobal.logMain(header, log);
     }
 
     final void log(String header, String... log) {
-        SPGlobal.log(header, log);
+	SPGlobal.log(header, log);
     }
 
     void newLog(String fileName) {
-        SPGlobal.newLog(fileName);
+	SPGlobal.newLog(fileName);
     }
 
     final void logSync(String header, String... log) {
-        SPGlobal.logSync(header, log);
+	SPGlobal.logSync(header, log);
     }
 
     void logError(String header, String... log) {
-        SPGlobal.logError(header, log);
+	SPGlobal.logError(header, log);
     }
 
     void logSpecial(Enum e, String header, String... log) {
-        SPGlobal.logSpecial(e, header, log);
+	SPGlobal.logSpecial(e, header, log);
     }
 
     void flush() {
-        SPGlobal.flush();
+	SPGlobal.flush();
     }
 
     /**
@@ -729,23 +757,23 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     @Override
     public int compareTo(Object o) {
-        Mod rhs = (Mod) o;
-        if (this.getInfo().getMasterTag() == true
-                && rhs.getInfo().getMasterTag() == false) {
-            return -1;
-        }
-        if (this.getInfo().getMasterTag() == false
-                && rhs.getInfo().getMasterTag() == true) {
-            return 1;
-        }
-        if (getInfo().date < rhs.getInfo().date) {
-            return -1;
-        }
-        if (getInfo().date > rhs.getInfo().date) {
-            return 1;
-        }
+	Mod rhs = (Mod) o;
+	if (this.getInfo().getMasterTag() == true
+		&& rhs.getInfo().getMasterTag() == false) {
+	    return -1;
+	}
+	if (this.getInfo().getMasterTag() == false
+		&& rhs.getInfo().getMasterTag() == true) {
+	    return 1;
+	}
+	if (getInfo().date < rhs.getInfo().date) {
+	    return -1;
+	}
+	if (getInfo().date > rhs.getInfo().date) {
+	    return 1;
+	}
 
-        return 0;
+	return 0;
     }
 
     /**
@@ -758,17 +786,17 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Mod other = (Mod) obj;
-        if (!this.getName().equalsIgnoreCase(other.getName())) {
-            return false;
-        }
-        return true;
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final Mod other = (Mod) obj;
+	if (!this.getName().equalsIgnoreCase(other.getName())) {
+	    return false;
+	}
+	return true;
     }
 
     /**
@@ -779,201 +807,201 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + (this.modInfo != null ? this.modInfo.hashCode() : 0);
-        return hash;
+	int hash = 5;
+	hash = 97 * hash + (this.modInfo != null ? this.modInfo.hashCode() : 0);
+	return hash;
     }
 
     @Override
     public Iterator<GRUP> iterator() {
-        return GRUPs.values().iterator();
+	return GRUPs.values().iterator();
     }
 
     // Internal Classes
     static class TES4 extends Record {
 
-        private static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
-        SubRecords subRecords = new SubRecords();
-        private LFlags flags = new LFlags(4);
-        private int fluff1 = 0;
-        private int fluff2 = 0;
-        private int fluff3 = 0;
-        HEDR HEDR = new HEDR();
-        SubString author = new SubString(Type.CNAM, true);
-        SubSortedList<ModListing> masters = new SubSortedList<ModListing>(new ModListing());
-        SubString description = new SubString(Type.SNAM, true);
-        SubData INTV = new SubData(Type.INTV, defaultINTV);
-        private static final Type[] type = {Type.TES4};
+	private static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
+	SubRecords subRecords = new SubRecords();
+	private LFlags flags = new LFlags(4);
+	private int fluff1 = 0;
+	private int fluff2 = 0;
+	private int fluff3 = 0;
+	HEDR HEDR = new HEDR();
+	SubString author = new SubString(Type.CNAM, true);
+	SubSortedList<ModListing> masters = new SubSortedList<ModListing>(new ModListing());
+	SubString description = new SubString(Type.SNAM, true);
+	SubData INTV = new SubData(Type.INTV, defaultINTV);
+	private static final Type[] type = {Type.TES4};
 
-        TES4() {
-            subRecords.add(HEDR);
-            subRecords.add(author);
-            subRecords.add(description);
-            subRecords.add(masters);
-            subRecords.add(INTV);
-        }
+	TES4() {
+	    subRecords.add(HEDR);
+	    subRecords.add(author);
+	    subRecords.add(description);
+	    subRecords.add(masters);
+	    subRecords.add(INTV);
+	}
 
-        TES4(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
+	TES4(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
 
-        @Override
-        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            flags.set(in.extract(4));
-            fluff1 = Ln.arrayToInt(in.extractInts(4));
-            fluff2 = Ln.arrayToInt(in.extractInts(4));
-            fluff3 = Ln.arrayToInt(in.extractInts(4));
-            subRecords.importSubRecords(in);
-        }
+	@Override
+	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    flags.set(in.extract(4));
+	    fluff1 = Ln.arrayToInt(in.extractInts(4));
+	    fluff2 = Ln.arrayToInt(in.extractInts(4));
+	    fluff3 = Ln.arrayToInt(in.extractInts(4));
+	    subRecords.importSubRecords(in);
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        public String toString() {
-            return "HEDR";
-        }
+	@Override
+	public String toString() {
+	    return "HEDR";
+	}
 
-        @Override
-        Type[] getTypes() {
-            return type;
-        }
+	@Override
+	Type[] getTypes() {
+	    return type;
+	}
 
-        @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(flags.export(), 4);
-            out.write(fluff1, 4);
-            out.write(fluff2, 4);
-            out.write(fluff3, 4);
-            HEDR.export(out, srcMod);
-            author.export(out, srcMod);
-            masters.export(out, srcMod);
-        }
+	@Override
+	void export(LExportParser out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(flags.export(), 4);
+	    out.write(fluff1, 4);
+	    out.write(fluff2, 4);
+	    out.write(fluff3, 4);
+	    HEDR.export(out, srcMod);
+	    author.export(out, srcMod);
+	    masters.export(out, srcMod);
+	}
 
-        void addMaster(ModListing mod) {
-            masters.add(mod);
-        }
+	void addMaster(ModListing mod) {
+	    masters.add(mod);
+	}
 
-        void clearMasters() {
-            masters.clear();
-        }
+	void clearMasters() {
+	    masters.clear();
+	}
 
-        SubSortedList<ModListing> getMasters() {
-            return masters;
-        }
+	SubSortedList<ModListing> getMasters() {
+	    return masters;
+	}
 
-        void setAuthor(String in) {
-            author.setString(in);
-        }
+	void setAuthor(String in) {
+	    author.setString(in);
+	}
 
-        @Override
-        int getFluffLength() {
-            return 16;
-        }
+	@Override
+	int getFluffLength() {
+	    return 16;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            int out = 0;
-            out += HEDR.getTotalLength(srcMod);
-            out += author.getTotalLength(srcMod);
-            out += masters.getTotalLength(srcMod);
-            return out;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    int out = 0;
+	    out += HEDR.getTotalLength(srcMod);
+	    out += author.getTotalLength(srcMod);
+	    out += masters.getTotalLength(srcMod);
+	    return out;
+	}
 
-        @Override
-        int getSizeLength() {
-            return 4;
-        }
+	@Override
+	int getSizeLength() {
+	    return 4;
+	}
 
-        void setNumRecords(int num) {
-            HEDR.setRecords(num);
-        }
+	void setNumRecords(int num) {
+	    HEDR.setRecords(num);
+	}
 
-        @Override
-        Record getNew() {
-            return new TES4();
-        }
+	@Override
+	Record getNew() {
+	    return new TES4();
+	}
 
-        @Override
-        public String print() {
-            return toString();
-        }
+	@Override
+	public String print() {
+	    return toString();
+	}
     }
 
     static class HEDR extends SubRecord {
 
-        byte[] version;
-        int numRecords;
-        int nextID;
+	byte[] version;
+	int numRecords;
+	int nextID;
 
-        HEDR() {
-            super(Type.HEDR);
-            clear();
-        }
+	HEDR() {
+	    super(Type.HEDR);
+	    clear();
+	}
 
-        HEDR(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
+	HEDR(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
 
-        void setRecords(int num) {
-            numRecords = num;
-        }
+	void setRecords(int num) {
+	    numRecords = num;
+	}
 
-        int numRecords() {
-            return numRecords;
-        }
+	int numRecords() {
+	    return numRecords;
+	}
 
-        void addRecords(int num) {
-            setRecords(numRecords() + num);
-        }
+	void addRecords(int num) {
+	    setRecords(numRecords() + num);
+	}
 
-        int nextID() {
-            return nextID++;
-        }
+	int nextID() {
+	    return nextID++;
+	}
 
-        @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(version, 4);
-            out.write(numRecords, 4);
-            out.write(nextID, 4);
-        }
+	@Override
+	void export(LExportParser out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(version, 4);
+	    out.write(numRecords, 4);
+	    out.write(nextID, 4);
+	}
 
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            version = in.extract(4);
-            numRecords = in.extractInt(4);
-            nextID = in.extractInt(4);
-        }
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    version = in.extract(4);
+	    numRecords = in.extractInt(4);
+	    nextID = in.extractInt(4);
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new HEDR();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new HEDR();
+	}
 
-        @Override
-        final public void clear() {
-            version = Ln.parseHexString("D7 A3 70 3F", 4);
-            numRecords = 0;
-            nextID = 3426;  // first available ID on empty CS plugins
-        }
+	@Override
+	final public void clear() {
+	    version = Ln.parseHexString("D7 A3 70 3F", 4);
+	    numRecords = 0;
+	    nextID = 3426;  // first available ID on empty CS plugins
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            return 12;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 12;
+	}
     }
 
     /**
@@ -981,27 +1009,27 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public enum Mod_Flags {
 
-        /**
-         * Master flag determines whether a mod is labeled as a master plugin
-         * and receives a ".esm" suffix.
-         */
-        MASTER(0),
-        /**
-         * String Tabled flag determines whether names and descriptions are
-         * stored inside the mod itself, or in external STRINGS files. <br><br>
-         *
-         * In general, it is suggested to disable this flag for most patches, as
-         * the only benefit of external STRINGS files is easy multi-language
-         * support. Skyproc can offer this same multilanguage support without
-         * external STRINGS files. See SPGlobal.language for more information.
-         *
-         * @see SPGlobal
-         */
-        STRING_TABLED(7);
-        int value;
+	/**
+	 * Master flag determines whether a mod is labeled as a master plugin
+	 * and receives a ".esm" suffix.
+	 */
+	MASTER(0),
+	/**
+	 * String Tabled flag determines whether names and descriptions are
+	 * stored inside the mod itself, or in external STRINGS files. <br><br>
+	 *
+	 * In general, it is suggested to disable this flag for most patches, as
+	 * the only benefit of external STRINGS files is easy multi-language
+	 * support. Skyproc can offer this same multilanguage support without
+	 * external STRINGS files. See SPGlobal.language for more information.
+	 *
+	 * @see SPGlobal
+	 */
+	STRING_TABLED(7);
+	int value;
 
-        private Mod_Flags(int in) {
-            value = in;
-        }
+	private Mod_Flags(int in) {
+	    value = in;
+	}
     };
 }

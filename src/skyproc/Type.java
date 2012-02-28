@@ -731,8 +731,9 @@ public enum Type {
      *
      */
     MODS,
-    
+
     KYWD,
+    AMMO,
 
     /**
      * NPC_: Marks DNAM position?

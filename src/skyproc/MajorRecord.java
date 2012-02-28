@@ -36,7 +36,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord(Mod modToOriginateFrom) {
         this();
-        ID = modToOriginateFrom.getNextID();
+        ID = modToOriginateFrom.getNextID(getEDID());
         modToOriginateFrom.addRecord(this);
     }
 
@@ -58,22 +58,15 @@ public abstract class MajorRecord extends Record implements Serializable {
         return out + "]";
     }
 
-    /**
-     * Makes a copy of the Major Record with a new FormID originating from
-     * the mod parameter.  This function also automatically adds the new copied record to
-     * the patch it originates from.  This makes two separate records independant of each other.<br><br>
-     *
-     * NOTE: The record returned can only be determined by the compiler to be a Major Record.
-     * You must cast it yourself to be the correct type of major record.<br>
-     * ex.  NPC_ newNPC = (NPC_) otherNPC.copyOf(myPatch);
-     * @param modToOriginateFrom Mod to look to in assigning a new FormID.  The copied record will also be added to this Mod.
-     * @return The copied record.
-     */
     @Override
     MajorRecord copyOf(Mod modToOriginateFrom) {
+	return copyOf(modToOriginateFrom, this.getEDID() + "_DUP");
+    }
+
+    MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
         MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
-        out.setForm(modToOriginateFrom.getNextID());
-        out.setEDID(out.getEDID() + "_DUP");
+        out.setEDID(edid);
+        out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
         return out;
     }
 
@@ -232,7 +225,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * Sets the EDID of the Major Record
      * @param in The string to have the EDID set to.
      */
-    public void setEDID(String in) {
+    final public void setEDID(String in) {
         EDID.setString(in);
     }
 
@@ -240,7 +233,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      *
      * @return The current EDID string.
      */
-    public String getEDID() {
+    final public String getEDID() {
         return EDID.print();
     }
 

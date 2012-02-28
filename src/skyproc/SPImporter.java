@@ -471,7 +471,7 @@ public class SPImporter {
      * a mod at all.
      */
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
-	return importMod(listing, path, new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets)));
+	return importMod(listing, path, true, grup_targets);
     }
 
     /**
@@ -486,12 +486,15 @@ public class SPImporter {
      * a mod at all.
      */
     public Mod importMod(ModListing listing, String path, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
-	return importMod(listing, path, true, grup_targets);
+	GRUP_TYPE[] types = new GRUP_TYPE[grup_targets.size()];
+	types = grup_targets.toArray(types);
+	return importMod(listing, path, types);
     }
 
-    Mod importMod(ModListing listing, String path, Boolean addtoDb, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
+    Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE ... grup_targets) throws BadMod {
 	try {
-	    int numTargets = grup_targets.size();
+	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
+	    int numTargets = grups.size();
 	    int targetsFound = 0;
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
@@ -515,7 +518,7 @@ public class SPImporter {
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
 		SPGlobal.flush();
-		if (grup_targets.isEmpty()) {
+		if (grups.isEmpty()) {
 		    break;
 		}
 

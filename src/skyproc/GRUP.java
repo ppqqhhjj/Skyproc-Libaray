@@ -160,7 +160,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
             if (logging()) {
                 logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
             }
-            for (T t : this) {
+            for (MajorRecord t : this) {
                 t.export(out, srcMod);
                 SPGuiPortal.progress.incrementBar();
             }
@@ -304,7 +304,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
         if (logging() && SPGlobal.debugModMerge) {
             log(toString(), "Size before: " + numRecords());
         }
-        for (T item : rhs) {
+        for (MajorRecord item : rhs) {
             if (logging() && SPGlobal.debugModMerge) {
                 if (contains(item.getForm())) {
                     log(toString(), "Replacing record " + item.toString() + " with one from " + rhs.toString());

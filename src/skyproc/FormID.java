@@ -97,7 +97,6 @@ public class FormID implements Serializable {
             System.arraycopy(id, 0, form, 0, id.length);
         }
         valid = !equals(NULL);
-//	}
     }
 
     void export(LExportParser out) throws IOException {
