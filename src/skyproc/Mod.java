@@ -148,25 +148,23 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (!equals(SPGlobal.getGlobalPatch())) {
 	    return new FormID(header.HEDR.nextID++, getInfo());
 
-	// If global patch, check for consistency
+	    // If global patch, check for consistency
 	} else {
 	    // If has an EDID match, grab old FormID
-	    if (SPGlobal.edidToForm.containsKey(edid)) {
-		if (SPGlobal.logging()) {
-		    SPGlobal.logSync(getName(), "Assigning old FormID " + SPGlobal.edidToForm.get(edid) + " for EDID " + edid);
-		}
-		return SPGlobal.edidToForm.get(edid);
+	    FormID oldFormID = SPGlobal.getOldForm(edid);
+	    if (oldFormID != null) {
+		return oldFormID;
 	    } else {
 
 		//Find next open FormID
 		FormID possibleID = new FormID(header.HEDR.nextID++, getInfo());
-		for (int i = 0 ; i < SPGlobal.edidToForm.size() ; i++) {
+		for (int i = 0; i < SPGlobal.edidToForm.size(); i++) {
 		    if (!SPGlobal.edidToForm.containsValue(possibleID)) {
 			break;
 		    }
 		    possibleID = new FormID(header.HEDR.nextID++, getInfo());
 		}
-		if (SPGlobal.logging()) {
+		if (SPGlobal.debugConsistencyTies && SPGlobal.logging()) {
 		    SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
 		}
 		return possibleID;
@@ -202,6 +200,13 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	return m;
+    }
+
+    public MajorRecord makeCopy(MajorRecord m, String newEDID) {
+	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	m = m.copyOf(this, newEDID);
 	GRUPs.get(m.getTypes()[0]).addRecord(m);
 	return m;
     }

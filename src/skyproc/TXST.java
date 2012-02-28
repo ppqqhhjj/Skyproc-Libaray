@@ -24,8 +24,8 @@ public class TXST extends MajorRecord {
     SubData DODT = new SubData(Type.DODT);
     SubFlag DNAM = new SubFlag(Type.DNAM, 2);
 
-    public TXST(Mod srcMod) {
-        super(srcMod);
+    public TXST(Mod srcMod, String edid) {
+        super(srcMod, edid);
         init();
         OBND.setData(new byte[12]);
     }

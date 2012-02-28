@@ -16,8 +16,9 @@ import skyproc.exceptions.Uninitialized;
 import skyproc.exceptions.BadRecord;
 
 /**
- * A record contained in a GRUP.  These are top level records that all have
+ * A record contained in a GRUP. These are top level records that all have
  * FormIDs that uniquely identify them.
+ *
  * @author Justin Swanson
  */
 public abstract class MajorRecord extends Record implements Serializable {
@@ -31,13 +32,14 @@ public abstract class MajorRecord extends Record implements Serializable {
     Enum exception;
 
     MajorRecord() {
-        subRecords.add(EDID);
+	subRecords.add(EDID);
     }
 
-    MajorRecord(Mod modToOriginateFrom) {
-        this();
-        ID = modToOriginateFrom.getNextID(getEDID());
-        modToOriginateFrom.addRecord(this);
+    MajorRecord(Mod modToOriginateFrom, String edid) {
+	this();
+	EDID.setString(edid);
+	ID = modToOriginateFrom.getNextID(getEDID());
+	modToOriginateFrom.addRecord(this);
     }
 
     /**
@@ -46,16 +48,16 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String toString() {
-        String out = "[" + getTypes()[0].toString() + " | ";
-        if (ID.isStandardized()) {
-            out += getFormStr();
-        } else if (isValid()) {
-            out += getFormArrayStr(true);
-        }
-        if (EDID.isValid()) {
-            out += " | " + EDID.print();
-        }
-        return out + "]";
+	String out = "[" + getTypes()[0].toString() + " | ";
+	if (ID.isStandardized()) {
+	    out += getFormStr();
+	} else if (isValid()) {
+	    out += getFormArrayStr(true);
+	}
+	if (EDID.isValid()) {
+	    out += " | " + EDID.print();
+	}
+	return out + "]";
     }
 
     @Override
@@ -64,169 +66,197 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
-        MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
-        out.setEDID(edid);
-        out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
-        return out;
+	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
+	out.EDID.setString(edid);
+	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
+	return out;
     }
 
     @Override
     Boolean isValid() {
-        if (ID == null) {
-            return false;
-        } else {
-            return ID.isValid();
-        }
+	if (ID == null) {
+	    return false;
+	} else {
+	    return ID.isValid();
+	}
     }
 
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        parseData(in, null);
+	parseData(in, null);
     }
 
     void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-        super.parseData(in);
-        majorFlags = new LFlags(in.extract(4));
-        setForm(in.extract(4));
-        versionInfo = new LFlags(in.extract(4));
-        newFlags = new LFlags(in.extract(4));
+	super.parseData(in);
+	majorFlags = new LFlags(in.extract(4));
+	setForm(in.extract(4));
+	versionInfo = new LFlags(in.extract(4));
+	newFlags = new LFlags(in.extract(4));
 
-        if (isCompressed()) {
-            majorFlags.set(18, false);
-            in.correctForCompression();
-            logSync(getTypes().toString(), "Decompressed");
-        }
+	if (isCompressed()) {
+	    majorFlags.set(18, false);
+	    in.correctForCompression();
+	    logSync(getTypes().toString(), "Decompressed");
+	}
 
-        if (getNextType(in) == Type.EDID) {
-            EDID.parseData(EDID.extractRecordData(in));
-        }
+	if (getNextType(in) == Type.EDID) {
+	    EDID.parseData(EDID.extractRecordData(in));
+	}
 
 //        if (EDID.print().equals("EncHorker")) {
 //            int wer = 32;
 //        }
 
-        importSubRecords(in, mask);
-        subRecords.printSummary();
+	importSubRecords(in, mask);
+	subRecords.printSummary();
     }
 
     void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-        subRecords.importSubRecords(in, mask);
+	subRecords.importSubRecords(in, mask);
     }
 
     void standardizeMasters(Mod srcMod) {
-        ID.standardize(srcMod);
-        subRecords.standardize(srcMod);
+	ID.standardize(srcMod);
+	subRecords.standardize(srcMod);
     }
 
     /**
      * Prints the contents of the Major Record to the asynchronous logs.
+     *
      * @return The empty string.
      */
     @Override
     public String print() {
-        logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + EDID.print());
-        if (hasException()) {
-            logSync(getTypes().toString(), "Exception: " + exception.toString());
-        }
-        return "";
+	logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + EDID.print());
+	if (hasException()) {
+	    logSync(getTypes().toString(), "Exception: " + exception.toString());
+	}
+	return "";
     }
 
     @Override
     int getFluffLength() {
-        return 16;
+	return 16;
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        if (isValid()) {
-            return subRecords.length(srcMod);
-        } else {
-            return 0;
-        }
+	if (isValid()) {
+	    return subRecords.length(srcMod);
+	} else {
+	    return 0;
+	}
     }
 
     @Override
     int getSizeLength() {
-        return 4;
+	return 4;
     }
 
     @Override
     void export(LExportParser out, Mod srcMod) throws IOException {
-        super.export(out, srcMod);
-        if (isValid()) {
-            if (logging() && SPGlobal.debugExportSummary) {
-                logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
-            }
+	super.export(out, srcMod);
+	if (isValid()) {
+	    if (logging() && SPGlobal.debugExportSummary) {
+		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
+	    }
 
 //            if ("EncDremoraWarlock06".equals(getEDID())) {
 //                int sdf = 234;
 //            }
 
-            out.write(majorFlags.export(), 4);
-            out.write(ID.getInternal(true), 4);
-            out.write(versionInfo.export(), 4);
-            out.write(newFlags.export(), 4);
-            subRecords.export(out, srcMod);
-        }
+	    out.write(majorFlags.export(), 4);
+	    out.write(ID.getInternal(true), 4);
+	    out.write(versionInfo.export(), 4);
+	    out.write(newFlags.export(), 4);
+	    subRecords.export(out, srcMod);
+	}
     }
 
     Boolean isCompressed() {
-        if (majorFlags.is(18)) {
-            return true;
-        } else {
-            return false;
-        }
+	if (majorFlags.is(18)) {
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     void setException(Enum input) {
-        exception = input;
+	exception = input;
     }
 
     Enum getException() {
-        if (hasException()) {
-            return exception;
-        } else {
-            return SPExceptionDbInterface.NullException.NULL;
-        }
+	if (hasException()) {
+	    return exception;
+	} else {
+	    return SPExceptionDbInterface.NullException.NULL;
+	}
     }
 
     void fetchException(SPDatabase database) {
-        try {
-            setException(database.getException(this));
-        } catch (Uninitialized ex) {
-            exception = SPExceptionDbInterface.NullException.NULL;
-        }
-        if (logging() && !exception.equals(SPExceptionDbInterface.NullException.NULL)) {
-            logSync(toString(), "Exception fetched (", getException().toString() + ") for " + toString());
-        }
+	try {
+	    setException(database.getException(this));
+	} catch (Uninitialized ex) {
+	    exception = SPExceptionDbInterface.NullException.NULL;
+	}
+	if (logging() && !exception.equals(SPExceptionDbInterface.NullException.NULL)) {
+	    logSync(toString(), "Exception fetched (", getException().toString() + ") for " + toString());
+	}
     }
 
     Boolean hasException() {
-        return exception != null;
+	return exception != null;
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
 //        if ("EncDremoraWarlock06".equals(getEDID())) {
 //            int sdf = 234;
 //        }
-        for (SubRecord s : subRecords) {
-            if (s.getClass() == SubStringPointer.class) {
-                try {
-                    ((SubStringPointer) s).fetchStringPointers(srcMod, this, streams);
-                } catch (IOException e) {
-                    logError(srcMod.getName(), "Fetch String Pointer IO error: " + s);
-                }
-            }
-        }
+	for (SubRecord s : subRecords) {
+	    if (s.getClass() == SubStringPointer.class) {
+		try {
+		    ((SubStringPointer) s).fetchStringPointers(srcMod, this, streams);
+		} catch (IOException e) {
+		    logError(srcMod.getName(), "Fetch String Pointer IO error: " + s);
+		}
+	    }
+	}
     }
 
     // Get/set methods
     /**
      * Sets the EDID of the Major Record
+     *
      * @param in The string to have the EDID set to.
      */
-    final public void setEDID(String in) {
-        EDID.setString(in);
+    final public void setEDID(String edid) {
+	setEDID(edid, this.getFormMaster());
+    }
+
+    final void setEDID(String edid, ModListing srcMod) {
+
+	if (srcMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
+	    // No duplicates
+	    if (SPGlobal.globalPatchEDIDS.contains(edid)) {
+		int num = SPGlobal.random.nextInt(10000);
+		String newEDID = edid + num;
+		for (int i = 0; i < SPGlobal.edidToForm.size(); i++) {
+		    if (!SPGlobal.edidToForm.containsKey(newEDID)) {
+			break;
+		    }
+		    newEDID = edid + (++num);
+		}
+		edid = newEDID;
+	    }
+	    SPGlobal.globalPatchEDIDS.add(edid);
+
+	    // Assign old formIDs
+	    FormID oldFormID = SPGlobal.getOldForm(edid);
+	    if (oldFormID != null) {
+		setForm(oldFormID);
+	    }
+	}
+	EDID.setString(edid);
     }
 
     /**
@@ -234,23 +264,27 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The current EDID string.
      */
     final public String getEDID() {
-        return EDID.print();
+	return EDID.print();
     }
 
     /**
-     * Sets the FormID of the Major Record.  Any changes to that FormID will be reflected in the Major Record as well, it shares the same object.
+     * Sets the FormID of the Major Record. Any changes to that FormID will be
+     * reflected in the Major Record as well, it shares the same object.
+     *
      * @param in The FormID to assign to this Major Record.
      */
     public void setForm(FormID in) {
-        ID = in;
+	ID = in;
     }
 
     /**
-     * Returns the FormID object of the Major Record.  Note that any changes made to this FormID will be reflected in the Major Record also.
+     * Returns the FormID object of the Major Record. Note that any changes made
+     * to this FormID will be reflected in the Major Record also.
+     *
      * @return The FormID object of the Major Record.
      */
     public FormID getForm() {
-        return ID;
+	return ID;
     }
 
     /**
@@ -258,11 +292,11 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The FormID string of the Major Record.
      */
     public String getFormStr() {
-        return ID.getFormStr();
+	return ID.getFormStr();
     }
 
     String getFormArrayStr(Boolean master) {
-        return ID.getArrayStr(master);
+	return ID.getArrayStr(master);
     }
 
     /**
@@ -270,126 +304,128 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The name of the mod from which this Major Record originates.
      */
     public ModListing getFormMaster() {
-        return ID.getMaster();
+	return ID.getMaster();
     }
 
     void setForm(byte[] in) throws BadParameter {
-        ID.setInternal(in);
-        if (logging()) {
-            logSync(toString(), "Setting FormID: " + ID.getArrayStr(true));
-        }
+	ID.setInternal(in);
+	if (logging()) {
+	    logSync(toString(), "Setting FormID: " + ID.getArrayStr(true));
+	}
     }
 
     /**
-     * Returns a customized Mask object with the correct Types preloaded with the
-     * flags set to false.  This means it will initially import nothing.  You must
-     * tell the mask which Types to allow.
+     * Returns a customized Mask object with the correct Types preloaded with
+     * the flags set to false. This means it will initially import nothing. You
+     * must tell the mask which Types to allow.
+     *
      * @see Type
      * @return Major Record specific customized mask with flags set to false.
      */
     Mask getMask() {
-        return new Mask();
+	return new Mask();
     }
 
     public static Mask getMask(Type maskType) {
-        Mod tempMod = new Mod(new ModListing("temp", false), 0);
-        GRUP g = tempMod.GRUPs.get(maskType);
-        if (g == null) {
-            return null;
-        }
-        MajorRecord m = (MajorRecord) g.prototype.getNew();
-        return m.getMask();
+	Mod tempMod = new Mod(new ModListing("temp", false), 0);
+	GRUP g = tempMod.GRUPs.get(maskType);
+	if (g == null) {
+	    return null;
+	}
+	MajorRecord m = (MajorRecord) g.prototype.getNew();
+	return m.getMask();
     }
 
     /**
      * A mask that can be added to an SPImporter object to inform it of special
-     * importing rules for specific GRUPs.  The SPImporter stops importing a Major
-     * Record when all of the subrecords allowed by a mask have been imported.  This
-     * saves time when only a few subrecords need to be imported for use in your program.
+     * importing rules for specific GRUPs. The SPImporter stops importing a
+     * Major Record when all of the subrecords allowed by a mask have been
+     * imported. This saves time when only a few subrecords need to be imported
+     * for use in your program.
      *
-     * NOTE:  If a mask is used for a specific GRUP, that GRUP should never be exported
-     * with the patch, or else the records will be incomplete (missing information).  It should
-     * only be used for in-program purposes.
+     * NOTE: If a mask is used for a specific GRUP, that GRUP should never be
+     * exported with the patch, or else the records will be incomplete (missing
+     * information). It should only be used for in-program purposes.
      */
     public class Mask {
 
-        Map<Type, Boolean> allowed = new EnumMap<Type, Boolean>(Type.class);
-        Type type;
-        int numImport = 0;
-        Map<Type, Boolean> imported = new EnumMap<Type, Boolean>(Type.class);
-        int numImported = 0;
+	Map<Type, Boolean> allowed = new EnumMap<Type, Boolean>(Type.class);
+	Type type;
+	int numImport = 0;
+	Map<Type, Boolean> imported = new EnumMap<Type, Boolean>(Type.class);
+	int numImported = 0;
 
-        /**
-         * Creates a mask with all related Type flags set to false.
-         */
-        public Mask() {
-            this(false);
-        }
+	/**
+	 * Creates a mask with all related Type flags set to false.
+	 */
+	public Mask() {
+	    this(false);
+	}
 
-        Mask(boolean b) {
-            type = getTypes()[0];
-            for (Type t : subRecords.getTypes()) {
-                allowed.put(t, b);
-                imported.put(t, false);
-            }
-        }
+	Mask(boolean b) {
+	    type = getTypes()[0];
+	    for (Type t : subRecords.getTypes()) {
+		allowed.put(t, b);
+		imported.put(t, false);
+	    }
+	}
 
-        /**
-         *
-         * @see Type
-         * @param t Type to allow import.
-         */
-        public void allow(Type t) {
-            if (allowed.get(t) == false) {
-                allowed.put(t, true);
-                numImport++;
-            }
-        }
+	/**
+	 *
+	 * @see Type
+	 * @param t Type to allow import.
+	 */
+	public void allow(Type t) {
+	    if (allowed.get(t) == false) {
+		allowed.put(t, true);
+		numImport++;
+	    }
+	}
 
-        void clear() {
-            for (Type t : imported.keySet()) {
-                imported.put(t, false);
-            }
-            numImported = 0;
-        }
+	void clear() {
+	    for (Type t : imported.keySet()) {
+		imported.put(t, false);
+	    }
+	    numImported = 0;
+	}
 
-        void imported(Type t) {
-            if (imported.get(t) == false) {
-                imported.put(t, true);
-                numImported++;
-            }
-        }
+	void imported(Type t) {
+	    if (imported.get(t) == false) {
+		imported.put(t, true);
+		numImported++;
+	    }
+	}
 
-        boolean done() {
-            if (numImported == numImport) {
-                clear();
-                SPGlobal.logSync("MASK", "Done importing record.");
-                return true;
-            }
-            return false;
-        }
+	boolean done() {
+	    if (numImported == numImport) {
+		clear();
+		SPGlobal.logSync("MASK", "Done importing record.");
+		return true;
+	    }
+	    return false;
+	}
     }
 
     static class Null_Major extends MajorRecord {
 
-        private static final Type[] type = {Type.NULL};
+	private static final Type[] type = {Type.NULL};
 
-        @Override
-        public void fetchException(SPDatabase database) {
-        }
+	@Override
+	public void fetchException(SPDatabase database) {
+	}
 
-        @Override
-        Type[] getTypes() {
-            return type;
-        }
+	@Override
+	Type[] getTypes() {
+	    return type;
+	}
 
-        public static Null_Major getNull() {
-            return new Null_Major();
-        }
+	public static Null_Major getNull() {
+	    return new Null_Major();
+	}
 
-        @Override
-        Record getNew() {
-            return getNull();
-        }
+	@Override
+	Record getNew() {
+	    return getNull();
+	}
     }
 }

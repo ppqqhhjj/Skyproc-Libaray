@@ -14,6 +14,8 @@ import skyproc.exceptions.BadMod;
  */
 public class SPGlobal {
 
+    static String header = "SPGlobal";
+    static Random random = new Random(System.currentTimeMillis());
     static String gameName = "Skyrim";
     /**
      * Path and filename to look for the active plugins file.<br>
@@ -55,6 +57,18 @@ public class SPGlobal {
     }
     static Mod globalPatchOut;
     static Map<String, FormID> edidToForm = new HashMap<String, FormID>();
+    static Set<String> globalPatchEDIDS = new HashSet<String>();
+
+    static FormID getOldForm(String edid) {
+	if (SPGlobal.edidToForm.containsKey(edid)) {
+	    if (debugConsistencyTies && SPGlobal.logging()) {
+		SPGlobal.logSync(header, "Assigning old FormID " + SPGlobal.edidToForm.get(edid) + " for EDID " + edid);
+	    }
+	    return SPGlobal.edidToForm.get(edid);
+	} else {
+	    return null;
+	}
+    }
 
     /**
      * Creating your patch ahead of time, and setting it as the Global Patch
@@ -90,7 +104,7 @@ public class SPGlobal {
 			    // If already exists, problem
 			    if (!edidToForm.containsKey(m.getEDID())) {
 				edidToForm.put(m.getEDID(), m.getForm());
-				if (logging()) {
+				if (debugConsistencyImport && logging()) {
 				    log("Consistency", m.toString());
 				}
 			    } else {

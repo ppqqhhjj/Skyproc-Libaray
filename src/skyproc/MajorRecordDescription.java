@@ -20,8 +20,8 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
         subRecords.add(DESC);
     }
 
-    MajorRecordDescription(Mod mod) {
-        super(mod);
+    MajorRecordDescription(Mod mod, String edid) {
+        super(mod, edid);
         DESC.forceExport = true;
         subRecords.add(DESC);
     }

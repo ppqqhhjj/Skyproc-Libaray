@@ -25,7 +25,7 @@ public class KYWD extends MajorRecord {
     }
 
     public KYWD (Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom);
+	super(modToOriginateFrom, edid);
 	EDID.setString(edid);
     }
 

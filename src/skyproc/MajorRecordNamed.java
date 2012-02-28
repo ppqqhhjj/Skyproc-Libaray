@@ -16,8 +16,8 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
         subRecords.add(FULL);
     }
 
-    MajorRecordNamed (Mod mod) {
-        super(mod);
+    MajorRecordNamed (Mod mod, String edid) {
+        super(mod, edid);
         subRecords.add(FULL);
     }
 

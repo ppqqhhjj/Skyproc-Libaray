@@ -13,8 +13,8 @@ public abstract class Actor extends MajorRecordNamed implements Serializable {
         super();
     }
 
-    Actor (Mod mod) {
-        super(mod);
+    Actor (Mod mod, String edid) {
+        super(mod, edid);
     }
 
     int getTrueLevel(int depth) {

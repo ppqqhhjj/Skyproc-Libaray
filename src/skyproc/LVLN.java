@@ -42,8 +42,8 @@ public class LVLN extends Actor implements Iterable<LVLO> {
      * Creates a new LVLN record with a FormID originating from the mod parameter.
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      */
-    public LVLN(Mod modToOriginateFrom) {
-        super(modToOriginateFrom);
+    public LVLN(Mod modToOriginateFrom, String edid) {
+        super(modToOriginateFrom, edid);
         init();
     }
 
