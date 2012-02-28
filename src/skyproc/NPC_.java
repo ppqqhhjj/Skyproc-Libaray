@@ -3,15 +3,12 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LExportParser;
+import lev.LFlags;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.NotFound;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -435,8 +432,9 @@ public class NPC_ extends Actor implements Serializable {
         int maxCalcLevel = 0;
         int speedMult = 100;
         int dispositionBase = 0;
+	int healthOffset = 0;
         byte[] fluff1 = new byte[4];
-        byte[] fluff2 = new byte[4];
+	LFlags templateFlags = new LFlags(2);
         byte[] fluff3 = new byte[2];
 
         ACBS() {
@@ -463,8 +461,9 @@ public class NPC_ extends Actor implements Serializable {
             minCalcLevel = in.extractInt(2);
             maxCalcLevel = in.extractInt(2);
             speedMult = in.extractInt(2);
-            fluff2 = in.extract(4);
             dispositionBase = in.extractInt(2);
+            templateFlags.set(in.extract(2));
+	    healthOffset = in.extractInt(2);
             fluff3 = in.extract(2);
             if (logging()) {
                 logSync("", "ACBS record: ");
@@ -484,8 +483,9 @@ public class NPC_ extends Actor implements Serializable {
             out.write(minCalcLevel, 2);
             out.write(maxCalcLevel, 2);
             out.write(speedMult, 2);
-            out.write(fluff2, 4);
             out.write(dispositionBase, 2);
+            out.write(templateFlags.export(), 2);
+            out.write(healthOffset, 2);
             out.write(fluff3, 2);
         }
 
@@ -738,7 +738,19 @@ public class NPC_ extends Actor implements Serializable {
         SPELL_POINTS_BASE
     }
 
+    public enum TemplateFlag {
+	USE_TRAITS
+    }
+
     // Get/Set methods
+    public void setTemplateFlag(TemplateFlag flag, boolean on) {
+	ACBS.templateFlags.set(flag.ordinal(), on);
+    }
+
+    public boolean getTemplateFlag(TemplateFlag flag) {
+	return ACBS.templateFlags.is(flag.ordinal());
+    }
+
     /**
      * Returns the group of factions assigned to the NPC.  Changing this group by adding or
      * removing factions will affect that NPC.
