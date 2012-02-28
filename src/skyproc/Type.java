@@ -734,6 +734,7 @@ public enum Type {
 
     KYWD,
     AMMO,
+    FLST,
 
     /**
      * NPC_: Marks DNAM position?

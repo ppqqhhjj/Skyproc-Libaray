@@ -43,6 +43,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
     GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
+    GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<SubStringPointer.Files, Map<Integer, Integer>>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<String>();
     private ArrayList<String> outDLStrings = new ArrayList<String>();
@@ -89,6 +90,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(textures.getContainedType(), textures);
 	GRUPs.put(weapons.getContainedType(), weapons);
 	GRUPs.put(keywords.getContainedType(), keywords);
+	GRUPs.put(formLists.getContainedType(), formLists);
     }
 
     /**
@@ -679,6 +681,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<KYWD> getKeywords() {
 	return keywords;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Keyword records
+     */
+    public GRUP<FLST> getFormLists() {
+	return formLists;
     }
 
     /**
