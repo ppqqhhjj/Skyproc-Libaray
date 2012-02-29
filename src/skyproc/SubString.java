@@ -132,4 +132,10 @@ class SubString extends SubRecord {
         hash = 29 * hash + (this.string != null ? this.string.hashCode() : 0);
         return hash;
     }
+
+    public int hashUpperCaseCode() {
+	int hash = 7;
+        hash = 29 * hash + (this.string != null ? this.string.toUpperCase().hashCode() : 0);
+        return hash;
+    }
 }

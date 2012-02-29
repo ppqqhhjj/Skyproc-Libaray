@@ -164,7 +164,7 @@ public class ModListing extends SubRecord implements Comparable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + (this.mast != null ? this.mast.hashCode() : 0);
+        hash = 37 * hash + (this.mast != null ? this.mast.hashUpperCaseCode() : 0);
         hash = 37 * hash + (this.master ? 1 : 0);
         return hash;
     }

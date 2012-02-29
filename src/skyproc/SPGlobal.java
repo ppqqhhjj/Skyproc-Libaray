@@ -228,6 +228,7 @@ public class SPGlobal {
 	    e.printStackTrace(pw);
 	    pw.flush();
 	    sw.flush();
+	    SPGlobal.log.logSync("EXCEPTION", sw.toString());
 	    SPGlobal.log.logException(sw.toString());
 	}
     }
