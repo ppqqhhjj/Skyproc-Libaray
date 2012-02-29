@@ -121,6 +121,14 @@ public class ARMA extends MajorRecord {
             }
         }
 
+	@Override
+	void standardizeMasters(Mod srcMod) {
+	    super.standardizeMasters(srcMod);
+	    for (AltTexture t : altTextures) {
+		t.standardizeMasters(srcMod);
+	    }
+	}
+
         @Override
         SubRecord getNew(Type type) {
             return new AltTextures(type);
@@ -175,6 +183,10 @@ public class ARMA extends MajorRecord {
             texture.export(out);
             out.write(index, 4);
         }
+
+	void standardizeMasters(Mod srcMod) {
+	    texture.standardize(srcMod);
+	}
 
         int getTotalLength() {
             return name.length() + 12;

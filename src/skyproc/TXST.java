@@ -4,12 +4,15 @@
  */
 package skyproc;
 
+import java.util.Iterator;
+
 /**
  *
  * @author Justin Swanson
  */
 public class TXST extends MajorRecord {
 
+    public static int NUM_MAPS = 8;
     private static final Type[] type = {Type.TXST};
 
     SubData OBND = new SubData(Type.OBND);
@@ -187,5 +190,25 @@ public class TXST extends MajorRecord {
         SPECULAR_MAP_OFF,
         FACEGEN_TEXTURES
     }
+
+//    public enum TXST_to_NIF {
+//	Diffuse(0),
+//	Normal(1),
+////	Environment_Mask,
+//	Glow(2),
+////	Height,
+////	Environment,
+////	Multilayer,
+////	Backlight_Mask,
+//
+//	Subsurface_Tint(2)
+////	Detail_Map
+//	;
+//
+//	int value;
+//	TXST_to_NIF(int in) {
+//	    value = in;
+//	}
+//    }
 
 }
