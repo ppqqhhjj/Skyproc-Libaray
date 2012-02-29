@@ -385,8 +385,8 @@ public class ARMA extends MajorRecord {
         additionalRaces.remove(new SubForm(Type.MODL, addRace));
     }
 
-    public SubList<SubForm> getAdditionalRaces() {
-        return additionalRaces;
+    public ArrayList<FormID> getAdditionalRaces() {
+        return SubList.subFormToPublic(additionalRaces);
     }
 
     public void setFootstepSound(FormID footstep) {

@@ -305,7 +305,7 @@ public class NPC_ extends Actor implements Serializable {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
             skills = in.extract(36);
             health = in.extractInt(2);
@@ -386,7 +386,7 @@ public class NPC_ extends Actor implements Serializable {
 
         @Override
         int getContentLength(Mod srcMod) {
-            if (isValid()) {;
+            if (isValid()) {
                 return TINI.getTotalLength(srcMod)
                         + TINC.getTotalLength(srcMod)
                         + TINV.getTotalLength(srcMod)
@@ -452,7 +452,7 @@ public class NPC_ extends Actor implements Serializable {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
             fluff1 = in.extract(4);
             baseSpellPoints = in.extractInt(2);
@@ -530,7 +530,7 @@ public class NPC_ extends Actor implements Serializable {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
             aggression = in.extractInt(1);
             confidence = in.extractInt(1);
@@ -757,15 +757,14 @@ public class NPC_ extends Actor implements Serializable {
      * @see SubRecordList
      * @return The group of factions assigned to the NPC.
      */
-    public SubList<SubFormInt> getFactions() {
-        return factions;
+    public ArrayList<SubFormInt> getFactions() {
+        return SubList.subFormIntToPublic(factions);
     }
 
     /**
      *
      * @param factionRef FormID of the faction to add the NPC into.
      * @param rank Rank within the faction to set the NPC at.
-     * @todo Add FormID confirmation
      * @return True if faction was added.
      */
     public boolean addFaction(FormID factionRef, int rank) {
@@ -797,7 +796,6 @@ public class NPC_ extends Actor implements Serializable {
      * @param skill The enum of the skill to set to the value.
      * @param value Sets the base value of the skill to this value.
      * @throws BadParameter If value is < 0.
-     * @todo Add more bounds checking on value.
      */
     public void set(Skills skill, int value) throws BadParameter {
         if (value >= 0) {
@@ -823,7 +821,6 @@ public class NPC_ extends Actor implements Serializable {
      * @param skill The enum of the skill to set to the value.
      * @param value Sets the mod value of the skill to this value.
      * @throws BadParameter If value is < 0.
-     * @todo Add more bounds checking on value.
      */
     public void setStatMod(Skills skill, int value) throws BadParameter {
         if (value >= 0) {
@@ -957,7 +954,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      * The item to be added to the NPC's inventory upon death.
      * @param deathItemRef
-     * @todo Add FormID confirmation
      */
     public void setDeathItem(FormID deathItemRef) {
         INAM.setForm(deathItemRef);
@@ -974,7 +970,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      * The voice type of the NPC.
      * @param voiceTypeRef
-     * @todo Add FormID confirmation
      */
     public void setVoiceType(FormID voiceTypeRef) {
         VTCK.setForm(voiceTypeRef);
@@ -991,7 +986,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param templateRef
-     * @todo Add FormID confirmation
      */
     public void setTemplate(FormID templateRef) {
         TPLT.setForm(templateRef);
@@ -1008,7 +1002,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param raceRef
-     * @todo Add FormID confirmation
      */
     public void setRace(FormID raceRef) {
         RNAM.setForm(raceRef);
@@ -1026,15 +1019,14 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public SubList<SubForm> getSpells() {
-        return spells;
+    public ArrayList<FormID> getSpells() {
+        return SubList.subFormToPublic(spells);
     }
 
     /**
      *
      * @param spellReference FormID of the spell to give to the NPC.
      * @return True if spell was added.
-     * @todo Add FormID confirmation
      */
     public boolean addSpell(FormID spellReference) {
         return spells.add(new SubForm(Type.SPLO, spellReference));
@@ -1055,7 +1047,6 @@ public class NPC_ extends Actor implements Serializable {
      * @param itemReference
      * @param count
      * @return
-     * @todo Add FormID confirmation
      */
     public boolean addItem(FormID itemReference, int count) {
         return items.add(new SubFormInt(Type.CNTO, itemReference, count));
@@ -1074,15 +1065,14 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public SubList<SubFormInt> getItems() {
-        return items;
+    public ArrayList<SubFormInt> getItems() {
+        return SubList.subFormIntToPublic(items);
     }
 
     /**
      * Adds an AI package with the FormID to the NPC.
      * @param aiPackageReference
      * @return True if AI package was added.
-     * @todo Add FormID confirmation
      */
     public boolean addAIPackage(FormID aiPackageReference) {
         return aiPackages.add(new SubForm(Type.PKID, aiPackageReference));
@@ -1101,14 +1091,13 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return SubRecordList of AI packages.
      */
-    public SubList<SubForm> getAIPackages() {
-        return aiPackages;
+    public ArrayList<FormID> getAIPackages() {
+        return SubList.subFormToPublic(aiPackages);
     }
 
     /**
      *
      * @param classReference
-     * @todo Add FormID confirmation
      */
     public void setNPCClass(FormID classReference) {
         CNAM.setForm(classReference);
@@ -1125,7 +1114,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param hairColorRef
-     * @todo Add FormID confirmation
      */
     public void setHairColor(FormID hairColorRef) {
         HCLF.setForm(hairColorRef);
@@ -1142,7 +1130,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param wornArmorRef
-     * @todo Add FormID confirmation
      */
     public void setWornArmor(FormID wornArmorRef) {
         WNAM.setForm(wornArmorRef);
@@ -1159,7 +1146,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param attackRaceRef
-     * @todo Add FormID confirmation
      */
     public void setAttackRace(FormID attackRaceRef) {
         ATKR.setForm(attackRaceRef);
@@ -1176,7 +1162,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param defaultOutfitRef
-     * @todo Add FormID confirmation
      */
     public void setDefaultOutfit(FormID defaultOutfitRef) {
         DOFT.setForm(defaultOutfitRef);
@@ -1193,7 +1178,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param sleepingOutfitRef
-     * @todo Add FormID confirmation
      */
     public void setSleepingOutfit(FormID sleepingOutfitRef) {
         SOFT.setForm(sleepingOutfitRef);
@@ -1210,7 +1194,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param combatRef
-     * @todo Add FormID confirmation
      */
     public void setCombatStyle(FormID combatRef) {
         ZNAM.setForm(combatRef);
@@ -1227,7 +1210,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param crimeFactionRef
-     * @todo Add FormID confirmation
      */
     public void setCrimeFaction(FormID crimeFactionRef) {
         this.CRIF.setForm(crimeFactionRef);
@@ -1244,7 +1226,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param headPartsRef
-     * @todo Add FormID confirmation
      */
     public void setFeatureSet(FormID headPartsRef) {
         FTST.setForm(headPartsRef);
@@ -1261,7 +1242,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param audioTemplateRef
-     * @todo Add FormID confirmation
      */
     public void setAudioTemplate(FormID audioTemplateRef) {
         CSCR.setForm(audioTemplateRef);
@@ -1278,7 +1258,6 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      * @param ref
-     * @todo Add FormID confirmation
      */
     public void setDefaultPackageList(FormID ref) {
         DPLT.setForm(ref);

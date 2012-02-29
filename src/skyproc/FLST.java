@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Justin Swanson
@@ -30,8 +32,8 @@ public class FLST extends MajorRecord {
 	return new FLST();
     }
 
-    public SubList<SubForm> getFromEntries() {
-	return LNAMs;
+    public ArrayList<FormID> getFromEntries() {
+	return SubList.subFormToPublic(LNAMs);
     }
 
     public void addFormEntry(FormID entry) {

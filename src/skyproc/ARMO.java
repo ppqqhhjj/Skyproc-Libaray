@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExportParser;
 import lev.LFlags;
@@ -205,8 +206,8 @@ public class ARMO extends MajorRecordDescription {
      *
      * @return Returns the list of ARMA records associated with the ARMO.
      */
-    public SubList<SubForm> getArmatures() {
-        return MODLs;
+    public ArrayList<FormID> getArmatures() {
+	return SubList.subFormToPublic(MODLs);
     }
 
     /**

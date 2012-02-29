@@ -297,14 +297,13 @@ public class SPEL extends MajorRecordDescription {
      *
      * @return The PERK ref associated with the SPEL.
      */
-    public SubForm getPerkRef() {
-        return SPIT.perkType;
+    public FormID getPerkRef() {
+        return SPIT.perkType.getForm();
     }
 
     /**
      *
      * @param perkRef FormID to set the SPELs PERK ref to.
-     * @todo Add FormID confirmation
      * @throws NotFound This functionality to come.  Skyproc does NOT confirm
      * that the FormID associated truly points to a correct record.  You will have to
      * confirm the accuracy yourself for now.

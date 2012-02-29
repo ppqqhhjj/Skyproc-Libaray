@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubForm extends SubRecord {
+class SubForm extends SubRecord {
 
     FormID ID = new FormID();
 

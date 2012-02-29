@@ -238,7 +238,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if (srcMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
 	    // No duplicates
 	    if (SPGlobal.globalPatchEDIDS.contains(edid)) {
-		int num = SPGlobal.random.nextInt(10000);
+		int num = 0;
 		String newEDID = edid + num;
 		for (int i = 0; i < SPGlobal.edidToForm.size(); i++) {
 		    if (!SPGlobal.edidToForm.containsKey(newEDID)) {

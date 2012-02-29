@@ -21,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  * @param <T>  The type of subrecord the group contains.
  * @author Justin Swanson
  */
-public class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
+class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     ArrayList<T> collection = new ArrayList<T>();
     T prototype;
@@ -213,6 +213,22 @@ public class SubList<T extends SubRecord> extends SubRecord implements Iterable<
         for (T item : collection) {
             item.standardizeMasters(srcMod);
         }
+    }
+
+    static ArrayList<FormID> subFormToPublic (SubList<SubForm> in) {
+	ArrayList<FormID> out = new ArrayList<FormID>(in.size());
+	for (SubForm s : in) {
+	    out.add(s.ID);
+	}
+	return out;
+    }
+
+    static ArrayList<SubFormInt> subFormIntToPublic (SubList<SubFormInt> in) {
+	ArrayList<SubFormInt> out = new ArrayList<SubFormInt>(in.size());
+	for (SubFormInt s : in) {
+	    out.add(s);
+	}
+	return out;
     }
 
     /**

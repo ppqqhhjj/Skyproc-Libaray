@@ -4,6 +4,7 @@ import lev.LShrinkArray;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.DeepCopy;
 import lev.LExportParser;
