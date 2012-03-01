@@ -447,20 +447,40 @@ public class ScriptPackage extends SubRecord {
         return scripts.get(scripts.indexOf(new VMADscript(scriptName)));
     }
 
+    /**
+     * 
+     * @param scriptName Script name to query
+     * @return True if package has a script with that name.
+     */
     public boolean hasScript(String scriptName) {
         return scripts.contains(new VMADscript(scriptName));
     }
 
+    /**
+     * 
+     * @param scriptName Script name to query inside for property
+     * @param propertyName Property name to query
+     * @return True if script exists with that property name
+     */
     public boolean hasProperty(String scriptName, String propertyName) {
         return hasScript(scriptName) && getScript(scriptName).properties.contains(new ScriptProperty(propertyName));
     }
 
+    /**
+     * 
+     * @param scriptName Script name to remove, if present.
+     */
     public void removeScript(String scriptName) {
         if (hasScript(scriptName)) {
             scripts.remove(new VMADscript(scriptName));
         }
     }
 
+    /**
+     * 
+     * @param scriptName Script to target
+     * @param propertyName Property to remove, if present
+     */
     public void removeProperty(String scriptName, String propertyName) {
         if (hasProperty(scriptName, propertyName)) {
             getScript(scriptName).properties.remove(new ScriptProperty(propertyName, 0));
@@ -468,54 +488,84 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * Adds a boolean property to the script.
+     * Adds a boolean property to the script, does not check for duplicates.
      * @param scriptName Script name to add property to
      * @param propertyName Name of the boolean property to add
      * @param booleanProperty What to set the boolean property to.
      */
-    public void addProperty(String scriptName, String propertyName, boolean booleanProperty) {
+    void addProperty(String scriptName, String propertyName, boolean booleanProperty) {
         getScript(scriptName).properties.add(new ScriptProperty(propertyName, booleanProperty));
     }
 
     /**
-     * Adds an integer property to the script.
+     * Adds an integer property to the script, does not check for duplicates.
      * @param scriptName Script name to add property to
      * @param propertyName Name of the integer property to add
      * @param integerProperty What to set the integer property to.
      */
-    public void addProperty(String scriptName, String propertyName, int integerProperty) {
+    void addProperty(String scriptName, String propertyName, int integerProperty) {
         getScript(scriptName).properties.add(new ScriptProperty(propertyName, integerProperty));
     }
 
     /**
-     * Adds a FormID property to the script.
+     * Adds a FormID property to the script, does not check for duplicates.
      * @param scriptName Script name to add property to
      * @param propertyName Name of the FormID property to add
      * @param idProperty What to set the FormID property to.
      */
-    public void addProperty(String scriptName, String propertyName, FormID idProperty) {
+    void addProperty(String scriptName, String propertyName, FormID idProperty) {
         getScript(scriptName).properties.add(new ScriptProperty(propertyName, idProperty));
     }
 
-    public void addProperty(String scriptName, String propertyName, Float floatProperty) {
+    /**
+     * Adds a float property to the script, does not check for duplicates.
+     * @param scriptName Script name to add property to (must already exist)
+     * @param propertyName Property name to add
+     * @param floatProperty Float value to assign to property
+     */
+    void addProperty(String scriptName, String propertyName, Float floatProperty) {
         getScript(scriptName).properties.add(new ScriptProperty(propertyName, floatProperty));
     }
 
+    /**
+     * Adds a boolean property to the script, checks for duplicates.
+     * @param scriptName Script name to add property to (must already exist)
+     * @param propertyName Property name to add
+     * @param booleanProperty Boolean value to assign to property
+     */
     public void setProperty(String scriptName, String propertyName, boolean booleanProperty) {
         removeProperty(scriptName, propertyName);
         addProperty(scriptName, propertyName, booleanProperty);
     }
 
+    /**
+     * Adds a int property to the script, checks for duplicates.
+     * @param scriptName Script name to add property to (must already exist)
+     * @param propertyName Property name to add
+     * @param integerProperty Integer value to assign to property
+     */
     public void setProperty(String scriptName, String propertyName, int integerProperty) {
         removeProperty(scriptName, propertyName);
         addProperty(scriptName, propertyName, integerProperty);
     }
 
+    /**
+     * Adds a FormID property to the script, checks for duplicates.
+     * @param scriptName Script name to add property to (must already exist)
+     * @param propertyName Property name to add
+     * @param idProperty FormID value to assign to property
+     */
     public void setProperty(String scriptName, String propertyName, FormID idProperty) {
         removeProperty(scriptName, propertyName);
         addProperty(scriptName, propertyName, idProperty);
     }
 
+    /**
+     * Adds a float property to the script, checks for duplicates.
+     * @param scriptName Script name to add property to (must already exist)
+     * @param propertyName Property name to add
+     * @param floatProperty Float value to assign to property
+     */
     public void setProperty(String scriptName, String propertyName, float floatProperty) {
         removeProperty(scriptName, propertyName);
         addProperty(scriptName, propertyName, floatProperty);

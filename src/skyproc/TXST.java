@@ -12,6 +12,10 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord {
 
+    /**
+     * The global constant holding the number of maps TXST records have
+     * for use with Nth functions
+     */
     public static int NUM_MAPS = 8;
     private static final Type[] type = {Type.TXST};
 
@@ -27,6 +31,11 @@ public class TXST extends MajorRecord {
     SubData DODT = new SubData(Type.DODT);
     SubFlag DNAM = new SubFlag(Type.DNAM, 2);
 
+    /**
+     * Constructor to create a blank new TXST record.
+     * @param srcMod The mod to originate from
+     * @param edid The edid to give the new record (make it unique)
+     */
     public TXST(Mod srcMod, String edid) {
         super(srcMod, edid);
         init();
@@ -62,6 +71,11 @@ public class TXST extends MajorRecord {
         return new TXST();
     }
 
+    /**
+     * Sets the TX00 - TX07 records in order.
+     * @param i the nth map to set
+     * @param path The filepath to set the map to.
+     */
     public void setNthMap(int i, String path) {
         switch (i) {
             case 0:
@@ -91,6 +105,11 @@ public class TXST extends MajorRecord {
         }
     }
 
+    /**
+     * Sets the TX00 - TX07 records in order.
+     * @param i the nth map to set
+     * @return The filepath the map is set to.
+     */
     public String getNthMap(int i) {
         switch (i) {
             case 0:
@@ -178,16 +197,29 @@ public class TXST extends MajorRecord {
         return specularityMap.print();
     }
 
+    /**
+     * 
+     * @param flag TXST flag to check
+     * @return True if flag is on.
+     */
     public boolean isFlag(TXSTflag flag) {
         return DNAM.is(flag.ordinal());
     }
 
+    /**
+     * 
+     * @param flag TXST flag to set
+     * @param to Boolean to set the flag to
+     */
     public void setFlag(TXSTflag flag, boolean to) {
         DNAM.set(flag.ordinal(), to);
     }
 
+    /**
+     * Flags associated with TXST records
+     */
     public enum TXSTflag {
-        SPECULAR_MAP_OFF,
+	SPECULAR_MAP_OFF,
         FACEGEN_TEXTURES
     }
 

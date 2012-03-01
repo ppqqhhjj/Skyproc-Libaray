@@ -732,8 +732,17 @@ public enum Type {
      */
     MODS,
 
+    /**
+     * s
+     */
     KYWD,
+    /**
+     * 
+     */
     AMMO,
+    /**
+     * 
+     */
     FLST,
 
     /**
