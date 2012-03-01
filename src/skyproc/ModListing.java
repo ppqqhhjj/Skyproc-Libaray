@@ -18,7 +18,6 @@ public class ModListing extends SubRecord implements Comparable {
     static private Type[] types = {Type.MAST, Type.DATA};
     SubString mast = new SubString(Type.MAST, true);
     SubData data = new SubData(Type.DATA);
-    long date = -1;
     boolean master = false;
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -61,14 +60,6 @@ public class ModListing extends SubRecord implements Comparable {
             in = in.substring(0, upper.indexOf(".ES"));
         }
         mast.setString(in);
-    }
-
-    /**
-     *
-     * @param date set the date of a mod (to affect its load order)
-     */
-    public void setDate(Long date) {
-        this.date = date;
     }
 
     /**
@@ -181,12 +172,6 @@ public class ModListing extends SubRecord implements Comparable {
         if (!master && rhs.master) {
             return 1;
         }
-        if (date < rhs.date) {
-            return -1;
-        } else if (date > rhs.date) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return SPGlobal.getDB().activePlugins.indexOf(this) - SPGlobal.getDB().activePlugins.indexOf(rhs);
     }
 }

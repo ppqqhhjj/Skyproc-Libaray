@@ -1,5 +1,6 @@
 package skyproc;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -81,10 +82,13 @@ public class SPGlobal {
 	    modsToSkip.remove(globalPatchOut.getInfo());
 	}
 	globalPatchOut = patch;
-	globalPatchOut.modInfo.setDate(Long.MAX_VALUE);
 	modsToSkip.add(globalPatchOut.getInfo());
 
 	// Import old patch for consistency
+	File f = new File(pathToData + patch.getName());
+	if (!f.exists()) {
+	    return;
+	}
 	SPImporter importer = new SPImporter();
 	Mod consistencyPatch;
 	try {

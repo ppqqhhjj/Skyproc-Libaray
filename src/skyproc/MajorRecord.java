@@ -327,7 +327,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     public static Mask getMask(Type maskType) {
-	Mod tempMod = new Mod(new ModListing("temp", false), 0);
+	Mod tempMod = new Mod(new ModListing("temp", false), true);
 	GRUP g = tempMod.GRUPs.get(maskType);
 	if (g == null) {
 	    return null;

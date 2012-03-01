@@ -1,9 +1,6 @@
 package skyproc;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import skyproc.exceptions.Uninitialized;
 
 /**
@@ -15,7 +12,8 @@ import skyproc.exceptions.Uninitialized;
  */
 public class SPDatabase implements Iterable<Mod> {
 
-//    Set<Mod> modOrder = new TreeSet<Mod>();
+    static ArrayList<ModListing> activePlugins = new ArrayList<ModListing>();
+    ArrayList<ModListing> plugins = new ArrayList<ModListing>();
     Map<ModListing, Mod> modLookup = new TreeMap<ModListing, Mod>();
     SPExceptionDbInterface exceptionsDb = new SPExceptionDbInterface<SPExceptionDbInterface.NullException>() {
 
@@ -78,6 +76,7 @@ public class SPDatabase implements Iterable<Mod> {
      */
     public void removeMod(ModListing listing) {
         if (modLookup.containsKey(listing)) {
+	    plugins.remove(listing);
             modLookup.remove(listing);
         }
     }
@@ -226,6 +225,7 @@ public class SPDatabase implements Iterable<Mod> {
      */
     public void add(Mod m) {
         removeMod(m.getInfo());
+	plugins.add(m.getInfo());
         modLookup.put(m.getInfo(), m);
     }
 
@@ -249,40 +249,4 @@ public class SPDatabase implements Iterable<Mod> {
     public Iterator<Mod> iterator() {
         return modLookup.values().iterator();
     }
-//    /**
-//     * Iterator over all mods in the database, in load order.
-//     */
-//    public class SDBIterator implements Iterator<Mod> {
-//
-//        Iterator<Mod> iter = modOrder.iterator();
-//        Mod last;
-//
-//        /**
-//         *
-//         * @return True if database has another mod.
-//         */
-//        @Override
-//        public boolean hasNext() {
-//            return iter.hasNext();
-//        }
-//
-//        /**
-//         *
-//         * @return The next Mod in the load order, if one exists.
-//         */
-//        @Override
-//        public Mod next() {
-//            last = iter.next();
-//            return last;
-//        }
-//
-//        /**
-//         * Removes the current Mod that the iterator points to.
-//         */
-//        @Override
-//        public void remove() {
-//            modLookup.remove(last.getInfo());
-//            iter.remove();
-//        }
-//    }
 }

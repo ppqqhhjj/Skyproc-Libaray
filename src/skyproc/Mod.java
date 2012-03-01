@@ -48,7 +48,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     private ArrayList<String> outStrings = new ArrayList<String>();
     private ArrayList<String> outDLStrings = new ArrayList<String>();
     private ArrayList<String> outILStrings = new ArrayList<String>();
-    private static int indexCount = 1000;
 
     /**
      * Creates an empty Mod with the name and master flag set to match info.
@@ -57,23 +56,22 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param info ModListing object containing name and master flag.
      */
     public Mod(ModListing info) {
-	init(info, Long.MAX_VALUE - indexCount--);
+	init(info);
 	SPGlobal.getDB().add(this);
     }
 
-    Mod(ModListing info, long inputDate, ByteBuffer headerInfo) throws BadRecord, DataFormatException, BadParameter {
-	this(info, inputDate);
+    Mod(ModListing info, ByteBuffer headerInfo) throws BadRecord, DataFormatException, BadParameter {
+	this(info, true);
 	logSync("MOD", "Parsing header");
 	header.parseData(headerInfo);
     }
 
-    Mod(ModListing info, long inputDate) {
-	init(info, inputDate);
+    Mod (ModListing info, boolean temp) {
+	init(info);
     }
 
-    final void init(ModListing info, long inputDate) {
+    final void init(ModListing info) {
 	this.modInfo = info;
-	this.modInfo.date = inputDate;
 	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
 	this.setFlag(Mod_Flags.STRING_TABLED, true);
 	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
@@ -717,16 +715,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return getName().substring(0, getName().indexOf(".es"));
     }
 
-    /**
-     * Returns the datestamp of when the mod was last modified, which also is
-     * used for load order. A larger datestamp means later in load order.
-     *
-     * @return The datestamp of when the mod was last modified.
-     */
-    public long getDate() {
-	return getInfo().date;
-    }
-
     void newSyncLog(String fileName) {
 	SPGlobal.newSyncLog(fileName);
     }
@@ -774,22 +762,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     @Override
     public int compareTo(Object o) {
 	Mod rhs = (Mod) o;
-	if (this.getInfo().getMasterTag() == true
-		&& rhs.getInfo().getMasterTag() == false) {
-	    return -1;
-	}
-	if (this.getInfo().getMasterTag() == false
-		&& rhs.getInfo().getMasterTag() == true) {
-	    return 1;
-	}
-	if (getInfo().date < rhs.getInfo().date) {
-	    return -1;
-	}
-	if (getInfo().date > rhs.getInfo().date) {
-	    return 1;
-	}
-
-	return 0;
+	return this.getInfo().compareTo(rhs.getInfo());
     }
 
     /**
