@@ -127,18 +127,26 @@ public class SPImporter {
 	    ModFile = new BufferedReader(new FileReader(dataFolder));
 
 	    try {
-		//Get to the first mod
 		String line = ModFile.readLine();
 		ArrayList<String> lines = new ArrayList<String>();
 		SPGlobal.logSync(header, "Loading in Active Plugins");
 		File pluginName;
 
+		//If Skyrim, add Skyrim.esm and Update.esm, as they
+		//are automatically removed from the list, and assumed
+		if (SPGlobal.gameName.equals("Skyrim")) {
+		    lines.add("Skyrim.esm");
+		    lines.add("Update.esm");
+		}
+
 		while (line != null) {
 		    pluginName = new File(SPGlobal.pathToData + line);
 		    if (!SPGlobal.modsToSkip.contains(new ModListing(line))) {
 			if (pluginName.isFile()) {
-			    SPGlobal.logSync(header, "Adding mod: " + line);
-			    lines.add(line);
+			    if (!lines.contains(line)) {
+				SPGlobal.logSync(header, "Adding mod: " + line);
+				lines.add(line);
+			    }
 			} else if (SPGlobal.logging()) {
 			    SPGlobal.logSync(header, "Mod didn't exist: ", line);
 			}
@@ -149,7 +157,7 @@ public class SPImporter {
 		}
 
 		SPGlobal.sync(false);
-		SPGlobal.getDB().activePlugins = sortModListings(lines);
+		SPDatabase.activePlugins = sortModListings(lines);
 
 	    } catch (java.io.FileNotFoundException e) {
 		SPGlobal.logError(header, "Error opening Plugin file!");
@@ -161,7 +169,7 @@ public class SPImporter {
 		throw e;
 	    }
 	}
-	return SPGlobal.getDB().activePlugins;
+	return SPDatabase.activePlugins;
     }
 
     /**
