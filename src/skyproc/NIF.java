@@ -173,7 +173,7 @@ public class NIF {
         return nodes.get(i).title;
     }
 
-    public ArrayList<Node> getNode(NodeType type) {
+    public ArrayList<Node> getNodes(NodeType type) {
         ArrayList<Node> out = new ArrayList<Node>();
         for (int i = 0; i < nodes.size(); i++) {
             if (nodes.get(i).type == type) {
@@ -181,5 +181,22 @@ public class NIF {
             }
         }
         return out;
+    }
+
+    public ArrayList<ArrayList<Node>> getNiTriShapePackages() {
+	ArrayList<ArrayList<Node>> out = new ArrayList<ArrayList<Node>>();
+	ArrayList<Node> NiTriShapePackage = new ArrayList<Node>();
+	boolean on = false;
+	for (Node n : nodes) {
+	    if (n.type == NodeType.NITRISHAPE) {
+		NiTriShapePackage = new ArrayList<Node>();
+		out.add(NiTriShapePackage);
+		NiTriShapePackage.add(n);
+		on = true;
+	    } else if (on) {
+		NiTriShapePackage.add(n);
+	    }
+	}
+	return out;
     }
 }
