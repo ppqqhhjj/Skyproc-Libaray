@@ -13,19 +13,19 @@ import skyproc.exceptions.Uninitialized;
 public class SPDatabase implements Iterable<Mod> {
 
     static ArrayList<ModListing> activePlugins = new ArrayList<ModListing>();
-    ArrayList<ModListing> plugins = new ArrayList<ModListing>();
+    ArrayList<ModListing> addedplugins = new ArrayList<ModListing>();
     Map<ModListing, Mod> modLookup = new TreeMap<ModListing, Mod>();
     SPExceptionDbInterface exceptionsDb = new SPExceptionDbInterface<SPExceptionDbInterface.NullException>() {
 
-        @Override
-        public SPExceptionDbInterface.NullException getException(Record record) {
-            return SPExceptionDbInterface.NullException.NULL;
-        }
+	@Override
+	public SPExceptionDbInterface.NullException getException(Record record) {
+	    return SPExceptionDbInterface.NullException.NULL;
+	}
 
-        @Override
-        public Boolean is(Record record, SPExceptionDbInterface.NullException exceptionType) {
-            return false;
-        }
+	@Override
+	public Boolean is(Record record, SPExceptionDbInterface.NullException exceptionType) {
+	    return false;
+	}
     };
 
     /**
@@ -42,14 +42,14 @@ public class SPDatabase implements Iterable<Mod> {
      * @return Mod's index in the load order.
      */
     public int modIndex(ModListing listing) {
-        int counter = 0;
-        for (Mod m : modLookup.values()) {
-            if (m.getName().equalsIgnoreCase(listing.print())) {
-                return counter;
-            }
-            counter++;
-        }
-        return -1;
+	int counter = 0;
+	for (Mod m : modLookup.values()) {
+	    if (m.getName().equalsIgnoreCase(listing.print())) {
+		return counter;
+	    }
+	    counter++;
+	}
+	return -1;
     }
 
     /**
@@ -58,7 +58,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return Mod matching the ModListing query.
      */
     public Mod getMod(ModListing listing) {
-        return modLookup.get(listing);
+	return modLookup.get(listing);
     }
 
     /**
@@ -67,7 +67,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return True if database contains a matching Mod.
      */
     public boolean hasMod(ModListing listing) {
-        return modLookup.containsKey(listing);
+	return modLookup.containsKey(listing);
     }
 
     /**
@@ -75,10 +75,8 @@ public class SPDatabase implements Iterable<Mod> {
      * @param listing ModListing to remove.
      */
     public void removeMod(ModListing listing) {
-        if (modLookup.containsKey(listing)) {
-	    plugins.remove(listing);
-            modLookup.remove(listing);
-        }
+	addedplugins.remove(listing);
+	modLookup.remove(listing);
     }
 
     /**
@@ -91,7 +89,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @throws Uninitialized If the Global Database is not initialized.
      */
     static public boolean queryMajor(FormID query) {
-        return queryMajor(query, SPGlobal.getDB());
+	return queryMajor(query, SPGlobal.getDB());
     }
 
     /**
@@ -104,7 +102,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return True if FormID exists in the database.
      */
     static public boolean queryMajor(FormID query, SPDatabase database) {
-        return queryMajor(query, database, GRUP_TYPE.values());
+	return queryMajor(query, database, GRUP_TYPE.values());
     }
 
     /**
@@ -116,7 +114,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return True if FormID exists in the database.
      */
     static public boolean queryMajor(FormID query, GRUP_TYPE... grup_types) {
-        return queryMajor(query, SPGlobal.getDB(), grup_types);
+	return queryMajor(query, SPGlobal.getDB(), grup_types);
     }
 
     /**
@@ -129,7 +127,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return True if FormID exists in the database.
      */
     static public boolean queryMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
-        return getMajor(query, database, grup_types) != null;
+	return getMajor(query, database, grup_types) != null;
     }
 
     /**
@@ -142,7 +140,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @throws Uninitialized If the Global Database is not initialized.
      */
     static public MajorRecord getMajor(FormID query) {
-        return getMajor(query, SPGlobal.getDB());
+	return getMajor(query, SPGlobal.getDB());
     }
 
     /**
@@ -155,7 +153,7 @@ public class SPDatabase implements Iterable<Mod> {
      * were found.
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database) {
-        return getMajor(query, database, GRUP_TYPE.values());
+	return getMajor(query, database, GRUP_TYPE.values());
     }
 
     /**
@@ -168,7 +166,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return The first MajorRecord that matches, or null if none were found.
      */
     static public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
-        return getMajor(query, SPGlobal.getDB(), grup_types);
+	return getMajor(query, SPGlobal.getDB(), grup_types);
     }
 
     /**
@@ -182,39 +180,39 @@ public class SPDatabase implements Iterable<Mod> {
      * @return The first MajorRecord that matches, or null if none were found.
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
-        MajorRecord out;
-        if (query.getMaster() != null) {
-            Mod m = database.modLookup.get(query.getMaster());
-            if (m != null) {
-                for (GRUP_TYPE g : grup_types) {
-                    GRUP grup = m.GRUPs.get(Type.toRecord(g));
-                    if (grup.mapRecords.containsKey(query)) {
-                        return (MajorRecord) grup.mapRecords.get(query);
-                    }
+	MajorRecord out;
+	if (query.getMaster() != null) {
+	    Mod m = database.modLookup.get(query.getMaster());
+	    if (m != null) {
+		for (GRUP_TYPE g : grup_types) {
+		    GRUP grup = m.GRUPs.get(Type.toRecord(g));
+		    if (grup.mapRecords.containsKey(query)) {
+			return (MajorRecord) grup.mapRecords.get(query);
+		    }
 //                Iterator<MajorRecord> iter = m.GRUPs.get(Type.toRecord(g)).iterator();
 //                while (iter.hasNext()) {
 //                    if ((out = iter.next()).getForm().equals(query)) {
 //                        return out;
 //                    }
 //                }
-                }
-            }
-        }
-        return null;
+		}
+	    }
+	}
+	return null;
     }
 
     void setExceptionDbInterface(SPExceptionDbInterface in) {
-        exceptionsDb = in;
+	exceptionsDb = in;
     }
 
     void fetchExceptions() {
-        for (Mod m : modLookup.values()) {
-            m.fetchExceptions(this);
-        }
+	for (Mod m : modLookup.values()) {
+	    m.fetchExceptions(this);
+	}
     }
 
     Enum getException(Record in) throws Uninitialized {
-        return exceptionsDb.getException(in);
+	return exceptionsDb.getException(in);
     }
 
     /**
@@ -224,9 +222,9 @@ public class SPDatabase implements Iterable<Mod> {
      * @param m Mod to add to the database.
      */
     public void add(Mod m) {
-        removeMod(m.getInfo());
-	plugins.add(m.getInfo());
-        modLookup.put(m.getInfo(), m);
+	removeMod(m.getInfo());
+	addedplugins.add(m.getInfo());
+	modLookup.put(m.getInfo(), m);
     }
 
     /**
@@ -236,9 +234,9 @@ public class SPDatabase implements Iterable<Mod> {
      * @param modSet Set of mods to add into the database.
      */
     public void add(Set<Mod> modSet) {
-        for (Mod m : modSet) {
-            add(m);
-        }
+	for (Mod m : modSet) {
+	    add(m);
+	}
     }
 
     /**
@@ -247,6 +245,6 @@ public class SPDatabase implements Iterable<Mod> {
      */
     @Override
     public Iterator<Mod> iterator() {
-        return modLookup.values().iterator();
+	return modLookup.values().iterator();
     }
 }

@@ -8,9 +8,10 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- * A more accurate representation of a modname:
- * A combination of mod name without the suffix and its master flag.
- * Skyrim.esm, for example, would be "Skyrim" with a true master flag.
+ * A more accurate representation of a modname: A combination of mod name
+ * without the suffix and its master flag. Skyrim.esm, for example, would be
+ * "Skyrim" with a true master flag.
+ *
  * @author Justin Swanson
  */
 public class ModListing extends SubRecord implements Comparable {
@@ -21,86 +22,90 @@ public class ModListing extends SubRecord implements Comparable {
     boolean master = false;
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        this();
-        parseData(in);
+	this();
+	parseData(in);
     }
 
     /**
-     * ModListing objects are used to uniquely identify mods via name and master tag.
-     * @param name The name to give to a mod.  Eg. "Skyrim"   (with no suffix)
-     * @param master The master tag.  (.esp or .esm)
+     * ModListing objects are used to uniquely identify mods via name and master
+     * tag.
+     *
+     * @param name The name to give to a mod. Eg. "Skyrim" (with no suffix)
+     * @param master The master tag. (.esp or .esm)
      */
     public ModListing(String name, Boolean master) {
-        this(name);
-        this.master = master;
+	this(name);
+	this.master = master;
     }
 
     /**
      *
-     * @param nameWithSuffix String containing the modname AND suffix.  Eg "Skyrim.esm"
+     * @param nameWithSuffix String containing the modname AND suffix. Eg
+     * "Skyrim.esm"
      */
     public ModListing(String nameWithSuffix) {
-        this();
-        setString(nameWithSuffix);
+	this();
+	setString(nameWithSuffix);
     }
 
     ModListing() {
-        super(types);
-        data.initialize(8);
-        data.forceExport(true);
+	super(types);
+	data.initialize(8);
+	data.forceExport(true);
     }
 
     final void setString(String in) {
-        String upper = in.toUpperCase();
-        if (upper.contains(".ESM")) {
-            setMasterTag(true);
-            in = in.substring(0, upper.indexOf(".ES"));
-        } else if (upper.contains(".ESP")) {
-            setMasterTag(false);
-            in = in.substring(0, upper.indexOf(".ES"));
-        }
-        mast.setString(in);
+	String upper = in.toUpperCase();
+	if (upper.contains(".ESM")) {
+	    setMasterTag(true);
+	    in = in.substring(0, upper.indexOf(".ES"));
+	} else if (upper.contains(".ESP")) {
+	    setMasterTag(false);
+	    in = in.substring(0, upper.indexOf(".ES"));
+	}
+	mast.setString(in);
     }
 
     /**
      * Prints the mod name and appropriate suffix (.esp or .esm)
+     *
      * @return
      */
     @Override
     public String print() {
-        if (master) {
-            return mast.print() + ".esm";
-        } else {
-            return mast.print() + ".esp";
-        }
+	if (master) {
+	    return mast.print() + ".esm";
+	} else {
+	    return mast.print() + ".esp";
+	}
     }
 
     @Override
     void export(LExportParser out, Mod srcMod) throws IOException {
-        String tmp = mast.string;
-        mast.string = print();
-        mast.export(out, srcMod);
-        mast.string = tmp;
-        data.export(out, srcMod);
+	String tmp = mast.string;
+	mast.string = print();
+	mast.export(out, srcMod);
+	mast.string = tmp;
+	data.export(out, srcMod);
     }
 
     @Override
     final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        switch (getNextType(in)) {
-            case MAST:
-                mast.parseData(in);
-                setString(mast.string);
-        }
+	switch (getNextType(in)) {
+	    case MAST:
+		mast.parseData(in);
+		setString(mast.string);
+	}
     }
 
     @Override
     SubRecord getNew(Type type_) {
-        return new ModListing();
+	return new ModListing();
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        return mast.getContentLength(srcMod) + data.getTotalLength(srcMod) + 4;  // For .esp
+	return mast.getContentLength(srcMod) + data.getTotalLength(srcMod) + 4;  // For .esp
     }
 
     /**
@@ -108,44 +113,47 @@ public class ModListing extends SubRecord implements Comparable {
      */
     @Override
     public void clear() {
-        mast.clear();
-        data.clear();
+	mast.clear();
+	data.clear();
     }
 
     @Override
     Boolean isValid() {
-        return mast.isValid();
+	return mast.isValid();
     }
 
     void setMasterTag(Boolean in) {
-        master = in;
+	master = in;
     }
 
     boolean getMasterTag() {
-        return master;
+	return master;
     }
 
     /**
-     * Checks if the modname's are equal (case ignored), and the master tags are the same.
+     * Checks if the modname's are equal (case ignored), and the master tags are
+     * the same.
+     *
      * @param obj Another ModListing
-     * @return True if modname's are equal (case ignored), and the master tags are the same.
+     * @return True if modname's are equal (case ignored), and the master tags
+     * are the same.
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ModListing other = (ModListing) obj;
-        if (this.mast != other.mast && (this.mast == null || !this.mast.equalsIgnoreCase(other.mast))) {
-            return false;
-        }
-        if (this.master != other.master) {
-            return false;
-        }
-        return true;
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final ModListing other = (ModListing) obj;
+	if (this.mast != other.mast && (this.mast == null || !this.mast.equalsIgnoreCase(other.mast))) {
+	    return false;
+	}
+	if (this.master != other.master) {
+	    return false;
+	}
+	return true;
     }
 
     /**
@@ -154,27 +162,44 @@ public class ModListing extends SubRecord implements Comparable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + (this.mast != null ? this.mast.hashUpperCaseCode() : 0);
-        hash = 37 * hash + (this.master ? 1 : 0);
-        return hash;
+	int hash = 7;
+	hash = 37 * hash + (this.mast != null ? this.mast.hashUpperCaseCode() : 0);
+	hash = 37 * hash + (this.master ? 1 : 0);
+	return hash;
     }
 
     @Override
     public int compareTo(Object o) {
-        ModListing rhs = (ModListing) o;
-        if (equals(rhs)) {
-            return 0;
-        }
-        if (master == true && !rhs.master) {
-            return -1;
-        }
-        if (!master && rhs.master) {
-            return 1;
-        }
-	if (!SPDatabase.activePlugins.contains(this)) {
+	ModListing rhs = (ModListing) o;
+	if (equals(rhs)) {
+	    return 0;
+	}
+	if (master && !rhs.master) {
+	    return -1;
+	}
+	if (!master && rhs.master) {
 	    return 1;
 	}
-        return SPDatabase.activePlugins.indexOf(this) - SPDatabase.activePlugins.indexOf(rhs);
+	if (equals(SPGlobal.getGlobalPatch().getInfo())) {
+	    return 1;
+	}
+	if (rhs.equals(SPGlobal.getGlobalPatch().getInfo())) {
+	    return -1;
+	}
+	boolean thisActive = SPDatabase.activePlugins.contains(this);
+	boolean rhsActive = SPDatabase.activePlugins.contains(rhs);
+	if (thisActive) {
+	    if (!rhsActive) {
+		return -1;
+	    } else {
+		return SPDatabase.activePlugins.indexOf(this) - SPDatabase.activePlugins.indexOf(rhs);
+	    }
+	} else {
+	    if (rhsActive) {
+		return 1;
+	    } else {
+		return SPGlobal.getDB().addedplugins.indexOf(this) - SPGlobal.getDB().addedplugins.indexOf(rhs);
+	    }
+	}
     }
 }

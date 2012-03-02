@@ -309,7 +309,7 @@ public class SPGlobal {
      * Print messages concerning the merging of two plugins.<br> Prints to the
      * sync log<br>
      */
-    public static boolean debugModMerge = true;
+    public static boolean debugModMerge = false;
     // SubRecords
     /**
      * Print short summary of imported subrecords after each major record is
