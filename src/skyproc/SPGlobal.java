@@ -135,6 +135,10 @@ public class SPGlobal {
     }
     static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
 
+    /**
+     * 
+     * @param m Mod to skip when importing.
+     */
     public static void addModToSkip(ModListing m) {
 	modsToSkip.add(m);
     }
@@ -296,7 +300,14 @@ public class SPGlobal {
 	}
     }
     // Debug Globals
+    /**
+     * This flag prints messages when records are tied to FormIDs from the last
+     * patch via EDID match.
+     */
     public static boolean debugConsistencyTies = false;
+    /**
+     * This flag prints old FormIDs imported from the last patch.
+     */
     public static boolean debugConsistencyImport = false;
     public static boolean debugBSAimport = true;
     public static boolean debugNIFimport = true;

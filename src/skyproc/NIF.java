@@ -4,7 +4,11 @@
  */
 package skyproc;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import lev.LFileChannel;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -16,12 +20,20 @@ import skyproc.exceptions.BadParameter;
 public class NIF {
 
     private static String header = "NIF";
+    String fileName;
     int numBlocks;
     ArrayList<String> blockTypes;
     ArrayList<Node> nodes;
     long headerOffset;
 
-    public NIF(LShrinkArray in) throws BadParameter {
+    public NIF(File f) throws FileNotFoundException, IOException, BadParameter {
+	LFileChannel in = new LFileChannel(f);
+	fileName = f.getPath();
+	parseData(new LShrinkArray(in.readInByteBuffer(0, in.available())));
+    }
+    
+    public NIF(String filename, LShrinkArray in) throws BadParameter {
+	this.fileName = filename;
         parseData(in);
     }
 
@@ -36,7 +48,7 @@ public class NIF {
             SPGlobal.logSync(header, "Loading nif file");
         }
         if (!in.extractString(20).equals("Gamebryo File Format")) {
-            throw new BadParameter("Was not a NIF file.");
+            throw new BadParameter(fileName + " was not a NIF file.");
         }
         in.extractLine();
 
@@ -198,5 +210,14 @@ public class NIF {
 	    }
 	}
 	return out;
+    }
+    
+    public static ArrayList<String> extractBSTextures(Node n) {
+	int numTextures = n.data.extractInt(4);
+	ArrayList<String> maps = new ArrayList<String>(numTextures);
+	for (int i = 0; i < numTextures; i++) {
+	    maps.add(n.data.extractString(n.data.extractInt(4)));
+	}
+	return maps;
     }
 }

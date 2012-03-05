@@ -16,9 +16,13 @@ public class FLST extends MajorRecord {
 
     SubList<SubForm> LNAMs = new SubList<SubForm>(new SubForm(Type.LNAM));
 
-    public FLST() {
+    FLST() {
 	super();
-
+	subRecords.add(LNAMs);
+    }
+    
+    public FLST (Mod modToOriginateFrom, String edid) {
+	super(modToOriginateFrom, edid);
 	subRecords.add(LNAMs);
     }
 
