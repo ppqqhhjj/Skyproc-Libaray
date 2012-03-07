@@ -47,7 +47,13 @@ public enum GRUP_TYPE {
      * Weapons
      */
     WEAP,
+    /**
+     * 
+     */
     FLST,
+    /**
+     * 
+     */
     KYWD;
 
 }

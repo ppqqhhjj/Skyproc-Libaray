@@ -104,6 +104,11 @@ public class SPDefaultGUI extends JFrame {
         patching.setFontColor(Color.orange);
     }
 
+    /**
+     * 
+     * @param c GUI component to add to the default GUI
+     * @return The component added.
+     */
     @Override
     public Component add(final Component c) {
         SwingUtilities.invokeLater(new Runnable() {

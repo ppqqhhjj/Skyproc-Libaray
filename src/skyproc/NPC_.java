@@ -728,38 +728,90 @@ public class NPC_ extends Actor implements Serializable {
 	SPELL_POINTS_BASE
     }
 
+    /**
+     * The template flags telling the NPC which parts to use from its target template.
+     */
     public enum TemplateFlag {
 
+	/**
+	 * Flag to use the traits page of its template.
+	 */
 	USE_TRAITS
     }
 
-    public enum ACBSFlag {
+    /**
+     * Collection of various flags applied to the NPC
+     */
+    public enum NPCFlags {
 
+	/**
+	 * 
+	 */
 	IsCharGenFacePreset(2),
+	/**
+	 * 
+	 */
 	Summonable(14),
+	/**
+	 * 
+	 */
 	Essential(1),
+	/**
+	 * 
+	 */
 	IsGhost(29),
+	/**
+	 * 
+	 */
 	Protected(13),
+	/**
+	 * 
+	 */
 	Invulnerable(31),
+	/**
+	 * 
+	 */
 	Respawn(3),
+	/**
+	 * 
+	 */
 	DoesntBleed(16),
+	/**
+	 * 
+	 */
 	Unique(5),
+	/**
+	 * 
+	 */
 	SimpleActor(20),
+	/**
+	 * 
+	 */
 	DoesntAffectStealthMeter(21)
 	;
 	int value;
 
-	ACBSFlag(int value) {
+	NPCFlags(int value) {
 	    this.value = value;
 	}
     }
 
     // Get/Set methods
-    public void setTemplateFlag(TemplateFlag flag, boolean on) {
+    /**
+     * 
+     * @param flag Template flag to set.
+     * @param on What to set the template flag to.
+     */
+    public void set(TemplateFlag flag, boolean on) {
 	ACBS.templateFlags.set(flag.ordinal(), on);
     }
 
-    public boolean getTemplateFlag(TemplateFlag flag) {
+    /**
+     * 
+     * @param flag Template flag to get.
+     * @return Template flag's status.
+     */
+    public boolean get(TemplateFlag flag) {
 	return ACBS.templateFlags.is(flag.ordinal());
     }
 
@@ -793,11 +845,21 @@ public class NPC_ extends Actor implements Serializable {
 	return factions.remove(new SubFormInt(Type.SNAM, factionRef, 0));
     }
 
-    public boolean get (ACBSFlag flag) {
+    /**
+     * 
+     * @param flag NPCFlag to get.
+     * @return NPCFlag's status.
+     */
+    public boolean get (NPCFlags flag) {
 	return ACBS.ACBSflags.is(flag.value);
     }
 
-    public void set (ACBSFlag flag, boolean on) {
+    /**
+     * 
+     * @param flag NPCFlag to set.
+     * @param on What to set the NPCFlag to.
+     */
+    public void set (NPCFlags flag, boolean on) {
 	ACBS.ACBSflags.set(flag.value, on);
     }
 

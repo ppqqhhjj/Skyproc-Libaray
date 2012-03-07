@@ -187,10 +187,13 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * automatically adds the new copied record to the mod. This makes two
      * separate records independent of each other.<br><br>
      *
-     * This function requires there to be a GlobalDB set, as it adds the
-     * necessary masters from it.<br><br>
-     *
-     * NOTE: The record returned can only be determined by the compiler to be a
+     * CONSISTENCY NOTE:  This functions appends "_DUP" to the end of the EDID, 
+     * and then a random number if that EDID already exists.  It is suggested you
+     * only use this function if you are only making one duplicate of the record.
+     * For multiple duplicates, use the version with a specified EDID, for better
+     * consistency results<br><br>
+     * 
+     * COMPILER NOTE: The record returned can only be determined by the compiler to be a
      * Major Record. You must cast it yourself to be the correct type of major
      * record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
      *
@@ -204,6 +207,20 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return m;
     }
 
+    /**
+     * Makes a copy of the Major Record and loads it into the mod, giving a new
+     * Major Record a FormID originating from the mod. This function also
+     * automatically adds the new copied record to the mod. This makes two
+     * separate records independent of each other.<br><br>
+     *
+     * COMPILER NOTE: The record returned can only be determined by the compiler to be a
+     * Major Record. You must cast it yourself to be the correct type of major
+     * record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
+     *
+     * @param m Major Record to make a copy of and add to the mod.
+     * @param newEDID EDID to assign to the new record.  Make sure it's unique.
+     * @return The copied record.
+     */
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this, newEDID);
@@ -801,6 +818,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return hash;
     }
 
+    /**
+     * 
+     * @return An iterator over all the GRUPs in the mod.
+     */
     @Override
     public Iterator<GRUP> iterator() {
 	return GRUPs.values().iterator();

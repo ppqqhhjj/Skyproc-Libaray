@@ -231,13 +231,7 @@ public class SPGlobal {
      */
     public static void logException(Exception e) {
 	if (log != null) {
-	    StringWriter sw = new StringWriter();
-	    PrintWriter pw = new PrintWriter(sw, true);
-	    e.printStackTrace(pw);
-	    pw.flush();
-	    sw.flush();
-	    SPGlobal.log.logSync("EXCEPTION", sw.toString());
-	    SPGlobal.log.logException(sw.toString());
+	    SPGlobal.log.logException(e);
 	}
     }
 
@@ -309,7 +303,13 @@ public class SPGlobal {
      * This flag prints old FormIDs imported from the last patch.
      */
     public static boolean debugConsistencyImport = false;
+    /**
+     * Displays information about BSA importing
+     */
     public static boolean debugBSAimport = true;
+    /**
+     * Displays information about NIF importing
+     */
     public static boolean debugNIFimport = true;
     /**
      * Prints messages about records pairing strings with external STRINGS

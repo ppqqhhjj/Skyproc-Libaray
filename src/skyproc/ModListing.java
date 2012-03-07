@@ -168,6 +168,17 @@ public class ModListing extends SubRecord implements Comparable {
 	return hash;
     }
 
+    /**
+     * Compare funtion is as follows:<br>
+     * 1) A master always is less than a non-master plugin<br>
+     * 2) The global patch always is greater<br>
+     * 3) A plugin that is on the active plugins list via importActivePlugins() comes before
+     * a plugin that was created manually. <br>
+     * 4) Remaining plugins are ordered in the same order they were
+     * created in the code.
+     * @param o Another ModListing.
+     * @return Whether this modlisting is >/==/< the parameter.
+     */
     @Override
     public int compareTo(Object o) {
 	ModListing rhs = (ModListing) o;

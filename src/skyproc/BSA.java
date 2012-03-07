@@ -7,24 +7,26 @@ package skyproc;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LFlags;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 
 /**
- *
+ * An object that interfaces with BSA files, allowing for queries of its contents
+ * and file data extraction.
  * @author Justin Swanson
  */
 public class BSA {
 
-    public static ArrayList<BSA> BSAs = new ArrayList<BSA>();
-    private static String header = "BSA";
+    static Map<String, BSA> BSAs = new HashMap<String,BSA>();
+    static String header = "BSA";
     String filePath;
     int offset;
     LFlags archiveFlags;
@@ -63,6 +65,13 @@ public class BSA {
 	}
     }
 
+    /**
+     * 
+     * @param filePath Filepath to load BSA data from.
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws BadParameter If the BSA is malformed (by SkyProc standards)
+     */
     public BSA(String filePath) throws FileNotFoundException, IOException, BadParameter {
 	this(filePath, true);
     }
@@ -104,6 +113,13 @@ public class BSA {
 	}
     }
 
+    /**
+     * 
+     * @param filePath filepath to query for and retrieve.
+     * @return ShrinkArray of the raw data from the BSA of the file specified, already decompressed if applicable; Empty ShrinkArray if the file did not exist.
+     * @throws IOException
+     * @throws DataFormatException
+     */
     public LShrinkArray getFile(String filePath) throws IOException, DataFormatException {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
@@ -117,7 +133,7 @@ public class BSA {
 	return new LShrinkArray(new byte[0]);
     }
 
-    public String getFilename(String filePath) throws IOException {
+    String getFilename(String filePath) throws IOException {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
 	    in.pos(ref.nameOffset);
@@ -126,13 +142,13 @@ public class BSA {
 	return "";
     }
 
-    public static String getUsedFilename(String filePath) throws IOException {
+    static String getUsedFilename(String filePath) throws IOException {
 	String out;
 	File file = new File(filePath);
 	if (!(file = Ln.getFilepathCaseInsensitive(file)).getPath().equals("")) {
 	    return file.getName();
 	}
-	for (BSA b : BSAs) {
+	for (BSA b : BSAs.values()) {
 	    out = b.getFilename(filePath);
 	    if (!out.equals("")) {
 		return out;
@@ -141,13 +157,21 @@ public class BSA {
 	return "";
     }
 
+    /**
+     * 
+     * @param filePath File to query for.
+     * @return The used file, which prioritizes loose files first, and then BSAs.<br>
+     * NOTE:  Not fully sophisticated yet for prioritizing between BSAs.
+     * @throws IOException
+     * @throws DataFormatException
+     */
     static public LShrinkArray getUsedFile(String filePath) throws IOException, DataFormatException {
 	File outsideBSA = new File(SPGlobal.pathToData + filePath);
 	if (outsideBSA.isFile()) {
 	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from outside BSA.");
 	    return new LShrinkArray(outsideBSA);
 	} else {
-	    for (BSA b : BSAs) {
+	    for (BSA b : BSAs.values()) {
 		if (b.contains(BSA.FileType.NIF) && b.hasFile(filePath)) {
 		    SPGlobal.log(header, "  Nif " + filePath + " loaded from BSA " + b.getFilePath());
 		    return b.getFile(filePath);
@@ -171,14 +195,28 @@ public class BSA {
 	return null;
     }
 
+    /**
+     * 
+     * @param filePath Filepath the query for.
+     * @return True if BSA has a file with that path.
+     */
     public boolean hasFile(String filePath) {
 	return getFileRef(filePath) != null;
     }
 
+    /**
+     * 
+     * @return The BSA's filepath.
+     */
     public String getFilePath() {
 	return filePath.substring(0, filePath.length());
     }
 
+    /**
+     * 
+     * @param folderPath Folder path to query for.
+     * @return True if BSA has a folder with that path.
+     */
     public boolean hasFolder(String folderPath) {
 	filePath = filePath.toUpperCase();
 	if (folders.containsKey(folderPath)) {
@@ -188,10 +226,18 @@ public class BSA {
 	}
     }
 
+    /**
+     * 
+     * @return A list of contained folders.
+     */
     public Set<String> getFolders() {
 	return folders.keySet();
     }
 
+    /**
+     * 
+     * @return Map containing folder paths as keys, and list of file paths as values.
+     */
     public Map<String, ArrayList<String>> getFiles() {
 	Map<String, ArrayList<String>> out = new HashMap<String, ArrayList<String>>(folders.size());
 	for (String folder : folders.keySet()) {
@@ -203,10 +249,20 @@ public class BSA {
 	return out;
     }
 
+    /**
+     * 
+     * @param fileType Filetype to query for.
+     * @return True if BSA contains files of that type.
+     */
     public boolean contains(FileType fileType) {
 	return fileFlags.is(fileType.ordinal());
     }
 
+    /**
+     * 
+     * @param fileTypes Filetypes to query for.
+     * @return True if BSA contains any of the filetypes.
+     */
     public boolean containsAny(FileType[] fileTypes) {
 	for (FileType f : fileTypes) {
 	    if (contains(f)) {
@@ -216,6 +272,11 @@ public class BSA {
 	return false;
     }
 
+    /**
+     * 
+     * @param types Types to load in.
+     * @return List of all BSA files that contain any of the filetypes.
+     */
     public static ArrayList<BSA> loadInBSAs(FileType... types) {
 	File data = new File(SPGlobal.pathToData);
 	ArrayList<BSA> out = new ArrayList<BSA>();
@@ -246,16 +307,46 @@ public class BSA {
 	long dataOffset;
     }
 
+    /**
+     * Enum containing all of the various filetypes BSAs could contain.
+     */
     public enum FileType {
 
+	/**
+	 * 
+	 */
 	NIF,
+	/**
+	 * 
+	 */
 	DDS,
+	/**
+	 * 
+	 */
 	XML,
+	/**
+	 * 
+	 */
 	WAV,
+	/**
+	 * 
+	 */
 	MP3,
+	/**
+	 * 
+	 */
 	TXT_HTML_BAT_SCC,
+	/**
+	 * 
+	 */
 	SPT,
+	/**
+	 * 
+	 */
 	TEX_FNT,
+	/**
+	 * 
+	 */
 	CTL
     }
 }

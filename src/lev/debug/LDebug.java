@@ -17,7 +17,15 @@ import lev.Ln;
  */
 public class LDebug {
 
+    /**
+     * Turns on debug info regarding how much time has passed since the last
+     * debug output.
+     */
     public static boolean timeStamp = false;
+    /**
+     * Turns on debug info regarding how much time has passed since the start
+     * of the program.
+     */
     public static boolean timeElapsed = false;
     private static Boolean on = true;
     private static ArrayList<String> bannedHeaders = new ArrayList<String>();
@@ -28,11 +36,20 @@ public class LDebug {
     private long lastStamp = System.nanoTime();
     private static ArrayList<LDebug> debugs = new ArrayList<LDebug>();
 
+    /**
+     * Creates a debug log at the path desired, and with the given character
+     * space for the header text.
+     * @param path
+     * @param space
+     */
     public LDebug(String path, int space) {
         openDebug(path, space);
         init();
     }
 
+    /**
+     * 
+     */
     public LDebug () {
         init();
     }
@@ -41,14 +58,27 @@ public class LDebug {
         debugs.add(this);
     }
 
+    /**
+     * 
+     * @param b
+     */
     public static void on(Boolean b) {
         on = b;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static boolean on () {
         return on;
     }
 
+    /**
+     * 
+     * @param path
+     * @param space
+     */
     public final void openDebug(String path, int space) {
         try {
             closeDebugFile();
@@ -74,6 +104,11 @@ public class LDebug {
         }
     }
 
+    /**
+     * Writes to the debug log.
+     * @param header
+     * @param input
+     */
     public void w(final String header, final String... input) {
 
         if (on && writer != null) {
@@ -111,16 +146,28 @@ public class LDebug {
         }
     }
 
+    /**
+     * 
+     * @param in
+     */
     public void writeException(String in) {
         if (in.length() > 0) {
             w("EXCEPTION", in);
         }
     }
 
+    /**
+     * 
+     * @param in
+     * @throws IOException
+     */
     public void writeException(char in) throws IOException {
         writer.write(in);
     }
 
+    /**
+     * 
+     */
     public void flushDebug() {
         try {
             if (on && writer != null) {
@@ -130,6 +177,9 @@ public class LDebug {
         }
     }
 
+    /**
+     * 
+     */
     public void closeDebugFile() {
         if (writer != null) {
             w("DEBUG", "Closing Debug File.  Time was: " + (System.currentTimeMillis() - startTime));
@@ -141,14 +191,25 @@ public class LDebug {
         }
     }
 
+    /**
+     * 
+     */
     public void clearBannedHeaders() {
         bannedHeaders.clear();
     }
 
+    /**
+     * 
+     * @param in
+     */
     public void addBannedHeader(String in) {
         bannedHeaders.add(in);
     }
 
+    /**
+     * 
+     * @param input
+     */
     public void addBannedHeader(String[] input) {
         bannedHeaders.addAll(Arrays.asList(input));
     }
@@ -161,6 +222,10 @@ public class LDebug {
 	return counterStr + Ln.spaceLeft(concat, spaces - counterStr.length(), c, input);
     }
 
+    /**
+     * Closes debug logs and flushes their buffers.
+     * @throws IOException
+     */
     public static void wrapUp() throws IOException {
         for (LDebug d : debugs) {
             d.closeDebugFile();

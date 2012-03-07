@@ -11,11 +11,17 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * GUI related nifty functions
  * @author Justin Swanson
  */
 public class Lg {
 
+    /**
+     * 
+     * @param originalImage Image to resize
+     * @param size size to convert to
+     * @return Resized image
+     */
     static public BufferedImage resizeImage(BufferedImage originalImage, Dimension size) {
         int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
         BufferedImage resizedImage = new BufferedImage(size.width, size.height, type);
@@ -26,6 +32,12 @@ public class Lg {
         return resizedImage;
     }
 
+    /**
+     * 
+     * @param originalImage Image to resize
+     * @param size size to convert to
+     * @return Resized image
+     */
     static public BufferedImage resizeImageWithHint(BufferedImage originalImage, Dimension size) {
         int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
         BufferedImage resizedImage = new BufferedImage(size.width, size.height, type);
@@ -44,6 +56,15 @@ public class Lg {
         return resizedImage;
     }
 
+    /**
+     * This function returns the minimum dimensions to fit inside (maxx,maxy) while
+     * retaining the aspect ratio of the original (x,y)
+     * @param x Original width
+     * @param y Original height
+     * @param maxX Max width
+     * @param maxY Max height
+     * @return New dimensions fitting inside limits, while retaining aspect ratio.
+     */
     static public Dimension calcSize(double x, double y, int maxX, int maxY) {
         double xMod = 1.0 * maxX / x;
         double yMod = 1.0 * maxY / y;

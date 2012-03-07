@@ -225,9 +225,12 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     // Get/set methods
     /**
-     * Sets the EDID of the Major Record
+     * Sets the EDID of the Major Record<br><br>
+     * 
+     * NOTE:  This will reassign the records formID if the new EDID matches
+     * an EDID from the previous patch.
      *
-     * @param in The string to have the EDID set to.
+     * @param edid The string to have the EDID set to.
      */
     final public void setEDID(String edid) {
 	setEDID(edid, this.getFormMaster());
@@ -326,6 +329,19 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return new Mask();
     }
 
+    /**
+     * This function creates an mask for the major record given,
+     * or null if a mask type is given that isn't a major record.<br><br>
+     * 
+     * To use a mask:<br>
+     * 1) create one with this function<br>
+     * 2) Set the flags for the desired subrecords to true.<br>
+     * 3) Add it to the SPImporter object<br>
+     * 4) Import as usual
+     * @param maskType Type to create a mask for. (major record)
+     * @return A mask reflecting the major record's type, with all subrecord flags
+     * set to block.
+     */
     public static Mask getMask(Type maskType) {
 	Mod tempMod = new Mod(new ModListing("temp", false), true);
 	GRUP g = tempMod.GRUPs.get(maskType);

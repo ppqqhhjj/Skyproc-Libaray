@@ -19,11 +19,22 @@ public class KYWD extends MajorRecord {
 	subRecords.add(color);
     }
 
+    /**
+     * 
+     * @param modToOriginateFrom
+     * @param edid EDID to assign the record.  Make sure it's unique.
+     * @param color Color to have the keyword highlight as.
+     */
     public KYWD (Mod modToOriginateFrom, String edid, int color) {
 	this(modToOriginateFrom, edid);
 	this.color.setData(color);
     }
 
+    /**
+     * 
+     * @param modToOriginateFrom
+     * @param edid EDID to assign the record.  Make sure it's unique.
+     */
     public KYWD (Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	EDID.setString(edid);

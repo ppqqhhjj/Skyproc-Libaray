@@ -86,7 +86,6 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @param query FormID to look for.
      * @return True if FormID exists in the database.
-     * @throws Uninitialized If the Global Database is not initialized.
      */
     static public boolean queryMajor(FormID query) {
 	return queryMajor(query, SPGlobal.getDB());
@@ -137,7 +136,6 @@ public class SPDatabase implements Iterable<Mod> {
      * @param query FormID to look for.
      * @return The first MajorRecord that matches, or MajorRecord.NULL if none
      * were found.
-     * @throws Uninitialized If the Global Database is not initialized.
      */
     static public MajorRecord getMajor(FormID query) {
 	return getMajor(query, SPGlobal.getDB());

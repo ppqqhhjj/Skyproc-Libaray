@@ -10,7 +10,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 
 /**
- *
+ * A customized JLabel that is used by Leviathan for GUIs.
  * @author Justin Swanson
  */
 public class LLabel extends LComponent {
@@ -21,6 +21,12 @@ public class LLabel extends LComponent {
     JLabel shadow3;
     int shadowSpacing = 2;
 
+    /**
+     * 
+     * @param text
+     * @param font
+     * @param c
+     */
     public LLabel(String text, Font font, Color c) {
 	mainText = new JLabel(text);
 	mainText.setFont(font);
@@ -32,6 +38,10 @@ public class LLabel extends LComponent {
 	setSize(mainText.getPreferredSize());
     }
 
+    /**
+     * Adds three copies of the primary label that are black and placed to 
+     * mimic a shadow behind the primary label.
+     */
     public void addShadow() {
 	shadow = copyLabel(mainText);
 	shadow.setForeground(Color.BLACK);
@@ -55,10 +65,18 @@ public class LLabel extends LComponent {
 	return output;
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getText () {
 	return mainText.getText();
     }
 
+    /**
+     * 
+     * @param input
+     */
     public void setText (String input) {
 	mainText.setText(input);
 	mainText.setSize(mainText.getPreferredSize());
@@ -73,10 +91,18 @@ public class LLabel extends LComponent {
 	setSize(getPreferredSize());
     }
 
+    /**
+     * 
+     * @param c
+     */
     public void setFontColor (Color c) {
         mainText.setForeground(c);
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public Dimension getPreferredSize () {
 	if (shadow == null)
@@ -85,6 +111,10 @@ public class LLabel extends LComponent {
 	    return new Dimension (mainText.getWidth() + shadowSpacing, mainText.getHeight() + shadowSpacing);
     }
 
+    /**
+     * 
+     * @param c
+     */
     @Override
     public void setForeground(Color c) {
         mainText.setForeground(c);

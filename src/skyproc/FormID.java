@@ -42,6 +42,11 @@ public class FormID implements Serializable {
         this(id, new ModListing(master));
     }
 
+    /**
+     * 
+     * @param form String containing the last 6 digits of a FormID, followed immediately
+     * by the plugin it originates from.  eg "000123Skyrim.esm"
+     */
     public FormID(String form) {
         this(form.substring(0, 6), form.substring(6));
     }
@@ -56,6 +61,11 @@ public class FormID implements Serializable {
         this(Ln.parseHexString(id, 4, false), master);
     }
 
+    /**
+     * 
+     * @param id Byte array (usually size 3), which contains FormID bytes.
+     * @param master The mod from which this formID originates.
+     */
     public FormID(byte[] id, ModListing master) {
         set(id);
         this.master = master;
@@ -228,6 +238,10 @@ public class FormID implements Serializable {
         return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;

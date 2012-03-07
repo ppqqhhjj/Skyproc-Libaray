@@ -1,8 +1,6 @@
 package lev;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -17,6 +15,38 @@ import javax.swing.tree.TreePath;
  */
 public class Ln {
 
+    /**
+     * Returns a copy of the object, or null if the object cannot
+     * be serialized.
+     * @param orig Object to copy
+     * @return A deep copy of the object, completely separate from the original.
+     */
+    public static Object deepCopy(Object orig) {
+        Object obj = null;
+        try {
+            // Write the object out to a byte array
+            FastByteArrayOutputStream fbos =
+                    new FastByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(fbos);
+            out.writeObject(orig);
+            out.flush();
+            out.close();
+
+            // Retrieve an input stream from the byte array and read
+            // a copy of the object back in.
+            ObjectInputStream in =
+                new ObjectInputStream(fbos.getInputStream());
+            obj = in.readObject();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        catch(ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        }
+        return obj;
+    }
+    
     private static String space(Boolean left, Boolean concat, int spaces, char c, String... input) {
 	String output = "";
 	for (String x : input) {
@@ -44,23 +74,30 @@ public class Ln {
 	return output;
     }
 
-    public static String spaceLeft(Boolean concat, int spaces, char c, String... input) {
-	return space(true, concat, spaces, c, input);
+    /**
+     * Takes the input and adds the desired amount of spaces to get the end result of being
+     * "spaces" wide.
+     * @param enforce Whether to shrink the input to enforce the spaces size, or let it bleed over to print
+     * all of the input
+     * @param spaces Width desired including spaces + input.
+     * @param c Character to print to achieve desired width.
+     * @param input Input to print.
+     * @return Final spaced string.
+     */
+    public static String spaceLeft(Boolean enforce, int spaces, char c, String... input) {
+	return space(true, enforce, spaces, c, input);
     }
 
+    /**
+     * Takes the input and adds the desired amount of spaces to get the end result of being
+     * "spaces" wide.  Input is aligned left, so that the spaces are on the right side.
+     * @param spaces Width desired including spaces + input.
+     * @param c Character to print to achieve desired width.
+     * @param input Input to print.
+     * @return Final spaced string.
+     */
     public static String spaceRight(int spaces, char c, String... input) {
 	return space(false, false, spaces, c, input);
-    }
-
-    public static String prependSpaces(int spaces, char c, String... input) {
-	String output = "";
-	for (String x : input) {
-	    output = output + x;
-	}
-	for (int i = 0; i < spaces; i++) {
-	    output = c + output;
-	}
-	return output;
     }
 
     public static String center(int spaces, char c, String... input) {

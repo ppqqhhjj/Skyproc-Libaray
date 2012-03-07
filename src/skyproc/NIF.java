@@ -26,12 +26,27 @@ public class NIF {
     ArrayList<Node> nodes;
     long headerOffset;
 
+    /**
+     * Loads in a nif file from the specified file.  Exceptions can be thrown
+     * if the file specified is not a nif file, or malformed.
+     * @param f File/path to load nif from.
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws BadParameter If the nif file is malformed (by SkyProc's standards)
+     */
     public NIF(File f) throws FileNotFoundException, IOException, BadParameter {
 	LFileChannel in = new LFileChannel(f);
 	fileName = f.getPath();
 	parseData(new LShrinkArray(in.readInByteBuffer(0, in.available())));
     }
     
+    /**
+     * Creates a NIF object from the given ShrinkArray.  Throws exceptions
+     * if the data is not a proper nif file.
+     * @param filename Name to give the NIF object.
+     * @param in Nif data to parse and load into the NIF object.
+     * @throws BadParameter If the data given to parse is malformed (by SkyProc's standards)
+     */
     public NIF(String filename, LShrinkArray in) throws BadParameter {
 	this.fileName = filename;
         parseData(in);
@@ -81,7 +96,7 @@ public class NIF {
         nodes = new ArrayList<Node>(numBlocks);
         for (int i = 0; i < numBlocks; i++) {
             int type = in.extractInt(2);
-            nodes.add(new Node(NodeType.avValueOf(blockTypes.get(type))));
+            nodes.add(new Node(NodeType.SPvalueOf(blockTypes.get(type))));
             if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
                 SPGlobal.logSync(header, "  Block list[" + i + "] has block type: " + type + ", " + blockTypes.get(type));
             }
@@ -127,12 +142,24 @@ public class NIF {
         }
     }
 
+    /**
+     * A single Node and its data in the nif file.  
+     */
     public class Node {
 
-        public String title;
-        public NodeType type;
+	/**
+	 * Title assigned to the node.
+	 */
+	public String title;
+	/**
+	 * Type of node.
+	 */
+	public NodeType type;
         int size;
-        public LShrinkArray data;
+	/**
+	 * Raw data contained in the node.
+	 */
+	public LShrinkArray data;
 
         Node(NodeType n) {
             type = n;
@@ -146,21 +173,57 @@ public class NIF {
         }
     }
 
+    /**
+     * 
+     */
     public enum NodeType {
 
-        NINODE,
-        BSINVMARKER,
-        NITRISHAPE,
-        NITRISHAPEDATA,
-        NISKININSTANCE,
-        NISKINDATA,
-        NISKINPARTITION,
-        BSLIGHTINGSHADERPROPERTY,
-        BSSHADERTEXTURESET,
-        NIALPHAPROPERTY,
-        UNKNOWN;
+	/**
+	 * 
+	 */
+	NINODE,
+	/**
+	 * 
+	 */
+	BSINVMARKER,
+	/**
+	 * 
+	 */
+	NITRISHAPE,
+	/**
+	 * 
+	 */
+	NITRISHAPEDATA,
+	/**
+	 * 
+	 */
+	NISKININSTANCE,
+	/**
+	 * 
+	 */
+	NISKINDATA,
+	/**
+	 * 
+	 */
+	NISKINPARTITION,
+	/**
+	 * 
+	 */
+	BSLIGHTINGSHADERPROPERTY,
+	/**
+	 * 
+	 */
+	BSSHADERTEXTURESET,
+	/**
+	 * 
+	 */
+	NIALPHAPROPERTY,
+	/**
+	 * 
+	 */
+	UNKNOWN;
 
-        public static NodeType avValueOf(String in) {
+        static NodeType SPvalueOf(String in) {
             try {
                 return valueOf(in.toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -169,6 +232,10 @@ public class NIF {
         }
     }
 
+    /**
+     * 
+     * @return List of the node types in the nif file, in order.
+     */
     public ArrayList<NodeType> getNodeTypes() {
         ArrayList<NodeType> out = new ArrayList<NodeType>(nodes.size());
         for (int i = 0; i < nodes.size(); i++) {
@@ -177,14 +244,29 @@ public class NIF {
         return out;
     }
 
+    /**
+     * 
+     * @param i
+     * @return The ith node in the NIF object.
+     */
     public Node getNode(int i) {
         return new Node(nodes.get(i));
     }
 
+    /**
+     * 
+     * @param i
+     * @return The title of the ith node in the NIF object.
+     */
     public String getNodeTitle(int i) {
         return nodes.get(i).title;
     }
 
+    /**
+     * 
+     * @param type Type to retrieve.
+     * @return List of all the Node objects matching the given type.
+     */
     public ArrayList<Node> getNodes(NodeType type) {
         ArrayList<Node> out = new ArrayList<Node>();
         for (int i = 0; i < nodes.size(); i++) {
@@ -195,6 +277,13 @@ public class NIF {
         return out;
     }
 
+    /**
+     * A special function that returns sets of nodes each relating to a 
+     * NiTriShape package. This return a list of lists containing a NiTriShape 
+     * and all the nodes following up until another NiTriShape is encountered,
+     * which will start another list.
+     * @return List of NiTriShape node sets.
+     */
     public ArrayList<ArrayList<Node>> getNiTriShapePackages() {
 	ArrayList<ArrayList<Node>> out = new ArrayList<ArrayList<Node>>();
 	ArrayList<Node> NiTriShapePackage = new ArrayList<Node>();
@@ -212,6 +301,12 @@ public class NIF {
 	return out;
     }
     
+    /**
+     * 
+     * @param n Node to extract texture names from.  Must be a valid BSShaderTextureSet node
+     * or the function will fail.
+     * @return List of the textures in the node.
+     */
     public static ArrayList<String> extractBSTextures(Node n) {
 	int numTextures = n.data.extractInt(4);
 	ArrayList<String> maps = new ArrayList<String>(numTextures);

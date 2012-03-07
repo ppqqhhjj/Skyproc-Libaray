@@ -4,9 +4,7 @@ import lev.LShrinkArray;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.DeepCopy;
 import lev.LExportParser;
 import lev.Ln;
 import skyproc.exceptions.BadRecord;
@@ -49,7 +47,7 @@ public abstract class Record extends ExportRecord implements Serializable {
     abstract Record getNew();
 
     Record copyOf(Mod modToOriginateFrom) {
-        return (Record) DeepCopy.copy(this);
+        return (Record) Ln.deepCopy(this);
     }
 
     static Type matchType(String str) throws BadRecord {

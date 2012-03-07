@@ -41,6 +41,7 @@ public class LVLN extends Actor implements Iterable<LVLO> {
     /**
      * Creates a new LVLN record with a FormID originating from the mod parameter.
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
+     * @param edid EDID to assign the record.  Make sure it's unique. 
      */
     public LVLN(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);
@@ -141,9 +142,6 @@ public class LVLN extends Actor implements Iterable<LVLO> {
          * @param id  The formID of the actor to put on the entry.
          * @param level The level to mark the entry on the LVLN.
          * @param count The number of actors to spawn when this entry is picked.
-         * @throws NotFound This functionality to come.  Skyproc does NOT confirm
-         * that the FormID associated truly points to a correct record.  You will have to
-         * confirm the accuracy yourself for now.
          */
         public LVLO(FormID id, int level, int count) {
             this();

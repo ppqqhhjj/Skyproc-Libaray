@@ -275,7 +275,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      *
      * @param id FormID to query the GRUP for.
      * @return Major Record with FormID == id.
-     * @throws NotFound
      */
     public MajorRecord get(FormID id) {
         return mapRecords.get(id);

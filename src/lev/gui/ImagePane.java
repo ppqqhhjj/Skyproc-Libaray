@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
- *
+ * A customized JPanel that has a background image.
  * @author Justin Swanson
  */
 public class ImagePane extends JPanel {
@@ -27,26 +27,49 @@ public class ImagePane extends JPanel {
         setLayout(null);
     }
 
+    /**
+     * 
+     * @param img
+     * @throws IOException
+     */
     public ImagePane(File img) throws IOException {
         this();
         setImage(ImageIO.read(img));
     }
 
+    /**
+     * 
+     * @param img
+     * @throws IOException
+     */
     public ImagePane(String img) throws IOException {
         this();
         setImage(ImageIO.read(new File(img)));
     }
 
+    /**
+     * 
+     * @param img
+     */
     public ImagePane(BufferedImage img) {
         this();
         setImage(img);
     }
 
+    /**
+     * 
+     * @param url
+     * @throws IOException
+     */
     public ImagePane(URL url) throws IOException {
         this();
         setImage(ImageIO.read(url));
     }
 
+    /**
+     * 
+     * @param originalImage
+     */
     final public void setImage(BufferedImage originalImage) {
         if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
             img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
@@ -61,10 +84,20 @@ public class ImagePane extends JPanel {
         repaint();
     }
 
+    /**
+     * 
+     * @param in
+     * @throws IOException
+     */
     final public void setImage(File in) throws IOException {
         setImage(ImageIO.read(in));
     }
 
+    /**
+     * 
+     * @param x
+     * @param y
+     */
     public void setMaxSize(int x, int y) {
         IMG_WIDTH = x;
         IMG_HEIGHT = y;
@@ -72,14 +105,7 @@ public class ImagePane extends JPanel {
     }
 
     Dimension calcSize(double x, double y) {
-        double xMod = 1.0 * IMG_WIDTH / x;
-        double yMod = 1.0 * IMG_HEIGHT / y;
-        double mod = (xMod <= yMod) ? xMod : yMod;
-        if (mod < 1) {
-            x = x * mod;
-            y = y * mod;
-        }
-        return new Dimension((int) x, (int) y);
+	return Lg.calcSize(x, y, IMG_WIDTH, IMG_HEIGHT);
     }
 
 //    public void rotateImg() {
@@ -93,6 +119,10 @@ public class ImagePane extends JPanel {
 //        img = new ImageIcon(rotatedImage).getImage();
 //        setSize(new Dimension(img.getWidth(null), img.getHeight(null)));
 //    }
+    /**
+     * 
+     * @param g
+     */
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(img, 0, 0, null);

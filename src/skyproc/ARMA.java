@@ -154,13 +154,25 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * A struct holding the internals of an ARMA's alternate texture field.
+     * These are used to specify which TXST records are used instead of the
+     * normal textures from the ARMA's nif.
+     */
     static public class AltTexture implements Serializable {
 
         String name;
         FormID texture = new FormID();
         int index;
 
-        public AltTexture(String name, FormID txst, int index) {
+	/**
+	 * Creates a new AltTexture, which can be added to the ARMA
+	 * to give it an alternate texture.
+	 * @param name Name of the NiTriShape to apply this TXST to.
+	 * @param txst FormID of the TXST to apply as the alt.
+	 * @param index Index of the NiTriShape to apply this TXST to.
+	 */
+	public AltTexture(String name, FormID txst, int index) {
             this.name = name;
             this.texture = txst;
             this.index = index;
@@ -192,27 +204,51 @@ public class ARMA extends MajorRecord {
             return name.length() + 12;
         }
 
-        public void setName(String name) {
+	/**
+	 * 
+	 * @param name String to set the AltTexture name to.
+	 */
+	public void setName(String name) {
             this.name = name;
         }
 
-        public String getName() {
+	/**
+	 * 
+	 * @return Name of the AltTexture.
+	 */
+	public String getName() {
             return name;
         }
 
-        public void setTexture(FormID txst) {
+	/**
+	 * 
+	 * @param txst FormID of the TXST to tie the AltTexture to.
+	 */
+	public void setTexture(FormID txst) {
             texture = txst;
         }
 
-        public FormID getTexture() {
+	/**
+	 * 
+	 * @return FormID of the TXST the AltTexture is tied to.
+	 */
+	public FormID getTexture() {
             return texture;
         }
 
-        public void setIndex(int index) {
+	/**
+	 * 
+	 * @param index The NiTriShape index to assign.
+	 */
+	public void setIndex(int index) {
             this.index = index;
         }
 
-        public int getIndex() {
+	/**
+	 * 
+	 * @return The NiTriShape index assigned to the AltTexture.
+	 */
+	public int getIndex() {
             return index;
         }
     }
@@ -280,6 +316,12 @@ public class ARMA extends MajorRecord {
     }
 
     // Get/set
+    /**
+     * 
+     * @param path Path of the .nif file to assign.
+     * @param gender The gender to assign this model path to.
+     * @param perspective Perspective to assign this model path to.
+     */
     public void setModelPath(String path, Gender gender, Perspective perspective) {
         switch (gender) {
             case MALE:
@@ -303,6 +345,13 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param gender The gender of the desired model path to query.
+     * @param perspective The perspective of the model path to query.
+     * @return The model path of the specified gender/perspective.  Empty string
+     * if a model path does not exist for specified parameters.
+     */
     public String getModelPath(Gender gender, Perspective perspective) {
         switch (gender) {
             case MALE:
@@ -322,6 +371,12 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * Returns the set of AltTextures applied to a specified gender and perspective.
+     * @param gender Gender of the AltTexture set to query.
+     * @param perspective Perspective of the AltTexture set to query.
+     * @return List of the AltTextures applied to the gender/perspective.
+     */
     public ArrayList<AltTexture> getAltTextures(Gender gender, Perspective perspective) {
         switch (gender) {
             case MALE:
@@ -341,14 +396,27 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param race
+     */
     public void setRace(FormID race) {
         RNAM.setForm(race);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getRace() {
         return RNAM.getForm();
     }
 
+    /**
+     * 
+     * @param skin
+     * @param gender
+     */
     public void setSkinTexture(FormID skin, Gender gender) {
         switch (gender) {
             case MALE:
@@ -360,6 +428,11 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param gender
+     * @return
+     */
     public FormID getSkinTexture(Gender gender) {
         switch (gender) {
             case MALE:
@@ -369,6 +442,11 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param swapList
+     * @param gender
+     */
     public void setSkinSwap(FormID swapList, Gender gender) {
         switch (gender) {
             case MALE:
@@ -380,6 +458,11 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param gender
+     * @return
+     */
     public FormID getSkinSwap(Gender gender) {
         switch (gender) {
             case MALE:
@@ -389,26 +472,51 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param addRace
+     */
     public void addAdditionalRace(FormID addRace) {
         additionalRaces.add(new SubForm(Type.MODL, addRace));
     }
 
+    /**
+     * 
+     * @param addRace
+     */
     public void removeAdditionalRace(FormID addRace) {
         additionalRaces.remove(new SubForm(Type.MODL, addRace));
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<FormID> getAdditionalRaces() {
         return SubList.subFormToPublic(additionalRaces);
     }
 
+    /**
+     * 
+     * @param footstep
+     */
     public void setFootstepSound(FormID footstep) {
         footstepSound.setForm(footstep);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getFootstepSound() {
         return footstepSound.getForm();
     }
 
+    /**
+     * 
+     * @param priority
+     * @param gender
+     */
     public void setPriority(int priority, Gender gender) {
         switch (gender) {
             case MALE:
@@ -420,6 +528,11 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param gender
+     * @return
+     */
     public int getPriority(Gender gender) {
         switch (gender) {
             case MALE:
@@ -429,18 +542,34 @@ public class ARMA extends MajorRecord {
         }
     }
 
+    /**
+     * 
+     * @param value
+     */
     public void setDetectionSoundValue(int value) {
         DNAM.detectionSoundValue = value;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getDetectionSoundValue() {
         return DNAM.detectionSoundValue;
     }
 
+    /**
+     * 
+     * @param adjust
+     */
     public void setWeaponAdjust(float adjust) {
         DNAM.weaponAdjust = adjust;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getWeaponAdjust() {
         return DNAM.weaponAdjust;
     }

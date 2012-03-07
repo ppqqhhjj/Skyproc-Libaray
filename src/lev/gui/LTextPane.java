@@ -10,14 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.*;
 
 /**
- *
+ * A customized Text Pane used by Leviathan for GUIs.
  * @author Justin Swanson
  */
 public class LTextPane extends LComponent {
@@ -27,6 +23,11 @@ public class LTextPane extends LComponent {
     JTextPane pane;
     Document doc;
 
+    /**
+     * 
+     * @param size_
+     * @param c
+     */
     public LTextPane(Dimension size_, Color c) {
         pane = new JTextPane();
         doc = pane.getDocument();
@@ -37,6 +38,10 @@ public class LTextPane extends LComponent {
         super.setSize(size_);
     }
 
+    /**
+     * 
+     * @param in
+     */
     public void setText(String in) {
         clearText();
         try {
@@ -46,6 +51,9 @@ public class LTextPane extends LComponent {
         }
     }
 
+    /**
+     * 
+     */
     public void badText() {
         try {
             doc.insertString(0, "Bad Error", null);
@@ -54,6 +62,9 @@ public class LTextPane extends LComponent {
         }
     }
 
+    /**
+     * 
+     */
     public void clearText() {
         try {
             doc.remove(0, doc.getLength());
@@ -61,6 +72,10 @@ public class LTextPane extends LComponent {
         }
     }
 
+    /**
+     * 
+     * @param in
+     */
     public void append(String in) {
         try {
             doc.insertString(doc.getLength(), in, null);
@@ -69,23 +84,42 @@ public class LTextPane extends LComponent {
         }
     }
 
+    /**
+     * 
+     * @param b
+     */
     public void setOpaque(Boolean b) {
         pane.setOpaque(b);
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean isEmpty() {
         return doc.getLength() == 0;
     }
 
+    /**
+     * 
+     * @param c
+     */
     @Override
     public void setBackground(Color c) {
         pane.setBackground(c);
     }
 
+    /**
+     * 
+     * @param c
+     */
     public void setCaretColor(Color c) {
         pane.setCaretColor(c);
     }
 
+    /**
+     * 
+     */
     public void centerText() {
         StyledDocument doc = pane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
@@ -93,6 +127,9 @@ public class LTextPane extends LComponent {
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
     }
 
+    /**
+     * 
+     */
     public void addScroll() {
         this.removeAll();
         scroll = new JScrollPane(pane);
@@ -100,14 +137,26 @@ public class LTextPane extends LComponent {
         add(scroll);
     }
 
+    /**
+     * 
+     * @param b
+     */
     public void setEditable(boolean b) {
         pane.setEditable(b);
     }
 
+    /**
+     * 
+     * @param size
+     */
     public void setFontSize(float size) {
         pane.setFont(pane.getFont().deriveFont(size));
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public Dimension getPreferredSize() {
         return pane.getPreferredSize();

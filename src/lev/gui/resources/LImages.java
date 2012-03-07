@@ -7,10 +7,14 @@ package lev.gui.resources;
 import java.net.URL;
 
 /**
- *
+ * Collection of embedded images to be used in GUIs.
  * @author Justin Swanson
  */
 public class LImages {
+    /**
+     * 
+     * @return The multipurpose background image used in DefaultGUI.
+     */
     public static URL multipurpose() {
 	return LImages.class.getResource("multipurpose.png");
     }

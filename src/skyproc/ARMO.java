@@ -189,16 +189,15 @@ public class ARMO extends MajorRecordDescription {
         }
     }
 
-    public enum Flags {
+    /**
+     * Flags associated with the ARMO record.
+     */
+    public enum ARMOFlags {
 
-        PLAYABLE
-    }
-
-    public enum ArmorType {
-
-        LIGHT,
-        HEAVY,
-        CLOTHING
+	/**
+	 * 
+	 */
+	PLAYABLE
     }
 
     // Get/Set
@@ -226,31 +225,63 @@ public class ARMO extends MajorRecordDescription {
         MODLs.remove(new SubForm(Type.MODL, id));
     }
 
+    /**
+     * 
+     * @param id
+     */
     public void setEnchantment(FormID id) {
         EITM.setForm(id);
     }
 
-    public void setFlag(BodyPart part, Boolean on) {
+    /**
+     * 
+     * @param part
+     * @param on
+     */
+    public void set(BodyPart part, Boolean on) {
         BODT.bodyParts.set(part.ordinal(), on);
     }
 
-    public boolean getFlag(BodyPart part) {
+    /**
+     * 
+     * @param part
+     * @return
+     */
+    public boolean get(BodyPart part) {
         return BODT.bodyParts.is(part.ordinal());
     }
 
-    public void setFlag(Flags flag, Boolean on) {
+    /**
+     * 
+     * @param flag
+     * @param on
+     */
+    public void set(ARMOFlags flag, Boolean on) {
         BODT.flags.set(4, on);
     }
 
-    public boolean getFlag(Flags flag) {
+    /**
+     * 
+     * @param flag
+     * @return
+     */
+    public boolean get(ARMOFlags flag) {
         return BODT.flags.is(4);
     }
 
+    /**
+     * 
+     * @param type
+     */
     public void setArmorType(ArmorType type) {
         BODT.armorType = type.ordinal();
         BODT.old = false;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArmorType getArmorType() {
         if (!BODT.old) {
             return ArmorType.values()[BODT.armorType];
@@ -259,10 +290,19 @@ public class ARMO extends MajorRecordDescription {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getEnchantment() {
         return EITM.getForm();
     }
 
+    /**
+     * 
+     * @param path
+     * @param perspective
+     */
     public void setModel(String path, Perspective perspective) {
         switch (perspective) {
             case THIRD_PERSON:
@@ -274,6 +314,11 @@ public class ARMO extends MajorRecordDescription {
         }
     }
 
+    /**
+     * 
+     * @param perspective
+     * @return
+     */
     public String getModel(Perspective perspective) {
         switch (perspective) {
             case THIRD_PERSON:
@@ -283,74 +328,146 @@ public class ARMO extends MajorRecordDescription {
         }
     }
 
+    /**
+     * 
+     * @param sound
+     */
     public void setPickupSound(FormID sound) {
         YNAM.setForm(sound);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getPickupSound() {
         return YNAM.getForm();
     }
 
+    /**
+     * 
+     * @param sound
+     */
     public void setDropSound(FormID sound) {
         ZNAM.setForm(sound);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getDropSound() {
         return ZNAM.getForm();
     }
 
+    /**
+     * 
+     * @param slot
+     */
     public void setEquipSlot(FormID slot) {
         ETYP.setForm(slot);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getEquipSet() {
         return ETYP.getForm();
     }
 
+    /**
+     * 
+     * @param set
+     */
     public void setBashImpactData(FormID set) {
         BIDS.setForm(set);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getBashImpactData() {
         return BIDS.getForm();
     }
 
+    /**
+     * 
+     * @param race
+     */
     public void setRace(FormID race) {
         RNAM.setForm(race);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getRace() {
         return RNAM.getForm();
     }
 
+    /**
+     * 
+     * @param value
+     */
     public void setValue(int value) {
         DATA.value = value;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getValue() {
         return DATA.value;
     }
 
+    /**
+     * 
+     * @param weight
+     */
     public void setWeight(float weight) {
         DATA.weight = weight;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getWeight() {
         return DATA.weight;
     }
 
+    /**
+     * 
+     * @param rating
+     */
     public void setArmorRating(int rating) {
         DNAM.setData(rating * 100);
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getArmorRating() {
         return DNAM.toInt() / 100;
     }
 
+    /**
+     * 
+     * @param template
+     */
     public void setTemplate(FormID template) {
         TNAM.setForm(template);
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getTemplate() {
         return TNAM.getForm();
     }
