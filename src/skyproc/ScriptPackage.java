@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -78,7 +78,7 @@ public class ScriptPackage extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         super.export(out, srcMod);
         if (isValid()) {
             out.write(version, 2);
@@ -123,7 +123,7 @@ public class ScriptPackage extends SubRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             name.export(out, srcMod);
             out.write(unknown, 1);
             out.write(properties.size(), 2);
@@ -311,7 +311,7 @@ public class ScriptPackage extends SubRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             name.export(out, srcMod);
             out.write(type, 1);
             out.write(unknown, 1);

@@ -9,5 +9,9 @@ package lev;
  * @author Justin Swanson
  */
 public interface LMergable {
+    /**
+     * Function to handle merging in an element that is equal.
+     * @param in
+     */
     public void mergeIn(LMergable in);
 }

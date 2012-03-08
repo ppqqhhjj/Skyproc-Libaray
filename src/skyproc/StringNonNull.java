@@ -5,7 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
-import lev.LExportParser;
+import lev.LExporter;
 
 /**
  *
@@ -28,7 +28,7 @@ class StringNonNull extends Record {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         out.write(getContentLength(srcMod), 2);
         out.write(data);
     }

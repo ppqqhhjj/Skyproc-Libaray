@@ -7,7 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -114,7 +114,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             out.write(wtype.ordinal(), 4);
             out.write(speed);
@@ -193,7 +193,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             out.write(value, 4);
             out.write(weight);
@@ -248,7 +248,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             out.write(critDmg, 4);
             out.write(critMult);

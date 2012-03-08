@@ -6,7 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -55,7 +55,7 @@ class Keywords extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             counter.export(out, srcMod);
             keywords.export(out, srcMod);

@@ -8,7 +8,7 @@ import skyproc.exceptions.BadParameter;
 import lev.LShrinkArray;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import skyproc.exceptions.BadRecord;
 
@@ -145,7 +145,7 @@ class SubForm extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         super.export(out, srcMod);
         if (isValid()) {
             ID.export(out);

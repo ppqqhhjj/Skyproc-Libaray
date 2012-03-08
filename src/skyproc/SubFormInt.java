@@ -2,7 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -27,7 +27,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
 	data = Ln.toByteArray(num, 4);
 	super.export(out, srcMod);
     }

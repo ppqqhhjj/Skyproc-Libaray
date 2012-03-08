@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFlags;
 import lev.Ln;
 import lev.LShrinkArray;
@@ -207,7 +207,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    if (isValid()) {
 		CSDT.export(out, srcMod);
 		for (SoundPair pair : soundPairs) {
@@ -325,7 +325,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(skills, 36);
 	    out.write(health, 2);
@@ -398,7 +398,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    if (isValid()) {
 		TINI.export(out, srcMod);
 		TINC.export(out, srcMod);
@@ -475,7 +475,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(ACBSflags.export(), 4);
 	    out.write(baseSpellPoints, 2);
@@ -549,7 +549,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(aggression, 1);
 	    out.write(confidence, 1);

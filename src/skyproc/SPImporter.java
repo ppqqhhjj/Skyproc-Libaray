@@ -92,7 +92,7 @@ public class SPImporter {
      * @throws java.io.IOException
      */
     static public ArrayList<ModListing> getActiveModList() throws java.io.IOException {
-	if (SPGlobal.getDB().activePlugins.isEmpty()) {
+	if (SPDatabase.activePlugins.isEmpty()) {
 	    SPGlobal.sync(true);
 	    SPGlobal.newSyncLog("Get Active Mod List.txt");
 	    String header = "IMPORT MODS";

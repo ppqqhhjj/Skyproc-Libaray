@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 
 /**
@@ -109,7 +109,7 @@ public class FormID implements Serializable {
         valid = !equals(NULL);
     }
 
-    void export(LExportParser out) throws IOException {
+    void export(LExporter out) throws IOException {
         out.write(getInternal(true), 4);
     }
 

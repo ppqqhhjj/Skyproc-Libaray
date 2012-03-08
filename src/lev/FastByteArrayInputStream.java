@@ -25,19 +25,42 @@ public class FastByteArrayInputStream extends InputStream {
      */
     protected int pos = 0;
 
+    /**
+     * 
+     * @param buf
+     * @param count
+     */
     public FastByteArrayInputStream(byte[] buf, int count) {
         this.buf = buf;
         this.count = count;
     }
 
+    /**
+     * 
+     * @return
+     */
+    @Override
     public final int available() {
         return count - pos;
     }
 
+    /**
+     * 
+     * @return
+     */
+    @Override
     public final int read() {
         return (pos < count) ? (buf[pos++] & 0xff) : -1;
     }
 
+    /**
+     * 
+     * @param b
+     * @param off
+     * @param len
+     * @return
+     */
+    @Override
     public final int read(byte[] b, int off, int len) {
         if (pos >= count)
             return -1;
@@ -50,6 +73,12 @@ public class FastByteArrayInputStream extends InputStream {
         return len;
     }
 
+    /**
+     * 
+     * @param n
+     * @return
+     */
+    @Override
     public final long skip(long n) {
         if ((pos + n) > count)
             n = count - pos;

@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -40,7 +40,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         for (Type t : markers) {
             if (set.containsKey(t)) {
                 if (set.get(t).isValid()) {

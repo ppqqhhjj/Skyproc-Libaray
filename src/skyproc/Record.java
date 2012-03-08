@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.BadParameter;
@@ -65,7 +65,7 @@ public abstract class Record extends ExportRecord implements Serializable {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             out.write(getTypes()[0].toString());
             out.write(getContentLength(srcMod), 4);

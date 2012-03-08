@@ -25,6 +25,7 @@ import skyproc.exceptions.BadParameter;
  */
 public class BSA {
 
+    static ArrayList<String> resourceLoadOrder;
     static Map<String, BSA> BSAs = new HashMap<String,BSA>();
     static String header = "BSA";
     String filePath;
@@ -171,6 +172,9 @@ public class BSA {
 	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from outside BSA.");
 	    return new LShrinkArray(outsideBSA);
 	} else {
+	    if (resourceLoadOrder == null) {
+		loadResourceLoadOrder();
+	    }
 	    for (BSA b : BSAs.values()) {
 		if (b.contains(BSA.FileType.NIF) && b.hasFile(filePath)) {
 		    SPGlobal.log(header, "  Nif " + filePath + " loaded from BSA " + b.getFilePath());
@@ -181,6 +185,11 @@ public class BSA {
 	return null;
     }
 
+    static void loadResourceLoadOrder() {
+	File myDocuments = Ln.getMyDocuments();
+	int werwe = 23;
+    }
+    
     BSAFileRef getFileRef(String filePath) {
 	filePath = filePath.toUpperCase();
 	int index = filePath.lastIndexOf('\\');
@@ -288,6 +297,7 @@ public class BSA {
 		    if (tmp.containsAny(types)) {
 			tmp.loadFolders();
 			out.add(tmp);
+			BSAs.put(f.getName().toUpperCase(), tmp);
 			SPGlobal.log(header, "Loaded BSA: " + f.getPath());
 		    }
 		} catch (Exception e) {

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFileChannel;
 import lev.LFlags;
 import lev.Ln;
@@ -154,7 +154,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
 	    if (logging() && SPGlobal.debugExportSummary) {

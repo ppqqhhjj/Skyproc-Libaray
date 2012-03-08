@@ -2,7 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -96,7 +96,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
                 out.write(eyeAdaptSpeed);
@@ -169,7 +169,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
                 out.write(saturation);
@@ -239,7 +239,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
                 out.write(alpha);
@@ -281,7 +281,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
                 out.write(DOFstrength);

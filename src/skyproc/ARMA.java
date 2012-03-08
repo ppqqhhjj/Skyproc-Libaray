@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -97,7 +97,7 @@ public class ARMA extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
                 out.write(altTextures.size(), 4);
@@ -189,7 +189,7 @@ public class ARMA extends MajorRecord {
             index = in.extractInt(4);
         }
 
-        void export(LExportParser out) throws IOException {
+        void export(LExporter out) throws IOException {
             out.write(name.length(), 4);
             out.write(name);
             texture.export(out);
@@ -267,7 +267,7 @@ public class ARMA extends MajorRecord {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if ("FalmerHelmetKhajiitAA".equals(getEDID())) {
                 int werw = 2;

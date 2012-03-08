@@ -7,7 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -52,7 +52,7 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         super.export(out, srcMod);
         out.write(data, 0);
     }

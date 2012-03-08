@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
@@ -39,7 +39,7 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
         list.add(r);
     }
 
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         for (SubRecord s : list) {
 //            if (s.getTypes()[0] == Type.FULL) {
 //                int test = 2343;

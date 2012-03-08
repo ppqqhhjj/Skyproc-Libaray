@@ -16,6 +16,9 @@ public class FastByteArrayOutputStream extends OutputStream {
      * Buffer and size
      */
     protected byte[] buf = null;
+    /**
+     * 
+     */
     protected int size = 0;
 
     /**
@@ -27,6 +30,7 @@ public class FastByteArrayOutputStream extends OutputStream {
 
     /**
      * Constructs a stream with the given initial size
+     * @param initSize 
      */
     public FastByteArrayOutputStream(int initSize) {
         this.size = 0;
@@ -45,6 +49,10 @@ public class FastByteArrayOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getSize() {
         return size;
     }
@@ -53,34 +61,56 @@ public class FastByteArrayOutputStream extends OutputStream {
      * Returns the byte array containing the written data. Note that this
      * array will almost always be larger than the amount of data actually
      * written.
+     * @return 
      */
     public byte[] getByteArray() {
         return buf;
     }
 
+    /**
+     * 
+     * @param b
+     */
+    @Override
     public final void write(byte b[]) {
         verifyBufferSize(size + b.length);
         System.arraycopy(b, 0, buf, size, b.length);
         size += b.length;
     }
 
+    /**
+     * 
+     * @param b
+     * @param off
+     * @param len
+     */
+    @Override
     public final void write(byte b[], int off, int len) {
         verifyBufferSize(size + len);
         System.arraycopy(b, off, buf, size, len);
         size += len;
     }
 
+    /**
+     * 
+     * @param b
+     */
+    @Override
     public final void write(int b) {
         verifyBufferSize(size + 1);
         buf[size++] = (byte) b;
     }
 
+    /**
+     * 
+     */
     public void reset() {
         size = 0;
     }
 
     /**
      * Returns a ByteArrayInputStream for reading back the written data
+     * @return 
      */
     public InputStream getInputStream() {
         return new FastByteArrayInputStream(buf, size);

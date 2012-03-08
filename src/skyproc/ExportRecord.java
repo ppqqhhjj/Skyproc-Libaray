@@ -1,7 +1,7 @@
 package skyproc;
 
 import java.io.IOException;
-import lev.LExportParser;
+import lev.LExporter;
 
 /**
  *
@@ -9,5 +9,5 @@ import lev.LExportParser;
  */
 abstract class ExportRecord {
 
-    abstract void export(LExportParser out, Mod srcMod) throws IOException;
+    abstract void export(LExporter out, Mod srcMod) throws IOException;
 }

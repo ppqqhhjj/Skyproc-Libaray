@@ -7,7 +7,7 @@ package skyproc;
 import java.util.zip.DataFormatException;
 import skyproc.exceptions.BadRecord;
 import java.io.IOException;
-import lev.LExportParser;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
@@ -68,7 +68,7 @@ public abstract class SubRecord extends Record {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             out.write(getTypes()[0].toString());
             out.write(getContentLength(srcMod), 2);

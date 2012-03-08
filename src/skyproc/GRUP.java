@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFileChannel;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
@@ -150,7 +150,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             super.export(out, srcMod);
             out.write(this.getContainedType().toString());

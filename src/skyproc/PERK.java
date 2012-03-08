@@ -3,7 +3,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import lev.LShrinkArray;
@@ -111,7 +111,7 @@ public class PERK extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             PRKE.export(out, srcMod);
             subPackage.export(out, srcMod);
             PRKF.export(out, srcMod);
@@ -208,7 +208,7 @@ public class PERK extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             DATA.export(out, srcMod);
             PRKCs.export(out, srcMod);
             EPFT.export(out, srcMod);
@@ -303,7 +303,7 @@ public class PERK extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             PRKC.export(out, srcMod);
             CTDAs.export(out, srcMod);
         }
@@ -369,7 +369,7 @@ public class PERK extends MajorRecordDescription {
         }
 
         @Override
-        void export(LExportParser out, Mod srcMod) throws IOException {
+        void export(LExporter out, Mod srcMod) throws IOException {
             CTDA.export(out, srcMod);
             CIS1.export(out, srcMod);
             CIS2.export(out, srcMod);

@@ -2,7 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -21,7 +21,7 @@ class SubFlag extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	out.write(flags.export(), flags.length());
     }

@@ -3,7 +3,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFileChannel;
 import lev.Ln;
 import lev.LShrinkArray;
@@ -50,7 +50,7 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             if (srcMod.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
                 data.setData(Ln.toByteArray(srcMod.addOutString(text.string, file), 4));

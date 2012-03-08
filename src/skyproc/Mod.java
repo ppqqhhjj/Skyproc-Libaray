@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFileChannel;
 import lev.LFlags;
 import lev.Ln;
@@ -481,11 +481,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @throws IOException
      */
     public void export(String path) throws IOException {
-	export(new LExportParser(path + getName()), this);
+	export(new LExporter(path + getName()), this);
     }
 
     @Override
-    void export(LExportParser out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException {
 	header.setNumRecords(numRecords());
 	header.export(out, srcMod);
 
@@ -530,7 +530,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 	}
 	int outLength = stringLength + 8 * list.size() + 8;
-	LExportParser out = new LExportParser(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
+	LExporter out = new LExporter(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
 
 	out.write(list.size(), 4);
 	out.write(stringLength, 4);
@@ -882,7 +882,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(flags.export(), 4);
 	    out.write(fluff1, 4);
@@ -976,7 +976,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(version, 4);
 	    out.write(numRecords, 4);

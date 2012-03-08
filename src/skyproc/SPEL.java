@@ -6,7 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExportParser;
+import lev.LExporter;
 import lev.LFlags;
 import lev.Ln;
 import lev.LShrinkArray;
@@ -74,7 +74,7 @@ public class SPEL extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    EFID.export(out, srcMod);
 	    EFIT.export(out, srcMod);
 	    CTDAs.export(out, srcMod);
@@ -156,7 +156,7 @@ public class SPEL extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    CTDA.export(out, srcMod);
 	    CIS1.export(out, srcMod);
 	    CIS2.export(out, srcMod);
@@ -252,7 +252,7 @@ public class SPEL extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExportParser out, Mod srcMod) throws IOException {
+	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    if (isValid()) {
 		out.write(baseCost);
