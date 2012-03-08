@@ -165,16 +165,36 @@ public class LFileChannel {
 	return Ln.arrayToString(readUntil(0));
     }
 
+    /**
+     * Reads in a line until a newline character is found. (Byte of 10, or bytes 13 -> 10)
+     * @return 
+     * @throws IOException
+     */
     public String readLine() throws IOException {
 	byte[] read1 = { 10 };
 	byte[] read2 = { 13 , 10 };
 	return Ln.arrayToString(readUntil(read2, read1));
     }
 
+    /**
+     * Reads in bytes until the delimiter is read.
+     *
+     * @param delimiter char to stop reading at.
+     * @param bufsize Buffer size to hold readings.
+     * @return Byte array containing read data without delimiter.
+     * @throws IOException
+     */
     public byte[] readUntil(char delimiter, int bufsize) throws IOException {
 	return readUntil((int) delimiter, bufsize);
     }
 
+    /**
+     * Reads in bytes until the delimiter is read.
+     *
+     * @param delimiter char to stop reading at.
+     * @return Byte array containing read data without delimiter.
+     * @throws IOException
+     */
     public byte[] readUntil(char delimiter) throws IOException {
 	return readUntil((int) delimiter);
     }
@@ -183,6 +203,7 @@ public class LFileChannel {
      * Reads in bytes until the delimiter is read.
      *
      * @param delimiter Byte to stop reading at.
+     * @param bufsize Buffer size to hold readings.
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
@@ -198,11 +219,25 @@ public class LFileChannel {
 	return out;
     }
 
+    /**
+     * Reads in bytes until the delimiter is read.
+     *
+     * @param delimiter int to stop reading at.
+     * @return Byte array containing read data without delimiter.
+     * @throws IOException
+     */
     public byte[] readUntil(int delimiter) throws IOException {
 	byte[] delimiterB = {(byte) delimiter};
 	return readUntil(delimiterB);
     }
 
+    /**
+     * Reads in bytes until any of the delimiters are read.  Returns the
+     * first delimiter found, so parameter order matters.
+     * @param delimiters Byte arrays of patterns to stop reading at.
+     * @return Byte array containing read data without delimiter.
+     * @throws IOException
+     */
     public byte[] readUntil(byte[] ... delimiters) throws IOException {
 	ArrayList<Byte> buffer = new ArrayList<Byte>(50);
 	LByteSearcher search = new LByteSearcher(delimiters);

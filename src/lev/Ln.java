@@ -971,6 +971,12 @@ public class Ln {
 	return min + "m:" + seconds + "s";
     }
 
+    /**
+     * Replaces the suffix with the desired suffix.
+     * @param input
+     * @param type
+     * @return
+     */
     public static String changeFileTypeTo (String input, String type) {
 	return input.substring(0, input.lastIndexOf(".") + 1) + type;
     }

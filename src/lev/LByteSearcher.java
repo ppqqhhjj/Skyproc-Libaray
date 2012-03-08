@@ -17,13 +17,17 @@ public class LByteSearcher {
     Boolean mark;
 
     /**
-     * Creates an LStringSearcher object that will look for the given target strings.
+     * Creates a searcher object that will look for the given target bytes.
      * @param targets_ Strings to look for.
      */
     public LByteSearcher(byte[]... targets_) {
         init(targets_);
     }
     
+    /**
+     * Creates a search object that will look for the target int.
+     * @param target
+     */
     public LByteSearcher(int target) {
 	byte[] targ = { (byte) target };
 	init(targ);
@@ -37,7 +41,7 @@ public class LByteSearcher {
     /**
      * Inform the searcher of the next input, and receive feedback if something was found.
      * @param in The next input
-     * @return Target if found, empty string if not.
+     * @return Target if found, byte[] of size 0 if not.
      */
     public byte[] next(int in) {
         return next((char) in);
@@ -46,7 +50,7 @@ public class LByteSearcher {
     /**
      * Inform the searcher of the next input, and receive feedback if something was found.
      * @param in The next input
-     * @return Target if found, empty string if not.
+     * @return Target if found, byte[] of size 0 if not.
      */
     public byte[] next(char in) {
         for (int i = 0; i < found.length; i++) {
@@ -71,7 +75,7 @@ public class LByteSearcher {
      * once one is found.
      * @param in The next input
      * @param input Stream to mark.
-     * @return Target if found, empty string if not.
+     * @return Target if found, byte[] of size 0 if not.
      */
     public byte[] next(int in, BufferedInputStream input) {
         return next((char) in, input);
@@ -83,7 +87,7 @@ public class LByteSearcher {
      * once one is found.
      * @param in The next input
      * @param input Stream to mark.
-     * @return Target if found, empty string if not.
+     * @return Target if found, byte[] of size 0 if not.
      */
     public byte[] next(char in, BufferedInputStream input) {
         mark = true;
