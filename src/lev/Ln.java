@@ -24,7 +24,6 @@ public class Ln {
     public static File getMyDocuments() {
 	JFileChooser fr = new JFileChooser();
 	FileSystemView fw = fr.getFileSystemView();
-	System.out.println(fw.getDefaultDirectory());
 	return fw.getDefaultDirectory();
     }
 
@@ -972,6 +971,10 @@ public class Ln {
 	return min + "m:" + seconds + "s";
     }
 
+    public static String changeFileTypeTo (String input, String type) {
+	return input.substring(0, input.lastIndexOf(".") + 1) + type;
+    }
+    
     /**
      * Returns the greatest common denominator.
      * @param a

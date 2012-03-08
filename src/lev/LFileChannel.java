@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 
 /**
  * A FileChannel setup that supports easy extraction/getting of information.
@@ -54,7 +55,7 @@ public class LFileChannel {
     }
 
     /**
-     * 
+     *
      * @param f File to open a channel to.
      * @throws FileNotFoundException
      */
@@ -64,6 +65,7 @@ public class LFileChannel {
 
     /**
      * Reads in a byte and moves forward one position in the file.
+     *
      * @return The next int in the file.
      * @throws IOException
      */
@@ -72,7 +74,9 @@ public class LFileChannel {
     }
 
     /**
-     * Reads in the desired bytes and converts them to a long (little endian assumed).
+     * Reads in the desired bytes and converts them to a long (little endian
+     * assumed).
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
      * @return Long representation of read bytes
@@ -84,6 +88,7 @@ public class LFileChannel {
 
     /**
      * Reads in the desired bytes and converts them to a string.
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
      * @return String representation of read bytes
@@ -94,7 +99,9 @@ public class LFileChannel {
     }
 
     /**
-     * Reads in the desired bytes and converts them to a int (little endian assumed).
+     * Reads in the desired bytes and converts them to a int (little endian
+     * assumed).
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
      * @return Integer representation of read bytes
@@ -106,6 +113,7 @@ public class LFileChannel {
 
     /**
      * Reads in the desired bytes and converts them to an int array.
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
      * @return
@@ -117,9 +125,10 @@ public class LFileChannel {
 
     /**
      * Reads in the desired bytes.
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
-     * @return 
+     * @return
      * @throws IOException
      */
     final public byte[] readInBytes(final int skip, final int read) throws IOException {
@@ -131,6 +140,7 @@ public class LFileChannel {
 
     /**
      * Reads in the desired bytes and wraps them in a ByteBuffer.
+     *
      * @param skip Bytes to skip
      * @param read Bytes to read and convert
      * @return ByteBuffer containing read bytes.
@@ -145,8 +155,9 @@ public class LFileChannel {
     }
 
     /**
-     * Reads in characters until a null byte (0) is read, and converts them to a 
+     * Reads in characters until a null byte (0) is read, and converts them to a
      * string.
+     *
      * @return Next string in the file.
      * @throws IOException
      */
@@ -154,17 +165,32 @@ public class LFileChannel {
 	return Ln.arrayToString(readUntil(0));
     }
 
+    public String readLine() throws IOException {
+	byte[] read1 = { 10 };
+	byte[] read2 = { 13 , 10 };
+	return Ln.arrayToString(readUntil(read2, read1));
+    }
+
+    public byte[] readUntil(char delimiter, int bufsize) throws IOException {
+	return readUntil((int) delimiter, bufsize);
+    }
+
+    public byte[] readUntil(char delimiter) throws IOException {
+	return readUntil((int) delimiter);
+    }
+
     /**
      * Reads in bytes until the delimiter is read.
+     *
      * @param delimiter Byte to stop reading at.
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(int delimiter) throws IOException {
-	byte[] buffer = new byte[1000];
+    public byte[] readUntil(int delimiter, int bufsize) throws IOException {
+	byte[] buffer = new byte[bufsize];
 	int counter = 0;
 	int in;
-	while ((in = read()) != 0) {
+	while (available() > 0 && (in = read()) != delimiter) {
 	    buffer[counter++] = (byte) in;
 	}
 	byte[] out = new byte[counter];
@@ -172,8 +198,32 @@ public class LFileChannel {
 	return out;
     }
 
+    public byte[] readUntil(int delimiter) throws IOException {
+	byte[] delimiterB = {(byte) delimiter};
+	return readUntil(delimiterB);
+    }
+
+    public byte[] readUntil(byte[] ... delimiters) throws IOException {
+	ArrayList<Byte> buffer = new ArrayList<Byte>(50);
+	LByteSearcher search = new LByteSearcher(delimiters);
+	int in;
+	byte[] stop = new byte[0];
+	while (available() > 0 && stop.length == 0) {
+	    in = read();
+	    if ((stop = search.next(in)).length == 0) {
+		buffer.add((byte) in);
+	    }
+	}
+	byte[] out = new byte[buffer.size() - (stop.length - 1)];
+	for (int i = 0; i < buffer.size() - (stop.length - 1); i++) {
+	    out[i] = buffer.get(i);
+	}
+	return out;
+    }
+
     /**
      * Bumps the position the desired offset.
+     *
      * @param offset Desired offset.
      * @throws IOException
      */
@@ -186,6 +236,7 @@ public class LFileChannel {
 
     /**
      * Jumps back to the marked location that was set using posAndReturn()
+     *
      * @throws IOException
      */
     final public void jumpBack() throws IOException {
@@ -198,6 +249,7 @@ public class LFileChannel {
     /**
      * Moves to the desired position, but marks the current location for
      * jumpBack().
+     *
      * @param pos Position to move to.
      * @throws IOException
      */
@@ -207,7 +259,7 @@ public class LFileChannel {
     }
 
     /**
-     * 
+     *
      * @param pos Position to move to.
      * @throws IOException
      */
@@ -216,7 +268,7 @@ public class LFileChannel {
     }
 
     /**
-     * 
+     *
      * @return Current position.
      * @throws IOException
      */
@@ -226,6 +278,7 @@ public class LFileChannel {
 
     /**
      * Marks the current position for jumpBack().
+     *
      * @throws IOException
      */
     final public void markReturn() throws IOException {
@@ -234,13 +287,15 @@ public class LFileChannel {
     }
 
     /**
-     * Uses an LSearcher to read file contents until one of the targets is found.
+     * Uses an LStringSearcher to read file contents until one of the targets is
+     * found.
+     *
      * @param targets
      * @return The target found, or the empty string if none found.
      * @throws IOException
      */
     final public String scanTo(String... targets) throws IOException {
-	LSearcher search = new LSearcher(targets);
+	LStringSearcher search = new LStringSearcher(targets);
 	String result;
 	int inputInt = iStream.read();
 
@@ -257,6 +312,7 @@ public class LFileChannel {
 
     /**
      * Closes streams.
+     *
      * @throws IOException
      */
     final public void close() throws IOException {
@@ -267,7 +323,7 @@ public class LFileChannel {
     }
 
     /**
-     * 
+     *
      * @return Bytes left to read in the file.
      * @throws IOException
      */

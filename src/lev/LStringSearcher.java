@@ -10,23 +10,23 @@ import java.io.BufferedInputStream;
 
 /**
  * A helper object that manages searching a stream for targets.<br><br>
- * To use an LSearcher:<br>
+ * To use an LStringSearcher:<br>
  * 1) Create one with the targets desired.<br>
  * 2) read single ints from your stream and feed it to the next() functions<br>
  * 3) If a non-empty string is returned, then it is the target that was found.
  * @author Justin Swanson
  */
-public class LSearcher {
+public class LStringSearcher {
 
     String[] targets;
     int[] found;
     Boolean mark;
 
     /**
-     * Creates an LSearcher object that will look for the given target strings.
+     * Creates an LStringSearcher object that will look for the given target strings.
      * @param targets_ Strings to look for.
      */
-    public LSearcher(String... targets_) {
+    public LStringSearcher(String... targets_) {
         targets = targets_;
         found = new int[targets.length];
     }
