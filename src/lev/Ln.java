@@ -18,7 +18,7 @@ import javax.swing.tree.TreePath;
 public class Ln {
 
     /**
-     * 
+     *
      * @return My documents folder for the system.
      */
     public static File getMyDocuments() {
@@ -115,6 +115,7 @@ public class Ln {
 
     /**
      * Centers the input inside desired width.
+     *
      * @param spaces Width desired.
      * @param c Character to fill to the width
      * @param input Input to center.
@@ -138,7 +139,8 @@ public class Ln {
 
     /**
      * Reverse characters in the string
-     * @param input 
+     *
+     * @param input
      * @return
      */
     public static String reverse(String input) {
@@ -147,6 +149,7 @@ public class Ln {
 
     /**
      * Reverses characters in a char array
+     *
      * @param input
      * @return
      */
@@ -160,6 +163,7 @@ public class Ln {
 
     /**
      * Reverses integers in an int array
+     *
      * @param input
      * @return
      */
@@ -173,6 +177,7 @@ public class Ln {
 
     /**
      * Reverses bytes in a byte array
+     *
      * @param input
      * @return
      */
@@ -186,8 +191,9 @@ public class Ln {
 
     /**
      * Removes comments, and trims whitespace
+     *
      * @param line
-     * @param comment 
+     * @param comment
      * @return
      */
     public static String cleanLine(String line, String comment) {
@@ -205,7 +211,8 @@ public class Ln {
 
     /**
      * Removes the directory and everything inside of it.
-     * @param directory 
+     *
+     * @param directory
      * @return
      */
     public static boolean removeDirectory(File directory) {
@@ -245,7 +252,8 @@ public class Ln {
 
     /**
      * Makes the directories associated with a file.
-     * @param file 
+     *
+     * @param file
      */
     public static void makeDirs(File file) {
 	makeDirs(file.getPath());
@@ -253,6 +261,7 @@ public class Ln {
 
     /**
      * Makes the directories associated with a file.
+     *
      * @param file
      */
     public static void makeDirs(String file) {
@@ -272,7 +281,9 @@ public class Ln {
     }
 
     /**
-     * Moves a file from one directory to another.  (eraseOldDirs is not implemented yet)
+     * Moves a file from one directory to another. (eraseOldDirs is not
+     * implemented yet)
+     *
      * @param src Source file
      * @param dest Destination file
      * @param eraseOldDirs Whether to erase old empty directories.
@@ -287,13 +298,16 @@ public class Ln {
     }
 
     /**
-     * Recursively returns all files inside of a directory and its subdirectories.<br>
-     * Has min/max depths to exclude undesired levels.
+     * Recursively returns all files inside of a directory and its
+     * subdirectories.<br> Has min/max depths to exclude undesired levels.
+     *
      * @param src Folder to recursively search
      * @param minDepth Min depth to start adding file to the list
      * @param maxDepth Max depth to add files to the list
-     * @param addDirs Include directories as files in the list, followed by their contents.
-     * @return List of all files inside the folder and subfolders within the depth parameters.
+     * @param addDirs Include directories as files in the list, followed by
+     * their contents.
+     * @return List of all files inside the folder and subfolders within the
+     * depth parameters.
      */
     public static ArrayList<File> generateFileList(File src, int minDepth, int maxDepth, boolean addDirs) {
 	ArrayList<File> out = new ArrayList<File>();
@@ -312,6 +326,7 @@ public class Ln {
 
     /**
      * Converts an int array to its string equivalent.
+     *
      * @param input
      * @return
      */
@@ -325,6 +340,7 @@ public class Ln {
 
     /**
      * Converts a byte array to its string equivalent.
+     *
      * @param input
      * @return
      */
@@ -338,6 +354,7 @@ public class Ln {
 
     /**
      * Returns true if input is a file (case insensitive check)
+     *
      * @param test File to check if exists
      * @return true if input is a file (case insensitive check).
      */
@@ -347,6 +364,7 @@ public class Ln {
 
     /**
      * Returns an uppercase version of the test path if it exists.
+     *
      * @param test
      * @return Uppercase version of the test file.
      */
@@ -371,6 +389,7 @@ public class Ln {
 
     /**
      * Converts int array to a single int, assuming little endian.
+     *
      * @param input
      * @return
      */
@@ -380,6 +399,7 @@ public class Ln {
 
     /**
      * Converts int array to a single long, assuming little endian.
+     *
      * @param input
      * @return
      */
@@ -395,6 +415,7 @@ public class Ln {
 
     /**
      * Converts byte array to a single int, assuming little endian.
+     *
      * @param input
      * @return
      */
@@ -404,6 +425,7 @@ public class Ln {
 
     /**
      * Converts byte array to a single long, assuming little endian.
+     *
      * @param input
      * @return
      */
@@ -419,6 +441,7 @@ public class Ln {
 
     /**
      * Prints the integer representation of each index in the array.
+     *
      * @param input
      * @return
      */
@@ -432,6 +455,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input (assuming its one byte)
+     *
      * @param input
      * @return
      */
@@ -445,6 +469,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input (assuming its one byte)
+     *
      * @param input
      * @return
      */
@@ -454,6 +479,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input
+     *
      * @param input integer to print
      * @param space Adds spaces in between bytes
      * @param reverse Reverses byte printout
@@ -466,6 +492,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input
+     *
      * @param input array to print
      * @param space Adds spaces in between bytes
      * @param reverse Reverses byte printout
@@ -477,6 +504,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input
+     *
      * @param input array to print
      * @param space Adds spaces in between bytes
      * @param reverse Reverses byte printout
@@ -488,6 +516,7 @@ public class Ln {
 
     /**
      * Prints the hex string of the input
+     *
      * @param input array to print
      * @param space Adds spaces in between bytes
      * @param reverse Reverses byte printout
@@ -512,7 +541,9 @@ public class Ln {
     }
 
     /**
-     * Prints input in the form of: "([integer representation]->[hex representation])"
+     * Prints input in the form of: "([integer representation]->[hex
+     * representation])"
+     *
      * @param input Number to print
      * @return Final string
      */
@@ -521,7 +552,9 @@ public class Ln {
     }
 
     /**
-     * Prints input in the form of: "([integer representation]->[hex representation])"
+     * Prints input in the form of: "([integer representation]->[hex
+     * representation])"
+     *
      * @param input Number to print
      * @return Final string
      */
@@ -531,6 +564,7 @@ public class Ln {
 
     /**
      * Prints a double in digit form, no scientific notation.
+     *
      * @param in Double to print.
      * @param length number of characters to print.
      * @return Final double print string.
@@ -550,6 +584,7 @@ public class Ln {
 
     /**
      * Removes all instances of the remove string from the input string.
+     *
      * @param input Source string
      * @param remove String to remove
      * @return
@@ -567,6 +602,7 @@ public class Ln {
 
     /**
      * Inserts a string inside the input string at the given index.
+     *
      * @param input Source string
      * @param insert String to insert
      * @param location index to insert at.
@@ -584,6 +620,7 @@ public class Ln {
 
     /**
      * Converts "true" to "1" and "false" to "0"
+     *
      * @param input
      * @return
      */
@@ -599,6 +636,7 @@ public class Ln {
 
     /**
      * Converts boolean to "1" or "0"
+     *
      * @param input
      * @return
      */
@@ -607,7 +645,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return True if string equals "1" or "true"
      */
@@ -620,8 +658,9 @@ public class Ln {
     }
 
     /**
-     * Make directories to file path if they don't exist.<br>
-     * Deletes old file if delete is on.
+     * Make directories to file path if they don't exist.<br> Deletes old file
+     * if delete is on.
+     *
      * @param f
      * @param delete
      * @return
@@ -641,8 +680,9 @@ public class Ln {
     }
 
     /**
-     * Make directories to file path if they don't exist.<br>
-     * Deletes old file if delete is on.
+     * Make directories to file path if they don't exist.<br> Deletes old file
+     * if delete is on.
+     *
      * @param s
      * @param delete
      * @return
@@ -653,6 +693,7 @@ public class Ln {
 
     /**
      * Expands or minimizes all nodes in a GUI tree.
+     *
      * @param tree
      * @param expand
      */
@@ -683,11 +724,9 @@ public class Ln {
     }
 
     /**
-     * Parses a hex string.<br>
-     * Viable formats:<br>
-     * 1) "0123"<br>
-     * 2) "01 23"<br>
+     * Parses a hex string.<br> Viable formats:<br> 1) "0123"<br> 2) "01 23"<br>
      * 3) "0x01 0x23"
+     *
      * @param hex Hex string to parse.
      * @param min Minimum length, will be filled with zeros to fill.
      * @param reverse Reverse the bytes
@@ -702,11 +741,9 @@ public class Ln {
     }
 
     /**
-     * Parses a hex string.<br>
-     * Viable formats:<br>
-     * 1) "0123"<br>
-     * 2) "01 23"<br>
+     * Parses a hex string.<br> Viable formats:<br> 1) "0123"<br> 2) "01 23"<br>
      * 3) "0x01 0x23"
+     *
      * @param hex Hex string to parse.
      * @return Parsed hex string in a byte array.
      */
@@ -715,11 +752,9 @@ public class Ln {
     }
 
     /**
-     * Parses a hex string.<br>
-     * Viable formats:<br>
-     * 1) "0123"<br>
-     * 2) "01 23"<br>
+     * Parses a hex string.<br> Viable formats:<br> 1) "0123"<br> 2) "01 23"<br>
      * 3) "0x01 0x23"
+     *
      * @param hex Hex string to parse.
      * @param min Minimum length, will be filled with zeros to fill.
      * @return Parsed hex string in a byte array.
@@ -761,6 +796,7 @@ public class Ln {
 
     /**
      * Converts a byte to an unsigned integer.
+     *
      * @param in
      * @return
      */
@@ -770,6 +806,7 @@ public class Ln {
 
     /**
      * Converts to int array
+     *
      * @param in
      * @return
      */
@@ -790,7 +827,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return
      */
@@ -803,7 +840,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return
      */
@@ -812,7 +849,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @param maxLength
@@ -823,7 +860,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @return
@@ -833,7 +870,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return
      */
@@ -842,7 +879,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @param maxLength
@@ -873,7 +910,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return
      */
@@ -886,7 +923,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @return
      */
@@ -895,7 +932,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @return
@@ -905,7 +942,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @param maxLength
@@ -916,7 +953,7 @@ public class Ln {
     }
 
     /**
-     * 
+     *
      * @param input
      * @param minLength
      * @param maxLength
@@ -948,6 +985,7 @@ public class Ln {
 
     /**
      * Converts string to a byte array with no null terminator.
+     *
      * @param input
      * @return
      */
@@ -961,6 +999,7 @@ public class Ln {
 
     /**
      * Print nanoseconds to a m:s format.
+     *
      * @param nanoseconds
      * @return
      */
@@ -973,16 +1012,18 @@ public class Ln {
 
     /**
      * Replaces the suffix with the desired suffix.
+     *
      * @param input
      * @param type
      * @return
      */
-    public static String changeFileTypeTo (String input, String type) {
+    public static String changeFileTypeTo(String input, String type) {
 	return input.substring(0, input.lastIndexOf(".") + 1) + type;
     }
-    
+
     /**
      * Returns the greatest common denominator.
+     *
      * @param a
      * @param b
      * @return
@@ -1000,6 +1041,7 @@ public class Ln {
 
     /**
      * Returns least common multiple
+     *
      * @param a
      * @param b
      * @return
@@ -1010,11 +1052,14 @@ public class Ln {
 
     /**
      * Returns least common multiple
+     *
      * @param nums
      * @return
      */
     public static int lcmm(int... nums) {
-	if (nums.length == 2) {
+	if (nums.length == 1) {
+	    return nums[0];
+	} else if (nums.length == 2) {
 	    return lcm(nums[0], nums[1]);
 	} else {
 	    int[] rest = Arrays.copyOfRange(nums, 1, nums.length);
