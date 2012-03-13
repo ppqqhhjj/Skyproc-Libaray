@@ -306,11 +306,11 @@ public class SPGlobal {
     /**
      * Displays information about BSA importing
      */
-    public static boolean debugBSAimport = true;
+    public static boolean debugBSAimport = false;
     /**
      * Displays information about NIF importing
      */
-    public static boolean debugNIFimport = true;
+    public static boolean debugNIFimport = false;
     /**
      * Prints messages about records pairing strings with external STRINGS
      * files.<br> Prints to the sync log<br>

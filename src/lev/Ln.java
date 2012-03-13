@@ -324,6 +324,10 @@ public class Ln {
 	return out;
     }
 
+    public static ArrayList<File> generateFileList(File src, boolean addDirs) {
+	return generateFileList(src, -1, -1, addDirs);
+    }
+    
     /**
      * Converts an int array to its string equivalent.
      *
