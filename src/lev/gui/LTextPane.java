@@ -31,11 +31,16 @@ public class LTextPane extends LComponent {
     public LTextPane(Dimension size_, Color c) {
         pane = new JTextPane();
         doc = pane.getDocument();
-        pane.setSize(size_);
         pane.setOpaque(false);
         pane.setForeground(c);
+	setSize(size_);
         add(pane);
-        super.setSize(size_);
+    }
+    
+    @Override
+    public void setSize(Dimension size) {
+        super.setSize(size);
+	pane.setSize(size);
     }
 
     /**
