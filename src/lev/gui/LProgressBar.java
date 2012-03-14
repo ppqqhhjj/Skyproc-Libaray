@@ -15,7 +15,7 @@ import lev.gui.resources.LFonts;
  *
  * @author Justin Swanson
  */
-public class LProgressBar extends LComponent {
+public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     JProgressBar bar;
     LLabel footer;
@@ -52,19 +52,14 @@ public class LProgressBar extends LComponent {
 	this.centered = centered;
     }
 
-    public void setBarMax(final int max, final String reason) {
-	SwingUtilities.invokeLater(new Runnable() {
-
-	    @Override
-	    public void run() {
-		bar.setValue(0);
-		bar.setMaximum(max);
-		switchFooter(reason);
-	    }
-	});
+    @Override
+    public void setMax(final int max, final String reason) {
+	setMax(max);
+	setStatus(reason);
     }
 
-    public void incrementBarValue() {
+    @Override
+    public void incrementBar() {
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -74,7 +69,8 @@ public class LProgressBar extends LComponent {
 	});
     }
 
-    public void switchFooter(final String input_) {
+    @Override
+    public void setStatus(final String input_) {
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -92,5 +88,39 @@ public class LProgressBar extends LComponent {
     public void setDoneListener(ChangeListener c) {
 	done = new LCheckBox("", done.getFont(), Color.BLACK);
 	done.addChangeListener(c);
+    }
+
+    @Override
+    public void setMax(final int in) {
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		bar.setValue(0);
+		bar.setMaximum(in);
+	    }
+	});
+    }
+
+    @Override
+    public void reset() {
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		bar.setValue(0);
+	    }
+	});
+    }
+
+    @Override
+    public void setBar (final int in) {
+	SwingUtilities.invokeLater(new Runnable() {
+
+	    @Override
+	    public void run() {
+		bar.setValue(in);
+	    }
+	});
     }
 }

@@ -8,7 +8,7 @@ import lev.gui.LProgressBarInterface;
  */
 class SPGuiPortal {
 
-    static LProgressBarInterface progress = new ProgressBarPlaceholder();
+    public static LProgressBarInterface progress = new ProgressBarPlaceholder();
 
     static class ProgressBarPlaceholder implements LProgressBarInterface {
 

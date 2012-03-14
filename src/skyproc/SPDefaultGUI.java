@@ -92,6 +92,7 @@ public class SPDefaultGUI extends JFrame {
 	    pbar = new LProgressBar(250, 15, LFonts.Typo3(8), new Color(210, 210, 210));
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
 	    pbar.setFooterOffset(6);
+	    SPGuiPortal.progress = pbar;
 	    backgroundPanel.add(pbar,0);
 
 	    setVisible(true);

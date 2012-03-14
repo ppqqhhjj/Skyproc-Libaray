@@ -18,7 +18,7 @@ import lev.gui.resources.LImages;
  *
  * @author Justin Swanson
  */
-public class LProgressBarFrame extends JFrame {
+public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 
     LProgressBar bar;
     LLabel title;
@@ -63,12 +63,14 @@ public class LProgressBarFrame extends JFrame {
 	closeOp = JFrame.DISPOSE_ON_CLOSE;
     }
 
-    public void setBarMax(final int max, final String reason) {
-	bar.setBarMax(max, reason);
+    @Override
+    public void setMax(final int max, final String reason) {
+	bar.setMax(max, reason);
     }
 
-    public void incrementBarValue() {
-	bar.incrementBarValue();
+    @Override
+    public void incrementBar() {
+	bar.incrementBar();
     }
 
     public void setCorrectLocation(int x, int y) {
@@ -80,8 +82,9 @@ public class LProgressBarFrame extends JFrame {
 	setLocation(r.x + correctLocation.width, r.y + correctLocation.height);
     }
 
-    public void switchFooter(final String input_) {
-	bar.switchFooter(input_);
+    @Override
+    public void setStatus(final String input_) {
+	bar.setStatus(input_);
     }
 
     public void open() {
@@ -111,5 +114,20 @@ public class LProgressBarFrame extends JFrame {
 
     public void setGUIref(JFrame ref) {
 	guiRef = ref;
+    }
+
+    @Override
+    public void setMax(int in) {
+	bar.setMax(in);
+    }
+
+    @Override
+    public void reset() {
+	bar.reset();
+    }
+
+    @Override
+    public void setBar(int in) {
+	bar.setBar(in);
     }
 }
