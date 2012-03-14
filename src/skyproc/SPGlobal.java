@@ -1,9 +1,6 @@
 package skyproc;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
@@ -136,7 +133,7 @@ public class SPGlobal {
     static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
 
     /**
-     * 
+     *
      * @param m Mod to skip when importing.
      */
     public static void addModToSkip(ModListing m) {
@@ -282,6 +279,36 @@ public class SPGlobal {
 	} else {
 	    return false;
 	}
+    }
+
+    public static void redirectSystemOutStream() throws FileNotFoundException, IOException {
+	if (log == null) {
+	    createGlobalLog();
+	}
+	OutputStream outToDebug = new OutputStream() {
+
+	    @Override
+	    public void write(final int b) throws IOException {
+		if (b != 116) {
+		    log("", String.valueOf((char) b));
+		}
+	    }
+
+	    @Override
+	    public void write(byte[] b, int off, int len) throws IOException {
+		String output = new String(b, off, len);
+		if (output.length() > 2) {
+		    log("", output);
+		}
+	    }
+
+	    @Override
+	    public void write(byte[] b) throws IOException {
+		write(b, 0, b.length);
+	    }
+	};
+
+	System.setOut(new PrintStream(outToDebug, true));
     }
 
     /**

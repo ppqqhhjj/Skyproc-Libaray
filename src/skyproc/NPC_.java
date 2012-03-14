@@ -736,7 +736,19 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 * Flag to use the traits page of its template.
 	 */
-	USE_TRAITS
+	USE_TRAITS,
+	USE_STATS,
+	USE_SCRIPT,
+	USE_FACTIONS,
+	USE_AI_DATA,
+	USE_AI_PACKAGES,
+	USE_DEF_PACK_LIST,
+	USE_ATTACK_DATA,
+	USE_SPELL_LIST,
+	USE_INVENTORY,
+	USE_BASE_DATA,
+	USE_KEYWORDS
+	
     }
 
     /**
@@ -1359,15 +1371,5 @@ public class NPC_ extends Actor implements Serializable {
     public void setDefaultPackageList(FormID ref) {
 	DPLT.setForm(ref);
     }
-
-    /**
-     *
-     * @return
-     */
-    public FormID getDefaultPackageList() {
-	return DPLT.getForm();
-    }
-//    public SubList<SubForm> getKeywordIDs () {
-//	return keywords;
-//    }
+    
 }

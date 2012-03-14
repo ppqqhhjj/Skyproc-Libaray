@@ -17,13 +17,13 @@ import javax.swing.JPanel;
  * A customized JPanel that has a background image.
  * @author Justin Swanson
  */
-public class ImagePane extends JPanel {
+public class LImagePane extends JPanel {
 
     private BufferedImage img;
     int IMG_WIDTH = 0;
     int IMG_HEIGHT = 0;
 
-    ImagePane() {
+    LImagePane() {
         setLayout(null);
     }
 
@@ -32,7 +32,7 @@ public class ImagePane extends JPanel {
      * @param img
      * @throws IOException
      */
-    public ImagePane(File img) throws IOException {
+    public LImagePane(File img) throws IOException {
         this();
         setImage(ImageIO.read(img));
     }
@@ -42,7 +42,7 @@ public class ImagePane extends JPanel {
      * @param img
      * @throws IOException
      */
-    public ImagePane(String img) throws IOException {
+    public LImagePane(String img) throws IOException {
         this();
         setImage(ImageIO.read(new File(img)));
     }
@@ -51,7 +51,7 @@ public class ImagePane extends JPanel {
      * 
      * @param img
      */
-    public ImagePane(BufferedImage img) {
+    public LImagePane(BufferedImage img) {
         this();
         setImage(img);
     }
@@ -61,7 +61,7 @@ public class ImagePane extends JPanel {
      * @param url
      * @throws IOException
      */
-    public ImagePane(URL url) throws IOException {
+    public LImagePane(URL url) throws IOException {
         this();
         setImage(ImageIO.read(url));
     }

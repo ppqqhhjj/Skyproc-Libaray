@@ -18,4 +18,11 @@ public class LImages {
     public static URL multipurpose() {
 	return LImages.class.getResource("multipurpose.png");
     }
+    
+    public static URL arrow(boolean leftArrow) {
+	if (leftArrow)
+	    return LImages.class.getResource("ArrowLeft.png");
+	else
+	    return LImages.class.getResource("ArrowRight.png");
+    }
 }

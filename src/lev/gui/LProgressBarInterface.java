@@ -8,7 +8,7 @@ package lev.gui;
  *
  * @author Justin Swanson
  */
-public interface ProgressBar {
+public interface LProgressBarInterface {
     /**
      * 
      * @param in Value to set as the max unit value of the progress bar.

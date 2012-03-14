@@ -1,6 +1,6 @@
 package skyproc;
 
-import lev.gui.ProgressBar;
+import lev.gui.LProgressBarInterface;
 
 /**
  * A boundary class that will eventually offer an interface to the the LevGUI library.
@@ -8,9 +8,9 @@ import lev.gui.ProgressBar;
  */
 class SPGuiPortal {
 
-    static ProgressBar progress = new ProgressBarPlaceholder();
+    static LProgressBarInterface progress = new ProgressBarPlaceholder();
 
-    static class ProgressBarPlaceholder implements ProgressBar {
+    static class ProgressBarPlaceholder implements LProgressBarInterface {
 
         @Override
         public void setMax(int i) {
