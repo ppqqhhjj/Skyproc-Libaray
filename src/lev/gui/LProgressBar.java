@@ -22,30 +22,30 @@ public class LProgressBar extends LComponent {
     boolean centered = true;
     LCheckBox done = new LCheckBox("", LFonts.Typo3(1), Color.BLACK);
 
-    public LProgressBar(int width, int height, final Font footer, final Color footerC) {
-	bar = new JProgressBar(width, height);
+    public LProgressBar(final int width, final int height, final Font footerF, final Color footerC) {
+	bar = new JProgressBar(0, 100);
+	bar.setSize(width, height);
+	bar.setLocation(bar.getWidth() / 2, 0);
+	bar.setStringPainted(true);
+	bar.setVisible(true);
+
+	footer = new LLabel(". . .", footerF, footerC);
+	footer.setLocation(bar.getX() + bar.getWidth() / 2 - footer.getWidth() / 2, bar.getY() + bar.getHeight() + 10);
+
+	setSize(bar.getWidth() * 2, footer.getY() + footer.getHeight());
+	add(bar);
+	add(footer);
+	setVisible(true);
+    }
+
+    public void setFooterOffset(final int y) {
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
 	    public void run() {
-		addComponents(footer, footerC);
+		footer.setLocation(footer.getX(), bar.getY() + bar.getHeight() + y);
 	    }
 	});
-    }
-
-    final void addComponents(Font footerF, Color footerC) {
-	footer = new LLabel("Finishing importing your mods.", footerF, footerC);
-
-	bar.setSize(150, 15);
-	bar.setStringPainted(true);
-	bar.setVisible(true);
-
-	setSize(bar.getWidth() + 100, bar.getHeight() + 65);
-	bar.setLocation(getWidth() / 2 - bar.getWidth() / 2, getHeight() / 2 - bar.getHeight() / 2);
-	footer.setLocation(getWidth() / 2 - footer.getWidth() / 2, getHeight() - footer.getHeight() - 2);
-
-	add(bar);
-	add(footer);
     }
 
     public void setCentered(boolean centered) {
@@ -93,5 +93,4 @@ public class LProgressBar extends LComponent {
 	done = new LCheckBox("", done.getFont(), Color.BLACK);
 	done.addChangeListener(c);
     }
-
 }
