@@ -22,8 +22,8 @@ public class SPImporter {
 
     private static String header = "Importer";
     Map<Type, Mask> masks = new EnumMap<Type, Mask>(Type.class);
-    int curMod;
-    int maxMod;
+    int curMod = 1;
+    int maxMod = 1;
     static int extraStepsPerMod = 1;
 
     /**
@@ -435,14 +435,16 @@ public class SPImporter {
 
 	Set<Mod> outSet = new TreeSet<Mod>();
 
-	SPGuiPortal.progress.setMax(mods.size() * grup_targets.length + 1, "Importing plugins.");
+	curMod = 1;
+	maxMod = mods.size();
+	SPGuiPortal.progress.reset();
+	SPGuiPortal.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    SPGuiPortal.progress.setStatus(genStatus(curMod++, maxMod, mods.get(i)));
+	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
-		SPGuiPortal.progress.setStatus("(" + Integer.toString(i + 1) + "/" + Integer.toString(mods.size()) + ") " + mod);
 		try {
 		    outSet.add(importMod(new ModListing(mod), path, true, grup_targets));
 		} catch (BadMod ex) {
@@ -457,6 +459,7 @@ public class SPImporter {
 		    }
 		}
 	    }
+	    curMod++;
 	}
 
 	if (SPGlobal.logging()) {
@@ -483,6 +486,7 @@ public class SPImporter {
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
 	curMod = 1;
 	maxMod = 1;
+	SPGuiPortal.progress.reset();
 	SPGuiPortal.progress.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
@@ -530,11 +534,10 @@ public class SPImporter {
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
 		SPGlobal.flush();
+		SPGuiPortal.progress.incrementBar();
 		if (grups.isEmpty()) {
 		    break;
 		}
-
-		SPGuiPortal.progress.incrementBar();
 	    }
 
 	    SPGuiPortal.progress.setBar(curBar + grup_targets.length);

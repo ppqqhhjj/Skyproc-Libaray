@@ -92,6 +92,8 @@ public class SPGlobal {
 
 	    boolean tmpLogging = logging();
 	    logging(debugConsistencyImport);
+	    SPGuiPortal.progress.reset();
+	    SPGuiPortal.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
 	    consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
 	    logging(tmpLogging);
 	    edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
