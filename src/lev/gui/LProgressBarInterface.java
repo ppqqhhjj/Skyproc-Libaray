@@ -38,4 +38,6 @@ public interface LProgressBarInterface {
      * @param in value to set the progress bar at.
      */
     void setBar(int in);
+    int getBar();
+    int getMax();
 }

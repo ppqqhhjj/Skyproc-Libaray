@@ -1,12 +1,7 @@
 package skyproc;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import lev.gui.LImagePane;
@@ -37,6 +32,8 @@ public class SPDefaultGUI extends JFrame {
      */
     public SPDefaultGUI(final String yourPatcherName, final String yourDescription) {
 	super(yourPatcherName);
+	pbar = new LProgressBar(250, 15, new Font("SansSerif", Font.PLAIN, 11), new Color(180, 180, 180));
+	SPGuiPortal.progress = pbar;
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -89,7 +86,6 @@ public class SPDefaultGUI extends JFrame {
 	    backgroundPanel.add(patching, 0);
 	    
 	    //ProgressBar
-	    pbar = new LProgressBar(250, 15, LFonts.Typo3(8), new Color(210, 210, 210));
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
 	    pbar.setFooterOffset(6);
 	    SPGuiPortal.progress = pbar;

@@ -35,5 +35,17 @@ class SPGuiPortal {
         @Override
         public void setStatus(String string) {
         }
+
+	@Override
+	public int getBar() {
+	    return 0;
+	}
+
+	@Override
+	public int getMax() {
+	    return 0;
+	}
     }
+    
+    public static int extraProgressBarSteps = 0;
 }

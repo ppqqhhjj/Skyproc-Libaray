@@ -130,4 +130,14 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     public void setBar(int in) {
 	bar.setBar(in);
     }
+
+    @Override
+    public int getBar() {
+	return bar.getBar();
+    }
+
+    @Override
+    public int getMax() {
+	return bar.getMax();
+    }
 }

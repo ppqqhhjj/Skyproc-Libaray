@@ -22,6 +22,9 @@ public class SPImporter {
 
     private static String header = "Importer";
     Map<Type, Mask> masks = new EnumMap<Type, Mask>(Type.class);
+    int curMod;
+    int maxMod;
+    static int extraStepsPerMod = 1;
 
     /**
      * A placeholder constructor not meant to be called.<br> An SPImporter
@@ -436,11 +439,12 @@ public class SPImporter {
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
+	    SPGuiPortal.progress.setStatus(genStatus(curMod++, maxMod, mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		SPGuiPortal.progress.setStatus("(" + Integer.toString(i + 1) + "/" + Integer.toString(mods.size()) + ") " + mod);
 		try {
-		    outSet.add(importMod(new ModListing(mod), path, grup_targets));
+		    outSet.add(importMod(new ModListing(mod), path, true, grup_targets));
 		} catch (BadMod ex) {
 		    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
 		    SPGlobal.logError(header, "  " + ex.toString());
@@ -477,6 +481,9 @@ public class SPImporter {
      * has any error importing a mod at all.
      */
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
+	curMod = 1;
+	maxMod = 1;
+	SPGuiPortal.progress.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -499,10 +506,9 @@ public class SPImporter {
     }
 
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
+	int curBar = SPGuiPortal.progress.getBar();
 	try {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
-	    int numTargets = grups.size();
-	    int targetsFound = 0;
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    LFileChannel input = new LFileChannel(path + listing.print());
@@ -519,6 +525,7 @@ public class SPImporter {
 
 	    Type result;
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
+		SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
@@ -528,26 +535,29 @@ public class SPImporter {
 		}
 
 		SPGuiPortal.progress.incrementBar();
-		targetsFound++;
 	    }
 
-	    while (targetsFound < numTargets) {
-		SPGuiPortal.progress.incrementBar();
-		targetsFound++;
-	    }
-
+	    SPGuiPortal.progress.setBar(curBar + grup_targets.length);
+	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
+	    SPGuiPortal.progress.incrementBar();
 	    input.close();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
 	    }
+
+	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Done");
+
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
+	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Failed");
+	    SPGuiPortal.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
+
     }
 
     static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
@@ -626,5 +636,9 @@ public class SPImporter {
 	}
 	in.offset(-8); // Back to start of GRUP
 	return in.readInByteBuffer(0, size);
+    }
+
+    static private String genStatus(int min, int max, ModListing mod) {
+	return "(" + min + "/" + (max + SPGuiPortal.extraProgressBarSteps) + ") Importing " + mod.print();
     }
 }

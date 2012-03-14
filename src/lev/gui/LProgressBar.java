@@ -123,4 +123,14 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	    }
 	});
     }
+
+    @Override
+    public int getBar() {
+	return bar.getValue();
+    }
+
+    @Override
+    public int getMax() {
+	return bar.getMaximum();
+    }
 }
