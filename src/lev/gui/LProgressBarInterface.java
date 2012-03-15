@@ -10,22 +10,22 @@ package lev.gui;
  */
 public interface LProgressBarInterface {
     /**
-     * 
+     *
      * @param in Value to set as the max unit value of the progress bar.
      */
     void setMax(int in);
     /**
-     * 
+     *
      * @param in Value to set as the max unit value of the progress bar.
      * @param status String to set as the status of the progress bar.
      */
     void setMax(int in, String status);
     /**
-     * 
+     *
      * @param status String to set as the status of the progress bar.
      */
     void setStatus(String status);
-    
+
     void setStatus(int min, int max, String status);
     /**
      * Increments the progress bar one unit.
@@ -36,10 +36,11 @@ public interface LProgressBarInterface {
      */
     void reset();
     /**
-     * 
+     *
      * @param in value to set the progress bar at.
      */
     void setBar(int in);
     int getBar();
     int getMax();
+    void pause(boolean on);
 }

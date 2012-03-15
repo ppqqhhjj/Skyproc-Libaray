@@ -19,6 +19,7 @@ import lev.gui.resources.LFonts;
 public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     JProgressBar bar;
+    boolean pause;
     LLabel status;
     boolean centered = true;
     LCheckBox done = new LCheckBox("", LFonts.Typo3(1), Color.BLACK);
@@ -58,32 +59,36 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     @Override
     public void incrementBar() {
-	SwingUtilities.invokeLater(new Runnable() {
+	if (!pause) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		bar.setValue((bar.getValue()) + 1);
-	    }
-	});
+		@Override
+		public void run() {
+		    bar.setValue((bar.getValue()) + 1);
+		}
+	    });
+	}
     }
-    
+
     public void setStatusOffset(int y) {
 	status.setLocation(status.getX(), status.getY() + y);
     }
 
     @Override
     public void setStatus(final String input_) {
-	SwingUtilities.invokeLater(new Runnable() {
+	if (!pause) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		int x = status.getX() + status.getWidth() / 2;
-		status.setText(input_);
-		if (centered) {
-		    status.setLocation(x - status.getWidth() / 2, status.getY());
+		@Override
+		public void run() {
+		    int x = status.getX() + status.getWidth() / 2;
+		    status.setText(input_);
+		    if (centered) {
+			status.setLocation(x - status.getWidth() / 2, status.getY());
+		    }
 		}
-	    }
-	});
+	    });
+	}
     }
 
     public void setDoneListener(ChangeListener c) {
@@ -93,36 +98,42 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     @Override
     public void setMax(final int in) {
-	SwingUtilities.invokeLater(new Runnable() {
+	if (!pause) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		bar.setValue(0);
-		bar.setMaximum(in);
-	    }
-	});
+		@Override
+		public void run() {
+		    bar.setValue(0);
+		    bar.setMaximum(in);
+		}
+	    });
+	}
     }
 
     @Override
     public void reset() {
-	SwingUtilities.invokeLater(new Runnable() {
+	if (!pause) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		bar.setValue(0);
-	    }
-	});
+		@Override
+		public void run() {
+		    bar.setValue(0);
+		}
+	    });
+	}
     }
 
     @Override
     public void setBar(final int in) {
-	SwingUtilities.invokeLater(new Runnable() {
+	if (!pause) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		bar.setValue(in);
-	    }
-	});
+		@Override
+		public void run() {
+		    bar.setValue(in);
+		}
+	    });
+	}
     }
 
     @Override
@@ -137,11 +148,18 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     @Override
     public void setStatus(int min, int max, String status) {
-	setStatus("(" + min + "/" + max + ") " + status);
+	if (!pause) {
+	    setStatus("(" + min + "/" + max + ") " + status);
+	}
     }
 
     public void setStatusLabel(LLabel label) {
 	status.setVisible(false);
 	status = label;
+    }
+
+    @Override
+    public void pause(boolean on) {
+	pause = on;
     }
 }

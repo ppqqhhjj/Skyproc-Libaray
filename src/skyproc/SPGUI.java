@@ -49,6 +49,10 @@ public class SPGUI {
 	@Override
 	public void setStatus(int min, int max, String status) {
 	}
+
+	@Override
+	public void pause(boolean on) {
+	}
     }
-    
+
 }
