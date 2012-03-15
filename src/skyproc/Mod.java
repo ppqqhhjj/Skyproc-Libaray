@@ -66,7 +66,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	header.parseData(headerInfo);
     }
 
-    Mod (ModListing info, boolean temp) {
+    Mod(ModListing info, boolean temp) {
 	init(info);
     }
 
@@ -187,15 +187,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * automatically adds the new copied record to the mod. This makes two
      * separate records independent of each other.<br><br>
      *
-     * CONSISTENCY NOTE:  This functions appends "_DUP" to the end of the EDID, 
-     * and then a random number if that EDID already exists.  It is suggested you
-     * only use this function if you are only making one duplicate of the record.
-     * For multiple duplicates, use the version with a specified EDID, for better
-     * consistency results<br><br>
-     * 
-     * COMPILER NOTE: The record returned can only be determined by the compiler to be a
-     * Major Record. You must cast it yourself to be the correct type of major
-     * record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
+     * CONSISTENCY NOTE: This functions appends "_DUP" to the end of the EDID,
+     * and then a random number if that EDID already exists. It is suggested you
+     * only use this function if you are only making one duplicate of the
+     * record. For multiple duplicates, use the version with a specified EDID,
+     * for better consistency results<br><br>
+     *
+     * COMPILER NOTE: The record returned can only be determined by the compiler
+     * to be a Major Record. You must cast it yourself to be the correct type of
+     * major record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
      *
      * @param m Major Record to make a copy of and add to the mod.
      * @return The copied record.
@@ -213,12 +213,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * automatically adds the new copied record to the mod. This makes two
      * separate records independent of each other.<br><br>
      *
-     * COMPILER NOTE: The record returned can only be determined by the compiler to be a
-     * Major Record. You must cast it yourself to be the correct type of major
-     * record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
+     * COMPILER NOTE: The record returned can only be determined by the compiler
+     * to be a Major Record. You must cast it yourself to be the correct type of
+     * major record.<br> ex. NPC_ newNPC = (NPC_) myPatch.makeCopy(otherNPC);
      *
      * @param m Major Record to make a copy of and add to the mod.
-     * @param newEDID EDID to assign to the new record.  Make sure it's unique.
+     * @param newEDID EDID to assign to the new record. Make sure it's unique.
      * @return The copied record.
      */
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
@@ -275,6 +275,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    g.toString();
 	}
 	logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
+    }
+
+    @Override
+    public String toString() {
+	return getName();
     }
 
     void standardizeMasters() {
@@ -486,23 +491,45 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
+	int fullGRUPS = 0;
+	for (GRUP g : GRUPs.values()) {
+	    if (!g.isEmpty()) {
+		fullGRUPS++;
+	    }
+	}
+	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
+	    fullGRUPS++;
+	}
+	SPGuiPortal.progress.reset();
+	SPGuiPortal.progress.setMax(fullGRUPS, "Exporting " + srcMod);
+
 	header.setNumRecords(numRecords());
 	header.export(out, srcMod);
 
 	standardizeMasters();
 	if (logging()) {
-	    logSync(this.getName(), "Exporting " + this.numRecords() + " records.");
+	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
 	}
+	int count = 1;
 	for (GRUP g : GRUPs.values()) {
+	    if (!g.isEmpty()) {
+		SPGuiPortal.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
+	    }
 	    g.export(out, srcMod);
+	    if (!g.isEmpty()) {
+		SPGuiPortal.progress.incrementBar();
+	    }
 	}
 
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
+	    SPGuiPortal.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
+	    SPGuiPortal.progress.incrementBar();
 	}
 	out.close();
+	SPGuiPortal.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
     }
 
     int addOutString(String in, SubStringPointer.Files file) {
@@ -819,7 +846,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * 
+     *
      * @return An iterator over all the GRUPs in the mod.
      */
     @Override
