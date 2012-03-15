@@ -169,13 +169,12 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     /**
-     * Compare funtion is as follows:<br>
-     * 1) A master always is less than a non-master plugin<br>
-     * 2) The global patch always is greater<br>
-     * 3) A plugin that is on the active plugins list via importActivePlugins() comes before
-     * a plugin that was created manually. <br>
-     * 4) Remaining plugins are ordered in the same order they were
-     * created in the code.
+     * Compare funtion is as follows:<br> 1) A master always is less than a
+     * non-master plugin<br> 2) The global patch always is greater<br> 3) A
+     * plugin that is on the active plugins list via importActivePlugins() comes
+     * before a plugin that was created manually. <br> 4) Remaining plugins are
+     * ordered in the same order they were created in the code.
+     *
      * @param o Another ModListing.
      * @return Whether this modlisting is >/==/< the parameter.
      */
@@ -191,11 +190,13 @@ public class ModListing extends SubRecord implements Comparable {
 	if (!master && rhs.master) {
 	    return 1;
 	}
-	if (equals(SPGlobal.getGlobalPatch().getInfo())) {
-	    return 1;
-	}
-	if (rhs.equals(SPGlobal.getGlobalPatch().getInfo())) {
-	    return -1;
+	if (SPGlobal.getGlobalPatch() != null) {
+	    if (equals(SPGlobal.getGlobalPatch().getInfo())) {
+		return 1;
+	    }
+	    if (rhs.equals(SPGlobal.getGlobalPatch().getInfo())) {
+		return -1;
+	    }
 	}
 	boolean thisActive = SPDatabase.activePlugins.contains(this);
 	boolean rhsActive = SPDatabase.activePlugins.contains(rhs);

@@ -381,6 +381,18 @@ public class BSA {
 	}
 	return out;
     }
+    
+    public int numFolders () {
+	return folders.size();
+    }
+    
+    public int numFiles () {
+	int out = 0;
+	for (Map m : folders.values()) {
+	    out += m.size();
+	}
+	return out;
+    }
 
     /**
      *

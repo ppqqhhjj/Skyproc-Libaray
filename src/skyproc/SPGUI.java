@@ -6,7 +6,7 @@ import lev.gui.LProgressBarInterface;
  * A boundary class that will eventually offer an interface to the the LevGUI library.
  * @author Justin Swanson
  */
-public class SPGuiPortal {
+public class SPGUI {
 
     public static LProgressBarInterface progress = new ProgressBarPlaceholder();
 

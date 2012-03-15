@@ -500,8 +500,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    fullGRUPS++;
 	}
-	SPGuiPortal.progress.reset();
-	SPGuiPortal.progress.setMax(fullGRUPS, "Exporting " + srcMod);
+	SPGUI.progress.reset();
+	SPGUI.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
 	header.setNumRecords(numRecords());
 	header.export(out, srcMod);
@@ -513,23 +513,23 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
-		SPGuiPortal.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
+		SPGUI.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
 	    }
 	    g.export(out, srcMod);
 	    if (!g.isEmpty()) {
-		SPGuiPortal.progress.incrementBar();
+		SPGUI.progress.incrementBar();
 	    }
 	}
 
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPGuiPortal.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
+	    SPGUI.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
-	    SPGuiPortal.progress.incrementBar();
+	    SPGUI.progress.incrementBar();
 	}
 	out.close();
-	SPGuiPortal.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
+	SPGUI.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
     }
 
     int addOutString(String in, SubStringPointer.Files file) {

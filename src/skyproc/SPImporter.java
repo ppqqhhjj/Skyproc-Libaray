@@ -437,12 +437,12 @@ public class SPImporter {
 
 	curMod = 1;
 	maxMod = mods.size();
-	SPGuiPortal.progress.reset();
-	SPGuiPortal.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
+	SPGUI.progress.reset();
+	SPGUI.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
+	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -458,8 +458,10 @@ public class SPImporter {
 			SPGlobal.logError(header, "  " + s.toString());
 		    }
 		}
+		curMod++;
+	    } else {
+		SPGUI.progress.setStatus(++curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
 	    }
-	    curMod++;
 	}
 
 	if (SPGlobal.logging()) {
@@ -486,8 +488,8 @@ public class SPImporter {
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
 	curMod = 1;
 	maxMod = 1;
-	SPGuiPortal.progress.reset();
-	SPGuiPortal.progress.setMax(grup_targets.length + extraStepsPerMod);
+	SPGUI.progress.reset();
+	SPGUI.progress.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -510,7 +512,7 @@ public class SPImporter {
     }
 
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
-	int curBar = SPGuiPortal.progress.getBar();
+	int curBar = SPGUI.progress.getBar();
 	try {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
 
@@ -529,35 +531,35 @@ public class SPImporter {
 
 	    Type result;
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
+		SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
 		SPGlobal.flush();
-		SPGuiPortal.progress.incrementBar();
+		SPGUI.progress.incrementBar();
 		if (grups.isEmpty()) {
 		    break;
 		}
 	    }
 
-	    SPGuiPortal.progress.setBar(curBar + grup_targets.length);
-	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
+	    SPGUI.progress.setBar(curBar + grup_targets.length);
+	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
-	    SPGuiPortal.progress.incrementBar();
+	    SPGUI.progress.incrementBar();
 	    input.close();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
 	    }
 
-	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
+	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
-	    SPGuiPortal.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
+	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
+	    SPGUI.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 

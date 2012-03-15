@@ -162,7 +162,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
             }
             for (MajorRecord t : this) {
                 t.export(out, srcMod);
-                SPGuiPortal.progress.incrementBar();
+                SPGUI.progress.incrementBar();
             }
         }
     }
@@ -176,7 +176,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void fetchExceptions(SPDatabase database) {
         for (T item : mapRecords.values()) {
             item.fetchException(database);
-            SPGuiPortal.progress.incrementBar();
+            SPGUI.progress.incrementBar();
         }
     }
 
