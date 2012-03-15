@@ -15,10 +15,6 @@ import lev.debug.LDebug;
  */
 class SkyProcTester {
 
-    static boolean stringfiles = false;
-    static int step = 0;
-    static Mod merger;
-
     private static void normalRun() throws Exception {
 
 //	GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
