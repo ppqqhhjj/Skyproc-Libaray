@@ -442,7 +442,7 @@ public class SPImporter {
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, mods.get(i)));
+	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -529,7 +529,7 @@ public class SPImporter {
 
 	    Type result;
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": " + result);
+		SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
@@ -541,7 +541,7 @@ public class SPImporter {
 	    }
 
 	    SPGuiPortal.progress.setBar(curBar + grup_targets.length);
-	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Standardizing");
+	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
 	    SPGuiPortal.progress.incrementBar();
@@ -551,12 +551,12 @@ public class SPImporter {
 		SPGlobal.getDB().add(plugin);
 	    }
 
-	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Done");
+	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPGuiPortal.progress.setStatus(genStatus(curMod, maxMod, listing) + ": Failed");
+	    SPGuiPortal.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
 	    SPGuiPortal.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
@@ -641,7 +641,7 @@ public class SPImporter {
 	return in.readInByteBuffer(0, size);
     }
 
-    static private String genStatus(int min, int max, ModListing mod) {
-	return "(" + min + "/" + (max + SPGuiPortal.extraProgressBarSteps) + ") Importing " + mod.print();
+    static private String genStatus(ModListing mod) {
+	return "Importing " + mod.print();
     }
 }

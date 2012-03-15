@@ -1,7 +1,6 @@
 package skyproc;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import javax.swing.JFrame;
@@ -62,7 +61,7 @@ public class SPDefaultGUI extends JFrame {
 	    backgroundPanel = new LImagePane(LImages.multipurpose());
 	    super.add(backgroundPanel);
 	    skyprocLogo = new LImagePane(SPDefaultGUI.class.getResource("SkyProc Logo Small.png"));
-	    skyprocLogo.setLocation(5, this.getHeight() - skyprocLogo.getHeight() - 30);
+	    skyprocLogo.setLocation(getWidth() - skyprocLogo.getWidth() - 15, this.getHeight() - skyprocLogo.getHeight() - 30);
 	    backgroundPanel.add(skyprocLogo, 0);
 
 
@@ -82,8 +81,13 @@ public class SPDefaultGUI extends JFrame {
 
 	    //ProgressBar
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
-	    pbar.setFooterOffset(6);
+	    pbar.setCentered(false);
+	    pbar.setStatusOffset(-5);
 	    SPGuiPortal.progress = pbar;
+	    LLabel status = new LLabel(". . .", new Font("SansSerif", Font.PLAIN, 11), new Color(160,160,160));
+	    pbar.setStatusLabel(status);
+	    status.setLocation(8, getHeight() - status.getHeight() - 36);
+	    backgroundPanel.add(status,0);
 	    backgroundPanel.add(pbar, 0);
 
 	    //Description

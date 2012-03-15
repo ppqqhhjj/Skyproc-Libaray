@@ -140,4 +140,9 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     public int getMax() {
 	return bar.getMax();
     }
+
+    @Override
+    public void setStatus(int min, int max, String status) {
+	bar.setStatus(min, max, status);
+    }
 }

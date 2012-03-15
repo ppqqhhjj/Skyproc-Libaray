@@ -25,6 +25,8 @@ public interface LProgressBarInterface {
      * @param status String to set as the status of the progress bar.
      */
     void setStatus(String status);
+    
+    void setStatus(int min, int max, String status);
     /**
      * Increments the progress bar one unit.
      */

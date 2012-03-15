@@ -6,7 +6,7 @@ import lev.gui.LProgressBarInterface;
  * A boundary class that will eventually offer an interface to the the LevGUI library.
  * @author Justin Swanson
  */
-class SPGuiPortal {
+public class SPGuiPortal {
 
     public static LProgressBarInterface progress = new ProgressBarPlaceholder();
 
@@ -45,7 +45,10 @@ class SPGuiPortal {
 	public int getMax() {
 	    return 0;
 	}
+
+	@Override
+	public void setStatus(int min, int max, String status) {
+	}
     }
     
-    public static int extraProgressBarSteps = 0;
 }

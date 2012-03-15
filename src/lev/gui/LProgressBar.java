@@ -5,6 +5,7 @@
 package lev.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -18,7 +19,7 @@ import lev.gui.resources.LFonts;
 public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     JProgressBar bar;
-    LLabel footer;
+    LLabel status;
     boolean centered = true;
     LCheckBox done = new LCheckBox("", LFonts.Typo3(1), Color.BLACK);
 
@@ -29,27 +30,24 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	bar.setStringPainted(true);
 	bar.setVisible(true);
 
-	footer = new LLabel(". . .", footerF, footerC);
-	footer.setLocation(bar.getX() + bar.getWidth() / 2 - footer.getWidth() / 2, bar.getY() + bar.getHeight() + 10);
+	status = new LLabel(". . .", footerF, footerC);
+	status.setLocation(bar.getX() + bar.getWidth() / 2 - status.getWidth() / 2, bar.getY() + bar.getHeight() + 10);
 
-	setSize(bar.getWidth() * 2, footer.getY() + footer.getHeight());
+	setSize(bar.getWidth() * 2, status.getY() + status.getHeight());
 	add(bar);
-	add(footer);
+	add(status);
 	setVisible(true);
     }
 
-    public void setFooterOffset(final int y) {
-	SwingUtilities.invokeLater(new Runnable() {
-
-	    @Override
-	    public void run() {
-		footer.setLocation(footer.getX(), bar.getY() + bar.getHeight() + y);
-	    }
-	});
+    @Override
+    public void setSize(int x, int y) {
+	super.setSize(x, y);
+	bar.setLocation(bar.getWidth() / 2, 0);
     }
 
     public void setCentered(boolean centered) {
 	this.centered = centered;
+	status.setLocation(bar.getX(), status.getY());
     }
 
     @Override
@@ -68,6 +66,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	    }
 	});
     }
+    
+    public void setStatusOffset(int y) {
+	status.setLocation(status.getX(), status.getY() + y);
+    }
 
     @Override
     public void setStatus(final String input_) {
@@ -75,11 +77,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 
 	    @Override
 	    public void run() {
-		footer.setText(input_);
+		int x = status.getX() + status.getWidth() / 2;
+		status.setText(input_);
 		if (centered) {
-		    footer.setLocation(bar.getX() + bar.getWidth() / 2 - footer.getWidth() / 2, footer.getY());
-		} else {
-		    footer.setLocation(bar.getX(), footer.getY());
+		    status.setLocation(x - status.getWidth() / 2, status.getY());
 		}
 	    }
 	});
@@ -114,7 +115,7 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     }
 
     @Override
-    public void setBar (final int in) {
+    public void setBar(final int in) {
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -132,5 +133,15 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     @Override
     public int getMax() {
 	return bar.getMaximum();
+    }
+
+    @Override
+    public void setStatus(int min, int max, String status) {
+	setStatus("(" + min + "/" + max + ") " + status);
+    }
+
+    public void setStatusLabel(LLabel label) {
+	status.setVisible(false);
+	status = label;
     }
 }
