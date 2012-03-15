@@ -442,6 +442,7 @@ public class SPImporter {
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
+	    int curBar = SPGUI.progress.getBar();
 	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
@@ -458,10 +459,11 @@ public class SPImporter {
 			SPGlobal.logError(header, "  " + s.toString());
 		    }
 		}
-		curMod++;
 	    } else {
-		SPGUI.progress.setStatus(++curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
+		SPGUI.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
 	    }
+	    SPGUI.progress.setBar(curBar + (grup_targets.length + extraStepsPerMod));
+	    curMod++;
 	}
 
 	if (SPGlobal.logging()) {
