@@ -62,7 +62,7 @@ public class SPDefaultGUI extends JFrame {
 	    super.add(backgroundPanel);
 	    skyprocLogo = new LImagePane(SPDefaultGUI.class.getResource("SkyProc Logo Small.png"));
 	    skyprocLogo.setLocation(getWidth() - skyprocLogo.getWidth() - 15, this.getHeight() - skyprocLogo.getHeight() - 30);
-	    backgroundPanel.add(skyprocLogo, 0);
+	    backgroundPanel.add(skyprocLogo);
 
 
 	    // Label
@@ -70,25 +70,25 @@ public class SPDefaultGUI extends JFrame {
 	    pluginLabel.addShadow();
 	    pluginLabel.centerIn(this, 20);
 	    descriptionAnchor = pluginLabel;
-	    backgroundPanel.add(pluginLabel, 0);
+	    backgroundPanel.add(pluginLabel);
 
 
 	    //Creating Patch
 	    patching = new LLabel("Creating patch.", LFonts.Typo3(15), new Color(210, 210, 210));
 	    patching.addShadow();
 	    patching.centerIn(this, this.getHeight() - patching.getHeight() - 80);
-	    backgroundPanel.add(patching, 0);
+	    backgroundPanel.add(patching);
 
 	    //ProgressBar
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
 	    pbar.setCentered(false);
 	    pbar.setStatusOffset(-5);
 	    SPGUI.progress = pbar;
-	    LLabel status = new LLabel(". . .", new Font("SansSerif", Font.PLAIN, 11), new Color(160,160,160));
+	    LLabel status = new LLabel(". . .", new Font("SansSerif", Font.PLAIN, 11), new Color(160, 160, 160));
 	    pbar.setStatusLabel(status);
 	    status.setLocation(8, getHeight() - status.getHeight() - 36);
-	    backgroundPanel.add(status,0);
-	    backgroundPanel.add(pbar, 0);
+	    backgroundPanel.add(status);
+	    backgroundPanel.add(pbar);
 
 	    //Description
 	    int descY = descriptionAnchor.getY() + descriptionAnchor.getHeight() + 20;
@@ -100,7 +100,7 @@ public class SPDefaultGUI extends JFrame {
 	    description.setText(descriptionText);
 	    description.setFontSize(14);
 	    description.centerText();
-	    backgroundPanel.add(description, 0);
+	    backgroundPanel.add(description);
 
 
 	    setVisible(true);
@@ -125,13 +125,7 @@ public class SPDefaultGUI extends JFrame {
 
 	    @Override
 	    public void run() {
-		SwingUtilities.invokeLater(new Runnable() {
-
-		    @Override
-		    public void run() {
-			backgroundPanel.add(c, 1);
-		    }
-		});
+		backgroundPanel.add(c,0);
 	    }
 	});
 	return c;
