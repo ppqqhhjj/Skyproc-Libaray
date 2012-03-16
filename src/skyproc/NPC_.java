@@ -748,69 +748,69 @@ public class NPC_ extends Actor implements Serializable {
 	USE_INVENTORY,
 	USE_BASE_DATA,
 	USE_KEYWORDS
-	
+
     }
 
     /**
      * Collection of various flags applied to the NPC
      */
-    public enum NPCFlags {
+    public enum NPCFlag {
 
 	/**
-	 * 
+	 *
 	 */
 	IsCharGenFacePreset(2),
 	/**
-	 * 
+	 *
 	 */
 	Summonable(14),
 	/**
-	 * 
+	 *
 	 */
 	Essential(1),
 	/**
-	 * 
+	 *
 	 */
 	IsGhost(29),
 	/**
-	 * 
+	 *
 	 */
 	Protected(13),
 	/**
-	 * 
+	 *
 	 */
 	Invulnerable(31),
 	/**
-	 * 
+	 *
 	 */
 	Respawn(3),
 	/**
-	 * 
+	 *
 	 */
 	DoesntBleed(16),
 	/**
-	 * 
+	 *
 	 */
 	Unique(5),
 	/**
-	 * 
+	 *
 	 */
 	SimpleActor(20),
 	/**
-	 * 
+	 *
 	 */
 	DoesntAffectStealthMeter(21)
 	;
 	int value;
 
-	NPCFlags(int value) {
+	NPCFlag(int value) {
 	    this.value = value;
 	}
     }
 
     // Get/Set methods
     /**
-     * 
+     *
      * @param flag Template flag to set.
      * @param on What to set the template flag to.
      */
@@ -819,7 +819,7 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param flag Template flag to get.
      * @return Template flag's status.
      */
@@ -858,20 +858,20 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param flag NPCFlag to get.
      * @return NPCFlag's status.
      */
-    public boolean get (NPCFlags flag) {
+    public boolean get (NPCFlag flag) {
 	return ACBS.ACBSflags.is(flag.value);
     }
 
     /**
-     * 
+     *
      * @param flag NPCFlag to set.
      * @param on What to set the NPCFlag to.
      */
-    public void set (NPCFlags flag, boolean on) {
+    public void set (NPCFlag flag, boolean on) {
 	ACBS.ACBSflags.set(flag.value, on);
     }
 
@@ -1371,5 +1371,5 @@ public class NPC_ extends Actor implements Serializable {
     public void setDefaultPackageList(FormID ref) {
 	DPLT.setForm(ref);
     }
-    
+
 }
