@@ -5,9 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LFlags;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -48,248 +48,260 @@ public class WEAP extends MajorRecordDescription {
     SubForm WNAM = new SubForm(Type.WNAM);
 
     WEAP() {
-        super();
-        subRecords.remove(Type.FULL);
-        subRecords.remove(Type.DESC);
+	super();
+	subRecords.remove(Type.FULL);
+	subRecords.remove(Type.DESC);
 
-        subRecords.add(scripts);
-        subRecords.add(OBND);
-        subRecords.add(FULL);
-        subRecords.add(MODL);
-        subRecords.add(MODT);
-        subRecords.add(EITM);
-        subRecords.add(EAMT);
-        subRecords.add(MODS);
-        subRecords.add(ETYP);
-        subRecords.add(BIDS);
-        subRecords.add(BAMT);
-        subRecords.add(keywords);
-        subRecords.add(DESC);
-        subRecords.add(NNAM);
-        subRecords.add(INAM);
-        subRecords.add(SNAM);
-        subRecords.add(WNAM);
-        subRecords.add(TNAM);
-        subRecords.add(UNAM);
-        subRecords.add(NAM9);
-        subRecords.add(NAM8);
-        subRecords.add(DATA);
-        subRecords.add(DNAM);
-        subRecords.add(CRDT);
-        subRecords.add(VNAM);
-        subRecords.add(CNAM);
+	subRecords.add(scripts);
+	subRecords.add(OBND);
+	subRecords.add(FULL);
+	subRecords.add(MODL);
+	subRecords.add(MODT);
+	subRecords.add(EITM);
+	subRecords.add(EAMT);
+	subRecords.add(MODS);
+	subRecords.add(ETYP);
+	subRecords.add(BIDS);
+	subRecords.add(BAMT);
+	subRecords.add(keywords);
+	subRecords.add(DESC);
+	subRecords.add(NNAM);
+	subRecords.add(INAM);
+	subRecords.add(SNAM);
+	subRecords.add(WNAM);
+	subRecords.add(TNAM);
+	subRecords.add(UNAM);
+	subRecords.add(NAM9);
+	subRecords.add(NAM8);
+	subRecords.add(DATA);
+	subRecords.add(DNAM);
+	subRecords.add(CRDT);
+	subRecords.add(VNAM);
+	subRecords.add(CNAM);
     }
 
     @Override
     Type[] getTypes() {
-        return type;
+	return type;
     }
 
     @Override
     Record getNew() {
-        return new WEAP();
+	return new WEAP();
     }
 
     static class DNAM extends SubRecord {
 
-        WeaponType wtype;
-        float speed;
-        float reach;
-        byte[] unknown1;
-        float sightFOV;
-        byte[] unknown2;
-        int vats;
-        byte[] unknown3;
-        int numProjectiles;
-        int embeddedWeapActorValue;
-        float minRange;
-        float maxRange;
-        byte[] unknown5;
-        byte[] resist;
-        byte[] unknown6;
-        float stagger;
+	WeaponType wtype;
+	float speed;
+	float reach;
+	LFlags flags1 = new LFlags(4);
+	float sightFOV;
+	byte[] unknown2;
+	int vats;
+	byte[] unknown3;
+	int numProjectiles;
+	int embeddedWeapActorValue;
+	float minRange;
+	float maxRange;
+	byte[] unknown5;
+	LFlags flags2 = new LFlags(4);
+	byte[] unknown6;
+	LFlags flags3 = new LFlags(4);
+	byte[] unknown7;
+	byte[] resist;
+	byte[] unknown8;
+	float stagger;
 
-        public DNAM() {
-            super(Type.DNAM);
-        }
+	public DNAM() {
+	    super(Type.DNAM);
+	}
 
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(wtype.ordinal(), 4);
-            out.write(speed);
-            out.write(reach);
-            out.write(unknown1, 4);
-            out.write(sightFOV);
-            out.write(unknown2, 4);
-            out.write(vats, 1);
-            out.write(unknown3, 1);
-            out.write(numProjectiles, 1);
-            out.write(embeddedWeapActorValue, 1);
-            out.write(minRange);
-            out.write(maxRange);
-            out.write(unknown5, 52);
-            out.write(resist, 4);
-            out.write(unknown6, 4);
-            out.write(stagger);
-        }
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(wtype.ordinal(), 4);
+	    out.write(speed);
+	    out.write(reach);
+	    out.write(flags1.export());
+	    out.write(sightFOV);
+	    out.write(unknown2, 4);
+	    out.write(vats, 1);
+	    out.write(unknown3, 1);
+	    out.write(numProjectiles, 1);
+	    out.write(embeddedWeapActorValue, 1);
+	    out.write(minRange);
+	    out.write(maxRange);
+	    out.write(unknown5, 4);
+	    out.write(flags2.export());
+	    out.write(unknown6, 24);
+	    out.write(flags3.export());
+	    out.write(unknown7, 16);
+	    out.write(resist, 4);
+	    out.write(unknown8, 4);
+	    out.write(stagger);
+	}
 
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            wtype = WeaponType.values()[in.extractInt(4)];
-            speed = in.extractFloat();
-            reach = in.extractFloat();
-            unknown1 = in.extract(4);
-            sightFOV = in.extractFloat();
-            unknown2 = in.extract(4);
-            vats = in.extractInt(1);
-            unknown3 = in.extract(1);
-            numProjectiles = in.extractInt(1);
-            embeddedWeapActorValue = in.extractInt(1);
-            minRange = in.extractFloat();
-            maxRange = in.extractFloat();
-            unknown5 = in.extract(52);
-            resist = in.extract(4);
-            unknown6 = in.extract(4);
-            stagger = in.extractFloat();
-            if (logging()) {
-                logSync("", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
-                logSync("", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
-                logSync("", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
-                logSync("", "stagger: " + stagger);
-            }
-        }
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    wtype = WeaponType.values()[in.extractInt(4)];
+	    speed = in.extractFloat();
+	    reach = in.extractFloat();
+	    flags1.set(in.extract(4));
+	    sightFOV = in.extractFloat();
+	    unknown2 = in.extract(4);
+	    vats = in.extractInt(1);
+	    unknown3 = in.extract(1);
+	    numProjectiles = in.extractInt(1);
+	    embeddedWeapActorValue = in.extractInt(1);
+	    minRange = in.extractFloat();
+	    maxRange = in.extractFloat();
+	    unknown5 = in.extract(4);
+	    flags2.set(in.extract(4));
+	    unknown6 = in.extract(24);
+	    flags3.set(in.extract(4));
+	    unknown7 = in.extract(16);
+	    resist = in.extract(4);
+	    unknown8 = in.extract(4);
+	    stagger = in.extractFloat();
+	    if (logging()) {
+		logSync("", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
+		logSync("", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
+		logSync("", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
+		logSync("", "stagger: " + stagger);
+	    }
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new DNAM();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DNAM();
+	}
 
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public void clear() {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            return 100;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 100;
+	}
     }
 
     static class DATA extends SubRecord {
 
-        int value = 0;
-        float weight = 0;
-        int damage = 0;
+	int value = 0;
+	float weight = 0;
+	int damage = 0;
 
-        public DATA() {
-            super(Type.DATA);
-        }
+	public DATA() {
+	    super(Type.DATA);
+	}
 
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(value, 4);
-            out.write(weight);
-            out.write(damage, 2);
-        }
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(value, 4);
+	    out.write(weight);
+	    out.write(damage, 2);
+	}
 
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            value = in.extractInt(4);
-            weight = in.extractFloat();
-            damage = in.extractInt(2);
-            if (logging()) {
-                logSync("", "Value: " + value + ", weight: " + weight + ", damage: " + damage);
-            }
-        }
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    value = in.extractInt(4);
+	    weight = in.extractFloat();
+	    damage = in.extractInt(2);
+	    if (logging()) {
+		logSync("", "Value: " + value + ", weight: " + weight + ", damage: " + damage);
+	    }
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new DATA();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DATA();
+	}
 
-        @Override
-        public void clear() {
-            value = 0;
-            weight = 0;
-            damage = 0;
-        }
+	@Override
+	public void clear() {
+	    value = 0;
+	    weight = 0;
+	    damage = 0;
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            return 10;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 10;
+	}
     }
 
     static class CRDT extends SubRecord {
 
-        int critDmg;
-        byte[] unknown0;
-        float critMult;
-        int onDeath;
-        byte[] unknown;
-        FormID critEffect = new FormID();
+	int critDmg;
+	byte[] unknown0;
+	float critMult;
+	int onDeath;
+	byte[] unknown;
+	FormID critEffect = new FormID();
 
-        public CRDT() {
-            super(Type.CRDT);
-        }
+	public CRDT() {
+	    super(Type.CRDT);
+	}
 
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(critDmg, 4);
-            out.write(critMult);
-            out.write(onDeath, 1);
-            out.write(unknown, 3);
-            critEffect.export(out);
-        }
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(critDmg, 4);
+	    out.write(critMult);
+	    out.write(onDeath, 1);
+	    out.write(unknown, 3);
+	    critEffect.export(out);
+	}
 
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            critDmg = in.extractInt(2);
-            unknown0 = in.extract(2);
-            critMult = in.extractFloat();
-            onDeath = in.extractInt(1);
-            unknown = in.extract(3);
-            critEffect.setInternal(in.extract(4));
-            if (logging()) {
-                logSync("", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
-            }
-        }
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    critDmg = in.extractInt(2);
+	    unknown0 = in.extract(2);
+	    critMult = in.extractFloat();
+	    onDeath = in.extractInt(1);
+	    unknown = in.extract(3);
+	    critEffect.setInternal(in.extract(4));
+	    if (logging()) {
+		logSync("", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
+	    }
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new CRDT();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new CRDT();
+	}
 
-        @Override
-        final public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	final public void clear() {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            return 16;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 16;
+	}
     }
 
     /**
@@ -297,42 +309,65 @@ public class WEAP extends MajorRecordDescription {
      */
     public enum WeaponType {
 
-        /**
-         *
-         */
-        Projectile,
-        /**
-         *
-         */
-        OneHSword,
-        /**
-         *
-         */
-        Dagger,
-        /**
-         *
-         */
-        OneHAxe,
-        /**
-         *
-         */
-        OneHBlunt,
-        /**
-         *
-         */
-        TwoHSword,
-        /**
-         *
-         */
-        TwoHBluntAxe,
-        /**
-         *
-         */
-        Bow,
-        /**
-         *
-         */
-        Staff
+	/**
+	 *
+	 */
+	Projectile,
+	/**
+	 *
+	 */
+	OneHSword,
+	/**
+	 *
+	 */
+	Dagger,
+	/**
+	 *
+	 */
+	OneHAxe,
+	/**
+	 *
+	 */
+	OneHBlunt,
+	/**
+	 *
+	 */
+	TwoHSword,
+	/**
+	 *
+	 */
+	TwoHBluntAxe,
+	/**
+	 *
+	 */
+	Bow,
+	/**
+	 *
+	 */
+	Staff
+    }
+
+    public enum WeaponFlag {
+
+	IgnoresNormalWeaponResistance(1,0),
+	HideBackpack(4,0),
+	NonPlayable(7,0),
+	CantDrop(3,0),
+
+	PlayerOnly(0, 1),
+	NPCsUseAmmo(1, 1),
+	NoJamAfterReload(3, 1),
+	MinorCrime(4, 1),
+	NotUsedInNormalCombat(6, 1),
+	NonHostile(8, 1),
+	BoundWeapon(9, 1),;
+	int value;
+	int flagSet;
+
+	WeaponFlag(int value, int flagSet) {
+	    this.value = value;
+	    this.flagSet = flagSet;
+	}
     }
 
     // Get /set
@@ -341,7 +376,7 @@ public class WEAP extends MajorRecordDescription {
      * @param value
      */
     public void setValue(int value) {
-        DATA.value = Math.abs(value);
+	DATA.value = Math.abs(value);
     }
 
     /**
@@ -349,7 +384,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getValue() {
-        return DATA.value;
+	return DATA.value;
     }
 
     /**
@@ -357,7 +392,7 @@ public class WEAP extends MajorRecordDescription {
      * @param weight
      */
     public void setWeight(float weight) {
-        DATA.weight = weight;
+	DATA.weight = weight;
     }
 
     /**
@@ -365,7 +400,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getWeight() {
-        return DATA.weight;
+	return DATA.weight;
     }
 
     /**
@@ -373,7 +408,7 @@ public class WEAP extends MajorRecordDescription {
      * @param damage
      */
     public void setDamage(int damage) {
-        DATA.damage = Math.abs(damage) % 0xFFFF;  // can't be more than 2 bytes
+	DATA.damage = Math.abs(damage) % 0xFFFF;  // can't be more than 2 bytes
     }
 
     /**
@@ -381,7 +416,7 @@ public class WEAP extends MajorRecordDescription {
      * @param amount
      */
     public void setEnchantmentCharge(int amount) {
-        EAMT.setDataAbs(amount, 2, 2);
+	EAMT.setDataAbs(amount, 2, 2);
     }
 
     /**
@@ -389,7 +424,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getEnchantmentCharge() {
-        return EAMT.toInt();
+	return EAMT.toInt();
     }
 
     /**
@@ -397,7 +432,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setEnchantment(FormID id) {
-        EITM.setForm(id);
+	EITM.setForm(id);
     }
 
     /**
@@ -405,7 +440,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getEnchantment() {
-        return EITM.getForm();
+	return EITM.getForm();
     }
 
     /**
@@ -413,7 +448,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setEquipmentSlot(FormID id) {
-        ETYP.setForm(id);
+	ETYP.setForm(id);
     }
 
     /**
@@ -421,7 +456,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getEquipmentSlot() {
-        return ETYP.getForm();
+	return ETYP.getForm();
     }
 
     /**
@@ -429,7 +464,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setImpactSet(FormID id) {
-        INAM.setForm(id);
+	INAM.setForm(id);
     }
 
     /**
@@ -437,7 +472,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getImpactSet() {
-        return INAM.getForm();
+	return INAM.getForm();
     }
 
     /**
@@ -445,7 +480,7 @@ public class WEAP extends MajorRecordDescription {
      * @param filename
      */
     public void setModelFilename(String filename) {
-        MODL.setString(filename);
+	MODL.setString(filename);
     }
 
     /**
@@ -453,7 +488,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public String getModelFilename() {
-        return MODL.print();
+	return MODL.print();
     }
 
     /**
@@ -461,7 +496,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setSheathSound(FormID id) {
-        NAM8.setForm(id);
+	NAM8.setForm(id);
     }
 
     /**
@@ -469,7 +504,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getSheathSound() {
-        return NAM8.getForm();
+	return NAM8.getForm();
     }
 
     /**
@@ -477,7 +512,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setDrawSound(FormID id) {
-        NAM9.setForm(id);
+	NAM9.setForm(id);
     }
 
     /**
@@ -485,7 +520,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getDrawSound() {
-        return NAM9.getForm();
+	return NAM9.getForm();
     }
 
     /**
@@ -493,7 +528,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setSwingSound(FormID id) {
-        TNAM.setForm(id);
+	TNAM.setForm(id);
     }
 
     /**
@@ -501,7 +536,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getSwingSound() {
-        return TNAM.getForm();
+	return TNAM.getForm();
     }
 
     /**
@@ -509,7 +544,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setBoundWeaponSound(FormID id) {
-        UNAM.setForm(id);
+	UNAM.setForm(id);
     }
 
     /**
@@ -517,7 +552,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getBoundWeaponSound() {
-        return UNAM.getForm();
+	return UNAM.getForm();
     }
 
     /**
@@ -525,7 +560,7 @@ public class WEAP extends MajorRecordDescription {
      * @param in
      */
     public void setWeaponType(WeaponType in) {
-        DNAM.wtype = in;
+	DNAM.wtype = in;
     }
 
     /**
@@ -533,7 +568,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public WeaponType getWeaponType() {
-        return DNAM.wtype;
+	return DNAM.wtype;
     }
 
     /**
@@ -541,7 +576,7 @@ public class WEAP extends MajorRecordDescription {
      * @param speed
      */
     public void setSpeed(float speed) {
-        DNAM.speed = speed;
+	DNAM.speed = speed;
     }
 
     /**
@@ -549,7 +584,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getSpeed() {
-        return DNAM.speed;
+	return DNAM.speed;
     }
 
     /**
@@ -557,7 +592,7 @@ public class WEAP extends MajorRecordDescription {
      * @param reach
      */
     public void setReach(float reach) {
-        DNAM.reach = reach;
+	DNAM.reach = reach;
     }
 
     /**
@@ -565,7 +600,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getReach() {
-        return DNAM.reach;
+	return DNAM.reach;
     }
 
     /**
@@ -573,7 +608,7 @@ public class WEAP extends MajorRecordDescription {
      * @param fov
      */
     public void setSightFOV(float fov) {
-        DNAM.sightFOV = fov;
+	DNAM.sightFOV = fov;
     }
 
     /**
@@ -581,7 +616,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getSightFOV() {
-        return DNAM.sightFOV;
+	return DNAM.sightFOV;
     }
 
     /**
@@ -589,7 +624,7 @@ public class WEAP extends MajorRecordDescription {
      * @param vats
      */
     public void setVATS(int vats) {
-        DNAM.vats = vats;
+	DNAM.vats = vats;
     }
 
     /**
@@ -597,7 +632,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getVATS() {
-        return DNAM.vats;
+	return DNAM.vats;
     }
 
     /**
@@ -605,7 +640,7 @@ public class WEAP extends MajorRecordDescription {
      * @param numProj
      */
     public void setNumProjectiles(int numProj) {
-        DNAM.numProjectiles = numProj;
+	DNAM.numProjectiles = numProj;
     }
 
     /**
@@ -613,7 +648,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getNumProjectiles() {
-        return DNAM.numProjectiles;
+	return DNAM.numProjectiles;
     }
 
     /**
@@ -621,7 +656,7 @@ public class WEAP extends MajorRecordDescription {
      * @param minRange
      */
     public void setMinRange(float minRange) {
-        DNAM.minRange = minRange;
+	DNAM.minRange = minRange;
     }
 
     /**
@@ -629,7 +664,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getMinRange() {
-        return DNAM.minRange;
+	return DNAM.minRange;
     }
 
     /**
@@ -637,7 +672,7 @@ public class WEAP extends MajorRecordDescription {
      * @param maxRange
      */
     public void setMaxRange(float maxRange) {
-        DNAM.maxRange = maxRange;
+	DNAM.maxRange = maxRange;
     }
 
     /**
@@ -645,7 +680,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getMaxRange() {
-        return DNAM.maxRange;
+	return DNAM.maxRange;
     }
 
     /**
@@ -653,7 +688,7 @@ public class WEAP extends MajorRecordDescription {
      * @param stagger
      */
     public void setStagger(float stagger) {
-        DNAM.stagger = stagger;
+	DNAM.stagger = stagger;
     }
 
     /**
@@ -661,7 +696,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getStagger() {
-        return DNAM.stagger;
+	return DNAM.stagger;
     }
 
     /**
@@ -669,7 +704,7 @@ public class WEAP extends MajorRecordDescription {
      * @param critDmg
      */
     public void setCritDamage(int critDmg) {
-        CRDT.critDmg = critDmg;
+	CRDT.critDmg = critDmg;
     }
 
     /**
@@ -677,7 +712,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getCritDamage() {
-        return CRDT.critDmg;
+	return CRDT.critDmg;
     }
 
     /**
@@ -685,7 +720,7 @@ public class WEAP extends MajorRecordDescription {
      * @param critMult
      */
     public void setCritMult(float critMult) {
-        CRDT.critMult = critMult;
+	CRDT.critMult = critMult;
     }
 
     /**
@@ -693,7 +728,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public float getCritMult() {
-        return CRDT.critMult;
+	return CRDT.critMult;
     }
 
     /**
@@ -701,42 +736,60 @@ public class WEAP extends MajorRecordDescription {
      * @param onDeath
      */
     public void setCritEffectOnDeath(boolean onDeath) {
-        if (onDeath) {
-            CRDT.onDeath = 1;
-        } else {
-            CRDT.onDeath = 0;
-        }
+	if (onDeath) {
+	    CRDT.onDeath = 1;
+	} else {
+	    CRDT.onDeath = 0;
+	}
     }
 
     /**
      *
      * @return
      */
-    public boolean getCritEffectOnDeath () {
-        if (CRDT.onDeath == 0) {
-            return false;
-        } else {
-            return true;
-        }
+    public boolean getCritEffectOnDeath() {
+	if (CRDT.onDeath == 0) {
+	    return false;
+	} else {
+	    return true;
+	}
     }
 
     /**
      *
      * @param critEffect
      */
-    public void setCritEffect (FormID critEffect) {
-        CRDT.critEffect = critEffect;
+    public void setCritEffect(FormID critEffect) {
+	CRDT.critEffect = critEffect;
     }
 
     /**
      *
      * @return
      */
-    public FormID getCritEffect () {
-        return CRDT.critEffect;
+    public FormID getCritEffect() {
+	return CRDT.critEffect;
     }
-//
-//    public SubList<SubForm> getKeywordIDs () {
-//	return keywords;
-//    }
+
+    public void set(WeaponFlag flag, boolean on) {
+	switch (flag.flagSet) {
+	    case 0:
+		DNAM.flags1.set(flag.value, on);
+		break;
+	    case 1:
+		DNAM.flags2.set(flag.value, on);
+		break;
+	}
+    }
+
+    public boolean get(WeaponFlag flag) {
+	switch (flag.flagSet) {
+	    case 0:
+		return DNAM.flags1.is(flag.value);
+	    case 1:
+		return DNAM.flags2.is(flag.value);
+	    default:
+		return false;
+	}
+    }
 }
