@@ -90,7 +90,7 @@ public class WEAP extends MajorRecordDescription {
 	return new WEAP();
     }
 
-    static class DNAM extends SubRecord {
+    class DNAM extends SubRecord {
 
 	WeaponType wtype;
 	float speed;
@@ -169,7 +169,10 @@ public class WEAP extends MajorRecordDescription {
 		logSync("", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
 		logSync("", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
 		logSync("", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
-		logSync("", "stagger: " + stagger);
+		logSync("", "stagger: " + stagger + ", Bound: " + get(WeaponFlag.BoundWeapon) + ", Cant Drop: " + get(WeaponFlag.CantDrop));
+		logSync("", "Hide Backpack: " + get(WeaponFlag.HideBackpack) + ", Ignore Normal Weapon Resistance: " + get(WeaponFlag.IgnoresNormalWeaponResistance) + ", Minor Crime: " + get(WeaponFlag.MinorCrime));
+		logSync("", "NPCs Use Ammo: " + get(WeaponFlag.NPCsUseAmmo) + ", No jam after reload: " + get(WeaponFlag.NoJamAfterReload) + ", Non Hostile: " + get(WeaponFlag.NonHostile));
+		logSync("", "Non Playable: " + get(WeaponFlag.NonPlayable) + ", Not used in normal combat: " + get(WeaponFlag.NotUsedInNormalCombat) + ", Player Only: " + get(WeaponFlag.PlayerOnly));
 	    }
 	}
 
@@ -360,7 +363,7 @@ public class WEAP extends MajorRecordDescription {
 	MinorCrime(4, 1),
 	NotUsedInNormalCombat(6, 1),
 	NonHostile(8, 1),
-	BoundWeapon(9, 1),;
+	BoundWeapon(13, 1),;
 	int value;
 	int flagSet;
 
