@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.concurrent.locks.Lock;
-import sun.rmi.runtime.Log;
 
 /**
  *
@@ -18,7 +16,7 @@ import sun.rmi.runtime.Log;
  */
 class EmbeddedScripts {
 
-    static Map<Integer, Script> scripts;
+    static Map<Integer, Script> scripts = null;
 
     // Highly specific function meant to parse the function list from
     // mod.gib.me/skyrim/functions.html as an easier way to generate
@@ -813,6 +811,13 @@ class EmbeddedScripts {
 	scripts.put(726, new Script("DoesNotExist", 726));
     }
 
+    static Script getScript (int index) {
+	if (scripts == null) {
+	    init();
+	}
+	return scripts.get(index);
+    }
+
     static class Script {
 
 	String name;
@@ -823,6 +828,14 @@ class EmbeddedScripts {
 	    this.name = name;
 	    this.index = index;
 	    parameterFormMask = parameters;
+	}
+
+	boolean isForm (int paramIndex) {
+	    if (parameterFormMask.length > paramIndex && parameterFormMask[paramIndex]) {
+		return true;
+	    } else {
+		return false;
+	    }
 	}
     }
 }

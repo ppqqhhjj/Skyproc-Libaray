@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -19,13 +20,13 @@ import skyproc.exceptions.BadRecord;
 public class MGEF extends MajorRecordDescription {
 
     private static Type[] types = {Type.MGEF};
-
     DATA DATA = new DATA();
     SubForm ESCE = new SubForm(Type.ESCE);
     Keywords keywords = new Keywords();
     SubForm MODB = new SubForm(Type.MDOB);
     SubData OBND = new SubData(Type.OBND);
-    SubList<SNDD> sounds = new SubList<SNDD>(new SNDD());
+    SNDD sounds = new SNDD();
+    SubList<Condition> CONDs = new SubList<Condition>(new Condition());
     public ScriptPackage scripts = new ScriptPackage();
 
     MGEF() {
@@ -33,14 +34,16 @@ public class MGEF extends MajorRecordDescription {
 
 	subRecords.remove(Type.DESC);
 	description = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
-	subRecords.add(description);
+	description.forceExport = true;
 
-	subRecords.add(DATA);
-	subRecords.add(ESCE);
-	subRecords.add(keywords);
 	subRecords.add(MODB);
-	subRecords.add(OBND);
+	subRecords.add(DATA);
 	subRecords.add(sounds);
+	subRecords.add(description);
+	subRecords.add(ESCE);
+	subRecords.add(CONDs);
+	subRecords.add(keywords);
+	subRecords.add(OBND);
 	subRecords.add(scripts);
     }
 
@@ -102,24 +105,24 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(flags.export(),4);
+	    out.write(flags.export(), 4);
 	    out.write(baseCost);
 	    relatedID.export(out);
-	    out.write(ActorValue.value(skillType),4);
-	    out.write(ActorValue.value(resistanceAV),4);
-	    out.write(unknown,4);
+	    out.write(ActorValue.value(skillType), 4);
+	    out.write(ActorValue.value(resistanceAV), 4);
+	    out.write(unknown, 4);
 	    lightID.export(out);
 	    out.write(taperWeight);
 	    hitShader.export(out);
 	    enchantShader.export(out);
-	    out.write(skillLevel,4);
-	    out.write(area,4);
+	    out.write(skillLevel, 4);
+	    out.write(area, 4);
 	    out.write(castingTime);
 	    out.write(taperCurve);
 	    out.write(taperDuration);
 	    out.write(secondAVWeight);
-	    out.write(effectType,4);
-	    out.write(ActorValue.value(primaryAV),4);
+	    out.write(effectType, 4);
+	    out.write(ActorValue.value(primaryAV), 4);
 	    projectileID.export(out);
 	    explosionID.export(out);
 	    out.write(castType.ordinal());
@@ -132,12 +135,12 @@ public class MGEF extends MajorRecordDescription {
 	    dualCastID.export(out);
 	    out.write(dualCastScale);
 	    enchantArtID.export(out);
-	    out.write(nullData,4);
-	    out.write(nullData2,4);
+	    out.write(nullData, 4);
+	    out.write(nullData2, 4);
 	    equipAbility.export(out);
 	    imageSpaceModID.export(out);
 	    perkID.export(out);
-	    out.write(vol.ordinal(),4);
+	    out.write(vol.ordinal(), 4);
 	    out.write(scriptAIDataScore);
 	    out.write(scriptAIDataDelayTime);
 	}
@@ -227,25 +230,30 @@ public class MGEF extends MajorRecordDescription {
 
     class SNDD extends SubRecord {
 
-	SoundData sound;
-	FormID soundID = new FormID();
+	ArrayList<Sound> sounds = new ArrayList<Sound>();
 
-	SNDD(){
+	SNDD() {
 	    super(Type.SNDD);
 	}
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(sound.ordinal(),4);
-	    soundID.export(out);
+	    for (Sound s : sounds) {
+		out.write(s.sound.ordinal());
+		s.soundID.export(out);
+	    }
 	}
 
 	@Override
 	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    sound = SoundData.values()[in.extractInt(4)];
-	    soundID.setInternal(in.extract(4));
+	    while (!in.isEmpty()) {
+		Sound sound = new Sound();
+		sound.sound = SoundData.values()[in.extractInt(4)];
+		sound.soundID.setInternal(in.extract(4));
+		sounds.add(sound);
+	    }
 	}
 
 	@Override
@@ -256,7 +264,9 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	void standardizeMasters(Mod srcMod) {
 	    super.standardizeMasters(srcMod);
-	    soundID.standardize(srcMod);
+	    for (Sound s : sounds) {
+		s.soundID.standardize(srcMod);
+	    }
 	}
 
 	@Override
@@ -271,18 +281,24 @@ public class MGEF extends MajorRecordDescription {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return 8;
+	    return 8 * sounds.size();
 	}
 
+	class Sound {
+	    SoundData sound;
+	    FormID soundID = new FormID();
+	}
     }
 
     public enum CastType {
+
 	ConstantEffect,
 	FireAndForget,
 	Concentration
     }
 
     public enum DeliveryType {
+
 	Self,
 	Touch,
 	Aimed,
@@ -309,8 +325,7 @@ public class MGEF extends MajorRecordDescription {
 	PowerAffectsDuration(22),
 	Painless(26),
 	NoHitEffect(27),
-	NoDeathDispel(28),
-	;
+	NoDeathDispel(28),;
 	int value;
 
 	SpellEffectFlag(int value) {
@@ -319,6 +334,7 @@ public class MGEF extends MajorRecordDescription {
     }
 
     public enum SoundData {
+
 	SheathDraw,
 	Charge,
 	Ready,

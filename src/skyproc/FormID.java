@@ -43,7 +43,7 @@ public class FormID implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param form String containing the last 6 digits of a FormID, followed immediately
      * by the plugin it originates from.  eg "000123Skyrim.esm"
      */
@@ -62,7 +62,7 @@ public class FormID implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param id Byte array (usually size 3), which contains FormID bytes.
      * @param master The mod from which this formID originates.
      */
@@ -130,7 +130,7 @@ public class FormID implements Serializable {
     }
 
     byte[] getInternal(Boolean masterIndex) {
-        if (!masterIndex || master == null) {
+        if (!masterIndex) {
             return Arrays.copyOfRange(form, 0, 3);
         } else {
             return form;
@@ -239,7 +239,7 @@ public class FormID implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
