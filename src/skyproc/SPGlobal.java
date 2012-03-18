@@ -82,46 +82,48 @@ public class SPGlobal {
 	modsToSkip.add(globalPatchOut.getInfo());
 
 	// Import old patch for consistency
-	File f = new File(pathToData + patch.getName());
-	if (!f.exists()) {
-	    return;
-	}
-	SPImporter importer = new SPImporter();
-	Mod consistencyPatch;
-	try {
+	if (consistency) {
+	    File f = new File(pathToData + patch.getName());
+	    if (!f.exists()) {
+		return;
+	    }
+	    SPImporter importer = new SPImporter();
+	    Mod consistencyPatch;
+	    try {
 
-	    boolean tmpLogging = logging();
-	    logging(debugConsistencyImport);
-	    SPGUI.progress.reset();
-	    SPGUI.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
-	    consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
-	    logging(tmpLogging);
-	    edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
-	    for (GRUP g : consistencyPatch.GRUPs.values()) {
-		for (Object o : g) {
-		    MajorRecord m = (MajorRecord) o;
-		    // If src mod is the patch itself
-		    if (m.getFormMaster().equals(consistencyPatch.getInfo())) {
-			// If EDID is not empty
-			if (!m.getEDID().equals("")) {
-			    // If already exists, problem
-			    if (!edidToForm.containsKey(m.getEDID())) {
-				edidToForm.put(m.getEDID(), m.getForm());
-				if (debugConsistencyImport && logging()) {
-				    log("Consistency", m.toString());
+		boolean tmpLogging = logging();
+		logging(debugConsistencyImport);
+		SPGUI.progress.reset();
+		SPGUI.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
+		consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
+		logging(tmpLogging);
+		edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
+		for (GRUP g : consistencyPatch.GRUPs.values()) {
+		    for (Object o : g) {
+			MajorRecord m = (MajorRecord) o;
+			// If src mod is the patch itself
+			if (m.getFormMaster().equals(consistencyPatch.getInfo())) {
+			    // If EDID is not empty
+			    if (!m.getEDID().equals("")) {
+				// If already exists, problem
+				if (!edidToForm.containsKey(m.getEDID())) {
+				    edidToForm.put(m.getEDID(), m.getForm());
+				    if (debugConsistencyImport && logging()) {
+					log("Consistency", m.toString());
+				    }
+				} else {
+				    logError("Consistency", "Record " + m.getFormStr() + " had an already existing EDID: " + m.getEDID());
 				}
 			    } else {
-				logError("Consistency", "Record " + m.getFormStr() + " had an already existing EDID: " + m.getEDID());
+				logError("Consistency", "Record " + m.getFormStr() + " didn't have an EDID.");
 			    }
-			} else {
-			    logError("Consistency", "Record " + m.getFormStr() + " didn't have an EDID.");
 			}
 		    }
 		}
-	    }
 
-	} catch (BadMod ex) {
-	    logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
+	    } catch (BadMod ex) {
+		logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
+	    }
 	}
     }
 
@@ -322,6 +324,8 @@ public class SPGlobal {
 	} catch (IOException ex) {
 	}
     }
+    // Flag globals
+    public static boolean consistency = true;
     // Debug Globals
     /**
      * This flag prints messages when records are tied to FormIDs from the last
