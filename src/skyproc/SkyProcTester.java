@@ -17,7 +17,7 @@ class SkyProcTester {
 
     private static void normalRun() throws Exception {
 
-	GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
+	GRUP_TYPE[] types = {GRUP_TYPE.MGEF};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
@@ -48,6 +48,7 @@ class SkyProcTester {
 	SPGUI.progress.pause(true);
 
 	Mod patch = new Mod(new ModListing("Test.esp"));
+	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
 	patch.setAuthor("Leviathan1753");
 	patch.export();
@@ -55,7 +56,7 @@ class SkyProcTester {
 	boolean passed = true;
 	System.out.println("Testing Record Lengths " + type);
 	passed = passed && SPExporter.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
-	File validF = new File(type.toString() + "validation.esp");
+	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
 	if (validF.isFile()) {
 	    passed = Ln.validateCompare(SPGlobal.pathToData + "Test.esp", validF.getPath(), 10) && passed;
 	} else {
