@@ -1,12 +1,11 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
-import lev.LShrinkArray;
 
 /**
  * A record fully describing and specifying a perk, including level up perks, as
@@ -33,7 +32,7 @@ public class PERK extends MajorRecordDescription {
 
         subRecords.add(scripts);
         subRecords.add(FULL);
-        subRecords.add(DESC);
+        subRecords.add(description);
         subRecords.add(CTDAs);
         subRecords.add(DATA);
         subRecords.add(NNAM);

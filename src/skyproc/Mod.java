@@ -44,6 +44,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
     GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
+    GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<SubStringPointer.Files, Map<Integer, Integer>>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<String>();
     private ArrayList<String> outDLStrings = new ArrayList<String>();
@@ -89,6 +90,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(weapons.getContainedType(), weapons);
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(formLists.getContainedType(), formLists);
+	GRUPs.put(magicEffects.getContainedType(), magicEffects);
     }
 
     /**
@@ -732,6 +734,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<FLST> getFormLists() {
 	return formLists;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Magic Effect records
+     */
+    public GRUP<MGEF> getMagicEffects() {
+	return magicEffects;
     }
 
     /**

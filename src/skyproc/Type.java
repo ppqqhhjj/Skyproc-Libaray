@@ -737,13 +737,16 @@ public enum Type {
      */
     KYWD,
     /**
-     * 
+     *
      */
     AMMO,
     /**
-     * 
+     *
      */
     FLST,
+
+    MGEF,
+    ESCE,
 
     /**
      * NPC_: Marks DNAM position?

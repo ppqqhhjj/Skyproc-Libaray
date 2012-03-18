@@ -64,7 +64,7 @@ public class WEAP extends MajorRecordDescription {
 	subRecords.add(BIDS);
 	subRecords.add(BAMT);
 	subRecords.add(keywords);
-	subRecords.add(DESC);
+	subRecords.add(description);
 	subRecords.add(NNAM);
 	subRecords.add(INAM);
 	subRecords.add(SNAM);

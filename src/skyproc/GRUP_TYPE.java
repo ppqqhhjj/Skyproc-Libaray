@@ -48,12 +48,13 @@ public enum GRUP_TYPE {
      */
     WEAP,
     /**
-     * 
+     *
      */
     FLST,
     /**
-     * 
+     *
      */
-    KYWD;
+    KYWD,
+    MGEF;
 
 }

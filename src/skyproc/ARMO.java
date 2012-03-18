@@ -71,7 +71,7 @@ public class ARMO extends MajorRecordDescription {
         subRecords.add(BAMT);
         subRecords.add(RNAM);
         subRecords.add(keywords);
-        subRecords.add(DESC);
+        subRecords.add(description);
         subRecords.add(MODLs);
         subRecords.add(DATA);
         subRecords.add(DNAM);
@@ -195,7 +195,7 @@ public class ARMO extends MajorRecordDescription {
     public enum ARMOFlags {
 
 	/**
-	 * 
+	 *
 	 */
 	PLAYABLE
     }
@@ -226,7 +226,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param id
      */
     public void setEnchantment(FormID id) {
@@ -234,7 +234,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param part
      * @param on
      */
@@ -243,7 +243,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param part
      * @return
      */
@@ -252,7 +252,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -261,7 +261,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -270,7 +270,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param type
      */
     public void setArmorType(ArmorType type) {
@@ -279,7 +279,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArmorType getArmorType() {
@@ -291,7 +291,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getEnchantment() {
@@ -299,7 +299,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param path
      * @param perspective
      */
@@ -315,7 +315,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param perspective
      * @return
      */
@@ -329,7 +329,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param sound
      */
     public void setPickupSound(FormID sound) {
@@ -337,7 +337,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getPickupSound() {
@@ -345,7 +345,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param sound
      */
     public void setDropSound(FormID sound) {
@@ -353,7 +353,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getDropSound() {
@@ -361,7 +361,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param slot
      */
     public void setEquipSlot(FormID slot) {
@@ -369,7 +369,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getEquipSet() {
@@ -377,7 +377,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param set
      */
     public void setBashImpactData(FormID set) {
@@ -385,7 +385,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getBashImpactData() {
@@ -393,7 +393,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param race
      */
     public void setRace(FormID race) {
@@ -401,7 +401,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getRace() {
@@ -409,7 +409,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param value
      */
     public void setValue(int value) {
@@ -417,7 +417,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getValue() {
@@ -425,7 +425,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param weight
      */
     public void setWeight(float weight) {
@@ -433,7 +433,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getWeight() {
@@ -441,7 +441,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param rating
      */
     public void setArmorRating(int rating) {
@@ -449,7 +449,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getArmorRating() {
@@ -457,7 +457,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param template
      */
     public void setTemplate(FormID template) {
@@ -465,7 +465,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getTemplate() {

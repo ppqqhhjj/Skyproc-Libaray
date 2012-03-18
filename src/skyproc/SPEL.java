@@ -46,7 +46,7 @@ public class SPEL extends MajorRecordDescription {
 	subRecords.add(FULL);
 	subRecords.add(MDOB);
 	subRecords.add(ETYP);
-	subRecords.add(DESC);
+	subRecords.add(description);
 	subRecords.add(SPIT);
 	subRecords.add(spellSections);
     }

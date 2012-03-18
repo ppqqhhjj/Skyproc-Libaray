@@ -12,18 +12,18 @@ import skyproc.SubStringPointer.Files;
  */
 public abstract class MajorRecordDescription extends MajorRecordNamed {
 
-    SubStringPointer DESC = new SubStringPointer(Type.DESC, Files.DLSTRINGS);
+    SubStringPointer description = new SubStringPointer(Type.DESC, Files.DLSTRINGS);
 
     MajorRecordDescription() {
         super();
-        DESC.forceExport = true;
-        subRecords.add(DESC);
+        description.forceExport = true;
+        subRecords.add(description);
     }
 
     MajorRecordDescription(Mod mod, String edid) {
         super(mod, edid);
-        DESC.forceExport = true;
-        subRecords.add(DESC);
+        description.forceExport = true;
+        subRecords.add(description);
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * @return Description associated with the Major Record, or <NO TEXT> if empty.
      */
     public String getDescription () {
-        return DESC.print();
+        return description.print();
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * @param description String to set as the Major Record description.
      */
     public void setDescription (String description) {
-        DESC.setText(description);
+        this.description.setText(description);
     }
 
 }

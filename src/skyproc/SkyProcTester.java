@@ -17,8 +17,8 @@ class SkyProcTester {
 
     private static void normalRun() throws Exception {
 
-//	GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
-	GRUP_TYPE[] types = GRUP_TYPE.values();
+	GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
+//	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
