@@ -4,6 +4,10 @@
  */
 package skyproc;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  *
  * @author Justin Swanson
@@ -44,12 +48,11 @@ public enum ActorValue {
     InventoryWeight,
     CarryWeight,
     DragonRend,
-    CritChance,
-    MeleeDamage,
-    UnarmedDamage,
-    Mass,
-    VoicePoints,
-    VoiceRate,
+    UNKNOWN34,
+    UNKNOWN35,
+    UNKNOWN36,
+    UNKNOWN37,
+    UNKNOWN38,
     DamageResist,
     PoisonResist,
     FireResist,
@@ -57,6 +60,13 @@ public enum ActorValue {
     FrostResist,
     MagicResist,
     DiseaseResist,
+    UNKNOWN46,
+    UNKNOWN47,
+    UNKNOWN48,
+    UNKNOWN49,
+    UNKNOWN50,
+    UNKNOWN51,
+    UNKNOWN52,
     Paralysis,
     Invisibility,
     NightEye,
@@ -157,23 +167,109 @@ public enum ActorValue {
     IllusionPowerMod,
     RestorationPowerMod,
     EnchantingPowerMod,
+    UNKNOWN153,
     AttackDamageMult,
     HealRateMult,
     MagickaRateMult,
     StaminaRateMult,
-    CombatHealthRegenMultMod,
-    CombatHealthRegenMultPowerMod,
-    HealRatePowerMod,
-    MagickaRateMod,
+    UNKNOWN158,
+    UNKNOWN159,
+    UNKNOWN160,
+    UNKNOWN161,
+    UNKNOWN162,
     ReflectDamage,
-    NormalWeaponsResist,
-    PerceptionCondition,
-    EnduranceCondition,
-    LeftAttackCondition,
-    RightAttackCondition,
-    LeftMobilityCondition,
-    RightMobilityCondition,
-    BrainCondition,
+    UNKNOWN164,
+    UNKNOWN165,
+    UNKNOWN166,
+    UNKNOWN167,
+    UNKNOWN168,
+    UNKNOWN169,
+    UNKNOWN170,
+    UNKNOWN171,
+    UNKNOWN172,
+    UNKNOWN173,
+    UNKNOWN174,
+    UNKNOWN175,
+    UNKNOWN176,
+    UNKNOWN177,
+    UNKNOWN178,
+    UNKNOWN179,
+    UNKNOWN180,
+    UNKNOWN181,
+    UNKNOWN182,
+    UNKNOWN183,
+    UNKNOWN184,
+    UNKNOWN185,
+    UNKNOWN186,
+    UNKNOWN187,
+    UNKNOWN188,
+    UNKNOWN189,
+    UNKNOWN190,
+    UNKNOWN191,
+    UNKNOWN192,
+    UNKNOWN193,
+    UNKNOWN194,
+    UNKNOWN195,
+    UNKNOWN196,
+    UNKNOWN197,
+    UNKNOWN198,
+    UNKNOWN199,
+    UNKNOWN200,
+    UNKNOWN201,
+    UNKNOWN202,
+    UNKNOWN203,
+    UNKNOWN204,
+    UNKNOWN205,
+    UNKNOWN206,
+    UNKNOWN207,
+    UNKNOWN208,
+    UNKNOWN209,
+    UNKNOWN210,
+    UNKNOWN211,
+    UNKNOWN212,
+    UNKNOWN213,
+    UNKNOWN214,
+    UNKNOWN215,
+    UNKNOWN216,
+    UNKNOWN217,
+    UNKNOWN218,
+    UNKNOWN219,
+    UNKNOWN220,
+    UNKNOWN221,
+    UNKNOWN222,
+    UNKNOWN223,
+    UNKNOWN224,
+    UNKNOWN225,
+    UNKNOWN226,
+    UNKNOWN227,
+    UNKNOWN228,
+    UNKNOWN229,
+    UNKNOWN230,
+    UNKNOWN231,
+    UNKNOWN232,
+    UNKNOWN233,
+    UNKNOWN234,
+    UNKNOWN235,
+    UNKNOWN236,
+    UNKNOWN237,
+    UNKNOWN238,
+    UNKNOWN239,
+    UNKNOWN240,
+    UNKNOWN241,
+    UNKNOWN242,
+    UNKNOWN243,
+    UNKNOWN244,
+    UNKNOWN245,
+    UNKNOWN246,
+    UNKNOWN247,
+    UNKNOWN248,
+    UNKNOWN249,
+    UNKNOWN250,
+    UNKNOWN251,
+    UNKNOWN252,
+    UNKNOWN253,
+    UNKNOWN254,
+    UNKNOWN255,
     UNKNOWN;
 
     static int value(ActorValue in) {
@@ -190,5 +286,50 @@ public enum ActorValue {
 	} else {
 	    return UNKNOWN;
 	}
+    }
+
+    // Highly specific function meant to parse the function list from
+    // http://www.uesp.net/wiki/Tes5Mod:Actor_Value_Indices#Actor_Value_Codes as an easier way to generate
+    // code, rather than typing it all by hand.
+    // Shouldn't need to be used by you or any users.
+    static void parseData() throws FileNotFoundException, IOException {
+
+	String dir = "Validation Files/";
+	BufferedReader in = new BufferedReader(new FileReader(dir + "ActorValueSource.txt"));
+	BufferedWriter out = new BufferedWriter(new FileWriter(dir + "ActorValueOut.txt"));
+	BufferedWriter log = new BufferedWriter(new FileWriter(dir + "ActorValueOutLog.txt"));
+
+	String[] values = new String[256];
+
+	ArrayList<String> outStrings = new ArrayList<String>();
+	while (in.ready()) {
+	    String line = in.readLine();
+	    log.write("Read Line: " + line);
+	    Scanner tokenizer = new Scanner(line);
+	    try {
+		int index = Integer.valueOf(tokenizer.next());
+		log.write("  Index: " + index);
+		String name = tokenizer.next();
+		log.write("  Ref: " + name);
+
+		// Generate string
+		values[index] = name;
+
+	    } catch (NumberFormatException ex) {
+		log.write("  Skipped");
+	    }
+	}
+
+	for (int i = 0; i < values.length; i++) {
+	    if (values[i] != null) {
+		out.write(values[i] + ",\n");
+	    } else {
+		out.write("UNKNOWN" + i + ",\n");
+	    }
+	}
+
+	in.close();
+	out.close();
+	log.close();
     }
 }

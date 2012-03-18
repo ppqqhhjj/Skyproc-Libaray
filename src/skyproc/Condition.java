@@ -79,7 +79,8 @@ class Condition extends SubShell {
 	    out.write(fluff, 3);
 
 	    if (get(CondFlag.UseGlobal)) {
-		comparisonValueForm.export(out);
+		// This FormID is flipped, so it's an odd export.
+		out.write(comparisonValueForm.get());
 	    } else {
 		out.write(comparisonValueFloat);
 	    }
@@ -122,7 +123,8 @@ class Condition extends SubShell {
 	    fluff = in.extract(3);
 
 	    if (get(CondFlag.UseGlobal)) {
-		comparisonValueForm.setInternal(in.extract(4));
+		// Use public set here, because for some reason, this FormID is flipped
+		comparisonValueForm.set(in.extract(4));
 	    } else {
 		comparisonValueFloat = in.extractFloat();
 	    }

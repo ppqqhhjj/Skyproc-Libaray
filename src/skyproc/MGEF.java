@@ -10,6 +10,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -32,10 +33,14 @@ public class MGEF extends MajorRecordDescription {
     MGEF() {
 	super();
 
+	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
 	description = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
 	description.forceExport = true;
+	description.file = SubStringPointer.Files.STRINGS;
 
+	subRecords.add(scripts);
+	subRecords.add(FULL);
 	subRecords.add(MODB);
 	subRecords.add(keywords);
 	subRecords.add(DATA);
@@ -44,7 +49,6 @@ public class MGEF extends MajorRecordDescription {
 	subRecords.add(ESCE);
 	subRecords.add(CONDs);
 	subRecords.add(OBND);
-	subRecords.add(scripts);
     }
 
     @Override
@@ -164,7 +168,9 @@ public class MGEF extends MajorRecordDescription {
 	    taperCurve = in.extractFloat();
 	    taperDuration = in.extractFloat();
 	    secondAVWeight = in.extractFloat();
+	    logSync("", Ln.arrayPrintInts(in.getInts(0, 4)));
 	    effectType = in.extractInt(4);
+	    logSync("", Ln.arrayPrintInts(in.getInts(0, 4)));
 	    primaryAV = ActorValue.value(in.extractInt(4));
 	    projectileID.setInternal(in.extract(4));
 	    explosionID.setInternal(in.extract(4));
@@ -186,6 +192,52 @@ public class MGEF extends MajorRecordDescription {
 	    vol = SoundVolume.values()[in.extractInt(4)];
 	    scriptAIDataScore = in.extractFloat();
 	    scriptAIDataDelayTime = in.extractFloat();
+	    print();
+	}
+
+	@Override
+	public String print() {
+	    if (SPGlobal.logging()) {
+		logSync("", "DATA:");
+		logSync("", "  Flags: " + flags);
+		logSync("", "  Base Cost: " + baseCost);
+		logSync("", "  Related ID: " + relatedID);
+		logSync("", "  skillType: " + skillType);
+		logSync("", "  resistanceAV: " + resistanceAV);
+		logSync("", "  Light: " + lightID);
+		logSync("", "  Taper Weight: " + taperWeight);
+		logSync("", "  Hit Shader: " + hitShader);
+		logSync("", "  Enchant Shader: " + enchantShader);
+		logSync("", "  Skill Level: " + skillLevel);
+		logSync("", "  Area: " + area);
+		logSync("", "  Casting Time: " + castingTime);
+		logSync("", "  Taper Curve: " + taperCurve);
+		logSync("", "  Taper Duration: " + taperDuration);
+		logSync("", "  second AV weight: " + secondAVWeight);
+		logSync("", "  Effect Type: " + effectType);
+		logSync("", "  Primary AV: " + primaryAV);
+		logSync("", "  Base Cost: " + baseCost);
+		logSync("", "  Projectile : " + projectileID);
+		logSync("", "  Explosion: " + explosionID);
+		logSync("", "  Cast Type: " + castType);
+		logSync("", "  Delivery Type: " + deliveryType);
+		logSync("", "  Second AV: " + secondAV);
+		logSync("", "  Casting Art: " + castingArt);
+		logSync("", "  Hit Effect Art: " + hitEffectArt);
+		logSync("", "  Impact Data: " + impactData);
+		logSync("", "  Skill Usage Mult: " + skillUsageMult);
+		logSync("", "  Dual Cast ID: " + dualCastID);
+		logSync("", "  Dual Cast Scale: " + dualCastScale);
+		logSync("", "  Enchant Art: " + enchantArtID);
+		logSync("", "  Equip Ability: " + equipAbility);
+		logSync("", "  Image Space Mod ID: " + imageSpaceModID);
+		logSync("", "  Perk: " + perkID);
+		logSync("", "  Volume: " + vol);
+		logSync("", "  Base Cost: " + baseCost);
+		logSync("", "  Script AI Data Score: " + scriptAIDataScore);
+		logSync("", "  Script AI Data Delay Time: " + scriptAIDataDelayTime);
+	    }
+	    return "";
 	}
 
 	@Override

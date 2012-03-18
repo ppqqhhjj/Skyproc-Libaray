@@ -45,8 +45,9 @@ class EmbeddedScripts {
 		if (name.contains("ref.")) {
 		    name = tokenizer.next();
 		}
-		log.write("  Ref: " + index);
+		log.write("  Ref: " + name);
 		ArrayList<Boolean> parameterMask = new ArrayList<Boolean>();
+		tokenizer.useDelimiter(",");
 		while (tokenizer.hasNext()) {
 		    String parameter = tokenizer.next();
 		    if (parameter.contains("UNK")) {
@@ -763,7 +764,7 @@ class EmbeddedScripts {
 	scripts.put(678, new Script("ShouldAttackKill", 678, false));
 	scripts.put(679, new Script("SendStealAlarm", 679, false, false));
 	scripts.put(680, new Script("GetActivationHeight", 680));
-	scripts.put(681, new Script("EPModSkillUsage_IsAdvanceSkill", 681, true, false));
+	scripts.put(681, new Script("EPModSkillUsage_IsAdvanceSkill", 681, false));
 	scripts.put(682, new Script("WornHasKeyword", 682, true));
 	scripts.put(683, new Script("GetPathingCurrentSpeed", 683));
 	scripts.put(684, new Script("GetPathingCurrentSpeedAngle", 684, true));
@@ -774,11 +775,11 @@ class EmbeddedScripts {
 	scripts.put(689, new Script("AddFormToLeveledList", 689, true, true, false, false));
 	scripts.put(690, new Script("RevertLeveledList", 690, true));
 	scripts.put(691, new Script("EPModSkillUsage_AdvanceObjectHasKeyword", 691, true));
-	scripts.put(692, new Script("EPModSkillUsage_IsAdvanceAction", 692, true, false));
+	scripts.put(692, new Script("EPModSkillUsage_IsAdvanceAction", 692, true));
 	scripts.put(693, new Script("EPMagic_SpellHasKeyword", 693, true));
 	scripts.put(694, new Script("GetNoBleedoutRecovery", 694));
 	scripts.put(695, new Script("SetNoBleedoutRecovery", 695, false));
-	scripts.put(696, new Script("EPMagic_SpellHasSkill", 696, true, false));
+	scripts.put(696, new Script("EPMagic_SpellHasSkill", 696, false));
 	scripts.put(697, new Script("IsAttackType", 697, true));
 	scripts.put(698, new Script("IsAllowedToFly", 698));
 	scripts.put(699, new Script("HasMagicEffectKeyword", 699, true));
