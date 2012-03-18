@@ -108,21 +108,21 @@ public class MGEF extends MajorRecordDescription {
 	    out.write(flags.export(), 4);
 	    out.write(baseCost);
 	    relatedID.export(out);
-	    out.write(ActorValue.value(skillType), 4);
-	    out.write(ActorValue.value(resistanceAV), 4);
+	    out.write(ActorValue.value(skillType));
+	    out.write(ActorValue.value(resistanceAV));
 	    out.write(unknown, 4);
 	    lightID.export(out);
 	    out.write(taperWeight);
 	    hitShader.export(out);
 	    enchantShader.export(out);
-	    out.write(skillLevel, 4);
-	    out.write(area, 4);
+	    out.write(skillLevel);
+	    out.write(area);
 	    out.write(castingTime);
 	    out.write(taperCurve);
 	    out.write(taperDuration);
 	    out.write(secondAVWeight);
-	    out.write(effectType, 4);
-	    out.write(ActorValue.value(primaryAV), 4);
+	    out.write(effectType);
+	    out.write(ActorValue.value(primaryAV));
 	    projectileID.export(out);
 	    explosionID.export(out);
 	    out.write(castType.ordinal());
@@ -140,7 +140,7 @@ public class MGEF extends MajorRecordDescription {
 	    equipAbility.export(out);
 	    imageSpaceModID.export(out);
 	    perkID.export(out);
-	    out.write(vol.ordinal(), 4);
+	    out.write(vol.ordinal());
 	    out.write(scriptAIDataScore);
 	    out.write(scriptAIDataDelayTime);
 	}

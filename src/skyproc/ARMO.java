@@ -100,7 +100,7 @@ public class ARMO extends MajorRecordDescription {
         @Override
         void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
-            out.write(value, 4);
+            out.write(value);
             out.write(weight);
         }
 
@@ -152,7 +152,7 @@ public class ARMO extends MajorRecordDescription {
             out.write(bodyParts.export(), 4);
             out.write(flags.export(), 4);
             if (!old) {
-                out.write(armorType, 4);
+                out.write(armorType);
             }
         }
 

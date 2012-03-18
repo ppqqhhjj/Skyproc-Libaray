@@ -558,7 +558,7 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(fluff2, 1);
 	    out.write(assistance, 1);
 	    out.write(fluff3, 10);
-	    out.write(aggroradius, 4);
+	    out.write(aggroradius);
 	}
 
 	@Override

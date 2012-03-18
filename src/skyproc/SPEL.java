@@ -257,10 +257,10 @@ public class SPEL extends MajorRecordDescription {
 	    if (isValid()) {
 		out.write(baseCost);
 		out.write(flags.export(),4);
-		out.write(baseType, 4);
+		out.write(baseType);
 		out.write(chargeTime);
-		out.write(castType, 4);
-		out.write(targetType, 4);
+		out.write(castType);
+		out.write(targetType);
 		out.write(fluff1, 4);
 		out.write(range);
 		out.write(perkType.getFormArray(true), 4);

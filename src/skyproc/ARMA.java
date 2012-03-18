@@ -100,7 +100,7 @@ public class ARMA extends MajorRecord {
         void export(LExporter out, Mod srcMod) throws IOException {
             super.export(out, srcMod);
             if (isValid()) {
-                out.write(altTextures.size(), 4);
+                out.write(altTextures.size());
                 for (AltTexture t : altTextures) {
                     t.export(out);
                 }
@@ -190,10 +190,10 @@ public class ARMA extends MajorRecord {
         }
 
         void export(LExporter out) throws IOException {
-            out.write(name.length(), 4);
+            out.write(name.length());
             out.write(name);
             texture.export(out);
-            out.write(index, 4);
+            out.write(index);
         }
 
 	void standardizeMasters(Mod srcMod) {
@@ -205,7 +205,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @param name String to set the AltTexture name to.
 	 */
 	public void setName(String name) {
@@ -213,7 +213,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @return Name of the AltTexture.
 	 */
 	public String getName() {
@@ -221,7 +221,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @param txst FormID of the TXST to tie the AltTexture to.
 	 */
 	public void setTexture(FormID txst) {
@@ -229,7 +229,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @return FormID of the TXST the AltTexture is tied to.
 	 */
 	public FormID getTexture() {
@@ -237,7 +237,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @param index The NiTriShape index to assign.
 	 */
 	public void setIndex(int index) {
@@ -245,7 +245,7 @@ public class ARMA extends MajorRecord {
         }
 
 	/**
-	 * 
+	 *
 	 * @return The NiTriShape index assigned to the AltTexture.
 	 */
 	public int getIndex() {
@@ -317,7 +317,7 @@ public class ARMA extends MajorRecord {
 
     // Get/set
     /**
-     * 
+     *
      * @param path Path of the .nif file to assign.
      * @param gender The gender to assign this model path to.
      * @param perspective Perspective to assign this model path to.
@@ -346,7 +346,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param gender The gender of the desired model path to query.
      * @param perspective The perspective of the model path to query.
      * @return The model path of the specified gender/perspective.  Empty string
@@ -397,7 +397,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param race
      */
     public void setRace(FormID race) {
@@ -405,7 +405,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getRace() {
@@ -413,7 +413,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param skin
      * @param gender
      */
@@ -429,7 +429,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param gender
      * @return
      */
@@ -443,7 +443,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param swapList
      * @param gender
      */
@@ -459,7 +459,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param gender
      * @return
      */
@@ -473,7 +473,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param addRace
      */
     public void addAdditionalRace(FormID addRace) {
@@ -481,7 +481,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param addRace
      */
     public void removeAdditionalRace(FormID addRace) {
@@ -489,7 +489,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArrayList<FormID> getAdditionalRaces() {
@@ -497,7 +497,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param footstep
      */
     public void setFootstepSound(FormID footstep) {
@@ -505,7 +505,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getFootstepSound() {
@@ -513,7 +513,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param priority
      * @param gender
      */
@@ -529,7 +529,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param gender
      * @return
      */
@@ -543,7 +543,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param value
      */
     public void setDetectionSoundValue(int value) {
@@ -551,7 +551,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getDetectionSoundValue() {
@@ -559,7 +559,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param adjust
      */
     public void setWeaponAdjust(float adjust) {
@@ -567,7 +567,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getWeaponAdjust() {

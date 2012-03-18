@@ -327,7 +327,7 @@ public class Ln {
     public static ArrayList<File> generateFileList(File src, boolean addDirs) {
 	return generateFileList(src, -1, -1, addDirs);
     }
-    
+
     /**
      * Converts an int array to its string equivalent.
      *
@@ -932,17 +932,23 @@ public class Ln {
      * @return
      */
     public static byte[] toByteArray(int input) {
-	return toByteArray(input, 0);
+	return new byte[]{
+		    (byte) (input), (byte) (input >>> 8),
+		    (byte) (input >>> 16), (byte) (input >>> 24)};
     }
 
     /**
      *
      * @param input
-     * @param minLength
+     * @param size
      * @return
      */
-    public static byte[] toByteArray(int input, int minLength) {
-	return toByteArray(input, minLength, 0);
+    public static byte[] toByteArray(int input, int size) {
+	byte[] out = new byte[size];
+	for (int i = 0; i < size; i++) {
+	    out[i] = (byte) (input >>> (8 * i));
+	}
+	return out;
     }
 
     /**
@@ -953,7 +959,11 @@ public class Ln {
      * @return
      */
     public static byte[] toByteArray(int input, int minLength, int maxLength) {
+//	if (minLength == 4 && maxLength == 4) {
+//	    return toByteArray(input);
+//	} else {
 	return toByteArray((long) input, minLength, maxLength);
+//	}
     }
 
     /**

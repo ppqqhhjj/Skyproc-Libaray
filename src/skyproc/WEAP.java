@@ -120,7 +120,7 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(wtype.ordinal(), 4);
+	    out.write(wtype.ordinal());
 	    out.write(speed);
 	    out.write(reach);
 	    out.write(flags1.export());
@@ -210,7 +210,7 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(value, 4);
+	    out.write(value);
 	    out.write(weight);
 	    out.write(damage, 2);
 	}
@@ -265,7 +265,7 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(critDmg, 4);
+	    out.write(critDmg);
 	    out.write(critMult);
 	    out.write(onDeath, 1);
 	    out.write(unknown, 3);

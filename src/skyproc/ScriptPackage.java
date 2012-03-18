@@ -244,7 +244,7 @@ public class ScriptPackage extends SubRecord {
         ScriptProperty(String name, int in) {
             this(name);
             type = ScriptPropType.Integer.ordinal();
-            data = Ln.toByteArray(in, 4);
+            data = Ln.toByteArray(in);
         }
 
         ScriptProperty(String name, FormID id) {
@@ -259,7 +259,7 @@ public class ScriptPackage extends SubRecord {
         ScriptProperty(String name, float in) {
             this(name);
             type = ScriptPropType.Float.ordinal();
-            data = Ln.toByteArray(Float.floatToIntBits(in), 4);
+            data = Ln.toByteArray(Float.floatToIntBits(in));
         }
 
         ScriptProperty(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -448,7 +448,7 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * 
+     *
      * @param scriptName Script name to query
      * @return True if package has a script with that name.
      */
@@ -457,7 +457,7 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * 
+     *
      * @param scriptName Script name to query inside for property
      * @param propertyName Property name to query
      * @return True if script exists with that property name
@@ -467,7 +467,7 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * 
+     *
      * @param scriptName Script name to remove, if present.
      */
     public void removeScript(String scriptName) {
@@ -477,7 +477,7 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * 
+     *
      * @param scriptName Script to target
      * @param propertyName Property to remove, if present
      */

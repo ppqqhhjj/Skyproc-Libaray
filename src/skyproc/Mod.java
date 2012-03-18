@@ -561,14 +561,14 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	int outLength = stringLength + 8 * list.size() + 8;
 	LExporter out = new LExporter(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
 
-	out.write(list.size(), 4);
-	out.write(stringLength, 4);
+	out.write(list.size());
+	out.write(stringLength);
 
 	int i = 1;  // To prevent indexing starting at 0
 	int offset = 0;
 	for (String s : list) {
-	    out.write(i++, 4);
-	    out.write(offset, 4);
+	    out.write(i++);
+	    out.write(offset);
 	    offset += s.length() + 1;
 	}
 
@@ -923,9 +923,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(flags.export(), 4);
-	    out.write(fluff1, 4);
-	    out.write(fluff2, 4);
-	    out.write(fluff3, 4);
+	    out.write(fluff1);
+	    out.write(fluff2);
+	    out.write(fluff3);
 	    HEDR.export(out, srcMod);
 	    author.export(out, srcMod);
 	    masters.export(out, srcMod);
@@ -1016,9 +1016,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(version, 4);
-	    out.write(numRecords, 4);
-	    out.write(nextID, 4);
+	    out.write(version);
+	    out.write(numRecords);
+	    out.write(nextID);
 	}
 
 	@Override

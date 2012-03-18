@@ -68,7 +68,7 @@ public abstract class Record extends ExportRecord implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
         if (isValid()) {
             out.write(getTypes()[0].toString());
-            out.write(getContentLength(srcMod), 4);
+            out.write(getContentLength(srcMod));
         }
     }
 

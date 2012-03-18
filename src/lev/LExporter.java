@@ -19,7 +19,7 @@ public class LExporter {
     private BufferedOutputStream output;
 
     /**
-     * 
+     *
      * @param path Path to open an exporter to.
      * @throws FileNotFoundException
      */
@@ -28,7 +28,7 @@ public class LExporter {
     }
 
     /**
-     * 
+     *
      * @param path Path to open a channel to.
      * @throws FileNotFoundException
      */
@@ -60,7 +60,7 @@ public class LExporter {
     }
 
     /**
-     * 
+     *
      * @param size Number of zero bytes to write.
      * @throws IOException
      */
@@ -74,8 +74,12 @@ public class LExporter {
      * @param size Minimum byte size.  Output will be appended with zeros until size is met.
      * @throws java.io.IOException
      */
-    public void write(int input, int size) throws java.io.IOException {
+    public void write(int input, int size) throws IOException {
         write(Ln.toByteArray(input, size, size));
+    }
+
+    public void write(int input) throws IOException {
+	write(Ln.toByteArray(input));
     }
 
     /**
