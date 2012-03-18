@@ -38,6 +38,11 @@ class Condition extends SubShell {
 	return new Condition();
     }
 
+    @Override
+    Boolean isValid() {
+	return cond.isValid();
+    }
+
     class Cond extends SubRecord {
 
 	Operator operator;
@@ -66,6 +71,42 @@ class Condition extends SubShell {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
+	    LFlags tmp = new LFlags(Ln.toByteArray(operator.ordinal(), 1));
+	    for (int i = 3 ; i < 8 ; i++) {
+		tmp.set(i, flags.is(i));
+	    }
+	    out.write(tmp.export(),1);
+	    out.write(fluff, 3);
+
+	    if (get(CondFlag.UseGlobal)) {
+		comparisonValueForm.export(out);
+	    } else {
+		out.write(comparisonValueFloat);
+	    }
+
+	    out.write(functionIndex, 2);
+	    out.write(padding, 2);
+
+	    if (param1formF) {
+		param1form.export(out);
+	    } else {
+		out.write(param1int);
+	    }
+
+	    if (param2formF) {
+		param2form.export(out);
+	    } else {
+		out.write(param2int);
+	    }
+
+	    out.write(runType.ordinal());
+	    reference.export(out);
+
+	    if (param3formF) {
+		param3form.export(out);
+	    } else {
+		out.write(param3int);
+	    }
 	}
 
 	@Override

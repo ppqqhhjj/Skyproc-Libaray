@@ -99,12 +99,12 @@ class SubStringPointer extends SubRecord {
                     }
 
                     if (logging() && SPGlobal.debugStringPairing) {
-                        logSync("", r.toString() + " String pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
+                        logSync("", r.toString() + " " + file + " pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
                     }
 
                 } else {
                     if (logging() && SPGlobal.debugStringPairing) {
-                        logSync("", r.toString() + " String pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
+                        logSync("", r.toString() + " "  + file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
                     }
                     data.setData(0); // Invalidate data to stop export
                 }

@@ -37,12 +37,12 @@ public class MGEF extends MajorRecordDescription {
 	description.forceExport = true;
 
 	subRecords.add(MODB);
+	subRecords.add(keywords);
 	subRecords.add(DATA);
 	subRecords.add(sounds);
 	subRecords.add(description);
 	subRecords.add(ESCE);
 	subRecords.add(CONDs);
-	subRecords.add(keywords);
 	subRecords.add(OBND);
 	subRecords.add(scripts);
     }
@@ -276,7 +276,7 @@ public class MGEF extends MajorRecordDescription {
 
 	@Override
 	Boolean isValid() {
-	    return true;
+	    return !sounds.isEmpty();
 	}
 
 	@Override

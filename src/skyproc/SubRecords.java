@@ -48,14 +48,6 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
         }
     }
 
-    int getContentLength(Mod srcMod) {
-        int sum = 0;
-        for (SubRecord s : getRecords()) {
-            sum += s.getContentLength(srcMod);
-        }
-        return sum;
-    }
-
     public boolean contains(Type t) {
         return map.containsKey(t);
     }
