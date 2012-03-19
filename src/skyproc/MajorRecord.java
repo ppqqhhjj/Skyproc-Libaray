@@ -1,15 +1,19 @@
 package skyproc;
 
+import lev.LShrinkArray;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LExporter;
+import lev.LFileChannel;
+import lev.LFlags;
+import lev.Ln;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.Uninitialized;
+import skyproc.exceptions.BadRecord;
 
 /**
  * A record contained in a GRUP. These are top level records that all have
@@ -22,8 +26,8 @@ public abstract class MajorRecord extends Record implements Serializable {
     SubRecords subRecords = new SubRecords();
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
-    byte[] revision = new byte[4];
-    byte[] version = { 0x28 , 0 ,0 ,0};
+    LFlags versionInfo = new LFlags(4);
+    LFlags newFlags = new LFlags(4);
     SubString EDID = new SubString(Type.EDID, true);
     Enum exception;
 
@@ -86,8 +90,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	super.parseData(in);
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
-	revision = in.extract(4);
-	version = in.extract(4);
+	versionInfo = new LFlags(in.extract(4));
+	newFlags = new LFlags(in.extract(4));
 
 	if (isCompressed()) {
 	    majorFlags.set(18, false);
@@ -163,8 +167,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);
-	    out.write(revision, 4);
-	    out.write(version, 4);
+	    out.write(versionInfo.export(), 4);
+	    out.write(newFlags.export(), 4);
 	    subRecords.export(out, srcMod);
 	}
     }
@@ -222,7 +226,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     // Get/set methods
     /**
      * Sets the EDID of the Major Record<br><br>
-     *
+     * 
      * NOTE:  This will reassign the records formID if the new EDID matches
      * an EDID from the previous patch.
      *
@@ -328,7 +332,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     /**
      * This function creates an mask for the major record given,
      * or null if a mask type is given that isn't a major record.<br><br>
-     *
+     * 
      * To use a mask:<br>
      * 1) create one with this function<br>
      * 2) Set the flags for the desired subrecords to true.<br>

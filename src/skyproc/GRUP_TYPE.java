@@ -2,7 +2,6 @@ package skyproc;
 
 /**
  * Types of GRUP records that skyproc can currently import.
- *
  * @see SPImporter
  * @author Justin Swanson
  */
@@ -58,12 +57,4 @@ public enum GRUP_TYPE {
     KYWD,
     MGEF;
 
-    /**
-     *
-     * @param in
-     * @return
-     */
-    public static GRUP_TYPE toRecord(Enum in) {
-	return GRUP_TYPE.valueOf(in.toString());
-    }
 }

@@ -30,23 +30,9 @@ public class MGEF extends MajorRecordDescription {
     SubList<Condition> CONDs = new SubList<Condition>(new Condition());
     public ScriptPackage scripts = new ScriptPackage();
 
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param edid EDID to give the new record. Make sure it is unique.
-     */
-    public MGEF(Mod modToOriginateFrom, String edid, String name) {
-	super(modToOriginateFrom, edid);
-	this.setName(name);
-	init();
-    }
-
     MGEF() {
 	super();
-	init();
-    }
 
-    final void init() {
 	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
 	description = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
@@ -78,43 +64,43 @@ public class MGEF extends MajorRecordDescription {
     class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(4);
-	float baseCost = 0;
+	float baseCost;
 	FormID relatedID = new FormID();
-	ActorValue skillType = ActorValue.UNKNOWN;
-	ActorValue resistanceAV = ActorValue.UNKNOWN;
-	byte[] unknown = {0x00, 0x00, 0x00,(byte)0x80};
+	ActorValue skillType;
+	ActorValue resistanceAV;
+	byte[] unknown;
 	FormID lightID = new FormID();
-	float taperWeight = 0;
+	float taperWeight;
 	FormID hitShader = new FormID();
 	FormID enchantShader = new FormID();
-	int skillLevel = 0;
-	int area = 0;
-	float castingTime = 0;
-	float taperCurve = 0;
-	float taperDuration = 0;
-	float secondAVWeight = 0;
-	int effectType = 0;
-	ActorValue primaryAV = ActorValue.Health;
+	int skillLevel;
+	int area;
+	float castingTime;
+	float taperCurve;
+	float taperDuration;
+	float secondAVWeight;
+	int effectType;
+	ActorValue primaryAV;
 	FormID projectileID = new FormID();
 	FormID explosionID = new FormID();
-	CastType castType = CastType.ConstantEffect;
-	DeliveryType deliveryType = DeliveryType.Self;
-	ActorValue secondAV = ActorValue.UNKNOWN;
+	CastType castType;
+	DeliveryType deliveryType;
+	ActorValue secondAV;
 	FormID castingArt = new FormID();
 	FormID hitEffectArt = new FormID();
 	FormID impactData = new FormID();
-	float skillUsageMult = 0;
+	float skillUsageMult;
 	FormID dualCastID = new FormID();
-	float dualCastScale = 1;
+	float dualCastScale;
 	FormID enchantArtID = new FormID();
-	int nullData = 0;
-	int nullData2 = 0;
+	int nullData;
+	int nullData2;
 	FormID equipAbility = new FormID();
 	FormID imageSpaceModID = new FormID();
 	FormID perkID = new FormID();
-	SoundVolume vol = SoundVolume.Normal;
-	float scriptAIDataScore = 0;
-	float scriptAIDataDelayTime = 0;
+	SoundVolume vol;
+	float scriptAIDataScore;
+	float scriptAIDataDelayTime;
 
 	DATA() {
 	    super(Type.DATA);
@@ -182,7 +168,9 @@ public class MGEF extends MajorRecordDescription {
 	    taperCurve = in.extractFloat();
 	    taperDuration = in.extractFloat();
 	    secondAVWeight = in.extractFloat();
+	    logSync("", Ln.arrayPrintInts(in.getInts(0, 4)));
 	    effectType = in.extractInt(4);
+	    logSync("", Ln.arrayPrintInts(in.getInts(0, 4)));
 	    primaryAV = ActorValue.value(in.extractInt(4));
 	    projectileID.setInternal(in.extract(4));
 	    explosionID.setInternal(in.extract(4));
@@ -228,6 +216,7 @@ public class MGEF extends MajorRecordDescription {
 		logSync("", "  second AV weight: " + secondAVWeight);
 		logSync("", "  Effect Type: " + effectType);
 		logSync("", "  Primary AV: " + primaryAV);
+		logSync("", "  Base Cost: " + baseCost);
 		logSync("", "  Projectile : " + projectileID);
 		logSync("", "  Explosion: " + explosionID);
 		logSync("", "  Cast Type: " + castType);
@@ -244,6 +233,7 @@ public class MGEF extends MajorRecordDescription {
 		logSync("", "  Image Space Mod ID: " + imageSpaceModID);
 		logSync("", "  Perk: " + perkID);
 		logSync("", "  Volume: " + vol);
+		logSync("", "  Base Cost: " + baseCost);
 		logSync("", "  Script AI Data Score: " + scriptAIDataScore);
 		logSync("", "  Script AI Data Delay Time: " + scriptAIDataDelayTime);
 	    }
@@ -347,7 +337,6 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	class Sound {
-
 	    SoundData sound;
 	    FormID soundID = new FormID();
 	}

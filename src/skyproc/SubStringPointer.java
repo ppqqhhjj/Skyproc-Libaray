@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
-import lev.LShrinkArray;
 import lev.Ln;
+import lev.LShrinkArray;
 import skyproc.Mod.Mod_Flags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -21,11 +21,10 @@ class SubStringPointer extends SubRecord {
     SubString text;
     Files file;
     boolean forceExport = false;
-    static boolean shortNull = true;
 
     SubStringPointer(Type type, Files file) {
 	super(type);
-	data = new SubData(type, new byte[1]);
+	data = new SubData(type, 0);
 	text = new SubString(type, true);
 	this.file = file;
     }
@@ -60,7 +59,7 @@ class SubStringPointer extends SubRecord {
 		text.export(out, srcMod);
 	    }
 	} else if (forceExport) {
-	    if (data.getData().length < 4 && !shortNull) {
+	    if (data.getData().length < 4) {
 		data.setData(0, 4);
 	    }
 	    data.export(out, srcMod);
@@ -70,9 +69,6 @@ class SubStringPointer extends SubRecord {
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in);
-	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
-	}
     }
 
     void fetchStringPointers(Mod srcMod, Record r, Map<Files, LFileChannel> streams) throws IOException {
@@ -145,11 +141,7 @@ class SubStringPointer extends SubRecord {
 		return text.getContentLength(srcMod);
 	    }
 	} else {
-	    if (shortNull) {
-		return 1;
-	    } else {
-		return 4; // empty data with 4 zeros
-	    }
+	    return 4; // empty data with 4 zeros
 	}
     }
 

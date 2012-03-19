@@ -8,7 +8,10 @@ import skyproc.exceptions.BadRecord;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import lev.LExporter;
 import lev.LFileChannel;
 import lev.LFlags;
@@ -28,7 +31,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     TES4 header = new TES4();
     ModListing modInfo;
-    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<GRUP_TYPE, GRUP>(GRUP_TYPE.class);
+    Map<Type, GRUP> GRUPs = new EnumMap<Type, GRUP>(Type.class);
     GRUP<LVLN> LLists = new GRUP<LVLN>(this, new LVLN());
     GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
     GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
@@ -202,7 +205,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
 	return m;
     }
 
@@ -223,7 +226,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this, newEDID);
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
 	return m;
     }
 
@@ -251,7 +254,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(m.getTypes()[0]).addRecord(m);
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
     }
 
@@ -350,8 +353,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param grup_type Any amount of GRUPs to keep, separated by commas
      */
     public void keep(GRUP_TYPE... grup_type) {
-	ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
-	grups.addAll(Arrays.asList(grup_type));
+	ArrayList<Type> grups = new ArrayList<Type>();
+	for (GRUP_TYPE t : grup_type) {
+	    grups.add(Type.toRecord(t));
+	}
 	for (GRUP g : GRUPs.values()) {
 	    if (!grups.contains(g.getContainedType())) {
 		g.clear();
@@ -374,11 +379,13 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (grup_types.length == 0) {
 	    grup_types = GRUP_TYPE.values();
 	}
-	ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
-	grups.addAll(Arrays.asList(grup_types));
+	ArrayList<Type> grups = new ArrayList<Type>();
+	for (GRUP_TYPE t : grup_types) {
+	    grups.add(Type.toRecord(t));
+	}
 	if (!this.equals(rhs)) {
 	    mergeMasters(rhs);
-	    for (GRUP_TYPE t : GRUPs.keySet()) {
+	    for (Type t : GRUPs.keySet()) {
 		if (grups.contains(t)) {
 		    GRUPs.get(t).merge(rhs.GRUPs.get(t));
 		}
@@ -585,9 +592,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     void parseData(Type type, ByteBuffer data, Map<Type, Mask> masks) throws BadRecord, DataFormatException, BadParameter {
 	if (masks.containsKey(type)) {
-	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data, masks.get(type));
+	    GRUPs.get(type).parseData(data, masks.get(type));
 	} else {
-	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
+	    GRUPs.get(type).parseData(data);
 	}
     }
 
@@ -922,7 +929,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    HEDR.export(out, srcMod);
 	    author.export(out, srcMod);
 	    masters.export(out, srcMod);
-	    INTV.export(out, srcMod);
 	}
 
 	void addMaster(ModListing mod) {
