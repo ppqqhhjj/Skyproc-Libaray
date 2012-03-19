@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import lev.Ln;
 import lev.debug.LDebug;
 
@@ -15,10 +16,54 @@ import lev.debug.LDebug;
  */
 class SkyProcTester {
 
-    private static void normalRun() throws Exception {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws Exception {
+	setSkyProcGlobal();
 
-//	GRUP_TYPE[] types = {GRUP_TYPE.PERK};
-	GRUP_TYPE[] types = GRUP_TYPE.values();
+	try {
+
+	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
+//	    validate();
+	    testFreshNewRecord(GRUP_TYPE.SPEL);
+	    gui.finished();
+
+	} catch (Exception e) {
+	    LDebug.wrapUp();
+	    throw e;
+	}
+
+
+	LDebug.wrapUp();
+    }
+
+    private static void testFreshNewRecord(GRUP_TYPE type) throws Exception {
+
+	SPImporter importer = new SPImporter();
+	SPGlobal.logging(false);
+	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, type);
+	SPGlobal.logging(true);
+	importer.importMod(new ModListing("CKReadIn.esp"), "Validation Files/", type);
+
+	Mod patch = new Mod(new ModListing("Test.esp"));
+	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
+	patch.setAuthor("DEFAULT");
+
+	patch.header.addMaster(new ModListing("Skyrim.esm"));
+	patch.header.addMaster(new ModListing("Update.esm"));
+
+	SPEL spel = new SPEL(patch, "AV_test");
+
+	patch.export();
+
+	Ln.validateCompare(SPGlobal.pathToData + "Test.esp", "Validation Files/CKReadIn.esp", 10);
+    }
+
+    private static void validate() throws Exception {
+
+	GRUP_TYPE[] types = {GRUP_TYPE.MGEF};
+//	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
@@ -34,14 +79,6 @@ class SkyProcTester {
 	    SPGUI.progress.setStatus("Validating DONE");
 	}
 
-    }
-
-    private static void setSkyProcGlobal() {
-	SPGlobal.createGlobalLog();
-	SPGlobal.pathToData = "../";
-	SPGlobal.consistency = false;
-	LDebug.timeElapsed = true;
-	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }
 
     private static boolean test(GRUP_TYPE type) throws IOException {
@@ -69,24 +106,11 @@ class SkyProcTester {
 	return passed;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-	setSkyProcGlobal();
-
-	try {
-
-	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
-	    normalRun();
-	    gui.finished();
-
-	} catch (Exception e) {
-	    LDebug.wrapUp();
-	    throw e;
-	}
-
-
-	LDebug.wrapUp();
+    private static void setSkyProcGlobal() {
+	SPGlobal.createGlobalLog();
+	SPGlobal.pathToData = "../";
+	SPGlobal.consistency = false;
+	LDebug.timeElapsed = true;
+	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }
 }

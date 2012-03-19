@@ -1,19 +1,15 @@
 package skyproc;
 
-import lev.LShrinkArray;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LFileChannel;
-import lev.LFlags;
-import lev.Ln;
+import lev.*;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.Uninitialized;
 import skyproc.exceptions.BadRecord;
+import skyproc.exceptions.Uninitialized;
 
 /**
  * A record contained in a GRUP. These are top level records that all have
@@ -39,7 +35,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	this();
 	EDID.setString(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
-	modToOriginateFrom.addRecord(this);
+	modToOriginateFrom.addRecordSilent(this);
     }
 
     /**

@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.Mod.Mod_Flags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -19,10 +19,11 @@ class SubStringPointer extends SubRecord {
 
     SubData data;
     SubString text;
-    Files file;
+    SubStringPointer.Files file;
     boolean forceExport = false;
+    static boolean shortNull = true;
 
-    SubStringPointer(Type type, Files file) {
+    SubStringPointer(Type type, SubStringPointer.Files file) {
 	super(type);
 	data = new SubData(type, new byte[1]);
 	text = new SubString(type, true);
@@ -31,7 +32,7 @@ class SubStringPointer extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubStringPointer(type, Files.STRINGS);
+	return new SubStringPointer(type, SubStringPointer.Files.STRINGS);
     }
 
     @Override
@@ -59,7 +60,7 @@ class SubStringPointer extends SubRecord {
 		text.export(out, srcMod);
 	    }
 	} else if (forceExport) {
-	    if (data.getData().length < 4) {
+	    if (data.getData().length < 4 && !shortNull) {
 		data.setData(0, 4);
 	    }
 	    data.export(out, srcMod);
@@ -69,9 +70,12 @@ class SubStringPointer extends SubRecord {
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in);
+	if (logging()) {
+	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
+	}
     }
 
-    void fetchStringPointers(Mod srcMod, Record r, Map<Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    if (data.isValid() && streams.containsKey(file)) {
 		int index = Ln.arrayToInt(data.getData());
@@ -141,7 +145,11 @@ class SubStringPointer extends SubRecord {
 		return text.getContentLength(srcMod);
 	    }
 	} else {
-	    return 4; // empty data with 4 zeros
+	    if (shortNull) {
+		return 1;
+	    } else {
+		return 4; // empty data with 4 zeros
+	    }
 	}
     }
 

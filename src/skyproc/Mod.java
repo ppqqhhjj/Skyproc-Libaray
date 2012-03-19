@@ -274,6 +274,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
     }
 
+    final void addRecordSilent(MajorRecord m) {
+	GRUPs.get(m.getTypes()[0]).addRecordSilent(m);
+    }
+
     /**
      * Prints each GRUP in the mod to the asynchronous log.
      */

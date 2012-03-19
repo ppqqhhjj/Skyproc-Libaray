@@ -20,12 +20,12 @@ import skyproc.exceptions.NotFound;
  */
 public class SPEL extends MajorRecordDescription {
 
-    private static final Type[] type = {Type.SPEL};
-    private SubData OBND = new SubData(Type.OBND);
-    private SubForm MDOB = new SubForm(Type.MDOB);
-    private SubForm ETYP = new SubForm(Type.ETYP);
-    private SPIT SPIT = new SPIT();
-    private SubList<EFIDPackage> spellSections = new SubList<EFIDPackage>(new EFIDPackage());
+    static final Type[] type = {Type.SPEL};
+    SubData OBND = new SubData(Type.OBND);
+    SubForm MDOB = new SubForm(Type.MDOB);
+    SubForm ETYP = new SubForm(Type.ETYP);
+    SPIT SPIT = new SPIT();
+    SubList<EFIDPackage> spellSections = new SubList<EFIDPackage>(new EFIDPackage());
 
     @Override
     Type[] getTypes() {
@@ -39,6 +39,19 @@ public class SPEL extends MajorRecordDescription {
 
     SPEL() {
 	super();
+	init();
+    }
+
+    SPEL (Mod modToOriginateFrom, String edid) {
+	super(modToOriginateFrom, edid);
+	init();
+	this.revision = new byte[] {(byte) 0x13, (byte) 0x6F, 0, 0 };
+	OBND.initialize(12);
+	ETYP.getForm().setInternal(new byte[] {(byte)0x44,(byte)0x3F,(byte)0x01,(byte)0x00});
+	SPIT.valid = true;
+    }
+
+    final void init() {
 	subRecords.remove(Type.FULL);
         subRecords.remove(Type.DESC);
 
@@ -200,12 +213,12 @@ public class SPEL extends MajorRecordDescription {
     static class SPIT extends SubRecord {
 
 	private float baseCost = 0;
-	private LFlags flags;
+	private LFlags flags = new LFlags(4);
 	private int baseType = 0;
 	private float chargeTime = 0;
 	private int castType = 0;
 	private int targetType = 0;
-	private byte[] fluff1;
+	private byte[] fluff1 = new byte[4];
 	private float range = 0;
 	private boolean valid = true;
 	private SubForm perkType = new SubForm(Type.PERK);

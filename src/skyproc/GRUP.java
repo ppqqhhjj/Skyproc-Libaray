@@ -241,10 +241,13 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param item Record to add to the GRUP.
      */
     public void addRecord(T item) {
-        removeRecord(item);
         // Get Masters
         item.standardizeMasters(srcMod);
+	addRecordSilent(item);
+    }
 
+    final void addRecordSilent(T item) {
+        removeRecord(item);
         mapRecords.put(item.getForm(), item);
         listRecords.add(item);
     }
