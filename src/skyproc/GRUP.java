@@ -52,8 +52,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return An enum constant representing the type of record the GRUP
      * contains.
      */
-    public Type getContainedType() {
-        return prototype.getTypes()[0];
+    public GRUP_TYPE getContainedType() {
+        return GRUP_TYPE.toRecord(prototype.getTypes()[0]);
     }
 
     /**
