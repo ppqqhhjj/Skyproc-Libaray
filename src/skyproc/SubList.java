@@ -4,15 +4,14 @@
  */
 package skyproc;
 
-import java.util.Iterator;
-import skyproc.exceptions.BadParameter;
-import lev.LShrinkArray;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LShrinkArray;
 import lev.Ln;
+import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -227,6 +226,14 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	ArrayList<SubFormInt> out = new ArrayList<SubFormInt>(in.size());
 	for (SubFormInt s : in) {
 	    out.add(s);
+	}
+	return out;
+    }
+
+    ArrayList<T> toPublic () {
+	ArrayList<T> out = new ArrayList<T>(size());
+	for (T t : collection) {
+	    out.add(t);
 	}
 	return out;
     }

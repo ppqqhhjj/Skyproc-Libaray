@@ -352,22 +352,6 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
-    public enum CastType {
-
-	ConstantEffect,
-	FireAndForget,
-	Concentration
-    }
-
-    public enum DeliveryType {
-
-	Self,
-	Touch,
-	Aimed,
-	TargetActor,
-	TargetLocation
-    }
-
     public enum SpellEffectFlag {
 
 	Hostile(0),

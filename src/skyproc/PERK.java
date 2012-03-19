@@ -283,7 +283,7 @@ public class PERK extends MajorRecordDescription {
 
         private static Type[] types = {Type.PRKC, Type.CTDA, Type.CIS1, Type.CIS2};
         SubData PRKC = new SubData(Type.PRKC);
-        SubList<CTDApackage> CTDAs = new SubList<CTDApackage>(new CTDApackage());
+        SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
 
         PRKCpackage() {
             super(types);
@@ -338,74 +338,6 @@ public class PERK extends MajorRecordDescription {
         int getContentLength(Mod srcMod) {
             return PRKC.getTotalLength(srcMod)
                     + CTDAs.getTotalLength(srcMod);
-        }
-    }
-
-    static class CTDApackage extends SubRecord {
-
-        private static Type[] types = {Type.CTDA, Type.CIS1, Type.CIS2};
-        SubData CTDA = new SubData(Type.CTDA);
-        SubString CIS1 = new SubString(Type.CIS1, true);
-        SubString CIS2 = new SubString(Type.CIS2, true);
-
-        CTDApackage() {
-            super(types);
-        }
-
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            switch (getNextType(in)) {
-                case CTDA:
-                    CTDA.parseData(in);
-                    break;
-                case CIS1:
-                    CIS1.parseData(in);
-                    break;
-                case CIS2:
-                    CIS2.parseData(in);
-                    break;
-            }
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            CTDA.export(out, srcMod);
-            CIS1.export(out, srcMod);
-            CIS2.export(out, srcMod);
-        }
-
-        @Override
-        int getSizeLength() {
-            return 0;
-        }
-
-        @Override
-        int getHeaderLength() {
-            return 0;
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            return new CTDApackage();
-        }
-
-        @Override
-        public void clear() {
-            CTDA.clear();
-            CIS1.clear();
-            CIS2.clear();
-        }
-
-        @Override
-         Boolean isValid() {
-            return CTDA.isValid();
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            return CTDA.getTotalLength(srcMod)
-                    + CIS1.getTotalLength(srcMod)
-                    + CIS2.getTotalLength(srcMod);
         }
     }
 

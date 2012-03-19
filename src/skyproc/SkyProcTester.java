@@ -25,8 +25,8 @@ class SkyProcTester {
 	try {
 
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
-//	    validate();
-	    testFreshNewRecord(GRUP_TYPE.SPEL);
+	    validate();
+//	    testFreshNewRecord(GRUP_TYPE.SPEL);
 	    gui.finished();
 
 	} catch (Exception e) {
@@ -62,7 +62,9 @@ class SkyProcTester {
 
     private static void validate() throws Exception {
 
-	GRUP_TYPE[] types = {GRUP_TYPE.MGEF};
+	SubStringPointer.shortNull = false;
+
+	GRUP_TYPE[] types = {GRUP_TYPE.SPEL};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();

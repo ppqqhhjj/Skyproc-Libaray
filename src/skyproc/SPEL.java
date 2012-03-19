@@ -5,11 +5,11 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.NotFound;
@@ -25,7 +25,7 @@ public class SPEL extends MajorRecordDescription {
     SubForm MDOB = new SubForm(Type.MDOB);
     SubForm ETYP = new SubForm(Type.ETYP);
     SPIT SPIT = new SPIT();
-    SubList<EFIDPackage> spellSections = new SubList<EFIDPackage>(new EFIDPackage());
+    SubList<MagicEffectRef> spellSections = new SubList<MagicEffectRef>(new MagicEffectRef());
 
     @Override
     Type[] getTypes() {
@@ -42,18 +42,18 @@ public class SPEL extends MajorRecordDescription {
 	init();
     }
 
-    public SPEL (Mod modToOriginateFrom, String edid) {
+    public SPEL(Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	init();
-	this.revision = new byte[] {(byte) 0x13, (byte) 0x6F, 0, 0 };
+	this.revision = new byte[]{(byte) 0x13, (byte) 0x6F, 0, 0};
 	OBND.initialize(12);
-	ETYP.getForm().setInternal(new byte[] {(byte)0x44,(byte)0x3F,(byte)0x01,(byte)0x00});
+	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	SPIT.valid = true;
     }
 
     final void init() {
 	subRecords.remove(Type.FULL);
-        subRecords.remove(Type.DESC);
+	subRecords.remove(Type.DESC);
 
 	subRecords.add(OBND);
 	subRecords.add(FULL);
@@ -70,155 +70,15 @@ public class SPEL extends MajorRecordDescription {
 	spellSections.standardizeMasters(srcMod);
     }
 
-    static class EFIDPackage extends SubRecord {
-
-	private static Type[] types = {Type.EFID, Type.EFIT, Type.CTDA, Type.CIS1, Type.CIS2};
-	SubForm EFID = new SubForm(Type.EFID);
-	SubData EFIT = new SubData(Type.EFIT);
-	SubList<SPEL.CTDApackage> CTDAs = new SubList<SPEL.CTDApackage>(new SPEL.CTDApackage());
-
-	EFIDPackage() {
-	    super(types);
-	}
-
-	EFIDPackage(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord {
-	    this();
-	    parseData(in);
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    EFID.export(out, srcMod);
-	    EFIT.export(out, srcMod);
-	    CTDAs.export(out, srcMod);
-	}
-
-	@Override
-	void parseData(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord {
-	    switch (getNextType(in)) {
-		case EFID:
-		    EFID.parseData(in);
-		    break;
-		case EFIT:
-		    EFIT.parseData(in);
-		    break;
-		default:
-		    CTDAs.parseData(in);
-		    break;
-	    }
-	}
-
-	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new SPEL.EFIDPackage();
-	}
-
-	@Override
-	public void clear() {
-	    EFID.clear();
-	    EFIT.clear();
-	    CTDAs.clear();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return EFID.isValid() && EFIT.isValid();
-	}
-
-	@Override
-	int getHeaderLength() {
-	    return 0;
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    return EFID.getTotalLength(srcMod) + EFIT.getTotalLength(srcMod)
-		    + CTDAs.getTotalLength(srcMod);
-	}
-    }
-
-    static class CTDApackage extends SubRecord {
-
-	private static Type[] types = {Type.CTDA, Type.CIS1, Type.CIS2};
-	SubData CTDA = new SubData(Type.CTDA);
-	SubString CIS1 = new SubString(Type.CIS1, true);
-	SubString CIS2 = new SubString(Type.CIS2, true);
-
-	CTDApackage() {
-	    super(types);
-	}
-
-	@Override
-	void parseData(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord {
-	    switch (getNextType(in)) {
-		case CTDA:
-		    CTDA.parseData(in);
-		    break;
-		case CIS1:
-		    CIS1.parseData(in);
-		    break;
-		case CIS2:
-		    CIS2.parseData(in);
-		    break;
-	    }
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    CTDA.export(out, srcMod);
-	    CIS1.export(out, srcMod);
-	    CIS2.export(out, srcMod);
-	}
-
-	@Override
-	int getSizeLength() {
-	    return 0;
-	}
-
-	@Override
-	int getHeaderLength() {
-	    return 0;
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new SPEL.CTDApackage();
-	}
-
-	@Override
-	public void clear() {
-	    CTDA.clear();
-	    CIS1.clear();
-	    CIS2.clear();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return CTDA.isValid();
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    return CTDA.getTotalLength(srcMod)
-		    + CIS1.getTotalLength(srcMod)
-		    + CIS2.getTotalLength(srcMod);
-	}
-    }
-
     static class SPIT extends SubRecord {
 
-	private float baseCost = 0;
+	private int baseCost = 0;
 	private LFlags flags = new LFlags(4);
 	private int baseType = 0;
 	private float chargeTime = 0;
-	private int castType = 0;
-	private int targetType = 0;
-	private byte[] fluff1 = new byte[4];
+	private CastType castType = CastType.ConstantEffect;
+	private DeliveryType targetType = DeliveryType.Self;
+	private float castDuration = 0;
 	private float range = 0;
 	private boolean valid = true;
 	private SubForm perkType = new SubForm(Type.PERK);
@@ -242,22 +102,22 @@ public class SPEL extends MajorRecordDescription {
 	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 
-	    baseCost = in.extractFloat();
+	    baseCost = in.extractInt(4);
 	    flags = new LFlags(in.extract(4));
 	    baseType = in.extractInt(4);
 	    chargeTime = in.extractFloat();
-	    castType = in.extractInt(4);
-	    targetType = in.extractInt(4);
-	    fluff1 = in.extract(4);
+	    castType = CastType.values()[in.extractInt(4)];
+	    targetType = DeliveryType.values()[in.extractInt(4)];
+	    castDuration = in.extractFloat();
 	    range = in.extractFloat();
 	    perkType.setForm(in.extract(4));
 
 	    if (logging()) {
 		logSync("", "SPIT record: ");
 		logSync("", "  " + "Base Spell Cost: " + baseCost + ", flags: " + flags
-			+", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);
+			+ ", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);
 		logSync("", "  " + "cast type: " + castType + ", targetType: " + targetType
-			+ ", fluff: " + Ln.printHex(fluff1, true, false)
+			+ ", Cast Duration: " + castDuration
 			+ ", Spell Range: " + range + ", Perk for Spell: " + perkType.print());
 	    }
 
@@ -269,12 +129,12 @@ public class SPEL extends MajorRecordDescription {
 	    super.export(out, srcMod);
 	    if (isValid()) {
 		out.write(baseCost);
-		out.write(flags.export(),4);
+		out.write(flags.export(), 4);
 		out.write(baseType);
 		out.write(chargeTime);
-		out.write(castType);
-		out.write(targetType);
-		out.write(fluff1, 4);
+		out.write(castType.ordinal());
+		out.write(targetType.ordinal());
+		out.write(castDuration);
 		out.write(range);
 		out.write(perkType.getFormArray(true), 4);
 	    }
@@ -289,11 +149,11 @@ public class SPEL extends MajorRecordDescription {
 	    return valid;
 	}
 
-        @Override
-        void standardizeMasters(Mod srcMod) {
-            super.standardizeMasters(srcMod);
-            perkType.standardizeMasters(srcMod);
-        }
+	@Override
+	void standardizeMasters(Mod srcMod) {
+	    super.standardizeMasters(srcMod);
+	    perkType.standardizeMasters(srcMod);
+	}
 
 	@Override
 	int getContentLength(Mod srcMod) {
@@ -305,23 +165,161 @@ public class SPEL extends MajorRecordDescription {
 	}
     }
 
+    public enum SPELFlag {
+
+	ManualCostCalculation(0),
+	PCStartSpell(17),
+	AreaEffectIgnoresLOS(19),
+	IgnoreResistance(20),
+	NoAbsorbOrReflect(21),
+	NoDualCastModification(23);
+	int value;
+
+	SPELFlag(int valuein) {
+	    value = valuein;
+	}
+    }
+
+    public enum SPELType {
+
+	Spell(0),
+	Disease(1),
+	Power(2),
+	LesserPower(3),
+	Ability(4),
+	Addition(10),
+	Voice(11),
+	UNKNOWN(-1);
+	int value;
+
+	SPELType(int valuein) {
+	    value = valuein;
+	}
+
+	static SPELType value(int value) {
+	    for (SPELType s : SPELType.values()) {
+		if (s.value == value) {
+		    return s;
+		}
+	    }
+	    return UNKNOWN;
+	}
+    }
+
     // Get Set functions
+    public void setInventoryModel(FormID invModel) {
+	MDOB.setForm(invModel);
+    }
+
+    public FormID getInventoryModel() {
+	return MDOB.getForm();
+    }
+
+    public void setEquipSlot(FormID equipType) {
+	ETYP.setForm(equipType);
+    }
+
+    public FormID getEquipSlot() {
+	return ETYP.getForm();
+    }
+
+    public void setBaseCost(int baseCost) {
+	SPIT.baseCost = baseCost;
+    }
+
+    public int getBaseCost() {
+	return SPIT.baseCost;
+    }
+
+    public void set(SPELFlag flag, boolean on) {
+	SPIT.flags.set(flag.value, on);
+    }
+
+    public boolean get(SPELFlag flag) {
+	return SPIT.flags.is(flag.value);
+    }
+
+    public void setSpellType(SPELType type) {
+	SPIT.baseType = type.value;
+    }
+
+    public SPELType getSpellType() {
+	return SPELType.value(SPIT.baseType);
+    }
+
+    public void setChargeTime (float chargeTime) {
+	SPIT.chargeTime = chargeTime;
+    }
+
+    public float getChargeTime () {
+	return SPIT.chargeTime;
+    }
+
+    public void setCastType (CastType type) {
+	SPIT.castType = type;
+    }
+
+    public CastType getCastType () {
+	return SPIT.castType;
+    }
+
+    public void setDeliveryType (DeliveryType type) {
+	SPIT.targetType = type;
+    }
+
+    public DeliveryType getDeliveryType () {
+	return SPIT.targetType;
+    }
+
+    public void setCastDuration (float duration) {
+	SPIT.castDuration = duration;
+    }
+
+    public float getCastDuration () {
+	return SPIT.castDuration;
+    }
+
+    public void setRange (float range) {
+	SPIT.range = range;
+    }
+
+    public float getRange () {
+	return SPIT.range;
+    }
+
     /**
      *
      * @return The PERK ref associated with the SPEL.
      */
     public FormID getPerkRef() {
-        return SPIT.perkType.getForm();
+	return SPIT.perkType.getForm();
     }
 
     /**
      *
      * @param perkRef FormID to set the SPELs PERK ref to.
-     * @throws NotFound This functionality to come.  Skyproc does NOT confirm
-     * that the FormID associated truly points to a correct record.  You will have to
-     * confirm the accuracy yourself for now.
+     * @throws NotFound This functionality to come. Skyproc does NOT confirm
+     * that the FormID associated truly points to a correct record. You will
+     * have to confirm the accuracy yourself for now.
      */
-    public void setPerkRef (FormID perkRef) throws NotFound {
-        SPIT.perkType.setForm(perkRef);
+    public void setPerkRef(FormID perkRef) throws NotFound {
+	SPIT.perkType.setForm(perkRef);
     }
+
+    public ArrayList<MagicEffectRef> getMagicEffects () {
+	return spellSections.toPublic();
+    }
+
+    public void removeMagicEffect(MagicEffectRef magicEffect) {
+	spellSections.remove(magicEffect);
+    }
+
+    public void addMagicEffect(MagicEffectRef magicEffect) {
+	spellSections.add(magicEffect);
+    }
+
+    public void clearMagicEffects () {
+	spellSections.clear();
+    }
+
 }

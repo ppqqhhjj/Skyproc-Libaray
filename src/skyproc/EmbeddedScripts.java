@@ -81,6 +81,8 @@ class EmbeddedScripts {
 	log.close();
     }
 
+
+    // NOTE:  List is NOT 100% correct.  Needs manual CK checking for each.  To be done later.
     static void init() {
 	scripts = new TreeMap<Integer, Script>();
 	scripts.put(0, new Script("GetWantBlocking", 0));
@@ -712,7 +714,7 @@ class EmbeddedScripts {
 	scripts.put(626, new Script("IsLocAliasLoaded", 626, true));
 	scripts.put(627, new Script("IsDualCasting", 627));
 	scripts.put(628, new Script("DualCast", 628, true, false, true));
-	scripts.put(629, new Script("GetVMQuestVariable", 629, false, true, false, false));
+	scripts.put(629, new Script("GetVMQuestVariable", 629, true, false));
 	scripts.put(630, new Script("GetVMScriptVariable", 630, true, true, false, false));
 	scripts.put(631, new Script("IsEnteringInteractionQuick", 631));
 	scripts.put(632, new Script("IsCasting", 632));
