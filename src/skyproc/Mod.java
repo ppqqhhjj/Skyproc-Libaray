@@ -1,5 +1,6 @@
 package skyproc;
 
+import java.io.File;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
@@ -69,6 +70,21 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     Mod(ModListing info, boolean temp) {
 	init(info);
+    }
+
+    void deleteStringsFiles() {
+	File STRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+	File DLSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+	File ILSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+	if (STRINGS.exists()) {
+	    STRINGS.delete();
+	}
+	if (DLSTRINGS.exists()) {
+	    DLSTRINGS.delete();
+	}
+	if (ILSTRINGS.exists()) {
+	    ILSTRINGS.delete();
+	}
     }
 
     final void init(ModListing info) {
@@ -529,6 +545,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
 	    SPGUI.progress.incrementBar();
+	} else {
+	    deleteStringsFiles();
 	}
 	out.close();
 	SPGUI.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
@@ -552,6 +570,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return list.indexOf(in) + 1;  // To prevent indexing starting at 0
     }
 
+    String genStringsPath(SubStringPointer.Files file) {
+	return SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file;
+    }
+
     void exportStringsFile(ArrayList<String> list, SubStringPointer.Files file) throws FileNotFoundException, IOException {
 	int stringLength = 0;
 	for (String s : list) {
@@ -559,7 +581,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 	}
 	int outLength = stringLength + 8 * list.size() + 8;
-	LExporter out = new LExporter(SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file);
+	LExporter out = new LExporter(genStringsPath(file));
 
 	out.write(list.size());
 	out.write(stringLength);

@@ -6,14 +6,11 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -130,7 +127,6 @@ public class ScriptPackage extends SubRecord {
             for (ScriptProperty p : properties) {
                 p.export(out, srcMod);
             }
-//            out.write(rest, 0);
         }
 
         void standardizeMasters(Mod srcMod) {
@@ -220,7 +216,7 @@ public class ScriptPackage extends SubRecord {
     static class ScriptProperty extends Record {
 
         StringNonNull name = new StringNonNull();
-        int type = 0;
+        PropType type = PropType.Unknown;
         int unknown = 1;
         int size = 0;  // 0 unless it's a string property, in which case + 2
         byte[] data;
@@ -236,20 +232,20 @@ public class ScriptPackage extends SubRecord {
 
         ScriptProperty(String name, boolean b) {
             this(name);
-            type = ScriptPropType.Boolean.ordinal();
+            type = PropType.Boolean;
             data = new byte[1];
             data[0] = b ? (byte)1 : 0;
         }
 
         ScriptProperty(String name, int in) {
             this(name);
-            type = ScriptPropType.Integer.ordinal();
+            type = PropType.Integer;
             data = Ln.toByteArray(in);
         }
 
         ScriptProperty(String name, FormID id) {
             this(name);
-            type = ScriptPropType.FormID.ordinal();
+            type = PropType.FormID;
             this.id = id;
             data = new byte[4];
             data[2] = -1;
@@ -258,7 +254,7 @@ public class ScriptPackage extends SubRecord {
 
         ScriptProperty(String name, float in) {
             this(name);
-            type = ScriptPropType.Float.ordinal();
+            type = PropType.Float;
             data = Ln.toByteArray(Float.floatToIntBits(in));
         }
 
@@ -273,27 +269,27 @@ public class ScriptPackage extends SubRecord {
         @Override
         final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             name.set(in.extractString(in.extractInt(2)));
-            type = in.extractInt(1);
+            type = PropType.values()[in.extractInt(1)];
             unknown = in.extractInt(1);
             if (logging()) {
                 logSync("VMAD", "    Property " + name + " with type " + type + ", unknown: " + unknown);
             }
             switch (type) {
-                case 1:  // type1 object reference?
+                case FormID:
                     data = in.extract(4);
                     id.setInternal(in.extract(4));
                     break;
-                case 2:  // String
+                case String:
                     data = in.extract(in.extractInt(2));
                     size += 2;
                     break;
-                case 3:  // int32
+                case Integer:
                     data = in.extract(4);
                     break;
-                case 4:  // float
+                case Float:
                     data = in.extract(4);
                     break;
-                case 5:  // bool
+                case Boolean:
                     data = in.extract(1);
                     break;
                 default:
@@ -303,7 +299,7 @@ public class ScriptPackage extends SubRecord {
                     }
                     in.extractInts(1000);  // break extraction to exclude NPC from database
             }
-            if (logging() && type != 2) {
+            if (logging() && type != PropType.String) {
                 logSync("VMAD", "      Data: " + Ln.printHex(data, true, false));
             } else if (logging()) {
                 logSync("VMAD", "      Data: " + Ln.arrayToString(data));
@@ -313,15 +309,15 @@ public class ScriptPackage extends SubRecord {
         @Override
         void export(LExporter out, Mod srcMod) throws IOException {
             name.export(out, srcMod);
-            out.write(type, 1);
+            out.write(type.ordinal(), 1);
             out.write(unknown, 1);
             switch (type) {
-                case 2:
+                case String:
                     out.write(data.length, 2);
                     break;
             }
             out.write(data, 0);
-            if (type == 1) {
+            if (type == PropType.FormID) {
                 id.export(out);
             }
         }
@@ -369,7 +365,7 @@ public class ScriptPackage extends SubRecord {
         @Override
         int getContentLength(Mod srcMod) {
             int out = name.getTotalLength(srcMod) + 2;
-            if (type == 1) {
+            if (type == PropType.FormID) {
                 out += id.getContentLength();
             }
             return out + data.length + size;
@@ -397,14 +393,24 @@ public class ScriptPackage extends SubRecord {
             return hash;
         }
 
-        enum ScriptPropType {
+        enum PropType {
 
             Unknown,
             FormID,
             String,
             Integer,
             Float,
-            Boolean
+            Boolean,
+	    UNKNOWN6,
+	    UNKNOWN7,
+	    UNKNOWN8,
+	    UNKNOWN9,
+	    UNKNOWN0,
+	    FormIDArr,
+	    StringArr,
+	    IntegerArr,
+	    FloatArr,
+	    BooleanArr;
         }
     }
 

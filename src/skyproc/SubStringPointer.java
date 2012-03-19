@@ -24,7 +24,7 @@ class SubStringPointer extends SubRecord {
 
     SubStringPointer(Type type, Files file) {
 	super(type);
-	data = new SubData(type, 0);
+	data = new SubData(type, new byte[1]);
 	text = new SubString(type, true);
 	this.file = file;
     }
