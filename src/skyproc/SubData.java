@@ -70,7 +70,7 @@ class SubData extends SubRecord {
     }
 
     void setData(int data) {
-        setData(data, 0);
+        setData(data, 4);
     }
 
     void setData(int data, int size) {

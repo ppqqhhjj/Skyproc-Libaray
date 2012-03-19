@@ -318,6 +318,10 @@ public class SPEL extends MajorRecordDescription {
 	spellSections.add(magicEffect);
     }
 
+    public void addMagicEffect(MGEF magicEffect) {
+	spellSections.add(new MagicEffectRef(magicEffect.getForm()));
+    }
+
     public void clearMagicEffects () {
 	spellSections.clear();
     }

@@ -119,7 +119,7 @@ class SubStringPointer extends SubRecord {
 			    logSync("", r.toString() + " " + file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
 			}
 		    }
-		    data.setData(0); // Invalidate data to stop export
+		    data.setData(0,1); // Invalidate data to stop export
 		}
 	    }
 	} else {
