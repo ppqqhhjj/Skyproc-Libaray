@@ -42,7 +42,7 @@ public class SPEL extends MajorRecordDescription {
 	init();
     }
 
-    SPEL (Mod modToOriginateFrom, String edid) {
+    public SPEL (Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	init();
 	this.revision = new byte[] {(byte) 0x13, (byte) 0x6F, 0, 0 };
