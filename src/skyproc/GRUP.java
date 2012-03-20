@@ -1,19 +1,18 @@
 package skyproc;
 
-import lev.LShrinkArray;
-import java.util.Iterator;
-import skyproc.exceptions.BadParameter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
+import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
-import skyproc.exceptions.NotFound;
+import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -24,27 +23,28 @@ import skyproc.exceptions.BadRecord;
  */
 public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
+    boolean addedOrder = true;
     private byte[] grupType = new byte[4];
-    private byte[] dateStamp = new byte[4];
+    private byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
     private byte[] version = new byte[4];
     ArrayList<T> listRecords = new ArrayList<T>();
-    Map<FormID, T> mapRecords = new HashMap<FormID, T>();
+    Map<FormID, T> mapRecords = new TreeMap<FormID, T>();
     Mod srcMod;
     T prototype;
     private static final Type[] type = {Type.GRUP};
 
     GRUP(Mod srcMod_, T prototype) {
-        srcMod = srcMod_;
-        this.prototype = prototype;
+	srcMod = srcMod_;
+	this.prototype = prototype;
     }
 
     void parseData(ByteBuffer in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-        parseData(new LShrinkArray(in), mask);
+	parseData(new LShrinkArray(in), mask);
     }
 
     @Override
     Type[] getTypes() {
-        return type;
+	return type;
     }
 
     /**
@@ -52,8 +52,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return An enum constant representing the type of record the GRUP
      * contains.
      */
-    public Type getContainedType() {
-        return prototype.getTypes()[0];
+    public GRUP_TYPE getContainedType() {
+	return GRUP_TYPE.toRecord(prototype.getTypes()[0]);
     }
 
     /**
@@ -62,7 +62,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     public String toString() {
-        return srcMod.getName() + " - " + getContainedType().toString() + " GRUP";
+	return srcMod.getName() + " - " + getContainedType().toString() + " GRUP";
     }
 
     /**
@@ -71,7 +71,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     Boolean isValid() {
-        return !isEmpty();
+	return !isEmpty();
     }
 
     /**
@@ -79,52 +79,52 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return Returns true if GRUP contains no records.
      */
     public Boolean isEmpty() {
-        return mapRecords.isEmpty();
+	return mapRecords.isEmpty();
     }
 
     @Override
     final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        parseData(in, null);
+	parseData(in, null);
     }
 
     void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-        super.parseData(in);
-        in.skip(4); // GRUP type
-        grupType = in.extract(4);
-        dateStamp = in.extract(4);
-        version = in.extract(4);
-        while (!in.isEmpty()) {
-            if (logging()) {
-                logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
-            }
-            T item = (T) prototype.getNew();
-            try {
+	super.parseData(in);
+	in.skip(4); // GRUP type
+	grupType = in.extract(4);
+	dateStamp = in.extract(4);
+	version = in.extract(4);
+	while (!in.isEmpty()) {
+	    if (logging()) {
+		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
+	    }
+	    T item = (T) prototype.getNew();
+	    try {
 
-                item.parseData(item.extractRecordData(in), mask);
+		item.parseData(item.extractRecordData(in), mask);
 
-                // Customizable middle stage for specialized GRUPs
-                parseDataHelper(item);
+		// Customizable middle stage for specialized GRUPs
+		parseDataHelper(item);
 
-                // Add to GRUP
-                if (item.isValid()) {
-                    addRecord(item);
-                } else if (logging()) {
-                    logSync(toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
-                }
+		// Add to GRUP
+		if (item.isValid()) {
+		    addRecord(item);
+		} else if (logging()) {
+		    logSync(toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
+		}
 
-                if (logging()) {
-                    logSync(toString(), "=============== DONE ==============");
-                }
-            } catch (java.nio.BufferUnderflowException e) {
-                handleBadRecord(item, e.toString());
-            } catch (BadRecord e) {
-                handleBadRecord(item, e.toString());
-            }
-            flush();
-        }
-        if (logging()) {
-            logSync(toString(), "Data exhausted");
-        }
+		if (logging()) {
+		    logSync(toString(), "=============== DONE ==============");
+		}
+	    } catch (java.nio.BufferUnderflowException e) {
+		handleBadRecord(item, e.toString());
+	    } catch (BadRecord e) {
+		handleBadRecord(item, e.toString());
+	    }
+	    flush();
+	}
+	if (logging()) {
+	    logSync(toString(), "Data exhausted");
+	}
     }
 
     void parseDataHelper(T item) {
@@ -137,53 +137,53 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     public String print() {
-        if (!isEmpty()) {
-            logSync(toString(), "=======================================================================");
-            logSync(toString(), "========================= Printing " + getContainedType().toString() + "s =============================");
-            logSync(toString(), "=======================================================================");
-            for (T t : mapRecords.values()) {
-                t.toString();
-                flush();
-            }
-        }
-        return "";
+	if (!isEmpty()) {
+	    logSync(toString(), "=======================================================================");
+	    logSync(toString(), "========================= Printing " + getContainedType().toString() + "s =============================");
+	    logSync(toString(), "=======================================================================");
+	    for (T t : mapRecords.values()) {
+		t.toString();
+		flush();
+	    }
+	}
+	return "";
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-        if (isValid()) {
-            super.export(out, srcMod);
-            out.write(this.getContainedType().toString());
-            out.write(grupType, 4);
-            out.write(dateStamp, 4);
-            out.write(version, 4);
-            if (logging()) {
-                logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
-            }
-            for (MajorRecord t : this) {
-                t.export(out, srcMod);
-                SPGUI.progress.incrementBar();
-            }
-        }
+	if (isValid()) {
+	    super.export(out, srcMod);
+	    out.write(this.getContainedType().toString());
+	    out.write(grupType, 4);
+	    out.write(dateStamp, 4);
+	    out.write(version, 4);
+	    if (logging()) {
+		logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
+	    }
+	    for (MajorRecord t : this) {
+		t.export(out, srcMod);
+		SPGUI.progress.incrementBar();
+	    }
+	}
     }
 
     void standardizeMasters() {
-        for (T item : listRecords) {
-            item.standardizeMasters(srcMod);
-        }
+	for (T item : listRecords) {
+	    item.standardizeMasters(srcMod);
+	}
     }
 
     void fetchExceptions(SPDatabase database) {
-        for (T item : mapRecords.values()) {
-            item.fetchException(database);
-            SPGUI.progress.incrementBar();
-        }
+	for (T item : mapRecords.values()) {
+	    item.fetchException(database);
+	    SPGUI.progress.incrementBar();
+	}
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
-        for (MajorRecord r : listRecords) {
-            r.fetchStringPointers(srcMod, streams);
-        }
+	for (MajorRecord r : listRecords) {
+	    r.fetchStringPointers(srcMod, streams);
+	}
     }
 
     /**
@@ -191,7 +191,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return The number of contained records.
      */
     public int numRecords() {
-        return mapRecords.size();
+	return mapRecords.size();
     }
 
     /**
@@ -202,13 +202,13 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * was contained.
      */
     public boolean removeRecord(FormID id) {
-        if (mapRecords.containsKey(id)) {
-            listRecords.remove(mapRecords.get(id));
-            mapRecords.remove(id);
-            return true;
-        } else {
-            return false;
-        }
+	if (mapRecords.containsKey(id)) {
+	    listRecords.remove(mapRecords.get(id));
+	    mapRecords.remove(id);
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     /**
@@ -219,19 +219,19 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * was contained.
      */
     public boolean removeRecord(T item) {
-        return removeRecord(item.getForm());
+	return removeRecord(item.getForm());
     }
 
     void handleBadRecord(MajorRecord r, String reason) {
-        if (logging()) {
-            if (r.isValid()) {
-                logSync(toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
-                logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
-            } else {
-                logSync(toString(), "Caught a bad record, reason:" + reason);
-                logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);
-            }
-        }
+	if (logging()) {
+	    if (r.isValid()) {
+		logSync(toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
+		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
+	    } else {
+		logSync(toString(), "Caught a bad record, reason:" + reason);
+		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);
+	    }
+	}
     }
 
     /**
@@ -241,19 +241,19 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param item Record to add to the GRUP.
      */
     public void addRecord(T item) {
-        // Get Masters
-        item.standardizeMasters(srcMod);
+	// Get Masters
+	item.standardizeMasters(srcMod);
 	addRecordSilent(item);
     }
 
     final void addRecordSilent(T item) {
-        removeRecord(item);
-        mapRecords.put(item.getForm(), item);
-        listRecords.add(item);
+	removeRecord(item);
+	mapRecords.put(item.getForm(), item);
+	listRecords.add(item);
     }
 
     void addRecord(Object item) {
-        addRecord((T) item);
+	addRecord((T) item);
     }
 
     /**
@@ -262,7 +262,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return Returns true if GRUP contains a record with id.
      */
     public Boolean contains(FormID id) {
-        return mapRecords.containsKey(id);
+	return mapRecords.containsKey(id);
     }
 
     /**
@@ -271,7 +271,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return Returns true if GRUP contains a record with FormID == id.
      */
     public Boolean contains(T item) {
-        return contains(item.getForm());
+	return contains(item.getForm());
     }
 
     /**
@@ -280,20 +280,20 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return Major Record with FormID == id.
      */
     public MajorRecord get(FormID id) {
-        return mapRecords.get(id);
+	return mapRecords.get(id);
     }
 
     /**
      * Deletes all records from the GRUP.
      */
     public void clear() {
-        listRecords.clear();
-        mapRecords.clear();
+	listRecords.clear();
+	mapRecords.clear();
     }
 
     @Override
     Record getNew() {
-        throw new UnsupportedOperationException("Not supported yet.");
+	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
@@ -303,41 +303,41 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param rhs GRUP to copy records from.
      */
     public void merge(GRUP<T> rhs) {
-        if (logging() && SPGlobal.debugModMerge) {
-            log(toString(), "Size before: " + numRecords());
-        }
-        for (MajorRecord item : rhs) {
-            if (logging() && SPGlobal.debugModMerge) {
-                if (contains(item.getForm())) {
-                    log(toString(), "Replacing record " + item.toString() + " with one from " + rhs.toString());
-                } else {
-                    log(toString(), "Adding record " + item.toString());
-                }
-            }
-            addRecord(item);
-        }
-        if (logging() && SPGlobal.debugModMerge) {
-            log(toString(), "Size after: " + numRecords());
-        }
+	if (logging() && SPGlobal.debugModMerge) {
+	    log(toString(), "Size before: " + numRecords());
+	}
+	for (MajorRecord item : rhs) {
+	    if (logging() && SPGlobal.debugModMerge) {
+		if (contains(item.getForm())) {
+		    log(toString(), "Replacing record " + item.toString() + " with one from " + rhs.toString());
+		} else {
+		    log(toString(), "Adding record " + item.toString());
+		}
+	    }
+	    addRecord(item);
+	}
+	if (logging() && SPGlobal.debugModMerge) {
+	    log(toString(), "Size after: " + numRecords());
+	}
     }
 
     @Override
     int getFluffLength() {
-        return 16;
+	return 16;
     }
 
     @Override
     int getSizeLength() {
-        return 4;
+	return 4;
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        int length = getHeaderLength();
-        for (T t : listRecords) {
-            length += t.getTotalLength(srcMod);
-        }
-        return length;
+	int length = getHeaderLength();
+	for (T t : listRecords) {
+	    length += t.getTotalLength(srcMod);
+	}
+	return length;
     }
 
     /**
@@ -347,8 +347,12 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        ArrayList<T> temp = new ArrayList<T>();
-        temp.addAll(listRecords);
-        return temp.iterator();
+	ArrayList<T> temp = new ArrayList<T>();
+	if (addedOrder) {
+	    temp.addAll(listRecords);
+	} else {
+	    temp.addAll(mapRecords.values());
+	}
+	return temp.iterator();
     }
 }

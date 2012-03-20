@@ -1,25 +1,16 @@
 package skyproc;
 
 import java.io.File;
-import java.util.EnumMap;
-import java.util.Iterator;
-import java.util.zip.DataFormatException;
-import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.BadRecord;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
-import lev.LExporter;
-import lev.LFileChannel;
-import lev.LFlags;
-import lev.Ln;
-import lev.LShrinkArray;
+import java.util.*;
+import java.util.zip.DataFormatException;
+import lev.*;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  * A mod is a collection of GRUPs which contain records. Mods are used to create
@@ -32,20 +23,20 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     TES4 header = new TES4();
     ModListing modInfo;
-    Map<Type, GRUP> GRUPs = new EnumMap<Type, GRUP>(Type.class);
-    GRUP<LVLN> LLists = new GRUP<LVLN>(this, new LVLN());
-    GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
-    GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
-    GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
-    GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
-    GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
-    GRUP<ARMO> armors = new GRUP<ARMO>(this, new ARMO());
-    GRUP<ARMA> armatures = new GRUP<ARMA>(this, new ARMA());
-    GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
-    GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
+    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<GRUP_TYPE, GRUP>(GRUP_TYPE.class);
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
-    GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
+    GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
+    GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
     GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
+    GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
+    GRUP<ARMO> armors = new GRUP<ARMO>(this, new ARMO());
+    GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
+    GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
+    GRUP<LVLN> LLists = new GRUP<LVLN>(this, new LVLN());
+    GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
+    GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
+    GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
+    GRUP<ARMA> armatures = new GRUP<ARMA>(this, new ARMA());
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<SubStringPointer.Files, Map<Integer, Integer>>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<String>();
     private ArrayList<String> outDLStrings = new ArrayList<String>();
@@ -94,19 +85,19 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
-	GRUPs.put(LLists.getContainedType(), LLists);
-	GRUPs.put(NPCs.getContainedType(), NPCs);
-	GRUPs.put(perks.getContainedType(), perks);
-	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
-	GRUPs.put(spells.getContainedType(), spells);
-	GRUPs.put(races.getContainedType(), races);
-	GRUPs.put(armors.getContainedType(), armors);
-	GRUPs.put(armatures.getContainedType(), armatures);
-	GRUPs.put(textures.getContainedType(), textures);
-	GRUPs.put(weapons.getContainedType(), weapons);
 	GRUPs.put(keywords.getContainedType(), keywords);
-	GRUPs.put(formLists.getContainedType(), formLists);
+	GRUPs.put(textures.getContainedType(), textures);
+	GRUPs.put(races.getContainedType(), races);
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
+	GRUPs.put(spells.getContainedType(), spells);
+	GRUPs.put(armors.getContainedType(), armors);
+	GRUPs.put(weapons.getContainedType(), weapons);
+	GRUPs.put(NPCs.getContainedType(), NPCs);
+	GRUPs.put(LLists.getContainedType(), LLists);
+	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
+	GRUPs.put(formLists.getContainedType(), formLists);
+	GRUPs.put(perks.getContainedType(), perks);
+	GRUPs.put(armatures.getContainedType(), armatures);
     }
 
     /**
@@ -197,6 +188,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (!in.equals(SPGlobal.getGlobalPatch())) {
 	    header.masters.add(in.modInfo);
 	}
+	if (in.getInfo().equals(ModListing.skyrim)) {
+	    header.masters.add(ModListing.update);
+	}
     }
 
     /**
@@ -221,7 +215,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
-	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
 	return m;
     }
 
@@ -242,7 +236,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this, newEDID);
-	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
 	return m;
     }
 
@@ -270,12 +264,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUPs.get(m.getTypes()[0]).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
     }
 
     final void addRecordSilent(MajorRecord m) {
-	GRUPs.get(m.getTypes()[0]).addRecordSilent(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecordSilent(m);
     }
 
     /**
@@ -373,10 +367,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param grup_type Any amount of GRUPs to keep, separated by commas
      */
     public void keep(GRUP_TYPE... grup_type) {
-	ArrayList<Type> grups = new ArrayList<Type>();
-	for (GRUP_TYPE t : grup_type) {
-	    grups.add(Type.toRecord(t));
-	}
+	ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
+	grups.addAll(Arrays.asList(grup_type));
 	for (GRUP g : GRUPs.values()) {
 	    if (!grups.contains(g.getContainedType())) {
 		g.clear();
@@ -399,13 +391,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (grup_types.length == 0) {
 	    grup_types = GRUP_TYPE.values();
 	}
-	ArrayList<Type> grups = new ArrayList<Type>();
-	for (GRUP_TYPE t : grup_types) {
-	    grups.add(Type.toRecord(t));
-	}
+	ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
+	grups.addAll(Arrays.asList(grup_types));
 	if (!this.equals(rhs)) {
 	    mergeMasters(rhs);
-	    for (Type t : GRUPs.keySet()) {
+	    for (GRUP_TYPE t : GRUPs.keySet()) {
 		if (grups.contains(t)) {
 		    GRUPs.get(t).merge(rhs.GRUPs.get(t));
 		}
@@ -618,9 +608,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     void parseData(Type type, ByteBuffer data, Map<Type, Mask> masks) throws BadRecord, DataFormatException, BadParameter {
 	if (masks.containsKey(type)) {
-	    GRUPs.get(type).parseData(data, masks.get(type));
+	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data, masks.get(type));
 	} else {
-	    GRUPs.get(type).parseData(data);
+	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
 	}
     }
 

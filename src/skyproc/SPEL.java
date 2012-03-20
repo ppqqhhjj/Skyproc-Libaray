@@ -45,7 +45,6 @@ public class SPEL extends MajorRecordDescription {
     public SPEL(Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	init();
-	this.revision = new byte[]{(byte) 0x13, (byte) 0x6F, 0, 0};
 	OBND.initialize(12);
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	SPIT.valid = true;

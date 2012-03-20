@@ -8,53 +8,56 @@ package skyproc;
 public enum GRUP_TYPE {
 
     /**
-     * Leveled Lists
+     *
      */
-    LVLN,
-    /**
-     * Non-Player Characters (Actors)
-     */
-    NPC_,
-    /**
-     * Perks
-     */
-    PERK,
-    /**
-     * Image Spaces
-     */
-    IMGS,
-    /**
-     * Spells
-     */
-    SPEL,
-    /**
-     * Races
-     */
-    RACE,
-    /**
-     * Armors
-     */
-    ARMO,
-    /**
-     * Armatures
-     */
-    ARMA,
+    KYWD,
     /**
      * Texture Sets
      */
     TXST,
     /**
+     * Races
+     */
+    RACE,
+    MGEF,
+    /**
+     * Spells
+     */
+    SPEL,
+    /**
+     * Armors
+     */
+    ARMO,
+    /**
      * Weapons
      */
     WEAP,
+    /**
+     * Non-Player Characters (Actors)
+     */
+    NPC_,
+    /**
+     * Leveled Lists
+     */
+    LVLN,
+    /**
+     * Image Spaces
+     */
+    IMGS,
     /**
      *
      */
     FLST,
     /**
-     *
+     * Perks
      */
-    KYWD,
-    MGEF;
+    PERK,
+    /**
+     * Armatures
+     */
+    ARMA;
 
+    static GRUP_TYPE toRecord (Enum e) {
+	return GRUP_TYPE.valueOf(e.toString());
+    }
 }

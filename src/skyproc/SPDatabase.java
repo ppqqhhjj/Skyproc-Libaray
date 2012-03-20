@@ -183,7 +183,7 @@ public class SPDatabase implements Iterable<Mod> {
 	    Mod m = database.modLookup.get(query.getMaster());
 	    if (m != null) {
 		for (GRUP_TYPE g : grup_types) {
-		    GRUP grup = m.GRUPs.get(Type.toRecord(g));
+		    GRUP grup = m.GRUPs.get(g);
 		    if (grup.mapRecords.containsKey(query)) {
 			return (MajorRecord) grup.mapRecords.get(query);
 		    }

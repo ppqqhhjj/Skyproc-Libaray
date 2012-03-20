@@ -424,7 +424,14 @@ public class Ln {
      * @return
      */
     public static int arrayToInt(byte[] input) {
-	return (int) arrayToLong(input);
+	int out = 0;
+	for (int i = input.length - 1; i >= 0; i--) {
+	    out |= input[i] & 0xFF;
+	    if (i != 0) {
+		out <<= 8;
+	    }
+	}
+	return out;
     }
 
     /**
@@ -434,13 +441,14 @@ public class Ln {
      * @return
      */
     public static long arrayToLong(byte[] input) {
-	int multiplier = 1;
-	long output = 0;
-	for (int i = 0; i < input.length; i++) {
-	    output += bToUInt(input[i]) * multiplier;
-	    multiplier *= 256;
+	long out = 0;
+	for (int i = input.length - 1; i >= 0; i--) {
+	    out |= input[i] & 0xFF;
+	    if (i != 0) {
+		out <<= 8;
+	    }
 	}
-	return output;
+	return out;
     }
 
     /**

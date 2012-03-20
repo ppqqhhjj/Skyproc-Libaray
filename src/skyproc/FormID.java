@@ -18,7 +18,7 @@ import lev.Ln;
  *
  * @author Justin Swanson
  */
-public class FormID implements Serializable {
+public class FormID implements Comparable, Serializable {
 
     boolean valid = false;
     byte[] form = new byte[4];
@@ -39,16 +39,16 @@ public class FormID implements Serializable {
      * "Skyrim.esm"
      */
     public FormID(String id, String master) {
-        this(id, new ModListing(master));
+	this(id, new ModListing(master));
     }
 
     /**
      *
-     * @param form String containing the last 6 digits of a FormID, followed immediately
-     * by the plugin it originates from.  eg "000123Skyrim.esm"
+     * @param form String containing the last 6 digits of a FormID, followed
+     * immediately by the plugin it originates from. eg "000123Skyrim.esm"
      */
     public FormID(String form) {
-        this(form.substring(0, 6), form.substring(6));
+	this(form.substring(0, 6), form.substring(6));
     }
 
     /**
@@ -58,7 +58,7 @@ public class FormID implements Serializable {
      * @param master The mod from which this formID originates.
      */
     public FormID(String id, ModListing master) {
-        this(Ln.parseHexString(id, 4, false), master);
+	this(Ln.parseHexString(id, 4, false), master);
     }
 
     /**
@@ -67,8 +67,8 @@ public class FormID implements Serializable {
      * @param master The mod from which this formID originates.
      */
     public FormID(byte[] id, ModListing master) {
-        set(id);
-        this.master = master;
+	set(id);
+	this.master = master;
     }
 
     /**
@@ -77,17 +77,17 @@ public class FormID implements Serializable {
      * @param master The modname from which this formID originates.
      */
     public FormID(int[] id, ModListing master) {
-        this(Ln.toByteArray(id), master);
+	this(Ln.toByteArray(id), master);
     }
 
     FormID(int id, ModListing master) {
-        setInternal(Ln.toByteArray(id));
-        this.master = master;
+	setInternal(Ln.toByteArray(id));
+	this.master = master;
     }
 
     FormID(FormID in) {
-        form = in.form;
-        master = in.master;
+	form = in.form;
+	master = in.master;
     }
 
     /**
@@ -95,30 +95,30 @@ public class FormID implements Serializable {
      * @param id An int array containing the last 6 digits of the FormID.
      */
     final public void set(byte[] id) {
-        setInternal(Ln.reverse(id));
+	setInternal(Ln.reverse(id));
     }
 
     final void setInternal(byte[] id) {
-        form = id;
-        if (id.length > 4) {
-            form = Arrays.copyOfRange(form, 0, 3);
-        } else if (id.length < 3) {
-            form = new byte[4];
-            System.arraycopy(id, 0, form, 0, id.length);
-        }
-        valid = !equals(NULL);
+	form = id;
+	if (id.length > 4) {
+	    form = Arrays.copyOfRange(form, 0, 3);
+	} else if (id.length < 3) {
+	    form = new byte[4];
+	    System.arraycopy(id, 0, form, 0, id.length);
+	}
+	valid = !equals(NULL);
     }
 
     void export(LExporter out) throws IOException {
-        out.write(getInternal(true), 4);
+	out.write(getInternal(true), 4);
     }
 
     String getArrayStr(Boolean masterIndex) {
-        if (isValid()) {
-            return Ln.printHex(getInternal(masterIndex), false, true);
-        } else {
-            return "No FormID";
-        }
+	if (isValid()) {
+	    return Ln.printHex(getInternal(masterIndex), false, true);
+	} else {
+	    return "No FormID";
+	}
     }
 
     /**
@@ -126,15 +126,15 @@ public class FormID implements Serializable {
      * @return An int array of length 8, including the current master index.
      */
     public byte[] get() {
-        return Ln.reverse(getInternal(true));
+	return Ln.reverse(getInternal(true));
     }
 
     byte[] getInternal(Boolean masterIndex) {
-        if (!masterIndex) {
-            return Arrays.copyOfRange(form, 0, 3);
-        } else {
-            return form;
-        }
+	if (!masterIndex) {
+	    return Arrays.copyOfRange(form, 0, 3);
+	} else {
+	    return form;
+	}
     }
 
     /**
@@ -142,7 +142,7 @@ public class FormID implements Serializable {
      * @return The name of the mod from which this FormID originates.
      */
     public ModListing getMaster() {
-        return master;
+	return master;
     }
 
     /**
@@ -151,11 +151,11 @@ public class FormID implements Serializable {
      * printed instead of numerical mod index.
      */
     public String getFormStr() {
-        if (master == null) {
-            return getArrayStr(false);
-        } else {
-            return getArrayStr(false) + getMaster().print();
-        }
+	if (master == null) {
+	    return getArrayStr(false);
+	} else {
+	    return getArrayStr(false) + getMaster().print();
+	}
     }
 
     /**
@@ -163,7 +163,7 @@ public class FormID implements Serializable {
      * @return A string representing the FormID.
      */
     public String getTitle() {
-        return toString();
+	return toString();
     }
 
     /**
@@ -172,45 +172,45 @@ public class FormID implements Serializable {
      */
     @Override
     public String toString() {
-        if (isStandardized()) {
-            return getFormStr();
-        } else if (isValid()) {
-            return getArrayStr(true);
-        } else {
-            return "NULL";
-        }
+	if (isStandardized()) {
+	    return getFormStr();
+	} else if (isValid()) {
+	    return getArrayStr(true);
+	} else {
+	    return "NULL";
+	}
     }
 
     void standardize(Mod srcMod) {
-        if (isValid()) {
-            if (master == null) {
-                master = srcMod.getNthMaster(form[3]);
-            }
-            adjustMasterIndex(srcMod);
-        }
+	if (isValid()) {
+	    if (master == null) {
+		master = srcMod.getNthMaster(form[3]);
+	    }
+	    adjustMasterIndex(srcMod);
+	}
     }
 
     private void adjustMasterIndex(Mod srcMod) {
-        ArrayList<String> masters = srcMod.getMastersStrings();
-        for (byte i = 0; i < masters.size(); i++) {
-            if (masters.get(i).equals(master.print())) {
-                form[3] = i;
-                return;
-            }
-        }
-        form[3] = (byte) masters.size();
+	ArrayList<String> masters = srcMod.getMastersStrings();
+	for (byte i = 0; i < masters.size(); i++) {
+	    if (masters.get(i).equals(master.print())) {
+		form[3] = i;
+		return;
+	    }
+	}
+	form[3] = (byte) masters.size();
     }
 
     Boolean isValid() {
-        return valid;
+	return valid;
     }
 
     Boolean isStandardized() {
-        return (isValid() && master != null);
+	return (isValid() && master != null);
     }
 
     int getContentLength() {
-        return 4;
+	return 4;
     }
 
     /**
@@ -220,22 +220,22 @@ public class FormID implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final FormID other = (FormID) obj;
-        for (int i = 0; i < 3; i++) {
-            if (form[i] != other.form[i]) {
-                return false;
-            }
-        }
-        if ((this.master == null) ? (other.master != null) : !this.master.equals(other.master)) {
-            return false;
-        }
-        return true;
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final FormID other = (FormID) obj;
+	for (int i = 0; i < 3; i++) {
+	    if (form[i] != other.form[i]) {
+		return false;
+	    }
+	}
+	if ((this.master == null) ? (other.master != null) : !this.master.equals(other.master)) {
+	    return false;
+	}
+	return true;
     }
 
     /**
@@ -244,9 +244,19 @@ public class FormID implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Arrays.hashCode(Arrays.copyOf(this.form, 3));
-        hash = 97 * hash + (this.master != null ? this.master.hashCode() : 0);
-        return hash;
+	int hash = 7;
+	hash = 97 * hash + Arrays.hashCode(Arrays.copyOf(this.form, 3));
+	hash = 97 * hash + (this.master != null ? this.master.hashCode() : 0);
+	return hash;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+	FormID rhs = (FormID) o;
+	if (master.equals(rhs.master)) {
+	    return Ln.arrayToInt(form) - Ln.arrayToInt(rhs.form);
+	} else {
+	    return master.compareTo(rhs.master);
+	}
     }
 }

@@ -20,6 +20,8 @@ public class ModListing extends SubRecord implements Comparable {
     SubString mast = new SubString(Type.MAST, true);
     SubData data = new SubData(Type.DATA);
     boolean master = false;
+    static ModListing skyrim = new ModListing("Skyrim.esm");
+    static ModListing update = new ModListing("Update.esm");
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	this();
@@ -197,6 +199,18 @@ public class ModListing extends SubRecord implements Comparable {
 	    if (rhs.equals(SPGlobal.getGlobalPatch().getInfo())) {
 		return -1;
 	    }
+	}
+	if (equals(skyrim)) {
+	    return -1;
+	}
+	if (rhs.equals(skyrim)) {
+	    return 1;
+	}
+	if (equals(update)) {
+	    return -1;
+	}
+	if (rhs.equals(update)) {
+	    return 1;
 	}
 	boolean thisActive = SPDatabase.activePlugins.contains(this);
 	boolean rhsActive = SPDatabase.activePlugins.contains(rhs);
