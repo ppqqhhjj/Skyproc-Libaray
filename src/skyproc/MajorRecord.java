@@ -33,7 +33,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord(Mod modToOriginateFrom, String edid) {
 	this();
-	EDID.setString(edid);
+	EDID.setString(edid.replaceAll(" ", ""));
 	ID = modToOriginateFrom.getNextID(getEDID());
 	modToOriginateFrom.addRecordSilent(this);
     }
