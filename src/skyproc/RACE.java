@@ -4,6 +4,7 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -412,8 +413,20 @@ public class RACE extends MajorRecordDescription {
     public void setWornArmor(FormID id) {
         WNAM.setForm(id);
     }
-//
-//    public SubList<SubForm> getKeywordIDs () {
-//	return keywords;
-//    }
+
+    public ArrayList<FormID> getSpells() {
+	return SubList.subFormToPublic(spells);
+    }
+
+    public void addSpell (FormID spell) {
+	spells.add(new SubForm(Type.SPLO, spell));
+    }
+
+    public void removeSpell (FormID spell) {
+	spells.remove(new SubForm( Type.SPLO, spell));
+    }
+
+    public void clearSpells () {
+	spells.clear();
+    }
 }
