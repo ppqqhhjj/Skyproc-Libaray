@@ -907,6 +907,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SubSortedList<ModListing> masters = new SubSortedList<ModListing>(new ModListing());
 	SubString description = new SubString(Type.SNAM, true);
 	SubData INTV = new SubData(Type.INTV, defaultINTV);
+	SubData ONAM = new SubData(Type.ONAM);
 	private static final Type[] type = {Type.TES4};
 
 	TES4() {
@@ -914,6 +915,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    subRecords.add(author);
 	    subRecords.add(description);
 	    subRecords.add(masters);
+	    subRecords.add(ONAM);
 	    subRecords.add(INTV);
 	}
 

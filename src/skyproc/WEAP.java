@@ -352,11 +352,10 @@ public class WEAP extends MajorRecordDescription {
 
     public enum WeaponFlag {
 
-	IgnoresNormalWeaponResistance(1,0),
-	HideBackpack(4,0),
-	NonPlayable(7,0),
-	CantDrop(3,0),
-
+	IgnoresNormalWeaponResistance(1, 0),
+	HideBackpack(4, 0),
+	NonPlayable(7, 0),
+	CantDrop(3, 0),
 	PlayerOnly(0, 1),
 	NPCsUseAmmo(1, 1),
 	NoJamAfterReload(3, 1),
