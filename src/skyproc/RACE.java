@@ -452,26 +452,64 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
-//    public void setVoiceType(Gender gender, FormID voice) {
-//	switch (gender) {
-//	    case MALE:
-//		VTCK.IDs.get(0);
-//	}
-//    }
+    public void setVoiceType(Gender gender, FormID voice) {
+	switch (gender) {
+	    case MALE:
+		VTCK.IDs.set(0, voice);
+		break;
+	    default:
+		VTCK.IDs.set(1, voice);
+		break;
+	}
+    }
 
-//    public ArrayList<MovementType> getMovementTypes () throws BadParameter {
-//	ArrayList<MovementType> out = new ArrayList<MovementType>();
-//	for (SubString s : MTNMs.collection) {
-//	    out.add(MovementType.translate(s.string));
-//	}
-//	return out;
-//    }
-//
-//    public void addMovementType (MovementType type) {
-//	MTNMs.collection.add(EDID);
-//    }
-//
-//    public void removeMovementType (MovementType type) {
-//
-//    }
+    public FormID getVoiceType(Gender gender) {
+	switch (gender) {
+	    case MALE:
+		return VTCK.IDs.get(0);
+	    default:
+		return VTCK.IDs.get(1);
+	}
+    }
+
+    public void setHairColor(Gender gender, FormID color) {
+	switch (gender) {
+	    case MALE:
+		HCLF.IDs.set(0, color);
+		break;
+	    default:
+		HCLF.IDs.set(1, color);
+		break;
+	}
+    }
+
+    public FormID getHairColor(Gender gender) {
+	switch (gender) {
+	    case MALE:
+		return HCLF.IDs.get(0);
+	    default:
+		return HCLF.IDs.get(1);
+	}
+    }
+
+    public void setDecapHeadPart(Gender gender, FormID part) {
+	switch (gender) {
+	    case MALE:
+		DNAM.IDs.set(0, part);
+		break;
+	    default:
+		DNAM.IDs.set(1, part);
+		break;
+	}
+    }
+
+    public FormID getDecapHeadPart(Gender gender) {
+	switch (gender) {
+	    case MALE:
+		return DNAM.IDs.get(0);
+	    default:
+		return DNAM.IDs.get(1);
+	}
+    }
+
 }
