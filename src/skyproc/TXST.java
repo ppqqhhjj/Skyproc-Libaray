@@ -4,11 +4,14 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  *
  * @author Justin Swanson
  */
-public class TXST extends MajorRecord {
+public class TXST extends MajorRecord implements Iterable<String> {
 
     /**
      * The global constant holding the number of maps TXST records have for use
@@ -284,6 +287,26 @@ public class TXST extends MajorRecord {
 	 *
 	 */
 	FACEGEN_TEXTURES
+    }
+
+
+    /**
+     *
+     * @return An iterator that steps through each record in the GRUP, in the
+     * order they were added.
+     */
+    @Override
+    public Iterator<String> iterator() {
+	ArrayList<String> temp = new ArrayList<String>();
+	temp.add(colorMap.string);
+	temp.add(normalMap.string);
+	temp.add(maskMap.string);
+	temp.add(toneMap.string);
+	temp.add(detailMap.string);
+	temp.add(environmentMap.string);
+	temp.add(TX06.string);
+	temp.add(specularityMap.string);
+	return temp.iterator();
     }
 //    public enum TXST_to_NIF {
 //	Diffuse(0),
