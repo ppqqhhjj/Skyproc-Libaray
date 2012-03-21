@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import lev.Ln;
 import lev.debug.LDebug;
+import skyproc.exceptions.BadParameter;
 
 /**
  *
@@ -64,8 +65,8 @@ class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-//	GRUP_TYPE[] types = {GRUP_TYPE.SPEL};
-	GRUP_TYPE[] types = GRUP_TYPE.values();
+	GRUP_TYPE[] types = {GRUP_TYPE.RACE};
+//	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);

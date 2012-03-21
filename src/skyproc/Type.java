@@ -747,6 +747,9 @@ public enum Type {
 
     MGEF,
     ESCE,
+    ALCH,
+    ENIT,
+    MICO,
 
     /**
      * NPC_: Marks DNAM position?

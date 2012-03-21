@@ -32,7 +32,7 @@ public class ARMO extends MajorRecordDescription {
     SubString MOD4 = new SubString(Type.MOD4, true);
     SubData MO4T = new SubData(Type.MO4T);
     SubData MO4S = new SubData(Type.MO4S);
-    BODT BODT = new BODT();
+    public BodyTemplate bodyTemplate = new BodyTemplate();
     SubForm YNAM = new SubForm(Type.YNAM);
     SubForm ZNAM = new SubForm(Type.ZNAM);
     SubForm ETYP = new SubForm(Type.ETYP);
@@ -63,7 +63,7 @@ public class ARMO extends MajorRecordDescription {
         subRecords.add(MOD4);
         subRecords.add(MO4T);
         subRecords.add(MO4S);
-        subRecords.add(BODT);
+        subRecords.add(bodyTemplate);
         subRecords.add(YNAM);
         subRecords.add(ZNAM);
         subRecords.add(ETYP);
@@ -135,70 +135,6 @@ public class ARMO extends MajorRecordDescription {
         }
     }
 
-    class BODT extends SubRecord {
-
-        LFlags bodyParts;
-        LFlags flags;
-        int armorType;
-        boolean old = false;
-
-        BODT() {
-            super(Type.BODT);
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            out.write(bodyParts.export(), 4);
-            out.write(flags.export(), 4);
-            if (!old) {
-                out.write(armorType);
-            }
-        }
-
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            bodyParts = new LFlags(in.extract(4));
-            flags = new LFlags(in.extract(4));
-            if (!in.isEmpty()) {
-                armorType = in.extractInt(4);
-            } else {
-                old = true;
-            }
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        Boolean isValid() {
-            return true;
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            return old ? 8 : 12;
-        }
-    }
-
-    /**
-     * Flags associated with the ARMO record.
-     */
-    public enum ARMOFlags {
-
-	/**
-	 *
-	 */
-	PLAYABLE
-    }
 
     // Get/Set
     /**
@@ -231,63 +167,6 @@ public class ARMO extends MajorRecordDescription {
      */
     public void setEnchantment(FormID id) {
         EITM.setForm(id);
-    }
-
-    /**
-     *
-     * @param part
-     * @param on
-     */
-    public void set(BodyPart part, Boolean on) {
-        BODT.bodyParts.set(part.ordinal(), on);
-    }
-
-    /**
-     *
-     * @param part
-     * @return
-     */
-    public boolean get(BodyPart part) {
-        return BODT.bodyParts.is(part.ordinal());
-    }
-
-    /**
-     *
-     * @param flag
-     * @param on
-     */
-    public void set(ARMOFlags flag, Boolean on) {
-        BODT.flags.set(4, on);
-    }
-
-    /**
-     *
-     * @param flag
-     * @return
-     */
-    public boolean get(ARMOFlags flag) {
-        return BODT.flags.is(4);
-    }
-
-    /**
-     *
-     * @param type
-     */
-    public void setArmorType(ArmorType type) {
-        BODT.armorType = type.ordinal();
-        BODT.old = false;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArmorType getArmorType() {
-        if (!BODT.old) {
-            return ArmorType.values()[BODT.armorType];
-        } else {
-            return ArmorType.CLOTHING;
-        }
     }
 
     /**

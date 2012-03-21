@@ -4,28 +4,19 @@
  */
 package skyproc;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LFlags;
-import lev.LShrinkArray;
-import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.NotFound;
 
 /**
  *
  * @author Plutoman101
  */
-public class SPEL extends MajorRecordDescription {
+public class SPEL extends MagicItem {
 
     static final Type[] type = {Type.SPEL};
-    SubData OBND = new SubData(Type.OBND);
     SubForm MDOB = new SubForm(Type.MDOB);
     SubForm ETYP = new SubForm(Type.ETYP);
     SPIT SPIT = new SPIT();
-    SubList<MagicEffectRef> spellSections = new SubList<MagicEffectRef>(new MagicEffectRef());
 
     @Override
     Type[] getTypes() {
@@ -45,123 +36,24 @@ public class SPEL extends MajorRecordDescription {
     public SPEL(Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	init();
-	OBND.initialize(12);
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	SPIT.valid = true;
     }
 
+    @Override
     final void init() {
-	subRecords.remove(Type.FULL);
-	subRecords.remove(Type.DESC);
-
-	subRecords.add(OBND);
-	subRecords.add(FULL);
+	super.init();
 	subRecords.add(MDOB);
 	subRecords.add(ETYP);
 	subRecords.add(description);
 	subRecords.add(SPIT);
-	subRecords.add(spellSections);
+	subRecords.add(magicEffects);
     }
 
     @Override
     void standardizeMasters(Mod srcMod) {
 	super.standardizeMasters(srcMod);
-	spellSections.standardizeMasters(srcMod);
-    }
-
-    static class SPIT extends SubRecord {
-
-	private int baseCost = 0;
-	private LFlags flags = new LFlags(4);
-	private int baseType = 0;
-	private float chargeTime = 0;
-	private CastType castType = CastType.ConstantEffect;
-	private DeliveryType targetType = DeliveryType.Self;
-	private float castDuration = 0;
-	private float range = 0;
-	private boolean valid = true;
-	private SubForm perkType = new SubForm(Type.PERK);
-
-	SPIT() {
-	    super(Type.SPIT);
-	    valid = false;
-	}
-
-	SPIT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new SPIT();
-	}
-
-	@Override
-	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
-
-	    baseCost = in.extractInt(4);
-	    flags = new LFlags(in.extract(4));
-	    baseType = in.extractInt(4);
-	    chargeTime = in.extractFloat();
-	    castType = CastType.values()[in.extractInt(4)];
-	    targetType = DeliveryType.values()[in.extractInt(4)];
-	    castDuration = in.extractFloat();
-	    range = in.extractFloat();
-	    perkType.setForm(in.extract(4));
-
-	    if (logging()) {
-		logSync("", "SPIT record: ");
-		logSync("", "  " + "Base Spell Cost: " + baseCost + ", flags: " + flags
-			+ ", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);
-		logSync("", "  " + "cast type: " + castType + ", targetType: " + targetType
-			+ ", Cast Duration: " + castDuration
-			+ ", Spell Range: " + range + ", Perk for Spell: " + perkType.print());
-	    }
-
-	    valid = true;
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
-	    if (isValid()) {
-		out.write(baseCost);
-		out.write(flags.export(), 4);
-		out.write(baseType);
-		out.write(chargeTime);
-		out.write(castType.ordinal());
-		out.write(targetType.ordinal());
-		out.write(castDuration);
-		out.write(range);
-		out.write(perkType.getFormArray(true), 4);
-	    }
-	}
-
-	@Override
-	public void clear() {
-	}
-
-	@Override
-	Boolean isValid() {
-	    return valid;
-	}
-
-	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    perkType.standardizeMasters(srcMod);
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    if (isValid()) {
-		return 36;
-	    } else {
-		return 0;
-	    }
-	}
+	magicEffects.standardizeMasters(srcMod);
     }
 
     public enum SPELFlag {
@@ -303,26 +195,6 @@ public class SPEL extends MajorRecordDescription {
      */
     public void setPerkRef(FormID perkRef) throws NotFound {
 	SPIT.perkType.setForm(perkRef);
-    }
-
-    public ArrayList<MagicEffectRef> getMagicEffects () {
-	return spellSections.toPublic();
-    }
-
-    public void removeMagicEffect(MagicEffectRef magicEffect) {
-	spellSections.remove(magicEffect);
-    }
-
-    public void addMagicEffect(MagicEffectRef magicEffect) {
-	spellSections.add(magicEffect);
-    }
-
-    public void addMagicEffect(MGEF magicEffect) {
-	spellSections.add(new MagicEffectRef(magicEffect.getForm()));
-    }
-
-    public void clearMagicEffects () {
-	spellSections.clear();
     }
 
 }

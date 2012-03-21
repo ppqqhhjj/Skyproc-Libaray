@@ -20,9 +20,9 @@ import skyproc.exceptions.BadRecord;
 
 class SubMarkerSet<T extends SubRecord> extends SubRecord {
 
-    Map<Type, SubRecord> set = new EnumMap<Type, SubRecord>(Type.class);
+    Map<Type, T> set = new EnumMap<Type, T>(Type.class);
     ArrayList<Type> markers;
-    SubRecord active;
+    T active;
     T prototype;
     boolean forceMarkers = false;
 
@@ -64,7 +64,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
         Type next = Record.getNextType(in);
         if (markers.contains(next)) {
             logSync("", "Loaded Marker " + next);
-            active = prototype.getNew(next);
+            active = (T) prototype.getNew(next);
             set.put(next, active);
         } else {
             active.parseData(in);

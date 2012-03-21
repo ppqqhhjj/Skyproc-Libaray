@@ -24,9 +24,9 @@ import skyproc.exceptions.BadRecord;
 public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     boolean addedOrder = true;
-    private byte[] grupType = new byte[4];
-    private byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
-    private byte[] version = new byte[4];
+    byte[] grupType = new byte[4];
+    byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
+    byte[] version = new byte[4];
     ArrayList<T> listRecords = new ArrayList<T>();
     Map<FormID, T> mapRecords = new TreeMap<FormID, T>();
     Mod srcMod;
