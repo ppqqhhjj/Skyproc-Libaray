@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.saving;
+package lev.gui;
 
 import lev.Ln;
 
@@ -10,7 +10,7 @@ import lev.Ln;
  *
  * @author Justin Swanson
  */
-public class SaveBool extends Setting<Boolean> {
+class SaveBool extends Setting<Boolean> {
 
     public SaveBool(String title_, Boolean data_, Boolean in_game) {
         super(title_, data_, in_game);

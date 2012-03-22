@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.saving;
+package lev.gui;
 
 import java.io.BufferedWriter;
 import lev.gui.LUserSetting;
@@ -12,7 +12,7 @@ import skyproc.exceptions.BadParameter;
  *
  * @author Justin Swanson
  */
-public abstract class Setting<T> {
+abstract class Setting<T> {
 
     protected T data;
     protected String title;

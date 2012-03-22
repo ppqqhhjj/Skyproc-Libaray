@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.saving;
+package lev.gui;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,7 +13,7 @@ import lev.gui.LUserSetting;
  *
  * @author Justin Swanson
  */
-public abstract class LSaveFile <E extends Enum> {
+abstract class LSaveFile <E extends Enum> {
 
     protected ArrayList<Map<E, Setting>> sets = new ArrayList<Map<E, Setting>>();
     private static String header = "SaveFile";

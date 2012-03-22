@@ -15,7 +15,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import lev.saving.LSaveFile;
 
 /**
  *
@@ -86,7 +85,7 @@ public abstract class LHelpComponent extends LComponent {
 
         }
     }
-    
+
     protected class HelpMouseHandler implements MouseListener {
 
 	@Override
@@ -110,7 +109,7 @@ public abstract class LHelpComponent extends LComponent {
 	public void mouseExited(MouseEvent arg0) {
 	    updateHelp();
 	}
-	
+
     }
 
     class HelpListHandler implements ListSelectionListener {
@@ -148,7 +147,7 @@ public abstract class LHelpComponent extends LComponent {
     public void setHelpInfo(String info) {
         helpInfo = info;
     }
-    
+
     public void setHelpInfo(Enum setting, LSaveFile save) {
 	if (save.helpInfo.get(setting) != null) {
 	    setHelpInfo((String) save.helpInfo.get(setting));

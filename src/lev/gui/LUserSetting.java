@@ -14,8 +14,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lev.saving.LSaveFile;
-import lev.saving.Setting;
 
 /**
  *

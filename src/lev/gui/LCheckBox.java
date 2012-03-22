@@ -17,7 +17,6 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import lev.saving.Setting;
 
 /**
  *

@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.saving;
+package lev.gui;
 
 /**
  *
  * @author Justin Swanson
  */
-public class SaveInt extends Setting<Integer> {
+class SaveInt extends Setting<Integer> {
 
     public SaveInt(String title_, Integer data_, Boolean oblivion_) {
         super(title_, data_, oblivion_);
