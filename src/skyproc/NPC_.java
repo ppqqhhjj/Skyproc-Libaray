@@ -52,7 +52,7 @@ public class NPC_ extends Actor implements Serializable {
     SubForm ATKR = new SubForm(Type.ATKR);
     SubData ATKD = new SubData(Type.ATKD);
     SubData ATKE = new SubData(Type.ATKE);
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
     SubData QNAM = new SubData(Type.QNAM);
     SubData NAM9 = new SubData(Type.NAM9);
     SubList<CSDTpackage> soundPackages = new SubList<CSDTpackage>(new CSDTpackage());

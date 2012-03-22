@@ -21,7 +21,7 @@ public class RACE extends MajorRecordDescription {
     SubList<SubForm> spells = new SubList<SubForm>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm WNAM = new SubForm(Type.WNAM);
     public BodyTemplate bodyTemplate = new BodyTemplate();
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
     SubData DATA = new SubData(Type.DATA);
     SubMarkerSet<MFNAMdata> MFNAM = new SubMarkerSet<MFNAMdata>(new MFNAMdata(), Type.MNAM, Type.FNAM);
     SubList<SubString> MTNMs = new SubList<SubString>(new SubString(Type.MTNM, false));

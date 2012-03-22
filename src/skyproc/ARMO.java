@@ -39,7 +39,7 @@ public class ARMO extends MajorRecordDescription {
     SubForm BIDS = new SubForm(Type.BIDS);
     SubForm BAMT = new SubForm(Type.BAMT);
     SubForm RNAM = new SubForm(Type.RNAM);
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
     SubList<SubForm> MODLs = new SubList<SubForm>(new SubForm(Type.MODL));
     DATA DATA = new DATA();
     SubData DNAM = new SubData(Type.DNAM);

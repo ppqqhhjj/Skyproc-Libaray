@@ -22,7 +22,7 @@ public class MGEF extends MajorRecordDescription {
     private static Type[] types = {Type.MGEF};
     DATA DATA = new DATA();
     SubForm ESCE = new SubForm(Type.ESCE);
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
     SubForm MODB = new SubForm(Type.MDOB);
     SubData OBND = new SubData(Type.OBND);
     SNDD sounds = new SNDD();

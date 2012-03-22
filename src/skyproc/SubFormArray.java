@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
@@ -17,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubFormArray extends SubRecord {
+class SubFormArray extends SubRecord implements Iterable<FormID> {
 
     ArrayList<FormID> IDs;
 
@@ -65,6 +66,10 @@ class SubFormArray extends SubRecord {
         IDs.get(i).setInternal(in);
     }
 
+    int size () {
+	return IDs.size();
+    }
+
     @Override
     void standardizeMasters(Mod srcMod) {
         super.standardizeMasters(srcMod);
@@ -86,5 +91,23 @@ class SubFormArray extends SubRecord {
     @Override
     int getContentLength(Mod srcMod) {
         return IDs.size() * 4;
+    }
+
+    @Override
+    public Iterator<FormID> iterator() {
+	return IDs.iterator();
+    }
+
+    public boolean remove (FormID id) {
+	if (IDs.contains(id)) {
+	    IDs.remove(id);
+	    return true;
+	} else {
+	    return false;
+	}
+    }
+
+    public void add (FormID id) {
+	IDs.add(id);
     }
 }

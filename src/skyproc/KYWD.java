@@ -20,7 +20,7 @@ public class KYWD extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param modToOriginateFrom
      * @param edid EDID to assign the record.  Make sure it's unique.
      * @param color Color to have the keyword highlight as.
@@ -31,7 +31,7 @@ public class KYWD extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param modToOriginateFrom
      * @param edid EDID to assign the record.  Make sure it's unique.
      */

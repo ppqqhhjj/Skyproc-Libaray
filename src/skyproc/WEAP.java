@@ -29,7 +29,7 @@ public class WEAP extends MajorRecordDescription {
     SubForm EITM = new SubForm(Type.EITM);
     SubForm ETYP = new SubForm(Type.ETYP);
     SubForm INAM = new SubForm(Type.INAM);
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
     SubData OBND = new SubData(Type.OBND);
     SubString MODL = new SubString(Type.MODL, true);
     SubData MODS = new SubData(Type.MODS);

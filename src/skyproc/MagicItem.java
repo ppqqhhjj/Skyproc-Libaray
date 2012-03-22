@@ -21,7 +21,7 @@ abstract class MagicItem extends MajorRecordDescription {
 
     SubData OBND = new SubData(Type.OBND);
     SubList<MagicEffectRef> magicEffects = new SubList<MagicEffectRef>(new MagicEffectRef());
-    Keywords keywords = new Keywords();
+    public Keywords keywords = new Keywords();
 
     MagicItem () {
 	super();
