@@ -15,11 +15,11 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubFloat extends SubRecord {
+class SubInt extends SubRecord {
 
-    float data;
+    int data;
 
-    SubFloat(Type type) {
+    SubInt(Type type) {
 	super(type);
     }
 
@@ -36,7 +36,7 @@ class SubFloat extends SubRecord {
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-	data = in.extractFloat();
+	data = in.extractInt(4);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
@@ -61,6 +61,6 @@ class SubFloat extends SubRecord {
 
     @Override
     public void clear() {
-        data = 0;
+	data = 0;
     }
 }

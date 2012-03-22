@@ -28,6 +28,7 @@ public enum GRUP_TYPE {
      * Armors
      */
     ARMO,
+    INGR,
     ALCH,
     /**
      * Weapons

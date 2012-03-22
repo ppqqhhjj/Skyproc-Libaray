@@ -750,6 +750,7 @@ public enum Type {
     ALCH,
     ENIT,
     MICO,
+    INGR,
 
     /**
      * NPC_: Marks DNAM position?

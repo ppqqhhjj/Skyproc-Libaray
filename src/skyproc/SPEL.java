@@ -43,6 +43,8 @@ public class SPEL extends MagicItem {
     @Override
     final void init() {
 	super.init();
+	subRecords.add(OBND);
+	subRecords.add(FULL);
 	subRecords.add(MDOB);
 	subRecords.add(ETYP);
 	subRecords.add(description);

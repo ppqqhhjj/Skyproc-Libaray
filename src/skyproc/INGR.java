@@ -16,22 +16,21 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ALCH extends MagicItem {
+public class INGR extends MagicItem {
 
+    Type[] types = {Type.INGR};
     SubString MODL = new SubString(Type.MODL, true);
     SubData MODT = new SubData(Type.MODT);
     SubForm YNAM = new SubForm(Type.YNAM);
     SubForm ZNAM = new SubForm(Type.ZNAM);
+    DATA DATA = new DATA();
     ENIT ENIT = new ENIT();
-    SubFloat DATA = new SubFloat(Type.DATA);
     SubString ICON = new SubString(Type.ICON, true);
     SubString MICO = new SubString(Type.MICO, true);
     SubForm ETYP = new SubForm(Type.ETYP);
-    SubData MODS = new SubData(Type.MODS);
+    public ScriptPackage scripts = new ScriptPackage();
 
-    Type[] type = {Type.ALCH};
-
-    ALCH () {
+    INGR() {
 	super();
 	init();
     }
@@ -39,6 +38,7 @@ public class ALCH extends MagicItem {
     @Override
     final void init() {
 	super.init();
+	subRecords.add(scripts);
 	subRecords.add(OBND);
 	subRecords.add(FULL);
 	subRecords.add(keywords);
@@ -46,62 +46,85 @@ public class ALCH extends MagicItem {
 	subRecords.add(MODT);
 	subRecords.add(YNAM);
 	subRecords.add(ZNAM);
-	subRecords.add(MODS);
 	subRecords.add(DATA);
 	subRecords.add(ENIT);
+	subRecords.add(magicEffects);
 	subRecords.add(ICON);
 	subRecords.add(MICO);
 	subRecords.add(ETYP);
-	subRecords.add(magicEffects);
     }
 
     @Override
     Type[] getTypes() {
-	return type;
+	return types;
     }
 
     @Override
     Record getNew() {
-	return new ALCH();
+	return new INGR();
+    }
+
+    class DATA extends SubRecord {
+
+	byte[] fluff = new byte[4];
+	float weight = 0;
+
+	DATA () {
+	    super(Type.DATA);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(fluff,4);
+	    out.write(weight);
+	}
+
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    fluff = in.extract(4);
+	    weight = in.extractFloat();
+	    if (SPGlobal.logging()) {
+		logSync("", "Setting DATA:    Weight: " + weight);
+	    }
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DATA();
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 8;
+	}
     }
 
     class ENIT extends SubRecord {
 
-	int value;
+	int baseCost = 0;
 	LFlags flags = new LFlags(4);
-	FormID addiction = new FormID();
-	byte[] addictionChance = new byte[4];
-	FormID useSound = new FormID();
 
-	ENIT() {
+	ENIT () {
 	    super(Type.ENIT);
 	}
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(value);
-	    out.write(flags.export());
-	    addiction.export(out);
-	    out.write(addictionChance,4);
-	    useSound.export(out);
+	    out.write(baseCost);
+	    out.write(flags.export(),4);
 	}
 
 	@Override
 	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    value = in.extractInt(4);
+	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));
-	    addiction.setInternal(in.extract(4));
-	    addictionChance = in.extract(4);
-	    useSound.setInternal(in.extract(4));
-	}
-
-	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    addiction.standardize(srcMod);
-	    useSound.standardize(srcMod);
+	    if (SPGlobal.logging()) {
+		logSync("", "Base cost: " + baseCost + ", flags: " + flags);
+	    }
 	}
 
 	@Override
@@ -111,25 +134,25 @@ public class ALCH extends MagicItem {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return 20;
+	    return 8;
 	}
+
     }
 
-    public enum ALCHFlag {
+    public enum INGRFlag {
 	ManualCalc(0),
 	Food(1),
-	Medicine(16),
-	Poison(17)
+	ReferencesPersist(8)
 	;
 
 	int value;
 
-	ALCHFlag (int in) {
-	    value = in;
+	INGRFlag (int value) {
+	    this.value = value;
 	}
     }
 
-    // Get / set
+    // Get/set
 
     public void setModel (String groundModel) {
 	MODL.setString(groundModel);
@@ -155,44 +178,28 @@ public class ALCH extends MagicItem {
 	return ZNAM.getForm();
     }
 
-    public void setValue (int value) {
-	ENIT.value = value;
+    public void setWeight (float weight) {
+	DATA.weight = weight;
     }
 
-    public int getValue () {
-	return ENIT.value;
+    public float getWeight() {
+	return DATA.weight;
     }
 
-    public void set(ALCHFlag flag, boolean on) {
+    public void setBaseCost (int baseCost) {
+	ENIT.baseCost = baseCost;
+    }
+
+    public int getBaseCost () {
+	return ENIT.baseCost;
+    }
+
+    public void set (INGRFlag flag, boolean on) {
 	ENIT.flags.set(flag.value, on);
     }
 
-    public boolean get(ALCHFlag flag) {
+    public boolean get (INGRFlag flag) {
 	return ENIT.flags.is(flag.value);
-    }
-
-    public void setAddiction (FormID addiction) {
-	ENIT.addiction = addiction;
-    }
-
-    public FormID getAddiction () {
-	return ENIT.addiction;
-    }
-
-    public void setUseSound (FormID useSound) {
-	ENIT.useSound = useSound;
-    }
-
-    public FormID getUseSound () {
-	return ENIT.useSound;
-    }
-
-    public void setWeight (float weight) {
-	DATA.data = weight;
-    }
-
-    public float getWeight () {
-	return DATA.data;
     }
 
     public void setInventoryIcon (String filename) {

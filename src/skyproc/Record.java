@@ -51,7 +51,9 @@ public abstract class Record extends ExportRecord implements Serializable {
 
     abstract Type[] getTypes();
 
-    abstract Record getNew();
+    Record getNew() {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     Record copyOf(Mod modToOriginateFrom) {
 	return (Record) Ln.deepCopy(this);

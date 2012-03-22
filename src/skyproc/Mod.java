@@ -30,6 +30,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
     GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
     GRUP<ARMO> armors = new GRUP<ARMO>(this, new ARMO());
+    GRUP<INGR> ingredients = new GRUP<INGR>(this, new INGR());
     GRUP<ALCH> alchemy = new GRUP<ALCH>(this, new ALCH());
     GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
     GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
@@ -92,6 +93,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
+	ingredients.dateStamp = new byte[] { 1, (byte) 0x4C, (byte) 0x2F , 0 };
+	GRUPs.put(ingredients.getContainedType(), ingredients);
 	alchemy.dateStamp = new byte[] { 3 , (byte)0x3D ,2, 0 };
 	GRUPs.put(alchemy.getContainedType(), alchemy);
 	GRUPs.put(weapons.getContainedType(), weapons);
@@ -771,6 +774,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<ALCH> getAlchemy() {
 	return alchemy;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Magic Effect records
+     */
+    public GRUP<INGR> getIngredients() {
+	return ingredients;
     }
 
     /**

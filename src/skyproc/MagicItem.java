@@ -34,10 +34,7 @@ abstract class MagicItem extends MajorRecordDescription {
     void init() {
 	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
-
 	OBND.initialize(12);
-	subRecords.add(OBND);
-	subRecords.add(FULL);
     }
 
     static class SPIT extends SubRecord {
@@ -134,7 +131,6 @@ abstract class MagicItem extends MajorRecordDescription {
 	    }
 	}
     }
-
 
     public ArrayList<MagicEffectRef> getMagicEffects () {
 	return magicEffects.toPublic();
