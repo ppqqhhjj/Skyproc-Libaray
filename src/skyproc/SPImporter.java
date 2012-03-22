@@ -110,7 +110,8 @@ public class SPImporter {
 		// If Messed Up
 		if (dataFolder == null) {
 		    SPGlobal.logError(header, "Can't locate local app data folder.");
-		    dataFolder = manualFindList();
+		    dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+			    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 		} else {
 
 		    SPGlobal.logSync(header, "APPDATA returned: ", dataFolder, "     Shaving off the \\Application Data.");
@@ -124,6 +125,12 @@ public class SPImporter {
 	    } else {
 		dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
 		SPGlobal.logSync(header, SPGlobal.gameName + " Plugin list file thought to be in: ", dataFolder);
+	    }
+
+	    File pluginListPath = new File(dataFolder);
+	    if (!pluginListPath.exists()) {
+		dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+			+ "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 	    }
 
 	    //Open Plugin file
@@ -163,11 +170,11 @@ public class SPImporter {
 		SPDatabase.activePlugins = sortModListings(lines);
 
 	    } catch (java.io.FileNotFoundException e) {
-		SPGlobal.logError(header, "Error opening Plugin file!");
+		SPGlobal.logException(e);
 		SPGlobal.sync(false);
 		throw e;
 	    } catch (java.io.IOException e) {
-		SPGlobal.logError(header, "Error reading from Plugin file!");
+		SPGlobal.logException(e);
 		SPGlobal.sync(false);
 		throw e;
 	    }
@@ -239,44 +246,6 @@ public class SPImporter {
 
 	SPGlobal.sync(false);
 	return listing;
-    }
-
-    static String manualFindList() throws java.io.IOException {
-	try {
-	    String fileLocation = "Cancelled";
-	    String header = "MANUAL-FIND-PLUGIN";
-	    // Check for save file
-	    File f = new File(SPGlobal.pluginListBackupPath);
-	    if (f.isFile()) {
-		BufferedReader pluginLocation = new BufferedReader(new FileReader(f));
-		fileLocation = pluginLocation.readLine();
-		SPGlobal.logSync(header, "Backup file has file location: ", fileLocation);
-		return fileLocation;
-	    }
-
-	    // Open diaSPGlobal.log box
-
-	    JOptionPane.showMessageDialog(null, "The application is having trouble locating your active plugins file.\n"
-		    + "Please locate this yourself.\n\n"
-		    + "Usually in /Users/****Username****/AppData/Local/" + SPGlobal.gameName + "/Plugins.txt\n"
-		    + "(You might have to enable visibility of hidden folders)");
-
-	    JFileChooser fd = new JFileChooser(".");
-	    int returnVal = fd.showOpenDialog(null);
-	    if (returnVal == JFileChooser.APPROVE_OPTION) {
-		// Save file location
-		f = fd.getSelectedFile();
-		fileLocation = f.getPath();
-		//fileLocation = fileLocation + fd.getSelectedFile().getName();
-		SPGlobal.logSync(header, "User chose file location: ", fileLocation);
-		BufferedWriter pluginLocation = new BufferedWriter(new FileWriter(SPGlobal.pluginListBackupPath));
-		pluginLocation.write(fileLocation);
-		pluginLocation.close();
-	    }
-	    return fileLocation;
-	} catch (java.io.IOException e) {
-	    throw e;
-	}
     }
 
     /**

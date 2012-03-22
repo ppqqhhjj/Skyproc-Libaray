@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
@@ -1087,6 +1088,31 @@ public class Ln {
 	    int[] rest = Arrays.copyOfRange(nums, 1, nums.length);
 	    return lcm(nums[0], lcmm(rest));
 	}
+    }
+
+    public static File manualFindFile(String fileMessageToAskUserFor, File backupFileLocation) throws FileNotFoundException, IOException {
+	// Check for save file
+	if (backupFileLocation.isFile()) {
+	    BufferedReader pluginLocation = new BufferedReader(new FileReader(backupFileLocation));
+	    return new File(pluginLocation.readLine());
+	}
+
+	// Open dialog box
+
+	JOptionPane.showMessageDialog(null, "The application is having trouble locating: " + fileMessageToAskUserFor + "\n"
+		+ "Please locate this yourself.");
+
+	JFileChooser fd = new JFileChooser(".");
+	int returnVal = fd.showOpenDialog(null);
+	File fileLocation = null;
+	if (returnVal == JFileChooser.APPROVE_OPTION) {
+	    // Save file location
+	    fileLocation = fd.getSelectedFile();
+	    BufferedWriter pluginLocation = new BufferedWriter(new FileWriter(backupFileLocation));
+	    pluginLocation.write(fileLocation.getPath());
+	    pluginLocation.close();
+	}
+	return fileLocation;
     }
 
     /**

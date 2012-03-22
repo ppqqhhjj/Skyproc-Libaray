@@ -27,6 +27,7 @@ public class SPGlobal {
      * Patcher.jar")
      */
     public static String pathToData = "../../";
+    public static String pathToInternalFiles = "Files/";
     /**
      * Skyproc will import and embed the language given by SPGlobal.language
      * every time a patch is created. To offer multi-language support, simply

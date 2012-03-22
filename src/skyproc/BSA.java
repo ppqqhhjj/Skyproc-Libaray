@@ -237,6 +237,9 @@ public class BSA {
 	File myDocuments = Ln.getMyDocuments();
 	ArrayList<String> resources = new ArrayList<String>();
 	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
+	if (!ini.exists()) {
+	    ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
+	}
 	if (SPGlobal.logging()) {
 	    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
 	}
