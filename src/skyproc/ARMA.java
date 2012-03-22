@@ -9,13 +9,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * Armature records (pieces of armor)
  * @author Justin Swanson
  */
 public class ARMA extends MajorRecord {

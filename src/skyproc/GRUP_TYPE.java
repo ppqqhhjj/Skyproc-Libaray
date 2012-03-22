@@ -8,7 +8,7 @@ package skyproc;
 public enum GRUP_TYPE {
 
     /**
-     *
+     * Keywords
      */
     KYWD,
     /**
@@ -19,6 +19,9 @@ public enum GRUP_TYPE {
      * Races
      */
     RACE,
+    /**
+     * Magic Effects
+     */
     MGEF,
     /**
      * Spells
@@ -28,7 +31,13 @@ public enum GRUP_TYPE {
      * Armors
      */
     ARMO,
+    /**
+     * Ingredients
+     */
     INGR,
+    /**
+     * Alchemy
+     */
     ALCH,
     /**
      * Weapons
@@ -47,7 +56,7 @@ public enum GRUP_TYPE {
      */
     IMGS,
     /**
-     *
+     * Form Lists
      */
     FLST,
     /**

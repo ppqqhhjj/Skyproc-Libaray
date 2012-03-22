@@ -8,6 +8,11 @@ import lev.gui.LProgressBarInterface;
  */
 public class SPGUI {
 
+    /**
+     * SkyProc's import and export functions hook up their progress output to this
+     * variable.  If you want to display import/export progress bar data on your
+     * GUI, then assign this variable to the progress bar you are displaying.
+     */
     public static LProgressBarInterface progress = new ProgressBarPlaceholder();
 
     static class ProgressBarPlaceholder implements LProgressBarInterface {

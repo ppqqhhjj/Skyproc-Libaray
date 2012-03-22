@@ -103,14 +103,30 @@ public class ScriptPackage extends SubRecord {
 	addScript(new ScriptRef(scriptName));
     }
 
+    /**
+     * Adds the script reference to the package.
+     * @param script
+     */
     public void addScript(ScriptRef script) {
 	scripts.add(script);
     }
 
+    /**
+     * Returns a ScriptRef object matching the name, if one exists, or null
+     * if one does not.
+     * @param scriptName
+     * @return
+     */
     public ScriptRef getScript(String scriptName) {
 	return getScript(new ScriptRef(scriptName));
     }
 
+    /**
+     * Returns the ScriptRef object from the ScriptPackage that matches the input's
+     * name.
+     * @param script
+     * @return
+     */
     public ScriptRef getScript(ScriptRef script) {
 	return scripts.get(scripts.indexOf(script));
     }
@@ -124,6 +140,11 @@ public class ScriptPackage extends SubRecord {
 	return hasScript(new ScriptRef(scriptName));
     }
 
+    /**
+     * Returns true if package has a script matching the input's name
+     * @param script
+     * @return
+     */
     public boolean hasScript(ScriptRef script) {
 	return scripts.contains(script);
     }
@@ -136,6 +157,10 @@ public class ScriptPackage extends SubRecord {
 	removeScript(new ScriptRef(scriptName));
     }
 
+    /**
+     * Removes a ScriptRef matching the input's name, if one exists.
+     * @param script
+     */
     public void removeScript(ScriptRef script) {
 	scripts.remove(script);
     }

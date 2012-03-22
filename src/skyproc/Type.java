@@ -745,11 +745,29 @@ public enum Type {
      */
     FLST,
 
+    /**
+     *
+     */
     MGEF,
+    /**
+     *
+     */
     ESCE,
+    /**
+     *
+     */
     ALCH,
+    /**
+     *
+     */
     ENIT,
+    /**
+     *
+     */
     MICO,
+    /**
+     *
+     */
     INGR,
 
     /**

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -52,7 +52,10 @@ public class NPC_ extends Actor implements Serializable {
     SubForm ATKR = new SubForm(Type.ATKR);
     SubData ATKD = new SubData(Type.ATKD);
     SubData ATKE = new SubData(Type.ATKE);
-    public Keywords keywords = new Keywords();
+    /**
+     *
+     */
+    public KeywordSet keywords = new KeywordSet();
     SubData QNAM = new SubData(Type.QNAM);
     SubData NAM9 = new SubData(Type.NAM9);
     SubList<CSDTpackage> soundPackages = new SubList<CSDTpackage>(new CSDTpackage());
@@ -737,17 +740,6 @@ public class NPC_ extends Actor implements Serializable {
 	 * Flag to use the traits page of its template.
 	 */
 	USE_TRAITS,
-	USE_STATS,
-	USE_SCRIPT,
-	USE_FACTIONS,
-	USE_AI_DATA,
-	USE_AI_PACKAGES,
-	USE_DEF_PACK_LIST,
-	USE_ATTACK_DATA,
-	USE_SPELL_LIST,
-	USE_INVENTORY,
-	USE_BASE_DATA,
-	USE_KEYWORDS
 
     }
 

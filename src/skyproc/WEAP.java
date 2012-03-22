@@ -13,7 +13,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * Weapon Records
  * @author Justin Swanson
  */
 public class WEAP extends MajorRecordDescription {
@@ -29,7 +29,10 @@ public class WEAP extends MajorRecordDescription {
     SubForm EITM = new SubForm(Type.EITM);
     SubForm ETYP = new SubForm(Type.ETYP);
     SubForm INAM = new SubForm(Type.INAM);
-    public Keywords keywords = new Keywords();
+    /**
+     *
+     */
+    public KeywordSet keywords = new KeywordSet();
     SubData OBND = new SubData(Type.OBND);
     SubString MODL = new SubString(Type.MODL, true);
     SubData MODS = new SubData(Type.MODS);
@@ -350,18 +353,54 @@ public class WEAP extends MajorRecordDescription {
 	Staff
     }
 
+    /**
+     *
+     */
     public enum WeaponFlag {
 
+	/**
+	 *
+	 */
 	IgnoresNormalWeaponResistance(1, 0),
+	/**
+	 *
+	 */
 	HideBackpack(4, 0),
+	/**
+	 *
+	 */
 	NonPlayable(7, 0),
+	/**
+	 *
+	 */
 	CantDrop(3, 0),
+	/**
+	 *
+	 */
 	PlayerOnly(0, 1),
+	/**
+	 *
+	 */
 	NPCsUseAmmo(1, 1),
+	/**
+	 *
+	 */
 	NoJamAfterReload(3, 1),
+	/**
+	 *
+	 */
 	MinorCrime(4, 1),
+	/**
+	 *
+	 */
 	NotUsedInNormalCombat(6, 1),
+	/**
+	 *
+	 */
 	NonHostile(8, 1),
+	/**
+	 *
+	 */
 	BoundWeapon(13, 1),;
 	int value;
 	int flagSet;
@@ -773,6 +812,11 @@ public class WEAP extends MajorRecordDescription {
 	return CRDT.critEffect;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(WeaponFlag flag, boolean on) {
 	switch (flag.flagSet) {
 	    case 0:
@@ -784,6 +828,11 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(WeaponFlag flag) {
 	switch (flag.flagSet) {
 	    case 0:

@@ -7,13 +7,7 @@ package skyproc;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LFlags;
@@ -381,11 +375,19 @@ public class BSA {
 	}
 	return out;
     }
-    
+
+    /**
+     *
+     * @return Number of folders contained in the BSA
+     */
     public int numFolders () {
 	return folders.size();
     }
-    
+
+    /**
+     *
+     * @return Number of files contained in the BSA
+     */
     public int numFiles () {
 	int out = 0;
 	for (Map m : folders.values()) {
@@ -421,7 +423,7 @@ public class BSA {
      *
      * @param types Types to load in.
      * @return List of all BSA files that contain any of the filetypes.
-     * @throws IOException  
+     * @throws IOException
      */
     public static ArrayList<BSA> loadInBSAs(FileType... types) throws IOException {
 	loadResourceLoadOrder();

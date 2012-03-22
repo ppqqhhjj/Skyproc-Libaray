@@ -7,15 +7,33 @@ package skyproc;
 import skyproc.exceptions.BadParameter;
 
 /**
- *
+ * Different ways to move
  * @author Justin Swanson
  */
 public enum MovementType {
+    /**
+     *
+     */
     Walk,
+    /**
+     *
+     */
     Run,
+    /**
+     *
+     */
     Swim,
+    /**
+     *
+     */
     Fly,
+    /**
+     *
+     */
     Sneak,
+    /**
+     *
+     */
     Sprint;
 
     static String translate (MovementType type) {

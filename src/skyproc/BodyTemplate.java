@@ -13,7 +13,8 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * A internal structure found in many major records representing body setups.
+ * The use depends on the context of the major record it is inside of.
  * @author Justin Swanson
  */
 public class BodyTemplate extends SubRecord {

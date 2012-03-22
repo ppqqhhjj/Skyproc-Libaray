@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ScriptProperty extends Record {
+class ScriptProperty extends Record {
 
     StringNonNull name = new StringNonNull();
     ScriptPropertyType type = ScriptPropertyType.Unknown;

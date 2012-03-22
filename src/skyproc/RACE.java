@@ -11,8 +11,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- * Race
- *
+ * Race Records
  * @author Justin Swanson
  */
 public class RACE extends MajorRecordDescription {
@@ -20,8 +19,14 @@ public class RACE extends MajorRecordDescription {
     private static final Type[] type = {Type.RACE};
     SubList<SubForm> spells = new SubList<SubForm>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm WNAM = new SubForm(Type.WNAM);
+    /**
+     *
+     */
     public BodyTemplate bodyTemplate = new BodyTemplate();
-    public Keywords keywords = new Keywords();
+    /**
+     *
+     */
+    public KeywordSet keywords = new KeywordSet();
     SubData DATA = new SubData(Type.DATA);
     SubMarkerSet<MFNAMdata> MFNAM = new SubMarkerSet<MFNAMdata>(new MFNAMdata(), Type.MNAM, Type.FNAM);
     SubList<SubString> MTNMs = new SubList<SubString>(new SubString(Type.MTNM, false));
@@ -416,22 +421,42 @@ public class RACE extends MajorRecordDescription {
 	WNAM.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getSpells() {
 	return SubList.subFormToPublic(spells);
     }
 
+    /**
+     *
+     * @param spell
+     */
     public void addSpell(FormID spell) {
 	spells.add(new SubForm(Type.SPLO, spell));
     }
 
+    /**
+     *
+     * @param spell
+     */
     public void removeSpell(FormID spell) {
 	spells.remove(new SubForm(Type.SPLO, spell));
     }
 
+    /**
+     *
+     */
     public void clearSpells() {
 	spells.clear();
     }
 
+    /**
+     *
+     * @param gender
+     * @param model
+     */
     public void setModel(Gender gender, String model) {
 	switch (gender) {
 	    case MALE:
@@ -443,6 +468,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public String getModel(Gender gender) {
 	switch (gender) {
 	    case MALE:
@@ -452,6 +482,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @param voice
+     */
     public void setVoiceType(Gender gender, FormID voice) {
 	switch (gender) {
 	    case MALE:
@@ -463,6 +498,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public FormID getVoiceType(Gender gender) {
 	switch (gender) {
 	    case MALE:
@@ -472,6 +512,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @param color
+     */
     public void setHairColor(Gender gender, FormID color) {
 	switch (gender) {
 	    case MALE:
@@ -483,6 +528,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public FormID getHairColor(Gender gender) {
 	switch (gender) {
 	    case MALE:
@@ -492,6 +542,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @param part
+     */
     public void setDecapHeadPart(Gender gender, FormID part) {
 	switch (gender) {
 	    case MALE:
@@ -503,6 +558,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public FormID getDecapHeadPart(Gender gender) {
 	switch (gender) {
 	    case MALE:

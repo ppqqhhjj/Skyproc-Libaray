@@ -13,7 +13,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * Alchemy Records
  * @author Justin Swanson
  */
 public class ALCH extends MagicItem {
@@ -115,10 +115,25 @@ public class ALCH extends MagicItem {
 	}
     }
 
+    /**
+     *
+     */
     public enum ALCHFlag {
+	/**
+	 *
+	 */
 	ManualCalc(0),
+	/**
+	 *
+	 */
 	Food(1),
+	/**
+	 *
+	 */
 	Medicine(16),
+	/**
+	 *
+	 */
 	Poison(17)
 	;
 
@@ -131,90 +146,180 @@ public class ALCH extends MagicItem {
 
     // Get / set
 
+    /**
+     *
+     * @param groundModel
+     */
     public void setModel (String groundModel) {
 	MODL.setString(groundModel);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModel () {
 	return MODL.string;
     }
 
+    /**
+     *
+     * @param pickupSound
+     */
     public void setPickupSound (FormID pickupSound) {
 	YNAM.setForm(pickupSound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getPickupSound () {
 	return YNAM.getForm();
     }
 
+    /**
+     *
+     * @param dropSound
+     */
     public void setDropSound (FormID dropSound) {
 	ZNAM.setForm(dropSound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getDropSound () {
 	return ZNAM.getForm();
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue (int value) {
 	ENIT.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue () {
 	return ENIT.value;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(ALCHFlag flag, boolean on) {
 	ENIT.flags.set(flag.value, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(ALCHFlag flag) {
 	return ENIT.flags.is(flag.value);
     }
 
+    /**
+     *
+     * @param addiction
+     */
     public void setAddiction (FormID addiction) {
 	ENIT.addiction = addiction;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getAddiction () {
 	return ENIT.addiction;
     }
 
+    /**
+     *
+     * @param useSound
+     */
     public void setUseSound (FormID useSound) {
 	ENIT.useSound = useSound;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getUseSound () {
 	return ENIT.useSound;
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight (float weight) {
 	DATA.data = weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight () {
 	return DATA.data;
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setInventoryIcon (String filename) {
 	ICON.setString(filename);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getInventoryIcon () {
 	return ICON.print();
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setMessageIcon (String filename) {
 	MICO.setString(filename);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMessageIcon () {
 	return MICO.print();
     }
 
+    /**
+     *
+     * @param equipType
+     */
     public void setEquipType (FormID equipType) {
 	ETYP.setForm(equipType);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getEquipType () {
 	return ETYP.getForm();
     }

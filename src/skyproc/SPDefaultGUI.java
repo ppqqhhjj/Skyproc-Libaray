@@ -13,7 +13,7 @@ import lev.gui.resources.LFonts;
 import lev.gui.resources.LImages;
 
 /**
- *
+ * A GUI setup that offered as an easy out-of-the-box GUI option. 
  * @author Justin Swanson
  */
 public class SPDefaultGUI extends JFrame {
@@ -131,6 +131,13 @@ public class SPDefaultGUI extends JFrame {
 	return c;
     }
 
+    /**
+     * This function will replace the default text-based header with an image you supply.
+     * @param logo URL to an image.
+     * @param descriptionOffset Y-offset to give the description box, to help align where
+     * it should begin in relation to your image.
+     * @throws IOException If the image given by the URL cannot be loaded properly.
+     */
     public void replaceHeader(final URL logo, final int descriptionOffset) throws IOException {
 	patcherLogo = new LImagePane(logo);
 	SwingUtilities.invokeLater(new Runnable() {

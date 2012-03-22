@@ -12,6 +12,8 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
+ * A Magic Effect reference object that is used to represent attached MGEF records on
+ * spells. 
  *
  * @author Justin Swanson
  */
@@ -22,7 +24,10 @@ public class MagicEffectRef extends SubShell {
     EFIT EFIT = new EFIT();
     SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
 
-    public MagicEffectRef (FormID magicEffectRef) {
+    /**
+     * @param magicEffectRef A formID to a MGEF record.
+     */
+    public MagicEffectRef(FormID magicEffectRef) {
 	super(types);
 	init();
 	EFID.setForm(magicEffectRef);
@@ -82,7 +87,7 @@ public class MagicEffectRef extends SubShell {
 	int AOE = 0;
 	int duration = 0;
 
-	EFIT () {
+	EFIT() {
 	    super(Type.EFIT);
 	}
 
@@ -124,35 +129,67 @@ public class MagicEffectRef extends SubShell {
     }
 
     // Get/Set
-    public void setMagicRef (FormID magicRef) {
+    /**
+     *
+     * @param magicRef
+     */
+    public void setMagicRef(FormID magicRef) {
 	EFID.setForm(magicRef);
     }
 
-    public FormID getMagicRef () {
+    /**
+     *
+     * @return
+     */
+    public FormID getMagicRef() {
 	return EFID.getForm();
     }
 
-    public void setMagnitude (float magnitude) {
+    /**
+     *
+     * @param magnitude
+     */
+    public void setMagnitude(float magnitude) {
 	EFIT.magnitude = magnitude;
     }
 
-    public float getMagnitude () {
+    /**
+     *
+     * @return
+     */
+    public float getMagnitude() {
 	return EFIT.magnitude;
     }
 
-    public void setAreaOfEffect (int aoe) {
+    /**
+     *
+     * @param aoe
+     */
+    public void setAreaOfEffect(int aoe) {
 	EFIT.AOE = aoe;
     }
 
-    public int getAreaOfEffect () {
+    /**
+     *
+     * @return
+     */
+    public int getAreaOfEffect() {
 	return EFIT.AOE;
     }
 
-    public void setDuration (int duration) {
+    /**
+     *
+     * @param duration
+     */
+    public void setDuration(int duration) {
 	EFIT.duration = duration;
     }
 
-    public int getDuration () {
+    /**
+     *
+     * @return
+     */
+    public int getDuration() {
 	return EFIT.duration;
     }
 }

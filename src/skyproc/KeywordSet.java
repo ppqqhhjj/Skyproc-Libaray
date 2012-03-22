@@ -13,22 +13,22 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * A set of keywords associated with a major record.
  * @author Justin Swanson
  */
-public class Keywords extends SubRecord {
+public class KeywordSet extends SubRecord {
 
     private static final Type[] types = {Type.KSIZ, Type.KWDA};
     SubData counter = new SubData(Type.KSIZ);
     SubFormArray keywords = new SubFormArray(Type.KWDA, 0);
 
-    Keywords() {
+    KeywordSet() {
 	super(types);
     }
 
     @Override
     SubRecord getNew(Type type) {
-	return new Keywords();
+	return new KeywordSet();
     }
 
     @Override
@@ -81,6 +81,10 @@ public class Keywords extends SubRecord {
 	keywords.standardizeMasters(srcMod);
     }
 
+    /**
+     * Returns a COPY of the list of FormIDs associated with this keyword set.
+     * @return
+     */
     public ArrayList<FormID> getKeywordRefs() {
 	ArrayList<FormID> out = new ArrayList<FormID>(keywords.size());
 	for (FormID id : keywords) {
@@ -89,11 +93,19 @@ public class Keywords extends SubRecord {
 	return out;
     }
 
+    /**
+     * Adds a keyword to the list
+     * @param keywordRef A KYWD formID
+     */
     public void addKeywordRef(FormID keywordRef) {
 	keywords.add(keywordRef);
 	counter.modValue(1);
     }
 
+    /**
+     * Removes a keyword to the list
+     * @param keywordRef A KYWD formID
+     */
     public void removeKeywordRef(FormID keywordRef) {
 	if (keywords.remove(keywordRef)) {
 	    counter.modValue(-1);

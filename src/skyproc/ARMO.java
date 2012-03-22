@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LFlags;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- * Armor
+ * Armor Records
  * @author Justin Swanson
  */
 public class ARMO extends MajorRecordDescription {
@@ -32,6 +31,9 @@ public class ARMO extends MajorRecordDescription {
     SubString MOD4 = new SubString(Type.MOD4, true);
     SubData MO4T = new SubData(Type.MO4T);
     SubData MO4S = new SubData(Type.MO4S);
+    /**
+     *
+     */
     public BodyTemplate bodyTemplate = new BodyTemplate();
     SubForm YNAM = new SubForm(Type.YNAM);
     SubForm ZNAM = new SubForm(Type.ZNAM);
@@ -39,7 +41,10 @@ public class ARMO extends MajorRecordDescription {
     SubForm BIDS = new SubForm(Type.BIDS);
     SubForm BAMT = new SubForm(Type.BAMT);
     SubForm RNAM = new SubForm(Type.RNAM);
-    public Keywords keywords = new Keywords();
+    /**
+     *
+     */
+    public KeywordSet keywords = new KeywordSet();
     SubList<SubForm> MODLs = new SubList<SubForm>(new SubForm(Type.MODL));
     DATA DATA = new DATA();
     SubData DNAM = new SubData(Type.DNAM);

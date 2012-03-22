@@ -14,7 +14,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * A Magic Effect record
  * @author Justin Swanson
  */
 public class MGEF extends MajorRecordDescription {
@@ -22,17 +22,24 @@ public class MGEF extends MajorRecordDescription {
     private static Type[] types = {Type.MGEF};
     DATA DATA = new DATA();
     SubForm ESCE = new SubForm(Type.ESCE);
-    public Keywords keywords = new Keywords();
+    /**
+     *
+     */
+    public KeywordSet keywords = new KeywordSet();
     SubForm MODB = new SubForm(Type.MDOB);
     SubData OBND = new SubData(Type.OBND);
     SNDD sounds = new SNDD();
     SubList<Condition> CONDs = new SubList<Condition>(new Condition());
+    /**
+     *
+     */
     public ScriptPackage scripts = new ScriptPackage();
 
     /**
      *
      * @param modToOriginateFrom
      * @param edid EDID to give the new record. Make sure it is unique.
+     * @param name
      */
     public MGEF(Mod modToOriginateFrom, String edid, String name) {
 	super(modToOriginateFrom, edid);
@@ -352,25 +359,82 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     */
     public enum SpellEffectFlag {
 
+	/**
+	 *
+	 */
 	Hostile(0),
+	/**
+	 *
+	 */
 	Recover(1),
+	/**
+	 *
+	 */
 	Detrimental(2),
+	/**
+	 *
+	 */
 	SnapToNavmesh(3),
+	/**
+	 *
+	 */
 	NoHitEvent(4),
+	/**
+	 *
+	 */
 	DispellEffects(8),
+	/**
+	 *
+	 */
 	NoDuration(9),
+	/**
+	 *
+	 */
 	NoMagnitude(10),
+	/**
+	 *
+	 */
 	NoArea(11),
+	/**
+	 *
+	 */
 	FXPersist(12),
+	/**
+	 *
+	 */
 	NoRecast(13),
+	/**
+	 *
+	 */
 	GoryVisual(14),
+	/**
+	 *
+	 */
 	HideInUI(15),
+	/**
+	 *
+	 */
 	PowerAffectsMagnitude(21),
+	/**
+	 *
+	 */
 	PowerAffectsDuration(22),
+	/**
+	 *
+	 */
 	Painless(26),
+	/**
+	 *
+	 */
 	NoHitEffect(27),
+	/**
+	 *
+	 */
 	NoDeathDispel(28),;
 	int value;
 
@@ -379,13 +443,34 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     */
     public enum SoundData {
 
+	/**
+	 *
+	 */
 	SheathDraw,
+	/**
+	 *
+	 */
 	Charge,
+	/**
+	 *
+	 */
 	Ready,
+	/**
+	 *
+	 */
 	Release,
+	/**
+	 *
+	 */
 	ConcentrationCastLoop,
+	/**
+	 *
+	 */
 	OnHit
     }
 }

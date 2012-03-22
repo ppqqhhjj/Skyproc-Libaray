@@ -9,12 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import lev.LFileChannel;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 
 /**
- *
+ * An object that parses and represents a NIF object.  Can be queried for its contents.
+ * NOTE:  This is a rough/incomplete object.  Expect deficiencies.
  * @author Justin Swanson
  */
 public class NIF {
@@ -39,7 +40,7 @@ public class NIF {
 	fileName = f.getPath();
 	parseData(new LShrinkArray(in.readInByteBuffer(0, in.available())));
     }
-    
+
     /**
      * Creates a NIF object from the given ShrinkArray.  Throws exceptions
      * if the data is not a proper nif file.
@@ -143,7 +144,7 @@ public class NIF {
     }
 
     /**
-     * A single Node and its data in the nif file.  
+     * A single Node and its data in the nif file.
      */
     public class Node {
 
@@ -174,52 +175,52 @@ public class NIF {
     }
 
     /**
-     * 
+     *
      */
     public enum NodeType {
 
 	/**
-	 * 
+	 *
 	 */
 	NINODE,
 	/**
-	 * 
+	 *
 	 */
 	BSINVMARKER,
 	/**
-	 * 
+	 *
 	 */
 	NITRISHAPE,
 	/**
-	 * 
+	 *
 	 */
 	NITRISHAPEDATA,
 	/**
-	 * 
+	 *
 	 */
 	NISKININSTANCE,
 	/**
-	 * 
+	 *
 	 */
 	NISKINDATA,
 	/**
-	 * 
+	 *
 	 */
 	NISKINPARTITION,
 	/**
-	 * 
+	 *
 	 */
 	BSLIGHTINGSHADERPROPERTY,
 	/**
-	 * 
+	 *
 	 */
 	BSSHADERTEXTURESET,
 	/**
-	 * 
+	 *
 	 */
 	NIALPHAPROPERTY,
 	/**
-	 * 
+	 *
 	 */
 	UNKNOWN;
 
@@ -233,7 +234,7 @@ public class NIF {
     }
 
     /**
-     * 
+     *
      * @return List of the node types in the nif file, in order.
      */
     public ArrayList<NodeType> getNodeTypes() {
@@ -245,7 +246,7 @@ public class NIF {
     }
 
     /**
-     * 
+     *
      * @param i
      * @return The ith node in the NIF object.
      */
@@ -254,7 +255,7 @@ public class NIF {
     }
 
     /**
-     * 
+     *
      * @param i
      * @return The title of the ith node in the NIF object.
      */
@@ -263,7 +264,7 @@ public class NIF {
     }
 
     /**
-     * 
+     *
      * @param type Type to retrieve.
      * @return List of all the Node objects matching the given type.
      */
@@ -278,8 +279,8 @@ public class NIF {
     }
 
     /**
-     * A special function that returns sets of nodes each relating to a 
-     * NiTriShape package. This return a list of lists containing a NiTriShape 
+     * A special function that returns sets of nodes each relating to a
+     * NiTriShape package. This return a list of lists containing a NiTriShape
      * and all the nodes following up until another NiTriShape is encountered,
      * which will start another list.
      * @return List of NiTriShape node sets.
@@ -300,9 +301,9 @@ public class NIF {
 	}
 	return out;
     }
-    
+
     /**
-     * 
+     *
      * @param n Node to extract texture names from.  Must be a valid BSShaderTextureSet node
      * or the function will fail.
      * @return List of the textures in the node.

@@ -285,6 +285,11 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Redirects System.out to the asynchronous log stream.
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static void redirectSystemOutStream() throws FileNotFoundException, IOException {
 	if (log == null) {
 	    createGlobalLog();
@@ -325,6 +330,13 @@ public class SPGlobal {
 	}
     }
     // Flag globals
+    /**
+     * If on, the Global Patch assigned will be imported in, and its EDID<->FormID
+     * assignments recorded.  Any records in the new patch that match EDIDs with the old
+     * patch will receive the same FormID.  This is meant to provide "consistency" so that
+     * rerunning the patcher with new input doesn't jumble the FormIDs and ruin the referencing
+     * in someone's savegame.
+     */
     public static boolean consistency = true;
     // Debug Globals
     /**

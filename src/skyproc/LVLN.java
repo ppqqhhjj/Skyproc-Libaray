@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.Ln;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.LVLN.LVLO;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -41,7 +41,7 @@ public class LVLN extends Actor implements Iterable<LVLO> {
     /**
      * Creates a new LVLN record with a FormID originating from the mod parameter.
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
-     * @param edid EDID to assign the record.  Make sure it's unique. 
+     * @param edid EDID to assign the record.  Make sure it's unique.
      */
     public LVLN(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);

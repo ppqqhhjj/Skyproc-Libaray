@@ -5,7 +5,7 @@
 package skyproc;
 
 /**
- *
+ * Keyword Records
  * @author Justin Swanson
  */
 public class KYWD extends MajorRecord {

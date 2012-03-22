@@ -13,7 +13,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * Ingredient Records
  * @author Justin Swanson
  */
 public class INGR extends MagicItem {
@@ -28,6 +28,9 @@ public class INGR extends MagicItem {
     SubString ICON = new SubString(Type.ICON, true);
     SubString MICO = new SubString(Type.MICO, true);
     SubForm ETYP = new SubForm(Type.ETYP);
+    /**
+     *
+     */
     public ScriptPackage scripts = new ScriptPackage();
 
     INGR() {
@@ -139,9 +142,21 @@ public class INGR extends MagicItem {
 
     }
 
+    /**
+     *
+     */
     public enum INGRFlag {
+	/**
+	 *
+	 */
 	ManualCalc(0),
+	/**
+	 *
+	 */
 	Food(1),
+	/**
+	 *
+	 */
 	ReferencesPersist(8)
 	;
 
@@ -154,74 +169,148 @@ public class INGR extends MagicItem {
 
     // Get/set
 
+    /**
+     *
+     * @param groundModel
+     */
     public void setModel (String groundModel) {
 	MODL.setString(groundModel);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModel () {
 	return MODL.string;
     }
 
+    /**
+     *
+     * @param pickupSound
+     */
     public void setPickupSound (FormID pickupSound) {
 	YNAM.setForm(pickupSound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getPickupSound () {
 	return YNAM.getForm();
     }
 
+    /**
+     *
+     * @param dropSound
+     */
     public void setDropSound (FormID dropSound) {
 	ZNAM.setForm(dropSound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getDropSound () {
 	return ZNAM.getForm();
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight (float weight) {
 	DATA.weight = weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight() {
 	return DATA.weight;
     }
 
+    /**
+     *
+     * @param baseCost
+     */
     public void setBaseCost (int baseCost) {
 	ENIT.baseCost = baseCost;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getBaseCost () {
 	return ENIT.baseCost;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set (INGRFlag flag, boolean on) {
 	ENIT.flags.set(flag.value, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get (INGRFlag flag) {
 	return ENIT.flags.is(flag.value);
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setInventoryIcon (String filename) {
 	ICON.setString(filename);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getInventoryIcon () {
 	return ICON.print();
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setMessageIcon (String filename) {
 	MICO.setString(filename);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMessageIcon () {
 	return MICO.print();
     }
 
+    /**
+     *
+     * @param equipType
+     */
     public void setEquipType (FormID equipType) {
 	ETYP.setForm(equipType);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getEquipType () {
 	return ETYP.getForm();
     }
