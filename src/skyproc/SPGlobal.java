@@ -136,7 +136,11 @@ public class SPGlobal {
 			+ " are unrelated with past patches.  This may not be a problem depending on the situation.<br><br>"
 			+ "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in "
 			+ "your debug folder) to Leviathan1753 for analysis.");
-		Ln.moveFile(f, new File(SPGlobal.pathToDebug + f.getName()), false);
+		File dest = new File(SPGlobal.pathToDebug + f.getName());
+		if (dest.isFile()) {
+		    dest.delete();
+		}
+		Ln.moveFile(f, dest, false);
 		logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
 	    }
 	}

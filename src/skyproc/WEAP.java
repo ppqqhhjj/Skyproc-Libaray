@@ -96,6 +96,7 @@ public class WEAP extends MajorRecordDescription {
     class DNAM extends SubRecord {
 
 	WeaponType wtype;
+	byte[] unknown1;
 	float speed;
 	float reach;
 	LFlags flags1 = new LFlags(4);
@@ -123,7 +124,8 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(wtype.ordinal());
+	    out.write(wtype.ordinal(),1);
+	    out.write(unknown1, 3);
 	    out.write(speed);
 	    out.write(reach);
 	    out.write(flags1.export());
@@ -148,7 +150,8 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    wtype = WeaponType.values()[in.extractInt(4)];
+	    wtype = WeaponType.values()[in.extractInt(1)];
+	    unknown1 = in.extract(3);
 	    speed = in.extractFloat();
 	    reach = in.extractFloat();
 	    flags1.set(in.extract(4));
