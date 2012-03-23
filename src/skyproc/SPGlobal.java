@@ -2,6 +2,8 @@ package skyproc;
 
 import java.io.*;
 import java.util.*;
+import javax.swing.JOptionPane;
+import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
 
@@ -28,6 +30,7 @@ public class SPGlobal {
      */
     public static String pathToData = "../../";
     public static String pathToInternalFiles = "Files/";
+    static String pathToDebug = "SkyProcDebug/";
     /**
      * Skyproc will import and embed the language given by SPGlobal.language
      * every time a patch is created. To offer multi-language support, simply
@@ -123,6 +126,17 @@ public class SPGlobal {
 		}
 
 	    } catch (BadMod ex) {
+		logException(ex);
+		JOptionPane.showMessageDialog(null, "There was an error importing the consistency patch.<br><br>"
+			+ "This means the old patch could not properly be imported to match new records with their"
+			+ "old formIDs.  This means your savegame has a good chance of having mismatched records.<br><br>"
+			+ "Option 1: Your old patch has been moved to the debug folder.  You can move that back to the data "
+			+ "folder and use it. This essentially is 'reverting' to your original setup.<br>"
+			+ "Option 2: Just keep letting the program run and use the new patch.  It will have fresh FormIDs that"
+			+ " are unrelated with past patches.  This may not be a problem depending on the situation.<br><br>"
+			+ "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in "
+			+ "your debug folder) to Leviathan1753 for analysis.");
+		Ln.moveFile(f, new File(SPGlobal.pathToDebug + f.getName()), false);
 		logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
 	    }
 	}
@@ -160,7 +174,8 @@ public class SPGlobal {
      * @param path The path to create the "SkyProcDebug/" folder.
      */
     public static void createGlobalLog(String path) {
-	log = new SPLogger(path + "SkyProcDebug/");
+	pathToDebug = path + "SkyProcDebug/";
+	log = new SPLogger(pathToDebug);
     }
 
     static void logSync(String header, String... print) {
