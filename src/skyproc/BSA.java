@@ -267,10 +267,10 @@ public class BSA {
 
 	    String line = "";
 	    // First line
-	    while (input.available() > 0 && !line.contains("sResourceArchiveList")) {
+	    while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
 		line = input.readLine();
 	    }
-	    if (line.contains("sResourceArchiveList2")) {
+	    if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
 		line2 = true;
 		resources.addAll(processINIline(line));
 	    } else {
@@ -280,10 +280,10 @@ public class BSA {
 
 	    // Second line
 	    line = "";
-	    while (input.available() > 0 && !line.contains("sResourceArchiveList")) {
+	    while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
 		line = input.readLine();
 	    }
-	    if (line.contains("sResourceArchiveList2")) {
+	    if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
 		line2 = true;
 		resources.addAll(processINIline(line));
 	    } else {
