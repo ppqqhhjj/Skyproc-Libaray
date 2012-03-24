@@ -94,13 +94,14 @@ public class SPGlobal {
 	    SPImporter importer = new SPImporter();
 	    Mod consistencyPatch;
 	    try {
-		boolean tmpLogging = logging();
-		logging(debugConsistencyImport);
 		SPGUI.progress.reset();
 		SPGUI.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
 		SPImporter.getActiveModList();
+		SPGlobal.newSyncLog("Mod Import/ConsistencyPatch.txt");
+		boolean syncing = sync();
+		sync(true);
 		consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
-		logging(tmpLogging);
+		sync(syncing);
 		edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
 		for (GRUP g : consistencyPatch.GRUPs.values()) {
 		    for (Object o : g) {
