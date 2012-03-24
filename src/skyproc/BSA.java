@@ -281,7 +281,7 @@ public class BSA {
 	    // Second line
 	    line = "";
 	    while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
-		line = input.readLine();
+		line = Ln.cleanLine(input.readLine(), "#");
 	    }
 	    if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
 		line2 = true;
