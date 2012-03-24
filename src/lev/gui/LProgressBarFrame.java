@@ -26,7 +26,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     Dimension GUIsize = new Dimension(250, 72);
     LImagePane backgroundPanel;
     JFrame guiRef;
-    static int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
+    int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
 
     public LProgressBarFrame(final Font header, final Color headerC, final Font footer, final Color footerC) {
 	bar = new LProgressBar(150, 15, footer, footerC);
@@ -59,7 +59,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	setVisible(true);
     }
 
-    public static void setExitOnClose() {
+    public void setExitOnClose() {
 	closeOp = JFrame.DISPOSE_ON_CLOSE;
     }
 

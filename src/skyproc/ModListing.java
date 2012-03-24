@@ -218,13 +218,23 @@ public class ModListing extends SubRecord implements Comparable {
 	    if (!rhsActive) {
 		return -1;
 	    } else {
-		return SPDatabase.activePlugins.indexOf(this) - SPDatabase.activePlugins.indexOf(rhs);
+		int comp = SPDatabase.activePlugins.indexOf(this) - SPDatabase.activePlugins.indexOf(rhs);
+		if (comp != 0) {
+		    return comp;
+		} else {
+		    return 1;
+		}
 	    }
 	} else {
 	    if (rhsActive) {
 		return 1;
 	    } else {
-		return SPGlobal.getDB().addedplugins.indexOf(this) - SPGlobal.getDB().addedplugins.indexOf(rhs);
+		int comp = SPGlobal.getDB().addedplugins.indexOf(this) - SPGlobal.getDB().addedplugins.indexOf(rhs);
+		if (comp != 0) {
+		    return comp;
+		} else {
+		    return 1;
+		}
 	    }
 	}
     }

@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lev.Ln;
 
 /**
@@ -48,7 +50,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      */
     public LDebug () {
         init();
@@ -59,7 +61,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @param b
      */
     public static void on(Boolean b) {
@@ -67,7 +69,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public static boolean on () {
@@ -75,7 +77,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @param path
      * @param space
      */
@@ -147,7 +149,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @param in
      */
     public void writeException(String in) {
@@ -157,7 +159,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @param in
      * @throws IOException
      */
@@ -166,7 +168,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      */
     public void flushDebug() {
         try {
@@ -178,7 +180,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      */
     public void closeDebugFile() {
         if (writer != null) {
@@ -192,14 +194,14 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      */
     public void clearBannedHeaders() {
         bannedHeaders.clear();
     }
 
     /**
-     * 
+     *
      * @param in
      */
     public void addBannedHeader(String in) {
@@ -207,7 +209,7 @@ public class LDebug {
     }
 
     /**
-     * 
+     *
      * @param input
      */
     public void addBannedHeader(String[] input) {
@@ -230,5 +232,13 @@ public class LDebug {
         for (LDebug d : debugs) {
             d.closeDebugFile();
         }
+    }
+
+    public static void wrapUpAndExit() {
+	try {
+	    wrapUp();
+	} catch (IOException ex) {
+	}
+	System.exit(0);
     }
 }

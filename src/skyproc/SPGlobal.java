@@ -94,11 +94,11 @@ public class SPGlobal {
 	    SPImporter importer = new SPImporter();
 	    Mod consistencyPatch;
 	    try {
-
 		boolean tmpLogging = logging();
 		logging(debugConsistencyImport);
 		SPGUI.progress.reset();
 		SPGUI.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
+		SPImporter.getActiveModList();
 		consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
 		logging(tmpLogging);
 		edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
@@ -125,17 +125,17 @@ public class SPGlobal {
 		    }
 		}
 
-	    } catch (BadMod ex) {
+	    } catch (Exception ex) {
 		logException(ex);
-		JOptionPane.showMessageDialog(null, "There was an error importing the consistency patch.<br><br>"
-			+ "This means the old patch could not properly be imported to match new records with their"
+		JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency patch.<br><br>"
+			+ "This means the old patch could not properly be imported to match new records with their<br>"
 			+ "old formIDs.  This means your savegame has a good chance of having mismatched records.<br><br>"
-			+ "Option 1: Your old patch has been moved to the debug folder.  You can move that back to the data "
+			+ "Option 1: Your old patch has been moved to the debug folder.  You can move that back to the data <br>"
 			+ "folder and use it. This essentially is 'reverting' to your original setup.<br>"
-			+ "Option 2: Just keep letting the program run and use the new patch.  It will have fresh FormIDs that"
+			+ "Option 2: Just keep letting the program run and use the new patch.  It will have fresh FormIDs that<br>"
 			+ " are unrelated with past patches.  This may not be a problem depending on the situation.<br><br>"
-			+ "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in "
-			+ "your debug folder) to Leviathan1753 for analysis.");
+			+ "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in<br>"
+			+ "your debug folder) to Leviathan1753 for analysis.</html>");
 		File dest = new File(SPGlobal.pathToDebug + f.getName());
 		if (dest.isFile()) {
 		    dest.delete();
@@ -307,6 +307,7 @@ public class SPGlobal {
 
     /**
      * Redirects System.out to the asynchronous log stream.
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -351,11 +352,12 @@ public class SPGlobal {
     }
     // Flag globals
     /**
-     * If on, the Global Patch assigned will be imported in, and its EDID<->FormID
-     * assignments recorded.  Any records in the new patch that match EDIDs with the old
-     * patch will receive the same FormID.  This is meant to provide "consistency" so that
-     * rerunning the patcher with new input doesn't jumble the FormIDs and ruin the referencing
-     * in someone's savegame.
+     * If on, the Global Patch assigned will be imported in, and its
+     * EDID<->FormID assignments recorded. Any records in the new patch that
+     * match EDIDs with the old patch will receive the same FormID. This is
+     * meant to provide "consistency" so that rerunning the patcher with new
+     * input doesn't jumble the FormIDs and ruin the referencing in someone's
+     * savegame.
      */
     public static boolean consistency = true;
     // Debug Globals

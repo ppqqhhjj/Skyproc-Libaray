@@ -3,8 +3,6 @@ package skyproc;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
