@@ -5,7 +5,6 @@
 package lev.gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -161,5 +160,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     @Override
     public void pause(boolean on) {
 	pause = on;
+    }
+
+    @Override
+    public boolean paused() {
+	return pause;
     }
 }

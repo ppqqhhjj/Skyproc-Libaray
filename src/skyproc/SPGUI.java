@@ -58,6 +58,11 @@ public class SPGUI {
 	@Override
 	public void pause(boolean on) {
 	}
+
+	@Override
+	public boolean paused() {
+	    return true;
+	}
     }
 
 }

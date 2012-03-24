@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -151,5 +150,10 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     @Override
     public void pause(boolean on) {
 	bar.pause(on);
+    }
+
+    @Override
+    public boolean paused() {
+	return bar.paused();
     }
 }
