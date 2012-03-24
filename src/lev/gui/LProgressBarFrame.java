@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -26,7 +27,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     Dimension GUIsize = new Dimension(250, 72);
     LImagePane backgroundPanel;
     JFrame guiRef;
-    int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
+    public int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
 
     public LProgressBarFrame(final Font header, final Color headerC, final Font footer, final Color footerC) {
 	bar = new LProgressBar(150, 15, footer, footerC);
@@ -56,7 +57,6 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	backgroundPanel.add(bar);
 	backgroundPanel.add(title);
 	setResizable(false);
-	setVisible(true);
     }
 
     public void setExitOnClose() {
@@ -78,8 +78,10 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     }
 
     public final void moveToCorrectLocation() {
-	Rectangle r = guiRef.getBounds();
-	setLocation(r.x + correctLocation.width, r.y + correctLocation.height);
+	if (guiRef != null) {
+	    Rectangle r = guiRef.getBounds();
+	    setLocation(r.x + correctLocation.width, r.y + correctLocation.height);
+	}
     }
 
     @Override

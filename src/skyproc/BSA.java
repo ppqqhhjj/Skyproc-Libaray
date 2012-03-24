@@ -318,7 +318,9 @@ public class BSA {
 
 	    if (!line1 || !line2) {
 		// If one of the lines is missing.
-		throw new BadParameter("BSA load order could not be properly established.  Check logs for more information.");
+		throw new BadParameter("<html>Your Skyrim.ini file did not have BOTH lines: 'sResourceArchiveList' and 'sResourceArchiveList2'.<br>"
+			+ "It cannot figure out which BSAs to load in.<br>"
+			+ "Please confirm that those lines appear in your Skyrim.ini and have the proper BSAs listed.");
 	    }
 
 	} catch (FileNotFoundException ex) {
