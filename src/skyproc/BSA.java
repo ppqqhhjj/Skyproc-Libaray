@@ -228,7 +228,7 @@ public class BSA {
 	}
     }
 
-    static void loadResourceLoadOrder() throws IOException {
+    static void loadResourceLoadOrder() throws IOException, BadParameter {
 	if (resourceLoadOrder != null) {
 	    return;
 	}
@@ -237,7 +237,7 @@ public class BSA {
 	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
 
 	// See if there's a manual override
-	File override = new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt");
+	File override = new File(SPGlobal.pathToInternalFiles + "Skyrim-INI-Location.txt");
 	if (override.exists()) {
 	    SPGlobal.log(header, "Skyrim.ini override file exists: " + override);
 	    BufferedReader in = new BufferedReader(new FileReader(override));
@@ -259,16 +259,22 @@ public class BSA {
 	if (SPGlobal.logging()) {
 	    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
 	}
+
+	// Load it in
 	try {
 	    LFileChannel input = new LFileChannel(ini);
+	    boolean line1 = false, line2 = false;
+
 	    String line = "";
-	    // Second line
+	    // First line
 	    while (input.available() > 0 && !line.contains("sResourceArchiveList")) {
 		line = input.readLine();
 	    }
 	    if (line.contains("sResourceArchiveList2")) {
+		line2 = true;
 		resources.addAll(processINIline(line));
 	    } else {
+		line1 = true;
 		resources.addAll(0, processINIline(line));
 	    }
 
@@ -278,8 +284,10 @@ public class BSA {
 		line = input.readLine();
 	    }
 	    if (line.contains("sResourceArchiveList2")) {
+		line2 = true;
 		resources.addAll(processINIline(line));
 	    } else {
+		line1 = true;
 		resources.addAll(0, processINIline(line));
 	    }
 
@@ -308,8 +316,14 @@ public class BSA {
 		}
 	    }
 
+	    if (!line1 || !line2) {
+		// If one of the lines is missing.
+		throw new BadParameter("BSA load order could not be properly established.  Check logs for more information.");
+	    }
+
 	} catch (FileNotFoundException ex) {
 	    SPGlobal.logException(ex);
+	    throw new BadParameter("BSA load order could not be properly established.  Check logs for more information.");
 	}
     }
 
@@ -443,8 +457,9 @@ public class BSA {
      * @param types Types to load in.
      * @return List of all BSA files that contain any of the filetypes.
      * @throws IOException
+     * @throws BadParameter If Skyrim.ini does not have the BSA load order lines
      */
-    public static ArrayList<BSA> loadInBSAs(FileType... types) throws IOException {
+    public static ArrayList<BSA> loadInBSAs(FileType... types) throws IOException, BadParameter {
 	loadResourceLoadOrder();
 	loadPluginLoadOrder();
 	ArrayList<BSA> out = new ArrayList<BSA>();
