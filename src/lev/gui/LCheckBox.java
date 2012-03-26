@@ -79,7 +79,7 @@ public class LCheckBox extends LUserSetting<Boolean> {
     public boolean revertTo(Map<Enum, Setting> m) {
 	if (isTied()) {
 	    boolean cur = cbox.isSelected();
-	    cbox.setSelected(m.get(saveTie).getBool());
+ 	    cbox.setSelected(m.get(saveTie).getBool());
 	    if (cur != cbox.isSelected())
 		return false;
 	}

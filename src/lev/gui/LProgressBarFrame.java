@@ -23,7 +23,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     LProgressBar bar;
     LLabel title;
     Dimension correctLocation = new Dimension(0, 0);
-    Dimension GUIsize = new Dimension(250, 72);
+    Dimension GUIsize = new Dimension(250, 100);
     LImagePane backgroundPanel;
     JFrame guiRef;
     public int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
@@ -49,7 +49,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 
 	title = new LLabel("Please wait...", header, headerC);
 	setSize(250, 72);
-	bar.setLocation(getWidth() / 2 - bar.getWidth() / 2, getHeight() / 2 - bar.getHeight() / 2);
+	bar.setLocation(getWidth() / 2 - bar.getWidth() / 2, getHeight() / 2 - bar.getHeight() / 2 + 10);
 	title.setLocation(getWidth() / 2 - title.getWidth() / 2, 2);
 
 	setSize(250, 100);
@@ -104,7 +104,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	setDoneListener(c);
     }
 
-    private void setDoneListener(ChangeListener c) {
+    void setDoneListener(ChangeListener c) {
 	bar.setDoneListener(c);
     }
 
@@ -155,5 +155,10 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     @Override
     public boolean paused() {
 	return bar.paused();
+    }
+
+    @Override
+    public void done() {
+	bar.done();
     }
 }

@@ -21,9 +21,9 @@ import javax.swing.event.ChangeListener;
  */
 public abstract class LUserSetting<T> extends LHelpComponent {
 
-    Enum saveTie;
-    LSaveFile save;
-    LLabel titleLabel;
+    public Enum saveTie;
+    public LSaveFile save;
+    public LLabel titleLabel;
 
     public LUserSetting(String text) {
 	super(text);

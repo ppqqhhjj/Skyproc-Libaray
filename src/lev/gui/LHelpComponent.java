@@ -4,12 +4,7 @@
  */
 package lev.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -22,10 +17,10 @@ import javax.swing.event.ListSelectionListener;
  */
 public abstract class LHelpComponent extends LComponent {
 
-    LHelpPanel help = null;
+    public LHelpPanel help = null;
     String helpPrefix = "";
     String helpInfo = "";
-    String title;
+    public String title;
 
     public LHelpComponent(String text) {
         title = text;
@@ -42,7 +37,7 @@ public abstract class LHelpComponent extends LComponent {
         }
     }
 
-    protected class HelpActionHandler implements ActionListener {
+    public class HelpActionHandler implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent event) {
@@ -58,7 +53,7 @@ public abstract class LHelpComponent extends LComponent {
 
     }
 
-    protected class HelpFocusHandler implements FocusListener {
+    public class HelpFocusHandler implements FocusListener {
 
         @Override
         public void focusGained(FocusEvent event) {
@@ -86,7 +81,7 @@ public abstract class LHelpComponent extends LComponent {
         }
     }
 
-    protected class HelpMouseHandler implements MouseListener {
+    public class HelpMouseHandler implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {

@@ -7,13 +7,12 @@ package lev.gui;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import lev.gui.LUserSetting;
 
 /**
  *
  * @author Justin Swanson
  */
-abstract class LSaveFile <E extends Enum> {
+public abstract class LSaveFile <E extends Enum> {
 
     protected ArrayList<Map<E, Setting>> sets = new ArrayList<Map<E, Setting>>();
     private static String header = "SaveFile";
@@ -54,16 +53,20 @@ abstract class LSaveFile <E extends Enum> {
 	m.put(type, s);
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean forOblivion, Boolean b) {
-	Add(m, type, new SaveBool(title, b, forOblivion));
+    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Boolean b) {
+	Add(m, type, new SaveBool(title, b, inGame));
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean forOblivion, String s) {
-	Add(m, type, new SaveString(title, s, forOblivion));
+    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, String s) {
+	Add(m, type, new SaveString(title, s, inGame));
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean forOblivion, Integer i) {
-	Add(m, type, new SaveInt(title, i, forOblivion));
+    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Integer i) {
+	Add(m, type, new SaveInt(title, i, inGame));
+    }
+
+    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Float f) {
+	Add(m, type, new SaveFloat(title, f, inGame));
     }
 
     public static void copyTo(Map<Enum, Setting> from, Map<Enum, Setting> to) {

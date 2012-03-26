@@ -12,7 +12,7 @@ import skyproc.exceptions.BadParameter;
  *
  * @author Justin Swanson
  */
-abstract class Setting<T> {
+public abstract class Setting<T> {
 
     protected T data;
     protected String title;

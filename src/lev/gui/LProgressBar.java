@@ -166,4 +166,9 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     public boolean paused() {
 	return pause;
     }
+
+    @Override
+    public void done() {
+	done.setSelected(true);
+    }
 }

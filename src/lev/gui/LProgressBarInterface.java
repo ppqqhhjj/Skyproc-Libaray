@@ -44,4 +44,5 @@ public interface LProgressBarInterface {
     int getMax();
     void pause(boolean on);
     boolean paused ();
+    void done();
 }

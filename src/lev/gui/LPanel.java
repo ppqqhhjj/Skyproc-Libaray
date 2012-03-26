@@ -32,7 +32,7 @@ public class LPanel extends JPanel implements Scrollable {
 	setLocation(x,y);
     }
 
-    protected void Add(Component input) {
+    public void Add(Component input) {
 	input.setVisible(true);
 	add(input);
     }

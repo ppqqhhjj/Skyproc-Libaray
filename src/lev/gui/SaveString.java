@@ -10,8 +10,8 @@ package lev.gui;
  */
 class SaveString extends Setting<String> {
 
-    public SaveString(String title_, String data_, Boolean oblivion_) {
-        super(title_, data_, oblivion_);
+    public SaveString(String title_, String data_, Boolean inGame) {
+        super(title_, data_, inGame);
     }
 
     @Override
