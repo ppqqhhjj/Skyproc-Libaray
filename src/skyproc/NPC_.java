@@ -3,6 +3,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -44,8 +46,8 @@ public class NPC_ extends Actor implements Serializable {
     SubList<SubForm> PNAMs = new SubList<SubForm>(new SubForm(Type.PNAM));
     SubForm HCLF = new SubForm(Type.HCLF);
     SubData NAM5 = new SubData(Type.NAM5);
-    SubData NAM6 = new SubData(Type.NAM6);
-    SubData NAM7 = new SubData(Type.NAM7);
+    SubFloat NAM6 = new SubFloat(Type.NAM6);
+    SubFloat NAM7 = new SubFloat(Type.NAM7);
     SubData NAM8 = new SubData(Type.NAM8);
     SubForm WNAM = new SubForm(Type.WNAM);
     SubForm ANAM = new SubForm(Type.ANAM);
@@ -262,7 +264,9 @@ public class NPC_ extends Actor implements Serializable {
 	int health = 1;
 	int magicka = 1;
 	int stamina = 1;
-	byte[] fluff = new byte[10];
+	byte[] fluff1 = new byte[2];
+	float farAwayDistance = 0;
+	byte[] fluff2 = new byte[4];
 
 	DNAM() {
 	    super(Type.DNAM);
@@ -315,7 +319,9 @@ public class NPC_ extends Actor implements Serializable {
 	    health = in.extractInt(2);
 	    magicka = in.extractInt(2);
 	    stamina = in.extractInt(2);
-	    fluff = in.extract(10);
+	    fluff1 = in.extract(2);
+	    farAwayDistance = in.extractFloat();
+	    fluff2 = in.extract(4);
 	    if (logging()) {
 		logSync("", "DNAM record: ");
 		String temp;
@@ -324,6 +330,7 @@ public class NPC_ extends Actor implements Serializable {
 		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
 		}
 		logSync("", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
+		logSync("", "  " + "Far Away Distance: " + farAwayDistance);
 	    }
 	}
 
@@ -334,7 +341,9 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(health, 2);
 	    out.write(magicka, 2);
 	    out.write(stamina, 2);
-	    out.write(fluff, 10);
+	    out.write(fluff1, 2);
+	    out.write(farAwayDistance);
+	    out.write(fluff2, 4);
 	}
     }
 
@@ -580,86 +589,6 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     /**
-     * Enum representing the various skills associated with an NPC.
-     */
-    public enum Skills {
-	// DO NOT change the order of these.
-
-	/**
-	 * One-handed skill of the NPC.
-	 */
-	ONEHANDED,
-	/**
-	 * Two-handed skill of the NPC.
-	 */
-	TWOHANDED,
-	/**
-	 * Marksman skill of the NPC.
-	 */
-	MARKSMAN,
-	/**
-	 * Block skill of the NPC.
-	 */
-	BLOCK,
-	/**
-	 * Smithing skill of the NPC.
-	 */
-	SMITHING,
-	/**
-	 * Heavy Armor skill of the NPC.
-	 */
-	HEAVYARMOR,
-	/**
-	 * Light Armor skill of the NPC.
-	 */
-	LIGHTARMOR,
-	/**
-	 * Pick Pocket skill of the NPC.
-	 */
-	PICKPOCKET,
-	/**
-	 * Lockpicking skill of the NPC.
-	 */
-	LOCKPICKING,
-	/**
-	 * Sneak skill of the NPC.
-	 */
-	SNEAK,
-	/**
-	 * Alchemy skill of the NPC.
-	 */
-	ALCHEMY,
-	/**
-	 * Speech Craft skill of the NPC.
-	 */
-	SPEECHCRAFT,
-	/**
-	 * Alteration skill of the NPC.
-	 */
-	ALTERATION,
-	/**
-	 * Conjuration skill of the NPC.
-	 */
-	CONJURATION,
-	/**
-	 * Destruction skill of the NPC.
-	 */
-	DESTRUCTION,
-	/**
-	 * Illusion skill of the NPC.
-	 */
-	ILLUSION,
-	/**
-	 * Restoration skill of the NPC.
-	 */
-	RESTORATION,
-	/**
-	 * Enchanting skill of the NPC.
-	 */
-	ENCHANTING
-    }
-
-    /**
      * Enum representing the various AI data types for an NPC.
      */
     public enum AI_Data {
@@ -732,7 +661,8 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     /**
-     * The template flags telling the NPC which parts to use from its target template.
+     * The template flags telling the NPC which parts to use from its target
+     * template.
      */
     public enum TemplateFlag {
 
@@ -740,14 +670,14 @@ public class NPC_ extends Actor implements Serializable {
 	 * Flag to use the traits page of its template.
 	 */
 	USE_TRAITS,
-
     }
 
     /**
-     * Collection of various flags applied to the NPC
+     * Collection of various flags applied to the NPC (ACBS flags)
      */
     public enum NPCFlag {
 
+	Female(0),
 	/**
 	 *
 	 */
@@ -784,6 +714,7 @@ public class NPC_ extends Actor implements Serializable {
 	 *
 	 */
 	Unique(5),
+	OppositeGenderAnims(19),
 	/**
 	 *
 	 */
@@ -791,12 +722,35 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 *
 	 */
-	DoesntAffectStealthMeter(21)
-	;
+	DoesntAffectStealthMeter(21);
 	int value;
 
 	NPCFlag(int value) {
 	    this.value = value;
+	}
+    }
+
+    // Special functions
+    public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
+	for (TemplateFlag f : flags) {
+	    templateToInternal(otherNPC, f);
+	}
+    }
+
+    void templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
+	switch (flag) {
+	    case USE_TRAITS:
+		set(NPCFlag.Female, otherNPC.get(NPCFlag.Female));
+		setRace(otherNPC.getRace());
+		setSkin(otherNPC.getSkin());
+		setHeight(otherNPC.getHeight());
+		setWeight(otherNPC.getWeight());
+		setFarAwayModelSkin(otherNPC.getFarAwayModelSkin());
+		setVoiceType(otherNPC.getVoiceType());
+		ACBS.dispositionBase = otherNPC.ACBS.dispositionBase;
+		setDeathItem(otherNPC.getDeathItem());
+		set(NPCFlag.OppositeGenderAnims, otherNPC.get(NPCFlag.OppositeGenderAnims));
+		break;
 	}
     }
 
@@ -854,7 +808,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param flag NPCFlag to get.
      * @return NPCFlag's status.
      */
-    public boolean get (NPCFlag flag) {
+    public boolean get(NPCFlag flag) {
 	return ACBS.ACBSflags.get(flag.value);
     }
 
@@ -863,7 +817,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param flag NPCFlag to set.
      * @param on What to set the NPCFlag to.
      */
-    public void set (NPCFlag flag, boolean on) {
+    public void set(NPCFlag flag, boolean on) {
 	ACBS.ACBSflags.set(flag.value, on);
     }
 
@@ -1364,4 +1318,35 @@ public class NPC_ extends Actor implements Serializable {
 	DPLT.setForm(ref);
     }
 
+    public void setHeight(float height) {
+	NAM6.data = height;
+    }
+
+    public float getHeight() {
+	return NAM6.data;
+    }
+
+    public void setWeight(float weight) {
+	NAM7.data = weight;
+    }
+
+    public float getWeight() {
+	return NAM7.data;
+    }
+
+    public void setFarAwayModelSkin(FormID id) {
+	ANAM.setForm(id);
+    }
+
+    public FormID getFarAwayModelSkin() {
+	return ANAM.getForm();
+    }
+
+    public void setFarAwayModelDistance(float dist) {
+	DNAM.farAwayDistance = dist;
+    }
+
+    public float getFarAwayModelDistance() {
+	return DNAM.farAwayDistance;
+    }
 }
