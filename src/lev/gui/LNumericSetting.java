@@ -18,8 +18,8 @@ public class LNumericSetting extends LUserSetting<Integer> {
 
     LSpinner setting;
 
-    public LNumericSetting(String text, int size, int min, Integer max, int step, Color c, Enum s, LHelpPanel help) {
-        super(text, new Font("Serif", Font.BOLD, size), c);
+    public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step, Enum s, LHelpPanel help) {
+        super(text, font, c);
         setting = new LSpinner(text, min, min, max, step, Integer.toString(max).length());
         int spacing = 10;
         titleLabel.addShadow();
