@@ -630,7 +630,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @return True if the given flag is on in the mod.
      */
     public boolean isFlag(Mod_Flags flag) {
-	return header.flags.is(flag.value);
+	return header.flags.get(flag.value);
     }
 
     /**

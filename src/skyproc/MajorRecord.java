@@ -170,7 +170,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     Boolean isCompressed() {
-	if (majorFlags.is(18)) {
+	if (majorFlags.get(18)) {
 	    return true;
 	} else {
 	    return false;

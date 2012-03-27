@@ -162,7 +162,7 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public boolean get(BodyPart part) {
-        return bodyParts.is(part.ordinal());
+        return bodyParts.get(part.ordinal());
     }
 
     /**
@@ -180,7 +180,7 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public boolean get(BodyTemplateFlag flag) {
-        return flags.is(4);
+        return flags.get(4);
     }
 
     /**

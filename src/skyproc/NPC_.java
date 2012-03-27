@@ -816,7 +816,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return Template flag's status.
      */
     public boolean get(TemplateFlag flag) {
-	return ACBS.templateFlags.is(flag.ordinal());
+	return ACBS.templateFlags.get(flag.ordinal());
     }
 
     /**
@@ -855,7 +855,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return NPCFlag's status.
      */
     public boolean get (NPCFlag flag) {
-	return ACBS.ACBSflags.is(flag.value);
+	return ACBS.ACBSflags.get(flag.value);
     }
 
     /**

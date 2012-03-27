@@ -225,7 +225,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public boolean get(ALCHFlag flag) {
-	return ENIT.flags.is(flag.value);
+	return ENIT.flags.get(flag.value);
     }
 
     /**

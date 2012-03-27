@@ -261,7 +261,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @param flag TXST flag to check
      * @return True if flag is on.
      */
-    public boolean isFlag(TXSTflag flag) {
+    public boolean get(TXSTflag flag) {
 	return DNAM.is(flag.ordinal());
     }
 
@@ -270,7 +270,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @param flag TXST flag to set
      * @param to Boolean to set the flag to
      */
-    public void setFlag(TXSTflag flag, boolean to) {
+    public void set(TXSTflag flag, boolean to) {
 	DNAM.set(flag.ordinal(), to);
     }
 

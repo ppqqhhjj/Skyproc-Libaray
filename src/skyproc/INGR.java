@@ -264,7 +264,7 @@ public class INGR extends MagicItem {
      * @return
      */
     public boolean get (INGRFlag flag) {
-	return ENIT.flags.is(flag.value);
+	return ENIT.flags.get(flag.value);
     }
 
     /**

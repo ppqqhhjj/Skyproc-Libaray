@@ -13,7 +13,7 @@ public class LFlags implements Serializable {
     private final int bitsPerInt = 8;
 
     /**
-     * 
+     *
      * @param size number of bytes-worth of flags to initialize.
      */
     public LFlags(int size) {
@@ -21,7 +21,7 @@ public class LFlags implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param inFlags bytes to initialize flags to.
      */
     public LFlags(byte[] inFlags) {
@@ -44,16 +44,16 @@ public class LFlags implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param bit Bit/Flag to check
      * @return True if bit/Flag is on
      */
-    public final boolean is(int bit) {
+    public final boolean get(int bit) {
         return flags[bit];
     }
 
     /**
-     * 
+     *
      * @param bit Bit/Flag to check
      * @param on Sets the bit/flag on/off
      */
@@ -78,7 +78,7 @@ public class LFlags implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return Length of the byte array representation
      */
     public final int length() {
@@ -95,7 +95,7 @@ public class LFlags implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return String of 1's and 0's.  Beep boop beep.
      */
     @Override

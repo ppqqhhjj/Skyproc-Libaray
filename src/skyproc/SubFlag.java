@@ -37,7 +37,7 @@ class SubFlag extends SubRecord {
     }
 
     boolean is(int bit) {
-	return flags.is(bit);
+	return flags.get(bit);
     }
 
     @Override

@@ -216,7 +216,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public boolean get(SPELFlag flag) {
-	return SPIT.flags.is(flag.value);
+	return SPIT.flags.get(flag.value);
     }
 
     /**

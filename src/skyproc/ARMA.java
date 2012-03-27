@@ -454,7 +454,6 @@ public class ARMA extends MajorRecord {
                 return;
             case FEMALE:
                 femaleSkinSwapList.setForm(swapList);
-                return;
         }
     }
 

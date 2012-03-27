@@ -839,9 +839,9 @@ public class WEAP extends MajorRecordDescription {
     public boolean get(WeaponFlag flag) {
 	switch (flag.flagSet) {
 	    case 0:
-		return DNAM.flags1.is(flag.value);
+		return DNAM.flags1.get(flag.value);
 	    case 1:
-		return DNAM.flags2.is(flag.value);
+		return DNAM.flags2.get(flag.value);
 	    default:
 		return false;
 	}

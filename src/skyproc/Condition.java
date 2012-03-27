@@ -73,7 +73,7 @@ class Condition extends SubShell {
 	    super.export(out, srcMod);
 	    LFlags tmp = new LFlags(Ln.toByteArray(operator.ordinal(), 1));
 	    for (int i = 3 ; i < 8 ; i++) {
-		tmp.set(i, flags.is(i));
+		tmp.set(i, flags.get(i));
 	    }
 	    out.write(tmp.export(),1);
 	    out.write(fluff, 3);
@@ -199,7 +199,7 @@ class Condition extends SubShell {
     }
 
     public boolean get(CondFlag flag) {
-	return cond.flags.is(flag.value);
+	return cond.flags.get(flag.value);
     }
 
     public void set(CondFlag flag, boolean on) {

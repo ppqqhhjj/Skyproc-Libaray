@@ -57,7 +57,7 @@ public class BSA {
 	if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
 	    SPGlobal.log(header, "Imported " + filePath);
 	    SPGlobal.log(header, "Offset " + offset + ", archiveFlags: " + archiveFlags);
-	    SPGlobal.log(header, "hasDirectoryNames: " + archiveFlags.is(0) + ", hasFileNames: " + archiveFlags.is(1) + ", compressed: " + archiveFlags.is(2));
+	    SPGlobal.log(header, "hasDirectoryNames: " + archiveFlags.get(0) + ", hasFileNames: " + archiveFlags.get(1) + ", compressed: " + archiveFlags.get(2));
 	    SPGlobal.log(header, "FolderCount: " + Ln.prettyPrintHex(folderCount) + ", FileCount: " + Ln.prettyPrintHex(fileCount));
 	    SPGlobal.log(header, "totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
 	    SPGlobal.log(header, "fileFlags: " + fileFlags.toString());
@@ -136,7 +136,7 @@ public class BSA {
 	if ((ref = getFileRef(filePath)) != null) {
 	    in.pos(ref.dataOffset);
 	    LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0, ref.size));
-	    if (archiveFlags.is(2)) {
+	    if (archiveFlags.get(2)) {
 		out.correctForCompression();
 	    }
 	    return out;
@@ -437,7 +437,7 @@ public class BSA {
      * @return True if BSA contains files of that type.
      */
     public boolean contains(FileType fileType) {
-	return fileFlags.is(fileType.ordinal());
+	return fileFlags.get(fileType.ordinal());
     }
 
     /**
