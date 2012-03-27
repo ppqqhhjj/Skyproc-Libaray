@@ -1232,7 +1232,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @param wornArmorRef
      */
-    public void setWornArmor(FormID wornArmorRef) {
+    public void setSkin(FormID wornArmorRef) {
 	WNAM.setForm(wornArmorRef);
     }
 
@@ -1240,7 +1240,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public FormID getWornArmor() {
+    public FormID getSkin() {
 	return WNAM.getForm();
     }
 
