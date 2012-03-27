@@ -93,9 +93,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
-	ingredients.dateStamp = new byte[] { 1, (byte) 0x4C, (byte) 0x2F , 0 };
+	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
 	GRUPs.put(ingredients.getContainedType(), ingredients);
-	alchemy.dateStamp = new byte[] { 3 , (byte)0x3D ,2, 0 };
+	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(alchemy.getContainedType(), alchemy);
 	GRUPs.put(weapons.getContainedType(), weapons);
 	GRUPs.put(NPCs.getContainedType(), NPCs);
@@ -270,8 +270,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
-	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	GRUP grup = GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0]));
+	if (!grup.contains(m.getForm()))  {
+	    grup.addRecord(m);
+	    mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	}
     }
 
     final void addRecordSilent(MajorRecord m) {
