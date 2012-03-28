@@ -80,12 +80,12 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     @Override
     public String toString() {
-	return "VMADscript " + name;
+	return print();
     }
 
     @Override
     public String print() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return name.toString();
     }
 
     @Override
@@ -150,6 +150,14 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     // Get/set
+    public void setName(String name) {
+	this.name.set(name);
+    }
+
+    public String getName () {
+	return name.print();
+    }
+
     /**
      *
      * @return A copy of all the property names in the script.
