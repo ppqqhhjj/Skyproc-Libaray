@@ -101,6 +101,14 @@ public class LExporter {
         write(Ln.toByteArray(input), size);
     }
 
+    public void write(boolean input, int size) throws IOException {
+	if (input) {
+	    write(1,size);
+	} else {
+	    write(0,size);
+	}
+    }
+
     /**
      * Writes a float to the file.
      * @param input

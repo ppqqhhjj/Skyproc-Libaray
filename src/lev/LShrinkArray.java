@@ -15,7 +15,7 @@ import java.util.zip.Inflater;
  * A special array with artificial min/max bounds.  This allows smaller parts of the array
  * to be passed around without actually copying the data to a new smaller array.
  * It also provides extract functions which bump the lower limit of the ShrinkArray's scope, so that
- * a following extract function can be called without having to worry about offset indexing.  
+ * a following extract function can be called without having to worry about offset indexing.
  * @author Justin Swanson
  */
 public class LShrinkArray {
@@ -73,7 +73,7 @@ public class LShrinkArray {
     }
 
     /**
-     * 
+     *
      * @return True if ShrinkArray has no bytes left to extract.
      */
     public Boolean isEmpty() {
@@ -81,7 +81,7 @@ public class LShrinkArray {
     }
 
     /**
-     * 
+     *
      * @return Amount of bytes left in the bounds of the ShrinkArray.
      */
     public final int length() {
@@ -141,7 +141,7 @@ public class LShrinkArray {
     }
 
     /**
-     * Gets specified number of bytes after skipping the desired amount.  Does not adjust 
+     * Gets specified number of bytes after skipping the desired amount.  Does not adjust
      * bounds of the ShrinkArray.
      * @param skip Amount to skip.
      * @param amount Amount to read.
@@ -154,7 +154,7 @@ public class LShrinkArray {
     }
 
     /**
-     * Gets specified number of ints after skipping the desired amount.  Does not adjust 
+     * Gets specified number of ints after skipping the desired amount.  Does not adjust
      * bounds of the ShrinkArray.
      * @param skip Amount to skip.
      * @param amount Amount to read.
@@ -194,7 +194,7 @@ public class LShrinkArray {
      * @return little endian int that was represented by the extracted bytes.
      */
     public int extractInt(int skip, int amount) {
-        return Ln.arrayToInt(extractInts(skip, amount));
+        return Ln.arrayToInt(extract(skip, amount));
     }
 
     /**
@@ -204,7 +204,7 @@ public class LShrinkArray {
      * @return little endian int that was represented by the extracted bytes.
      */
     public int extractInt(int amount) {
-        return Ln.arrayToInt(extractInts(amount));
+        return Ln.arrayToInt(extract(amount));
     }
 
     /**
@@ -225,8 +225,16 @@ public class LShrinkArray {
         return Float.intBitsToFloat(extractInt(0, 4));
     }
 
+    public boolean extractBool(int amount) {
+	if (extract(amount)[0] == 0) {
+	    return false;
+	} else {
+	    return true;
+	}
+    }
+
     /**
-     * Extracts the specified number of bytes after skipping the desired amount, 
+     * Extracts the specified number of bytes after skipping the desired amount,
      * and returns the string representation.<br>
      * Bumps the lower bound up so that following extracts do not extract the same data.
      * @param skip Amount to skip
@@ -280,7 +288,7 @@ public class LShrinkArray {
 
     /**
      * Extracts specified number of bytes. <br>
-     * Bumps the lower bound up so that following extracts do not extract the same data. 
+     * Bumps the lower bound up so that following extracts do not extract the same data.
      * @param amount Amount to read.
      * @return byte array.
      */

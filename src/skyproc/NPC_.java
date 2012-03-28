@@ -70,7 +70,7 @@ public class NPC_ extends Actor implements Serializable {
     SubData DEST = new SubData(Type.DEST);
     SubData DSTD = new SubData(Type.DSTD);
     SubData DSTF = new SubData(Type.DSTF);
-    SubData GNAM = new SubData(Type.GNAM);
+    SubForm GNAM = new SubForm(Type.GNAM);
     SubList<TINIpackage> tintPackages = new SubList<TINIpackage>(new TINIpackage());
 
     NPC_() {
@@ -517,14 +517,17 @@ public class NPC_ extends Actor implements Serializable {
 
     static class AIDT extends SubRecord implements Serializable {
 
-	int aggression = 0;
-	int confidence = 0;
-	int morality = 0;
-	int assistance = 0;
-	int aggroradius = 0;
-	byte[] fluff1 = new byte[1];
-	byte[] fluff2 = new byte[1];
-	byte[] fluff3 = new byte[10];
+	Aggression aggression = Aggression.Unaggressive;
+	Confidence confidence = Confidence.Cowardly;
+	Morality morality = Morality.AnyCrime;
+	Assistance assistance = Assistance.HelpsNobody;
+	int energy = 0;
+	Mood mood = Mood.Neutral;
+	boolean aggroRadiusBehavior = false;
+	byte[] fluff = new byte[1];
+	int aggroWarn = 0;
+	int aggroWarnAttack = 0;
+	int aggroAttack = 0;
 
 	AIDT() {
 	    super(Type.AIDT);
@@ -543,32 +546,39 @@ public class NPC_ extends Actor implements Serializable {
 	@Override
 	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    aggression = in.extractInt(1);
-	    confidence = in.extractInt(1);
-	    fluff1 = in.extract(1);
-	    morality = in.extractInt(1);
-	    fluff2 = in.extract(1);
-	    assistance = in.extractInt(1);
-	    fluff3 = in.extract(10);
-	    aggroradius = in.extractInt(4);
+	    aggression = Aggression.values()[in.extractInt(1)];
+	    confidence = Confidence.values()[in.extractInt(1)];
+	    energy = in.extractInt(1);
+	    morality = Morality.values()[in.extractInt(1)];
+	    mood = Mood.values()[in.extractInt(1)];
+	    assistance = Assistance.values()[in.extractInt(1)];
+	    aggroRadiusBehavior = in.extractBool(1);
+	    fluff = in.extract(1);
+	    aggroWarn = in.extractInt(4);
+	    aggroWarnAttack = in.extractInt(4);
+	    aggroAttack = in.extractInt(4);
 	    if (logging()) {
 		logSync("", "AIDT record: ");
-		logSync("", "  " + "Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
-		logSync("", "  " + "Assistance: " + assistance + ", Aggro Radius: " + aggroradius);
+		logSync("", "  Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
+		logSync("", "  Assistance: " + assistance + ", Mood: " + mood + ", AggroRadiusBehavior: " + aggroRadiusBehavior);
+		logSync("", "  Aggro Attack: " + aggroAttack + ", Aggro Warn: " + aggroWarn + ", Aggro Warn/Attack: " + aggroWarnAttack );
 	    }
 	}
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(aggression, 1);
-	    out.write(confidence, 1);
-	    out.write(fluff1, 1);
-	    out.write(morality, 1);
-	    out.write(fluff2, 1);
-	    out.write(assistance, 1);
-	    out.write(fluff3, 10);
-	    out.write(aggroradius);
+	    out.write(aggression.ordinal(), 1);
+	    out.write(confidence.ordinal(), 1);
+	    out.write(energy, 1);
+	    out.write(morality.ordinal(), 1);
+	    out.write(mood.ordinal(), 1);
+	    out.write(assistance.ordinal(), 1);
+	    out.write(aggroRadiusBehavior, 1);
+	    out.write(fluff,1);
+	    out.write(aggroWarn);
+	    out.write(aggroWarnAttack);
+	    out.write(aggroAttack);
 	}
 
 	@Override
@@ -585,40 +595,6 @@ public class NPC_ extends Actor implements Serializable {
 	    return 20;
 	}
     }
-
-    /**
-     * Enum representing the various AI data types for an NPC.
-     */
-    public enum AI_Data {
-
-	/**
-	 * Determines when and if the NPC will attack. 0: Unaggressive 1:
-	 * Aggressive 2: Very Aggressive 3: Frenzied
-	 */
-	AGGRESSION,
-	/**
-	 * Determines the radius that the NPC will attack another actor, given
-	 * the correct conditions.<br> <br> No known limit. Contact
-	 * Leviathan1753 if you discover one.
-	 */
-	AGGRO_RADIUS,
-	/**
-	 * Determines who the NPC will assist in combat. 0: Helps nobody 1:
-	 * Helps allies (within the same faction) 2: Helps friends and allies
-	 * (everyone they don't hate)
-	 */
-	ASSISTANCE,
-	/**
-	 * Determines at what health level the NPC will flee. 0: Cowardly
-	 * (always flees?) 1: Cautious 2: Average 3: Brave 4: Foolhardy (never
-	 * flees?)
-	 */
-	CONFIDENCE,
-	/**
-	 * Determines if/when the NPC will report a crime. NPC will report: 0:
-	 * Any crime 1: Violence 2: Property crime only 3: No crime
-	 */
-	MORALITY,}
 
     /**
      * Enum representing the various stats of the NPC
@@ -738,12 +714,57 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 *
 	 */
-	Invulnerable(31);
+	Invulnerable(31),
+	AggroRadiusBehavior(-1);
 	int value;
 
 	NPCFlag(int value) {
 	    this.value = value;
 	}
+    }
+
+    public enum Aggression {
+
+	Unaggressive,
+	Aggressive,
+	VeryAggressive,
+	Frenzied;
+    }
+
+    public enum Assistance {
+
+	HelpsNobody,
+	HelpsAllies,
+	HelpsFriends;
+    }
+
+    public enum Morality {
+
+	AnyCrime,
+	ViolenceAgainstEnemies,
+	PropertyCrimeOnly,
+	NoCrime;
+    }
+
+    public enum Confidence {
+
+	Cowardly,
+	Cautious,
+	Average,
+	Brave,
+	Foolhardy;
+    }
+
+    public enum Mood {
+
+	Neutral,
+	Angry,
+	Fear,
+	Happy,
+	Sad,
+	Surprised,
+	Puzzled,
+	Disgusted,;
     }
 
     // Special functions
@@ -820,7 +841,26 @@ public class NPC_ extends Actor implements Serializable {
 		    for (FormID f : otherNPC.getSpells()) {
 			addSpell(f);
 		    }
+		    this.clearPerks();
+		    for (SubFormInt s : otherNPC.perks) {
+			addPerk(s.getForm(), s.getNum());
+		    }
 		    break;
+		case USE_AI_DATA:
+		    this.setAggression(otherNPC.getAggression());
+		    this.setMood(otherNPC.getMood());
+		    this.setConfidence(otherNPC.getConfidence());
+		    this.setAssistance(otherNPC.getAssistance());
+		    this.setMorality(otherNPC.getMorality());
+		    this.setEnergy(otherNPC.getEnergy());
+		    this.set(NPCFlag.AggroRadiusBehavior, otherNPC.get(NPCFlag.AggroRadiusBehavior));
+		    this.setAggroWarn(otherNPC.getAggroWarn());
+		    this.setAggroWarnAttack(otherNPC.getAggroWarnAttack());
+		    this.setAggroAttack(otherNPC.getAggroAttack());
+		    this.setCombatStyle(otherNPC.getCombatStyle());
+		    this.setGiftFilter(otherNPC.getGiftFilter());
+		    break;
+
 	    }
 	    return true;
 	}
@@ -875,7 +915,7 @@ public class NPC_ extends Actor implements Serializable {
 	return factions.remove(new SubFormInt(Type.SNAM, factionRef, 0));
     }
 
-    public void clearFactions () {
+    public void clearFactions() {
 	factions.clear();
     }
 
@@ -887,7 +927,7 @@ public class NPC_ extends Actor implements Serializable {
 	perks.add(new SubFormInt(Type.PRKR, perkRef, rank));
     }
 
-    public boolean removePerk (FormID perkRef) {
+    public boolean removePerk(FormID perkRef) {
 	return perks.remove(new SubFormInt(Type.PRKR, perkRef, 0));
     }
 
@@ -901,7 +941,12 @@ public class NPC_ extends Actor implements Serializable {
      * @return NPCFlag's status.
      */
     public boolean get(NPCFlag flag) {
-	return ACBS.ACBSflags.get(flag.value);
+	switch (flag) {
+	    case AggroRadiusBehavior:
+		return AIDT.aggroRadiusBehavior;
+	    default:
+		return ACBS.ACBSflags.get(flag.value);
+	}
     }
 
     /**
@@ -910,7 +955,13 @@ public class NPC_ extends Actor implements Serializable {
      * @param on What to set the NPCFlag to.
      */
     public void set(NPCFlag flag, boolean on) {
-	ACBS.ACBSflags.set(flag.value, on);
+	switch (flag) {
+	    case AggroRadiusBehavior:
+		AIDT.aggroRadiusBehavior = on;
+		break;
+	    default:
+		ACBS.ACBSflags.set(flag.value, on);
+	}
     }
 
     /**
@@ -965,71 +1016,36 @@ public class NPC_ extends Actor implements Serializable {
 	DNAM.setSkillMod(skill, value);
     }
 
-    /**
-     * Returns the value of the AI data represented by the given enum.
-     *
-     * @see AI_Data
-     * @param aiType The enum of the AI data to return.
-     * @return The value of the AI data represented by the given enum.
-     */
-    public int get(AI_Data aiType) {
-	switch (aiType) {
-	    case AGGRESSION:
-		return AIDT.aggression;
-	    case CONFIDENCE:
-		return AIDT.confidence;
-	    case MORALITY:
-		return AIDT.morality;
-	    case ASSISTANCE:
-		return AIDT.assistance;
-	    case AGGRO_RADIUS:
-		return AIDT.aggroradius;
-	    default:
-		return -1;
-	}
+    public void setAggression(Aggression level) {
+	AIDT.aggression = level;
     }
 
-    /**
-     * Sets the value of the AI data represented by the given enum.
-     *
-     * @see AI_Data
-     * @param aiType The enum of the AI data to set to the value.
-     * @param value Sets the value of the AI data to this value.
-     * @throws BadParameter If value is < 0, or outside the predefined range of
-     * the specific AI data type.
-     */
-    public void set(AI_Data aiType, int value) throws BadParameter {
-	if (value < 0) {
-	    throw new BadParameter("Value must be > 0.");
-	}
-	switch (aiType) {
-	    case AGGRESSION:
-		if (value <= 3) {
-		    AIDT.aggression = value;
-		} else {
-		    throw new BadParameter("Value for aggression must be 0 < x <= 3");
-		}
-	    case CONFIDENCE:
-		if (value <= 4) {
-		    AIDT.confidence = value;
-		} else {
-		    throw new BadParameter("Value for confidence must be 0 < x <= 4");
-		}
-	    case MORALITY:
-		if (value <= 3) {
-		    AIDT.morality = value;
-		} else {
-		    throw new BadParameter("Value for morality must be 0 < x <= 3");
-		}
-	    case ASSISTANCE:
-		if (value <= 2) {
-		    AIDT.assistance = value;
-		} else {
-		    throw new BadParameter("Value for assistance must be 0 < x <= 3");
-		}
-	    case AGGRO_RADIUS:
-		AIDT.aggroradius = value;
-	}
+    public Aggression getAggression() {
+	return AIDT.aggression;
+    }
+
+    public void setConfidence(Confidence level) {
+	AIDT.confidence = level;
+    }
+
+    public Confidence getConfidence() {
+	return AIDT.confidence;
+    }
+
+    public void setMorality(Morality level) {
+	AIDT.morality = level;
+    }
+
+    public Morality getMorality() {
+	return AIDT.morality;
+    }
+
+    public void setAssistance(Assistance level) {
+	AIDT.assistance = level;
+    }
+
+    public Assistance getAssistance() {
+	return AIDT.assistance;
     }
 
     /**
@@ -1468,5 +1484,51 @@ public class NPC_ extends Actor implements Serializable {
 	return ACBS.fatigueOffset;
     }
 
+    public void setMood(Mood value) {
+	AIDT.mood = value;
+    }
 
+    public Mood getMood() {
+	return AIDT.mood;
+    }
+
+    public void setEnergy(int energy) {
+	AIDT.energy = energy;
+    }
+
+    public int getEnergy() {
+	return AIDT.energy;
+    }
+
+    public void setAggroWarn(int aggro) {
+	AIDT.aggroWarn = aggro;
+    }
+
+    public int getAggroWarn () {
+	return AIDT.aggroWarn;
+    }
+
+    public void setAggroWarnAttack (int aggro) {
+	AIDT.aggroWarnAttack = aggro;
+    }
+
+    public int getAggroWarnAttack () {
+	return AIDT.aggroWarnAttack;
+    }
+
+    public void setAggroAttack (int aggro) {
+	AIDT.aggroAttack = aggro;
+    }
+
+    public int getAggroAttack () {
+	return AIDT.aggroAttack;
+    }
+
+    public void setGiftFilter (FormID id) {
+	GNAM.setForm(id);
+    }
+
+    public FormID getGiftFilter () {
+	return GNAM.getForm();
+    }
 }
