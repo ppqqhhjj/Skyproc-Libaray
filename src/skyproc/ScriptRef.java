@@ -150,10 +150,19 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     // Get/set
+    /**
+     * Sets the name of the script.  This MUST match the name of the script
+     * file you wish to attach.
+     * @param name
+     */
     public void setName(String name) {
 	this.name.set(name);
     }
 
+    /**
+     * Gets the name of the script
+     * @return
+     */
     public String getName () {
 	return name.print();
     }

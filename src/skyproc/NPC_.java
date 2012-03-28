@@ -643,16 +643,49 @@ public class NPC_ extends Actor implements Serializable {
 	 * Flag to use the traits page of its template.
 	 */
 	USE_TRAITS(0),
+	/**
+	 *
+	 */
 	USE_STATS(1),
+	/**
+	 *
+	 */
 	USE_FACTIONS(2),
+	/**
+	 *
+	 */
 	USE_SPELL_LIST(3),
+	/**
+	 *
+	 */
 	USE_AI_DATA(4),
+	/**
+	 *
+	 */
 	USE_AI_PACKAGES(5),
+	/**
+	 *
+	 */
 	USE_BASE_DATA(7),
+	/**
+	 *
+	 */
 	USE_INVENTORY(8),
+	/**
+	 *
+	 */
 	USE_SCRIPTS(9),
+	/**
+	 *
+	 */
 	USE_DEF_PACK_LIST(10),
+	/**
+	 *
+	 */
 	USE_ATTACK_DATA(11),
+	/**
+	 *
+	 */
 	USE_KEYWORDS(12);
 	int value;
 
@@ -666,6 +699,9 @@ public class NPC_ extends Actor implements Serializable {
      */
     public enum NPCFlag {
 
+	/**
+	 *
+	 */
 	Female(0),
 	/**
 	 *
@@ -683,11 +719,17 @@ public class NPC_ extends Actor implements Serializable {
 	 *
 	 */
 	AutoCalcStats(4),
+	/**
+	 *
+	 */
 	Unique(5),
 	/**
 	 *
 	 */
 	PCLevelMult(7),
+	/**
+	 *
+	 */
 	Protected(13),
 	/**
 	 *
@@ -697,7 +739,13 @@ public class NPC_ extends Actor implements Serializable {
 	 *
 	 */
 	DoesntBleed(16),
+	/**
+	 *
+	 */
 	BleedoutOverride(18),
+	/**
+	 *
+	 */
 	OppositeGenderAnims(19),
 	/**
 	 *
@@ -715,6 +763,9 @@ public class NPC_ extends Actor implements Serializable {
 	 *
 	 */
 	Invulnerable(31),
+	/**
+	 *
+	 */
 	AggroRadiusBehavior(-1);
 	int value;
 
@@ -723,51 +774,150 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
+    /**
+     *
+     */
     public enum Aggression {
 
+	/**
+	 *
+	 */
 	Unaggressive,
+	/**
+	 *
+	 */
 	Aggressive,
+	/**
+	 *
+	 */
 	VeryAggressive,
+	/**
+	 *
+	 */
 	Frenzied;
     }
 
+    /**
+     *
+     */
     public enum Assistance {
 
+	/**
+	 *
+	 */
 	HelpsNobody,
+	/**
+	 *
+	 */
 	HelpsAllies,
+	/**
+	 *
+	 */
 	HelpsFriends;
     }
 
+    /**
+     *
+     */
     public enum Morality {
 
+	/**
+	 *
+	 */
 	AnyCrime,
+	/**
+	 *
+	 */
 	ViolenceAgainstEnemies,
+	/**
+	 *
+	 */
 	PropertyCrimeOnly,
+	/**
+	 *
+	 */
 	NoCrime;
     }
 
+    /**
+     *
+     */
     public enum Confidence {
 
+	/**
+	 *
+	 */
 	Cowardly,
+	/**
+	 *
+	 */
 	Cautious,
+	/**
+	 *
+	 */
 	Average,
+	/**
+	 *
+	 */
 	Brave,
+	/**
+	 *
+	 */
 	Foolhardy;
     }
 
+    /**
+     *
+     */
     public enum Mood {
 
+	/**
+	 *
+	 */
 	Neutral,
+	/**
+	 *
+	 */
 	Angry,
+	/**
+	 *
+	 */
 	Fear,
+	/**
+	 *
+	 */
 	Happy,
+	/**
+	 *
+	 */
 	Sad,
+	/**
+	 *
+	 */
 	Surprised,
+	/**
+	 *
+	 */
 	Puzzled,
+	/**
+	 *
+	 */
 	Disgusted,;
     }
 
     // Special functions
+    /**
+     * Takes in another NPC, and assumes all the information associated with the
+     * input flags.  It also unchecks the specific template flags on the NPC.<br><br>
+     * If the parameter NPC is templated to another NPC, this function will recursively call
+     *  in order to get the "correct" template information.  If during this recursive call
+     * the function encounters a Leveled List on the template chain, then the function will
+     * skip assuming that flag type, and instead mark the flag on the NPC (if it wasn't already).<br><br>
+     * If no template flags remain checked after this function has run, then the NPC's
+     * template reference is set to NULL.
+     * @param otherNPC NPC to assume info from.
+     * @param flags Types of information to assume.  If none are given, then all are checked. (Matches Bethesda's templating system)
+     */
     public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
 	if (flags.length == 0) {
 	    flags = TemplateFlag.values();
@@ -866,6 +1016,51 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
+    /**
+     * Checks the NPC's template chain to see if a Leveled List is on it, and returns it
+     * if found.<br><br>
+     * Flags can be specified if you only want to return a Leveled List if AT LEAST one of
+     * those flags is checked.
+     * @param templateFlagsToCheck Flags to consider.  If none are given, then all considered.
+     * @return Leveled List on the template chain, if the NPC has one of the flags, and a Leveled List
+     * exists on its template chain.
+     */
+    public LVLN isTemplatedToLList(NPC_.TemplateFlag ... templateFlagsToCheck) {
+	if (templateFlagsToCheck.length == 0) {
+	    templateFlagsToCheck = NPC_.TemplateFlag.values();
+	}
+	return isTemplatedToLList(getForm(), templateFlagsToCheck, 0);
+    }
+
+    static LVLN isTemplatedToLList(FormID query, NPC_.TemplateFlag[] templateFlagsToCheck, int depth) {
+	if (depth > 100) {
+	    return null; // avoid circular template overflows
+	}
+
+	NPC_ npc = (NPC_) SPDatabase.getMajor(query, GRUP_TYPE.NPC_);
+
+	if (npc != null && !npc.getTemplate().equals(FormID.NULL)) {
+	    boolean hasTargetTemplate = false;
+	    for (NPC_.TemplateFlag flag : templateFlagsToCheck) {
+		if (npc.get(flag)) {
+		    hasTargetTemplate = true;
+		    break;
+		}
+	    }
+	    if (!hasTargetTemplate) {
+		return null;
+	    }
+
+	    NPC_ templateN = (NPC_) SPDatabase.getMajor(npc.getTemplate(), GRUP_TYPE.NPC_);
+	    if (templateN != null) { // If template is an NPC, recursively chain the check
+		return isTemplatedToLList(templateN.getForm(), templateFlagsToCheck, depth + 1);
+	    } else if (npc.getTemplate().getMaster().equals(SPGlobal.getGlobalPatch().getInfo())) { // If LList that is template originates from AV
+		return (LVLN) SPGlobal.getGlobalPatch().getLeveledLists().get(npc.getTemplate());
+	    }
+	}
+	return null;
+    }
+
     // Get/Set methods
     /**
      *
@@ -915,22 +1110,42 @@ public class NPC_ extends Actor implements Serializable {
 	return factions.remove(new SubFormInt(Type.SNAM, factionRef, 0));
     }
 
+    /**
+     *
+     */
     public void clearFactions() {
 	factions.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<SubFormInt> getPerks() {
 	return SubList.subFormIntToPublic(perks);
     }
 
+    /**
+     *
+     * @param perkRef
+     * @param rank
+     */
     public void addPerk(FormID perkRef, int rank) {
 	perks.add(new SubFormInt(Type.PRKR, perkRef, rank));
     }
 
+    /**
+     *
+     * @param perkRef
+     * @return
+     */
     public boolean removePerk(FormID perkRef) {
 	return perks.remove(new SubFormInt(Type.PRKR, perkRef, 0));
     }
 
+    /**
+     *
+     */
     public void clearPerks() {
 	perks.clear();
     }
@@ -981,7 +1196,6 @@ public class NPC_ extends Actor implements Serializable {
      * @see Skills
      * @param skill The enum of the skill to set to the value.
      * @param value Sets the base value of the skill to this value.
-     * @throws BadParameter If value is < 0.
      */
     public void set(Skill skill, int value) {
 	if (value < 0) {
@@ -1007,7 +1221,6 @@ public class NPC_ extends Actor implements Serializable {
      * @see Skills
      * @param skill The enum of the skill to set to the value.
      * @param value Sets the mod value of the skill to this value.
-     * @throws BadParameter If value is < 0.
      */
     public void setMod(Skill skill, int value) {
 	if (value < 0) {
@@ -1016,34 +1229,66 @@ public class NPC_ extends Actor implements Serializable {
 	DNAM.setSkillMod(skill, value);
     }
 
+    /**
+     *
+     * @param level
+     */
     public void setAggression(Aggression level) {
 	AIDT.aggression = level;
     }
 
+    /**
+     *
+     * @return
+     */
     public Aggression getAggression() {
 	return AIDT.aggression;
     }
 
+    /**
+     *
+     * @param level
+     */
     public void setConfidence(Confidence level) {
 	AIDT.confidence = level;
     }
 
+    /**
+     *
+     * @return
+     */
     public Confidence getConfidence() {
 	return AIDT.confidence;
     }
 
+    /**
+     *
+     * @param level
+     */
     public void setMorality(Morality level) {
 	AIDT.morality = level;
     }
 
+    /**
+     *
+     * @return
+     */
     public Morality getMorality() {
 	return AIDT.morality;
     }
 
+    /**
+     *
+     * @param level
+     */
     public void setAssistance(Assistance level) {
 	AIDT.assistance = level;
     }
 
+    /**
+     *
+     * @return
+     */
     public Assistance getAssistance() {
 	return AIDT.assistance;
     }
@@ -1082,7 +1327,6 @@ public class NPC_ extends Actor implements Serializable {
      * @see Stat_Values
      * @param stat The enum of the stat data to set to the value.
      * @param value Sets the value of the stat data to this value.
-     * @throws BadParameter If value is < 0
      */
     public void set(NPCStat stat, int value) {
 	if (value < 0) {
@@ -1202,6 +1446,9 @@ public class NPC_ extends Actor implements Serializable {
 	return spells.remove(new SubForm(Type.SPLO, spellReference));
     }
 
+    /**
+     *
+     */
     public void clearSpells() {
 	spells.clear();
     }
@@ -1428,106 +1675,210 @@ public class NPC_ extends Actor implements Serializable {
 	DPLT.setForm(ref);
     }
 
+    /**
+     *
+     * @param height
+     */
     public void setHeight(float height) {
 	NAM6.data = height;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getHeight() {
 	return NAM6.data;
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight(float weight) {
 	NAM7.data = weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight() {
 	return NAM7.data;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setFarAwayModelSkin(FormID id) {
 	ANAM.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getFarAwayModelSkin() {
 	return ANAM.getForm();
     }
 
+    /**
+     *
+     * @param dist
+     */
     public void setFarAwayModelDistance(float dist) {
 	DNAM.farAwayDistance = dist;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFarAwayModelDistance() {
 	return DNAM.farAwayDistance;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setHealthOffset(int value) {
 	ACBS.healthOffset = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHealthOffset() {
 	return ACBS.healthOffset;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setMagickaOffset(int value) {
 	ACBS.magickaOffset = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMagickaOffset() {
 	return ACBS.magickaOffset;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setFatigueOffset(int value) {
 	ACBS.fatigueOffset = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFatigueOffset() {
 	return ACBS.fatigueOffset;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setMood(Mood value) {
 	AIDT.mood = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public Mood getMood() {
 	return AIDT.mood;
     }
 
+    /**
+     *
+     * @param energy
+     */
     public void setEnergy(int energy) {
 	AIDT.energy = energy;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getEnergy() {
 	return AIDT.energy;
     }
 
+    /**
+     *
+     * @param aggro
+     */
     public void setAggroWarn(int aggro) {
 	AIDT.aggroWarn = aggro;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAggroWarn () {
 	return AIDT.aggroWarn;
     }
 
+    /**
+     *
+     * @param aggro
+     */
     public void setAggroWarnAttack (int aggro) {
 	AIDT.aggroWarnAttack = aggro;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAggroWarnAttack () {
 	return AIDT.aggroWarnAttack;
     }
 
+    /**
+     *
+     * @param aggro
+     */
     public void setAggroAttack (int aggro) {
 	AIDT.aggroAttack = aggro;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAggroAttack () {
 	return AIDT.aggroAttack;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setGiftFilter (FormID id) {
 	GNAM.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getGiftFilter () {
 	return GNAM.getForm();
     }

@@ -29,6 +29,11 @@ public class SPGlobal {
      * Patcher.jar")
      */
     public static String pathToData = "../../";
+    /**
+     * A default path to "internal files".  This is currently only used
+     * for saving custom path information for Skyrim.ini and plugins.txt.
+     * This can also be used to store your own internal files.
+     */
     public static String pathToInternalFiles = "Files/";
     static String pathToDebug = "SkyProcDebug/";
     /**

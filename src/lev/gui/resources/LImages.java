@@ -12,13 +12,18 @@ import java.net.URL;
  */
 public class LImages {
     /**
-     * 
+     *
      * @return The multipurpose background image used in DefaultGUI.
      */
     public static URL multipurpose() {
 	return LImages.class.getResource("multipurpose.png");
     }
-    
+
+    /**
+     * Returns an arrow graphic pointing left or right.
+     * @param leftArrow
+     * @return
+     */
     public static URL arrow(boolean leftArrow) {
 	if (leftArrow)
 	    return LImages.class.getResource("ArrowLeft.png");

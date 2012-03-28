@@ -5,7 +5,6 @@
 package lev.gui;
 
 import java.io.BufferedWriter;
-import lev.gui.LUserSetting;
 import skyproc.exceptions.BadParameter;
 
 /**

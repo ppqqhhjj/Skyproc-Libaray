@@ -21,7 +21,6 @@ public class LFonts {
      *
      * @param size
      * @return
-     * @throws IOException
      */
     public static Font Typo3(float size) {
 	try {
@@ -37,8 +36,6 @@ public class LFonts {
      *
      * @param size
      * @return
-     * @throws IOException
-     * @throws FontFormatException
      */
     public static Font Neuropol(float size){
 	try {
@@ -54,8 +51,6 @@ public class LFonts {
      *
      * @param size
      * @return
-     * @throws IOException
-     * @throws FontFormatException
      */
     public static Font OptimusPrinceps(float size) {
 	try {
@@ -71,8 +66,6 @@ public class LFonts {
      *
      * @param size
      * @return
-     * @throws FontFormatException
-     * @throws IOException
      */
     public static Font Oleo(float size) {
 	try {
