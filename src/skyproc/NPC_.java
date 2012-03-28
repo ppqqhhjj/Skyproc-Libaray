@@ -33,7 +33,7 @@ public class NPC_ extends Actor implements Serializable {
     SubList<SubForm> spells = new SubList<SubForm>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm ECOR = new SubForm(Type.ECOR);
     SubForm SPOR = new SubForm(Type.SPOR);
-    SubList<SubFormData> PRKRs = new SubList<SubFormData>(Type.PRKZ, 4, new SubFormData(Type.PRKR));
+    SubList<SubFormInt> perks = new SubList<SubFormInt>(Type.PRKZ, 4, new SubFormInt(Type.PRKR));
     SubList<SubFormInt> items = new SubList<SubFormInt>(Type.COCT, 4, new SubFormInt(Type.CNTO));
     AIDT AIDT = new AIDT();
     SubList<SubForm> aiPackages = new SubList<SubForm>(new SubForm(Type.PKID));
@@ -98,7 +98,7 @@ public class NPC_ extends Actor implements Serializable {
 	subRecords.add(ATKE);
 	subRecords.add(SPOR);
 	subRecords.add(ECOR);
-	subRecords.add(PRKRs);
+	subRecords.add(perks);
 	subRecords.add(items);
 	subRecords.add(AIDT);
 	subRecords.add(aiPackages);
@@ -879,6 +879,22 @@ public class NPC_ extends Actor implements Serializable {
 	factions.clear();
     }
 
+    public ArrayList<SubFormInt> getPerks() {
+	return SubList.subFormIntToPublic(perks);
+    }
+
+    public void addPerk(FormID perkRef, int rank) {
+	perks.add(new SubFormInt(Type.PRKR, perkRef, rank));
+    }
+
+    public boolean removePerk (FormID perkRef) {
+	return perks.remove(new SubFormInt(Type.PRKR, perkRef, 0));
+    }
+
+    public void clearPerks() {
+	perks.clear();
+    }
+
     /**
      *
      * @param flag NPCFlag to get.
@@ -1451,4 +1467,6 @@ public class NPC_ extends Actor implements Serializable {
     public int getFatigueOffset() {
 	return ACBS.fatigueOffset;
     }
+
+
 }
