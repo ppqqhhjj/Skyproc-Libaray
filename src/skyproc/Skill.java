@@ -7,7 +7,7 @@ package skyproc;
 /**
  * Enum representing the various skills associated with an NPC.
  */
-public enum Skills {
+public enum Skill {
     // DO NOT change the order of these.
 
     /**

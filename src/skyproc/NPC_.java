@@ -3,8 +3,6 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -296,19 +294,19 @@ public class NPC_ extends Actor implements Serializable {
 	    return 52;
 	}
 
-	int getSkillBase(Skills in) {
+	int getSkillBase(Skill in) {
 	    return skills[in.ordinal()];
 	}
 
-	int getSkillMod(Skills in) {
+	int getSkillMod(Skill in) {
 	    return skills[in.ordinal() + 18];
 	}
 
-	void setSkillBase(Skills in, int to) {
+	void setSkillBase(Skill in, int to) {
 	    skills[in.ordinal()] = (byte) to;
 	}
 
-	void setSkillMod(Skills in, int to) {
+	void setSkillMod(Skill in, int to) {
 	    skills[in.ordinal() + 18] = (byte) to;
 	}
 
@@ -325,7 +323,7 @@ public class NPC_ extends Actor implements Serializable {
 	    if (logging()) {
 		logSync("", "DNAM record: ");
 		String temp;
-		for (Skills s : Skills.values()) {
+		for (Skill s : Skill.values()) {
 		    temp = " BASE:" + getSkillBase(s) + ", MOD:" + getSkillMod(s);
 		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
 		}
@@ -439,16 +437,16 @@ public class NPC_ extends Actor implements Serializable {
     static class ACBS extends SubRecord implements Serializable {
 
 	LFlags ACBSflags = new LFlags(4);
-	int baseSpellPoints = 0;
-	int baseFatigue = 0;
+	int magickaOffset = 0;
+	int fatigueOffset = 0;
 	int level = 0;
 	int minCalcLevel = 0;
 	int maxCalcLevel = 0;
-	int speedMult = 100;
+	int speed = 100;
 	int dispositionBase = 0;
-	int healthOffset = 0;
 	LFlags templateFlags = new LFlags(2);
-	byte[] fluff3 = new byte[2];
+	int healthOffset = 0;
+	int bleedout = 0;
 
 	ACBS() {
 	    super(Type.ACBS);
@@ -468,21 +466,21 @@ public class NPC_ extends Actor implements Serializable {
 	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    ACBSflags.set(in.extract(4));
-	    baseSpellPoints = in.extractInt(2);
-	    baseFatigue = in.extractInt(2);
+	    magickaOffset = in.extractInt(2);
+	    fatigueOffset = in.extractInt(2);
 	    level = in.extractInt(2);
 	    minCalcLevel = in.extractInt(2);
 	    maxCalcLevel = in.extractInt(2);
-	    speedMult = in.extractInt(2);
+	    speed = in.extractInt(2);
 	    dispositionBase = in.extractInt(2);
 	    templateFlags.set(in.extract(2));
 	    healthOffset = in.extractInt(2);
-	    fluff3 = in.extract(2);
+	    bleedout = in.extractInt(2);
 	    if (logging()) {
 		logSync("", "ACBS record: ");
-		logSync("", "  " + "Base Spell Points: " + baseSpellPoints + ", Base Fatigue: " + baseFatigue);
+		logSync("", "  " + "Base Spell Points: " + magickaOffset + ", Base Fatigue: " + fatigueOffset);
 		logSync("", "  " + "Level: " + level + ", Min Calculated Level: " + minCalcLevel + ", Max Calculated Level: " + maxCalcLevel);
-		logSync("", "  " + "Speed Multiplier: " + speedMult + ", Disposition Base: " + dispositionBase);
+		logSync("", "  " + "Speed Multiplier: " + speed + ", Disposition Base: " + dispositionBase);
 	    }
 	}
 
@@ -490,16 +488,16 @@ public class NPC_ extends Actor implements Serializable {
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(ACBSflags.export(), 4);
-	    out.write(baseSpellPoints, 2);
-	    out.write(baseFatigue, 2);
+	    out.write(magickaOffset, 2);
+	    out.write(fatigueOffset, 2);
 	    out.write(level, 2);
 	    out.write(minCalcLevel, 2);
 	    out.write(maxCalcLevel, 2);
-	    out.write(speedMult, 2);
+	    out.write(speed, 2);
 	    out.write(dispositionBase, 2);
 	    out.write(templateFlags.export(), 2);
 	    out.write(healthOffset, 2);
-	    out.write(fluff3, 2);
+	    out.write(bleedout, 2);
 	}
 
 	@Override
@@ -620,13 +618,12 @@ public class NPC_ extends Actor implements Serializable {
 	 * Determines if/when the NPC will report a crime. NPC will report: 0:
 	 * Any crime 1: Violence 2: Property crime only 3: No crime
 	 */
-	MORALITY,
-    }
+	MORALITY,}
 
     /**
      * Enum representing the various stats of the NPC
      */
-    public enum Stat_Values {
+    public enum NPCStat {
 
 	/**
 	 * Determines the initial disposition of the NPC to the player.
@@ -669,7 +666,23 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 * Flag to use the traits page of its template.
 	 */
-	USE_TRAITS,
+	USE_TRAITS(0),
+	USE_STATS(1),
+	USE_FACTIONS(2),
+	USE_SPELL_LIST(3),
+	USE_AI_DATA(4),
+	USE_AI_PACKAGES(5),
+	USE_BASE_DATA(7),
+	USE_INVENTORY(8),
+	USE_SCRIPTS(9),
+	USE_DEF_PACK_LIST(10),
+	USE_ATTACK_DATA(11),
+	USE_KEYWORDS(12);
+	int value;
+
+	TemplateFlag(int in) {
+	    value = in;
+	}
     }
 
     /**
@@ -681,27 +694,11 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 *
 	 */
-	IsCharGenFacePreset(2),
-	/**
-	 *
-	 */
-	Summonable(14),
-	/**
-	 *
-	 */
 	Essential(1),
 	/**
 	 *
 	 */
-	IsGhost(29),
-	/**
-	 *
-	 */
-	Protected(13),
-	/**
-	 *
-	 */
-	Invulnerable(31),
+	IsCharGenFacePreset(2),
 	/**
 	 *
 	 */
@@ -709,11 +706,22 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 *
 	 */
-	DoesntBleed(16),
+	AutoCalcStats(4),
+	Unique(5),
 	/**
 	 *
 	 */
-	Unique(5),
+	PCLevelMult(7),
+	Protected(13),
+	/**
+	 *
+	 */
+	Summonable(14),
+	/**
+	 *
+	 */
+	DoesntBleed(16),
+	BleedoutOverride(18),
 	OppositeGenderAnims(19),
 	/**
 	 *
@@ -722,7 +730,15 @@ public class NPC_ extends Actor implements Serializable {
 	/**
 	 *
 	 */
-	DoesntAffectStealthMeter(21);
+	DoesntAffectStealthMeter(21),
+	/**
+	 *
+	 */
+	IsGhost(29),
+	/**
+	 *
+	 */
+	Invulnerable(31);
 	int value;
 
 	NPCFlag(int value) {
@@ -732,25 +748,81 @@ public class NPC_ extends Actor implements Serializable {
 
     // Special functions
     public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
+	if (flags.length == 0) {
+	    flags = TemplateFlag.values();
+	}
 	for (TemplateFlag f : flags) {
-	    templateToInternal(otherNPC, f);
+	    if (templateToInternal(otherNPC, f)) {
+		set(f, false);
+	    }
+	}
+
+	// If NPC no longer has any template flags on, remove template.
+	boolean templated = false;
+	for (TemplateFlag f : TemplateFlag.values()) {
+	    if (get(f)) {
+		templated = true;
+		break;
+	    }
+	}
+	if (!templated) {
+	    setTemplate(FormID.NULL);
 	}
     }
 
-    void templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
-	switch (flag) {
-	    case USE_TRAITS:
-		set(NPCFlag.Female, otherNPC.get(NPCFlag.Female));
-		setRace(otherNPC.getRace());
-		setSkin(otherNPC.getSkin());
-		setHeight(otherNPC.getHeight());
-		setWeight(otherNPC.getWeight());
-		setFarAwayModelSkin(otherNPC.getFarAwayModelSkin());
-		setVoiceType(otherNPC.getVoiceType());
-		ACBS.dispositionBase = otherNPC.ACBS.dispositionBase;
-		setDeathItem(otherNPC.getDeathItem());
-		set(NPCFlag.OppositeGenderAnims, otherNPC.get(NPCFlag.OppositeGenderAnims));
-		break;
+    boolean templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
+	if (otherNPC.get(flag)) {
+	    NPC_ otherNPCsTemplate = (NPC_) SPDatabase.getMajor(otherNPC.getTemplate(), GRUP_TYPE.NPC_);
+	    if (otherNPCsTemplate != null) {
+		return templateToInternal(otherNPCsTemplate, flag);
+	    } else {
+		return false;
+	    }
+	} else {
+	    switch (flag) {
+		case USE_TRAITS:
+		    set(NPCFlag.Female, otherNPC.get(NPCFlag.Female));
+		    setRace(otherNPC.getRace());
+		    setSkin(otherNPC.getSkin());
+		    setHeight(otherNPC.getHeight());
+		    setWeight(otherNPC.getWeight());
+		    setFarAwayModelSkin(otherNPC.getFarAwayModelSkin());
+		    setVoiceType(otherNPC.getVoiceType());
+		    ACBS.dispositionBase = otherNPC.ACBS.dispositionBase;
+		    setDeathItem(otherNPC.getDeathItem());
+		    set(NPCFlag.OppositeGenderAnims, otherNPC.get(NPCFlag.OppositeGenderAnims));
+		    break;
+		case USE_STATS:
+		    ACBS.level = otherNPC.ACBS.level;
+		    set(NPCFlag.PCLevelMult, otherNPC.get(NPCFlag.PCLevelMult));
+		    set(NPCStat.MIN_CALC_LEVEL, otherNPC.get(NPCStat.MIN_CALC_LEVEL));
+		    set(NPCStat.MAX_CALC_LEVEL, otherNPC.get(NPCStat.MAX_CALC_LEVEL));
+		    ACBS.healthOffset = otherNPC.ACBS.healthOffset;
+		    ACBS.magickaOffset = otherNPC.ACBS.magickaOffset;
+		    ACBS.fatigueOffset = otherNPC.ACBS.fatigueOffset;
+		    for (Skill s : Skill.values()) {
+			this.set(s, otherNPC.get(s));
+			this.setMod(s, otherNPC.getMod(s));
+		    }
+		    this.ACBS.speed = otherNPC.ACBS.speed;
+		    this.ACBS.bleedout = otherNPC.ACBS.bleedout;
+		    this.setNPCClass(otherNPC.getNPCClass());
+		    break;
+		case USE_FACTIONS:
+		    this.clearFactions();
+		    for (SubFormInt s : otherNPC.getFactions()) {
+			addFaction(s.getForm(), s.getNum());
+		    }
+		    this.setCrimeFaction(otherNPC.getCrimeFaction());
+		    break;
+		case USE_SPELL_LIST:
+		    this.clearSpells();
+		    for (FormID f : otherNPC.getSpells()) {
+			addSpell(f);
+		    }
+		    break;
+	    }
+	    return true;
 	}
     }
 
@@ -761,7 +833,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param on What to set the template flag to.
      */
     public void set(TemplateFlag flag, boolean on) {
-	ACBS.templateFlags.set(flag.ordinal(), on);
+	ACBS.templateFlags.set(flag.value, on);
     }
 
     /**
@@ -770,7 +842,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return Template flag's status.
      */
     public boolean get(TemplateFlag flag) {
-	return ACBS.templateFlags.get(flag.ordinal());
+	return ACBS.templateFlags.get(flag.value);
     }
 
     /**
@@ -803,6 +875,10 @@ public class NPC_ extends Actor implements Serializable {
 	return factions.remove(new SubFormInt(Type.SNAM, factionRef, 0));
     }
 
+    public void clearFactions () {
+	factions.clear();
+    }
+
     /**
      *
      * @param flag NPCFlag to get.
@@ -828,7 +904,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param skill The enum of the skill to return the base value of.
      * @return The base value of the skill represented by the given enum.
      */
-    public int get(Skills skill) {
+    public int get(Skill skill) {
 	return DNAM.getSkillBase(skill);
     }
 
@@ -840,12 +916,11 @@ public class NPC_ extends Actor implements Serializable {
      * @param value Sets the base value of the skill to this value.
      * @throws BadParameter If value is < 0.
      */
-    public void set(Skills skill, int value) throws BadParameter {
-	if (value >= 0) {
-	    DNAM.setSkillBase(skill, value);
-	} else {
-	    throw new BadParameter("Value of setSkillBase() cannot be less than 0.");
+    public void set(Skill skill, int value) {
+	if (value < 0) {
+	    value = 0;
 	}
+	DNAM.setSkillBase(skill, value);
     }
 
     /**
@@ -855,7 +930,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param skill The enum of the skill to return the mod value of.
      * @return The mod value of the skill represented by the given enum.
      */
-    public int getStatMod(Skills skill) {
+    public int getMod(Skill skill) {
 	return DNAM.getSkillMod(skill);
     }
 
@@ -867,12 +942,11 @@ public class NPC_ extends Actor implements Serializable {
      * @param value Sets the mod value of the skill to this value.
      * @throws BadParameter If value is < 0.
      */
-    public void setStatMod(Skills skill, int value) throws BadParameter {
-	if (value >= 0) {
-	    DNAM.setSkillMod(skill, value);
-	} else {
-	    throw new BadParameter("Value of setSkillMod() cannot be less than 0.");
+    public void setMod(Skill skill, int value) {
+	if (value < 0) {
+	    value = 0;
 	}
+	DNAM.setSkillMod(skill, value);
     }
 
     /**
@@ -949,12 +1023,12 @@ public class NPC_ extends Actor implements Serializable {
      * @param stat The enum of the stat data to return.
      * @return The value of the stat data represented by the given enum.
      */
-    public int get(Stat_Values stat) {
+    public int get(NPCStat stat) {
 	switch (stat) {
 	    case SPELL_POINTS_BASE:
-		return ACBS.baseSpellPoints;
+		return ACBS.magickaOffset;
 	    case FATIGUE_BASE:
-		return ACBS.baseFatigue;
+		return ACBS.fatigueOffset;
 	    case LEVEL:
 		return ACBS.level;
 	    case MIN_CALC_LEVEL:
@@ -962,7 +1036,7 @@ public class NPC_ extends Actor implements Serializable {
 	    case MAX_CALC_LEVEL:
 		return ACBS.maxCalcLevel;
 	    case SPEED_MULT:
-		return ACBS.speedMult;
+		return ACBS.speed;
 	    case DISPOSITION_BASE:
 		return ACBS.dispositionBase;
 	    default:
@@ -978,15 +1052,15 @@ public class NPC_ extends Actor implements Serializable {
      * @param value Sets the value of the stat data to this value.
      * @throws BadParameter If value is < 0
      */
-    public void set(Stat_Values stat, int value) throws BadParameter {
+    public void set(NPCStat stat, int value) {
 	if (value < 0) {
-	    throw new BadParameter("Value must be > 0.");
+	    value = 0;
 	}
 	switch (stat) {
 	    case SPELL_POINTS_BASE:
-		ACBS.baseSpellPoints = value;
+		ACBS.magickaOffset = value;
 	    case FATIGUE_BASE:
-		ACBS.baseFatigue = value;
+		ACBS.fatigueOffset = value;
 	    case LEVEL:
 		ACBS.level = value;
 	    case MIN_CALC_LEVEL:
@@ -994,7 +1068,7 @@ public class NPC_ extends Actor implements Serializable {
 	    case MAX_CALC_LEVEL:
 		ACBS.maxCalcLevel = value;
 	    case SPEED_MULT:
-		ACBS.speedMult = value;
+		ACBS.speed = value;
 	    case DISPOSITION_BASE:
 		ACBS.dispositionBase = value;
 	}
@@ -1094,6 +1168,10 @@ public class NPC_ extends Actor implements Serializable {
      */
     public boolean removeSpell(FormID spellReference) {
 	return spells.remove(new SubForm(Type.SPLO, spellReference));
+    }
+
+    public void clearSpells() {
+	spells.clear();
     }
 
     /**
@@ -1348,5 +1426,29 @@ public class NPC_ extends Actor implements Serializable {
 
     public float getFarAwayModelDistance() {
 	return DNAM.farAwayDistance;
+    }
+
+    public void setHealthOffset(int value) {
+	ACBS.healthOffset = value;
+    }
+
+    public int getHealthOffset() {
+	return ACBS.healthOffset;
+    }
+
+    public void setMagickaOffset(int value) {
+	ACBS.magickaOffset = value;
+    }
+
+    public int getMagickaOffset() {
+	return ACBS.magickaOffset;
+    }
+
+    public void setFatigueOffset(int value) {
+	ACBS.fatigueOffset = value;
+    }
+
+    public int getFatigueOffset() {
+	return ACBS.fatigueOffset;
     }
 }
