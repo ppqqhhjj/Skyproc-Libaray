@@ -18,7 +18,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
 
     LSpinner setting;
 
-    public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step, Enum s, LHelpPanel help) {
+    public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step, Enum s, LSaveFile save, LHelpPanel help) {
         super(text, font, c);
         setting = new LSpinner(text, min, min, max, step, Integer.toString(max).length());
         int spacing = 10;
@@ -35,6 +35,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
         Add(setting);
         Add(titleLabel);
 
+	tie(s, save, help);
         addUpdateHandlers();
         setSize(titleLabel.getWidth() + setting.getWidth() + spacing, getHeight());
         setLocation(getX() - getWidth(), getY());
@@ -54,7 +55,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
     }
 
     @Override
-    public void tie(Enum s, LSaveFile save_, LHelpPanel help_) {
+    final public void tie(Enum s, LSaveFile save_, LHelpPanel help_) {
 	super.tie(s, save_, help_);
 	setting.tie(s, save_, help_);
     }

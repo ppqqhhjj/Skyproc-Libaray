@@ -19,7 +19,7 @@ import org.jfree.chart.JFreeChart;
  */
 public class LChart extends JPanel {
 
-    JFreeChart chart;
+    public JFreeChart chart;
     ChartPanel cPanel;
     LLabel title;
 

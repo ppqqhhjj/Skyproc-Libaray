@@ -41,9 +41,14 @@ public abstract class LSaveFile <E extends Enum> {
 	for (Map<E, Setting> e : sets) {
 	    init(e);
 	}
+	initHelp();
     }
 
     protected abstract void init(Map<E, Setting> m);
+    
+    protected void initHelp () {
+	
+    }
 
     protected abstract void readInSettings();
 
@@ -86,4 +91,15 @@ public abstract class LSaveFile <E extends Enum> {
 	curSettings.get(setting).setTo(in);
     }
 
+    public String getStr(E s) {
+        return curSettings.get(s).getStr();
+    }
+
+    public Integer getInt(E s) {
+        return curSettings.get(s).getInt();
+    }
+
+    public Boolean getBool(E s) {
+        return curSettings.get(s).getBool();
+    }
 }
