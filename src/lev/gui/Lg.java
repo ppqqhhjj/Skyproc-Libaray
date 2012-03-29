@@ -66,6 +66,12 @@ public class Lg {
      * @return New dimensions fitting inside limits, while retaining aspect ratio.
      */
     static public Dimension calcSize(double x, double y, int maxX, int maxY) {
+	if (maxX == 0) {
+	    maxX = Integer.MAX_VALUE;
+	}
+	if (maxY == 0) {
+	    maxY = Integer.MAX_VALUE;
+	}
         double xMod = 1.0 * maxX / x;
         double yMod = 1.0 * maxY / y;
         double mod = (xMod <= yMod) ? xMod : yMod;

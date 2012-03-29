@@ -63,7 +63,7 @@ public class LImagePane extends JPanel {
      */
     public LImagePane(URL url) throws IOException {
         this();
-        setImage(ImageIO.read(url));
+        setImage(url);
     }
 
     /**
@@ -81,7 +81,7 @@ public class LImagePane extends JPanel {
         setMinimumSize(size);
         setMaximumSize(size);
         setSize(size);
-        repaint();
+        this.revalidate();
     }
 
     /**
@@ -91,6 +91,10 @@ public class LImagePane extends JPanel {
      */
     final public void setImage(File in) throws IOException {
         setImage(ImageIO.read(in));
+    }
+    
+    final public void setImage(URL url) throws IOException {
+	setImage(ImageIO.read(url));
     }
 
     /**
