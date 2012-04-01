@@ -391,6 +391,8 @@ public enum Type {
      * NPC_: Spell override?
      */
     SPOR,
+    GWOR,
+    OCOR,
     /**
      * NPC_: Unknown
      * RACE: body part data

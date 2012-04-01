@@ -33,12 +33,14 @@ public class NPC_ extends Actor implements Serializable {
     SubList<SubForm> spells = new SubList<SubForm>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm ECOR = new SubForm(Type.ECOR);
     SubForm SPOR = new SubForm(Type.SPOR);
+    SubForm GWOR = new SubForm(Type.GWOR);
+    SubForm OCOR = new SubForm(Type.OCOR);
     SubList<SubFormInt> perks = new SubList<SubFormInt>(Type.PRKZ, 4, new SubFormInt(Type.PRKR));
     SubList<SubFormInt> items = new SubList<SubFormInt>(Type.COCT, 4, new SubFormInt(Type.CNTO));
     AIDT AIDT = new AIDT();
     SubList<SubForm> aiPackages = new SubList<SubForm>(new SubForm(Type.PKID));
     SubForm CNAM = new SubForm(Type.CNAM);
-    SubData SHRT = new SubData(Type.SHRT);
+    SubString SHRT = new SubString(Type.SHRT, true);
     SubData DATA = new SubData(Type.DATA);
     DNAM DNAM = new DNAM();
     SubList<SubForm> PNAMs = new SubList<SubForm>(new SubForm(Type.PNAM));
@@ -46,12 +48,12 @@ public class NPC_ extends Actor implements Serializable {
     SubData NAM5 = new SubData(Type.NAM5);
     SubFloat NAM6 = new SubFloat(Type.NAM6);
     SubFloat NAM7 = new SubFloat(Type.NAM7);
-    SubData NAM8 = new SubData(Type.NAM8);
+    SubInt NAM8 = new SubInt(Type.NAM8);
     SubForm WNAM = new SubForm(Type.WNAM);
     SubForm ANAM = new SubForm(Type.ANAM);
     SubForm ATKR = new SubForm(Type.ATKR);
-    SubData ATKD = new SubData(Type.ATKD);
-    SubData ATKE = new SubData(Type.ATKE);
+    ATKD ATKD = new ATKD();
+    SubString ATKE = new SubString(Type.ATKE, true);
     /**
      *
      */
@@ -97,6 +99,8 @@ public class NPC_ extends Actor implements Serializable {
 	subRecords.add(ATKD);
 	subRecords.add(ATKE);
 	subRecords.add(SPOR);
+	subRecords.add(GWOR);
+	subRecords.add(OCOR);
 	subRecords.add(ECOR);
 	subRecords.add(perks);
 	subRecords.add(items);
@@ -264,7 +268,8 @@ public class NPC_ extends Actor implements Serializable {
 	int stamina = 1;
 	byte[] fluff1 = new byte[2];
 	float farAwayDistance = 0;
-	byte[] fluff2 = new byte[4];
+	int gearedUpWeapons = 1;
+	byte[] fluff2 = new byte[3];
 
 	DNAM() {
 	    super(Type.DNAM);
@@ -319,7 +324,8 @@ public class NPC_ extends Actor implements Serializable {
 	    stamina = in.extractInt(2);
 	    fluff1 = in.extract(2);
 	    farAwayDistance = in.extractFloat();
-	    fluff2 = in.extract(4);
+	    gearedUpWeapons = in.extractInt(1);
+	    fluff2 = in.extract(3);
 	    if (logging()) {
 		logSync("", "DNAM record: ");
 		String temp;
@@ -328,7 +334,7 @@ public class NPC_ extends Actor implements Serializable {
 		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
 		}
 		logSync("", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
-		logSync("", "  " + "Far Away Distance: " + farAwayDistance);
+		logSync("", "  " + "Far Away Distance: " + farAwayDistance + ", Geared Up weapons: " + gearedUpWeapons);
 	    }
 	}
 
@@ -341,7 +347,8 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(stamina, 2);
 	    out.write(fluff1, 2);
 	    out.write(farAwayDistance);
-	    out.write(fluff2, 4);
+	    out.write(gearedUpWeapons, 1);
+	    out.write(fluff2, 3);
 	}
     }
 
@@ -561,7 +568,7 @@ public class NPC_ extends Actor implements Serializable {
 		logSync("", "AIDT record: ");
 		logSync("", "  Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
 		logSync("", "  Assistance: " + assistance + ", Mood: " + mood + ", AggroRadiusBehavior: " + aggroRadiusBehavior);
-		logSync("", "  Aggro Attack: " + aggroAttack + ", Aggro Warn: " + aggroWarn + ", Aggro Warn/Attack: " + aggroWarnAttack );
+		logSync("", "  Aggro Attack: " + aggroAttack + ", Aggro Warn: " + aggroWarn + ", Aggro Warn/Attack: " + aggroWarnAttack);
 	    }
 	}
 
@@ -575,7 +582,7 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(mood.ordinal(), 1);
 	    out.write(assistance.ordinal(), 1);
 	    out.write(aggroRadiusBehavior, 1);
-	    out.write(fluff,1);
+	    out.write(fluff, 1);
 	    out.write(aggroWarn);
 	    out.write(aggroWarnAttack);
 	    out.write(aggroAttack);
@@ -593,6 +600,83 @@ public class NPC_ extends Actor implements Serializable {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 20;
+	}
+    }
+
+    static class ATKD extends SubRecord implements Serializable {
+
+	float damageMult;
+	float attackChance;
+	FormID attackSpell = new FormID();
+	LFlags flags = new LFlags(4);
+	float attackAngle;
+	float strikeAngle;
+	float stagger;
+	FormID attackType = new FormID();
+	float knockdown;
+	float recovery;
+	float staminaMult;
+	boolean valid = false;
+
+	ATKD() {
+	    super(Type.ATKD);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(damageMult);
+		out.write(attackChance);
+		attackSpell.export(out);
+		out.write(flags.export());
+		out.write(attackAngle);
+		out.write(strikeAngle);
+		out.write(stagger);
+		attackType.export(out);
+		out.write(knockdown);
+		out.write(recovery);
+		out.write(staminaMult);
+	    }
+	}
+
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    damageMult = in.extractFloat();
+	    attackChance = in.extractFloat();
+	    attackSpell.setInternal(in.extract(4));
+	    flags.set(in.extract(4));
+	    attackAngle = in.extractFloat();
+	    strikeAngle = in.extractFloat();
+	    stagger = in.extractFloat();
+	    attackType.setInternal(in.extract(4));
+	    knockdown = in.extractFloat();
+	    recovery = in.extractFloat();
+	    staminaMult = in.extractFloat();
+	    valid = true;
+	}
+
+	@Override
+	void standardizeMasters(Mod srcMod) {
+	    super.standardizeMasters(srcMod);
+	    attackSpell.standardize(srcMod);
+	    attackType.standardize(srcMod);
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new ATKD();
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 44;
 	}
     }
 
@@ -908,22 +992,27 @@ public class NPC_ extends Actor implements Serializable {
     // Special functions
     /**
      * Takes in another NPC, and assumes all the information associated with the
-     * input flags.  It also unchecks the specific template flags on the NPC.<br><br>
-     * If the parameter NPC is templated to another NPC, this function will recursively call
-     *  in order to get the "correct" template information.  If during this recursive call
-     * the function encounters a Leveled List on the template chain, then the function will
-     * skip assuming that flag type, and instead mark the flag on the NPC (if it wasn't already).<br><br>
-     * If no template flags remain checked after this function has run, then the NPC's
-     * template reference is set to NULL.
+     * input flags. It also unchecks the specific template flags on the
+     * NPC.<br><br> If the parameter NPC is templated to another NPC, this
+     * function will recursively call in order to get the "correct" template
+     * information. If during this recursive call the function encounters a
+     * Leveled List on the template chain, then the function will skip assuming
+     * that flag type, and instead mark the flag on the NPC (if it wasn't
+     * already).<br><br> If no template flags remain checked after this function
+     * has run, then the NPC's template reference is set to NULL.<br><br>
+     * This function makes a deep copy of all templated info.
+     *
      * @param otherNPC NPC to assume info from.
-     * @param flags Types of information to assume.  If none are given, then all are checked. (Matches Bethesda's templating system)
+     * @param flags Types of information to assume. If none are given, then all
+     * are checked. (Matches Bethesda's templating system)
      */
     public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
 	if (flags.length == 0) {
 	    flags = TemplateFlag.values();
 	}
+	NPC_ dup = (NPC_) Ln.deepCopy(otherNPC);
 	for (TemplateFlag f : flags) {
-	    if (templateToInternal(otherNPC, f)) {
+	    if (templateToInternal(dup, f)) {
 		set(f, false);
 	    }
 	}
@@ -962,6 +1051,10 @@ public class NPC_ extends Actor implements Serializable {
 		    ACBS.dispositionBase = otherNPC.ACBS.dispositionBase;
 		    setDeathItem(otherNPC.getDeathItem());
 		    set(NPCFlag.OppositeGenderAnims, otherNPC.get(NPCFlag.OppositeGenderAnims));
+		    //Sound Tab
+		    this.setSoundVolume(otherNPC.getSoundVolume());
+		    this.setAudioTemplate(otherNPC.getAudioTemplate());
+		    this.soundPackages = otherNPC.soundPackages;
 		    break;
 		case USE_STATS:
 		    ACBS.level = otherNPC.ACBS.level;
@@ -1010,23 +1103,62 @@ public class NPC_ extends Actor implements Serializable {
 		    this.setCombatStyle(otherNPC.getCombatStyle());
 		    this.setGiftFilter(otherNPC.getGiftFilter());
 		    break;
+		case USE_INVENTORY:
+		    this.setDefaultOutfit(otherNPC.getDefaultOutfit());
+		    this.setSleepingOutfit(otherNPC.getSleepingOutfit());
+		    this.setGearedUpWeapons(otherNPC.getGearedUpWeapons());
+		    this.clearItems();
+		    for (SubFormInt f : otherNPC.getItems()) {
+			this.addItem(f.getForm(), f.getNum());
+		    }
+		    break;
 		case USE_AI_PACKAGES:
-		    
+		    this.clearAIPackages();
+		    for (SubForm id : otherNPC.aiPackages) {
+			this.addAIPackage(id.getForm());
+		    }
+		    break;
+		case USE_DEF_PACK_LIST:
+		    this.setDefaultPackageList(otherNPC.getDefaultPackageList());
+		    this.setSpectatorOverride(otherNPC.getSpectatorOverride());
+		    this.setObserveDeadOverride(otherNPC.getObserveDeadOverride());
+		    this.setGuardWornOverride(otherNPC.getGuardWornOverride());
+		    this.setCombatOverride(otherNPC.getCombatOverride());
+		    break;
+		case USE_ATTACK_DATA:
+		    this.setAttackDataRace(otherNPC.getAttackDataRace());
+		    this.ATKD = otherNPC.ATKD;
+		    this.ATKE.setString(otherNPC.ATKE.string);
+		    break;
+		case USE_BASE_DATA:
+		    this.setName(otherNPC.getName());
+		    this.setShortName(otherNPC.getShortName());		    this.set(NPCFlag.Essential, otherNPC.get(NPCFlag.Essential));
+		    this.set(NPCFlag.Protected, otherNPC.get(NPCFlag.Protected));
+		    this.set(NPCFlag.Respawn, otherNPC.get(NPCFlag.Respawn));
+		    this.set(NPCFlag.Summonable, otherNPC.get(NPCFlag.Summonable));
+		    this.set(NPCFlag.SimpleActor, otherNPC.get(NPCFlag.SimpleActor));
+		    this.set(NPCFlag.DoesntAffectStealthMeter, otherNPC.get(NPCFlag.DoesntAffectStealthMeter));
+		    break;
+		case USE_KEYWORDS:
+		    this.keywords = otherNPC.keywords;
+		    break;
+
 	    }
 	    return true;
 	}
     }
 
     /**
-     * Checks the NPC's template chain to see if a Leveled List is on it, and returns it
-     * if found.<br><br>
-     * Flags can be specified if you only want to return a Leveled List if AT LEAST one of
-     * those flags is checked.
-     * @param templateFlagsToCheck Flags to consider.  If none are given, then all considered.
-     * @return Leveled List on the template chain, if the NPC has one of the flags, and a Leveled List
-     * exists on its template chain.
+     * Checks the NPC's template chain to see if a Leveled List is on it, and
+     * returns it if found.<br><br> Flags can be specified if you only want to
+     * return a Leveled List if AT LEAST one of those flags is checked.
+     *
+     * @param templateFlagsToCheck Flags to consider. If none are given, then
+     * all considered.
+     * @return Leveled List on the template chain, if the NPC has one of the
+     * flags, and a Leveled List exists on its template chain.
      */
-    public LVLN isTemplatedToLList(NPC_.TemplateFlag ... templateFlagsToCheck) {
+    public LVLN isTemplatedToLList(NPC_.TemplateFlag... templateFlagsToCheck) {
 	if (templateFlagsToCheck.length == 0) {
 	    templateFlagsToCheck = NPC_.TemplateFlag.values();
 	}
@@ -1444,6 +1576,10 @@ public class NPC_ extends Actor implements Serializable {
 	return items.remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
+    public void clearItems() {
+	items.clear();
+    }
+
     /**
      *
      * @return
@@ -1477,6 +1613,10 @@ public class NPC_ extends Actor implements Serializable {
      */
     public ArrayList<FormID> getAIPackages() {
 	return SubList.subFormToPublic(aiPackages);
+    }
+
+    public void clearAIPackages() {
+	aiPackages.clear();
     }
 
     /**
@@ -1531,7 +1671,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @param attackRaceRef
      */
-    public void setAttackRace(FormID attackRaceRef) {
+    public void setAttackDataRace(FormID attackRaceRef) {
 	ATKR.setForm(attackRaceRef);
     }
 
@@ -1539,7 +1679,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public FormID getAttackRace() {
+    public FormID getAttackDataRace() {
 	return ATKR.getForm();
     }
 
@@ -1641,10 +1781,14 @@ public class NPC_ extends Actor implements Serializable {
 
     /**
      *
-     * @param ref
+     * @param list
      */
-    public void setDefaultPackageList(FormID ref) {
-	DPLT.setForm(ref);
+    public void setDefaultPackageList(FormID list) {
+	DPLT.setForm(list);
+    }
+
+    public FormID getDefaultPackageList() {
+	return DPLT.getForm();
     }
 
     /**
@@ -1803,7 +1947,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public int getAggroWarn () {
+    public int getAggroWarn() {
 	return AIDT.aggroWarn;
     }
 
@@ -1811,7 +1955,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @param aggro
      */
-    public void setAggroWarnAttack (int aggro) {
+    public void setAggroWarnAttack(int aggro) {
 	AIDT.aggroWarnAttack = aggro;
     }
 
@@ -1819,7 +1963,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public int getAggroWarnAttack () {
+    public int getAggroWarnAttack() {
 	return AIDT.aggroWarnAttack;
     }
 
@@ -1827,7 +1971,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @param aggro
      */
-    public void setAggroAttack (int aggro) {
+    public void setAggroAttack(int aggro) {
 	AIDT.aggroAttack = aggro;
     }
 
@@ -1835,7 +1979,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public int getAggroAttack () {
+    public int getAggroAttack() {
 	return AIDT.aggroAttack;
     }
 
@@ -1843,7 +1987,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @param id
      */
-    public void setGiftFilter (FormID id) {
+    public void setGiftFilter(FormID id) {
 	GNAM.setForm(id);
     }
 
@@ -1851,7 +1995,63 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public FormID getGiftFilter () {
+    public FormID getGiftFilter() {
 	return GNAM.getForm();
+    }
+
+    public void setGearedUpWeapons(int value) {
+	DNAM.gearedUpWeapons = value;
+    }
+
+    public int getGearedUpWeapons() {
+	return DNAM.gearedUpWeapons;
+    }
+
+    public void setSpectatorOverride(FormID list) {
+	SPOR.setForm(list);
+    }
+
+    public FormID getSpectatorOverride() {
+	return SPOR.getForm();
+    }
+
+    public void setObserveDeadOverride(FormID list) {
+	OCOR.setForm(list);
+    }
+
+    public FormID getObserveDeadOverride() {
+	return OCOR.getForm();
+    }
+
+    public void setGuardWornOverride(FormID list) {
+	GWOR.setForm(list);
+    }
+
+    public FormID getGuardWornOverride() {
+	return GWOR.getForm();
+    }
+
+    public void setCombatOverride(FormID list) {
+	ECOR.setForm(list);
+    }
+
+    public FormID getCombatOverride() {
+	return ECOR.getForm();
+    }
+    
+    public void setShortName (String alias) {
+	SHRT.setString(alias);
+    }
+    
+    public String getShortName () {
+	return SHRT.print();
+    }
+    
+    public void setSoundVolume (SoundVolume vol) {
+	NAM8.data = vol.ordinal();
+    }
+    
+    public SoundVolume getSoundVolume () {
+	return SoundVolume.values()[NAM8.data];
     }
 }
