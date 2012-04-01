@@ -179,12 +179,12 @@ public class SPDatabase implements Iterable<Mod> {
      * @return The first MajorRecord that matches, or null if none were found.
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
-	MajorRecord out;
 	if (query.getMaster() != null) {
-	    Mod m = database.modLookup.get(query.getMaster());
-	    if (m != null) {
+	    Iterator<Mod> revOrder = database.reverseIter();
+	    while (revOrder.hasNext()) {
+		Mod next = revOrder.next();
 		for (GRUP_TYPE g : grup_types) {
-		    GRUP grup = m.GRUPs.get(g);
+		    GRUP grup = next.GRUPs.get(g);
 		    if (grup.mapRecords.containsKey(query)) {
 			return (MajorRecord) grup.mapRecords.get(query);
 		    }
@@ -234,10 +234,22 @@ public class SPDatabase implements Iterable<Mod> {
 
     /**
      *
-     * @return SDBIterator of all the mods in the database, in load order.
+     * @return SDBIterator of all the mods in the database, in load order.  
+     * "Winning" mods will be last.
      */
     @Override
     public Iterator<Mod> iterator() {
 	return modLookup.values().iterator();
     }
+    
+    
+    public Iterator<Mod> reverseIter () {
+	Iterator<Mod> iter = iterator();
+	ArrayList<Mod> outList = new ArrayList<Mod>(modLookup.size());
+	while (iter.hasNext()) {
+	    outList.add(0, iter.next());
+	}
+	return outList.iterator();
+    }
+    
 }
