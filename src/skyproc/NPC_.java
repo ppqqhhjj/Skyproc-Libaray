@@ -1035,6 +1035,9 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     boolean templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
+	if (otherNPC == null) {
+	    return false;
+	}
 	if (otherNPC.get(flag)) {
 	    NPC_ otherNPCsTemplate = (NPC_) SPDatabase.getMajor(otherNPC.getTemplate(), GRUP_TYPE.NPC_);
 	    if (otherNPCsTemplate != null) {

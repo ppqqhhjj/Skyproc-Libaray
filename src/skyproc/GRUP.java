@@ -3,9 +3,9 @@ package skyproc;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
@@ -23,12 +23,11 @@ import skyproc.exceptions.BadRecord;
  */
 public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
-    boolean addedOrder = true;
     byte[] grupType = new byte[4];
     byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
     byte[] version = new byte[4];
     ArrayList<T> listRecords = new ArrayList<T>();
-    Map<FormID, T> mapRecords = new TreeMap<FormID, T>();
+    Map<FormID, T> mapRecords = new HashMap<FormID, T>();
     Mod srcMod;
     T prototype;
     private static final Type[] type = {Type.GRUP};
@@ -348,11 +347,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
 	ArrayList<T> temp = new ArrayList<T>();
-	if (addedOrder) {
-	    temp.addAll(listRecords);
-	} else {
-	    temp.addAll(mapRecords.values());
-	}
+	temp.addAll(listRecords);
 	return temp.iterator();
     }
 }
