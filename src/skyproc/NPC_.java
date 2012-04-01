@@ -1029,6 +1029,10 @@ public class NPC_ extends Actor implements Serializable {
 	    setTemplate(FormID.NULL);
 	}
     }
+    
+    public void templateTo (FormID npc, TemplateFlag ... flags) {
+	templateTo((NPC_)SPDatabase.getMajor(npc, GRUP_TYPE.NPC_), flags);
+    }
 
     boolean templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
 	if (otherNPC.get(flag)) {
@@ -1159,9 +1163,6 @@ public class NPC_ extends Actor implements Serializable {
      * flags, and a Leveled List exists on its template chain.
      */
     public LVLN isTemplatedToLList(NPC_.TemplateFlag... templateFlagsToCheck) {
-	if (templateFlagsToCheck.length == 0) {
-	    templateFlagsToCheck = NPC_.TemplateFlag.values();
-	}
 	return NiftyFunc.isTemplatedToLList(getForm(), templateFlagsToCheck, 0);
     }
 

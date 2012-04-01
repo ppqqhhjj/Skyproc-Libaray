@@ -64,9 +64,17 @@ public class NiftyFunc {
 	if (depth > 100) {
 	    return null; // avoid circular template overflows
 	}
+	
+	if (templateFlagsToCheck.length == 0) {
+	    templateFlagsToCheck = NPC_.TemplateFlag.values();
+	}
 
 	NPC_ npc = (NPC_) SPDatabase.getMajor(query, GRUP_TYPE.NPC_);
 
+	if (npc != null && npc.getEDID().equals("EncFalmer03SpellswordBoss")) {
+	    int werwe = 23;
+	}
+	
 	if (npc != null && !npc.getTemplate().equals(FormID.NULL)) {
 	    boolean hasTargetTemplate = false;
 	    for (NPC_.TemplateFlag flag : templateFlagsToCheck) {

@@ -168,7 +168,8 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Database and returns the first record that matches the FormID.
+     * Querys the Database and returns the record that matches the FormID.  The
+     * version in the latest mod in the load order will be returned.
      * <br> NOTE: it is recommended you use the version that only searches in
      * specific GRUPs for speed reasons.
      *
@@ -187,12 +188,6 @@ public class SPDatabase implements Iterable<Mod> {
 		    if (grup.mapRecords.containsKey(query)) {
 			return (MajorRecord) grup.mapRecords.get(query);
 		    }
-//                Iterator<MajorRecord> iter = m.GRUPs.get(Type.toRecord(g)).iterator();
-//                while (iter.hasNext()) {
-//                    if ((out = iter.next()).getForm().equals(query)) {
-//                        return out;
-//                    }
-//                }
 		}
 	    }
 	}
