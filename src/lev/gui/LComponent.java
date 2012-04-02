@@ -57,4 +57,8 @@ public class LComponent extends Container {
 	final Component thisC = this;
 	setLocation(x, c.getY() + c.getHeight() / 2 - thisC.getHeight() / 2);
     }
+    
+    public void putUnder (final Component c, final int x, final int yOffset) {
+	setLocation(x, c.getY() + c.getHeight() + yOffset);
+    }
 }
