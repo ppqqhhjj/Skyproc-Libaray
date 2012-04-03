@@ -993,22 +993,32 @@ public class NPC_ extends Actor implements Serializable {
     /**
      * Takes in another NPC, and assumes all the information associated with the
      * input flags. It also unchecks the specific template flags on the
-     * NPC.<br><br> If the parameter NPC is templated to another NPC, this
+     * NPC.<br><br>
+     *
+     * If the parameter NPC is templated to another NPC, this
      * function will recursively call in order to get the "correct" template
      * information. If during this recursive call the function encounters a
      * Leveled List on the template chain, then the function will skip assuming
      * that flag type, and instead mark the flag on the NPC (if it wasn't
-     * already).<br><br> If no template flags remain checked after this function
+     * already).<br><br>
+     *
+     * If no template flags remain checked after this function
      * has run, then the NPC's template reference is set to NULL.<br><br>
      * This function makes a deep copy of all templated info.
      *
      * @param otherNPC NPC to assume info from.
-     * @param flags Types of information to assume. If none are given, then all
-     * are checked. (Matches Bethesda's templating system)
+     * @param flags Types of information to assume. If none are given, then the NPCs
+     * active flags will be assumed.
      */
     public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
 	if (flags.length == 0) {
-	    flags = TemplateFlag.values();
+	    ArrayList<TemplateFlag> flagsList = new ArrayList<TemplateFlag>();
+	    for (TemplateFlag f : TemplateFlag.values()) {
+		if (get(f)) {
+		    flagsList.add(f);
+		}
+	    }
+	    flags = flagsList.toArray(flags);
 	}
 	NPC_ dup = (NPC_) Ln.deepCopy(otherNPC);
 	for (TemplateFlag f : flags) {
@@ -1029,7 +1039,7 @@ public class NPC_ extends Actor implements Serializable {
 	    setTemplate(FormID.NULL);
 	}
     }
-    
+
     public void templateTo (FormID npc, TemplateFlag ... flags) {
 	templateTo((NPC_)SPDatabase.getMajor(npc, GRUP_TYPE.NPC_), flags);
     }
@@ -2042,19 +2052,19 @@ public class NPC_ extends Actor implements Serializable {
     public FormID getCombatOverride() {
 	return ECOR.getForm();
     }
-    
+
     public void setShortName (String alias) {
 	SHRT.setString(alias);
     }
-    
+
     public String getShortName () {
 	return SHRT.print();
     }
-    
+
     public void setSoundVolume (SoundVolume vol) {
 	NAM8.data = vol.ordinal();
     }
-    
+
     public SoundVolume getSoundVolume () {
 	return SoundVolume.values()[NAM8.data];
     }
