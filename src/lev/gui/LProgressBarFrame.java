@@ -12,7 +12,9 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
+import lev.debug.LDebug;
 import lev.gui.resources.LImages;
+import skyproc.SPGlobal;
 
 /**
  *

@@ -23,12 +23,12 @@ public class LImagePane extends JPanel {
     int IMG_WIDTH = 0;
     int IMG_HEIGHT = 0;
 
-    LImagePane() {
+    public LImagePane() {
         setLayout(null);
     }
 
     /**
-     * 
+     *
      * @param img
      * @throws IOException
      */
@@ -38,7 +38,7 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param img
      * @throws IOException
      */
@@ -48,7 +48,7 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param img
      */
     public LImagePane(BufferedImage img) {
@@ -57,7 +57,7 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param url
      * @throws IOException
      */
@@ -67,10 +67,13 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param originalImage
      */
     final public void setImage(BufferedImage originalImage) {
+	if (originalImage == null) {
+	    return;
+	}
         if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
             img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
         } else {
@@ -85,20 +88,20 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param in
      * @throws IOException
      */
     final public void setImage(File in) throws IOException {
         setImage(ImageIO.read(in));
     }
-    
+
     final public void setImage(URL url) throws IOException {
 	setImage(ImageIO.read(url));
     }
 
     /**
-     * 
+     *
      * @param x
      * @param y
      */
@@ -124,7 +127,7 @@ public class LImagePane extends JPanel {
 //        setSize(new Dimension(img.getWidth(null), img.getHeight(null)));
 //    }
     /**
-     * 
+     *
      * @param g
      */
     @Override

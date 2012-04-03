@@ -42,8 +42,8 @@ public class LHelpPanel extends LPanel {
 	bottomArea = new LPanel();
 	bottomArea.setSize((int) bounds.getWidth(), 190);
 	bottomArea.setLocation(0, (int) bounds.getHeight() - bottomArea.getHeight());
-	Add(bottomArea);
 	bottomArea.setVisible(false);
+	add(bottomArea);
 
 	setVisible(true);
     }
@@ -70,12 +70,7 @@ public class LHelpPanel extends LPanel {
 	help.setLocation(35, y + setting.getHeight() / 2);
 	evalPositioning();
 
-//        setting.setLocation(17, 160);
-//        help.setLocation(35, 190);
-
     }
-
-    ;
 
     public void setContent(String text) {
 	hideArrow = false;
@@ -114,6 +109,16 @@ public class LHelpPanel extends LPanel {
     public void addToBottomArea(Component c) {
 	bottomArea.Add(c);
 	bottomArea.setVisible(true);
+    }
+
+    public void setBottomAreaHeight(int y) {
+	int limit = bottomArea.getY() + bottomArea.getHeight();
+	bottomArea.setSize(bottomArea.getWidth(), y);
+	bottomArea.setLocation(0, limit - bottomArea.getHeight());
+    }
+
+    public void setBottomAreaVisible(boolean on) {
+	bottomArea.setVisible(on);
     }
 
     public void textVisible(Boolean b) {
