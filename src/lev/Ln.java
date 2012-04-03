@@ -294,6 +294,13 @@ public class Ln {
 	makeDirs(dest);
 	src.renameTo(dest);
 	if (eraseOldDirs) {
+	    while ((src = src.getParentFile()) != null) {
+		if (src.isDirectory() && src.listFiles().length == 0) {
+		    src.delete();
+		} else {
+		    break;
+		}
+	    }
 	}
 	return dest;
     }

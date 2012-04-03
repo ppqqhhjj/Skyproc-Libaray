@@ -49,6 +49,8 @@ public class LVLN extends Actor implements Iterable<LVLO> {
     }
 
     final void init() {
+	subRecords.remove(Type.FULL);
+	
         subRecords.add(objectBounds);
         subRecords.add(chanceNone);
         subRecords.add(LVLNflags);

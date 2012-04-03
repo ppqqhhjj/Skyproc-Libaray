@@ -81,7 +81,7 @@ public class LSwingTree extends LComponent {
     public void addTreeExpansionListener(TreeExpansionListener t) {
         tree.addTreeExpansionListener(t);
     }
-    
+
     public int getRowCount() {
         return tree.getRowCount();
     }
@@ -97,6 +97,10 @@ public class LSwingTree extends LComponent {
     public void adaptToScrollbar(BoundedRangeModel b) {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setModel(b);
+    }
+
+    public TreePath[] getSelectionPaths () {
+	return tree.getSelectionPaths();
     }
 
     public ArrayList<Integer> getExpandedRows() {
