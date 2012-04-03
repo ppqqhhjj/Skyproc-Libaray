@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -97,7 +99,9 @@ public class NIF {
         nodes = new ArrayList<Node>(numBlocks);
         for (int i = 0; i < numBlocks; i++) {
             int type = in.extractInt(2);
-            nodes.add(new Node(NodeType.SPvalueOf(blockTypes.get(type))));
+	    Node n = new Node(NodeType.SPvalueOf(blockTypes.get(type)));
+	    n.number = i;
+            nodes.add(n);
             if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
                 SPGlobal.logSync(header, "  Block list[" + i + "] has block type: " + type + ", " + blockTypes.get(type));
             }
@@ -161,6 +165,7 @@ public class NIF {
 	 * Raw data contained in the node.
 	 */
 	public LShrinkArray data;
+	public int number;
 
         Node(NodeType n) {
             type = n;
@@ -171,6 +176,7 @@ public class NIF {
             this.type = in.type;
             this.size = in.size;
             this.data = new LShrinkArray(in.data);
+	    this.number = in.number;
         }
     }
 
@@ -266,13 +272,15 @@ public class NIF {
     /**
      *
      * @param type Type to retrieve.
-     * @return List of all the Node objects matching the given type.
+     * @return Map of all the Node objects matching the given type, with their
+     * node index as keys.
      */
-    public ArrayList<Node> getNodes(NodeType type) {
-        ArrayList<Node> out = new ArrayList<Node>();
+    public Map<Integer,Node> getNodes(NodeType type) {
+        Map<Integer,Node> out = new TreeMap<Integer,Node>();
         for (int i = 0; i < nodes.size(); i++) {
-            if (nodes.get(i).type == type) {
-                out.add(getNode(i));
+	    Node n = getNode(i);
+            if (n.type == type) {
+                out.put(n.number, n);
             }
         }
         return out;
