@@ -28,6 +28,7 @@ public class LSwingTree extends LComponent {
     protected JTree tree;
     int topMargin = 0;
     int leftMargin = 0;
+    String state;
 
     public LSwingTree(int width, int height) {
         super();
@@ -216,5 +217,21 @@ public class LSwingTree extends LComponent {
             }
         }
         return out;
+    }
+
+    public String getExpansionState(int row) {
+	return Ln.getExpansionState(tree, row);
+    }
+
+    public void restoreExpansionState (int row, String state) {
+	Ln.restoreExpanstionState(tree, row, state);
+    }
+
+    public void saveExpansionState () {
+	state = getExpansionState(0);
+    }
+
+    public void restoreExpansionState () {
+	restoreExpansionState(0, state);
     }
 }
