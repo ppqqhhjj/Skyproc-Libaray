@@ -537,23 +537,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
 	}
 
-	// Check if any duplicate EDIDS
-	Set<String> edids = new HashSet<String>();
-	boolean bad = false;
-	for (GRUP g : GRUPs.values()) {
-	    for (Object o : g.listRecords) {
-		MajorRecord m = (MajorRecord) o;
-		if (edids.contains(m.getEDID())) {
-		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
-		    bad = true;
-		} else {
-		    edids.add(m.getEDID());
-		}
-	    }
-	}
-	if (bad) {
-	    throw new BadRecord("Duplicate EDIDs.  Check logs for a listing.");
-	}
 
 	header.export(out, srcMod);
 	standardizeMasters();
@@ -579,6 +562,25 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 	out.close();
 	SPGUI.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
+
+
+	// Check if any duplicate EDIDS
+	Set<String> edids = new HashSet<String>();
+	boolean bad = false;
+	for (GRUP g : GRUPs.values()) {
+	    for (Object o : g.listRecords) {
+		MajorRecord m = (MajorRecord) o;
+		if (edids.contains(m.getEDID())) {
+		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
+		    bad = true;
+		} else {
+		    edids.add(m.getEDID());
+		}
+	    }
+	}
+	if (bad) {
+	    throw new BadRecord("Duplicate EDIDs.  Check logs for a listing.");
+	}
     }
 
     int addOutString(String in, SubStringPointer.Files file) {
