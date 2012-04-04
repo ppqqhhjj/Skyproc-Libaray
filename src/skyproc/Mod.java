@@ -495,7 +495,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @throws IOException If there are any unforseen disk errors exporting the
      * data.
      */
-    public void export() throws IOException {
+    public void export() throws IOException, BadRecord {
 	export(SPGlobal.pathToData);
     }
 
@@ -506,12 +506,20 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @param path
      * @throws IOException
      */
-    public void export(String path) throws IOException {
-	export(new LExporter(path + getName()), this);
+    public void export(String path) throws IOException, BadRecord {
+	File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");
+	File dest = new File(path + getName());
+	File backup = new File(SPGlobal.pathToInternalFiles + getName() + ".bak");
+	export(new LExporter(tmp), this);
+	if (backup.isFile()) {
+	    backup.delete();
+	}
+	Ln.moveFile(dest, backup, false);
+	Ln.moveFile(tmp, dest, false);
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(LExporter out, Mod srcMod) throws IOException, BadRecord {
 	int fullGRUPS = 0;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
@@ -525,12 +533,30 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPGUI.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
 	header.setNumRecords(numRecords());
-	header.export(out, srcMod);
-
-	standardizeMasters();
 	if (logging()) {
 	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
 	}
+
+	// Check if any duplicate EDIDS
+	Set<String> edids = new HashSet<String>();
+	boolean bad = false;
+	for (GRUP g : GRUPs.values()) {
+	    for (Object o : g.listRecords) {
+		MajorRecord m = (MajorRecord) o;
+		if (edids.contains(m.getEDID())) {
+		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
+		    bad = true;
+		} else {
+		    edids.add(m.getEDID());
+		}
+	    }
+	}
+	if (bad) {
+	    throw new BadRecord("Duplicate EDIDs.  Check logs for a listing.");
+	}
+
+	header.export(out, srcMod);
+	standardizeMasters();
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {

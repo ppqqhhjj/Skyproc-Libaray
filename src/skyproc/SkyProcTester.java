@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import lev.Ln;
 import lev.debug.LDebug;
+import skyproc.exceptions.BadRecord;
 
 /**
  *
@@ -82,7 +83,7 @@ class SkyProcTester {
 
     }
 
-    private static boolean test(GRUP_TYPE type) throws IOException {
+    private static boolean test(GRUP_TYPE type) throws IOException, BadRecord {
 	SPGUI.progress.setStatus("Validating " + type);
 	SPGUI.progress.pause(true);
 

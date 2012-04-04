@@ -4,10 +4,7 @@
  */
 package lev;
 
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
@@ -17,6 +14,10 @@ import java.nio.ByteBuffer;
 public class LExporter {
 
     private BufferedOutputStream output;
+
+    public LExporter (File file) throws FileNotFoundException {
+	this(file.getPath());
+    }
 
     /**
      *
