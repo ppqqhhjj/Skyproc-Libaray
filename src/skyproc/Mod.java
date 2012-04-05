@@ -120,10 +120,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	this(new ModListing(name, master));
     }
 
-    void addMaster(ModListing input) {
-	header.addMaster(input);
-    }
-
     /**
      * Returns the ModListing associated with the nth master of this mod.
      * Changing values on the returned ModListing will affect the mod it is tied
@@ -192,13 +188,19 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     void mergeMasters(Mod in) {
 	for (ModListing m : in.header.masters) {
-	    header.masters.add(m);
+	    addMaster(m);
 	}
 	if (!in.equals(SPGlobal.getGlobalPatch())) {
-	    header.masters.add(in.modInfo);
+	    addMaster(in.modInfo);
 	}
 	if (in.getInfo().equals(ModListing.skyrim)) {
-	    header.masters.add(ModListing.update);
+	    addMaster(ModListing.update);
+	}
+    }
+
+    void addMaster(ModListing input) {
+	if (!getInfo().equals(input)) {
+	    header.addMaster(input);
 	}
     }
 
