@@ -43,6 +43,7 @@ public enum GRUP_TYPE {
      * Weapons
      */
     WEAP,
+    AMMO,
     /**
      * Non-Player Characters (Actors)
      */

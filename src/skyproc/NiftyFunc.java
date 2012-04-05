@@ -59,16 +59,16 @@ public class NiftyFunc {
     public static LVLN isTemplatedToLList(FormID npc, NPC_.TemplateFlag ... templateFlagsToCheck) {
 	return isTemplatedToLList(npc, templateFlagsToCheck, 0);
     }
-    
-    public static LVLN isTemplateToLList(NPC_ npc, NPC_.TemplateFlag... templateFlagsToCheck) {
+
+    public static LVLN isTemplatedToLList(NPC_ npc, NPC_.TemplateFlag... templateFlagsToCheck) {
 	return isTemplatedToLList(npc.getForm(), templateFlagsToCheck);
     }
-    
+
     static LVLN isTemplatedToLList(FormID npc, NPC_.TemplateFlag[] templateFlagsToCheck, int depth) {
 	if (depth > 100) {
 	    return null; // avoid circular template overflows
 	}
-	
+
 	if (templateFlagsToCheck.length == 0) {
 	    templateFlagsToCheck = NPC_.TemplateFlag.values();
 	}
@@ -90,11 +90,11 @@ public class NiftyFunc {
 	    NPC_ templateN = (NPC_) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.NPC_);
 	    if (templateN != null) { // If template is an NPC, recursively chain the check
 		return isTemplatedToLList(templateN.getForm(), templateFlagsToCheck, depth + 1);
-	    } else if (npcSrc.getTemplate().getMaster().equals(SPGlobal.getGlobalPatch().getInfo())) { // If LList that is template originates from AV
+	    } else {
 		return (LVLN) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.LVLN);
 	    }
 	}
 	return null;
     }
-    
+
 }

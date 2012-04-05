@@ -207,6 +207,10 @@ public class SPGlobal {
 	}
     }
 
+    public static void logBlocked(String header, String reason, MajorRecord m) {
+	log.logSpecial(SPLogger.SpecialTypes.BLOCKED, header, "Blocked " + m + " for reason: " + reason);
+    }
+
     /**
      *
      * @return True if the logger is currently on.
