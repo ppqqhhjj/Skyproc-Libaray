@@ -6,7 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
@@ -71,12 +73,14 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     }
 
     @Override
-    void standardizeMasters(Mod srcMod) {
-        super.standardizeMasters(srcMod);
-        for (FormID ID : IDs) {
-            ID.standardize(srcMod);
-        }
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>(IDs.size());
+	for (FormID id : IDs) {
+	    out.add(id);
+	}
+	return out;
     }
+
 
     @Override
     Boolean isValid() {

@@ -4,13 +4,16 @@
  */
 package skyproc;
 
-import java.util.zip.DataFormatException;
-import skyproc.exceptions.BadRecord;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.DataFormatException;
 import lev.LExporter;
-import skyproc.exceptions.BadParameter;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  * An abstract class outlining the functionality of subrecords, which are
@@ -90,7 +93,8 @@ public abstract class SubRecord extends Record {
 	return true;
     }
 
-    void standardizeMasters(Mod srcMod) {
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return new ArrayList<FormID>(0);
     }
 
     @Override

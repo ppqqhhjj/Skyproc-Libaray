@@ -3,6 +3,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -181,6 +183,19 @@ public class NPC_ extends Actor implements Serializable {
 	    return valid;
 	}
 
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(soundPairs.size());
+		for (SoundPair pairs : soundPairs) {
+		    out.add(pairs.CSDI.ID);
+		}
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
+	}
+
 	class SoundPair implements Serializable {
 
 	    SubForm CSDI;
@@ -221,13 +236,6 @@ public class NPC_ extends Actor implements Serializable {
 		    pair.CSDI.export(out, srcMod);
 		    pair.CSDC.export(out, srcMod);
 		}
-	    }
-	}
-
-	@Override
-	void standardizeMasters(Mod srcMod) {
-	    for (SoundPair pairs : soundPairs) {
-		pairs.CSDI.standardizeMasters(srcMod);
 	    }
 	}
 
@@ -350,6 +358,11 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(gearedUpWeapons, 1);
 	    out.write(fluff2, 3);
 	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     static class TINIpackage extends SubRecord implements Serializable {
@@ -439,6 +452,11 @@ public class NPC_ extends Actor implements Serializable {
 		    && TINV.isValid()
 		    && TIAS.isValid();
 	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     static class ACBS extends SubRecord implements Serializable {
@@ -519,6 +537,11 @@ public class NPC_ extends Actor implements Serializable {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 24;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
 	}
     }
 
@@ -601,6 +624,11 @@ public class NPC_ extends Actor implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 20;
 	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     static class ATKD extends SubRecord implements Serializable {
@@ -658,13 +686,6 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    attackSpell.standardize(srcMod);
-	    attackType.standardize(srcMod);
-	}
-
-	@Override
 	Boolean isValid() {
 	    return valid;
 	}
@@ -677,6 +698,18 @@ public class NPC_ extends Actor implements Serializable {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 44;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		out.add(attackSpell);
+		out.add(attackType);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
     }
 
@@ -995,20 +1028,19 @@ public class NPC_ extends Actor implements Serializable {
      * input flags. It also unchecks the specific template flags on the
      * NPC.<br><br>
      *
-     * If the parameter NPC is templated to another NPC, this
-     * function will recursively call in order to get the "correct" template
-     * information. If during this recursive call the function encounters a
-     * Leveled List on the template chain, then the function will skip assuming
-     * that flag type, and instead mark the flag on the NPC (if it wasn't
-     * already).<br><br>
+     * If the parameter NPC is templated to another NPC, this function will
+     * recursively call in order to get the "correct" template information. If
+     * during this recursive call the function encounters a Leveled List on the
+     * template chain, then the function will skip assuming that flag type, and
+     * instead mark the flag on the NPC (if it wasn't already).<br><br>
      *
-     * If no template flags remain checked after this function
-     * has run, then the NPC's template reference is set to NULL.<br><br>
-     * This function makes a deep copy of all templated info.
+     * If no template flags remain checked after this function has run, then the
+     * NPC's template reference is set to NULL.<br><br> This function makes a
+     * deep copy of all templated info.
      *
      * @param otherNPC NPC to assume info from.
-     * @param flags Types of information to assume. If none are given, then the NPCs
-     * active flags will be assumed.
+     * @param flags Types of information to assume. If none are given, then the
+     * NPCs active flags will be assumed.
      */
     public void templateTo(NPC_ otherNPC, TemplateFlag... flags) {
 	if (flags.length == 0) {
@@ -1040,8 +1072,8 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    public void templateTo (FormID npc, TemplateFlag ... flags) {
-	templateTo((NPC_)SPDatabase.getMajor(npc, GRUP_TYPE.NPC_), flags);
+    public void templateTo(FormID npc, TemplateFlag... flags) {
+	templateTo((NPC_) SPDatabase.getMajor(npc, GRUP_TYPE.NPC_), flags);
     }
 
     boolean templateToInternal(NPC_ otherNPC, TemplateFlag flag) {
@@ -1149,7 +1181,8 @@ public class NPC_ extends Actor implements Serializable {
 		    break;
 		case USE_BASE_DATA:
 		    this.setName(otherNPC.getName());
-		    this.setShortName(otherNPC.getShortName());		    this.set(NPCFlag.Essential, otherNPC.get(NPCFlag.Essential));
+		    this.setShortName(otherNPC.getShortName());
+		    this.set(NPCFlag.Essential, otherNPC.get(NPCFlag.Essential));
 		    this.set(NPCFlag.Protected, otherNPC.get(NPCFlag.Protected));
 		    this.set(NPCFlag.Respawn, otherNPC.get(NPCFlag.Respawn));
 		    this.set(NPCFlag.Summonable, otherNPC.get(NPCFlag.Summonable));
@@ -2053,19 +2086,19 @@ public class NPC_ extends Actor implements Serializable {
 	return ECOR.getForm();
     }
 
-    public void setShortName (String alias) {
+    public void setShortName(String alias) {
 	SHRT.setString(alias);
     }
 
-    public String getShortName () {
+    public String getShortName() {
 	return SHRT.print();
     }
 
-    public void setSoundVolume (SoundVolume vol) {
+    public void setSoundVolume(SoundVolume vol) {
 	NAM8.data = vol.ordinal();
     }
 
-    public SoundVolume getSoundVolume () {
+    public SoundVolume getSoundVolume() {
 	return SoundVolume.values()[NAM8.data];
     }
 }

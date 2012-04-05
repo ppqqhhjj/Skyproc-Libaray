@@ -5,6 +5,8 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -53,9 +55,8 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    void standardizeMasters(Mod srcMod) {
-        super.standardizeMasters(srcMod);
-        subRecords.standardize(srcMod);
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return subRecords.allFormIDs(deep);
     }
 
     @Override

@@ -99,7 +99,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(alchemy.getContainedType(), alchemy);
 	GRUPs.put(weapons.getContainedType(), weapons);
-	ammo.dateStamp = new byte[]{(byte)0x0E,(byte) 0x4D,(byte) 0x2B, 0};
+	ammo.dateStamp = new byte[]{(byte) 0x0E, (byte) 0x4D, (byte) 0x2B, 0};
 	GRUPs.put(ammo.getContainedType(), ammo);
 	GRUPs.put(NPCs.getContainedType(), NPCs);
 	GRUPs.put(LLists.getContainedType(), LLists);
@@ -274,7 +274,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public void addRecord(MajorRecord m) {
 	GRUP grup = GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0]));
-	if (!grup.contains(m.getForm()))  {
+	if (!grup.contains(m.getForm())) {
 	    grup.addRecord(m);
 	    mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	}
@@ -315,6 +315,14 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	for (GRUP g : GRUPs.values()) {
 	    g.standardizeMasters();
 	}
+    }
+
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	for (GRUP g : GRUPs.values()) {
+	    out.addAll(g.allFormIDs(deep));
+	}
+	return out;
     }
 
     void fetchExceptions(SPDatabase database) {
@@ -511,12 +519,16 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public void export(String path) throws IOException, BadRecord {
 	File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");
+	if (tmp.isFile()) {
+	    tmp.delete();
+	}
 	File dest = new File(path + getName());
 	File backup = new File(SPGlobal.pathToInternalFiles + getName() + ".bak");
-	export(new LExporter(tmp), this);
 	if (backup.isFile()) {
 	    backup.delete();
 	}
+	export(new LExporter(tmp), this);
+
 	Ln.moveFile(dest, backup, false);
 	Ln.moveFile(tmp, dest, false);
     }
@@ -535,14 +547,25 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPGUI.progress.reset();
 	SPGUI.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
+	// Just for good measure
+	for (FormID ID : srcMod.allFormIDs(true)) {
+	    if (!ID.equals(FormID.NULL)) {
+		if (ID.getFormStr().equals("10ABA7Skyrim.esm")) {
+		    int ewrew = 23;
+		}
+		SPGlobal.log("", "Testing ID " + ID);
+		this.mergeMasters(SPGlobal.getDB().getMod(ID.getMaster()));
+	    }
+	}
+	standardizeMasters();
+
 	header.setNumRecords(numRecords());
 	if (logging()) {
 	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
 	}
 
-
 	header.export(out, srcMod);
-	standardizeMasters();
+
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
@@ -1134,6 +1157,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
 	}
     }
 

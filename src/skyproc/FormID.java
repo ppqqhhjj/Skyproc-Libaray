@@ -22,7 +22,7 @@ public class FormID implements Comparable, Serializable {
 
     boolean valid = false;
     byte[] form = new byte[4];
-    private ModListing master = null;
+    ModListing master = null;
     /**
      * An empty FormID for easy NULL checking.
      */

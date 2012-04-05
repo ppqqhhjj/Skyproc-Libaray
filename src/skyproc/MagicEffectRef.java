@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -13,7 +16,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * A Magic Effect reference object that is used to represent attached MGEF records on
- * spells. 
+ * spells.
  *
  * @author Justin Swanson
  */
@@ -125,6 +128,11 @@ public class MagicEffectRef extends SubShell {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
 	}
     }
 

@@ -2,6 +2,8 @@ package skyproc;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lev.Ln;
 import lev.debug.LDebug;
@@ -30,9 +32,9 @@ public class SPGlobal {
      */
     public static String pathToData = "../../";
     /**
-     * A default path to "internal files".  This is currently only used
-     * for saving custom path information for Skyrim.ini and plugins.txt.
-     * This can also be used to store your own internal files.
+     * A default path to "internal files". This is currently only used for
+     * saving custom path information for Skyrim.ini and plugins.txt. This can
+     * also be used to store your own internal files.
      */
     public static String pathToInternalFiles = "Files/";
     static String pathToDebug = "SkyProcDebug/";

@@ -2,8 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.SubStringPointer.Files;
@@ -111,9 +110,14 @@ public abstract class MajorRecord extends Record implements Serializable {
 	subRecords.importSubRecords(in, mask);
     }
 
-    void standardizeMasters(Mod srcMod) {
-	ID.standardize(srcMod);
-	subRecords.standardize(srcMod);
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	out.add(ID);
+	out.addAll(subRecords.allFormIDs(deep));
+	if (getEDID().equals("BretonRaceChildVampire")) {
+ 	    int werw = 23;
+	}
+	return out;
     }
 
     /**
@@ -340,7 +344,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public static Mask getMask(Type maskType) {
 	Mod tempMod = new Mod(new ModListing("temp", false), true);
-	GRUP g = tempMod.GRUPs.get(maskType);
+	GRUP g = tempMod.GRUPs.get(GRUP_TYPE.toRecord(maskType));
 	if (g == null) {
 	    return null;
 	}

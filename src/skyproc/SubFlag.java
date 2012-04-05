@@ -1,6 +1,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -63,6 +66,11 @@ class SubFlag extends SubRecord {
     @Override
     int getContentLength(Mod srcMod) {
 	return flags.length();
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return new ArrayList<FormID>(0);
     }
 
 }

@@ -6,6 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -257,25 +259,6 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    relatedID.standardize(srcMod);
-	    lightID.standardize(srcMod);
-	    hitShader.standardize(srcMod);
-	    enchantShader.standardize(srcMod);
-	    projectileID.standardize(srcMod);
-	    explosionID.standardize(srcMod);
-	    castingArt.standardize(srcMod);
-	    hitEffectArt.standardize(srcMod);
-	    impactData.standardize(srcMod);
-	    dualCastID.standardize(srcMod);
-	    enchantArtID.standardize(srcMod);
-	    equipAbility.standardize(srcMod);
-	    imageSpaceModID.standardize(srcMod);
-	    perkID.standardize(srcMod);
-	}
-
-	@Override
 	SubRecord getNew(Type type) {
 	    return new DATA();
 	}
@@ -293,6 +276,30 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 152;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		out.add(relatedID);
+		out.add(lightID);
+		out.add(hitShader);
+		out.add(enchantShader);
+		out.add(projectileID);
+		out.add(explosionID);
+		out.add(castingArt);
+		out.add(hitEffectArt);
+		out.add(impactData);
+		out.add(dualCastID);
+		out.add(enchantArtID);
+		out.add(equipAbility);
+		out.add(imageSpaceModID);
+		out.add(perkID);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
     }
 
@@ -330,14 +337,6 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    for (Sound s : sounds) {
-		s.soundID.standardize(srcMod);
-	    }
-	}
-
-	@Override
 	public void clear() {
 	    throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -350,6 +349,19 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 8 * sounds.size();
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		for (Sound s : sounds) {
+		    out.add(s.soundID);
+		}
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
 
 	class Sound {

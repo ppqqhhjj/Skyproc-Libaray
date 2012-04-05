@@ -4,6 +4,7 @@
  */
 package skyproc;
 
+import java.util.Set;
 import skyproc.exceptions.NotFound;
 
 /**
@@ -55,12 +56,6 @@ public class SPEL extends MagicItem {
 	subRecords.add(description);
 	subRecords.add(SPIT);
 	subRecords.add(magicEffects);
-    }
-
-    @Override
-    void standardizeMasters(Mod srcMod) {
-	super.standardizeMasters(srcMod);
-	magicEffects.standardizeMasters(srcMod);
     }
 
     /**

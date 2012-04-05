@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -137,5 +140,10 @@ class SubString extends SubRecord {
 	int hash = 7;
         hash = 29 * hash + (this.string != null ? this.string.toUpperCase().hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return new ArrayList<FormID>(0);
     }
 }

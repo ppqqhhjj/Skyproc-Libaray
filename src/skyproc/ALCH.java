@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -14,6 +17,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * Alchemy Records
+ *
  * @author Justin Swanson
  */
 public class ALCH extends MagicItem {
@@ -28,10 +32,9 @@ public class ALCH extends MagicItem {
     SubString MICO = new SubString(Type.MICO, true);
     SubForm ETYP = new SubForm(Type.ETYP);
     SubData MODS = new SubData(Type.MODS);
-
     Type[] type = {Type.ALCH};
 
-    ALCH () {
+    ALCH() {
 	super();
 	init();
     }
@@ -83,7 +86,7 @@ public class ALCH extends MagicItem {
 	    out.write(value);
 	    out.write(flags.export());
 	    addiction.export(out);
-	    out.write(addictionChance,4);
+	    out.write(addictionChance, 4);
 	    useSound.export(out);
 	}
 
@@ -98,10 +101,15 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    addiction.standardize(srcMod);
-	    useSound.standardize(srcMod);
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		out.add(addiction);
+		out.add(useSound);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
 
 	@Override
@@ -119,6 +127,7 @@ public class ALCH extends MagicItem {
      *
      */
     public enum ALCHFlag {
+
 	/**
 	 *
 	 */
@@ -134,23 +143,20 @@ public class ALCH extends MagicItem {
 	/**
 	 *
 	 */
-	Poison(17)
-	;
-
+	Poison(17);
 	int value;
 
-	ALCHFlag (int in) {
+	ALCHFlag(int in) {
 	    value = in;
 	}
     }
 
     // Get / set
-
     /**
      *
      * @param groundModel
      */
-    public void setModel (String groundModel) {
+    public void setModel(String groundModel) {
 	MODL.setString(groundModel);
     }
 
@@ -158,7 +164,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public String getModel () {
+    public String getModel() {
 	return MODL.string;
     }
 
@@ -166,7 +172,7 @@ public class ALCH extends MagicItem {
      *
      * @param pickupSound
      */
-    public void setPickupSound (FormID pickupSound) {
+    public void setPickupSound(FormID pickupSound) {
 	YNAM.setForm(pickupSound);
     }
 
@@ -174,7 +180,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public FormID getPickupSound () {
+    public FormID getPickupSound() {
 	return YNAM.getForm();
     }
 
@@ -182,7 +188,7 @@ public class ALCH extends MagicItem {
      *
      * @param dropSound
      */
-    public void setDropSound (FormID dropSound) {
+    public void setDropSound(FormID dropSound) {
 	ZNAM.setForm(dropSound);
     }
 
@@ -190,7 +196,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public FormID getDropSound () {
+    public FormID getDropSound() {
 	return ZNAM.getForm();
     }
 
@@ -198,7 +204,7 @@ public class ALCH extends MagicItem {
      *
      * @param value
      */
-    public void setValue (int value) {
+    public void setValue(int value) {
 	ENIT.value = value;
     }
 
@@ -206,7 +212,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public int getValue () {
+    public int getValue() {
 	return ENIT.value;
     }
 
@@ -232,7 +238,7 @@ public class ALCH extends MagicItem {
      *
      * @param addiction
      */
-    public void setAddiction (FormID addiction) {
+    public void setAddiction(FormID addiction) {
 	ENIT.addiction = addiction;
     }
 
@@ -240,7 +246,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public FormID getAddiction () {
+    public FormID getAddiction() {
 	return ENIT.addiction;
     }
 
@@ -248,7 +254,7 @@ public class ALCH extends MagicItem {
      *
      * @param useSound
      */
-    public void setUseSound (FormID useSound) {
+    public void setUseSound(FormID useSound) {
 	ENIT.useSound = useSound;
     }
 
@@ -256,7 +262,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public FormID getUseSound () {
+    public FormID getUseSound() {
 	return ENIT.useSound;
     }
 
@@ -264,7 +270,7 @@ public class ALCH extends MagicItem {
      *
      * @param weight
      */
-    public void setWeight (float weight) {
+    public void setWeight(float weight) {
 	DATA.data = weight;
     }
 
@@ -272,7 +278,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public float getWeight () {
+    public float getWeight() {
 	return DATA.data;
     }
 
@@ -280,7 +286,7 @@ public class ALCH extends MagicItem {
      *
      * @param filename
      */
-    public void setInventoryIcon (String filename) {
+    public void setInventoryIcon(String filename) {
 	ICON.setString(filename);
     }
 
@@ -288,7 +294,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public String getInventoryIcon () {
+    public String getInventoryIcon() {
 	return ICON.print();
     }
 
@@ -296,7 +302,7 @@ public class ALCH extends MagicItem {
      *
      * @param filename
      */
-    public void setMessageIcon (String filename) {
+    public void setMessageIcon(String filename) {
 	MICO.setString(filename);
     }
 
@@ -304,7 +310,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public String getMessageIcon () {
+    public String getMessageIcon() {
 	return MICO.print();
     }
 
@@ -312,7 +318,7 @@ public class ALCH extends MagicItem {
      *
      * @param equipType
      */
-    public void setEquipType (FormID equipType) {
+    public void setEquipType(FormID equipType) {
 	ETYP.setForm(equipType);
     }
 
@@ -320,7 +326,7 @@ public class ALCH extends MagicItem {
      *
      * @return
      */
-    public FormID getEquipType () {
+    public FormID getEquipType() {
 	return ETYP.getForm();
     }
 }

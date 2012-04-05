@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -76,9 +77,8 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    void standardizeMasters(Mod srcMod) {
-	super.standardizeMasters(srcMod);
-	keywords.standardizeMasters(srcMod);
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return keywords.allFormIDs(deep);
     }
 
     /**

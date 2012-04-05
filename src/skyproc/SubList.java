@@ -6,7 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -207,13 +209,6 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
         }
     }
 
-    @Override
-    void standardizeMasters(Mod srcMod) {
-        for (T item : collection) {
-            item.standardizeMasters(srcMod);
-        }
-    }
-
     static ArrayList<FormID> subFormToPublic (SubList<SubForm> in) {
 	ArrayList<FormID> out = new ArrayList<FormID>(in.size());
 	for (SubForm s : in) {
@@ -245,5 +240,14 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return collection.listIterator();
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	for (T item : collection) {
+            out.addAll(item.allFormIDs(deep));
+        }
+	return out;
     }
 }

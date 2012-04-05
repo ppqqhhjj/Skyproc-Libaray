@@ -20,10 +20,10 @@ public class FLST extends MajorRecord {
 	super();
 	subRecords.add(LNAMs);
     }
-    
+
     /**
-     * 
-     * @param modToOriginateFrom 
+     *
+     * @param modToOriginateFrom
      * @param edid EDID to give the new record.  Make sure it is unique.
      */
     public FLST (Mod modToOriginateFrom, String edid) {
@@ -42,7 +42,7 @@ public class FLST extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return List of all the FormIDs in the Form list.
      */
     public ArrayList<FormID> getFromEntries() {
@@ -50,16 +50,16 @@ public class FLST extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param entry FormID to add to the list.
      */
     public void addFormEntry(FormID entry) {
-	LNAMs.add(new SubForm(Type.LNAM, entry));
 
+	LNAMs.add(new SubForm(Type.LNAM, entry));
     }
 
     /**
-     * 
+     *
      * @param entry FormID to remove (if it exists).
      */
     public void removeFormEntry(FormID entry) {

@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -15,6 +18,7 @@ import skyproc.exceptions.BadRecord;
 /**
  * A internal structure found in many major records representing body setups.
  * The use depends on the context of the major record it is inside of.
+ *
  * @author Justin Swanson
  */
 public class BodyTemplate extends SubRecord {
@@ -68,6 +72,11 @@ public class BodyTemplate extends SubRecord {
     @Override
     int getContentLength(Mod srcMod) {
 	return old ? 8 : 12;
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return new ArrayList<FormID>(0);
     }
 
     /**
@@ -146,14 +155,13 @@ public class BodyTemplate extends SubRecord {
 	PLAYABLE
     }
 
-
     /**
      *
      * @param part
      * @param on
      */
     public void set(BodyPart part, Boolean on) {
-        bodyParts.set(part.ordinal(), on);
+	bodyParts.set(part.ordinal(), on);
     }
 
     /**
@@ -162,7 +170,7 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public boolean get(BodyPart part) {
-        return bodyParts.get(part.ordinal());
+	return bodyParts.get(part.ordinal());
     }
 
     /**
@@ -171,7 +179,7 @@ public class BodyTemplate extends SubRecord {
      * @param on
      */
     public void set(BodyTemplateFlag flag, Boolean on) {
-        flags.set(4, on);
+	flags.set(4, on);
     }
 
     /**
@@ -180,7 +188,7 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public boolean get(BodyTemplateFlag flag) {
-        return flags.get(4);
+	return flags.get(4);
     }
 
     /**
@@ -188,8 +196,8 @@ public class BodyTemplate extends SubRecord {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-        armorType = type.ordinal();
-        old = false;
+	armorType = type.ordinal();
+	old = false;
     }
 
     /**
@@ -197,10 +205,10 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public ArmorType getArmorType() {
-        if (!old) {
-            return ArmorType.values()[armorType];
-        } else {
-            return ArmorType.CLOTHING;
-        }
+	if (!old) {
+	    return ArmorType.values()[armorType];
+	} else {
+	    return ArmorType.CLOTHING;
+	}
     }
 }

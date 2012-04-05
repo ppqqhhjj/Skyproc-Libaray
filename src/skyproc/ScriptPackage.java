@@ -6,6 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -52,10 +54,15 @@ public class ScriptPackage extends SubRecord {
     }
 
     @Override
-    void standardizeMasters(Mod srcMod) {
-	super.standardizeMasters(srcMod);
-	for (ScriptRef s : scripts) {
-	    s.standardizeMasters(srcMod);
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	if (deep) {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    for (ScriptRef s : scripts) {
+		out.addAll(s.allFormIDs(deep));
+	    }
+	    return out;
+	} else {
+	    return new ArrayList<FormID>(0);
 	}
     }
 
@@ -105,6 +112,7 @@ public class ScriptPackage extends SubRecord {
 
     /**
      * Adds the script reference to the package.
+     *
      * @param script
      */
     public void addScript(ScriptRef script) {
@@ -112,8 +120,9 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * Returns a ScriptRef object matching the name, if one exists, or null
-     * if one does not.
+     * Returns a ScriptRef object matching the name, if one exists, or null if
+     * one does not.
+     *
      * @param scriptName
      * @return
      */
@@ -122,8 +131,9 @@ public class ScriptPackage extends SubRecord {
     }
 
     /**
-     * Returns the ScriptRef object from the ScriptPackage that matches the input's
-     * name.
+     * Returns the ScriptRef object from the ScriptPackage that matches the
+     * input's name.
+     *
      * @param script
      * @return
      */
@@ -142,6 +152,7 @@ public class ScriptPackage extends SubRecord {
 
     /**
      * Returns true if package has a script matching the input's name
+     *
      * @param script
      * @return
      */
@@ -159,6 +170,7 @@ public class ScriptPackage extends SubRecord {
 
     /**
      * Removes a ScriptRef matching the input's name, if one exists.
+     *
      * @param script
      */
     public void removeScript(ScriptRef script) {

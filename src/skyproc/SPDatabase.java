@@ -58,6 +58,9 @@ public class SPDatabase implements Iterable<Mod> {
      * @return Mod matching the ModListing query.
      */
     public Mod getMod(ModListing listing) {
+	if (listing.equals(SPGlobal.getGlobalPatch().getInfo())) {
+	    return SPGlobal.getGlobalPatch();
+	}
 	return modLookup.get(listing);
     }
 
@@ -234,15 +237,15 @@ public class SPDatabase implements Iterable<Mod> {
 
     /**
      *
-     * @return SDBIterator of all the mods in the database, in load order.  
+     * @return SDBIterator of all the mods in the database, in load order.
      * "Winning" mods will be last.
      */
     @Override
     public Iterator<Mod> iterator() {
 	return modLookup.values().iterator();
     }
-    
-    
+
+
     public Iterator<Mod> reverseIter () {
 	Iterator<Mod> iter = iterator();
 	ArrayList<Mod> outList = new ArrayList<Mod>(modLookup.size());
@@ -251,5 +254,5 @@ public class SPDatabase implements Iterable<Mod> {
 	}
 	return outList.iterator();
     }
-    
+
 }

@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -18,8 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class AMMO extends MajorRecordDescription {
 
-    static Type[] types = { Type.AMMO };
-
+    static Type[] types = {Type.AMMO};
     SubData OBND = new SubData(Type.OBND);
     SubString MODL = new SubString(Type.MODL, true);
     SubData MODT = new SubData(Type.MODT);
@@ -28,7 +30,7 @@ public class AMMO extends MajorRecordDescription {
     public KeywordSet keywords = new KeywordSet();
     DATA DATA = new DATA();
 
-    AMMO () {
+    AMMO() {
 	super();
 	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
@@ -61,7 +63,7 @@ public class AMMO extends MajorRecordDescription {
 	float damage = 0;
 	int value = 0;
 
-	DATA () {
+	DATA() {
 	    super(Type.DATA);
 	}
 
@@ -93,44 +95,48 @@ public class AMMO extends MajorRecordDescription {
 	    return 16;
 	}
 
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     public enum AMMOFlag {
+
 	IgnoresWeaponResistance,
 	VanishesWhenNotInFlight;
     }
 
     //Get/Set
-
-    public void setModel (String path) {
+    public void setModel(String path) {
 	MODL.setString(path);
     }
 
-    public String getModel () {
+    public String getModel() {
 	return MODL.print();
     }
 
-    public void setPickupSound (FormID sound) {
+    public void setPickupSound(FormID sound) {
 	YNAM.setForm(sound);
     }
 
-    public FormID getPickupSound () {
+    public FormID getPickupSound() {
 	return YNAM.getForm();
     }
 
-    public void setDropSound (FormID sound) {
+    public void setDropSound(FormID sound) {
 	ZNAM.setForm(sound);
     }
 
-    public FormID getDropSound () {
+    public FormID getDropSound() {
 	return ZNAM.getForm();
     }
 
-    public void setProjectile (FormID projectile) {
+    public void setProjectile(FormID projectile) {
 	DATA.projectile = projectile;
     }
 
-    public FormID getProjectile () {
+    public FormID getProjectile() {
 	return DATA.projectile;
     }
 
@@ -142,19 +148,19 @@ public class AMMO extends MajorRecordDescription {
 	return DATA.flags.get(flag.ordinal() + 1);
     }
 
-    public void setDamage (float damage) {
+    public void setDamage(float damage) {
 	DATA.damage = damage;
     }
 
-    public float getDamage () {
+    public float getDamage() {
 	return DATA.damage;
     }
 
-    public void setValue (int gold) {
+    public void setValue(int gold) {
 	DATA.value = gold;
     }
 
-    public int getValue () {
+    public int getValue() {
 	return DATA.value;
     }
 }

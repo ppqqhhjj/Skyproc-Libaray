@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -72,10 +75,10 @@ class Condition extends SubShell {
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    LFlags tmp = new LFlags(Ln.toByteArray(operator.ordinal(), 1));
-	    for (int i = 3 ; i < 8 ; i++) {
+	    for (int i = 3; i < 8; i++) {
 		tmp.set(i, flags.get(i));
 	    }
-	    out.write(tmp.export(),1);
+	    out.write(tmp.export(), 1);
 	    out.write(fluff, 3);
 
 	    if (get(CondFlag.UseGlobal)) {
@@ -116,7 +119,7 @@ class Condition extends SubShell {
 	    // First byte is both operator and flags, ugly.
 	    flags.set(in.extract(1));
 	    LFlags tmp = new LFlags(flags.export());
-	    for (int i = 3 ; i < 8 ; i++) {
+	    for (int i = 3; i < 8; i++) {
 		tmp.set(i, false);
 	    }
 	    operator = Operator.values()[Ln.arrayToInt(tmp.export())];
@@ -168,13 +171,18 @@ class Condition extends SubShell {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    comparisonValueForm.standardize(srcMod);
-	    param1form.standardize(srcMod);
-	    param2form.standardize(srcMod);
-	    reference.standardize(srcMod);
-	    param3form.standardize(srcMod);
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(5);
+		out.add(comparisonValueForm);
+		out.add(param1form);
+		out.add(param2form);
+		out.add(reference);
+		out.add(param3form);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
 
 	@Override
@@ -213,10 +221,9 @@ class Condition extends SubShell {
 	UseGlobal(5),
 	UsePackData(6),
 	SwapSubjectAndTarget(7);
-
 	int value;
 
-	CondFlag (int value) {
+	CondFlag(int value) {
 	    this.value = value;
 	}
     }

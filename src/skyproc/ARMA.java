@@ -7,6 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -16,6 +18,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * Armature records (pieces of armor)
+ *
  * @author Justin Swanson
  */
 public class ARMA extends MajorRecord {
@@ -53,105 +56,110 @@ public class ARMA extends MajorRecord {
      * Armature Major Record
      */
     ARMA() {
-        super();
+	super();
 
-        subRecords.add(BODT);
-        subRecords.add(RNAM);
-        subRecords.add(DNAM);
-        subRecords.add(MOD2);
-        subRecords.add(MO2T);
-        subRecords.add(MO2S);
-        subRecords.add(MOD3);
-        subRecords.add(MO3T);
-        subRecords.add(MO3S);
-        subRecords.add(MOD4);
-        subRecords.add(MO4T);
-        subRecords.add(MO4S);
-        subRecords.add(MOD5);
-        subRecords.add(MO5T);
-        subRecords.add(MO5S);
-        subRecords.add(maleSkinTexture);
-        subRecords.add(femaleSkinTexture);
-        subRecords.add(maleSkinSwapList);
-        subRecords.add(femaleSkinSwapList);
-        subRecords.add(additionalRaces);
-        subRecords.add(footstepSound);
+	subRecords.add(BODT);
+	subRecords.add(RNAM);
+	subRecords.add(DNAM);
+	subRecords.add(MOD2);
+	subRecords.add(MO2T);
+	subRecords.add(MO2S);
+	subRecords.add(MOD3);
+	subRecords.add(MO3T);
+	subRecords.add(MO3S);
+	subRecords.add(MOD4);
+	subRecords.add(MO4T);
+	subRecords.add(MO4S);
+	subRecords.add(MOD5);
+	subRecords.add(MO5T);
+	subRecords.add(MO5S);
+	subRecords.add(maleSkinTexture);
+	subRecords.add(femaleSkinTexture);
+	subRecords.add(maleSkinSwapList);
+	subRecords.add(femaleSkinSwapList);
+	subRecords.add(additionalRaces);
+	subRecords.add(footstepSound);
     }
 
     @Override
     Type[] getTypes() {
-        return type;
+	return type;
     }
 
     @Override
     Record getNew() {
-        return new ARMA();
+	return new ARMA();
     }
 
     class AltTextures extends SubRecord {
 
-        ArrayList<AltTexture> altTextures = new ArrayList<AltTexture>();
+	ArrayList<AltTexture> altTextures = new ArrayList<AltTexture>();
 
-        AltTextures(Type t) {
-            super(t);
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                out.write(altTextures.size());
-                for (AltTexture t : altTextures) {
-                    t.export(out);
-                }
-            }
-        }
-
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            int numTextures = in.extractInt(4);
-            for (int i = 0; i < numTextures; i++) {
-                int strLength = Ln.arrayToInt(in.getInts(0, 4));
-                AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)));
-                altTextures.add(newText);
-                if (logging()) {
-                    logSync("", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
-                }
-            }
-        }
+	AltTextures(Type t) {
+	    super(t);
+	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    for (AltTexture t : altTextures) {
-		t.standardizeMasters(srcMod);
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(altTextures.size());
+		for (AltTexture t : altTextures) {
+		    t.export(out);
+		}
 	    }
 	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new AltTextures(type);
-        }
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    int numTextures = in.extractInt(4);
+	    for (int i = 0; i < numTextures; i++) {
+		int strLength = Ln.arrayToInt(in.getInts(0, 4));
+		AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)));
+		altTextures.add(newText);
+		if (logging()) {
+		    logSync("", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
+		}
+	    }
+	}
 
-        @Override
-        public void clear() {
-            altTextures.clear();
-        }
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(altTextures.size());
+		for (AltTexture t : altTextures) {
+		    out.add(t.texture);
+		}
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
+	}
 
-        @Override
-        Boolean isValid() {
-            return !altTextures.isEmpty();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new AltTextures(type);
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            int out = 4;  // num Textures
-            for (AltTexture t : altTextures) {
-                out += t.getTotalLength();
-            }
-            return out;
-        }
+	@Override
+	public void clear() {
+	    altTextures.clear();
+	}
+
+	@Override
+	Boolean isValid() {
+	    return !altTextures.isEmpty();
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    int out = 4;  // num Textures
+	    for (AltTexture t : altTextures) {
+		out += t.getTotalLength();
+	    }
+	    return out;
+	}
     }
 
     /**
@@ -161,158 +169,164 @@ public class ARMA extends MajorRecord {
      */
     static public class AltTexture implements Serializable {
 
-        String name;
-        FormID texture = new FormID();
-        int index;
+	String name;
+	FormID texture = new FormID();
+	int index;
 
 	/**
-	 * Creates a new AltTexture, which can be added to the ARMA
-	 * to give it an alternate texture.
+	 * Creates a new AltTexture, which can be added to the ARMA to give it
+	 * an alternate texture.
+	 *
 	 * @param name Name of the NiTriShape to apply this TXST to.
 	 * @param txst FormID of the TXST to apply as the alt.
 	 * @param index Index of the NiTriShape to apply this TXST to.
 	 */
 	public AltTexture(String name, FormID txst, int index) {
-            this.name = name;
-            this.texture = txst;
-            this.index = index;
-        }
+	    this.name = name;
+	    this.texture = txst;
+	    this.index = index;
+	}
 
-        AltTexture(LShrinkArray in) {
-            parseData(in);
-        }
+	AltTexture(LShrinkArray in) {
+	    parseData(in);
+	}
 
-        final void parseData(LShrinkArray in) {
-            int strLength = in.extractInt(4);
-            name = in.extractString(strLength);
-            texture.setInternal(in.extract(4));
-            index = in.extractInt(4);
-        }
+	final void parseData(LShrinkArray in) {
+	    int strLength = in.extractInt(4);
+	    name = in.extractString(strLength);
+	    texture.setInternal(in.extract(4));
+	    index = in.extractInt(4);
+	}
 
-        void export(LExporter out) throws IOException {
-            out.write(name.length());
-            out.write(name);
-            texture.export(out);
-            out.write(index);
-        }
+	void export(LExporter out) throws IOException {
+	    out.write(name.length());
+	    out.write(name);
+	    texture.export(out);
+	    out.write(index);
+	}
 
 	void standardizeMasters(Mod srcMod) {
 	    texture.standardize(srcMod);
 	}
 
-        int getTotalLength() {
-            return name.length() + 12;
-        }
+	int getTotalLength() {
+	    return name.length() + 12;
+	}
 
 	/**
 	 *
 	 * @param name String to set the AltTexture name to.
 	 */
 	public void setName(String name) {
-            this.name = name;
-        }
+	    this.name = name;
+	}
 
 	/**
 	 *
 	 * @return Name of the AltTexture.
 	 */
 	public String getName() {
-            return name;
-        }
+	    return name;
+	}
 
 	/**
 	 *
 	 * @param txst FormID of the TXST to tie the AltTexture to.
 	 */
 	public void setTexture(FormID txst) {
-            texture = txst;
-        }
+	    texture = txst;
+	}
 
 	/**
 	 *
 	 * @return FormID of the TXST the AltTexture is tied to.
 	 */
 	public FormID getTexture() {
-            return texture;
-        }
+	    return texture;
+	}
 
 	/**
 	 *
 	 * @param index The NiTriShape index to assign.
 	 */
 	public void setIndex(int index) {
-            this.index = index;
-        }
+	    this.index = index;
+	}
 
 	/**
 	 *
 	 * @return The NiTriShape index assigned to the AltTexture.
 	 */
 	public int getIndex() {
-            return index;
-        }
+	    return index;
+	}
     }
 
     class DNAM extends SubRecord {
 
-        int malePriority;
-        int femalePriority;
-        byte[] unknown;
-        int detectionSoundValue;
-        byte[] unknown2;
-        float weaponAdjust;
+	int malePriority;
+	int femalePriority;
+	byte[] unknown;
+	int detectionSoundValue;
+	byte[] unknown2;
+	float weaponAdjust;
 
-        DNAM() {
-            super(Type.DNAM);
-        }
+	DNAM() {
+	    super(Type.DNAM);
+	}
 
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if ("FalmerHelmetKhajiitAA".equals(getEDID())) {
-                int werw = 2;
-            }
-            out.write(malePriority, 1);
-            out.write(femalePriority, 1);
-            out.write(unknown, 4);
-            out.write(detectionSoundValue, 1);
-            out.write(unknown2, 1);
-            out.write(weaponAdjust);
-        }
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if ("FalmerHelmetKhajiitAA".equals(getEDID())) {
+		int werw = 2;
+	    }
+	    out.write(malePriority, 1);
+	    out.write(femalePriority, 1);
+	    out.write(unknown, 4);
+	    out.write(detectionSoundValue, 1);
+	    out.write(unknown2, 1);
+	    out.write(weaponAdjust);
+	}
 
-        @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            malePriority = in.extractInt(1);
-            femalePriority = in.extractInt(1);
-            unknown = in.extract(4);
-            detectionSoundValue = in.extractInt(1);
-            unknown2 = in.extract(1);
-            weaponAdjust = in.extractFloat();
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    malePriority = in.extractInt(1);
+	    femalePriority = in.extractInt(1);
+	    unknown = in.extract(4);
+	    detectionSoundValue = in.extractInt(1);
+	    unknown2 = in.extract(1);
+	    weaponAdjust = in.extractFloat();
 	    if (logging()) {
 		logSync("", "M-Priority: " + malePriority + ", F-Priority: " + femalePriority + ", DetectionValue: " + detectionSoundValue + ", weaponAdjust: " + weaponAdjust);
 	    }
-        }
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+	@Override
+	public void clear() {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-        @Override
-        Boolean isValid() {
-            return true;
-        }
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            return 12;
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 12;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     // Get/set
@@ -323,77 +337,79 @@ public class ARMA extends MajorRecord {
      * @param perspective Perspective to assign this model path to.
      */
     public void setModelPath(String path, Gender gender, Perspective perspective) {
-        switch (gender) {
-            case MALE:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        MOD2.setString(path);
-                        return;
-                    case FIRST_PERSON:
-                        MOD4.setString(path);
-                        return;
-                }
-            case FEMALE:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        MOD3.setString(path);
-                        return;
-                    case FIRST_PERSON:
-                        MOD5.setString(path);
-                        return;
-                }
-        }
+	switch (gender) {
+	    case MALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			MOD2.setString(path);
+			return;
+		    case FIRST_PERSON:
+			MOD4.setString(path);
+			return;
+		}
+	    case FEMALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			MOD3.setString(path);
+			return;
+		    case FIRST_PERSON:
+			MOD5.setString(path);
+			return;
+		}
+	}
     }
 
     /**
      *
      * @param gender The gender of the desired model path to query.
      * @param perspective The perspective of the model path to query.
-     * @return The model path of the specified gender/perspective.  Empty string
+     * @return The model path of the specified gender/perspective. Empty string
      * if a model path does not exist for specified parameters.
      */
     public String getModelPath(Gender gender, Perspective perspective) {
-        switch (gender) {
-            case MALE:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        return MOD2.print();
-                    case FIRST_PERSON:
-                        return MOD4.print();
-                }
-            default:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        return MOD3.print();
-                    default:
-                        return MOD5.print();
-                }
-        }
+	switch (gender) {
+	    case MALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return MOD2.print();
+		    case FIRST_PERSON:
+			return MOD4.print();
+		}
+	    default:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return MOD3.print();
+		    default:
+			return MOD5.print();
+		}
+	}
     }
 
     /**
-     * Returns the set of AltTextures applied to a specified gender and perspective.
+     * Returns the set of AltTextures applied to a specified gender and
+     * perspective.
+     *
      * @param gender Gender of the AltTexture set to query.
      * @param perspective Perspective of the AltTexture set to query.
      * @return List of the AltTextures applied to the gender/perspective.
      */
     public ArrayList<AltTexture> getAltTextures(Gender gender, Perspective perspective) {
-        switch (gender) {
-            case MALE:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        return MO2S.altTextures;
-                    case FIRST_PERSON:
-                        return MO4S.altTextures;
-                }
-            default:
-                switch (perspective) {
-                    case THIRD_PERSON:
-                        return MO3S.altTextures;
-                    default:
-                        return MO5S.altTextures;
-                }
-        }
+	switch (gender) {
+	    case MALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return MO2S.altTextures;
+		    case FIRST_PERSON:
+			return MO4S.altTextures;
+		}
+	    default:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return MO3S.altTextures;
+		    default:
+			return MO5S.altTextures;
+		}
+	}
     }
 
     /**
@@ -401,7 +417,7 @@ public class ARMA extends MajorRecord {
      * @param race
      */
     public void setRace(FormID race) {
-        RNAM.setForm(race);
+	RNAM.setForm(race);
     }
 
     /**
@@ -409,7 +425,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getRace() {
-        return RNAM.getForm();
+	return RNAM.getForm();
     }
 
     /**
@@ -418,14 +434,14 @@ public class ARMA extends MajorRecord {
      * @param gender
      */
     public void setSkinTexture(FormID skin, Gender gender) {
-        switch (gender) {
-            case MALE:
-                maleSkinTexture.setForm(skin);
-                return;
-            case FEMALE:
-                femaleSkinTexture.setForm(skin);
-                return;
-        }
+	switch (gender) {
+	    case MALE:
+		maleSkinTexture.setForm(skin);
+		return;
+	    case FEMALE:
+		femaleSkinTexture.setForm(skin);
+		return;
+	}
     }
 
     /**
@@ -434,12 +450,12 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getSkinTexture(Gender gender) {
-        switch (gender) {
-            case MALE:
-                return maleSkinTexture.getForm();
-            default:
-                return femaleSkinTexture.getForm();
-        }
+	switch (gender) {
+	    case MALE:
+		return maleSkinTexture.getForm();
+	    default:
+		return femaleSkinTexture.getForm();
+	}
     }
 
     /**
@@ -448,13 +464,13 @@ public class ARMA extends MajorRecord {
      * @param gender
      */
     public void setSkinSwap(FormID swapList, Gender gender) {
-        switch (gender) {
-            case MALE:
-                maleSkinSwapList.setForm(swapList);
-                return;
-            case FEMALE:
-                femaleSkinSwapList.setForm(swapList);
-        }
+	switch (gender) {
+	    case MALE:
+		maleSkinSwapList.setForm(swapList);
+		return;
+	    case FEMALE:
+		femaleSkinSwapList.setForm(swapList);
+	}
     }
 
     /**
@@ -463,12 +479,12 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getSkinSwap(Gender gender) {
-        switch (gender) {
-            case MALE:
-                return maleSkinSwapList.getForm();
-            default:
-                return femaleSkinSwapList.getForm();
-        }
+	switch (gender) {
+	    case MALE:
+		return maleSkinSwapList.getForm();
+	    default:
+		return femaleSkinSwapList.getForm();
+	}
     }
 
     /**
@@ -476,7 +492,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void addAdditionalRace(FormID addRace) {
-        additionalRaces.add(new SubForm(Type.MODL, addRace));
+	additionalRaces.add(new SubForm(Type.MODL, addRace));
     }
 
     /**
@@ -484,7 +500,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void removeAdditionalRace(FormID addRace) {
-        additionalRaces.remove(new SubForm(Type.MODL, addRace));
+	additionalRaces.remove(new SubForm(Type.MODL, addRace));
     }
 
     /**
@@ -492,7 +508,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getAdditionalRaces() {
-        return SubList.subFormToPublic(additionalRaces);
+	return SubList.subFormToPublic(additionalRaces);
     }
 
     /**
@@ -500,7 +516,7 @@ public class ARMA extends MajorRecord {
      * @param footstep
      */
     public void setFootstepSound(FormID footstep) {
-        footstepSound.setForm(footstep);
+	footstepSound.setForm(footstep);
     }
 
     /**
@@ -508,7 +524,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getFootstepSound() {
-        return footstepSound.getForm();
+	return footstepSound.getForm();
     }
 
     /**
@@ -517,14 +533,14 @@ public class ARMA extends MajorRecord {
      * @param gender
      */
     public void setPriority(int priority, Gender gender) {
-        switch (gender) {
-            case MALE:
-                DNAM.malePriority = priority;
-                return;
-            case FEMALE:
-                DNAM.femalePriority = priority;
-                return;
-        }
+	switch (gender) {
+	    case MALE:
+		DNAM.malePriority = priority;
+		return;
+	    case FEMALE:
+		DNAM.femalePriority = priority;
+		return;
+	}
     }
 
     /**
@@ -533,12 +549,12 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public int getPriority(Gender gender) {
-        switch (gender) {
-            case MALE:
-                return DNAM.malePriority;
-            default:
-                return DNAM.femalePriority;
-        }
+	switch (gender) {
+	    case MALE:
+		return DNAM.malePriority;
+	    default:
+		return DNAM.femalePriority;
+	}
     }
 
     /**
@@ -546,7 +562,7 @@ public class ARMA extends MajorRecord {
      * @param value
      */
     public void setDetectionSoundValue(int value) {
-        DNAM.detectionSoundValue = value;
+	DNAM.detectionSoundValue = value;
     }
 
     /**
@@ -554,7 +570,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public int getDetectionSoundValue() {
-        return DNAM.detectionSoundValue;
+	return DNAM.detectionSoundValue;
     }
 
     /**
@@ -562,7 +578,7 @@ public class ARMA extends MajorRecord {
      * @param adjust
      */
     public void setWeaponAdjust(float adjust) {
-        DNAM.weaponAdjust = adjust;
+	DNAM.weaponAdjust = adjust;
     }
 
     /**
@@ -570,6 +586,6 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public float getWeaponAdjust() {
-        return DNAM.weaponAdjust;
+	return DNAM.weaponAdjust;
     }
 }

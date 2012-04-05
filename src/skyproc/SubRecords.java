@@ -6,12 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -158,12 +153,13 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
         return map.keySet();
     }
 
-    public void standardize(Mod srcMod) {
-        for (SubRecord s : list) {
-            s.standardizeMasters(srcMod);
+    public ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	for (SubRecord s : list) {
+            out.addAll(s.allFormIDs(deep));
         }
+	return out;
     }
-
     @Override
     public Iterator<SubRecord> iterator() {
         return list.iterator();

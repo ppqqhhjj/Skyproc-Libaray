@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -201,6 +204,11 @@ public class WEAP extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return 100;
 	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     static class DATA extends SubRecord {
@@ -252,6 +260,11 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 10;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    return new ArrayList<FormID>(0);
 	}
     }
 
@@ -310,6 +323,13 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 16;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    out.add(critEffect);
+	    return out;
 	}
     }
 

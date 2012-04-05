@@ -6,6 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -35,6 +37,13 @@ abstract class MagicItem extends MajorRecordDescription {
 	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
 	OBND.initialize(12);
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = super.allFormIDs(deep);
+	out.addAll(magicEffects.allFormIDs(deep));
+	return out;
     }
 
     static class SPIT extends SubRecord {
@@ -117,17 +126,22 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	void standardizeMasters(Mod srcMod) {
-	    super.standardizeMasters(srcMod);
-	    perkType.standardizeMasters(srcMod);
-	}
-
-	@Override
 	int getContentLength(Mod srcMod) {
 	    if (isValid()) {
 		return 36;
 	    } else {
 		return 0;
+	    }
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs (boolean deep) {
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		out.add(perkType.ID);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
 	    }
 	}
     }

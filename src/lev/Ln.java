@@ -287,9 +287,11 @@ public class Ln {
      * @param eraseOldDirs Whether to erase old empty directories.
      * @return The destination file
      */
-    public static File moveFile(File src, File dest, boolean eraseOldDirs) {
+    public static boolean moveFile(File src, File dest, boolean eraseOldDirs) {
 	makeDirs(dest);
-	src.renameTo(dest);
+	if (!src.renameTo(dest)) {
+	    return false;
+	}
 	if (eraseOldDirs) {
 	    while ((src = src.getParentFile()) != null) {
 		if (src.isDirectory() && src.listFiles().length == 0) {
@@ -299,7 +301,7 @@ public class Ln {
 		}
 	    }
 	}
-	return dest;
+	return true;
     }
 
     /**

@@ -1,14 +1,14 @@
 package skyproc;
 
-import lev.LShrinkArray;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LShrinkArray;
 import lev.Ln;
-import skyproc.exceptions.BadRecord;
 import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  * Abstract class outlining functions for a generic record.

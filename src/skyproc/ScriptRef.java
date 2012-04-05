@@ -6,7 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -14,7 +16,8 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- * A script reference to be added/found in a major record's ScriptPackage object.
+ * A script reference to be added/found in a major record's ScriptPackage
+ * object.
  *
  * @author Justin Swanson
  */
@@ -30,9 +33,9 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     /**
      * Creates a script reference with the given name. Adding this to a major
-     * record's ScriptPackage will attach the script to the record. Of course, there
-     * must be a script with that name in the Data/Scripts/ folder for it to
-     * actually do anything in-game.
+     * record's ScriptPackage will attach the script to the record. Of course,
+     * there must be a script with that name in the Data/Scripts/ folder for it
+     * to actually do anything in-game.
      *
      * @param name
      */
@@ -70,6 +73,18 @@ public class ScriptRef extends Record implements Iterable<String> {
     void standardizeMasters(Mod srcMod) {
 	for (ScriptProperty s : properties) {
 	    s.standardizeMasters(srcMod);
+	}
+    }
+
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	if (deep) {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    for (ScriptProperty s : properties) {
+		out.addAll(s.allFormIDs(deep));
+	    }
+	    return out;
+	} else {
+	    return new ArrayList<FormID>(0);
 	}
     }
 
@@ -151,8 +166,9 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     // Get/set
     /**
-     * Sets the name of the script.  This MUST match the name of the script
-     * file you wish to attach.
+     * Sets the name of the script. This MUST match the name of the script file
+     * you wish to attach.
+     *
      * @param name
      */
     public void setName(String name) {
@@ -161,9 +177,10 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     /**
      * Gets the name of the script
+     *
      * @return
      */
-    public String getName () {
+    public String getName() {
 	return name.print();
     }
 
@@ -185,6 +202,7 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     /**
      * Removes a property with the given name from the script, if one exists.
+     *
      * @param propertyName
      */
     public void removeProperty(String propertyName) {

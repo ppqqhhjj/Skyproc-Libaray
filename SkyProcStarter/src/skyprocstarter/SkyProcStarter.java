@@ -2,11 +2,7 @@ package skyprocstarter;
 
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import skyproc.Mod;
-import skyproc.SPDatabase;
-import skyproc.SPDefaultGUI;
-import skyproc.SPGlobal;
-import skyproc.SPImporter;
+import skyproc.*;
 
 /**
  *

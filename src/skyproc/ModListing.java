@@ -1,6 +1,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -168,6 +171,11 @@ public class ModListing extends SubRecord implements Comparable {
 	hash = 37 * hash + (this.mast != null ? this.mast.hashUpperCaseCode() : 0);
 	hash = 37 * hash + (this.master ? 1 : 0);
 	return hash;
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	return new ArrayList<FormID>(0);
     }
 
     /**

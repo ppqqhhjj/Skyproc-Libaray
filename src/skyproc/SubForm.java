@@ -7,6 +7,9 @@ package skyproc;
 import skyproc.exceptions.BadParameter;
 import lev.LShrinkArray;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
@@ -118,11 +121,6 @@ class SubForm extends SubRecord {
     }
 
     @Override
-    void standardizeMasters(Mod srcMod) {
-        ID.standardize(srcMod);
-    }
-
-    @Override
     boolean confirmLink() {
         if (SPGlobal.globalDatabase != null) {
             return confirmLink(SPGlobal.globalDatabase);
@@ -193,5 +191,12 @@ class SubForm extends SubRecord {
         int hash = 7;
         hash = 29 * hash + (this.ID != null ? this.ID.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>(1);
+	out.add(ID);
+	return out;
     }
 }

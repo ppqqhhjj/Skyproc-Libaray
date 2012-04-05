@@ -5,13 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -106,5 +100,14 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     @Override
     Boolean isValid() {
         return true;
+    }
+
+    @Override
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	for (T s : set.values()) {
+	    out.addAll(s.allFormIDs(deep));
+	}
+	return out;
     }
 }

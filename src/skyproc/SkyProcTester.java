@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.File;
 import java.io.IOException;
+import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadRecord;
@@ -64,8 +65,8 @@ class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.AMMO};
-//	GRUP_TYPE[] types = GRUP_TYPE.values();
+//	GRUP_TYPE[] types = {GRUP_TYPE.RACE};
+	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
@@ -91,7 +92,7 @@ class SkyProcTester {
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
 	patch.setAuthor("Leviathan1753");
-	patch.export();
+	patch.export(new LExporter(SPGlobal.pathToData + patch.getName()), patch);
 
 	boolean passed = true;
 	System.out.println("Testing Record Lengths " + type);

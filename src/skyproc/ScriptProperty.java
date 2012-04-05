@@ -5,6 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -67,6 +70,16 @@ class ScriptProperty extends Record {
 
     void standardizeMasters(Mod srcMod) {
 	id.standardize(srcMod);
+    }
+
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	if (deep) {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    out.add(id);
+	    return out;
+	} else {
+	    return new ArrayList<FormID>(0);
+	}
     }
 
     @Override

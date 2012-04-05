@@ -2,10 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
@@ -166,10 +163,12 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	}
     }
 
-    void standardizeMasters() {
+    ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T item : listRecords) {
-	    item.standardizeMasters(srcMod);
+	    out.addAll(item.allFormIDs(deep));
 	}
+	return out;
     }
 
     void fetchExceptions(SPDatabase database) {
@@ -241,8 +240,24 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     public void addRecord(T item) {
 	// Get Masters
-	item.standardizeMasters(srcMod);
+	standardizeMaster(item);
 	addRecordSilent(item);
+    }
+
+    void standardizeMasters() {
+	for (T item : listRecords) {
+	    standardizeMaster(item);
+	}
+    }
+
+    void standardizeMaster (T item) {
+	ArrayList<FormID> set = item.allFormIDs(true);
+	for (FormID id : set) {
+	    if (id.getFormStr().equals("000A042E")) {
+		int tests = 23;
+	    }
+	    id.standardize(srcMod);
+	}
     }
 
     final void addRecordSilent(T item) {
