@@ -203,8 +203,9 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
                 SubData counter = new SubData(counterType, Ln.toByteArray(collection.size(), counterLength));
                 counter.export(out, srcMod);
             }
-            for (T entry : collection) {
-                entry.export(out, srcMod);
+	    Iterator<T> iter = iterator();
+            while(iter.hasNext()) {
+                iter.next().export(out, srcMod);
             }
         }
     }
