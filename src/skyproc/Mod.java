@@ -317,7 +317,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs(boolean deep) {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (GRUP g : GRUPs.values()) {
 	    out.addAll(g.allFormIDs(deep));
@@ -547,14 +547,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPGUI.progress.reset();
 	SPGUI.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
-	// Just for good measure
+	// Confirm all formID references are added as
+	// masters, even if no actual major record from that
+	// mod was added.
 	for (FormID ID : srcMod.allFormIDs(true)) {
 	    if (!ID.equals(FormID.NULL)) {
-		if (ID.getFormStr().equals("10ABA7Skyrim.esm")) {
-		    int ewrew = 23;
-		}
-		SPGlobal.log("", "Testing ID " + ID);
-		this.mergeMasters(SPGlobal.getDB().getMod(ID.getMaster()));
+		this.addMaster(ID.getMaster());
 	    }
 	}
 	standardizeMasters();
@@ -1160,7 +1158,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> allFormIDs(boolean deep) {
 	    return new ArrayList<FormID>(0);
 	}
     }

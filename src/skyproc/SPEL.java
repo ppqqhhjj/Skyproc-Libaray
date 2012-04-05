@@ -43,6 +43,7 @@ public class SPEL extends MagicItem {
 	super(modToOriginateFrom, edid);
 	init();
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
+	ETYP.ID.standardize(modToOriginateFrom);
 	SPIT.valid = true;
     }
 

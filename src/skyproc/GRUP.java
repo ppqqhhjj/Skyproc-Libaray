@@ -253,9 +253,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void standardizeMaster (T item) {
 	ArrayList<FormID> set = item.allFormIDs(true);
 	for (FormID id : set) {
-	    if (id.getFormStr().equals("000A042E")) {
-		int tests = 23;
-	    }
 	    id.standardize(srcMod);
 	}
     }
