@@ -26,6 +26,7 @@ public class LSwingTree extends LComponent {
     protected JScrollPane scrollPane;
     protected JPanel panel;
     protected JTree tree;
+    protected DefaultTreeModel model;
     int topMargin = 0;
     int leftMargin = 0;
     String state;
@@ -34,6 +35,7 @@ public class LSwingTree extends LComponent {
         super();
 
         tree = new JTree();
+	model = (DefaultTreeModel) tree.getModel();
         panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(Color.white);
@@ -233,5 +235,9 @@ public class LSwingTree extends LComponent {
 
     public void restoreExpansionState () {
 	restoreExpansionState(0, state);
+    }
+    
+    public void nodeChanged (TreeNode node) {
+	model.nodeChanged(node);
     }
 }
