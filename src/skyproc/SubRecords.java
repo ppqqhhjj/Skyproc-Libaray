@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
@@ -151,6 +152,12 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 
     public Set<Type> getTypes() {
         return map.keySet();
+    }
+
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+	for (SubRecord s : list) {
+	    s.fetchStringPointers(srcMod, r, streams);
+	}
     }
 
     public ArrayList<FormID> allFormIDs (boolean deep) {

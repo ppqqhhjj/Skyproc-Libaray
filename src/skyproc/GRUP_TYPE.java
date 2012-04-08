@@ -15,6 +15,7 @@ public enum GRUP_TYPE {
      * Texture Sets
      */
     TXST,
+    FACT,
     /**
      * Races
      */

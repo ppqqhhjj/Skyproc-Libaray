@@ -206,18 +206,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
-//        if ("EncDremoraWarlock06".equals(getEDID())) {
-//            int sdf = 234;
-//        }
-	for (SubRecord s : subRecords) {
-	    if (s.getClass() == SubStringPointer.class) {
-		try {
-		    ((SubStringPointer) s).fetchStringPointers(srcMod, this, streams);
-		} catch (IOException e) {
-		    logError(srcMod.getName(), "Fetch String Pointer IO error: " + s);
-		}
-	    }
-	}
+	subRecords.fetchStringPointers(srcMod, this, streams);
     }
 
     // Get/set methods

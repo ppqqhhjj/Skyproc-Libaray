@@ -7,9 +7,11 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
+import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
@@ -95,6 +97,10 @@ public abstract class SubRecord extends Record {
 
     ArrayList<FormID> allFormIDs (boolean deep) {
 	return new ArrayList<FormID>(0);
+    }
+
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+
     }
 
     @Override

@@ -78,6 +78,7 @@ class SubStringPointer extends SubRecord {
 	}
     }
 
+    @Override
     void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    if (data.isValid() && streams.containsKey(file)) {
