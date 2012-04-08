@@ -260,6 +260,35 @@ public class ARMA extends MajorRecord {
 	public int getIndex() {
 	    return index;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final AltTexture other = (AltTexture) obj;
+	    if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+		return false;
+	    }
+	    if (this.index != other.index) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
+	    hash = 29 * hash + (this.texture != null ? this.texture.hashCode() : 0);
+	    hash = 29 * hash + this.index;
+	    return hash;
+	}
+
+
     }
 
     class DNAM extends SubRecord {
@@ -410,6 +439,27 @@ public class ARMA extends MajorRecord {
 			return MO5S.altTextures;
 		}
 	}
+    }
+
+    public boolean equalAltTextures(ARMA rhs, Gender gender, Perspective perspective) {
+	ArrayList<AltTexture> alts = getAltTextures(gender, perspective);
+	ArrayList<AltTexture> rhsAlts = rhs.getAltTextures(gender, perspective);
+
+	if (alts.size() != rhsAlts.size()) {
+	    return false;
+	}
+	if (alts.isEmpty() && rhsAlts.isEmpty()) {
+	    return true;
+	}
+
+	Set<AltTexture> altSet = new HashSet<AltTexture>(alts);
+	for (AltTexture t : rhsAlts) {
+	    if (!altSet.contains(t)) {
+		return false;
+	    }
+	}
+
+	return true;
     }
 
     /**
