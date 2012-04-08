@@ -47,6 +47,7 @@ public abstract class LUserSetting<T> extends LHelpComponent {
 	save = saveFile;
 	save.tie(setting, this);
 	revertTo(save.saveSettings);
+	addUpdateHandlers();
     }
 
     public abstract void addUpdateHandlers();

@@ -32,7 +32,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord(Mod modToOriginateFrom, String edid) {
 	this();
-	EDID.setString(edid.replaceAll(" ", ""));
+	setEDIDInternal(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	modToOriginateFrom.addRecordSilent(this);
     }
@@ -223,7 +223,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     final void setEDID(String edid, ModListing srcMod) {
-
+	edid = edid.replaceAll(" ", "");
 	if (srcMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
 	    // No duplicates
 	    if (SPGlobal.globalPatchEDIDS.contains(edid)) {
@@ -246,6 +246,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    }
 	}
 	EDID.setString(edid);
+    }
+
+    final void setEDIDInternal (String edid) {
+	EDID.setString(edid.replaceAll(" ", ""));
     }
 
     /**

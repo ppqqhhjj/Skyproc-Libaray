@@ -40,7 +40,6 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	cbox.setLocation(titleLabel.getWidth() + spacing, 5);
 	cbox.addChangeListener(new underlingChangeHandler());
 	cbox.addActionListener(new underlingActionHandler());
-	addUpdateHandlers();
 
 
 	setSize(titleLabel.getWidth() + cbox.getWidth() + spacing, titleLabel.getHeight());

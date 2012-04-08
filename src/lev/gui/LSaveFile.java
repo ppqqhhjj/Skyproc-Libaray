@@ -12,18 +12,18 @@ import java.util.TreeMap;
  *
  * @author Justin Swanson
  */
-public abstract class LSaveFile <E extends Enum> {
+public abstract class LSaveFile {
 
-    protected ArrayList<Map<E, Setting>> sets = new ArrayList<Map<E, Setting>>();
+    protected ArrayList<Map<Enum, Setting>> sets = new ArrayList<Map<Enum, Setting>>();
     private static String header = "SaveFile";
-    public Map<E, Setting> defaultSettings = new TreeMap<E, Setting>();
-    public Map<E, Setting> saveSettings = new TreeMap<E, Setting>();
-    public Map<E, Setting> curSettings = new TreeMap<E, Setting>();
-    public Map<E, Setting> tempCurSettings = new TreeMap<E, Setting>();
-    public Map<E, String> helpInfo = new TreeMap<E, String>();
+    public Map<Enum, Setting> defaultSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> saveSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> curSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> tempCurSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, String> helpInfo = new TreeMap<Enum, String>();
 
-    public void tie(E s, LUserSetting c) {
-	for (Map<E, Setting> e : sets) {
+    public void tie(Enum s, LUserSetting c) {
+	for (Map<Enum, Setting> e : sets) {
 	    if (e.containsKey(s)) {
 		e.get(s).tie(c);
 	    }
@@ -38,39 +38,40 @@ public abstract class LSaveFile <E extends Enum> {
     }
 
     public void init() {
-	for (Map<E, Setting> e : sets) {
+	for (Map<Enum, Setting> e : sets) {
 	    init(e);
 	}
 	initHelp();
+	readInSettings();
     }
 
-    protected abstract void init(Map<E, Setting> m);
-    
+    protected abstract void init(Map<Enum, Setting> m);
+
     protected void initHelp () {
-	
+
     }
 
-    protected abstract void readInSettings();
+    public abstract void readInSettings();
 
-    protected abstract void saveToFile();
+    public abstract void saveToFile();
 
-    protected void Add(Map<E, Setting> m, E type, Setting s) {
+    protected void Add(Map<Enum, Setting> m, Enum type, Setting s) {
 	m.put(type, s);
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Boolean b) {
+    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Boolean b) {
 	Add(m, type, new SaveBool(title, b, inGame));
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, String s) {
+    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, String s) {
 	Add(m, type, new SaveString(title, s, inGame));
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Integer i) {
+    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Integer i) {
 	Add(m, type, new SaveInt(title, i, inGame));
     }
 
-    protected void Add(Map<E, Setting> m, E type, String title, Boolean inGame, Float f) {
+    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Float f) {
 	Add(m, type, new SaveFloat(title, f, inGame));
     }
 
@@ -82,24 +83,24 @@ public abstract class LSaveFile <E extends Enum> {
     }
 
     public void update() {
-	for (E s : curSettings.keySet()) {
+	for (Enum s : curSettings.keySet()) {
 	    curSettings.get(s).set();
 	}
     }
 
-    public void set(E setting, Object in) {
+    public void set(Enum setting, Object in) {
 	curSettings.get(setting).setTo(in);
     }
 
-    public String getStr(E s) {
+    public String getStr(Enum s) {
         return curSettings.get(s).getStr();
     }
 
-    public Integer getInt(E s) {
+    public Integer getInt(Enum s) {
         return curSettings.get(s).getInt();
     }
 
-    public Boolean getBool(E s) {
+    public Boolean getBool(Enum s) {
         return curSettings.get(s).getBool();
     }
 }
