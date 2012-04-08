@@ -139,6 +139,9 @@ public class LDebug {
                 writer.write(13);
                 writer.write(10);
             } catch (IOException e) {
+                System.err.println("Caught Exception: "
+                        + e.getMessage());
+                e.printStackTrace();
             } catch (Exception e) {
 
                 System.err.println("Caught Exception: "
