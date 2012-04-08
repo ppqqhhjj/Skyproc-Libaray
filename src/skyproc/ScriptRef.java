@@ -109,11 +109,6 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    Record getNew() {
-	return new ScriptRef();
-    }
-
-    @Override
     int getHeaderLength() {
 	return 0;
     }

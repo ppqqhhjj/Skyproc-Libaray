@@ -154,13 +154,12 @@ public abstract class MajorRecord extends Record implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
+            if ("WEServiceMiscMerchant".equals(getEDID())) {
+                int sdf = 234;
+            }
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
-
-//            if ("EncDremoraWarlock06".equals(getEDID())) {
-//                int sdf = 234;
-//            }
 
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);
@@ -206,18 +205,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
-//        if ("EncDremoraWarlock06".equals(getEDID())) {
-//            int sdf = 234;
-//        }
-	for (SubRecord s : subRecords) {
-	    if (s.getClass() == SubStringPointer.class) {
-		try {
-		    ((SubStringPointer) s).fetchStringPointers(srcMod, this, streams);
-		} catch (IOException e) {
-		    logError(srcMod.getName(), "Fetch String Pointer IO error: " + s);
-		}
-	    }
-	}
+	subRecords.fetchStringPointers(srcMod, this, streams);
     }
 
     // Get/set methods
@@ -345,7 +333,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if (g == null) {
 	    return null;
 	}
-	MajorRecord m = (MajorRecord) g.prototype.getNew();
+	MajorRecord m = (MajorRecord) Ln.deepCopy(g.prototype);
 	return m.getMask();
     }
 
@@ -436,9 +424,5 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    return new Null_Major();
 	}
 
-	@Override
-	Record getNew() {
-	    return getNull();
-	}
     }
 }

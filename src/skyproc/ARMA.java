@@ -86,11 +86,6 @@ public class ARMA extends MajorRecord {
 	return type;
     }
 
-    @Override
-    Record getNew() {
-	return new ARMA();
-    }
-
     class AltTextures extends SubRecord {
 
 	ArrayList<AltTexture> altTextures = new ArrayList<AltTexture>();

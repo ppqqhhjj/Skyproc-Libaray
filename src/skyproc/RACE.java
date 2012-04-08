@@ -118,11 +118,6 @@ public class RACE extends MajorRecordDescription {
     }
 
     @Override
-    Record getNew() {
-	return new RACE();
-    }
-
-    @Override
     void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
 	while (!in.isEmpty() && (mask == null || !mask.done())) {

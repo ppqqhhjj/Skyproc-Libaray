@@ -50,11 +50,6 @@ public class PERK extends MajorRecordDescription {
     }
 
     @Override
-    Record getNew() {
-	return new PERK();
-    }
-
-    @Override
     ArrayList<FormID> allFormIDs (boolean deep) {
 	ArrayList<FormID> out = super.allFormIDs(deep);
 	out.addAll(perkSections.allFormIDs(deep));

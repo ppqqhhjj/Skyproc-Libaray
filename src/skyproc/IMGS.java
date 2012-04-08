@@ -40,11 +40,6 @@ public class IMGS extends MajorRecord {
         return type;
     }
 
-    @Override
-    Record getNew() {
-        return new IMGS();
-    }
-
     static class HNAM extends SubRecord {
 
         private float eyeAdaptSpeed = 0;

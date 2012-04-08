@@ -43,11 +43,11 @@ public class NPC_ extends Actor implements Serializable {
     SubList<SubForm> aiPackages = new SubList<SubForm>(new SubForm(Type.PKID));
     SubForm CNAM = new SubForm(Type.CNAM);
     SubString SHRT = new SubString(Type.SHRT, true);
-    SubData DATA = new SubData(Type.DATA);
+    SubData DATA = new SubData(Type.DATA);  // Marker for DNAM
     DNAM DNAM = new DNAM();
     SubList<SubForm> PNAMs = new SubList<SubForm>(new SubForm(Type.PNAM));
     SubForm HCLF = new SubForm(Type.HCLF);
-    SubData NAM5 = new SubData(Type.NAM5);
+    SubData NAM5 = new SubData(Type.NAM5);  // Unknown flags or marker (not FormID)
     SubFloat NAM6 = new SubFloat(Type.NAM6);
     SubFloat NAM7 = new SubFloat(Type.NAM7);
     SubInt NAM8 = new SubInt(Type.NAM8);
@@ -60,8 +60,8 @@ public class NPC_ extends Actor implements Serializable {
      *
      */
     public KeywordSet keywords = new KeywordSet();
-    SubData QNAM = new SubData(Type.QNAM);
-    SubData NAM9 = new SubData(Type.NAM9);
+    SubData QNAM = new SubData(Type.QNAM);  // Mat lighting
+    SubData NAM9 = new SubData(Type.NAM9);  // Face Morphs Values
     SubList<CSDTpackage> soundPackages = new SubList<CSDTpackage>(new CSDTpackage());
     SubForm DOFT = new SubForm(Type.DOFT);
     SubForm SOFT = new SubForm(Type.SOFT);
@@ -70,7 +70,7 @@ public class NPC_ extends Actor implements Serializable {
     SubForm FTST = new SubForm(Type.FTST);
     SubForm CSCR = new SubForm(Type.CSCR);
     SubForm DPLT = new SubForm(Type.DPLT);
-    SubData NAMA = new SubData(Type.NAMA);
+    SubData NAMA = new SubData(Type.NAMA);  // FaceParts (not FormID)
     SubData DEST = new SubData(Type.DEST);
     SubData DSTD = new SubData(Type.DSTD);
     SubData DSTF = new SubData(Type.DSTF);
@@ -139,11 +139,6 @@ public class NPC_ extends Actor implements Serializable {
     @Override
     Type[] getTypes() {
 	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new NPC_();
     }
 
     // Inner Classes

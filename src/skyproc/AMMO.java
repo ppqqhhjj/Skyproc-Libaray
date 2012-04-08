@@ -47,11 +47,6 @@ public class AMMO extends MajorRecordDescription {
     }
 
     @Override
-    Record getNew() {
-	return new AMMO();
-    }
-
-    @Override
     Type[] getTypes() {
 	return types;
     }

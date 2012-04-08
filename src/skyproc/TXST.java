@@ -67,11 +67,6 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	return type;
     }
 
-    @Override
-    Record getNew() {
-	return new TXST();
-    }
-
     /**
      * Sets the TX00 - TX07 records in order.
      *

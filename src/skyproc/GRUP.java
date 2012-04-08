@@ -7,6 +7,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
@@ -93,7 +94,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    if (logging()) {
 		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	    }
-	    T item = (T) prototype.getNew();
+	    T item = (T) Ln.deepCopy(prototype);
 	    try {
 
 		item.parseData(item.extractRecordData(in), mask);
@@ -300,11 +301,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     public void clear() {
 	listRecords.clear();
 	mapRecords.clear();
-    }
-
-    @Override
-    Record getNew() {
-	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**

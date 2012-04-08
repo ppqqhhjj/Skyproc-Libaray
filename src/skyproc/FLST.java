@@ -36,11 +36,6 @@ public class FLST extends MajorRecord {
 	return types;
     }
 
-    @Override
-    Record getNew() {
-	return new FLST();
-    }
-
     /**
      *
      * @return List of all the FormIDs in the Form list.
