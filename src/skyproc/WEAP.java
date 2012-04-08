@@ -91,6 +91,11 @@ public class WEAP extends MajorRecordDescription {
 	return type;
     }
 
+    @Override
+    Record getNew() {
+	return new WEAP();
+    }
+
     class DNAM extends SubRecord {
 
 	WeaponType wtype;

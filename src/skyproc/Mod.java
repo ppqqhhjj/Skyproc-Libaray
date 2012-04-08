@@ -26,7 +26,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<GRUP_TYPE, GRUP>(GRUP_TYPE.class);
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
     GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
-    GRUP<FACT> factions = new GRUP<FACT>(this, new FACT());
     GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
     GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
     GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
@@ -91,8 +90,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(textures.getContainedType(), textures);
-	factions.dateStamp = new byte[]{3, (byte)0x3D ,2, 0};
-	GRUPs.put(factions.getContainedType(), factions);
 	GRUPs.put(races.getContainedType(), races);
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
 	GRUPs.put(spells.getContainedType(), spells);
@@ -830,7 +827,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Alchemy records
+     * @return The GRUP containing Magic Effect records
      */
     public GRUP<ALCH> getAlchemy() {
 	return alchemy;
@@ -839,7 +836,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Ingredient records
+     * @return The GRUP containing Magic Effect records
      */
     public GRUP<INGR> getIngredients() {
 	return ingredients;
@@ -848,19 +845,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Ammo records
+     * @return The GRUP containing Magic Effect records
      */
     public GRUP<AMMO> getAmmo() {
 	return ammo;
-    }
-
-    /**
-     *
-     * @see GRUP
-     * @return The GRUP containing Faction records
-     */
-    public GRUP<FACT> getFactions() {
-	return factions;
     }
 
     /**
@@ -1088,6 +1076,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 	void setNumRecords(int num) {
 	    HEDR.setRecords(num);
+	}
+
+	@Override
+	Record getNew() {
+	    return new TES4();
 	}
 
 	@Override

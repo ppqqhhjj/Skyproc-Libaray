@@ -45,4 +45,9 @@ public class KYWD extends MajorRecord {
 	return type;
     }
 
+    @Override
+    Record getNew() {
+	return new KYWD();
+    }
+
 }

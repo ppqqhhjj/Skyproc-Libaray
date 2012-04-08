@@ -6,12 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
-import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -22,7 +20,6 @@ import skyproc.exceptions.BadRecord;
 abstract class SubShell extends SubRecord {
 
     SubRecords subRecords = new SubRecords();
-    boolean allValid = true;
 
     SubShell(Type type_) {
         super(type_);
@@ -39,7 +36,7 @@ abstract class SubShell extends SubRecord {
 
     @Override
     Boolean isValid() {
-        return subRecords.isValid(allValid);
+        return subRecords.isValid();
     }
 
     @Override
@@ -67,8 +64,4 @@ abstract class SubShell extends SubRecord {
         subRecords.importSubRecords(in);
     }
 
-    @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<Files, LFileChannel> streams) throws IOException {
-	subRecords.fetchStringPointers(srcMod, r, streams);
-    }
 }

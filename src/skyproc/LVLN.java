@@ -50,7 +50,7 @@ public class LVLN extends Actor implements Iterable<LVLO> {
 
     final void init() {
 	subRecords.remove(Type.FULL);
-
+	
         subRecords.add(objectBounds);
         subRecords.add(chanceNone);
         subRecords.add(LVLNflags);
@@ -101,6 +101,11 @@ public class LVLN extends Actor implements Iterable<LVLO> {
     @Override
     public String getName() {
         return EDID.toString();
+    }
+
+    @Override
+    Record getNew() {
+        return new LVLN();
     }
 
     /**

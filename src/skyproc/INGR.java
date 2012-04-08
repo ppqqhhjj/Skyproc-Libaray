@@ -65,6 +65,11 @@ public class INGR extends MagicItem {
 	return types;
     }
 
+    @Override
+    Record getNew() {
+	return new INGR();
+    }
+
     class DATA extends SubRecord {
 
 	byte[] fluff = new byte[4];

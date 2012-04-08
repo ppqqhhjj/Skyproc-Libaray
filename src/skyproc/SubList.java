@@ -5,13 +5,14 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
-import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -169,7 +170,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
         Type t = getNextType(in);
         if (counterType != t) {
             if (t.equals(type[0])) {
-                T newRecord = (T) Ln.deepCopy(prototype);
+                T newRecord = (T) prototype.getNew(type[0]);
                 newRecord.parseData(in);
                 add(newRecord);
             } else {
@@ -249,12 +250,5 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
             out.addAll(item.allFormIDs(deep));
         }
 	return out;
-    }
-
-    @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<Files, LFileChannel> streams) throws IOException {
-	for (SubRecord s : collection) {
-	    s.fetchStringPointers(srcMod, r, streams);
-	}
     }
 }

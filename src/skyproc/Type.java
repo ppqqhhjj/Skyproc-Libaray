@@ -772,21 +772,6 @@ public enum Type {
      */
     INGR,
 
-    FACT,
-    XNAM,
-    JAIL,
-    WAIT,
-    STOL,
-    PLCN,
-    CRGR,
-    JOUT,
-    CRVA,
-    VEND,
-    VENC,
-    VENV,
-    CITC,
-    PLVD,
-
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

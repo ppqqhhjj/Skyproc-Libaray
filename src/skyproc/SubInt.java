@@ -21,7 +21,6 @@ import skyproc.exceptions.BadRecord;
 class SubInt extends SubRecord {
 
     int data;
-    boolean valid = false;
 
     SubInt(Type type) {
 	super(type);
@@ -34,7 +33,7 @@ class SubInt extends SubRecord {
 
     @Override
     int getContentLength(Mod srcMod) {
-	return isValid() ? 4 : 0;
+	return 4;
     }
 
     @Override
@@ -44,7 +43,6 @@ class SubInt extends SubRecord {
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
-	valid = true;
     }
 
     @Override
@@ -70,12 +68,7 @@ class SubInt extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs(boolean deep) {
+    ArrayList<FormID> allFormIDs (boolean deep) {
 	return new ArrayList<FormID>(0);
-    }
-
-    @Override
-    Boolean isValid() {
-	return valid;
     }
 }

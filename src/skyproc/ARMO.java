@@ -91,6 +91,11 @@ public class ARMO extends MajorRecordDescription {
 	return type;
     }
 
+    @Override
+    Record getNew() {
+	return new ARMO();
+    }
+
     class DATA extends SubRecord {
 
 	int value;

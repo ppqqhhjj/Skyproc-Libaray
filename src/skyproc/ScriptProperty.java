@@ -159,6 +159,11 @@ class ScriptProperty extends Record {
     }
 
     @Override
+    Record getNew() {
+	return new ScriptProperty();
+    }
+
+    @Override
     int getHeaderLength() {
 	return 0;
     }

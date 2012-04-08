@@ -63,6 +63,11 @@ public class ALCH extends MagicItem {
 	return type;
     }
 
+    @Override
+    Record getNew() {
+	return new ALCH();
+    }
+
     class ENIT extends SubRecord {
 
 	int value;

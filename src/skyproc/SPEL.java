@@ -23,6 +23,11 @@ public class SPEL extends MagicItem {
 	return type;
     }
 
+    @Override
+    Record getNew() {
+	return new SPEL();
+    }
+
     SPEL() {
 	super();
 	init();

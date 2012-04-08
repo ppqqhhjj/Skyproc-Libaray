@@ -78,6 +78,11 @@ public class MGEF extends MajorRecordDescription {
 	return types;
     }
 
+    @Override
+    Record getNew() {
+	return new MGEF();
+    }
+
     class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(4);

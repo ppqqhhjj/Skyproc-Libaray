@@ -31,4 +31,10 @@ class StringNull extends StringNonNull {
         return super.getContentLength(srcMod) + 1;
     }
 
+    @Override
+    Record getNew() {
+        return new StringNull();
+    }
+
+
 }

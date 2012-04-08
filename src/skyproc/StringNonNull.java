@@ -62,6 +62,11 @@ class StringNonNull extends Record {
     }
 
     @Override
+    Record getNew() {
+        return new StringNonNull();
+    }
+
+    @Override
     int getHeaderLength() {
         return 2;
     }
