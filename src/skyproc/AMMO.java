@@ -27,6 +27,9 @@ public class AMMO extends MajorRecordDescription {
     SubData MODT = new SubData(Type.MODT);
     SubForm YNAM = new SubForm(Type.YNAM);
     SubForm ZNAM = new SubForm(Type.ZNAM);
+    /**
+     *
+     */
     public KeywordSet keywords = new KeywordSet();
     DATA DATA = new DATA();
 
@@ -101,65 +104,132 @@ public class AMMO extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     */
     public enum AMMOFlag {
 
+	/**
+	 *
+	 */
 	IgnoresWeaponResistance,
+	/**
+	 *
+	 */
 	VanishesWhenNotInFlight;
     }
 
     //Get/Set
+    /**
+     *
+     * @param path
+     */
     public void setModel(String path) {
 	MODL.setString(path);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModel() {
 	return MODL.print();
     }
 
+    /**
+     *
+     * @param sound
+     */
     public void setPickupSound(FormID sound) {
 	YNAM.setForm(sound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getPickupSound() {
 	return YNAM.getForm();
     }
 
+    /**
+     *
+     * @param sound
+     */
     public void setDropSound(FormID sound) {
 	ZNAM.setForm(sound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getDropSound() {
 	return ZNAM.getForm();
     }
 
+    /**
+     *
+     * @param projectile
+     */
     public void setProjectile(FormID projectile) {
 	DATA.projectile = projectile;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getProjectile() {
 	return DATA.projectile;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(AMMOFlag flag, boolean on) {
 	DATA.flags.set(flag.ordinal() + 1, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(AMMOFlag flag) {
 	return DATA.flags.get(flag.ordinal() + 1);
     }
 
+    /**
+     *
+     * @param damage
+     */
     public void setDamage(float damage) {
 	DATA.damage = damage;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDamage() {
 	return DATA.damage;
     }
 
+    /**
+     *
+     * @param gold
+     */
     public void setValue(int gold) {
 	DATA.value = gold;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
 	return DATA.value;
     }

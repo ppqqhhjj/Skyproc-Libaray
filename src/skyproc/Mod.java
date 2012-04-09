@@ -512,6 +512,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @see SPGlobal
      * @throws IOException If there are any unforseen disk errors exporting the
      * data.
+     * @throws BadRecord If duplicate EDIDs are found in the mod.  This has been
+     * deemed an unacceptable mod format, and is thrown to promote the investigation
+     * and elimination of duplicate EDIDs.
      */
     public void export() throws IOException, BadRecord {
 	export(SPGlobal.pathToData);
@@ -523,6 +526,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      *
      * @param path
      * @throws IOException
+     * @throws BadRecord If duplicate EDIDs are found in the mod.  This has been
+     * deemed an unacceptable mod format, and is thrown to promote the investigation
+     * and elimination of duplicate EDIDs.
      */
     public void export(String path) throws IOException, BadRecord {
 	File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");

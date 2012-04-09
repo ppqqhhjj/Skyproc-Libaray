@@ -56,10 +56,26 @@ public class NiftyFunc {
 	return attachmentRace;
     }
 
+    /**
+     * Checks the given template flag "chains" to see if the NPC is templated to a Leveled List at any point.
+     * If it is, that Leveled List is returned; Null if not.
+     *
+     * @param npc NPC formID to investigate.
+     * @param templateFlagsToCheck Template flags to consider.
+     * @return LVLN that it is templated to, or null.
+     */
     public static LVLN isTemplatedToLList(FormID npc, NPC_.TemplateFlag ... templateFlagsToCheck) {
 	return isTemplatedToLList(npc, templateFlagsToCheck, 0);
     }
 
+    /**
+     * Checks the given template flag "chains" to see if the NPC is templated to a Leveled List at any point.
+     * If it is, that Leveled List is returned; Null if not.
+     *
+     * @param npc NPC to investigate.
+     * @param templateFlagsToCheck Template flags to consider.
+     * @return LVLN that it is templated to, or null.
+     */
     public static LVLN isTemplatedToLList(NPC_ npc, NPC_.TemplateFlag... templateFlagsToCheck) {
 	return isTemplatedToLList(npc.getForm(), templateFlagsToCheck);
     }

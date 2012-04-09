@@ -165,6 +165,9 @@ public class NIF {
 	 * Raw data contained in the node.
 	 */
 	public LShrinkArray data;
+	/**
+	 * Node index in the nif
+	 */
 	public int number;
 
         Node(NodeType n) {

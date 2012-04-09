@@ -8,14 +8,15 @@ import java.io.BufferedWriter;
 import skyproc.exceptions.BadParameter;
 
 /**
- *
+ * A class representing a saveable value.
+ * @param <T> Type of data being saved.
  * @author Justin Swanson
  */
-public abstract class Setting<T> {
+abstract class Setting<T> {
 
-    protected T data;
-    protected String title;
-    protected LUserSetting<T> tie;
+    T data;
+    String title;
+    LUserSetting<T> tie;
     public Boolean forGame;
 
     public Setting(String title_, T data_, Boolean in_game) {
@@ -44,7 +45,7 @@ public abstract class Setting<T> {
         return title;
     }
 
-    public void tie(LUserSetting c) {
+    void tie(LUserSetting c) {
         tie = c;
     }
 

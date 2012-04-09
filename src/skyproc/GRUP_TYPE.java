@@ -7,6 +7,9 @@ package skyproc;
  */
 public enum GRUP_TYPE {
 
+    /**
+     * Game Settings
+     */
     GMST,
     /**
      * Keywords
@@ -16,6 +19,9 @@ public enum GRUP_TYPE {
      * Texture Sets
      */
     TXST,
+    /**
+     * Factions
+     */
     FACT,
     /**
      * Races
@@ -45,6 +51,9 @@ public enum GRUP_TYPE {
      * Weapons
      */
     WEAP,
+    /**
+     * Ammo
+     */
     AMMO,
     /**
      * Non-Player Characters (Actors)

@@ -441,6 +441,16 @@ public class ARMA extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     * @param rhs Other ARMA record.
+     * @param gender Gender of the pack to compare.
+     * @param perspective Perspective of the pack to compare
+     * @return true if:<br>
+     * Both sets are empty.<br>
+     *  or <br>
+     * Each set contains matching Alt Textures with the same name and TXST formID reference, in the same corresponding indices.
+     */
     public boolean equalAltTextures(ARMA rhs, Gender gender, Perspective perspective) {
 	ArrayList<AltTexture> alts = getAltTextures(gender, perspective);
 	ArrayList<AltTexture> rhsAlts = rhs.getAltTextures(gender, perspective);

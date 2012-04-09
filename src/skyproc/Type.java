@@ -391,7 +391,13 @@ public enum Type {
      * NPC_: Spell override?
      */
     SPOR,
+    /**
+     *
+     */
     GWOR,
+    /**
+     *
+     */
     OCOR,
     /**
      * NPC_: Unknown
@@ -771,21 +777,66 @@ public enum Type {
      *
      */
     INGR,
+    /**
+     *
+     */
     FACT,
+    /**
+     *
+     */
     XNAM,
+    /**
+     * 
+     */
     JAIL,
+    /**
+     *
+     */
     WAIT,
+    /**
+     *
+     */
     STOL,
+    /**
+     *
+     */
     PLCN,
+    /**
+     *
+     */
     CRGR,
+    /**
+     *
+     */
     JOUT,
+    /**
+     *
+     */
     CRVA,
+    /**
+     *
+     */
     VEND,
+    /**
+     *
+     */
     VENC,
+    /**
+     *
+     */
     VENV,
+    /**
+     *
+     */
     CITC,
+    /**
+     *
+     */
     PLVD,
 
+    /**
+     *
+     */
     GMST,
 
     /**

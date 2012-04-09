@@ -39,6 +39,10 @@ public class GMST extends MajorRecord {
 	return types;
     }
 
+    /**
+     *
+     * @return The type of data this GMST contains.
+     */
     public GMSTType getType() {
 	if (getEDID().length() == 0) {
 	    return GMSTType.Unknown;
@@ -58,15 +62,37 @@ public class GMST extends MajorRecord {
 	}
     }
 
+    /**
+     * Enum representing the different data types a GMST can hold.
+     */
     public enum GMSTType {
 
+	/**
+	 *
+	 */
 	Bool,
+	/**
+	 *
+	 */
 	Int,
+	/**
+	 *
+	 */
 	Float,
+	/**
+	 *
+	 */
 	String,
+	/**
+	 *
+	 */
 	Unknown;
     }
 
+    /**
+     * 
+     * @param b
+     */
     public void setData(Boolean b) {
 	if (b) {
 	    DATA.DATA.setData(1, 4);
@@ -75,20 +101,36 @@ public class GMST extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setData(String s) {
 	DATA.DATAs.setText(s);
     }
 
+    /**
+     *
+     * @param i
+     */
     public void setData(int i) {
 	DATA.DATA.setData(i, 4);
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setData(float f) {
 	ByteBuffer out = ByteBuffer.allocate(4);
 	out.putInt(Integer.reverseBytes(Float.floatToIntBits(f)));
 	DATA.DATA.setData(out.array());
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getBool() {
 	if (DATA.DATA.toInt() == 0) {
 	    return false;
@@ -97,14 +139,26 @@ public class GMST extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public String getString() {
 	return DATA.DATAs.print();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getInt() {
 	return DATA.DATA.toInt();
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFloat() {
 	return Float.intBitsToFloat(DATA.DATA.toInt());
     }

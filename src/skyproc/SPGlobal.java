@@ -209,6 +209,12 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Logs a specific record as blocked in the "Blocked Records.txt" log.
+     * @param header
+     * @param reason Reason for blocking the record.
+     * @param m Record that was blocked.
+     */
     public static void logBlocked(String header, String reason, MajorRecord m) {
 	log.logSpecial(SPLogger.SpecialTypes.BLOCKED, header, "Blocked " + m + " for reason: " + reason);
     }

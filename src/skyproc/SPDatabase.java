@@ -246,6 +246,10 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
 
+    /**
+     *
+     * @return An iterator that goes from the top of the load order down to the lowest priority at the end.
+     */
     public Iterator<Mod> reverseIter () {
 	Iterator<Mod> iter = iterator();
 	ArrayList<Mod> outList = new ArrayList<Mod>(modLookup.size());

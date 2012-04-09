@@ -1038,7 +1038,7 @@ public class NPC_ extends Actor implements Serializable {
      * NPC's template reference is set to NULL.<br><br> This function makes a
      * deep copy of all templated info.
      *
-     * @param otherNPC NPC to assume info from.
+     * @param otherNPC NPC FormID to assume info from.
      * @param flags Types of information to assume. If none are given, then the
      * NPCs active flags will be assumed.
      */
@@ -1072,6 +1072,25 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
+    /**
+     * Takes in another NPC, and assumes all the information associated with the
+     * input flags. It also unchecks the specific template flags on the
+     * NPC.<br><br>
+     *
+     * If the parameter NPC is templated to another NPC, this function will
+     * recursively call in order to get the "correct" template information. If
+     * during this recursive call the function encounters a Leveled List on the
+     * template chain, then the function will skip assuming that flag type, and
+     * instead mark the flag on the NPC (if it wasn't already).<br><br>
+     *
+     * If no template flags remain checked after this function has run, then the
+     * NPC's template reference is set to NULL.<br><br> This function makes a
+     * deep copy of all templated info.
+     *
+     * @param npc
+     * @param flags Types of information to assume. If none are given, then the
+     * NPCs active flags will be assumed.
+     */
     public void templateTo(FormID npc, TemplateFlag... flags) {
 	templateTo((NPC_) SPDatabase.getMajor(npc, GRUP_TYPE.NPC_), flags);
     }
@@ -1623,6 +1642,9 @@ public class NPC_ extends Actor implements Serializable {
 	return items.remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
+    /**
+     *
+     */
     public void clearItems() {
 	items.clear();
     }
@@ -1662,6 +1684,9 @@ public class NPC_ extends Actor implements Serializable {
 	return SubList.subFormToPublic(aiPackages);
     }
 
+    /**
+     *
+     */
     public void clearAIPackages() {
 	aiPackages.clear();
     }
@@ -1834,6 +1859,10 @@ public class NPC_ extends Actor implements Serializable {
 	DPLT.setForm(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getDefaultPackageList() {
 	return DPLT.getForm();
     }
@@ -2046,58 +2075,114 @@ public class NPC_ extends Actor implements Serializable {
 	return GNAM.getForm();
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setGearedUpWeapons(int value) {
 	DNAM.gearedUpWeapons = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getGearedUpWeapons() {
 	return DNAM.gearedUpWeapons;
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setSpectatorOverride(FormID list) {
 	SPOR.setForm(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getSpectatorOverride() {
 	return SPOR.getForm();
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setObserveDeadOverride(FormID list) {
 	OCOR.setForm(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getObserveDeadOverride() {
 	return OCOR.getForm();
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setGuardWornOverride(FormID list) {
 	GWOR.setForm(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getGuardWornOverride() {
 	return GWOR.getForm();
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setCombatOverride(FormID list) {
 	ECOR.setForm(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getCombatOverride() {
 	return ECOR.getForm();
     }
 
+    /**
+     *
+     * @param alias
+     */
     public void setShortName(String alias) {
 	SHRT.setString(alias);
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getShortName() {
 	return SHRT.print();
     }
 
+    /**
+     *
+     * @param vol
+     */
     public void setSoundVolume(SoundVolume vol) {
 	NAM8.data = vol.ordinal();
     }
 
+    /**
+     *
+     * @return
+     */
     public SoundVolume getSoundVolume() {
 	return SoundVolume.values()[NAM8.data];
     }
