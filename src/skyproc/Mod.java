@@ -24,6 +24,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     TES4 header = new TES4();
     ModListing modInfo;
     Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<GRUP_TYPE, GRUP>(GRUP_TYPE.class);
+    GRUP<GMST> gameSettings = new GRUP<GMST>(this, new GMST());
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
     GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
     GRUP<FACT> factions = new GRUP<FACT>(this, new FACT());
@@ -89,6 +90,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
+	GRUPs.put(gameSettings.getContainedType(), gameSettings);
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(textures.getContainedType(), textures);
 	factions.dateStamp = new byte[]{3, (byte)0x3D ,2, 0};
@@ -862,7 +864,16 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     public GRUP<FACT> getFactions() {
 	return factions;
     }
-    
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Faction records
+     */
+    public GRUP<GMST> getGameSettings() {
+	return gameSettings;
+    }
+
     /**
      *
      * @return The name of the mod (including suffix)

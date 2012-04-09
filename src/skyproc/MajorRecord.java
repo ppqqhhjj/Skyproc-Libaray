@@ -98,7 +98,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	}
 
-//        if (EDID.print().equals("EncHorker")) {
+//        if (EDID.print().equals("fSunAlphaTransTime")) {
 //            int wer = 32;
 //        }
 
@@ -158,7 +158,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
 
-//            if ("EncDremoraWarlock06".equals(getEDID())) {
+//            if ("fSunAlphaTransTime".equals(getEDID())) {
 //                int sdf = 234;
 //            }
 

@@ -7,6 +7,7 @@ package skyproc;
  */
 public enum GRUP_TYPE {
 
+    GMST,
     /**
      * Keywords
      */

@@ -786,6 +786,8 @@ public enum Type {
     CITC,
     PLVD,
 
+    GMST,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags
