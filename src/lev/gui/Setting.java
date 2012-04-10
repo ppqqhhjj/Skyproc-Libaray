@@ -12,7 +12,7 @@ import skyproc.exceptions.BadParameter;
  * @param <T> Type of data being saved.
  * @author Justin Swanson
  */
-abstract class Setting<T> {
+public abstract class Setting<T> {
 
     T data;
     String title;
