@@ -26,6 +26,7 @@ public class LLogger {
     private boolean syncing = false;
     private LDebug asynced;
     private boolean logging = true;
+    private boolean loggingSync = true;
     private static boolean mainLogSwitch = true;
     private Map<Enum, LDebug> special = new HashMap<Enum, LDebug>();
 
@@ -60,7 +61,7 @@ public class LLogger {
      * @param log
      */
     public void logSync(String header, String... log) {
-	if (logging()) {
+	if (loggingSync()) {
 	    if (syncing) {
 		synced.w(header, log);
 	    } else {
@@ -140,6 +141,24 @@ public class LLogger {
 	logging = on;
     }
 
+
+    /**
+     *
+     * @return Whether the LLogger's sync log is on/off.
+     */
+    public boolean loggingSync() {
+	return loggingSync && logging && mainLogSwitch;
+    }
+
+    /**
+     * Turns the LLogger sync log on/off.
+     *
+     * @param on
+     */
+    public void loggingSync(Boolean on) {
+	loggingSync = on;
+    }
+
     void logException(String dump) {
 	main.writeException(dump);
     }
@@ -209,7 +228,7 @@ public class LLogger {
 
     /**
      * Creates a new asynchronous log.
-     * @param filePath 
+     * @param filePath
      */
     public void newLog(String filePath) {
 	asynced.openDebug(debugPath + filePath, 50);

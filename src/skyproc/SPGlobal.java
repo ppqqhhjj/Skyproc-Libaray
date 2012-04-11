@@ -241,6 +241,29 @@ public class SPGlobal {
 	}
     }
 
+
+    /**
+     *
+     * @return True if the logger is currently on.
+     */
+    public static boolean loggingSync() {
+	if (log != null) {
+	    return SPGlobal.log.loggingSync();
+	} else {
+	    return false;
+	}
+    }
+
+    /**
+     *
+     * @param on Turns the logger on/off.
+     */
+    public static void loggingSync(Boolean on) {
+	if (log != null) {
+	    SPGlobal.log.loggingSync(on);
+	}
+    }
+
     /**
      * Flushes the Debug buffers to the files.
      */
