@@ -1136,21 +1136,28 @@ public class Ln {
     public static boolean validateCompare(File testFile, File keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
 	boolean print = numErrorsToPrint != 0;
 	if (keyFile.isFile() && testFile.isFile()) {
-	    BufferedInputStream keyIn = new BufferedInputStream(new FileInputStream(keyFile));
-	    BufferedInputStream testIn = new BufferedInputStream(new FileInputStream(testFile));
+
+	    LFileChannel keyIn = new LFileChannel(keyFile);
+	    LFileChannel testIn = new LFileChannel(testFile);
+
+	    if (numErrorsToPrint == 0 && keyIn.available() != testIn.available()) {
+		return false;
+	    }
+
+	    byte[] keyArray = keyIn.readInBytes(0, keyIn.available());
+	    byte[] testArray = testIn.readInBytes(0, testIn.available());
+
 	    Boolean passed = true;
-	    long locationCounter = 0;
-	    while (keyIn.available() > 0) {
-		if (keyIn.read() != testIn.read()) {
+	    for (int i = 0 ; i < keyArray.length ; i++) {
+		if (keyArray[i] != testArray[i] ) {
 		    if (print) {
-			System.out.println("Patch differed at " + Ln.prettyPrintHex(locationCounter));
+			System.out.println("Patch differed at " + Ln.prettyPrintHex(i));
 		    }
 		    passed = false;
 		    if (--numErrorsToPrint == 0) {
 			break;
 		    }
 		}
-		locationCounter++;
 	    }
 	    if (passed) {
 		if (print) {
