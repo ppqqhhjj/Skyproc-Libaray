@@ -65,7 +65,7 @@ class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.GMST};
+	GRUP_TYPE[] types = {GRUP_TYPE.ENCH};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
@@ -96,7 +96,9 @@ class SkyProcTester {
 
 	boolean passed = true;
 	System.out.println("Testing Record Lengths " + type);
-	passed = passed && SPExporter.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
+	if (type != GRUP_TYPE.ENCH) {
+	    passed = passed && SPExporter.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
+	}
 	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
 	if (validF.isFile()) {
 	    passed = Ln.validateCompare(SPGlobal.pathToData + "Test.esp", validF.getPath(), 10) && passed;

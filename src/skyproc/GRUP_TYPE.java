@@ -31,6 +31,7 @@ public enum GRUP_TYPE {
      * Magic Effects
      */
     MGEF,
+    ENCH,
     /**
      * Spells
      */

@@ -786,7 +786,7 @@ public enum Type {
      */
     XNAM,
     /**
-     * 
+     *
      */
     JAIL,
     /**
@@ -838,6 +838,7 @@ public enum Type {
      *
      */
     GMST,
+    ENCH,
 
     /**
      * NPC_: Marks DNAM position?

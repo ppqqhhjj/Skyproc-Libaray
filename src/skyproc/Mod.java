@@ -30,6 +30,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<FACT> factions = new GRUP<FACT>(this, new FACT());
     GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
     GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
+    GRUP<ENCH> enchantments = new GRUP<ENCH>(this, new ENCH());
     GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
     GRUP<ARMO> armors = new GRUP<ARMO>(this, new ARMO());
     GRUP<INGR> ingredients = new GRUP<INGR>(this, new INGR());
@@ -97,6 +98,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(factions.getContainedType(), factions);
 	GRUPs.put(races.getContainedType(), races);
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
+	enchantments.dateStamp = new byte[]{ (byte) 0x12, (byte) 0x4A , (byte) 0x20 , 0 };
+	GRUPs.put(enchantments.getContainedType(), enchantments);
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
 	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
@@ -874,10 +877,19 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Faction records
+     * @return The GRUP containing Game Setting records
      */
     public GRUP<GMST> getGameSettings() {
 	return gameSettings;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Enchantments records
+     */
+    public GRUP<ENCH> getEnchantments() {
+	return enchantments;
     }
 
     /**
