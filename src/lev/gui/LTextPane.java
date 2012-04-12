@@ -14,6 +14,7 @@ import javax.swing.text.*;
 
 /**
  * A customized Text Pane used by Leviathan for GUIs.
+ *
  * @author Justin Swanson
  */
 public class LTextPane extends LComponent {
@@ -24,150 +25,159 @@ public class LTextPane extends LComponent {
     Document doc;
 
     /**
-     * 
+     *
      * @param size_
      * @param c
      */
     public LTextPane(Dimension size_, Color c) {
-        pane = new JTextPane();
-        doc = pane.getDocument();
-        pane.setOpaque(false);
-        pane.setForeground(c);
+	pane = new JTextPane();
+	doc = pane.getDocument();
+	pane.setOpaque(false);
+	pane.setForeground(c);
 	setSize(size_);
-        add(pane);
+	add(pane);
     }
-    
+
     @Override
     public void setSize(Dimension size) {
-        super.setSize(size);
-	pane.setSize(size);
+	setSize(size.width, size.height);
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+	super.setSize(width, height);
+	if (scroll == null) {
+	    pane.setSize(width, height);
+	} else {
+	    scroll.setSize(width, height);
+	}
     }
 
     /**
-     * 
+     *
      * @param in
      */
     public void setText(String in) {
-        clearText();
-        try {
-            doc.insertString(0, in, null);
-        } catch (BadLocationException ex) {
-            badText();
-        }
+	clearText();
+	try {
+	    doc.insertString(0, in, null);
+	} catch (BadLocationException ex) {
+	    badText();
+	}
     }
 
     /**
-     * 
+     *
      */
     public void badText() {
-        try {
-            doc.insertString(0, "Bad Error", null);
-        } catch (BadLocationException ex) {
-            Logger.getLogger(LTextPane.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	try {
+	    doc.insertString(0, "Bad Error", null);
+	} catch (BadLocationException ex) {
+	    Logger.getLogger(LTextPane.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     /**
-     * 
+     *
      */
     public void clearText() {
-        try {
-            doc.remove(0, doc.getLength());
-        } catch (BadLocationException ex) {
-        }
+	try {
+	    doc.remove(0, doc.getLength());
+	} catch (BadLocationException ex) {
+	}
     }
 
     /**
-     * 
+     *
      * @param in
      */
     public void append(String in) {
-        try {
-            doc.insertString(doc.getLength(), in, null);
-        } catch (BadLocationException ex) {
-            badText();
-        }
+	try {
+	    doc.insertString(doc.getLength(), in, null);
+	} catch (BadLocationException ex) {
+	    badText();
+	}
     }
 
     /**
-     * 
+     *
      * @param b
      */
     public void setOpaque(Boolean b) {
-        pane.setOpaque(b);
+	pane.setOpaque(b);
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isEmpty() {
-        return doc.getLength() == 0;
+	return doc.getLength() == 0;
     }
 
     /**
-     * 
+     *
      * @param c
      */
     @Override
     public void setBackground(Color c) {
-        pane.setBackground(c);
+	pane.setBackground(c);
     }
 
     /**
-     * 
+     *
      * @param c
      */
     public void setCaretColor(Color c) {
-        pane.setCaretColor(c);
+	pane.setCaretColor(c);
     }
 
     /**
-     * 
+     *
      */
     public void centerText() {
-        StyledDocument doc = pane.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+	StyledDocument doc = pane.getStyledDocument();
+	SimpleAttributeSet center = new SimpleAttributeSet();
+	StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+	doc.setParagraphAttributes(0, doc.getLength(), center, false);
     }
 
     /**
-     * 
+     *
      */
     public void addScroll() {
-        this.removeAll();
-        scroll = new JScrollPane(pane);
-        scroll.setSize(pane.getSize());
+	this.removeAll();
+	scroll = new JScrollPane(pane);
+	scroll.setSize(pane.getSize());
 	scroll.setOpaque(false);
 	scroll.getViewport().setOpaque(false);
 	scroll.setBorder(null);
 	scroll.setVisible(true);
-        add(scroll);
+	add(scroll);
     }
 
     /**
-     * 
+     *
      * @param b
      */
     public void setEditable(boolean b) {
-        pane.setEditable(b);
+	pane.setEditable(b);
     }
 
     /**
-     * 
+     *
      * @param size
      */
     public void setFontSize(float size) {
-        pane.setFont(pane.getFont().deriveFont(size));
+	pane.setFont(pane.getFont().deriveFont(size));
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
     public Dimension getPreferredSize() {
-        return pane.getPreferredSize();
+	return pane.getPreferredSize();
     }
 }

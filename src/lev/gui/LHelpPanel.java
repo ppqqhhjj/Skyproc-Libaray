@@ -5,6 +5,7 @@
 package lev.gui;
 
 import java.awt.*;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import lev.gui.resources.LImages;
@@ -23,7 +24,7 @@ public class LHelpPanel extends LPanel {
     LPanel bottomArea;
     Boolean textVisible = false;
     Boolean hideArrow = false;
-    static int spacing = 30;
+    static int spacing = 75;
 
     public LHelpPanel(Rectangle bounds, Font titleFont, Color titleC, Color contentC, boolean leftArrow, int arrowX) {
 	y = - 100;
@@ -36,7 +37,6 @@ public class LHelpPanel extends LPanel {
 	help = new LTextPane(new Dimension(getWidth() - 35, getHeight()), contentC);
 	help.setVisible(true);
 	help.addScroll();
-	help.setOpaque(true);
 	add(setting);
 	add(help);
 	setting.setVisible(textVisible);
@@ -68,7 +68,11 @@ public class LHelpPanel extends LPanel {
     }
 
     public void setSettingPos(int y_) {
-	y = y_;
+	if (y_ == -1) {
+	    y = spacing;
+	} else {
+	    y = y_;
+	}
 	setting.setLocation(17, y - setting.getHeight() / 2);
 	help.setLocation(35, y + setting.getHeight() / 2);
 	evalPositioning();
@@ -82,18 +86,19 @@ public class LHelpPanel extends LPanel {
     }
 
     private void evalPositioning() {
-	int min = getLimit() - setting.getHeight() - spacing;
-	if (min > help.getPreferredSize().height){
+	// Divide by two as setting + help are shifted up that much in positioning
+	int min = getLimit() - spacing - setting.getHeight() / 2;
+	if (min > help.getPreferredSize().height) {
 	    min = help.getPreferredSize().height;
 	}
-	
+
 	help.setSize(help.getWidth(), min);
-//	int helpReach = help.getY() + help.getHeight() + spacing;
-//	if (helpReach > getLimit()) {
-//	    int move = help.getY() + help.getHeight() + spacing - getLimit();
-//	    help.setLocation(help.getX(), help.getY() - move);
-//	    setting.setLocation(setting.getX(), setting.getY() - move);
-//	}
+	int helpReach = setting.getY() + setting.getHeight() + help.getHeight();
+	if (helpReach > getLimit()) {
+	    int move = helpReach - getLimit();
+	    help.setLocation(help.getX(), help.getY() - move);
+	    setting.setLocation(setting.getX(), setting.getY() - move);
+	}
     }
 
     private int getLimit() {
