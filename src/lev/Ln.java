@@ -609,7 +609,7 @@ public class Ln {
 	}
     }
 
-    public static boolean isFileType (File f, String fileType) {
+    public static boolean isFileType(File f, String fileType) {
 	return getFileType(f).equalsIgnoreCase(fileType);
     }
 
@@ -1133,6 +1133,43 @@ public class Ln {
 	return fileLocation;
     }
 
+    public static boolean validateCompare(File testFile, File keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
+	boolean print = numErrorsToPrint != 0;
+	if (keyFile.isFile() && testFile.isFile()) {
+	    BufferedInputStream keyIn = new BufferedInputStream(new FileInputStream(keyFile));
+	    BufferedInputStream testIn = new BufferedInputStream(new FileInputStream(testFile));
+	    Boolean passed = true;
+	    long locationCounter = 0;
+	    while (keyIn.available() > 0) {
+		if (keyIn.read() != testIn.read()) {
+		    if (print) {
+			System.out.println("Patch differed at " + Ln.prettyPrintHex(locationCounter));
+		    }
+		    passed = false;
+		    if (--numErrorsToPrint == 0) {
+			break;
+		    }
+		}
+		locationCounter++;
+	    }
+	    if (passed) {
+		if (print) {
+		    System.out.println("Patch was validated.");
+		}
+		return true;
+	    } else {
+		if (print) {
+		    System.out.println("Patch was NOT validated.");
+		}
+		return false;
+	    }
+	}
+	if (print) {
+	    System.out.println("Validator could not locate both files (" + testFile + "," + keyFile + ")");
+	}
+	return false;
+    }
+
     /**
      * A simple comparison function that compares two files byte by byte, and
      * reports the positions of any differences (eg. file1[i] != file2[i]).
@@ -1142,40 +1179,8 @@ public class Ln {
      * @param numErrorsToPrint Number of differences to print.
      * @return True if files matched with NO differences.
      */
-    public static boolean validateCompare(String testFile, String keyFile, int numErrorsToPrint) {
-	String header = "Validate by Compare";
-	try {
-	    File good = new File(keyFile);
-	    File test = new File(testFile);
-	    if (good.isFile() && test.isFile()) {
-		BufferedInputStream goodIn = new BufferedInputStream(new FileInputStream(good));
-		BufferedInputStream testIn = new BufferedInputStream(new FileInputStream(test));
-		Boolean passed = true;
-		long locationCounter = 0;
-		while (goodIn.available() > 0) {
-		    if (goodIn.read() != testIn.read()) {
-			System.out.println("Patch differed at " + Ln.prettyPrintHex(locationCounter));
-			passed = false;
-			if (--numErrorsToPrint == 0) {
-			    break;
-			}
-		    }
-		    locationCounter++;
-		}
-		if (passed) {
-		    System.out.println("Patch was validated.");
-		    return true;
-		} else {
-		    System.out.println("Patch was NOT validated.");
-		    return false;
-		}
-	    }
-	    System.out.println("Validator could not locate both files (" + testFile + "," + keyFile + ")");
-	    return false;
-	} catch (Exception e) {
-	    System.out.println("Exception thrown while validating patch.");
-	    return false;
-	}
+    public static boolean validateCompare(String testFile, String keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
+	return validateCompare(new File(testFile), new File(keyFile), numErrorsToPrint);
     }
 
     public static boolean isDescendant(TreePath path1, TreePath path2) {
