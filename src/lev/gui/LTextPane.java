@@ -139,6 +139,10 @@ public class LTextPane extends LComponent {
         this.removeAll();
         scroll = new JScrollPane(pane);
         scroll.setSize(pane.getSize());
+	scroll.setOpaque(false);
+	scroll.getViewport().setOpaque(false);
+	scroll.setBorder(null);
+	scroll.setVisible(true);
         add(scroll);
     }
 

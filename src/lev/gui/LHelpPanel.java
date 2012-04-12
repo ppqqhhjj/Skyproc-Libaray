@@ -6,6 +6,7 @@ package lev.gui;
 
 import java.awt.*;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
 import lev.gui.resources.LImages;
 
 /**
@@ -32,8 +33,10 @@ public class LHelpPanel extends LPanel {
 	setting = new LLabel("  Setting Name", titleFont, titleC);
 	setBounds(bounds);
 
-	help = new LTextPane(new Dimension(getWidth() - 75, getHeight()), contentC);
+	help = new LTextPane(new Dimension(getWidth() - 35, getHeight()), contentC);
 	help.setVisible(true);
+	help.addScroll();
+	help.setOpaque(true);
 	add(setting);
 	add(help);
 	setting.setVisible(textVisible);
@@ -79,13 +82,18 @@ public class LHelpPanel extends LPanel {
     }
 
     private void evalPositioning() {
-	help.setSize(help.getWidth(), help.getPreferredSize().height);
-	int helpReach = help.getY() + help.getHeight() + spacing;
-	if (helpReach > getLimit()) {
-	    int move = help.getY() + help.getHeight() + spacing - getLimit();
-	    help.setLocation(help.getX(), help.getY() - move);
-	    setting.setLocation(setting.getX(), setting.getY() - move);
+	int min = getLimit() - setting.getHeight() - spacing;
+	if (min > help.getPreferredSize().height){
+	    min = help.getPreferredSize().height;
 	}
+	
+	help.setSize(help.getWidth(), min);
+//	int helpReach = help.getY() + help.getHeight() + spacing;
+//	if (helpReach > getLimit()) {
+//	    int move = help.getY() + help.getHeight() + spacing - getLimit();
+//	    help.setLocation(help.getX(), help.getY() - move);
+//	    setting.setLocation(setting.getX(), setting.getY() - move);
+//	}
     }
 
     private int getLimit() {
