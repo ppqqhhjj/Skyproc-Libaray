@@ -61,7 +61,7 @@ public class LLogger {
      * @param log
      */
     public void logSync(String header, String... log) {
-	if (loggingSync()) {
+	if (loggingSync() || syncing && logging()) {
 	    if (syncing) {
 		synced.w(header, log);
 	    } else {

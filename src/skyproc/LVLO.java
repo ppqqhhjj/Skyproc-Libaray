@@ -24,7 +24,7 @@ public class LVLO extends SubShell {
 
     public LVLO(FormID id, int level, int count) {
 	this();
-	setEntry(id);
+	setForm(id);
 	setLevel(level);
 	setCount(count);
     }
@@ -174,11 +174,11 @@ public class LVLO extends SubShell {
 	return entry.count;
     }
 
-    final public void setEntry(FormID id) {
+    final public void setForm(FormID id) {
 	entry.entry = id;
     }
 
-    public FormID getEntry() {
+    public FormID getForm() {
 	return entry.entry;
     }
 }

@@ -1141,15 +1141,19 @@ public class Ln {
 	    LFileChannel testIn = new LFileChannel(testFile);
 
 	    if (numErrorsToPrint == 0 && keyIn.available() != testIn.available()) {
+		keyIn.close();
+		testIn.close();
 		return false;
 	    }
 
 	    byte[] keyArray = keyIn.readInBytes(0, keyIn.available());
 	    byte[] testArray = testIn.readInBytes(0, testIn.available());
+	    keyIn.close();
+	    testIn.close();
 
 	    Boolean passed = true;
-	    for (int i = 0 ; i < keyArray.length && i < testArray.length ; i++) {
-		if (keyArray[i] != testArray[i] ) {
+	    for (int i = 0; i < keyArray.length && i < testArray.length; i++) {
+		if (keyArray[i] != testArray[i]) {
 		    if (print) {
 			System.out.println("Patch differed at " + Ln.prettyPrintHex(i));
 		    }
