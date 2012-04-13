@@ -64,6 +64,7 @@ public enum GRUP_TYPE {
      * Leveled Lists
      */
     LVLN,
+    LVLI,
     /**
      * Image Spaces
      */

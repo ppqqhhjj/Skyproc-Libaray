@@ -1148,7 +1148,7 @@ public class Ln {
 	    byte[] testArray = testIn.readInBytes(0, testIn.available());
 
 	    Boolean passed = true;
-	    for (int i = 0 ; i < keyArray.length ; i++) {
+	    for (int i = 0 ; i < keyArray.length && i < testArray.length ; i++) {
 		if (keyArray[i] != testArray[i] ) {
 		    if (print) {
 			System.out.println("Patch differed at " + Ln.prettyPrintHex(i));

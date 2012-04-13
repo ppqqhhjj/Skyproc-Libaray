@@ -38,7 +38,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
     GRUP<AMMO> ammo = new GRUP<AMMO>(this, new AMMO());
     GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
-    GRUP<LVLN> LLists = new GRUP<LVLN>(this, new LVLN());
+    GRUP<LVLN> leveledCreatures = new GRUP<LVLN>(this, new LVLN());
+    GRUP<LVLI> leveledItems = new GRUP<LVLI>(this, new LVLI());
     GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
     GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
     GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
@@ -110,7 +111,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	ammo.dateStamp = new byte[]{(byte) 0x0E, (byte) 0x4D, (byte) 0x2B, 0};
 	GRUPs.put(ammo.getContainedType(), ammo);
 	GRUPs.put(NPCs.getContainedType(), NPCs);
-	GRUPs.put(LLists.getContainedType(), LLists);
+	GRUPs.put(leveledCreatures.getContainedType(), leveledCreatures);
+	leveledItems.dateStamp = new byte[]{ (byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0 };
+	GRUPs.put(leveledItems.getContainedType(), leveledItems);
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
 	GRUPs.put(perks.getContainedType(), perks);
@@ -726,8 +729,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @see GRUP
      * @return The GRUP containing Leveled List records.
      */
-    public GRUP<LVLN> getLeveledLists() {
-	return LLists;
+    public GRUP<LVLN> getLeveledCreatures() {
+	return leveledCreatures;
     }
 
     /**
@@ -890,6 +893,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<ENCH> getEnchantments() {
 	return enchantments;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Leveled Items records
+     */
+    public GRUP<LVLI> getLeveledItems() {
+	return leveledItems;
     }
 
     /**

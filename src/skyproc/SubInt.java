@@ -21,10 +21,16 @@ import skyproc.exceptions.BadRecord;
 class SubInt extends SubRecord {
 
     int data;
+    int length = 4;
     boolean valid = false;
 
     SubInt(Type type) {
 	super(type);
+    }
+
+    SubInt(Type type, int length) {
+	this(type);
+	this.length = length;
     }
 
     @Override
@@ -34,13 +40,13 @@ class SubInt extends SubRecord {
 
     @Override
     int getContentLength(Mod srcMod) {
-	return 4;
+	return length;
     }
 
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-	data = in.extractInt(4);
+	data = in.extractInt(length);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
@@ -60,7 +66,7 @@ class SubInt extends SubRecord {
     void export(LExporter out, Mod srcMod) throws IOException {
 	if (isValid()) {
 	    super.export(out, srcMod);
-	    out.write(data);
+	    out.write(data, length);
 	}
     }
 
