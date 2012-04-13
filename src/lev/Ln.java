@@ -1108,6 +1108,10 @@ public class Ln {
 	}
     }
 
+    public static long toMB(long numBytes) {
+	return numBytes / 1048576;
+    }
+
     public static File manualFindFile(String fileMessageToAskUserFor, File backupFileLocation) throws FileNotFoundException, IOException {
 	// Check for save file
 	if (backupFileLocation.isFile()) {

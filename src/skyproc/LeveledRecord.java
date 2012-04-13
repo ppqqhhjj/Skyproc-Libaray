@@ -16,7 +16,7 @@ import skyproc.exceptions.NotFound;
 abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO> {
 
     SubList<LVLO> entries = new SubList<LVLO>(Type.LLCT, 1, new LVLO());
-    SubData OBND = new SubData(Type.OBND);
+    SubData OBND = new SubData(Type.OBND, 12);
     SubData LVLD = new SubData(Type.LVLD);
     SubFlag LVLF = new SubFlag(Type.LVLF, 1);
 
@@ -37,6 +37,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      */
     public LeveledRecord(Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
+	LVLD.initialize(1);
+	OBND.initialize(12);
+	set(LVLFlag.CalcAllLevelsEqualOrBelowPC, true);
     }
 
     /**
@@ -51,20 +54,10 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
     /**
      * This enum represents the different flags offered by LVLN.
      */
-    public enum LVLN_Flags {
+    public enum LVLFlag {
 
-	/**
-	 * Whether the LVLN should include only entries <= the players level.
-	 */
-	ALL_LEVELS,
-	/**
-	 * Whether to repeat the count calculation each LVLN call.
-	 */
-	EACH,
-	/**
-	 * Use all entries when LVLN is called.
-	 */
-	USE_ALL;
+	CalcAllLevelsEqualOrBelowPC,
+	CalcForEachItemInCount;
     }
 
     public void clearEntries() {
@@ -173,7 +166,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param flag LVLN_Flags enum representing the flag to check.
      * @return True if given flag is true.
      */
-    public boolean isFlag(LVLN.LVLN_Flags flag) {
+    public boolean get(LVLFlag flag) {
 	return LVLF.is(flag.ordinal());
     }
 
@@ -184,7 +177,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param flag LVLN_Flags enum representing the flag to set.
      * @param on Boolean to set flag to.
      */
-    public void setFlag(LVLN.LVLN_Flags flag, boolean on) {
+    final public void set(LVLFlag flag, boolean on) {
 	LVLF.set(flag.ordinal(), on);
     }
 }
