@@ -1112,6 +1112,10 @@ public class Ln {
 	return numBytes / 1048576;
     }
 
+    public static long toKB(long numBytes) {
+	return numBytes / 1024;
+    }
+
     public static File manualFindFile(String fileMessageToAskUserFor, File backupFileLocation) throws FileNotFoundException, IOException {
 	// Check for save file
 	if (backupFileLocation.isFile()) {

@@ -20,7 +20,7 @@ public class LMergeMap<K, V> {
     public LMergeMap(Boolean sorted) {
 	this(sorted, true);
     }
-    
+
     public LMergeMap(Boolean sorted, Boolean unique) {
 	if (sorted) {
 	    map = new TreeMap<K, ArrayList<V>>();
@@ -33,6 +33,12 @@ public class LMergeMap<K, V> {
 
     public void clear() {
 	map.clear();
+    }
+
+    public void addAll (LMergeMap<K,V> in) {
+	for (K k : in.keySet()) {
+	    map.put(k, in.get(k));
+	}
     }
 
     public boolean containsKey(K key) {
@@ -118,7 +124,7 @@ public class LMergeMap<K, V> {
 	}
 	return out;
     }
-    
+
     public Map<K,V> flatten() {
 	Map<K,V> out;
 	if (sorted) {

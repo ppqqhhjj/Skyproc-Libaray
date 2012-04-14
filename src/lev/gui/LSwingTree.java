@@ -7,6 +7,8 @@ package lev.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import javax.swing.*;
@@ -83,6 +85,15 @@ public class LSwingTree extends LComponent {
 
     public void addTreeExpansionListener(TreeExpansionListener t) {
         tree.addTreeExpansionListener(t);
+    }
+
+    @Override
+    public synchronized void addMouseListener(MouseListener l) {
+	tree.addMouseListener(l);
+    }
+
+    public void addMouseListener(MouseAdapter ma) {
+	tree.addMouseListener(ma);
     }
 
     public int getRowCount() {
@@ -236,7 +247,7 @@ public class LSwingTree extends LComponent {
     public void restoreExpansionState () {
 	restoreExpansionState(0, state);
     }
-    
+
     public void nodeChanged (TreeNode node) {
 	model.nodeChanged(node);
     }
