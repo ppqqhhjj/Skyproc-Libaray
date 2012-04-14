@@ -192,9 +192,9 @@ public class FormID implements Comparable, Serializable {
 
     private void adjustMasterIndex(Mod srcMod) {
 	ArrayList<String> masters = srcMod.getMastersStrings();
-	for (byte i = 0; i < masters.size(); i++) {
+	for (int i = 0; i < masters.size(); i++) {
 	    if (masters.get(i).equals(master.print())) {
-		form[3] = i;
+		form[3] = (byte) i;
 		return;
 	    }
 	}
