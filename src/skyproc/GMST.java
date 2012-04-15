@@ -31,22 +31,30 @@ public class GMST extends MajorRecord {
 
     public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
 	super(modToOriginateFrom, setting.toString());
+	init();
 	setData(b);
     }
 
     public GMST(Mod modToOriginateFrom, StringSetting setting, String s) {
 	super(modToOriginateFrom, setting.toString());
+	init();
 	setData(s);
     }
 
     public GMST(Mod modToOriginateFrom, IntSetting setting, int i) {
 	super(modToOriginateFrom, setting.toString());
+	init();
 	setData(i);
     }
 
     public GMST(Mod modToOriginateFrom, FloatSetting setting, float f) {
 	super(modToOriginateFrom, setting.toString());
+	init();
 	setData(f);
+    }
+
+    final void init() {
+	subRecords.add(DATA);
     }
 
     @Override
