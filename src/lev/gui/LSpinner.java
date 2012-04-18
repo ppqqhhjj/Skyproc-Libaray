@@ -52,8 +52,11 @@ public class LSpinner extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addHelpHandler() {
+    public void addHelpHandler(boolean hoverListener) {
 	spinner.addFocusListener(new HelpFocusHandler());
+	if (hoverListener) {
+	    spinner.addMouseListener(new HelpMouseHandler());
+	}
     }
 
     public void setValue(int in) {

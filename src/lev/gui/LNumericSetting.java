@@ -35,7 +35,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
         Add(setting);
         Add(titleLabel);
 
-	tie(s, save, help);
+ 	tie(s, save, help, true);
         setSize(titleLabel.getWidth() + setting.getWidth() + spacing, getHeight());
         setLocation(getX() - getWidth(), getY());
         setVisible(true);
@@ -54,9 +54,9 @@ public class LNumericSetting extends LUserSetting<Integer> {
     }
 
     @Override
-    final public void tie(Enum s, LSaveFile save_, LHelpPanel help_) {
-	super.tie(s, save_, help_);
-	setting.tie(s, save_, help_);
+    final public void tie(Enum s, LSaveFile save_, LHelpPanel help_, boolean hoverHandler) {
+	super.tie(s, save_, help_, hoverHandler);
+	setting.tie(s, save_, help_, hoverHandler);
     }
 
     @Override
@@ -79,8 +79,11 @@ public class LNumericSetting extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addHelpHandler() {
+    public void addHelpHandler(boolean hoverHandler) {
         setting.addFocusListener(new HelpFocusHandler());
+	if (hoverHandler) {
+	    setting.addMouseListener(new HelpMouseHandler());
+	}
     }
 
     @Override

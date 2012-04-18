@@ -35,11 +35,11 @@ public abstract class LUserSetting<T> extends LHelpComponent {
 	add(titleLabel);
     }
 
-    public void tie(Enum setting, LSaveFile saveFile, LHelpPanel help_) {
+    public void tie(Enum setting, LSaveFile saveFile, LHelpPanel help_, boolean hoverListener) {
 	tie(setting, saveFile);
 	help = help_;
 	setHelpInfo(setting, saveFile);
-	addHelpHandler();
+	addHelpHandler(hoverListener);
     }
 
     public void tie(Enum setting, LSaveFile saveFile) {

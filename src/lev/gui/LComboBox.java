@@ -77,8 +77,11 @@ public class LComboBox extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addHelpHandler() {
+    public void addHelpHandler(boolean mouseListener) {
         box.addFocusListener(new HelpFocusHandler());
+	if (mouseListener) {
+	    box.addMouseListener(new HelpMouseHandler());
+	}
     }
 
     @Override

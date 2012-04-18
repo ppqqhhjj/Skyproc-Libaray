@@ -26,7 +26,7 @@ public abstract class LHelpComponent extends LComponent {
         title = text;
     }
 
-    public abstract void addHelpHandler();
+    public abstract void addHelpHandler(boolean hoverListener);
 
     public void updateHelp() {
         if (help != null) {
@@ -151,9 +151,9 @@ public abstract class LHelpComponent extends LComponent {
 	}
     }
 
-    public void linkTo(Enum setting, LSaveFile save, LHelpPanel help_) {
+    public void linkTo(Enum setting, LSaveFile save, LHelpPanel help_, boolean hoverListener) {
         help = help_;
         setHelpInfo(setting, save);
-        addHelpHandler();
+        addHelpHandler(hoverListener);
     }
 }

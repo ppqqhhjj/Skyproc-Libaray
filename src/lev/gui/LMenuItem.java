@@ -22,7 +22,7 @@ public class LMenuItem extends LHelpComponent {
     }
 
     @Override
-    public void addHelpHandler() {
+    public void addHelpHandler(boolean hoverListener) {
 	menuItem.addMouseListener(new HelpMouseHandler());
     }
 

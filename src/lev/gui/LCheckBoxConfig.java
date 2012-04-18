@@ -38,7 +38,7 @@ public class LCheckBoxConfig extends LUserSetting {
         button.addActionListener(new UpdateHelpActionHandler());
 
         cbox = new LSpecialCheckBox(title_, new Font("Serif",size, style), shade, this);
-        cbox.tie(setting, save_, help);
+        cbox.tie(setting, save_, help, false);
         button.setLocation(cbox.getWidth() + spacing, 0);
 
         add(button);
@@ -98,7 +98,7 @@ public class LCheckBoxConfig extends LUserSetting {
     }
 
     @Override
-    public void addHelpHandler() {
+    public void addHelpHandler(boolean hoverHandler) {
     }
 
     public void setButtonOffset (int in) {

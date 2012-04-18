@@ -25,14 +25,13 @@ import javax.swing.event.ChangeListener;
 public class LCheckBox extends LUserSetting<Boolean> {
 
     private JCheckBox cbox;
-
     ArrayList<LComponent> underlings = new ArrayList<LComponent>();
 
     public LCheckBox(String text, Font font, Color shade) {
 	super(text, font, shade);
 	int spacing = 5;
 
-        titleLabel.addMouseListener(new ClickText());
+	titleLabel.addMouseListener(new ClickText());
 
 	cbox = new JCheckBox();
 	cbox.setSize(cbox.getPreferredSize());
@@ -57,7 +56,7 @@ public class LCheckBox extends LUserSetting<Boolean> {
     }
 
     @Override
-    public void setFocusable (boolean focusable) {
+    public void setFocusable(boolean focusable) {
 	super.setFocusable(focusable);
 	cbox.setFocusable(focusable);
     }
@@ -78,9 +77,10 @@ public class LCheckBox extends LUserSetting<Boolean> {
     public boolean revertTo(Map<Enum, Setting> m) {
 	if (isTied()) {
 	    boolean cur = cbox.isSelected();
- 	    cbox.setSelected(m.get(saveTie).getBool());
-	    if (cur != cbox.isSelected())
+	    cbox.setSelected(m.get(saveTie).getBool());
+	    if (cur != cbox.isSelected()) {
 		return false;
+	    }
 	}
 	return true;
     }
@@ -105,6 +105,7 @@ public class LCheckBox extends LUserSetting<Boolean> {
 
     private void visibilityUpdate() {
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    public void run() {
 		for (LComponent c : underlings) {
 		    c.setVisible(isSelected());
@@ -139,22 +140,26 @@ public class LCheckBox extends LUserSetting<Boolean> {
     }
 
     @Override
-    public void addHelpHandler () {
+    public void addHelpHandler(boolean hoverListener) {
 	cbox.addFocusListener(new HelpFocusHandler());
+	if (hoverListener) {
+	    cbox.addMouseListener(new HelpMouseHandler());
+	    titleLabel.addMouseListener(new HelpMouseHandler());
+	}
     }
 
     @Override
-    public final void addUpdateHandlers () {
+    public final void addUpdateHandlers() {
 	cbox.addActionListener(new UpdateHandler());
 	cbox.addChangeListener(new UpdateChangeHandler());
     }
 
-    public void removeChangeListener (ChangeListener c) {
+    public void removeChangeListener(ChangeListener c) {
 	cbox.removeChangeListener(c);
     }
 
-    public void setColor (Color c) {
-        titleLabel.setForeground(c);
+    public void setColor(Color c) {
+	titleLabel.setForeground(c);
     }
 
     public class ClickText implements MouseListener {

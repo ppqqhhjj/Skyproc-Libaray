@@ -13,84 +13,85 @@ import javax.swing.JButton;
 
 /**
  * A customized JButton used by Leviathan in GUIs.
+ *
  * @author Justin Swanson
  */
-public class LButton extends LComponent {
+public class LButton extends LHelpComponent {
 
     JButton button;
 
     /**
-     * 
+     *
      * @param title
      */
-    public LButton (String title) {
-//        super(title);
+    public LButton(String title) {
+	super(title);
 	button = new JButton();
 	button.setText(title);
-	button.setMargin(new Insets(0,2,0,2));
+	button.setMargin(new Insets(0, 2, 0, 2));
 	button.setSize(button.getPreferredSize());
 	button.setFocusable(false);
 	button.setVisible(true);
-	button.setLocation(0,0);
+	button.setLocation(0, 0);
 	super.setSize(button.getSize());
 	setVisible(true);
 	add(button);
     }
 
     /**
-     * 
+     *
      * @param title
      * @param size
      */
-    public LButton (String title, Dimension size) {
-        this(title);
-        setSize(size);
+    public LButton(String title, Dimension size) {
+	this(title);
+	setSize(size);
     }
 
     /**
-     * 
+     *
      * @param title
      * @param size
      * @param location
      */
-    public LButton (String title, Dimension size, Point location) {
+    public LButton(String title, Dimension size, Point location) {
 	this(title);
 	setSize(size);
 	setLocation(location);
     }
 
     /**
-     * 
+     *
      * @param title
      * @param location
      */
-    public LButton (String title, Point location) {
+    public LButton(String title, Point location) {
 	this(title);
 	setLocation(location);
     }
 
     /**
-     * 
+     *
      * @param size
      */
     @Override
-    public final void setSize (Dimension size) {
+    public final void setSize(Dimension size) {
 	setSize(size.width, size.height);
     }
 
     /**
-     * 
+     *
      * @param x
      * @param y
      */
     @Override
-    public final void setSize (int x, int y) {
-	button.setSize(x,y);
-	super.setSize(x,y);
+    public final void setSize(int x, int y) {
+	button.setSize(x, y);
+	super.setSize(x, y);
     }
 
     /**
-     * 
+     *
      * @param l
      */
     public void addActionListener(ActionListener l) {
@@ -98,32 +99,32 @@ public class LButton extends LComponent {
     }
 
     /**
-     * 
+     *
      * @param s
      */
-    public void setActionCommand (String s) {
-        button.setActionCommand(s);
+    public void setActionCommand(String s) {
+	button.setActionCommand(s);
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public JButton getSource () {
-        return button;
+    public JButton getSource() {
+	return button;
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
-    public boolean requestFocusInWindow () {
+    public boolean requestFocusInWindow() {
 	return button.requestFocusInWindow();
     }
 
     /**
-     * 
+     *
      * @param arg0
      */
     @Override
@@ -132,18 +133,26 @@ public class LButton extends LComponent {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getText() {
-        return button.getText();
+	return button.getText();
     }
 
     /**
-     * 
+     *
      * @param in
      */
     public void setText(String in) {
-        button.setText(in);
+	button.setText(in);
+    }
+
+    @Override
+    public void addHelpHandler(boolean hoverListener) {
+	if (hoverListener) {
+	    button.addMouseListener(new LHelpComponent.HelpMouseHandler());
+	}
+	button.addActionListener(new LHelpComponent.HelpActionHandler());
     }
 }
