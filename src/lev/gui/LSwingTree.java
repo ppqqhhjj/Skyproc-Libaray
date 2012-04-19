@@ -29,8 +29,8 @@ public class LSwingTree extends LComponent {
     protected JPanel panel;
     protected JTree tree;
     protected DefaultTreeModel model;
-    int topMargin = 0;
-    int leftMargin = 0;
+    protected int topMargin = 0;
+    protected int leftMargin = 0;
     String state;
 
     public LSwingTree(int width, int height) {
@@ -250,5 +250,13 @@ public class LSwingTree extends LComponent {
 
     public void nodeChanged (TreeNode node) {
 	model.nodeChanged(node);
+    }
+
+    public int getLeadSelectionRow () {
+	return tree.getLeadSelectionRow();
+    }
+
+    public TreePath getPathForRow(int row) {
+	return tree.getPathForRow(row);
     }
 }

@@ -20,55 +20,60 @@ public abstract class LHelpComponent extends LComponent {
     public LHelpPanel help = null;
     String helpPrefix = "";
     String helpInfo = "";
+    boolean followPos = true;
     public String title;
 
     public LHelpComponent(String text) {
-        title = text;
+	title = text;
     }
 
     public abstract void addHelpHandler(boolean hoverListener);
 
     public void updateHelp() {
-        if (help != null) {
-            help.setSetting(helpPrefix + title);
-            help.setContent(helpInfo);
-            help.setSettingPos(getY() + getHeight() / 2);
-            help.textVisible(true);
-        }
+	if (help != null) {
+	    help.setSetting(helpPrefix + title);
+	    help.setContent(helpInfo);
+	    if (followPos) {
+		help.setSettingPos(getY() + getHeight() / 2);
+	    } else {
+		help.setSettingPos(-1);
+		help.hideArrow();
+	    }
+	    help.textVisible(true);
+	}
     }
 
     public class HelpActionHandler implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void actionPerformed(ActionEvent event) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateHelp();
-                }
-            });
+		@Override
+		public void run() {
+		    updateHelp();
+		}
+	    });
 
-        }
-
+	}
     }
 
     public class HelpFocusHandler implements FocusListener {
 
-        @Override
-        public void focusGained(FocusEvent event) {
-            SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void focusGained(FocusEvent event) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateHelp();
-                }
-            });
+		@Override
+		public void run() {
+		    updateHelp();
+		}
+	    });
 
-        }
+	}
 
-        @Override
-        public void focusLost(FocusEvent event) {
+	@Override
+	public void focusLost(FocusEvent event) {
 //            SwingUtilities.invokeLater(new Runnable() {
 //
 //                public void run() {
@@ -77,8 +82,7 @@ public abstract class LHelpComponent extends LComponent {
 //                    }
 //                }
 //            });
-
-        }
+	}
     }
 
     public class HelpMouseHandler implements MouseListener {
@@ -104,43 +108,42 @@ public abstract class LHelpComponent extends LComponent {
 	public void mouseExited(MouseEvent arg0) {
 	    updateHelp();
 	}
-
     }
 
     class HelpListHandler implements ListSelectionListener {
 
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateHelp();
-                }
-            });
-        }
+		@Override
+		public void run() {
+		    updateHelp();
+		}
+	    });
+	}
     }
 
     class HelpChangeHandler implements ChangeListener {
 
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void stateChanged(ChangeEvent e) {
+	    SwingUtilities.invokeLater(new Runnable() {
 
-                @Override
-                public void run() {
-                    updateHelp();
-                }
-            });
-        }
+		@Override
+		public void run() {
+		    updateHelp();
+		}
+	    });
+	}
     }
 
     public void addHelpPrefix(String input) {
-        helpPrefix = input + " ";
+	helpPrefix = input + " ";
     }
 
     public void setHelpInfo(String info) {
-        helpInfo = info;
+	helpInfo = info;
     }
 
     public void setHelpInfo(Enum setting, LSaveFile save) {
@@ -152,8 +155,16 @@ public abstract class LHelpComponent extends LComponent {
     }
 
     public void linkTo(Enum setting, LSaveFile save, LHelpPanel help_, boolean hoverListener) {
-        help = help_;
-        setHelpInfo(setting, save);
-        addHelpHandler(hoverListener);
+	help = help_;
+	setHelpInfo(setting, save);
+	addHelpHandler(hoverListener);
+    }
+
+    public void setFollowPosition (boolean on) {
+	followPos = on;
+    }
+
+    public boolean getFollowPosition () {
+	return followPos;
     }
 }

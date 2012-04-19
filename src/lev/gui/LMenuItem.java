@@ -30,15 +30,6 @@ public class LMenuItem extends LHelpComponent {
 	return menuItem;
     }
 
-    @Override
-    public void updateHelp() {
-	super.updateHelp();
-        if (help != null) {
-            help.setSettingPos(75);
-            help.hideArrow();
-        }
-    }
-
     public void addActionListener (ActionListener a) {
 	menuItem.addActionListener(a);
     }
@@ -47,5 +38,17 @@ public class LMenuItem extends LHelpComponent {
     public void addMouseListener (MouseListener m) {
 	menuItem.addMouseListener(m);
     }
+
+    @Override
+    public boolean isVisible() {
+	return menuItem.isVisible();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+	menuItem.setVisible(b);
+    }
+
+
 }
 
