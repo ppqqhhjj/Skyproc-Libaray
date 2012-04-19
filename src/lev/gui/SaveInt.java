@@ -15,7 +15,7 @@ class SaveInt extends Setting<Integer> {
     }
 
     @Override
-    public String writeContent() {
+    public String toString() {
         return data.toString();
     }
 

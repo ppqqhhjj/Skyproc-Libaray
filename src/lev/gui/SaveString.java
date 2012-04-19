@@ -15,7 +15,7 @@ class SaveString extends Setting<String> {
     }
 
     @Override
-    public String writeContent() {
+    public String toString() {
         return data;
     }
 

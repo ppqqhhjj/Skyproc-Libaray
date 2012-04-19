@@ -17,7 +17,7 @@ class SaveBool extends Setting<Boolean> {
     }
 
     @Override
-    public String writeContent() {
+    public String toString() {
         return Ln.convertBoolTo1(data);
     }
 

@@ -17,7 +17,6 @@ import skyproc.exceptions.BadMod;
 public class SPGlobal {
 
     static String header = "SPGlobal";
-    static Random random = new Random(System.currentTimeMillis());
     static String gameName = "Skyrim";
     /**
      * Path and filename to look for the active plugins file.<br>
@@ -38,6 +37,9 @@ public class SPGlobal {
      */
     public static String pathToInternalFiles = "Files/";
     static String pathToDebug = "SkyProcDebug/";
+    public static String pathToDebug() {
+	return pathToDebug;
+    }
     /**
      * Skyproc will import and embed the language given by SPGlobal.language
      * every time a patch is created. To offer multi-language support, simply

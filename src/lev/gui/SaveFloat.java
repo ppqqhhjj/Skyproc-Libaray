@@ -15,7 +15,7 @@ class SaveFloat extends Setting<Float> {
     }
 
     @Override
-    public String writeContent() {
+    public String toString() {
         return data.toString();
     }
 

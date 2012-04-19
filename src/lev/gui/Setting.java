@@ -60,10 +60,8 @@ public abstract class Setting<T> {
     }
 
     public void write(BufferedWriter b) throws java.io.IOException {
-        b.write("set " + title + " to " + writeContent() + "\n");
+        b.write("set " + title + " to " + toString() + "\n");
     }
-
-    public abstract String writeContent();
 
     public void readSetting(String input) throws java.io.IOException, BadParameter {
         input = input.substring(input.indexOf(" to ") + 4);
