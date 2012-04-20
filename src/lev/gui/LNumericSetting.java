@@ -6,6 +6,7 @@ package lev.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.FocusListener;
 import java.util.Map;
 import javax.swing.event.ChangeListener;
@@ -35,7 +36,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
         Add(setting);
         Add(titleLabel);
 
- 	tie(s, save, help, true);
+ 	setting.tie(s, save, help, true);
         setSize(titleLabel.getWidth() + setting.getWidth() + spacing, getHeight());
         setLocation(getX() - getWidth(), getY());
         setVisible(true);
@@ -55,40 +56,17 @@ public class LNumericSetting extends LUserSetting<Integer> {
 
     @Override
     final public void tie(Enum s, LSaveFile save_, LHelpPanel help_, boolean hoverHandler) {
-	super.tie(s, save_, help_, hoverHandler);
 	setting.tie(s, save_, help_, hoverHandler);
     }
 
     @Override
     public void tie(Enum s, LSaveFile save_) {
-	super.tie(s, save_);
 	setting.tie(s, save_);
     }
 
     @Override
     public Integer getValue() {
         return (Integer) setting.getValue();
-    }
-
-    @Override
-    public boolean revertTo(Map<Enum, Setting> m) {
-        if (isTied()) {
-            return setting.revertTo(m);
-        }
-	return true;
-    }
-
-    @Override
-    public void addHelpHandler(boolean hoverHandler) {
-        setting.addFocusListener(new HelpFocusHandler());
-	if (hoverHandler) {
-	    setting.addMouseListener(new HelpMouseHandler());
-	}
-    }
-
-    @Override
-    public final void addUpdateHandlers() {
-	setting.addChangeListener(new UpdateChangeHandler());
     }
 
     @Override
@@ -112,5 +90,32 @@ public class LNumericSetting extends LUserSetting<Integer> {
     @Override
     public void clearHighlight() {
 	setting.clearHighlight();
+    }
+
+    @Override
+    public void addUpdateHandlers() {
+	setting.addUpdateHandlers();
+    }
+
+    @Override
+    public boolean revertTo(Map<Enum, Setting> m) {
+	return setting.revertTo(m);
+    }
+
+    @Override
+    public void addHelpHandler(boolean hoverListener) {
+	setting.addHelpHandler(hoverListener);
+    }
+
+    @Override
+    final public void setLocation(int x, int y) {
+	super.setLocation(x, y);
+	setting.helpYoffset = y;
+    }
+
+    @Override
+    final public void setLocation(Point p) {
+	super.setLocation(p);
+	setting.helpYoffset = p.y;
     }
 }

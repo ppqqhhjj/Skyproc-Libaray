@@ -22,6 +22,7 @@ public abstract class LHelpComponent extends LComponent {
     String helpInfo = "";
     boolean followPos = true;
     public String title;
+    public int helpYoffset = 0;
 
     public LHelpComponent(String text) {
 	title = text;
@@ -34,7 +35,7 @@ public abstract class LHelpComponent extends LComponent {
 	    help.setSetting(helpPrefix + title);
 	    help.setContent(helpInfo);
 	    if (followPos) {
-		help.setSettingPos(getY() + getHeight() / 2);
+		help.setSettingPos(getY() + getHeight() / 2 + helpYoffset);
 	    } else {
 		help.setSettingPos(-1);
 		help.hideArrow();
