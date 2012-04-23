@@ -35,7 +35,7 @@ class SubInt extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubFloat(type);
+	return new SubInt(type);
     }
 
     @Override
@@ -47,10 +47,10 @@ class SubInt extends SubRecord {
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	data = in.extractInt(length);
+	valid = true;
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
-	valid = true;
     }
 
     @Override

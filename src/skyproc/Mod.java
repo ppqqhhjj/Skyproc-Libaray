@@ -43,6 +43,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
     GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
     GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
+    GRUP<AVIF> actorValues = new GRUP<AVIF>(this, new AVIF());
     GRUP<ARMA> armatures = new GRUP<ARMA>(this, new ARMA());
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<SubStringPointer.Files, Map<Integer, Integer>>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<String>();
@@ -117,6 +118,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
 	GRUPs.put(perks.getContainedType(), perks);
+	actorValues.dateStamp = new byte[]{ (byte) 0x1B, (byte) 0x4D, (byte) 0x2B, 0};
+	GRUPs.put(actorValues.getContainedType(), actorValues);
 	GRUPs.put(armatures.getContainedType(), armatures);
     }
 
@@ -902,6 +905,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<LVLI> getLeveledItems() {
 	return leveledItems;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing ActorValue records
+     */
+    public GRUP<AVIF> getActorValues() {
+	return actorValues;
     }
 
     /**

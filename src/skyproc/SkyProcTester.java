@@ -65,7 +65,7 @@ class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.GMST};
+	GRUP_TYPE[] types = {GRUP_TYPE.AVIF};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();

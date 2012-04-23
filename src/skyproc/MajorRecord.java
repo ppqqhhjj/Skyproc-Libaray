@@ -154,13 +154,13 @@ public abstract class MajorRecord extends Record implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
+            if ("AVEnchanting".equals(getEDID())) {
+                int sdf = 234;
+            }
+
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
-
-//            if ("fSunAlphaTransTime".equals(getEDID())) {
-//                int sdf = 234;
-//            }
 
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);

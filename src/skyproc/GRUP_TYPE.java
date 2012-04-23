@@ -77,6 +77,7 @@ public enum GRUP_TYPE {
      * Perks
      */
     PERK,
+    AVIF,
     /**
      * Armatures
      */

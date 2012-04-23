@@ -841,6 +841,8 @@ public enum Type {
     ENCH,
     LVLI,
     LVLG,
+    AVIF,
+    AVSK,
 
     /**
      * NPC_: Marks DNAM position?
