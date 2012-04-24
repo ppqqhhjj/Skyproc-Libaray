@@ -11,7 +11,7 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- *
+ * Actor value records and perk trees.
  * @author Justin Swanson
  */
 public class AVIF extends MajorRecordDescription {
@@ -67,6 +67,9 @@ public class AVIF extends MajorRecordDescription {
 	}
     }
 
+    /**
+     * A structure that represents a perk in a perktree
+     */
     public static class PerkReference extends SubShell {
 
 	SubForm PNAM = new SubForm(Type.PNAM);
@@ -123,89 +126,172 @@ public class AVIF extends MajorRecordDescription {
 	    return new PerkReference();
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	public void setPerk(FormID id) {
 	    PNAM.setForm(id);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public FormID getPerk() {
 	    return PNAM.getForm();
 	}
 
+	/**
+	 *
+	 * @param x
+	 */
 	public void setX(int x) {
 	    XNAM.data = x;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getX() {
 	    return XNAM.data;
 	}
 
+	/**
+	 *
+	 * @param y
+	 */
 	public void setY(int y) {
 	    YNAM.data = y;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getY() {
 	    return YNAM.data;
 	}
 
+	/**
+	 *
+	 * @param horiz
+	 */
 	public void setHorizontalPos(float horiz) {
 	    HNAM.data = horiz;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public float getHorizontalPos () {
 	    return HNAM.data;
 	}
 
+	/**
+	 *
+	 * @param vert
+	 */
 	public void setVerticalPos (float vert) {
 	    VNAM.data = vert;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public float getVerticalPos () {
 	    return VNAM.data;
 	}
 
+	/**
+	 *
+	 * @param skill
+	 */
 	public void setSkill (FormID skill) {
 	    SNAM.setForm(skill);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public FormID getSkill () {
 	    return SNAM.getForm();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<Integer> getPointers () {
 	    return SubList.subIntToPublic(CNAMs);
 	}
 
+	/**
+	 * 
+	 */
 	public void clearPointers() {
 	    CNAMs.clear();
 	}
 
+	/**
+	 *
+	 * @param index
+	 */
 	public void addPointer (int index) {
 	    SubInt cnam = new SubInt(Type.CNAM);
 	    cnam.data = index;
 	    CNAMs.add(cnam);
 	}
 
+	/**
+	 *
+	 * @param ref
+	 */
 	public void addPointer (PerkReference ref) {
 	    addPointer(ref.INAM.data);
 	}
 
+	/**
+	 *
+	 * @param index
+	 */
 	public void setIndex (int index) {
 	    INAM.data = index;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getIndex () {
 	    return INAM.data;
 	}
     }
 
+    /**
+     *
+     * @param abbr
+     */
     public void setAbbreviation(String abbr) {
 	ANAM.setString(abbr);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getAbbreviation () {
 	return ANAM.print();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<PerkReference> getPerkReferences () {
 	return perks.collection;
     }
