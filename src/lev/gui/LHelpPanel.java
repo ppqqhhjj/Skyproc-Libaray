@@ -58,6 +58,10 @@ public class LHelpPanel extends LPanel {
 	}
     }
 
+    public void setHeaderColor (Color c) {
+	setting.setForeground(c);
+    }
+
     public void setSetting(String title_) {
 	setting.setText("   " + title_);
 	setting.setSize(setting.getPreferredSize());

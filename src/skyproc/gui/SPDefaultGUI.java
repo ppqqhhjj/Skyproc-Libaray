@@ -1,4 +1,4 @@
-package skyproc;
+package skyproc.gui;
 
 import java.awt.*;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import lev.gui.resources.LFonts;
 import lev.gui.resources.LImages;
 
 /**
- * A GUI setup that offered as an easy out-of-the-box GUI option. 
+ * A GUI setup that offered as an easy out-of-the-box GUI option.
  * @author Justin Swanson
  */
 public class SPDefaultGUI extends JFrame {
@@ -36,7 +36,7 @@ public class SPDefaultGUI extends JFrame {
     public SPDefaultGUI(final String yourPatcherName, final String yourDescription) {
 	super(yourPatcherName);
 	pbar = new LProgressBar(250, 15, new Font("SansSerif", Font.PLAIN, 11), new Color(180, 180, 180));
-	SPGUI.progress = pbar;
+	SPProgressBarPlug.progress = pbar;
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -83,7 +83,7 @@ public class SPDefaultGUI extends JFrame {
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
 	    pbar.setCentered(false);
 	    pbar.setStatusOffset(-5);
-	    SPGUI.progress = pbar;
+	    SPProgressBarPlug.progress = pbar;
 	    LLabel status = new LLabel(". . .", new Font("SansSerif", Font.PLAIN, 11), new Color(160, 160, 160));
 	    pbar.setStatusLabel(status);
 	    status.setLocation(8, getHeight() - status.getHeight() - 36);

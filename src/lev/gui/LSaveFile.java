@@ -21,6 +21,7 @@ public abstract class LSaveFile {
     public Map<Enum, Setting> curSettings = new TreeMap<Enum, Setting>();
     public Map<Enum, Setting> tempCurSettings = new TreeMap<Enum, Setting>();
     public Map<Enum, String> helpInfo = new TreeMap<Enum, String>();
+    boolean initialized = false;
 
     public void tie(Enum s, LUserSetting c) {
 	for (Map<Enum, Setting> e : sets) {
@@ -38,17 +39,19 @@ public abstract class LSaveFile {
     }
 
     public void init() {
-	for (Map<Enum, Setting> e : sets) {
-	    init(e);
+	if (!initialized) {
+	    for (Map<Enum, Setting> e : sets) {
+		init(e);
+	    }
+	    initHelp();
+	    readInSettings();
+	    initialized = true;
 	}
-	initHelp();
-	readInSettings();
     }
 
     protected abstract void init(Map<Enum, Setting> m);
 
-    protected void initHelp () {
-
+    protected void initHelp() {
     }
 
     public abstract void readInSettings();
@@ -93,14 +96,14 @@ public abstract class LSaveFile {
     }
 
     public String getStr(Enum s) {
-        return curSettings.get(s).getStr();
+	return curSettings.get(s).getStr();
     }
 
     public Integer getInt(Enum s) {
-        return curSettings.get(s).getInt();
+	return curSettings.get(s).getInt();
     }
 
     public Boolean getBool(Enum s) {
-        return curSettings.get(s).getBool();
+	return curSettings.get(s).getBool();
     }
 }

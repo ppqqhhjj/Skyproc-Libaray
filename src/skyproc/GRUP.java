@@ -1,5 +1,6 @@
 package skyproc;
 
+import skyproc.gui.SPProgressBarPlug;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -158,7 +159,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    }
 	    for (MajorRecord t : this) {
 		t.export(out, srcMod);
-		SPGUI.progress.incrementBar();
+		SPProgressBarPlug.progress.incrementBar();
 	    }
 	}
     }
@@ -174,7 +175,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void fetchExceptions(SPDatabase database) {
 	for (T item : mapRecords.values()) {
 	    item.fetchException(database);
-	    SPGUI.progress.incrementBar();
+	    SPProgressBarPlug.progress.incrementBar();
 	}
     }
 

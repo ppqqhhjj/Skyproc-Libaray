@@ -1,5 +1,6 @@
 package skyproc;
 
+import skyproc.gui.SPProgressBarPlug;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -37,6 +38,7 @@ public class SPGlobal {
      */
     public static String pathToInternalFiles = "Files/";
     static String pathToDebug = "SkyProcDebug/";
+
     public static String pathToDebug() {
 	return pathToDebug;
     }
@@ -103,37 +105,16 @@ public class SPGlobal {
 	    SPImporter importer = new SPImporter();
 	    Mod consistencyPatch;
 	    try {
-		SPGUI.progress.reset();
-		SPGUI.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
+		SPProgressBarPlug.progress.reset();
+		SPProgressBarPlug.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
 		SPImporter.getActiveModList();
 		SPGlobal.newSyncLog("Mod Import/ConsistencyPatch.txt");
 		boolean syncing = sync();
 		sync(true);
 		consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
-		sync(syncing);
 		edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
-		for (GRUP g : consistencyPatch.GRUPs.values()) {
-		    for (Object o : g) {
-			MajorRecord m = (MajorRecord) o;
-			// If src mod is the patch itself
-			if (m.getFormMaster().equals(consistencyPatch.getInfo())) {
-			    // If EDID is not empty
-			    if (!m.getEDID().equals("")) {
-				// If already exists, problem
-				if (!edidToForm.containsKey(m.getEDID())) {
-				    edidToForm.put(m.getEDID(), m.getForm());
-				    if (debugConsistencyImport && logging()) {
-					log("Consistency", m.toString());
-				    }
-				} else {
-				    logError("Consistency", "Record " + m.getFormStr() + " had an already existing EDID: " + m.getEDID());
-				}
-			    } else {
-				logError("Consistency", "Record " + m.getFormStr() + " didn't have an EDID.");
-			    }
-			}
-		    }
-		}
+		sync(syncing);
+		mergetIntoKnownEDIDs(consistencyPatch);
 
 	    } catch (Exception ex) {
 		logException(ex);
@@ -152,6 +133,31 @@ public class SPGlobal {
 		}
 		Ln.moveFile(f, dest, false);
 		logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
+	    }
+	}
+    }
+
+    public static void mergetIntoKnownEDIDs(Mod mod) throws IOException {
+	for (GRUP g : mod.GRUPs.values()) {
+	    for (Object o : g) {
+		MajorRecord m = (MajorRecord) o;
+		// If src mod is the patch itself
+		if (m.getFormMaster().equals(mod.getInfo())) {
+		    // If EDID is not empty
+		    if (!m.getEDID().equals("")) {
+			// If already exists and not same FormID, problem
+			if (!edidToForm.containsKey(m.getEDID()) || edidToForm.get(m.getEDID()).equals(m.getForm())) {
+			    edidToForm.put(m.getEDID(), m.getForm());
+			    if (debugConsistencyImport && logging()) {
+				log("Consistency", m.toString());
+			    }
+			} else {
+			    logError("Consistency", "Record " + m.getFormStr() + " had an already existing EDID: " + m.getEDID());
+			}
+		    } else {
+			logError("Consistency", "Record " + m.getFormStr() + " didn't have an EDID.");
+		    }
+		}
 	    }
 	}
     }
@@ -213,6 +219,7 @@ public class SPGlobal {
 
     /**
      * Logs a specific record as blocked in the "Blocked Records.txt" log.
+     *
      * @param header
      * @param reason Reason for blocking the record.
      * @param m Record that was blocked.
@@ -242,7 +249,6 @@ public class SPGlobal {
 	    SPGlobal.log.logging(on);
 	}
     }
-
 
     /**
      *

@@ -1,5 +1,6 @@
 package skyproc;
 
+import skyproc.gui.SPProgressBarPlug;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -566,8 +567,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    fullGRUPS++;
 	}
-	SPGUI.progress.reset();
-	SPGUI.progress.setMax(fullGRUPS, "Exporting " + srcMod);
+	SPProgressBarPlug.progress.reset();
+	SPProgressBarPlug.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
 	// Confirm all formID references are added as
 	// masters, even if no actual major record from that
@@ -589,25 +590,25 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
-		SPGUI.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
+		SPProgressBarPlug.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
 	    }
 	    g.export(out, srcMod);
 	    if (!g.isEmpty()) {
-		SPGUI.progress.incrementBar();
+		SPProgressBarPlug.progress.incrementBar();
 	    }
 	}
 
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPGUI.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
+	    SPProgressBarPlug.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
-	    SPGUI.progress.incrementBar();
+	    SPProgressBarPlug.progress.incrementBar();
 	} else {
 	    deleteStringsFiles();
 	}
 	out.close();
-	SPGUI.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
+	SPProgressBarPlug.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
 
 
 	// Check if any duplicate EDIDS

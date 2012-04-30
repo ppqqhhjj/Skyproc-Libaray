@@ -1,4 +1,4 @@
-package skyproc;
+package skyproc.gui;
 
 import lev.gui.LProgressBarInterface;
 
@@ -6,7 +6,7 @@ import lev.gui.LProgressBarInterface;
  * A boundary class that will eventually offer an interface to the the LevGUI library.
  * @author Justin Swanson
  */
-public class SPGUI {
+public class SPProgressBarPlug {
 
     /**
      * SkyProc's import and export functions hook up their progress output to this

@@ -9,6 +9,7 @@ import lev.Ln;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadMod;
+import skyproc.gui.SPProgressBarPlug;
 
 /**
  * Used to import data from files into Mod objects that are ready to be
@@ -404,13 +405,13 @@ public class SPImporter {
 
 	curMod = 1;
 	maxMod = mods.size();
-	SPGUI.progress.reset();
-	SPGUI.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
+	SPProgressBarPlug.progress.reset();
+	SPProgressBarPlug.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    int curBar = SPGUI.progress.getBar();
-	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
+	    int curBar = SPProgressBarPlug.progress.getBar();
+	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -427,9 +428,9 @@ public class SPImporter {
 		    }
 		}
 	    } else {
-		SPGUI.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
+		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
 	    }
-	    SPGUI.progress.setBar(curBar + (grup_targets.length + extraStepsPerMod));
+	    SPProgressBarPlug.progress.setBar(curBar + (grup_targets.length + extraStepsPerMod));
 	    curMod++;
 	}
 
@@ -457,8 +458,8 @@ public class SPImporter {
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
 	curMod = 1;
 	maxMod = 1;
-	SPGUI.progress.reset();
-	SPGUI.progress.setMax(grup_targets.length + extraStepsPerMod);
+	SPProgressBarPlug.progress.reset();
+	SPProgressBarPlug.progress.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -481,7 +482,7 @@ public class SPImporter {
     }
 
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
-	int curBar = SPGUI.progress.getBar();
+	int curBar = SPProgressBarPlug.progress.getBar();
 	try {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
 
@@ -500,35 +501,35 @@ public class SPImporter {
 
 	    Type result;
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
+		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
 		SPGlobal.flush();
-		SPGUI.progress.incrementBar();
+		SPProgressBarPlug.progress.incrementBar();
 		if (grups.isEmpty()) {
 		    break;
 		}
 	    }
 
-	    SPGUI.progress.setBar(curBar + grup_targets.length);
-	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
+	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.length);
+	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
-	    SPGUI.progress.incrementBar();
+	    SPProgressBarPlug.progress.incrementBar();
 	    input.close();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
 	    }
 
-	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
+	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPGUI.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
-	    SPGUI.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
+	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
+	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 

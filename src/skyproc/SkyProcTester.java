@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import skyproc.gui.SPProgressBarPlug;
+import skyproc.gui.SPDefaultGUI;
 import java.io.File;
 import java.io.IOException;
 import lev.LExporter;
@@ -71,22 +73,22 @@ class SkyProcTester {
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
 
-	SPGUI.progress.reset();
-	SPGUI.progress.setMax(types.length);
+	SPProgressBarPlug.progress.reset();
+	SPProgressBarPlug.progress.setMax(types.length);
 
 	for (GRUP_TYPE g : types) {
 	    if (!test(g)) {
-		SPGUI.progress.setStatus("FAILED: " + g);
+		SPProgressBarPlug.progress.setStatus("FAILED: " + g);
 		break;
 	    }
-	    SPGUI.progress.setStatus("Validating DONE");
+	    SPProgressBarPlug.progress.setStatus("Validating DONE");
 	}
 
     }
 
     private static boolean test(GRUP_TYPE type) throws IOException, BadRecord {
-	SPGUI.progress.setStatus("Validating " + type);
-	SPGUI.progress.pause(true);
+	SPProgressBarPlug.progress.setStatus("Validating " + type);
+	SPProgressBarPlug.progress.pause(true);
 
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
@@ -106,8 +108,8 @@ class SkyProcTester {
 	    System.out.println("Didn't have a source file to validate bytes to.");
 	}
 
-	SPGUI.progress.pause(false);
-	SPGUI.progress.incrementBar();
+	SPProgressBarPlug.progress.pause(false);
+	SPProgressBarPlug.progress.incrementBar();
 	return passed;
     }
 
