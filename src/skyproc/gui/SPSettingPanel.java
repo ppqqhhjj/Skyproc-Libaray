@@ -37,7 +37,7 @@ public abstract class SPSettingPanel extends LPanel {
     protected boolean initialized = false;
 
     public SPSettingPanel(String title, LSaveFile saveFile_, SPMainMenuPanel parent_, Color headerColor) {
-	super(SPComplexGUI.fullDimensions);
+	super(SUMGUI.fullDimensions);
 	saveFile = saveFile_;
 	parent = parent_;
 	header = new LLabel(title, new Font("Serif", Font.BOLD, 26), headerColor);
@@ -45,7 +45,7 @@ public abstract class SPSettingPanel extends LPanel {
 
     public boolean initialize() {
 	if (!initialized) {
-	    settingsPanel = new LPanel(SPComplexGUI.middleDimensions);
+	    settingsPanel = new LPanel(SUMGUI.middleDimensions);
 
 	    setVisible(true);
 	    int spacing = (settingsPanel.getWidth() - defaults.getWidth() - save.getWidth()) / 3;

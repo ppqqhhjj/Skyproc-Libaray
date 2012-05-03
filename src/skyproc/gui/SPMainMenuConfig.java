@@ -21,7 +21,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
     public SPMainMenuConfig(String title_, Boolean cBoxPresent, Boolean large, Color color, Point location, LSaveFile saveFile, Enum setting) {
         super(title_);
         save = saveFile;
-	help = SPComplexGUI.helpPanel;
+	help = SUMGUI.helpPanel;
         saveTie = setting;
         setHelpInfo(saveTie, save);
 

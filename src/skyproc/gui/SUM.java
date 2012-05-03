@@ -6,6 +6,7 @@ package skyproc.gui;
 
 import java.awt.Color;
 import java.net.URL;
+import javax.swing.JFrame;
 import lev.gui.LSaveFile;
 import skyproc.GRUP_TYPE;
 import skyproc.Mod;
@@ -22,7 +23,7 @@ public interface SUM {
     public boolean hasStandardMenu();
     public SPMainMenuPanel getStandardMenu();
     public boolean hasCustomMenu();
-    public void openCustomMenu();
+    public JFrame getCustomMenu();
     public boolean hasLogo();
     public URL getLogo();
     public boolean hasSave();

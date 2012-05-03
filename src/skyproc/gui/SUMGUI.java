@@ -24,9 +24,9 @@ import skyproc.SPImporter;
  *
  * @author Justin Swanson
  */
-public class SPComplexGUI extends JFrame {
+public class SUMGUI extends JFrame {
 
-    static SPComplexGUI singleton = null;
+    static JFrame singleton = null;
     public final static Rectangle fullDimensions = new Rectangle(0, 0, 950, 632);
     public final static Rectangle leftDimensions = new Rectangle(0, 0, 299, fullDimensions.height - 28); // For status update
     public final static Rectangle middleDimensions = new Rectangle(leftDimensions.x + leftDimensions.width + 7, 0, 330, fullDimensions.height);
@@ -54,14 +54,54 @@ public class SPComplexGUI extends JFrame {
     JTextArea statusUpdate;
     LLabel versionNum;
 
-    public SPComplexGUI() {
-	super("Automatic Variants");
+    SUMGUI() {
+	super(hook.getName());
+	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	setResizable(false);
+	Dimension GUISIZE = new Dimension(954,658);
+	setSize(GUISIZE);
+	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	setLocation(dim.width / 2 - GUISIZE.width / 2, dim.height / 2 - GUISIZE.height / 2);
+	setLayout(null);
+	addComponents();
+	addWindowListener(new WindowListener() {
+
+	    @Override
+	    public void windowClosed(WindowEvent arg0) {
+	    }
+
+	    @Override
+	    public void windowActivated(WindowEvent arg0) {
+	    }
+
+	    @Override
+	    public void windowClosing(WindowEvent arg0) {
+		closingGUIwindow();
+	    }
+
+	    @Override
+	    public void windowDeactivated(WindowEvent arg0) {
+	    }
+
+	    @Override
+	    public void windowDeiconified(WindowEvent arg0) {
+	    }
+
+	    @Override
+	    public void windowIconified(WindowEvent arg0) {
+	    }
+
+	    @Override
+	    public void windowOpened(WindowEvent arg0) {
+	    }
+	});
+	helpPanel.setHeaderColor(hook.getHeaderColor());
     }
 
-    void addComponents() {
+    final void addComponents() {
 	try {
 
-	    backgroundPanel = new LImagePane(SPComplexGUI.class.getResource("background.jpg"));
+	    backgroundPanel = new LImagePane(SUMGUI.class.getResource("background.jpg"));
 	    super.add(backgroundPanel);
 
 	    willMakePatch = new LLabel("A patch will be generated upon exit.", new Font("SansSerif", Font.PLAIN, 10), Color.GRAY);
@@ -123,7 +163,7 @@ public class SPComplexGUI extends JFrame {
 
 	    SPProgressBarPlug.progress = new AVProgress();
 
-	    singleton.setVisible(true);
+	    setVisible(true);
 
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
@@ -137,46 +177,12 @@ public class SPComplexGUI extends JFrame {
 	    @Override
 	    public void run() {
 		if (singleton == null) {
-		    SPComplexGUI.hook = hook;
-		    singleton = new SPComplexGUI();
-		    singleton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		    singleton.setResizable(false);
-		    singleton.setSize(954, 658);
-		    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		    singleton.setLocation(dim.width / 2 - singleton.getWidth() / 2, dim.height / 2 - singleton.getHeight() / 2);
-		    singleton.setLayout(null);
-		    singleton.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-			}
-
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-			}
-
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-			    closingGUIwindow();
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-			}
-
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-			}
-
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-			}
-		    });
-		    singleton.addComponents();
+		    SUMGUI.hook = hook;
+		    if (hook.hasCustomMenu()) {
+			singleton = hook.getCustomMenu();
+		    } else {
+			singleton = new SUMGUI();
+		    }
 
 		    if (hook.hasSave()) {
 			hook.getSave().init();
@@ -185,12 +191,10 @@ public class SPComplexGUI extends JFrame {
 		    if (hook.importAtStart()) {
 			runThread();
 		    }
-		}
 
-		helpPanel.setHeaderColor(hook.getHeaderColor());
-
-		if (hook.hasStandardMenu()) {
-		    singleton.add(hook.getStandardMenu());
+		    if (hook.hasStandardMenu()) {
+			singleton.add(hook.getStandardMenu());
+		    }
 		}
 	    }
 	});
@@ -200,7 +204,7 @@ public class SPComplexGUI extends JFrame {
 	return this.getHeight() - 28;
     }
 
-    static private void closingGUIwindow() {
+    static public void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
 
 	progress.setExitOnClose();
@@ -217,7 +221,9 @@ public class SPComplexGUI extends JFrame {
 
     static public void exitProgram() {
 	SPGlobal.log(header, "Exit requested.");
-	hook.getSave().saveToFile();
+	if (hook.hasSave()) {
+	    hook.getSave().saveToFile();
+	}
 	LDebug.wrapUpAndExit();
     }
 
@@ -236,6 +242,7 @@ public class SPComplexGUI extends JFrame {
 		}
 		if (exitRequested) {
 		    hook.runChangesToPatch();
+		    exitProgram();
 		}
 	    } catch (Exception e) {
 		System.err.println(e.toString());

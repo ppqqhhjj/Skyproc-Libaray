@@ -26,18 +26,18 @@ import skyproc.SPGlobal;
 public class SPMainMenuPanel extends JPanel {
 
     static final int spacing = 35;
-    static final int xPlacement = SPComplexGUI.leftDimensions.width - 25;
+    static final int xPlacement = SUMGUI.leftDimensions.width - 25;
     int yPlacement = 170;
     LImagePane customLogo;
     LLabel version;
     Color color;
-    protected LPanel menu = new LPanel(SPComplexGUI.leftDimensions);
+    protected LPanel menu = new LPanel(SUMGUI.leftDimensions);
     protected Close closeHandler = new Close();
     protected Open openHandler = new Open();
 
     public SPMainMenuPanel(Color menuColor) {
 	this.setLayout(null);
-	setSize(SPComplexGUI.middleLeftDimensions.getSize());
+	setSize(SUMGUI.middleLeftDimensions.getSize());
 	setLocation(0, 0);
 	add(menu);
 	setOpaque(false);
@@ -45,15 +45,15 @@ public class SPMainMenuPanel extends JPanel {
     }
 
     public SPMainMenuPanel() {
-	this(SPComplexGUI.light);
+	this(SUMGUI.light);
     }
 
     public void addLogo(URL logo) {
 	try {
 	    int height = 150;
 	    customLogo = new LImagePane(logo);
-	    customLogo.setMaxSize(SPComplexGUI.leftDimensions.width, height);
-	    customLogo.setLocation(SPComplexGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 0);
+	    customLogo.setMaxSize(SUMGUI.leftDimensions.width, height);
+	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 0);
 	    menu.Add(customLogo);
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
@@ -65,7 +65,7 @@ public class SPMainMenuPanel extends JPanel {
     }
 
     public void setVersion (String version, Point location) {
-	this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SPComplexGUI.darkGray);
+	this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
 	this.version.setLocation(location);
 	menu.Add(this.version);
     }

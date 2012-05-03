@@ -22,7 +22,7 @@ class SkyProcTester {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception {
+    public static void runTests(String[] args) throws Exception {
 	setSkyProcGlobal();
 
 	try {
