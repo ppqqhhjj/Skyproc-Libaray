@@ -22,7 +22,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
-    byte[] version = { 0x28 , 0,0,0};
+    byte[] version = {0x28, 0, 0, 0};
     SubString EDID = new SubString(Type.EDID, true);
     Enum exception;
 
@@ -32,7 +32,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord(Mod modToOriginateFrom, String edid) {
 	this();
-	setEDIDInternal(edid);
+	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	modToOriginateFrom.addRecordSilent(this);
     }
@@ -62,7 +62,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
 	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
-	out.EDID.setString(edid);
+	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
 	return out;
     }
@@ -98,9 +98,9 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	}
 
-//        if (EDID.print().equals("fSunAlphaTransTime")) {
-//            int wer = 32;
-//        }
+        if (EDID.print().equals("dunBluePalaceWingEncGoatDomestic")) {
+            int wer = 32;
+        }
 
 	importSubRecords(in, mask);
 	subRecords.printSummary();
@@ -110,7 +110,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	subRecords.importSubRecords(in, mask);
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs(boolean deep) {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	out.add(ID);
 	out.addAll(subRecords.allFormIDs(deep));
@@ -154,10 +154,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
-            if ("AVEnchanting".equals(getEDID())) {
-                int sdf = 234;
-            }
-
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
@@ -213,45 +209,29 @@ public abstract class MajorRecord extends Record implements Serializable {
     /**
      * Sets the EDID of the Major Record<br><br>
      *
-     * NOTE:  This will reassign the records formID if the new EDID matches
-     * an EDID from the previous patch.
+     * NOTE: This will reassign the records formID if the new EDID matches an
+     * EDID from the previous patch.
      *
      * @param edid The string to have the EDID set to.
      */
     final public void setEDID(String edid) {
-	setEDID(edid, this.getFormMaster());
+	setEdidNoConsistency(edid);
+	Consistency.addEntry(edid, this.getForm());
     }
-
-    final void setEDID(String edid, ModListing srcMod) {
-	edid = edid.replaceAll(" ", "");
-	if (srcMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
-	    // No duplicates
-	    if (SPGlobal.globalPatchEDIDS.contains(edid)) {
-		int num = 0;
-		String newEDID = edid + num;
-		for (int i = 0; i < SPGlobal.edidToForm.size(); i++) {
-		    if (!SPGlobal.edidToForm.containsKey(newEDID)) {
-			break;
-		    }
-		    newEDID = edid + (++num);
-		}
-		edid = newEDID;
-	    }
-	    SPGlobal.globalPatchEDIDS.add(edid);
-
-	    // Assign old formIDs
-	    FormID oldFormID = SPGlobal.getOldForm(edid);
-	    if (oldFormID != null) {
-		setForm(oldFormID);
-	    }
+    
+    final void setEdidNoConsistency (String edid) {
+	edid = Consistency.getAvailableEDID(edidFilter(edid));
+	FormID oldFormID = Consistency.getOldForm(edid);
+	if (oldFormID != null) {
+	    setForm(oldFormID);
 	}
 	EDID.setString(edid);
     }
 
-    final void setEDIDInternal (String edid) {
-	EDID.setString(edid.replaceAll(" ", ""));
+    static String edidFilter (String edid) {
+	return edid.replaceAll(" ", "");
     }
-
+    
     /**
      *
      * @return The current EDID string.
@@ -320,17 +300,16 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     /**
-     * This function creates an mask for the major record given,
-     * or null if a mask type is given that isn't a major record.<br><br>
+     * This function creates an mask for the major record given, or null if a
+     * mask type is given that isn't a major record.<br><br>
      *
-     * To use a mask:<br>
-     * 1) create one with this function<br>
-     * 2) Set the flags for the desired subrecords to true.<br>
-     * 3) Add it to the SPImporter object<br>
-     * 4) Import as usual
+     * To use a mask:<br> 1) create one with this function<br> 2) Set the flags
+     * for the desired subrecords to true.<br> 3) Add it to the SPImporter
+     * object<br> 4) Import as usual
+     *
      * @param maskType Type to create a mask for. (major record)
-     * @return A mask reflecting the major record's type, with all subrecord flags
-     * set to block.
+     * @return A mask reflecting the major record's type, with all subrecord
+     * flags set to block.
      */
     public static Mask getMask(Type maskType) {
 	Mod tempMod = new Mod(new ModListing("temp", false), true);

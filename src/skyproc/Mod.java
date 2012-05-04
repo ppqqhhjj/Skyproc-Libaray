@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import javax.swing.JOptionPane;
 import lev.*;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
+import skyproc.exceptions.BadMod;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -97,11 +99,11 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(gameSettings.getContainedType(), gameSettings);
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(textures.getContainedType(), textures);
-	factions.dateStamp = new byte[]{3, (byte)0x3D ,2, 0};
+	factions.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(factions.getContainedType(), factions);
 	GRUPs.put(races.getContainedType(), races);
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
-	enchantments.dateStamp = new byte[]{ (byte) 0x12, (byte) 0x4A , (byte) 0x20 , 0 };
+	enchantments.dateStamp = new byte[]{(byte) 0x12, (byte) 0x4A, (byte) 0x20, 0};
 	GRUPs.put(enchantments.getContainedType(), enchantments);
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
@@ -114,12 +116,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(ammo.getContainedType(), ammo);
 	GRUPs.put(NPCs.getContainedType(), NPCs);
 	GRUPs.put(leveledCreatures.getContainedType(), leveledCreatures);
-	leveledItems.dateStamp = new byte[]{ (byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0 };
+	leveledItems.dateStamp = new byte[]{(byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0};
 	GRUPs.put(leveledItems.getContainedType(), leveledItems);
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
 	GRUPs.put(perks.getContainedType(), perks);
-	actorValues.dateStamp = new byte[]{ (byte) 0x1B, (byte) 0x4D, (byte) 0x2B, 0};
+	actorValues.dateStamp = new byte[]{(byte) 0x1B, (byte) 0x4D, (byte) 0x2B, 0};
 	GRUPs.put(actorValues.getContainedType(), actorValues);
 	GRUPs.put(armatures.getContainedType(), armatures);
     }
@@ -173,31 +175,33 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     FormID getNextID(String edid) {
-	// If not global patch, just give next id
-	if (!equals(SPGlobal.getGlobalPatch())) {
-	    return new FormID(header.HEDR.nextID++, getInfo());
-
-	    // If global patch, check for consistency
+	// If has an EDID match, grab old FormID
+	FormID oldFormID = Consistency.getOldForm(edid);
+	if (oldFormID != null) {
+	    return oldFormID;
 	} else {
-	    // If has an EDID match, grab old FormID
-	    FormID oldFormID = SPGlobal.getOldForm(edid);
-	    if (oldFormID != null) {
-		return oldFormID;
-	    } else {
-
-		//Find next open FormID
-		FormID possibleID = new FormID(header.HEDR.nextID++, getInfo());
-		for (int i = 0; i < SPGlobal.edidToForm.size(); i++) {
-		    if (!SPGlobal.edidToForm.containsValue(possibleID)) {
-			break;
+	    //Find next open FormID
+	    FormID possibleID = new FormID(header.HEDR.nextID++, getInfo());
+	    while (!Consistency.requestID(possibleID)) {
+		header.HEDR.nextID++;
+		if (header.HEDR.nextID > 0xFFFFFF) {
+		    if (!Consistency.cleaned) {
+			header.HEDR.nextID = HEDR.firstAvailableID;
+			Consistency.cleanConsistency();
+			return getNextID(edid);
+		    } else {
+			SPGlobal.logError(getInfo().print(), "Ran out of available formids.");
+			JOptionPane.showMessageDialog(null, "<html>The output patch ran out of available FormIDs.<br>"
+				+ "Please contact Leviathan1753.</html>");
+			
 		    }
-		    possibleID = new FormID(header.HEDR.nextID++, getInfo());
 		}
-		if (SPGlobal.debugConsistencyTies && SPGlobal.logging()) {
-		    SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
-		}
-		return possibleID;
+		possibleID = new FormID(header.HEDR.nextID++, getInfo());
 	    }
+	    if (SPGlobal.debugConsistencyTies && SPGlobal.logging()) {
+		SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
+	    }
+	    return possibleID;
 	}
     }
 
@@ -229,7 +233,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * and then a random number if that EDID already exists. It is suggested you
      * only use this function if you are only making one duplicate of the
      * record. For multiple duplicates, use the version with a specified EDID,
-     * for better consistency results<br><br>
+     * for better consistencyFile results<br><br>
      *
      * COMPILER NOTE: The record returned can only be determined by the compiler
      * to be a Major Record. You must cast it yourself to be the correct type of
@@ -522,9 +526,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      * @see SPGlobal
      * @throws IOException If there are any unforseen disk errors exporting the
      * data.
-     * @throws BadRecord If duplicate EDIDs are found in the mod.  This has been
-     * deemed an unacceptable mod format, and is thrown to promote the investigation
-     * and elimination of duplicate EDIDs.
+     * @throws BadRecord If duplicate EDIDs are found in the mod. This has been
+     * deemed an unacceptable mod format, and is thrown to promote the
+     * investigation and elimination of duplicate EDIDs.
      */
     public void export() throws IOException, BadRecord {
 	export(SPGlobal.pathToData);
@@ -536,9 +540,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      *
      * @param path
      * @throws IOException
-     * @throws BadRecord If duplicate EDIDs are found in the mod.  This has been
-     * deemed an unacceptable mod format, and is thrown to promote the investigation
-     * and elimination of duplicate EDIDs.
+     * @throws BadRecord If duplicate EDIDs are found in the mod. This has been
+     * deemed an unacceptable mod format, and is thrown to promote the
+     * investigation and elimination of duplicate EDIDs.
      */
     public void export(String path) throws IOException, BadRecord {
 	File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");
@@ -627,6 +631,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 	if (bad) {
 	    throw new BadRecord("Duplicate EDIDs.  Check logs for a listing.");
+	}
+	
+	if (Consistency.automaticExport) {
+	    Consistency.export();
 	}
     }
 
@@ -1160,6 +1168,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	byte[] version;
 	int numRecords;
 	int nextID;
+	
+	static int firstAvailableID = 3426;  // first available ID on empty CS plugins
 
 	HEDR() {
 	    super(Type.HEDR);
@@ -1212,7 +1222,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	final public void clear() {
 	    version = Ln.parseHexString("D7 A3 70 3F", 4);
 	    numRecords = 0;
-	    nextID = 3426;  // first available ID on empty CS plugins
+	    nextID = firstAvailableID;  
 	}
 
 	@Override

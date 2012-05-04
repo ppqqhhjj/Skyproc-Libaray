@@ -116,7 +116,6 @@ class SkyProcTester {
     private static void setSkyProcGlobal() {
 	SPGlobal.createGlobalLog();
 	SPGlobal.pathToData = "../";
-	SPGlobal.consistency = false;
 	LDebug.timeElapsed = true;
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }

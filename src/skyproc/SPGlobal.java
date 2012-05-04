@@ -19,6 +19,13 @@ public class SPGlobal {
 
     static String header = "SPGlobal";
     static String gameName = "Skyrim";
+    static String pathToDebug = "SkyProcDebug/";
+    static Mod globalPatchOut;
+    static SPLogger log;
+    static SPDatabase globalDatabase = new SPDatabase();
+    /*
+     * Customizable Strings
+     */
     /**
      * Path and filename to look for the active plugins file.<br>
      * "/Skyrim/plugins.txt" by default.
@@ -37,11 +44,6 @@ public class SPGlobal {
      * also be used to store your own internal files.
      */
     public static String pathToInternalFiles = "Files/";
-    static String pathToDebug = "SkyProcDebug/";
-
-    public static String pathToDebug() {
-	return pathToDebug;
-    }
     /**
      * Skyproc will import and embed the language given by SPGlobal.language
      * every time a patch is created. To offer multi-language support, simply
@@ -54,12 +56,6 @@ public class SPGlobal {
      * automatically.
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
-    /**
-     * The logger object built into SkyProc. <br> See the levnifty JavaDocs for
-     * more information.
-     */
-    private static SPLogger log;
-    static SPDatabase globalDatabase = new SPDatabase();
 
     /**
      *
@@ -67,20 +63,6 @@ public class SPGlobal {
      */
     public static SPDatabase getDB() {
 	return globalDatabase;
-    }
-    static Mod globalPatchOut;
-    static Map<String, FormID> edidToForm = new HashMap<String, FormID>();
-    static Set<String> globalPatchEDIDS = new HashSet<String>();
-
-    static FormID getOldForm(String edid) {
-	if (SPGlobal.edidToForm.containsKey(edid)) {
-	    if (debugConsistencyTies && SPGlobal.logging()) {
-		SPGlobal.logSync(header, "Assigning old FormID " + SPGlobal.edidToForm.get(edid) + " for EDID " + edid);
-	    }
-	    return SPGlobal.edidToForm.get(edid);
-	} else {
-	    return null;
-	}
     }
 
     /**
@@ -95,72 +77,8 @@ public class SPGlobal {
 	}
 	globalPatchOut = patch;
 	modsToSkip.add(globalPatchOut.getInfo());
-
-	// Import old patch for consistency
-	if (consistency) {
-	    File f = new File(pathToData + patch.getName());
-	    if (!f.exists()) {
-		return;
-	    }
-	    SPImporter importer = new SPImporter();
-	    Mod consistencyPatch;
-	    try {
-		SPProgressBarPlug.progress.reset();
-		SPProgressBarPlug.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
-		SPImporter.getActiveModList();
-		SPGlobal.newSyncLog("Mod Import/ConsistencyPatch.txt");
-		boolean syncing = sync();
-		sync(true);
-		consistencyPatch = importer.importMod(globalPatchOut.modInfo, pathToData, false, GRUP_TYPE.values());
-		edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
-		sync(syncing);
-		mergetIntoKnownEDIDs(consistencyPatch);
-
-	    } catch (Exception ex) {
-		logException(ex);
-		JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency patch.<br><br>"
-			+ "This means the old patch could not properly be imported to match new records with their<br>"
-			+ "old formIDs.  This means your savegame has a good chance of having mismatched records.<br><br>"
-			+ "Option 1: Your old patch has been moved to the debug folder.  You can move that back to the data <br>"
-			+ "folder and use it. This essentially is 'reverting' to your original setup.<br>"
-			+ "Option 2: Just keep letting the program run and use the new patch.  It will have fresh FormIDs that<br>"
-			+ " are unrelated with past patches.  This may not be a problem depending on the situation.<br><br>"
-			+ "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in<br>"
-			+ "your debug folder) to Leviathan1753 for analysis.</html>");
-		File dest = new File(SPGlobal.pathToDebug + f.getName());
-		if (dest.isFile()) {
-		    dest.delete();
-		}
-		Ln.moveFile(f, dest, false);
-		logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
-	    }
-	}
     }
 
-    public static void mergetIntoKnownEDIDs(Mod mod) throws IOException {
-	for (GRUP g : mod.GRUPs.values()) {
-	    for (Object o : g) {
-		MajorRecord m = (MajorRecord) o;
-		// If src mod is the patch itself
-		if (m.getFormMaster().equals(mod.getInfo())) {
-		    // If EDID is not empty
-		    if (!m.getEDID().equals("")) {
-			// If already exists and not same FormID, problem
-			if (!edidToForm.containsKey(m.getEDID()) || edidToForm.get(m.getEDID()).equals(m.getForm())) {
-			    edidToForm.put(m.getEDID(), m.getForm());
-			    if (debugConsistencyImport && logging()) {
-				log("Consistency", m.toString());
-			    }
-			} else {
-			    logError("Consistency", "Record " + m.getFormStr() + " had an already existing EDID: " + m.getEDID());
-			}
-		    } else {
-			logError("Consistency", "Record " + m.getFormStr() + " didn't have an EDID.");
-		    }
-		}
-	    }
-	}
-    }
 
     /**
      *
@@ -399,16 +317,11 @@ public class SPGlobal {
 	} catch (IOException ex) {
 	}
     }
-    // Flag globals
-    /**
-     * If on, the Global Patch assigned will be imported in, and its
-     * EDID<->FormID assignments recorded. Any records in the new patch that
-     * match EDIDs with the old patch will receive the same FormID. This is
-     * meant to provide "consistency" so that rerunning the patcher with new
-     * input doesn't jumble the FormIDs and ruin the referencing in someone's
-     * savegame.
-     */
-    public static boolean consistency = true;
+    
+    public static String pathToDebug() {
+	return pathToDebug;
+    }
+    
     // Debug Globals
     /**
      * This flag prints messages when records are tied to FormIDs from the last
