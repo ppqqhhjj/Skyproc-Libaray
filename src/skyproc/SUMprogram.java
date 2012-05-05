@@ -5,12 +5,18 @@
 package skyproc;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import lev.Ln;
 import lev.gui.LSaveFile;
-import skyproc.gui.SUMGUI;
 import skyproc.gui.SPMainMenuPanel;
 import skyproc.gui.SUM;
+import skyproc.gui.SUMGUI;
 
 /**
  *
@@ -18,17 +24,70 @@ import skyproc.gui.SUM;
  */
 public class SUMprogram implements SUM {
 
-    static SPMainMenuPanel mmenu;
-    
+    ArrayList<String> exclude;
+    SPMainMenuPanel mmenu;
+
+    SUMprogram() {
+	exclude = new ArrayList<String>(2);
+	exclude.add("SkyProc Unified Manager.jar");
+	exclude.add("skyproc.jar");
+    }
+
     public static void main(String[] args) throws Exception {
-	openGUI();
+	SUMprogram sum = new SUMprogram();
+	ArrayList<Class> hooks = sum.getHooks();
+	
+	sum.openGUI();
     }
-    
-    static void openGUI() {
+
+    void openGUI() {
 	mmenu = new SPMainMenuPanel();
-	SUMGUI.open(new SUMprogram());
+	SUMGUI.open(this);
     }
-    
+
+    ArrayList<Class> getHooks() {
+	ArrayList<File> jars = findJars(new File("../"));
+	ArrayList<Class> sumClasses = new ArrayList<Class>();
+
+	for (File jar : jars) {
+	    try {
+		for (Class c : Ln.loadClasses(jar)) {
+		    if (c.isInstance(SUM.class)) {
+			sumClasses.add(c);
+		    }
+		}
+	    } catch (MalformedURLException ex) {
+		SPGlobal.logException(ex);
+	    } catch (FileNotFoundException ex) {
+		SPGlobal.logException(ex);
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    } catch (ClassNotFoundException ex) {
+		SPGlobal.logException(ex);
+	    }
+	}
+
+	return sumClasses;
+    }
+
+    ArrayList<File> findJars(File dir) {
+	if (!dir.isDirectory()) {
+	    return new ArrayList<File>(0);
+	}
+	ArrayList<File> out = new ArrayList<File>();
+	for (File f : dir.listFiles()) {
+	    if (f.isDirectory()) {
+		out.addAll(findJars(f));
+	    } else {
+		if (f.getName().toUpperCase().endsWith(".jar")
+			&& !exclude.contains(f.getName().toUpperCase())) {
+		    out.add(f);
+		}
+	    }
+	}
+	return out;
+    }
+
     @Override
     public String getName() {
 	return "SkyProc Unified Manager";
@@ -110,6 +169,4 @@ public class SUMprogram implements SUM {
     @Override
     public void runChangesToPatch() throws Exception {
     }
-    
-//    class SUMclassLoader extends ClassLoader 
 }

@@ -16,7 +16,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lev.debug.LDebug;
 import lev.gui.*;
-import skyproc.GRUP_TYPE;
 import skyproc.SPGlobal;
 import skyproc.SPImporter;
 
@@ -58,7 +57,7 @@ public class SUMGUI extends JFrame {
 	super(hook.getName());
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	setResizable(false);
-	Dimension GUISIZE = new Dimension(954,658);
+	Dimension GUISIZE = new Dimension(954, 658);
 	setSize(GUISIZE);
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	setLocation(dim.width / 2 - GUISIZE.width / 2, dim.height / 2 - GUISIZE.height / 2);
@@ -183,6 +182,8 @@ public class SUMGUI extends JFrame {
 		    } else {
 			singleton = new SUMGUI();
 		    }
+		    progress.setGUIref(singleton);
+		    progress.moveToCorrectLocation();
 
 		    if (hook.hasSave()) {
 			hook.getSave().init();

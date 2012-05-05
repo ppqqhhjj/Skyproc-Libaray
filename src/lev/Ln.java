@@ -1,7 +1,12 @@
 package lev;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -1238,5 +1243,27 @@ public class Ln {
 	    int token = row + Integer.parseInt(stok.nextToken());
 	    tree.expandRow(token);
 	}
+    }
+
+    public static ArrayList<String> getClasses(File jarPath) throws FileNotFoundException, IOException {
+	JarEntry jarEntry;
+	JarInputStream jarFile = new JarInputStream(new FileInputStream(jarPath));
+	ArrayList<String> out = new ArrayList<String>();
+	while ((jarEntry = jarFile.getNextJarEntry()) != null) {
+	    if (jarEntry.getName().endsWith(".class")) {
+		out.add(jarEntry.getName());
+	    }
+	}
+	return out;
+    }
+
+    public static ArrayList<Class> loadClasses(File jarPath) throws MalformedURLException, FileNotFoundException, IOException, ClassNotFoundException {
+	ArrayList<String> classPaths = getClasses(jarPath);
+	ArrayList<Class> out = new ArrayList<Class>(classPaths.size());
+	ClassLoader loader = new URLClassLoader(new URL[]{jarPath.toURI().toURL()});
+	for (String s : classPaths) {
+	    out.add(loader.loadClass(s));
+	}
+	return out;
     }
 }
