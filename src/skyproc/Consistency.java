@@ -4,16 +4,16 @@
  */
 package skyproc;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lev.Ln;
+import skyproc.MajorRecord.Mask;
 import skyproc.gui.SPProgressBarPlug;
 
 /**
@@ -26,7 +26,8 @@ class Consistency {
     static Map<String, FormID> edidToForm = new HashMap<String, FormID>();
     static Set<FormID> IDs = new HashSet<FormID>();
     static Set<FormID> newIDs = new HashSet<FormID>();
-    static File consistencyFile = new File(SPGlobal.pathToInternalFiles + "Consistency.txt");
+    static File consistencyFile = new File(SPGlobal.pathToInternalFiles + "Consistency");
+    static boolean imported = false;
     static boolean cleaned = false;
     static boolean automaticExport = true;
 
@@ -75,13 +76,19 @@ class Consistency {
 	}
     }
 
-    void importOldPatch(Mod patch) {
+    static void importPatch(Mod patch) {
 
 	File f = new File(SPGlobal.pathToData + patch.getName());
 	if (!f.exists()) {
 	    return;
 	}
 	SPImporter importer = new SPImporter();
+	// Only import EDIDs
+	for (GRUP_TYPE g : GRUP_TYPE.values()) {
+	    Mask m = MajorRecord.getMask(Type.toRecord(g));
+	    m.allow(Type.EDID);
+	    importer.addMask(m);
+	}
 	Mod consistencyPatch;
 	try {
 	    SPProgressBarPlug.progress.reset();
@@ -97,6 +104,12 @@ class Consistency {
 
 	} catch (Exception ex) {
 	    SPGlobal.logException(ex);
+	    File dest = new File(SPGlobal.pathToDebug + f.getName());
+	    if (dest.isFile()) {
+		dest.delete();
+	    }
+	    Ln.moveFile(f, dest, false);
+	    SPGlobal.logError("SPGlobal", "Error importing consistency patch: " + patch.getName());
 	    JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency patch.<br><br>"
 		    + "This means the old patch could not properly be imported to match new records with their<br>"
 		    + "old formIDs.  This means your savegame has a good chance of having mismatched records.<br><br>"
@@ -106,12 +119,6 @@ class Consistency {
 		    + " are unrelated with past patches.  This may not be a problem depending on the situation.<br><br>"
 		    + "Either way, it would be greatly appreciated if you sent the failed consistency patch (now located in<br>"
 		    + "your debug folder) to Leviathan1753 for analysis.</html>");
-	    File dest = new File(SPGlobal.pathToDebug + f.getName());
-	    if (dest.isFile()) {
-		dest.delete();
-	    }
-	    Ln.moveFile(f, dest, false);
-	    SPGlobal.logError("SPGlobal", "Error importing global consistency patch: " + patch.getName());
 	}
     }
 
@@ -136,19 +143,78 @@ class Consistency {
 	}
 	return edid;
     }
-    
-    static void addEntry (String edid, FormID id) {
+
+    static void addEntry(String edid, FormID id) {
 	edidToForm.put(edid, id);
 	IDs.add(id);
     }
-    
-    static void export() throws IOException {
-	BufferedWriter out = new BufferedWriter(new FileWriter(consistencyFile));
-	for (String s : edidToForm.keySet()) {
-	    if (newIDs.contains(edidToForm.get(s))) {
-		out.write(s + " " + edidToForm.get(s) + "\n");
+
+    static void importConsistency() {
+	if (SPGlobal.logging()) {
+	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Importing Consistency");
+	}
+	if (!imported) {
+	    imported = true;
+	    try {
+		if (consistencyFile.isFile()) {
+		    BufferedReader in = new BufferedReader(new FileReader(consistencyFile));
+		    while (in.ready()) {
+			String EDID = in.readLine();
+			String form = in.readLine();
+			edidToForm.put(EDID, new FormID(form));
+		    }
+		    in.close();
+		} else {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Importing Old Patch");
+		    }
+		    // If old system of keeping consistency in-patch, we want to import that.
+		    importPatch(SPGlobal.getGlobalPatch());
+		}
+		// Add imported formids to the list of ids to be exported
+		for (FormID f : edidToForm.values()) {
+		    newIDs.add(f);
+		}
+	    } catch (Exception ex) {
+		SPGlobal.logException(ex);
+		JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency information.<br><br>"
+			+ "This means your savegame has a good chance of having mismatched records.<br><br>"
+			+ "It would be greatly appreciated if you sent the failed consistency file located in<br>"
+			+ "Files/ to Leviathan1753 for analysis.</html>");
 	    }
 	}
-	out.close();
+    }
+
+    static void export() {
+	if (SPGlobal.logging()) {
+	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Exporting Consistency file.");
+	}
+	BufferedWriter out = null;
+	try {
+	    File tmp = new File(consistencyFile.getPath() + "Tmp");
+	    out = new BufferedWriter(new FileWriter(tmp));
+	    for (String s : edidToForm.keySet()) {
+		if (newIDs.contains(edidToForm.get(s))) {
+		    out.write(s + "\n" + edidToForm.get(s) + "\n");
+		}
+	    }
+	    out.close();
+	    if (consistencyFile.isFile()) {
+		consistencyFile.delete();
+	    }
+	    tmp.renameTo(consistencyFile);
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Error exporting Consistency file.");
+	    JOptionPane.showMessageDialog(null, "<html>There was an error exporting the consistency information.<br><br>"
+			+ "This means your savegame has a good chance of having mismatched records the next<br>"
+		        + "time you run the patcher.</html>");
+	} finally {
+	    try {
+		out.close();
+	    } catch (IOException ex) {
+		Logger.getLogger(Consistency.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
     }
 }

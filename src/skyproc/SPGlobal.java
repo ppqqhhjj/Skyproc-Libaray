@@ -77,8 +77,8 @@ public class SPGlobal {
 	}
 	globalPatchOut = patch;
 	modsToSkip.add(globalPatchOut.getInfo());
+	Consistency.importConsistency();
     }
-
 
     /**
      *

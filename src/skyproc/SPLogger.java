@@ -18,6 +18,7 @@ class SPLogger extends LLogger {
     public SPLogger (String in) {
         super(in);
         addSpecial(SpecialTypes.BLOCKED, "Blocked Records.txt");
+        addSpecial(PrivateTypes.CONSISTENCY, "Consistency.txt");
     }
 
     /**
@@ -29,5 +30,9 @@ class SPLogger extends LLogger {
 	 * A logstream used for logging which records have been skipped/blockec.
 	 */
 	BLOCKED;
+    }
+    
+    static enum PrivateTypes {
+	CONSISTENCY;
     }
 }

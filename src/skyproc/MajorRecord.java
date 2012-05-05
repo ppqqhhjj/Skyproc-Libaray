@@ -2,7 +2,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.SubStringPointer.Files;
@@ -34,6 +36,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	this();
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
+	Consistency.addEntry(getEDID(), ID);
 	modToOriginateFrom.addRecordSilent(this);
     }
 
@@ -64,6 +67,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
 	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
+	Consistency.addEntry(getEDID(), ID);
 	return out;
     }
 
@@ -96,11 +100,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	if (getNextType(in) == Type.EDID) {
 	    EDID.parseData(EDID.extractRecordData(in));
+	    Consistency.addEntry(EDID.print(), ID);
 	}
-
-        if (EDID.print().equals("dunBluePalaceWingEncGoatDomestic")) {
-            int wer = 32;
-        }
 
 	importSubRecords(in, mask);
 	subRecords.printSummary();
