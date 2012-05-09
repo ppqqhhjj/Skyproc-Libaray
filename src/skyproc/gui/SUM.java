@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import lev.gui.LSaveFile;
 import skyproc.GRUP_TYPE;
 import skyproc.Mod;
+import skyproc.ModListing;
 
 /**
  *
@@ -29,6 +30,7 @@ public interface SUM {
     public boolean hasSave();
     public LSaveFile getSave();
     public String getVersion();
+    public ModListing getListing();
     public Mod getExportPatch();
     public Color getHeaderColor();
     public void runChangesToPatch() throws Exception ;

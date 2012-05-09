@@ -87,6 +87,7 @@ public class SPGlobal {
     public static Mod getGlobalPatch() {
 	return globalPatchOut;
     }
+    
     static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
 
     /**

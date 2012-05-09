@@ -7,6 +7,8 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -1249,20 +1251,34 @@ public class Ln {
 	JarEntry jarEntry;
 	JarInputStream jarFile = new JarInputStream(new FileInputStream(jarPath));
 	ArrayList<String> out = new ArrayList<String>();
+	String name;
 	while ((jarEntry = jarFile.getNextJarEntry()) != null) {
-	    if (jarEntry.getName().endsWith(".class")) {
-		out.add(jarEntry.getName());
+	    name = jarEntry.getName();
+	    if (name.endsWith(".class") && !name.contains("$")) {
+		name = name.substring(0, name.indexOf(".class"));
+		name = name.replaceAll("/", ".");
+		out.add(name);
 	    }
 	}
 	return out;
     }
 
-    public static ArrayList<Class> loadClasses(File jarPath) throws MalformedURLException, FileNotFoundException, IOException, ClassNotFoundException {
+    public static ArrayList<Class> loadClasses(File jarPath, boolean skipBad) throws MalformedURLException, FileNotFoundException, IOException, ClassNotFoundException {
 	ArrayList<String> classPaths = getClasses(jarPath);
 	ArrayList<Class> out = new ArrayList<Class>(classPaths.size());
 	ClassLoader loader = new URLClassLoader(new URL[]{jarPath.toURI().toURL()});
 	for (String s : classPaths) {
-	    out.add(loader.loadClass(s));
+	    try {
+		out.add(loader.loadClass(s));
+	    } catch (ClassNotFoundException ex) {
+		if (!skipBad) {
+		    throw ex;
+		}
+	    } catch (NoClassDefFoundError ex) {
+		if (!skipBad) {
+		    throw ex;
+		}
+	    }
 	}
 	return out;
     }

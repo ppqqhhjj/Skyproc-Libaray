@@ -4,9 +4,12 @@
  */
 package lev.gui;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.swing.JOptionPane;
+import skyproc.SPGlobal;
 
 /**
  *
@@ -54,9 +57,62 @@ public abstract class LSaveFile {
     protected void initHelp() {
     }
 
-    public abstract void readInSettings();
+    public void readInSettings() {
+	File f = new File(SPGlobal.pathToInternalFiles + "Savefile");
+	SPGlobal.log("SaveFile Import", "Starting import");
+	if (f.exists()) {
+	    try {
+		BufferedReader input = new BufferedReader(new FileReader(f));
+		input.readLine();  //title
+		String inStr;
+		String settingTitle;
+		while (input.ready()) {
+		    inStr = input.readLine();
+		    settingTitle = inStr.substring(4, inStr.indexOf(" to "));
+		    for (Enum s : saveSettings.keySet()) {
+			if (saveSettings.containsKey(s)) {
+			    if (saveSettings.get(s).getTitle().equals(settingTitle)) {
+				saveSettings.get(s).readSetting(inStr);
+				curSettings.get(s).readSetting(inStr);
+			    }
+			}
+		    }
+		}
 
-    public abstract void saveToFile();
+	    } catch (Exception e) {
+		JOptionPane.showMessageDialog(null, "Error in reading in save file. Reverting to default settings.");
+		init();
+	    }
+	}
+    }
+
+    public void saveToFile() {
+	
+	File f = new File(SPGlobal.pathToInternalFiles);
+	if (!f.isDirectory()) {
+	    f.mkdirs();
+	}
+	f = new File(SPGlobal.pathToInternalFiles + "Savefile");
+	if (f.isFile()) {
+	    f.delete();
+	}
+
+	try {
+	    BufferedWriter output = new BufferedWriter(new FileWriter(f));
+	    output.write("Savefile used for the application.\n");
+	    for (Enum s : curSettings.keySet()) {
+		if (!curSettings.get(s).get().equals("")) {
+		    SPGlobal.log("SaveFile Export", "Exporting to savefile: " + curSettings.get(s).getTitle() + " = " + curSettings.get(s));
+		    curSettings.get(s).write(output);
+		} else {
+		    defaultSettings.get(s).write(output);
+		}
+	    }
+	    output.close();
+	} catch (java.io.IOException e) {
+	    JOptionPane.showMessageDialog(null, "The application couldn't open the save file output stream.  Your settings were not saved.");
+	}
+    }
 
     protected void Add(Map<Enum, Setting> m, Enum type, Setting s) {
 	m.put(type, s);

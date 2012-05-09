@@ -30,8 +30,8 @@ public class SUMGUI extends JFrame {
     public final static Rectangle leftDimensions = new Rectangle(0, 0, 299, fullDimensions.height - 28); // For status update
     public final static Rectangle middleDimensions = new Rectangle(leftDimensions.x + leftDimensions.width + 7, 0, 330, fullDimensions.height);
     public final static Rectangle rightDimensions = new Rectangle(middleDimensions.x + middleDimensions.width + 7, 0, 305, fullDimensions.height);
-    public final static Rectangle middleRightDimensions = new Rectangle(leftDimensions.x + leftDimensions.width + 7, 0, middleDimensions.width + rightDimensions.width + 7, fullDimensions.height);
-    public final static Rectangle middleLeftDimensions = new Rectangle(0, 0, leftDimensions.width + middleDimensions.width, middleDimensions.height);
+    public final static Rectangle middleRightDimensions = new Rectangle(middleDimensions.x, 0, rightDimensions.x + rightDimensions.width, fullDimensions.height);
+    public final static Rectangle middleLeftDimensions = new Rectangle(0, 0, middleDimensions.x + middleDimensions.width, middleDimensions.height);
     static final Color light = new Color(238, 233, 204);
     static final Color lightGray = new Color(190, 190, 190);
     static final Color darkGray = new Color(110, 110, 110);
@@ -171,12 +171,12 @@ public class SUMGUI extends JFrame {
     }
 
     public static void open(final SUM hook) {
+	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
 	    public void run() {
 		if (singleton == null) {
-		    SUMGUI.hook = hook;
 		    if (hook.hasCustomMenu()) {
 			singleton = hook.getCustomMenu();
 		    } else {

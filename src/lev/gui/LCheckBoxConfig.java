@@ -20,7 +20,7 @@ public class LCheckBoxConfig extends LUserSetting {
 
     public LSpecialCheckBox cbox;
     public LButton button;
-    public static String buttonText = "Config";
+    public static String buttonText = "Open";
     public static int spacing = 18;
 
     protected LCheckBoxConfig (String title_) {

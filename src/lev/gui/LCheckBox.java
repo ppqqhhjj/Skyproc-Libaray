@@ -36,7 +36,7 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	cbox = new JCheckBox();
 	cbox.setSize(cbox.getPreferredSize());
 	cbox.setOpaque(false);
-	cbox.setLocation(titleLabel.getWidth() + spacing, 5);
+	cbox.setLocation(titleLabel.getWidth() + spacing, 0);
 	cbox.addChangeListener(new underlingChangeHandler());
 	cbox.addActionListener(new underlingActionHandler());
 

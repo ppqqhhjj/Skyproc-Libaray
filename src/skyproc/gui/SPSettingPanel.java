@@ -26,7 +26,7 @@ public abstract class SPSettingPanel extends LPanel {
     protected LButton defaults = new LButton("Set to Default");
     protected LButton save = new LButton("Revert to Saved");
     protected SPMainMenuPanel parent;
-    public int spacing = 12;
+    protected int spacing = 12;
     protected Point last;
     protected LLabel header;
     protected ArrayList<LUserSetting> settings = new ArrayList<LUserSetting>();

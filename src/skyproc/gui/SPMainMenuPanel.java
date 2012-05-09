@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import lev.gui.LImagePane;
@@ -34,6 +35,8 @@ public class SPMainMenuPanel extends JPanel {
     protected LPanel menu = new LPanel(SUMGUI.leftDimensions);
     protected Close closeHandler = new Close();
     protected Open openHandler = new Open();
+    ArrayList<SPSettingPanel> panels = new ArrayList<SPSettingPanel>();
+    SPSettingPanel activePanel;
 
     public SPMainMenuPanel(Color menuColor) {
 	this.setLayout(null);
@@ -60,11 +63,11 @@ public class SPMainMenuPanel extends JPanel {
 	}
     }
 
-    public void setVersion (String version) {
+    public void setVersion(String version) {
 	setVersion(version, new Point(customLogo.getX(), customLogo.getHeight() + customLogo.getY() + 3));
     }
 
-    public void setVersion (String version, Point location) {
+    public void setVersion(String version, Point location) {
 	this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
 	this.version.setLocation(location);
 	menu.Add(this.version);
@@ -79,9 +82,18 @@ public class SPMainMenuPanel extends JPanel {
     }
 
     public void openPanel(SPSettingPanel panel) {
-	this.removeAll();
-	add(menu);
-	add(panel);
+	if (activePanel != null) {
+	    activePanel.setVisible(false);
+	}
+	int index = panels.indexOf(panel);
+	if (index != -1) {
+	    activePanel = panels.get(index);
+	} else {
+	    panels.add(panel);
+	    activePanel = panel;
+	    add(panel);
+	}
+	activePanel.setVisible(true);
     }
 
     public ActionListener getOpenHandler() {
