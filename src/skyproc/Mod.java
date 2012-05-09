@@ -586,6 +586,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 	header.setNumRecords(numRecords());
 	if (logging()) {
+	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
+	    SPGlobal.sync(true);
 	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
 	}
 
@@ -615,8 +617,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPProgressBarPlug.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
 
 
-	// Check if any duplicate EDIDS
+	// Check if any duplicate EDIDS or FormIDS
 	Set<String> edids = new HashSet<String>();
+	Set<FormID> IDs = new HashSet<FormID>();
 	boolean bad = false;
 	for (GRUP g : GRUPs.values()) {
 	    for (Object o : g.listRecords) {
@@ -626,6 +629,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 		    bad = true;
 		} else {
 		    edids.add(m.getEDID());
+		}
+		if (IDs.contains(m.getForm())) {
+		    SPGlobal.logError("FormID Check", "Error! Duplicate FormID " + m);
+		    bad = true;
+		} else {
+		    IDs.add(m.getForm());
 		}
 	    }
 	}

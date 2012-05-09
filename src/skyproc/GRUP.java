@@ -158,13 +158,16 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
 	    }
 	    for (MajorRecord t : this) {
+		if (logging()) {
+		    logSync(this.toString(), t.toString());
+		}
 		t.export(out, srcMod);
 		SPProgressBarPlug.progress.incrementBar();
 	    }
 	}
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs(boolean deep) {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T item : listRecords) {
 	    out.addAll(item.allFormIDs(deep));
@@ -251,7 +254,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	}
     }
 
-    void standardizeMaster (T item) {
+    void standardizeMaster(T item) {
 	ArrayList<FormID> set = item.allFormIDs(true);
 	for (FormID id : set) {
 	    id.standardize(srcMod);

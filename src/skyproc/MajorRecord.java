@@ -67,7 +67,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
 	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
-	Consistency.addEntry(getEDID(), ID);
+	Consistency.addEntry(out.getEDID(), ID);
+	Consistency.newIDs.add(ID);
 	return out;
     }
 
