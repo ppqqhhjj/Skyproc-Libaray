@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
 public class KeywordSet extends SubRecord {
 
     private static final Type[] types = {Type.KSIZ, Type.KWDA};
-    SubData counter = new SubData(Type.KSIZ);
+    SubData counter = new SubData(Type.KSIZ, 0);
     SubFormArray keywords = new SubFormArray(Type.KWDA, 0);
 
     KeywordSet() {
@@ -111,4 +111,31 @@ public class KeywordSet extends SubRecord {
 	    counter.modValue(-1);
 	}
     }
+
+    public boolean containedIn(KeywordSet set) {
+	return keywords.containedIn(set.keywords);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final KeywordSet other = (KeywordSet) obj;
+	if (this.keywords != other.keywords && (this.keywords == null || !this.keywords.equals(other.keywords))) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 5;
+	hash = 89 * hash + (this.keywords != null ? this.keywords.hashCode() : 0);
+	return hash;
+    }
+
 }

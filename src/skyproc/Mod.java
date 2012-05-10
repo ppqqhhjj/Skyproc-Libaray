@@ -624,6 +624,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	for (GRUP g : GRUPs.values()) {
 	    for (Object o : g.listRecords) {
 		MajorRecord m = (MajorRecord) o;
+		if (SPGlobal.logging()) {
+		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "Export", "Exporting " + m);
+		}
 		if (edids.contains(m.getEDID())) {
 		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
 		    bad = true;
@@ -639,7 +642,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    }
 	}
 	if (bad) {
-	    throw new BadRecord("Duplicate EDIDs.  Check logs for a listing.");
+	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
 	}
 	
 	if (Consistency.automaticExport) {

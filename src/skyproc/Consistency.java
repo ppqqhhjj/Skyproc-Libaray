@@ -161,7 +161,12 @@ class Consistency {
 		    while (in.ready()) {
 			String EDID = in.readLine();
 			String form = in.readLine();
-			edidToForm.put(EDID, new FormID(form));
+			FormID ID = new FormID(form);
+			edidToForm.put(EDID, ID);
+			IDs.add(ID);
+			if (SPGlobal.logging()) {
+			    SPGlobal.log("Import", form + " with " + EDID);
+			}
 		    }
 		    in.close();
 		} else {
@@ -194,9 +199,6 @@ class Consistency {
 	    File tmp = new File(consistencyFile.getPath() + "Tmp");
 	    out = new BufferedWriter(new FileWriter(tmp));
 	    for (String s : edidToForm.keySet()) {
-		if (s.equals("AV_StarXAVPackage_Draugr_Skin_STXDraugr15_ID_SkinDraugrMale01_armo")) {
-		    int wer = 234;
-		}
 		if (newIDs.contains(edidToForm.get(s))) {
 		    out.write(s + "\n" + edidToForm.get(s) + "\n");
 		}

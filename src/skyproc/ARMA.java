@@ -307,9 +307,6 @@ public class ARMA extends MajorRecord {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    if ("FalmerHelmetKhajiitAA".equals(getEDID())) {
-		int werw = 2;
-	    }
 	    out.write(malePriority, 1);
 	    out.write(femalePriority, 1);
 	    out.write(unknown, 4);

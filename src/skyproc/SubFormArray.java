@@ -114,4 +114,37 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     public void add (FormID id) {
 	IDs.add(id);
     }
+
+    public boolean containedIn (SubFormArray in) {
+	for (FormID id : IDs) {
+	    if (!in.IDs.contains(id)) {
+		return false;
+	    }
+	}
+	return true;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubFormArray other = (SubFormArray) obj;
+	if (this.IDs != other.IDs && (this.IDs == null || !this.IDs.equals(other.IDs))) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 3;
+	hash = 17 * hash + (this.IDs != null ? this.IDs.hashCode() : 0);
+	return hash;
+    }
+    
+    
 }

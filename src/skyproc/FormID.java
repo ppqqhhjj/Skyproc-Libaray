@@ -238,6 +238,10 @@ public class FormID implements Comparable, Serializable {
 	return true;
     }
 
+    public boolean isNull() {
+	return equals(FormID.NULL);
+    }
+    
     /**
      *
      * @return

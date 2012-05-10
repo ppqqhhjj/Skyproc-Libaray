@@ -224,9 +224,15 @@ public class SPGlobal {
 	}
     }
 
-    static void logSpecial(Enum e, String header, String... print) {
+    public static void logSpecial(Enum e, String header, String... print) {
 	if (log != null) {
 	    SPGlobal.log.logSpecial(e, header, print);
+	}
+    }
+    
+    public static void newSpecialLog (Enum e, String logName) {
+	if (log != null) {
+	    SPGlobal.log.addSpecial(e, logName);
 	}
     }
 

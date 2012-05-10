@@ -68,6 +68,19 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
 	return entries.toPublic();
     }
 
+    public ArrayList<LVLO> getFlattenedEntries() {
+	ArrayList<LVLO> out = new ArrayList<LVLO>();
+	for (LVLO entry : getEntries()) {
+	    MajorRecord o = SPDatabase.getMajor(entry.getForm());
+	    if (o instanceof LeveledRecord) {
+		out.addAll(((LeveledRecord)o).getFlattenedEntries());
+	    } else {
+		out.add(entry);
+	    }
+	}
+	return out;
+    }
+    
     /**
      * Adds the desired entry to the LVLN. Duplicates are accepted.
      *

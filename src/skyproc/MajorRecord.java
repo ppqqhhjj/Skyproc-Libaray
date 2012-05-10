@@ -37,6 +37,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	Consistency.addEntry(getEDID(), ID);
+	Consistency.newIDs.add(ID);
 	modToOriginateFrom.addRecordSilent(this);
     }
 
@@ -67,8 +68,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
 	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
-	Consistency.addEntry(out.getEDID(), ID);
-	Consistency.newIDs.add(ID);
+	Consistency.addEntry(out.getEDID(), out.getForm());
+	Consistency.newIDs.add(out.getForm());
 	return out;
     }
 
