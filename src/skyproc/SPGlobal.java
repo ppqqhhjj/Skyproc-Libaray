@@ -56,7 +56,9 @@ public class SPGlobal {
      * automatically.
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
-
+    
+    public static String SUMpath = "";
+    
     /**
      *
      * @return The database defined as the Global Database
@@ -96,6 +98,31 @@ public class SPGlobal {
      */
     public static void addModToSkip(ModListing m) {
 	modsToSkip.add(m);
+    }
+    
+    /**
+     * Querys the Global Database and returns whether the FormID exists.<br>
+     * NOTE: it is recommended you use the version that only searches in
+     * specific GRUPs for speed reasons.
+     *
+     * @param query FormID to look for.
+     * @return True if FormID exists in the database.
+     */
+    static public boolean queryMajor(FormID query) {
+	return SPDatabase.queryMajor(query, SPGlobal.getDB());
+    }
+    
+    
+    /**
+     * Querys the Global Database and returns whether the FormID exists. It
+     * limits its search to the given GRUP types for speed reasons.
+     *
+     * @param query FormID to look for.
+     * @param grup_types GRUPs to look in.
+     * @return True if FormID exists in the database.
+     */
+    static public boolean queryMajor(FormID query, GRUP_TYPE... grup_types) {
+	return SPDatabase.queryMajor(query, SPGlobal.getDB(), grup_types);
     }
 
     /**

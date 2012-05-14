@@ -38,7 +38,6 @@ import skyproc.SPGlobal;
 public class SUMprogram implements SUM {
 
     ArrayList<String> exclude = new ArrayList<String>(2);
-    ArrayList<SUM> hooks = new ArrayList<SUM>();
     ArrayList<PatcherLink> links = new ArrayList<PatcherLink>();
     Set<GRUP_TYPE> importRequests = new HashSet<GRUP_TYPE>();
     // GUI
@@ -61,22 +60,17 @@ public class SUMprogram implements SUM {
 
 	openDebug();
 	saveFile.init();
-	
-	for (Class c : getHooks()) {
-	    SUM hook = (SUM) c.newInstance();
-	    hooks.add(hook);
-	}
-	
+	getHooks();
 	openGUI();
-	createLinks();
+	initLinkGUIs();
 
-	for (SUM hook : hooks) {
+	for (PatcherLink link : links) {
 	    // Compile all needed GRUPs
-	    importRequests.addAll(Arrays.asList(hook.importRequests()));
+	    importRequests.addAll(Arrays.asList(link.hook.importRequests()));
 	    // Block SUM patches from being imported)
-	    SPGlobal.addModToSkip(hook.getListing());
+	    SPGlobal.addModToSkip(link.hook.getListing());
 	}
-	
+
 	// Import mods at start
 	if (saveFile.getBool(SUMSettings.IMPORT_AT_START)) {
 	    SUMGUI.runThread();
@@ -93,7 +87,7 @@ public class SUMprogram implements SUM {
 	LDebug.timeElapsed = true;
 	LDebug.timeStamp = true;
     }
-    
+
     void openGUI() {
 	mmenu = new SPMainMenuPanel();
 
@@ -106,7 +100,7 @@ public class SUMprogram implements SUM {
 	SUMGUI.open(this);
     }
 
-    void createLinks() {
+    void initLinkGUIs() {
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -116,10 +110,10 @@ public class SUMprogram implements SUM {
 
 		    @Override
 		    public void run() {
-			for (SUM s : hooks) {
+			for (PatcherLink link : links) {
 			    try {
-				PatcherLink hook = new PatcherLink(s);
-				hookMenu.hookMenu.add(hook);
+				link.setup();
+				hookMenu.hookMenu.add(link);
 				hookMenu.revalidate();
 			    } catch (Exception ex) {
 				Logger.getLogger(SUMprogram.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,9 +125,8 @@ public class SUMprogram implements SUM {
 	});
     }
 
-    ArrayList<Class> getHooks() {
+    void getHooks() {
 	ArrayList<File> jars = findJars(new File("../"));
-	ArrayList<Class> sumClasses = new ArrayList<Class>();
 
 	for (File jar : jars) {
 	    try {
@@ -141,7 +134,7 @@ public class SUMprogram implements SUM {
 		for (Class c : classes) {
 		    Object tester = c.newInstance();
 		    if (tester instanceof SUM) {
-			sumClasses.add(c);
+			links.add(new PatcherLink((SUM) c.newInstance(), jar));
 		    }
 		}
 	    } catch (MalformedURLException ex) {
@@ -157,7 +150,6 @@ public class SUMprogram implements SUM {
 	    }
 	}
 
-	return sumClasses;
     }
 
     ArrayList<File> findJars(File dir) {
@@ -216,6 +208,7 @@ public class SUMprogram implements SUM {
     class OptionsMenu extends SPSettingPanel {
 
 	LCheckBox importOnStartup;
+	LCheckBox mergePatches;
 
 	OptionsMenu(SPMainMenuPanel parent_, LSaveFile save) {
 	    super("SUM Options", save, parent_, blue);
@@ -231,6 +224,12 @@ public class SUMprogram implements SUM {
 		last = setPlacement(importOnStartup, last);
 		AddSetting(importOnStartup);
 
+		mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
+		mergePatches.addShadow();
+		mergePatches.tie(SUMSettings.MERGE_PATCH, saveFile, SUMGUI.helpPanel, false);
+		last = setPlacement(mergePatches, last);
+		AddSetting(mergePatches);
+
 		alignRight();
 
 		return true;
@@ -245,11 +244,16 @@ public class SUMprogram implements SUM {
 	LLabel title;
 	JCheckBox cbox;
 	SUM hook;
+	File path;
 	JPanel menu;
 
-	PatcherLink(final SUM hook) {
+	PatcherLink(final SUM hook, final File path) {
 	    super();
 	    this.hook = hook;
+	    this.path = path;
+	}
+
+	final void setup() {
 	    setupGUI();
 	    setupHook();
 	}
@@ -347,11 +351,13 @@ public class SUMprogram implements SUM {
 	@Override
 	protected void init(Map<Enum, Setting> m) {
 	    Add(m, SUMSettings.IMPORT_AT_START, "Import At Start", false, false);
+	    Add(m, SUMSettings.MERGE_PATCH, "Merge Patches", false, false);
 	}
     }
 
     public enum SUMSettings {
 
+	MERGE_PATCH,
 	IMPORT_AT_START;
     }
 
@@ -438,5 +444,22 @@ public class SUMprogram implements SUM {
 
     @Override
     public void runChangesToPatch() throws Exception {
+	if (saveFile.getBool(SUMSettings.MERGE_PATCH)) {
+	    SPGlobal.setGlobalPatch(getExportPatch());
+	    for (PatcherLink link : links) {
+		SPGlobal.SUMpath = link.path.getParentFile().getAbsolutePath();
+		link.hook.runChangesToPatch();
+	    }
+	} else {
+	    for (int i = 0; i < links.size(); i++) {
+		PatcherLink link = links.get(i);
+		SPGlobal.SUMpath = link.path.getParentFile().getAbsolutePath() + "\\";
+		SPGlobal.setGlobalPatch(link.hook.getExportPatch());
+		link.hook.runChangesToPatch();
+		if (i < links.size() - 1) { // Let normal routines export last patch
+		    SPGlobal.getGlobalPatch().export();
+		}
+	    }
+	}
     }
 }

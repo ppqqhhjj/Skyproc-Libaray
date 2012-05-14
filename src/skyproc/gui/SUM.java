@@ -5,6 +5,7 @@
 package skyproc.gui;
 
 import java.awt.Color;
+import java.io.File;
 import java.net.URL;
 import javax.swing.JFrame;
 import lev.gui.LSaveFile;

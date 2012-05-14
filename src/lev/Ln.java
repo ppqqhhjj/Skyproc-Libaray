@@ -7,8 +7,6 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -61,7 +59,7 @@ public class Ln {
 	}
 	return obj;
     }
-
+    
     private static String space(Boolean left, Boolean concat, int spaces, char c, String... input) {
 	String output = "";
 	for (String x : input) {

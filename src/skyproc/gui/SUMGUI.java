@@ -243,6 +243,17 @@ public class SUMGUI extends JFrame {
 		}
 		if (exitRequested) {
 		    hook.runChangesToPatch();
+
+		    try {
+			// Export your custom patch.
+			SPGlobal.getGlobalPatch().export();
+		    } catch (Exception ex) {
+			// If something goes wrong, show an error message.
+			SPGlobal.logException(ex);
+			JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\nPlease contact Leviathan1753.");
+		    }
+
+		    SPProgressBarPlug.progress.done();
 		    exitProgram();
 		}
 	    } catch (Exception e) {

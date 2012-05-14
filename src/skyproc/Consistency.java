@@ -150,10 +150,10 @@ class Consistency {
     }
 
     static void importConsistency() {
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Importing Consistency");
-	}
 	if (!imported) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Importing Consistency");
+	    }
 	    imported = true;
 	    try {
 		if (consistencyFile.isFile()) {
@@ -212,8 +212,8 @@ class Consistency {
 	    SPGlobal.logException(ex);
 	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Error exporting Consistency file.");
 	    JOptionPane.showMessageDialog(null, "<html>There was an error exporting the consistency information.<br><br>"
-			+ "This means your savegame has a good chance of having mismatched records the next<br>"
-		        + "time you run the patcher.</html>");
+		    + "This means your savegame has a good chance of having mismatched records the next<br>"
+		    + "time you run the patcher.</html>");
 	} finally {
 	    try {
 		out.close();
