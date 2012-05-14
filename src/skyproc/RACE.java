@@ -4,14 +4,17 @@
  */
 package skyproc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LExporter;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
  * Race Records
+ *
  * @author Justin Swanson
  */
 public class RACE extends MajorRecordDescription {
@@ -27,7 +30,7 @@ public class RACE extends MajorRecordDescription {
      *
      */
     public KeywordSet keywords = new KeywordSet();
-    SubData DATA = new SubData(Type.DATA);
+    DATA DATA = new DATA();
     SubMarkerSet<MFNAMdata> MFNAM = new SubMarkerSet<MFNAMdata>(new MFNAMdata(), Type.MNAM, Type.FNAM);
     SubList<SubString> MTNMs = new SubList<SubString>(new SubString(Type.MTNM, false));
     SubFormArray VTCK = new SubFormArray(Type.VTCK, 2);
@@ -404,6 +407,46 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    static class DATA extends SubRecord {
+
+	byte[] fluff1 = new byte[16];
+	float maleHeight = 0;
+	float femaleHeight = 0;
+	byte[] fluff2 = new byte[104];
+
+	DATA() {
+	    super(Type.DATA);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(fluff1, 16);
+	    out.write(maleHeight);
+	    out.write(femaleHeight);
+	    out.write(fluff2, 104);
+	}
+
+	@Override
+	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    fluff1 = in.extract(16);
+	    maleHeight = in.extractFloat();
+	    femaleHeight = in.extractFloat();
+	    fluff2 = in.extract(104);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DATA();
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 128;
+	}
+    }
+
     // Get / set
     /**
      *
@@ -572,4 +615,21 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    public void setHeight(Gender gender, float value) {
+	switch (gender) {
+	    case MALE:
+		DATA.maleHeight = value;
+	    case FEMALE:
+		DATA.femaleHeight = value;
+	}
+    }
+
+    public float getHeight(Gender gender) {
+	switch (gender) {
+	    case MALE:
+		return DATA.maleHeight;
+	    default:
+		return DATA.femaleHeight;
+	}
+    }
 }
