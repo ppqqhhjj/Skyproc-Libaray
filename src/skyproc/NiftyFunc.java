@@ -28,6 +28,7 @@ public class NiftyFunc {
 	String name = "SP_" + uniqueID + "_" + script.name.data + "_attacher";
 	MGEF mgef = new MGEF(originateFrom, name + "_MGEF", name + "_MGEF");
 	mgef.scripts.addScript(script);
+	mgef.set(MGEF.SpellEffectFlag.HideInUI, true);
 	SPEL spel = new SPEL(originateFrom, name + "_SPEL");
 	spel.setSpellType(SPEL.SPELType.Ability);
 	spel.addMagicEffect(mgef);

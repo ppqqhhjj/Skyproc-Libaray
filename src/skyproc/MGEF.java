@@ -17,6 +17,7 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * A Magic Effect record
+ *
  * @author Justin Swanson
  */
 public class MGEF extends MajorRecordDescription {
@@ -90,7 +91,7 @@ public class MGEF extends MajorRecordDescription {
 	FormID relatedID = new FormID();
 	ActorValue skillType = ActorValue.UNKNOWN;
 	ActorValue resistanceAV = ActorValue.UNKNOWN;
-	byte[] unknown = {0x00, 0x00, 0x00,(byte)0x80};
+	byte[] unknown = {0x00, 0x00, 0x00, (byte) 0x80};
 	FormID lightID = new FormID();
 	float taperWeight = 0;
 	FormID hitShader = new FormID();
@@ -279,7 +280,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> allFormIDs(boolean deep) {
 	    if (deep) {
 		ArrayList<FormID> out = new ArrayList<FormID>(2);
 		out.add(relatedID);
@@ -352,7 +353,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> allFormIDs(boolean deep) {
 	    if (deep) {
 		ArrayList<FormID> out = new ArrayList<FormID>(2);
 		for (Sound s : sounds) {
@@ -447,7 +448,7 @@ public class MGEF extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	NoDeathDispel(28),;
+	NoDeathDispel(28);
 	int value;
 
 	SpellEffectFlag(int value) {
@@ -484,5 +485,13 @@ public class MGEF extends MajorRecordDescription {
 	 *
 	 */
 	OnHit
+    }
+
+    public void set(SpellEffectFlag flag, boolean on) {
+	DATA.flags.set(flag.value, on);
+    }
+
+    public boolean get(SpellEffectFlag flag) {
+	return DATA.flags.get(flag.value);
     }
 }
