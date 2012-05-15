@@ -4,6 +4,7 @@
  */
 package skyproc.gui;
 
+import skyproc.SkyProcTester;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -26,10 +27,7 @@ import javax.swing.SwingUtilities;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
-import skyproc.GRUP_TYPE;
-import skyproc.Mod;
-import skyproc.ModListing;
-import skyproc.SPGlobal;
+import skyproc.*;
 
 /**
  *
@@ -50,8 +48,19 @@ public class SUMprogram implements SUM {
     Font settingFont = new Font("Serif", Font.BOLD, 14);
 
     public static void main(String[] args) throws Exception {
-	SUMprogram sum = new SUMprogram();
-	sum.runProgram();
+	if (handleArgs(args)) {
+	    SUMprogram sum = new SUMprogram();
+	    sum.runProgram();
+	}
+    }
+
+   static boolean handleArgs(String[] args) {
+	ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
+	if (argsList.contains("-test")) {
+	    SkyProcTester.runTests();
+	    return false;
+	}
+	return true;
     }
 
     void runProgram() throws InstantiationException, IllegalAccessException {

@@ -122,7 +122,7 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
                 SPGlobal.logSync(nextType.toString(), "Record blocked by mask");
             }
         } else {
-            throw new BadRecord("Record doesn't know what to do with a " + nextType.toString() + " record.");
+            throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
         }
     }
 
