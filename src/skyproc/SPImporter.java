@@ -99,38 +99,7 @@ public class SPImporter {
 	    SPGlobal.newSyncLog("Get Active Mod List.txt");
 	    String header = "IMPORT MODS";
 	    BufferedReader ModFile;
-	    String dataFolder = System.getenv("LOCALAPPDATA");
-
-	    // If XP
-	    if (dataFolder == null) {
-		SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
-		dataFolder = System.getenv("APPDATA");
-
-		// If Messed Up
-		if (dataFolder == null) {
-		    SPGlobal.logError(header, "Can't locate local app data folder.");
-		    dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
-			    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
-		} else {
-
-		    SPGlobal.logSync(header, "APPDATA returned: ", dataFolder, "     Shaving off the \\Application Data.");
-		    dataFolder = dataFolder.substring(0, dataFolder.indexOf("\\Application Data"));
-		    SPGlobal.logSync(header, "path now reads: ", dataFolder, "     appending \\Local Settings\\Application Data");
-		    dataFolder = dataFolder + "\\Local Settings\\Application Data";
-		    SPGlobal.logSync(header, "path now reads: ", dataFolder);
-		    dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
-		    SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file found in: ", dataFolder);
-		}
-	    } else {
-		dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
-		SPGlobal.logSync(header, SPGlobal.gameName + " Plugin list file thought to be in: ", dataFolder);
-	    }
-
-	    File pluginListPath = new File(dataFolder);
-	    if (!pluginListPath.exists()) {
-		dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
-			+ "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
-	    }
+	    String dataFolder = SPGlobal.getPluginsTxt();
 
 	    //Open Plugin file
 	    ModFile = new BufferedReader(new FileReader(dataFolder));

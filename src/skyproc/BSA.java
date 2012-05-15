@@ -232,30 +232,10 @@ public class BSA {
 	if (resourceLoadOrder != null) {
 	    return;
 	}
-	File myDocuments = Ln.getMyDocuments();
+
 	ArrayList<String> resources = new ArrayList<String>();
-	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
-
-	// See if there's a manual override
-	File override = new File(SPGlobal.pathToInternalFiles + "Skyrim-INI-Location.txt");
-	if (override.exists()) {
-	    SPGlobal.log(header, "Skyrim.ini override file exists: " + override);
-	    BufferedReader in = new BufferedReader(new FileReader(override));
-	    File iniTmp = new File(in.readLine());
-	    if (iniTmp.exists()) {
-		SPGlobal.log(header, "Skyrim.ini location override: " + iniTmp);
-		ini = iniTmp;
-	    } else {
-		SPGlobal.log(header, "Skyrim.ini location override thought to be in: " + iniTmp + ", but it did not exist.");
-	    }
-	}
-
-	if (!ini.exists()) {
-	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
-	    ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
-	} else if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
-	}
+	File ini = SPGlobal.getSkyrimINI();
+	
 	if (SPGlobal.logging()) {
 	    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
 	}
