@@ -65,6 +65,7 @@ public enum GRUP_TYPE {
      */
     LVLN,
     LVLI,
+    QUST,
     /**
      * Image Spaces
      */
@@ -85,5 +86,14 @@ public enum GRUP_TYPE {
 
     static GRUP_TYPE toRecord (Enum e) {
 	return GRUP_TYPE.valueOf(e.toString());
+    }
+    
+    static boolean unfinished(GRUP_TYPE t) {
+	switch(t) {
+	    case QUST:
+		return true;
+	    default:
+		return false;
+	}
     }
 }

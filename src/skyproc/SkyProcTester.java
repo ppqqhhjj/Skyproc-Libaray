@@ -17,12 +17,12 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SkyProcTester {
+public class SkyProcTester {
 
     /**
      * @param args the command line arguments
      */
-    public static void runTests(String[] args) throws Exception {
+    public static void runTests() throws Exception {
 	setSkyProcGlobal();
 
 	try {
@@ -67,8 +67,8 @@ class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.AVIF};
-//	GRUP_TYPE[] types = GRUP_TYPE.values();
+//	GRUP_TYPE[] types = {GRUP_TYPE.AVIF};
+	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
@@ -115,7 +115,6 @@ class SkyProcTester {
 
     private static void setSkyProcGlobal() {
 	SPGlobal.createGlobalLog();
-	SPGlobal.pathToData = "../";
 	LDebug.timeElapsed = true;
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }

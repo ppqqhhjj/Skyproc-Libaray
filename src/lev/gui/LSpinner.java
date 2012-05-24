@@ -5,6 +5,7 @@
 package lev.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.FocusListener;
 import java.util.Map;
 import javax.swing.*;
@@ -53,10 +54,13 @@ public class LSpinner extends LUserSetting<Integer> {
 
     @Override
     public void addHelpHandler(boolean hoverListener) {
-	spinner.addFocusListener(new HelpFocusHandler());
-	if (hoverListener) {
-	    spinner.addMouseListener(new HelpMouseHandler());
+	HelpFocusHandler focus = new HelpFocusHandler();
+	HelpMouseHandler mouse = new HelpMouseHandler();
+	for (Component c : spinner.getComponents()) {
+	    c.addMouseListener(mouse);
 	}
+	spinner.addFocusListener(focus);
+	spinner.addMouseListener(mouse);
     }
 
     public void setValue(int in) {

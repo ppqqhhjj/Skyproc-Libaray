@@ -43,19 +43,16 @@ public abstract class LSaveFile {
 
     public void init() {
 	if (!initialized) {
-	    for (Map<Enum, Setting> e : sets) {
-		init(e);
-	    }
+	    initSettings();
 	    initHelp();
 	    readInSettings();
 	    initialized = true;
 	}
     }
 
-    protected abstract void init(Map<Enum, Setting> m);
+    protected abstract void initSettings();
 
-    protected void initHelp() {
-    }
+    protected abstract void initHelp();
 
     public void readInSettings() {
 	File f = new File(SPGlobal.pathToInternalFiles + "Savefile");
@@ -87,7 +84,7 @@ public abstract class LSaveFile {
     }
 
     public void saveToFile() {
-	
+
 	File f = new File(SPGlobal.pathToInternalFiles);
 	if (!f.isDirectory()) {
 	    f.mkdirs();
@@ -114,24 +111,26 @@ public abstract class LSaveFile {
 	}
     }
 
-    protected void Add(Map<Enum, Setting> m, Enum type, Setting s) {
-	m.put(type, s);
+    void Add(Enum type, Setting s) {
+	for (Map<Enum, Setting> m : sets) {
+	    m.put(type, s.copyOf());
+	}
     }
 
-    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Boolean b) {
-	Add(m, type, new SaveBool(title, b, inGame));
+    protected void Add(Enum type, String title, Boolean inGame, Boolean b) {
+	Add(type, new SaveBool(title, b, inGame));
     }
 
-    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, String s) {
-	Add(m, type, new SaveString(title, s, inGame));
+    protected void Add(Enum type, String title, Boolean inGame, String s) {
+	Add(type, new SaveString(title, s, inGame));
     }
 
-    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Integer i) {
-	Add(m, type, new SaveInt(title, i, inGame));
+    protected void Add(Enum type, String title, Boolean inGame, Integer i) {
+	Add(type, new SaveInt(title, i, inGame));
     }
 
-    protected void Add(Map<Enum, Setting> m, Enum type, String title, Boolean inGame, Float f) {
-	Add(m, type, new SaveFloat(title, f, inGame));
+    protected void Add(Enum type, String title, Boolean inGame, Float f) {
+	Add(type, new SaveFloat(title, f, inGame));
     }
 
     public static void copyTo(Map<Enum, Setting> from, Map<Enum, Setting> to) {
