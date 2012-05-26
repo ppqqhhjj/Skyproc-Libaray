@@ -39,6 +39,7 @@ public class RACE extends MajorRecordDescription {
     SubData TINL = new SubData(Type.TINL);
     SubData PNAM = new SubData(Type.PNAM);
     SubData UNAM = new SubData(Type.UNAM);
+    SubForm ATKR = new SubForm(Type.ATKR);
     SubList<ATKDpackage> ATKDs = new SubList<ATKDpackage>(new ATKDpackage());
     SubData NAM1 = new SubData(Type.NAM1);
     SubMarkerSet EGTrecords = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
@@ -85,6 +86,7 @@ public class RACE extends MajorRecordDescription {
 	subRecords.add(TINL);
 	subRecords.add(PNAM);
 	subRecords.add(UNAM);
+	subRecords.add(ATKR);
 	subRecords.add(ATKDs);
 	NAM1.forceExport(true);
 	subRecords.add(NAM1);

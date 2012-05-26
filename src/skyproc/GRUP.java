@@ -228,7 +228,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	if (logging()) {
 	    if (r.isValid()) {
 		logSync(toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
-		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
+		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r.getFormStr() + srcMod + ", reason: " + reason);
 	    } else {
 		logSync(toString(), "Caught a bad record, reason:" + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);

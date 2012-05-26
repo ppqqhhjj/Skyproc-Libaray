@@ -26,7 +26,7 @@ class Consistency {
     static Map<String, FormID> edidToForm = new HashMap<String, FormID>();
     static Set<FormID> IDs = new HashSet<FormID>();
     static Set<FormID> newIDs = new HashSet<FormID>();
-    static File consistencyFile = new File(SPGlobal.pathToInternalFiles + "Consistency");
+    static File consistencyFile;
     static boolean imported = false;
     static boolean cleaned = false;
     static boolean automaticExport = true;
@@ -149,6 +149,13 @@ class Consistency {
 	IDs.add(id);
     }
 
+    static void getConsistencyFile() throws FileNotFoundException, IOException {
+	if (consistencyFile == null) {
+	    File myDocs = SPGlobal.getSkyProcDocuments();
+	    consistencyFile = new File(myDocs.getPath() + "\\" + "Consistency");
+	}
+    }
+
     static void importConsistency() {
 	if (!imported) {
 	    if (SPGlobal.logging()) {
@@ -156,6 +163,7 @@ class Consistency {
 	    }
 	    imported = true;
 	    try {
+		getConsistencyFile();
 		if (consistencyFile.isFile()) {
 		    BufferedReader in = new BufferedReader(new FileReader(consistencyFile));
 		    while (in.ready()) {
@@ -196,6 +204,7 @@ class Consistency {
 	}
 	BufferedWriter out = null;
 	try {
+	    getConsistencyFile();
 	    File tmp = new File(consistencyFile.getPath() + "Tmp");
 	    out = new BufferedWriter(new FileWriter(tmp));
 	    for (String s : edidToForm.keySet()) {

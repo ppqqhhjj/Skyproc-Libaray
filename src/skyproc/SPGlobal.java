@@ -56,9 +56,18 @@ public class SPGlobal {
      * automatically.
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
-    
     public static String SUMpath = "";
-    
+    static File skyProcDocuments;
+
+    public static File getSkyProcDocuments() throws FileNotFoundException, IOException {
+	if (skyProcDocuments == null) {
+	    File myDocs = SPGlobal.getMyDocumentsSkyrimFolder();
+	    skyProcDocuments = new File (myDocs.getPath() + "\\SkyProc\\");
+	    skyProcDocuments.mkdirs();
+	}
+	return skyProcDocuments;
+    }
+
     /**
      *
      * @return The database defined as the Global Database
@@ -89,7 +98,6 @@ public class SPGlobal {
     public static Mod getGlobalPatch() {
 	return globalPatchOut;
     }
-    
     static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
 
     /**
@@ -99,7 +107,7 @@ public class SPGlobal {
     public static void addModToSkip(ModListing m) {
 	modsToSkip.add(m);
     }
-    
+
     /**
      * Querys the Global Database and returns whether the FormID exists.<br>
      * NOTE: it is recommended you use the version that only searches in
@@ -111,8 +119,7 @@ public class SPGlobal {
     static public boolean queryMajor(FormID query) {
 	return SPDatabase.queryMajor(query, SPGlobal.getDB());
     }
-    
-    
+
     /**
      * Querys the Global Database and returns whether the FormID exists. It
      * limits its search to the given GRUP types for speed reasons.
@@ -125,6 +132,77 @@ public class SPGlobal {
 	return SPDatabase.queryMajor(query, SPGlobal.getDB(), grup_types);
     }
 
+    static public File getMyDocumentsSkyrimFolder() throws FileNotFoundException, IOException {
+	return getSkyrimINI().getParentFile();
+    }
+
+    static public File getSkyrimINI() throws FileNotFoundException, IOException {
+	File myDocuments = Ln.getMyDocuments();
+	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
+
+	// See if there's a manual override
+	File override = new File(SPGlobal.pathToInternalFiles + "Skyrim-INI-Location.txt");
+	if (override.exists()) {
+	    SPGlobal.log(header, "Skyrim.ini override file exists: " + override);
+	    BufferedReader in = new BufferedReader(new FileReader(override));
+	    File iniTmp = new File(in.readLine());
+	    if (iniTmp.exists()) {
+		SPGlobal.log(header, "Skyrim.ini location override: " + iniTmp);
+		ini = iniTmp;
+	    } else {
+		SPGlobal.log(header, "Skyrim.ini location override thought to be in: " + iniTmp + ", but it did not exist.");
+	    }
+	}
+
+	if (!ini.exists()) {
+	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
+	    ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
+	} else if (SPGlobal.logging()) {
+	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
+	}
+	return ini;
+    }
+
+    static public String getPluginsTxt() throws FileNotFoundException, IOException {
+	String dataFolder = System.getenv("LOCALAPPDATA");
+
+	// If XP
+	if (dataFolder == null) {
+	    SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
+	    dataFolder = System.getenv("APPDATA");
+
+	    // If Messed Up
+	    if (dataFolder == null) {
+		SPGlobal.logError(header, "Can't locate local app data folder.");
+		dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+			+ "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
+	    } else {
+
+		SPGlobal.logSync(header, "APPDATA returned: ", dataFolder, "     Shaving off the \\Application Data.");
+		dataFolder = dataFolder.substring(0, dataFolder.indexOf("\\Application Data"));
+		SPGlobal.logSync(header, "path now reads: ", dataFolder, "     appending \\Local Settings\\Application Data");
+		dataFolder = dataFolder + "\\Local Settings\\Application Data";
+		SPGlobal.logSync(header, "path now reads: ", dataFolder);
+		dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
+		SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file found in: ", dataFolder);
+	    }
+	} else {
+	    dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
+	    SPGlobal.logSync(header, SPGlobal.gameName + " Plugin list file thought to be in: ", dataFolder);
+	}
+
+	File pluginListPath = new File(dataFolder);
+	if (!pluginListPath.exists()) {
+	    dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+		    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
+	}
+	return dataFolder;
+    }
+
+
+    /*
+     * Logging functions
+     */
     /**
      * Initializes the Debug Logs in a "SkyProcDebug/" folder, and allows you to
      * print messages to them.<br> Do this step early in your program.
@@ -256,8 +334,8 @@ public class SPGlobal {
 	    SPGlobal.log.logSpecial(e, header, print);
 	}
     }
-    
-    public static void newSpecialLog (Enum e, String logName) {
+
+    public static void newSpecialLog(Enum e, String logName) {
 	if (log != null) {
 	    SPGlobal.log.addSpecial(e, logName);
 	}
@@ -351,11 +429,10 @@ public class SPGlobal {
 	} catch (IOException ex) {
 	}
     }
-    
+
     public static String pathToDebug() {
 	return pathToDebug;
     }
-    
     // Debug Globals
     /**
      * This flag prints messages when records are tied to FormIDs from the last

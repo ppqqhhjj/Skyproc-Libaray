@@ -4,70 +4,48 @@
  */
 package skyproc;
 
-import skyproc.gui.SPProgressBarPlug;
-import skyproc.gui.SPDefaultGUI;
 import java.io.File;
 import java.io.IOException;
 import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
+import skyproc.*;
 import skyproc.exceptions.BadRecord;
+import skyproc.gui.SPDefaultGUI;
+import skyproc.gui.SPProgressBarPlug;
 
 /**
  *
  * @author Justin Swanson
  */
-class SkyProcTester {
+public class SkyProcTester {
 
     /**
      * @param args the command line arguments
      */
-    public static void runTests(String[] args) throws Exception {
+    public static void runTests() {
 	setSkyProcGlobal();
 
 	try {
 
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	    validate();
-//	    testFreshNewRecord(GRUP_TYPE.SPEL);
 	    gui.finished();
 
 	} catch (Exception e) {
-	    LDebug.wrapUp();
-	    throw e;
+	    SPGlobal.logException(e);
 	}
-
-
-	LDebug.wrapUp();
-    }
-
-    private static void testFreshNewRecord(GRUP_TYPE type) throws Exception {
-
-	SPImporter importer = new SPImporter();
-	SPGlobal.logging(false);
-	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, type);
-	SPGlobal.logging(true);
-	importer.importMod(new ModListing("CKReadIn.esp"), "Validation Files/", type);
-
-	Mod patch = new Mod(new ModListing("Test.esp"));
-	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
-	patch.setAuthor("DEFAULT");
-
-	patch.header.addMaster(new ModListing("Skyrim.esm"));
-	patch.header.addMaster(new ModListing("Update.esm"));
-
-	SPEL spel = new SPEL(patch, "AV_test");
-
-	patch.export();
-
-	Ln.validateCompare(SPGlobal.pathToData + "Test.esp", "Validation Files/CKReadIn.esp", 10);
+	try {
+	    LDebug.wrapUp();
+	} catch (IOException ex) {
+	}
     }
 
     private static void validate() throws Exception {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.AVIF};
+	GRUP_TYPE[] types = {GRUP_TYPE.RACE};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
