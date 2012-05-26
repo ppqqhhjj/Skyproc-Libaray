@@ -114,10 +114,4 @@ public class NiftyFunc {
 	return null;
     }
 
-    public static QUST makeScriptQuest(Mod originateFrom, ScriptRef script) {
-	QUST quest = new QUST(originateFrom, script.getName() + "_qust");
-	quest.scripts.addScript(script);
-	quest.FULL.setText(script.getName() + " Quest");
-	return quest;
-    }
 }

@@ -844,9 +844,6 @@ public enum Type {
     AVIF,
     AVSK,
 
-    QUST,
-    NEXT,
-    
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags
