@@ -465,7 +465,9 @@ public class SPImporter {
 
 	    ArrayList<Type> typeTargets = new ArrayList<Type>();
 	    for (GRUP_TYPE g : grup_targets) {
-		typeTargets.add(Type.toRecord(g));
+		if (!GRUP_TYPE.unfinished(g)) {
+		    typeTargets.add(Type.toRecord(g));
+		}
 	    }
 
 	    Type result;

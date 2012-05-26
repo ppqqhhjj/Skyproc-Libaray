@@ -68,6 +68,7 @@ public enum GRUP_TYPE {
     /**
      * Image Spaces
      */
+    QUST,
     IMGS,
     /**
      * Form Lists
@@ -83,6 +84,15 @@ public enum GRUP_TYPE {
      */
     ARMA;
 
+    static boolean unfinished (GRUP_TYPE g) {
+	switch (g) {
+	    case QUST:
+		return true;
+	    default:
+		return false;
+	}
+    }
+    
     static GRUP_TYPE toRecord (Enum e) {
 	return GRUP_TYPE.valueOf(e.toString());
     }

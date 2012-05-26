@@ -43,6 +43,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
     GRUP<LVLN> leveledCreatures = new GRUP<LVLN>(this, new LVLN());
     GRUP<LVLI> leveledItems = new GRUP<LVLI>(this, new LVLI());
+    GRUP<QUST> quests = new GRUP<QUST>(this, new QUST());
     GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
     GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
     GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
@@ -118,6 +119,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(leveledCreatures.getContainedType(), leveledCreatures);
 	leveledItems.dateStamp = new byte[]{(byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0};
 	GRUPs.put(leveledItems.getContainedType(), leveledItems);
+	GRUPs.put(quests.getContainedType(), quests);
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
 	GRUPs.put(perks.getContainedType(), perks);
