@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -49,9 +50,6 @@ class ScriptProperty extends Record {
 	this(name);
 	FormIDData tmp = new FormIDData();
 	tmp.id = id;
-	tmp.data = new byte[4];
-	tmp.data[2] = -1;
-	tmp.data[3] = -1;
 	data = tmp;
     }
 
@@ -60,6 +58,40 @@ class ScriptProperty extends Record {
 	FloatData tmp = new FloatData();
 	tmp.data = in;
 	data = tmp;
+    }
+    
+    public ScriptProperty(String name, Integer ... in) {
+	this(name);
+	IntegerArrayData tmp = new IntegerArrayData();
+	tmp.data = new ArrayList<Integer>(Arrays.asList(in));
+    }
+    
+    public ScriptProperty(String name, String ... in) {
+	this(name);
+	StringArrayData tmp = new StringArrayData();
+	tmp.data = new ArrayList<String>(Arrays.asList(in));
+    }
+    
+    public ScriptProperty(String name, Float ... in) {
+	this(name);
+	FloatArrayData tmp = new FloatArrayData();
+	tmp.data = new ArrayList<Float>(Arrays.asList(in));
+    }
+    
+    public ScriptProperty(String name, Boolean ... in) {
+	this(name);
+	BoolArrayData tmp = new BoolArrayData();
+	tmp.data = new ArrayList<Boolean>(Arrays.asList(in));
+    }
+    
+    public ScriptProperty(String name, FormID ... in) {
+	this(name);
+	FormArrayData tmp = new FormArrayData();
+	ArrayList<FormIDData> list = new ArrayList<FormIDData>(in.length);
+	for (FormID id : in) {
+	    list.add(new FormIDData(id));
+	}
+	tmp.data = list;
     }
 
     ScriptProperty(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -107,6 +139,21 @@ class ScriptProperty extends Record {
 		break;
 	    case Boolean:
 		data = new BooleanData();
+		break;
+	    case FormIDArr:
+		data = new FormArrayData();
+		break;
+	    case StringArr:
+		data = new StringArrayData();
+		break;
+	    case IntegerArr:
+		data = new IntegerArrayData();
+		break;
+	    case FloatArr:
+		data = new FloatArrayData();
+		break;
+	    case BooleanArr:
+		data = new BoolArrayData();
 		break;
 	    default:
 		if (logging()) {
@@ -342,6 +389,17 @@ class ScriptProperty extends Record {
 	byte[] data;
 	FormID id;
 
+	FormIDData() {
+	    data = new byte[4];
+	    data[2] = -1;
+	    data[3] = -1;
+	}
+	
+	FormIDData (FormID in) {
+	    this();
+	    id = in;
+	}
+
 	@Override
 	public void parseData(LShrinkArray in) {
 	    data = in.extract(4);
@@ -398,6 +456,223 @@ class ScriptProperty extends Record {
 	@Override
 	public String print() {
 	    return String.valueOf(data);
+	}
+    }
+
+    class IntegerArrayData implements ScriptData {
+
+	ArrayList<Integer> data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    int size = in.extractInt(4);
+	    data = new ArrayList<Integer>(size);
+	    for (int i = 0; i < size; i++) {
+		data.add(in.extractInt(4));
+	    }
+	}
+
+	@Override
+	public int getContentLength() {
+	    return data.size() * 4 + 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.size());
+	    for (Integer i : data) {
+		out.write(i);
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.IntegerArr;
+	}
+
+	@Override
+	public String print() {
+	    String out = "";
+	    for (Integer i : data) {
+		out += i + " ";
+	    }
+	    return out;
+	}
+    }
+
+    class StringArrayData implements ScriptData {
+
+	ArrayList<String> data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    int size = in.extractInt(4);
+	    data = new ArrayList<String>(size);
+	    for (int i = 0; i < size; i++) {
+		int stringSize = in.extractInt(2);
+		data.add(in.extractString(stringSize));
+	    }
+	}
+
+	@Override
+	public int getContentLength() {
+	    int out = data.size() * 2 + 4;
+	    for (String s : data) {
+		out += s.length();
+	    }
+	    return out;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.size());
+	    for (String i : data) {
+		out.write(i.length(), 2);
+		out.write(i);
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.StringArr;
+	}
+
+	@Override
+	public String print() {
+	    String out = "";
+	    for (String i : data) {
+		out += i + " ";
+	    }
+	    return out;
+	}
+    }
+
+    class FormArrayData implements ScriptData {
+
+	ArrayList<FormIDData> data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    int size = in.extractInt(4);
+	    data = new ArrayList<FormIDData>(size);
+	    for (int i = 0; i < size; i++) {
+		FormIDData id = new FormIDData();
+		id.parseData(in);
+		data.add(id);
+	    }
+	}
+
+	@Override
+	public int getContentLength() {
+	    return data.size() * 4 + 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.size());
+	    for (FormIDData i : data) {
+		i.export(out, srcMod);
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.FormIDArr;
+	}
+
+	@Override
+	public String print() {
+	    String out = "";
+	    for (FormIDData i : data) {
+		out += i.print() + " ";
+	    }
+	    return out;
+	}
+    }
+
+    class BoolArrayData implements ScriptData {
+
+	ArrayList<Boolean> data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    int size = in.extractInt(4);
+	    data = new ArrayList<Boolean>(size);
+	    for (int i = 0; i < size; i++) {
+		data.add(in.extractBool(1));
+	    }
+	}
+
+	@Override
+	public int getContentLength() {
+	    return data.size() + 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.size());
+	    for (Boolean i : data) {
+		if (i) {
+		    out.write(1, 1);
+		} else {
+		    out.write(0, 1);
+		}
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.BooleanArr;
+	}
+
+	@Override
+	public String print() {
+	    String out = "";
+	    for (Boolean i : data) {
+		out += i + " ";
+	    }
+	    return out;
+	}
+    }
+
+    class FloatArrayData implements ScriptData {
+
+	ArrayList<Float> data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    int size = in.extractInt(4);
+	    data = new ArrayList<Float>(size);
+	    for (int i = 0; i < size; i++) {
+		data.add(in.extractFloat());
+	    }
+	}
+
+	@Override
+	public int getContentLength() {
+	    return data.size() * 4 + 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.size());
+	    for (Float i : data) {
+		out.write(i);
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.FloatArr;
+	}
+
+	@Override
+	public String print() {
+	    String out = "";
+	    for (Float i : data) {
+		out += i + " ";
+	    }
+	    return out;
 	}
     }
 

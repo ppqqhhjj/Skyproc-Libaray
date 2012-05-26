@@ -253,6 +253,26 @@ public class ScriptRef extends Record implements Iterable<String> {
 	properties.add(new ScriptProperty(propertyName, floatProperty));
     }
 
+    void addProperty(String propertyName, Integer ... in) {
+	properties.add(new ScriptProperty(propertyName, in));
+    }
+    
+    void addProperty(String propertyName, Float ... in) {
+	properties.add(new ScriptProperty(propertyName, in));
+    }
+    
+    void addProperty(String propertyName, Boolean ... in) {
+	properties.add(new ScriptProperty(propertyName, in));
+    }
+    
+    void addProperty(String propertyName, FormID ... in) {
+	properties.add(new ScriptProperty(propertyName, in));
+    }
+    
+    void addProperty(String propertyName, String ... in) {
+	properties.add(new ScriptProperty(propertyName, in));
+    }
+    
     /**
      * Adds a boolean property to the script, checks for duplicates.
      *
