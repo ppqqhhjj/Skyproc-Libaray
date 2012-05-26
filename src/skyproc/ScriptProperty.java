@@ -24,9 +24,8 @@ class ScriptProperty extends Record {
     StringNonNull name = new StringNonNull();
     ScriptPropertyType type = ScriptPropertyType.Unknown;
     int unknown = 1;
-    int size = 0;  // 0 unless it's a string property, in which case + 2
     byte[] data;
-    FormID id = new FormID();
+    FormID id;
     private static final Type[] types = {Type.VMAD};
 
     ScriptProperty() {
@@ -69,13 +68,17 @@ class ScriptProperty extends Record {
     }
 
     void standardizeMasters(Mod srcMod) {
-	id.standardize(srcMod);
+	if (id != null) {
+	    id.standardize(srcMod);
+	}
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs(boolean deep) {
 	if (deep) {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
-	    out.add(id);
+	    ArrayList<FormID> out = new ArrayList<FormID>(0);
+	    if (id != null) {
+		out.add(id);
+	    }
 	    return out;
 	} else {
 	    return new ArrayList<FormID>(0);
@@ -93,11 +96,11 @@ class ScriptProperty extends Record {
 	switch (type) {
 	    case FormID:
 		data = in.extract(4);
+		id = new FormID();
 		id.setInternal(in.extract(4));
 		break;
 	    case String:
 		data = in.extract(in.extractInt(2));
-		size += 2;
 		break;
 	    case Integer:
 		data = in.extract(4);
@@ -181,10 +184,14 @@ class ScriptProperty extends Record {
     @Override
     int getContentLength(Mod srcMod) {
 	int out = name.getTotalLength(srcMod) + 2;
-	if (type == ScriptPropertyType.FormID) {
-	    out += id.getContentLength();
+	switch (type) {
+	    case FormID:
+		out += id.getContentLength();
+		break;
+	    case String:
+		out += 2;
 	}
-	return out + data.length + size;
+	return out + data.length;
     }
 
     @Override
@@ -221,16 +228,14 @@ class ScriptProperty extends Record {
 	StringArr(12),
 	IntegerArr(13),
 	FloatArr(14),
-	BooleanArr(15)
-	;
-
+	BooleanArr(15);
 	int value;
 
-	ScriptPropertyType (int value ) {
+	ScriptPropertyType(int value) {
 	    this.value = value;
 	}
 
-	static ScriptPropertyType value (int value) {
+	static ScriptPropertyType value(int value) {
 	    for (ScriptPropertyType p : ScriptPropertyType.values()) {
 		if (p.value == value) {
 		    return p;

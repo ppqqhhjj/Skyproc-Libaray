@@ -358,9 +358,13 @@ public class SUMprogram implements SUM {
     class SUMsave extends LSaveFile {
 
 	@Override
-	protected void init(Map<Enum, Setting> m) {
-	    Add(m, SUMSettings.IMPORT_AT_START, "Import At Start", false, false);
-	    Add(m, SUMSettings.MERGE_PATCH, "Merge Patches", false, false);
+	protected void initSettings() {
+	    Add(SUMSettings.IMPORT_AT_START, "Import At Start", false, false);
+	    Add(SUMSettings.MERGE_PATCH, "Merge Patches", false, false);
+	}
+
+	@Override
+	protected void initHelp() {
 	}
     }
 

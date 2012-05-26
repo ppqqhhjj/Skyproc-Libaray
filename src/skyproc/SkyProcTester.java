@@ -45,8 +45,8 @@ public class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.RACE};
-//	GRUP_TYPE[] types = GRUP_TYPE.values();
+//	GRUP_TYPE[] types = {GRUP_TYPE.RACE};
+	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
@@ -93,7 +93,6 @@ public class SkyProcTester {
 
     private static void setSkyProcGlobal() {
 	SPGlobal.createGlobalLog();
-	SPGlobal.pathToData = "../";
 	LDebug.timeElapsed = true;
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }
