@@ -6,8 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -22,10 +20,8 @@ import skyproc.exceptions.BadRecord;
 class ScriptProperty extends Record {
 
     StringNonNull name = new StringNonNull();
-    ScriptPropertyType type = ScriptPropertyType.Unknown;
     int unknown = 1;
-    byte[] data;
-    FormID id;
+    ScriptData data;
     private static final Type[] types = {Type.VMAD};
 
     ScriptProperty() {
@@ -37,30 +33,33 @@ class ScriptProperty extends Record {
 
     public ScriptProperty(String name, boolean b) {
 	this(name);
-	type = ScriptPropertyType.Boolean;
-	data = new byte[1];
-	data[0] = b ? (byte) 1 : 0;
+	BooleanData tmp = new BooleanData();
+	tmp.data = b;
+	data = tmp;
     }
 
     public ScriptProperty(String name, int in) {
 	this(name);
-	type = ScriptPropertyType.Integer;
-	data = Ln.toByteArray(in);
+	IntData tmp = new IntData();
+	tmp.data = in;
+	data = tmp;
     }
 
     public ScriptProperty(String name, FormID id) {
 	this(name);
-	type = ScriptPropertyType.FormID;
-	this.id = id;
-	data = new byte[4];
-	data[2] = -1;
-	data[3] = -1;
+	FormIDData tmp = new FormIDData();
+	tmp.id = id;
+	tmp.data = new byte[4];
+	tmp.data[2] = -1;
+	tmp.data[3] = -1;
+	data = tmp;
     }
 
     public ScriptProperty(String name, float in) {
 	this(name);
-	type = ScriptPropertyType.Float;
-	data = Ln.toByteArray(Float.floatToIntBits(in));
+	FloatData tmp = new FloatData();
+	tmp.data = in;
+	data = tmp;
     }
 
     ScriptProperty(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -68,16 +67,16 @@ class ScriptProperty extends Record {
     }
 
     void standardizeMasters(Mod srcMod) {
-	if (id != null) {
-	    id.standardize(srcMod);
+	if (getType().equals(ScriptPropertyType.FormID)) {
+	    ((FormIDData) data).id.standardize(srcMod);
 	}
     }
 
     ArrayList<FormID> allFormIDs(boolean deep) {
 	if (deep) {
 	    ArrayList<FormID> out = new ArrayList<FormID>(0);
-	    if (id != null) {
-		out.add(id);
+	    if (getType().equals(ScriptPropertyType.FormID)) {
+		out.add(((FormIDData) data).id);
 	    }
 	    return out;
 	} else {
@@ -88,28 +87,26 @@ class ScriptProperty extends Record {
     @Override
     final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
-	type = ScriptPropertyType.value(in.extractInt(1));
+	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
 	if (logging()) {
 	    logSync("VMAD", "    Property " + name + " with type " + type + ", unknown: " + unknown);
 	}
 	switch (type) {
 	    case FormID:
-		data = in.extract(4);
-		id = new FormID();
-		id.setInternal(in.extract(4));
+		data = new FormIDData();
 		break;
 	    case String:
-		data = in.extract(in.extractInt(2));
+		data = new StringData();
 		break;
 	    case Integer:
-		data = in.extract(4);
+		data = new IntData();
 		break;
 	    case Float:
-		data = in.extract(4);
+		data = new FloatData();
 		break;
 	    case Boolean:
-		data = in.extract(1);
+		data = new BooleanData();
 		break;
 	    default:
 		if (logging()) {
@@ -118,27 +115,20 @@ class ScriptProperty extends Record {
 		}
 		in.extractInts(1000);  // break extraction to exclude NPC from database
 	}
-	if (logging() && type != ScriptPropertyType.String) {
-	    logSync("VMAD", "      Data: " + Ln.printHex(data, true, false));
-	} else if (logging()) {
-	    logSync("VMAD", "      Data: " + Ln.arrayToString(data));
+	if (data != null) {
+	    data.parseData(in);
+	}
+	if (logging()) {
+	    logSync("VMAD", "      Data: " + data.print());
 	}
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
 	name.export(out, srcMod);
-	out.write(type.value, 1);
+	out.write(getType().value, 1);
 	out.write(unknown, 1);
-	switch (type) {
-	    case String:
-		out.write(data.length, 2);
-		break;
-	}
-	out.write(data, 0);
-	if (type == ScriptPropertyType.FormID) {
-	    id.export(out);
-	}
+	data.export(out, srcMod);
     }
 
     @Override
@@ -184,14 +174,7 @@ class ScriptProperty extends Record {
     @Override
     int getContentLength(Mod srcMod) {
 	int out = name.getTotalLength(srcMod) + 2;
-	switch (type) {
-	    case FormID:
-		out += id.getContentLength();
-		break;
-	    case String:
-		out += 2;
-	}
-	return out + data.length;
+	return out + data.getContentLength();
     }
 
     @Override
@@ -245,8 +228,181 @@ class ScriptProperty extends Record {
 	}
     }
 
+    // Data classes 
+    interface ScriptData {
+
+	void parseData(LShrinkArray in);
+
+	int getContentLength();
+
+	void export(LExporter out, Mod srcMod) throws IOException;
+
+	ScriptPropertyType getType();
+
+	String print();
+    }
+
+    class StringData implements ScriptData {
+
+	String data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    data = in.extractString(in.extractInt(2));
+	}
+
+	@Override
+	public int getContentLength() {
+	    return 2 + data.length();
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data.length(), 2);
+	    out.write(data);
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.String;
+	}
+
+	@Override
+	public String print() {
+	    return data;
+	}
+    }
+
+    class IntData implements ScriptData {
+
+	int data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    data = in.extractInt(4);
+	}
+
+	@Override
+	public int getContentLength() {
+	    return 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data);
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.Integer;
+	}
+
+	@Override
+	public String print() {
+	    return Integer.toString(data);
+	}
+    }
+
+    class BooleanData implements ScriptData {
+
+	boolean data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    data = in.extractBool(1);
+	}
+
+	@Override
+	public int getContentLength() {
+	    return 1;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    if (data) {
+		out.write(1, 1);
+	    } else {
+		out.write(0, 1);
+	    }
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.Boolean;
+	}
+
+	@Override
+	public String print() {
+	    return String.valueOf(data);
+	}
+    }
+
+    class FormIDData implements ScriptData {
+
+	byte[] data;
+	FormID id;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    data = in.extract(4);
+	    id = new FormID();
+	    id.setInternal(in.extract(4));
+	}
+
+	@Override
+	public int getContentLength() {
+	    return 8;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data, 4);
+	    id.export(out);
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.FormID;
+	}
+
+	@Override
+	public String print() {
+	    return id.toString();
+	}
+    }
+
+    class FloatData implements ScriptData {
+
+	float data;
+
+	@Override
+	public void parseData(LShrinkArray in) {
+	    data = in.extractFloat();
+	}
+
+	@Override
+	public int getContentLength() {
+	    return 4;
+	}
+
+	@Override
+	public void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(data);
+	}
+
+	@Override
+	public ScriptPropertyType getType() {
+	    return ScriptPropertyType.Float;
+	}
+
+	@Override
+	public String print() {
+	    return String.valueOf(data);
+	}
+    }
+
     // get/set
     public ScriptPropertyType getType() {
-	return type;
+	return data.getType();
     }
 }
