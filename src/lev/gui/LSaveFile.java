@@ -113,7 +113,7 @@ public abstract class LSaveFile {
 
     void Add(Enum type, Setting s) {
 	for (Map<Enum, Setting> m : sets) {
-	    m.put(type, s);
+	    m.put(type, s.copyOf());
 	}
     }
 
