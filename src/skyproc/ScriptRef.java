@@ -316,4 +316,29 @@ public class ScriptRef extends Record implements Iterable<String> {
 	removeProperty(propertyName);
 	addProperty(propertyName, floatProperty);
     }
+    
+    public void setProperty(String propertyName, Float ... floatProperty) {
+	removeProperty(propertyName);
+	addProperty(propertyName, floatProperty);
+    }
+    
+    public void setProperty(String propertyName, Integer ... intProperty) {
+	removeProperty(propertyName);
+	addProperty(propertyName, intProperty);
+    }
+    
+    public void setProperty(String propertyName, Boolean ... boolProperty) {
+	removeProperty(propertyName);
+	addProperty(propertyName, boolProperty);
+    }
+    
+    public void setProperty(String propertyName, String ... stringProperty) {
+	removeProperty(propertyName);
+	addProperty(propertyName, stringProperty);
+    }
+    
+    public void setProperty(String propertyName, FormID ... formProperty) {
+	removeProperty(propertyName);
+	addProperty(propertyName, formProperty);
+    }
 }

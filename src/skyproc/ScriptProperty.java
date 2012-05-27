@@ -64,24 +64,28 @@ class ScriptProperty extends Record {
 	this(name);
 	IntegerArrayData tmp = new IntegerArrayData();
 	tmp.data = new ArrayList<Integer>(Arrays.asList(in));
+	data = tmp;
     }
     
     public ScriptProperty(String name, String ... in) {
 	this(name);
 	StringArrayData tmp = new StringArrayData();
 	tmp.data = new ArrayList<String>(Arrays.asList(in));
+	data = tmp;
     }
     
     public ScriptProperty(String name, Float ... in) {
 	this(name);
 	FloatArrayData tmp = new FloatArrayData();
 	tmp.data = new ArrayList<Float>(Arrays.asList(in));
+	data = tmp;
     }
     
     public ScriptProperty(String name, Boolean ... in) {
 	this(name);
 	BoolArrayData tmp = new BoolArrayData();
 	tmp.data = new ArrayList<Boolean>(Arrays.asList(in));
+	data = tmp;
     }
     
     public ScriptProperty(String name, FormID ... in) {
@@ -92,6 +96,7 @@ class ScriptProperty extends Record {
 	    list.add(new FormIDData(id));
 	}
 	tmp.data = list;
+	data = tmp;
     }
 
     ScriptProperty(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
