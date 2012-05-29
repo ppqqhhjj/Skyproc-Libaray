@@ -36,6 +36,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
         Add(setting);
         Add(titleLabel);
 
+	setting.titleLabel = titleLabel;
  	setting.tie(s, save, help, true);
         setSize(titleLabel.getWidth() + setting.getWidth() + spacing, getHeight());
         setLocation(getX() - getWidth(), getY());

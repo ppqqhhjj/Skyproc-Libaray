@@ -5,7 +5,9 @@
 package lev.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseListener;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -40,8 +42,9 @@ public class LSpinner extends LUserSetting<Integer> {
 	if (isTied()) {
 	    int cur = getValue();
 	    setValue(m.get(saveTie).getInt());
-	    if (cur != getValue())
+	    if (cur != getValue()) {
 		return false;
+	    }
 	}
 	return true;
     }
@@ -53,9 +56,15 @@ public class LSpinner extends LUserSetting<Integer> {
 
     @Override
     public void addHelpHandler(boolean hoverListener) {
-	spinner.addFocusListener(new HelpFocusHandler());
+	JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
+	editor.getTextField().addFocusListener(new HelpFocusHandler());
 	if (hoverListener) {
-	    spinner.addMouseListener(new HelpMouseHandler());
+	    MouseListener m = new HelpMouseHandler();
+	    titleLabel.addMouseListener(m);
+	    editor.getTextField().addMouseListener(m);
+	    for (Component c : spinner.getComponents()) {
+		c.addMouseListener(m);
+	    }
 	}
     }
 
