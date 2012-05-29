@@ -117,20 +117,20 @@ public abstract class LSaveFile {
 	}
     }
 
-    protected void Add(Enum type, String title, Boolean inGame, Boolean b) {
-	Add(type, new SaveBool(title, b, inGame));
+    protected void Add(Enum type, Boolean inGame, Boolean b) {
+	Add(type, new SaveBool(type.toString(), b, inGame));
     }
 
-    protected void Add(Enum type, String title, Boolean inGame, String s) {
-	Add(type, new SaveString(title, s, inGame));
+    protected void Add(Enum type, Boolean inGame, String s) {
+	Add(type, new SaveString(type.toString(), s, inGame));
     }
 
-    protected void Add(Enum type, String title, Boolean inGame, Integer i) {
-	Add(type, new SaveInt(title, i, inGame));
+    protected void Add(Enum type, Boolean inGame, Integer i) {
+	Add(type, new SaveInt(type.toString(), i, inGame));
     }
 
-    protected void Add(Enum type, String title, Boolean inGame, Float f) {
-	Add(type, new SaveFloat(title, f, inGame));
+    protected void Add(Enum type, Boolean inGame, Float f) {
+	Add(type, new SaveFloat(type.toString(), f, inGame));
     }
 
     public static void copyTo(Map<Enum, Setting> from, Map<Enum, Setting> to) {

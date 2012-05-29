@@ -24,7 +24,7 @@ public class QUST extends MajorRecordNamed {
     
     QUST (Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
-	DNAM.setData(0x11,12);
+	DNAM.setData(0x111,12);
 	NEXT.forceExport(true);
 	ANAM.initialize(4);
 	init();

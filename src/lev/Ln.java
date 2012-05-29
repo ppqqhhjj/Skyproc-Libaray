@@ -977,7 +977,7 @@ public class Ln {
      */
     public static byte[] toByteArray(int input, int size) {
 	byte[] out = new byte[size];
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size && i < 4; i++) {
 	    out[i] = (byte) (input >>> (8 * i));
 	}
 	return out;

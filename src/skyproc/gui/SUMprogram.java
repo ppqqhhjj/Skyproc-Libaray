@@ -359,8 +359,8 @@ public class SUMprogram implements SUM {
 
 	@Override
 	protected void initSettings() {
-	    Add(SUMSettings.IMPORT_AT_START, "Import At Start", false, false);
-	    Add(SUMSettings.MERGE_PATCH, "Merge Patches", false, false);
+	    Add(SUMSettings.IMPORT_AT_START, false, false);
+	    Add(SUMSettings.MERGE_PATCH, false, false);
 	}
 
 	@Override
