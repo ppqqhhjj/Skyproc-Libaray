@@ -19,7 +19,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
 
     LSpinner setting;
 
-    public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step, Enum s, LSaveFile save, LHelpPanel help) {
+    public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step) {
         super(text, font, c);
         setting = new LSpinner(text, min, min, max, step, Integer.toString(max).length());
         int spacing = 10;
@@ -37,7 +37,6 @@ public class LNumericSetting extends LUserSetting<Integer> {
         Add(titleLabel);
 
 	setting.titleLabel = titleLabel;
- 	setting.tie(s, save, help, true);
         setSize(titleLabel.getWidth() + setting.getWidth() + spacing, getHeight());
         setLocation(getX() - getWidth(), getY());
         setVisible(true);
@@ -58,6 +57,11 @@ public class LNumericSetting extends LUserSetting<Integer> {
     @Override
     final public void tie(Enum s, LSaveFile save_, LHelpPanel help_, boolean hoverHandler) {
 	setting.tie(s, save_, help_, hoverHandler);
+    }
+
+    @Override
+    public void linkTo(Enum s, LSaveFile save, LHelpPanel help_, boolean hoverListener) {
+	setting.linkTo(s, save, help_, hoverListener);
     }
 
     @Override

@@ -37,9 +37,7 @@ public abstract class LUserSetting<T> extends LHelpComponent {
 
     public void tie(Enum setting, LSaveFile saveFile, LHelpPanel help_, boolean hoverListener) {
 	tie(setting, saveFile);
-	help = help_;
-	setHelpInfo(setting, saveFile);
-	addHelpHandler(hoverListener);
+	linkTo(setting, saveFile, help_, hoverListener);
     }
 
     public void tie(Enum setting, LSaveFile saveFile) {

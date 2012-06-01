@@ -155,9 +155,15 @@ public abstract class SPSettingPanel extends LPanel {
 	}
     }
 
-    public ActionListener getOpenHandler(final SPMainMenuPanel parent) {
+    public void open() {
+	parent.open();
+	initialize();
+	parent.openPanel(this);
+	specialOpen(parent);
+	parent.revalidate();
+    }
 
-	final SPSettingPanel cur = this;
+    public ActionListener getOpenHandler(final SPMainMenuPanel parent) {
 
 	return new ActionListener() {
 
@@ -168,11 +174,7 @@ public abstract class SPSettingPanel extends LPanel {
 
 			    @Override
 			    public void run() {
-				parent.open();
-				initialize();
-				parent.openPanel(cur);
-				specialOpen(parent);
-				parent.revalidate();
+				open();
 			    }
 			});
 	    }

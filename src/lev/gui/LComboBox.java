@@ -17,68 +17,73 @@ import lev.gui.LHelpComponent.HelpFocusHandler;
 public class LComboBox extends LUserSetting<Integer> {
 
     JComboBox box;
-    String previous = "";
+    String previous;
 
-    public LComboBox (String title_) {
-        super(title_);
-        box = new JComboBox();
-        add(box);
+    public LComboBox(String title_) {
+	super(title_);
+	box = new JComboBox();
+	add(box);
 	box.setVisible(true);
 	setVisible(true);
     }
 
     @Override
     public void setSize(int x, int y) {
-        super.setSize(x, y);
-        box.setSize(x, y);
+	super.setSize(x, y);
+	box.setSize(x, y);
     }
 
     public void addActionListener(ActionListener a) {
-        box.addActionListener(a);
+	box.addActionListener(a);
     }
 
     public Object getSelectedItem() {
-        return box.getSelectedItem();
+	return box.getSelectedItem();
     }
 
     public void removeAllItems() {
-        box.removeAllItems();
+	box.removeAllItems();
     }
 
-    public void addItem (Object o) {
-        box.addItem(o);
+    public void addItem(Object o) {
+	box.addItem(o);
     }
 
-    public void setSelectedIndex (int in) {
-        if (box.getItemCount() <= in)
-            box.setSelectedIndex(box.getItemCount() - 1);
-        else if (in < 0)
-            box.setSelectedIndex(0);
-        else
-            box.setSelectedIndex(in);
+    public void setSelectedIndex(int in) {
+	if (box.getItemCount() <= in) {
+	    box.setSelectedIndex(box.getItemCount() - 1);
+	} else if (in < 0) {
+	    box.setSelectedIndex(0);
+	} else {
+	    box.setSelectedIndex(in);
+	}
     }
 
     public void switchTo(Object o) {
-        for (int i = 0 ; i < box.getItemCount() ; i++) {
-            if (box.getItemAt(i).toString().equals(o.toString()))
-                setSelectedIndex(i);
-        }
+	for (int i = 0; i < box.getItemCount(); i++) {
+	    if (box.getItemAt(i).toString().equals(o.toString())) {
+		setSelectedIndex(i);
+	    }
+	}
     }
 
-    public void savePrevious () {
-        if (box.getSelectedItem() != null)
-            previous = box.getSelectedItem().toString();
-        else
-            previous = "";
+    public void savePrevious() {
+	if (box.getSelectedItem() != null) {
+	    previous = box.getSelectedItem().toString();
+	} else {
+	    previous = null;
+	}
     }
 
-    public void switchToPrevious () {
-        switchTo(previous);
+    public void switchToPrevious() {
+	if (previous != null) {
+	    switchTo(previous);
+	}
     }
 
     @Override
     public void addHelpHandler(boolean mouseListener) {
-        box.addFocusListener(new HelpFocusHandler());
+	box.addFocusListener(new HelpFocusHandler());
 	if (mouseListener) {
 	    box.addMouseListener(new HelpMouseHandler());
 	}
@@ -93,9 +98,10 @@ public class LComboBox extends LUserSetting<Integer> {
     public boolean revertTo(Map<Enum, Setting> m) {
 	if (isTied()) {
 	    int cur = box.getSelectedIndex();
- 	    box.setSelectedIndex(m.get(saveTie).getInt());
-	    if (cur != box.getSelectedIndex())
+	    box.setSelectedIndex(m.get(saveTie).getInt());
+	    if (cur != box.getSelectedIndex()) {
 		return false;
+	    }
 	}
 	return true;
     }
@@ -114,5 +120,4 @@ public class LComboBox extends LUserSetting<Integer> {
     public void clearHighlight() {
 	box.setBackground(null);
     }
-
 }
