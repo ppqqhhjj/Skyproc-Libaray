@@ -1,10 +1,13 @@
 package lev;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import javax.swing.JFileChooser;
@@ -59,7 +62,7 @@ public class Ln {
 	}
 	return obj;
     }
-    
+
     private static String space(Boolean left, Boolean concat, int spaces, char c, String... input) {
 	String output = "";
 	for (String x : input) {
@@ -1280,7 +1283,7 @@ public class Ln {
 	}
 	return out;
     }
-    
+
     public static String convertStreamToStr(InputStream is) throws IOException {
 
 	if (is != null) {
@@ -1301,5 +1304,47 @@ public class Ln {
 	} else {
 	    return "";
 	}
+    }
+
+    public static String toJsonPretty(JsonElement object, String... exclude) {
+	String out = "{\n";
+	ArrayList<String> excludeList = new ArrayList<String>(Arrays.asList(exclude));
+	out += toJsonPretty(object, 1, excludeList);
+	return out + "\n}";
+    }
+
+    static String toJsonPretty(JsonElement object, int depth, ArrayList<String> exclude) {
+	if (object.isJsonPrimitive()) {
+	    return object.getAsJsonPrimitive().toString();
+	}
+	String out = "";
+	String tabs = "";
+	for (int i = 0; i < depth; i++) {
+	    tabs += "\t";
+	}
+
+	if (object.isJsonArray()) {
+	    JsonArray array = object.getAsJsonArray();
+	    out += "\n" + tabs + "[";
+	    for (JsonElement entry : array) {
+		out += "\n" + toJsonPretty(entry, depth + 1, exclude);
+	    }
+	    out += "\n" + tabs + "]";
+	} else if (object.isJsonObject()) {
+	    Set<Entry<String, JsonElement>> set = object.getAsJsonObject().entrySet();
+	    boolean first = true;
+	    for (Entry<String, JsonElement> entry : set) {
+		if (!exclude.contains(entry.getKey())) {
+		    if (!first) {
+			out += ",\n";
+		    } else {
+			first = false;
+		    }
+		    out += tabs + "\"" + entry.getKey() + "\" : ";
+		    out += toJsonPretty(entry.getValue(), depth + 1, exclude);
+		}
+	    }
+	}
+	return out;
     }
 }

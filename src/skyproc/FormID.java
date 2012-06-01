@@ -85,8 +85,8 @@ public class FormID implements Comparable, Serializable {
 	this.master = master;
     }
 
-    FormID(FormID in) {
-	form = in.form;
+    public FormID(FormID in) {
+	System.arraycopy(in.form, 0, form, 0, in.form.length);
 	master = in.master;
     }
 

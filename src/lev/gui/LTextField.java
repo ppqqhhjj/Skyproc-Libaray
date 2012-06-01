@@ -43,6 +43,14 @@ public class LTextField extends LUserSetting<String> {
     public void addUpdateHandlers() {
 	field.addActionListener(new UpdateHandler());
     }
+    
+    public void setText(String s) {
+	field.setText(s);
+    }
+    
+    public String getText() {
+	return field.getText();
+    }
 
     @Override
     public boolean revertTo(Map<Enum, Setting> m) {
