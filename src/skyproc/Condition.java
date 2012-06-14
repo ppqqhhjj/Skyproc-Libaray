@@ -163,7 +163,7 @@ class Condition extends SubShell {
 
 	    if (SPGlobal.logging()) {
 		logSync("", "New Condition.  Function: " + function.name + ", index: " + functionIndex);
-		logSync("", "  Operator: " + operator + ", flags: " + flags);
+		logSync("", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(CondFlag.UseGlobal));
 		logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat + ", Param 1: " + param1form + "|" + param1int);
 		logSync("", "  Param 2: " + param2form + "|" + param2int + ", Param 3: " + param3form + "|" + param3int);
 		logSync("", "  Run Type:" + runType + ", Reference: " + reference);
@@ -216,11 +216,11 @@ class Condition extends SubShell {
 
     public enum CondFlag {
 
-	OR(3),
-	UseAliases(4),
-	UseGlobal(5),
-	UsePackData(6),
-	SwapSubjectAndTarget(7);
+	OR(0),
+	UseAliases(1),
+	UseGlobal(3),
+	UsePackData(4),
+	SwapSubjectAndTarget(5);
 	int value;
 
 	CondFlag(int value) {
