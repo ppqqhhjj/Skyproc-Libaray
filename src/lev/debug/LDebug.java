@@ -35,6 +35,7 @@ public class LDebug {
     private int debugCounter = 0;
     private int spacing = 0;
     private long startTime;
+    private String openFile;
     private long lastStamp = System.nanoTime();
     private static ArrayList<LDebug> debugs = new ArrayList<LDebug>();
 
@@ -84,6 +85,7 @@ public class LDebug {
     public final void openDebug(String path, int space) {
         try {
             closeDebugFile();
+	    openFile = path;
             startTime = System.currentTimeMillis();
             debugCounter = 1;
             spacing = space;
@@ -243,5 +245,13 @@ public class LDebug {
 	} catch (IOException ex) {
 	}
 	System.exit(0);
+    }
+    
+    public String getOpenPath() {
+	return openFile;
+    }
+    
+    public int line() {
+	return this.debugCounter;
     }
 }

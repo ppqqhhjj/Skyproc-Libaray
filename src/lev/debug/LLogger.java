@@ -65,7 +65,7 @@ public class LLogger {
 	    if (syncing) {
 		synced.w(header, log);
 	    } else {
-		asynced.w(header, log);
+		log(header, log);
 	    }
 	}
     }
@@ -119,7 +119,14 @@ public class LLogger {
      * @param log
      */
     public void logError(String header, String... log) {
-	logMain(header, log);
+	LDebug logger = sync() ? synced : asynced;
+	logMain("ERROR", "File " + logger.getOpenPath());
+	logMain("ERROR", "   Line " + logger.line());
+	String message = "   Message: ";
+	for (String s : log) {
+	    message += s;
+	}
+	logMain("ERROR", message);
 	logSync(header, log);
 	flush();
     }
@@ -140,7 +147,6 @@ public class LLogger {
     public void logging(Boolean on) {
 	logging = on;
     }
-
 
     /**
      *
@@ -180,6 +186,7 @@ public class LLogger {
 
     /**
      * A global switch that allows/blocks all LLoggers to output.
+     *
      * @param in
      */
     public void setAllLogging(boolean in) {
@@ -201,8 +208,9 @@ public class LLogger {
     }
 
     /**
-     * Logs to a special log based on the given enum.  You must create these
+     * Logs to a special log based on the given enum. You must create these
      * special logs ahead of time.
+     *
      * @param e Enum key to log to.
      * @param header
      * @param log
@@ -217,6 +225,7 @@ public class LLogger {
 
     /**
      * Logs to the asynchronous log.
+     *
      * @param header
      * @param log
      */
@@ -228,6 +237,7 @@ public class LLogger {
 
     /**
      * Creates a new asynchronous log.
+     *
      * @param filePath
      */
     public void newLog(String filePath) {
