@@ -1085,6 +1085,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SubString description = new SubString(Type.SNAM, true);
 	SubData INTV = new SubData(Type.INTV, defaultINTV);
 	SubData ONAM = new SubData(Type.ONAM);
+	SubData INCC = new SubData(Type.INCC);
 	private static final Type[] type = {Type.TES4};
 
 	TES4() {
@@ -1094,6 +1095,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    subRecords.add(masters);
 	    subRecords.add(ONAM);
 	    subRecords.add(INTV);
+	    subRecords.add(INCC);
 	}
 
 	TES4(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {

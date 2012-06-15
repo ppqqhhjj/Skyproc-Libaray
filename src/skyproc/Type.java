@@ -26,6 +26,7 @@ public enum Type {
      * TES4: Used in headers. Internal version?
      */
     INTV,
+    INCC,
 
     /**
      * Used to mark a group of common records.
