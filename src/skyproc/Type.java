@@ -847,6 +847,8 @@ public enum Type {
     QUST,
     NEXT,
     
+    ECZN,
+    
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

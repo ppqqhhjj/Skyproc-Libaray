@@ -82,7 +82,8 @@ public enum GRUP_TYPE {
     /**
      * Armatures
      */
-    ARMA;
+    ARMA,
+    ECZN;
 
     static boolean unfinished (GRUP_TYPE g) {
 	switch (g) {

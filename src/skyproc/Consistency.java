@@ -172,8 +172,8 @@ class Consistency {
 			FormID ID = new FormID(form);
 			edidToForm.put(EDID, ID);
 			IDs.add(ID);
-			if (SPGlobal.logging()) {
-			    SPGlobal.log("Import", form + " with " + EDID);
+			if (SPGlobal.debugConsistencyImport && SPGlobal.logging()) {
+			    SPGlobal.log("Consistency Import", form + " with " + EDID);
 			}
 		    }
 		    in.close();
