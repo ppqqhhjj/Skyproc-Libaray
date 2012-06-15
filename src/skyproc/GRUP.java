@@ -248,6 +248,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	addRecordSilent(item);
     }
 
+    public ArrayList<T> getRecords() {
+        return listRecords;
+    }
+
     void standardizeMasters() {
 	for (T item : listRecords) {
 	    standardizeMaster(item);

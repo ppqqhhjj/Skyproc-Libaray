@@ -197,7 +197,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 			SPGlobal.logError(getInfo().print(), "Ran out of available formids.");
 			JOptionPane.showMessageDialog(null, "<html>The output patch ran out of available FormIDs.<br>"
 				+ "Please contact Leviathan1753.</html>");
-			
+
 		    }
 		}
 		possibleID = new FormID(header.HEDR.nextID++, getInfo());
@@ -403,6 +403,14 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    out.add(m);
 	}
 	return out;
+    }
+
+    /**
+     *
+     * @return the Map of GRUPs contained in the record.
+     */
+    public Map<GRUP_TYPE, GRUP> getGRUPs() {
+	return GRUPs;
     }
 
     /**
@@ -648,7 +656,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (bad) {
 	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
 	}
-	
+
 	if (Consistency.automaticExport) {
 	    Consistency.export();
 	}
@@ -1195,7 +1203,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	byte[] version;
 	int numRecords;
 	int nextID;
-	
 	static int firstAvailableID = 3426;  // first available ID on empty CS plugins
 
 	HEDR() {
@@ -1249,7 +1256,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	final public void clear() {
 	    version = Ln.parseHexString("D7 A3 70 3F", 4);
 	    numRecords = 0;
-	    nextID = firstAvailableID;  
+	    nextID = firstAvailableID;
 	}
 
 	@Override

@@ -82,6 +82,19 @@ public class SPDatabase implements Iterable<Mod> {
 	modLookup.remove(listing);
     }
 
+    public Mod getMod(int index) {
+        return modLookup.get(addedplugins.get(index));
+    }
+
+    /**
+     * Returns the number of mods currently loaded into this SPDatabase
+     *
+     * @return the number of mods
+     */
+    public int numMods() {
+        return addedplugins.size();
+    }
+
     /**
      * Querys the Global Database and returns whether the FormID exists.<br>
      * NOTE: it is recommended you use the version that only searches in
