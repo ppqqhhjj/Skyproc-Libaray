@@ -160,7 +160,7 @@ public class SUMGUI extends JFrame {
 	    helpPanel.setBounds(rightDimensions);
 	    backgroundPanel.add(helpPanel);
 
-	    SPProgressBarPlug.progress = new AVProgress();
+	    SPProgressBarPlug.progress = new SUMProgress();
 
 	    setVisible(true);
 
@@ -283,7 +283,7 @@ public class SUMGUI extends JFrame {
 	return backgroundPanel.add(comp);
     }
 
-    public class AVProgress implements LProgressBarInterface {
+    public class SUMProgress implements LProgressBarInterface {
 
 	@Override
 	public void setMax(int in) {
