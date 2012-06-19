@@ -3,6 +3,7 @@ package skyprocstarter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import skyproc.*;
+import skyproc.gui.SPDefaultGUI;
 
 /**
  *
@@ -24,6 +25,13 @@ public class SkyProcStarter {
             String myPatcherDescription =
                     "I did not change the description,\n"
                     + "but I'm patching your setup to do something fantastic!";
+	    // The types of records you want your patcher to import
+	    // At the moment, it imports NPC_ and LVLN records.  Change this to
+	    // customize the import to what you need.
+	    GRUP_TYPE[] typesToImport = {
+		GRUP_TYPE.NPC_,
+		GRUP_TYPE.LVLN
+	    };
 
 
 
@@ -61,10 +69,9 @@ public class SkyProcStarter {
              */
             try {
                 SPImporter importer = new SPImporter();
-                // Import all Mods and all the GRUPs SkyProc currently supports
-                // and merge them as overrides into your patch.
+                // Import all Mods and requested GRUPs and merges them as overrides into your patch.
                 // NOTE:  all the separate mods can still be accessed via the global database.
-                patch.addAsOverrides(importer.importActiveMods());
+                patch.addAsOverrides(importer.importActiveMods(typesToImport));
             } catch (IOException ex) {
                 // If things go wrong, create an error box.
                 JOptionPane.showMessageDialog(null, "There was an error importing plugins.\n(" + ex.getMessage() + ")\n\nPlease contact the author.");
