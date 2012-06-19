@@ -22,6 +22,12 @@ public class LVLO extends SubShell {
     COED COED = new COED();
     static Type[] types = {Type.LVLO, Type.COED};
 
+    /**
+     * 
+     * @param id
+     * @param level
+     * @param count
+     */
     public LVLO(FormID id, int level, int count) {
 	this();
 	setForm(id);
@@ -174,10 +180,18 @@ public class LVLO extends SubShell {
 	return entry.count;
     }
 
+    /**
+     *
+     * @param id
+     */
     final public void setForm(FormID id) {
 	entry.entry = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getForm() {
 	return entry.entry;
     }

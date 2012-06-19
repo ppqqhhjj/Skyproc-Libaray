@@ -114,6 +114,12 @@ public class NiftyFunc {
 	return null;
     }
 
+    /**
+     * Makes a new quest that starts immediately in-game, that has this script attached to it.
+     * @param originateFrom Mod the quest should originate from.
+     * @param script The script to add to the quest.
+     * @return
+     */
     public static QUST makeScriptQuest(Mod originateFrom, ScriptRef script) {
 	QUST quest = new QUST(originateFrom, script.getName() + "_qust");
 	quest.scripts.addScript(script);

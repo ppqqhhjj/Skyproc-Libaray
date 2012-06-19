@@ -21,7 +21,8 @@ import lev.gui.LSaveFile;
 import skyproc.SPGlobal;
 
 /**
- *
+ * A GUI panel that functions as the main menu in SUMGUI setups, and links to
+ *  several SPSettingPanel instantiations.
  * @author Justin Swanson
  */
 public class SPMainMenuPanel extends JPanel {
@@ -32,55 +33,99 @@ public class SPMainMenuPanel extends JPanel {
     LImagePane customLogo;
     LLabel version;
     Color color;
-    protected LPanel menu = new LPanel(SUMGUI.leftDimensions);
-    protected Close closeHandler = new Close();
-    protected Open openHandler = new Open();
+    /**
+     * Reference to the left column main menu panel.
+     */
+    protected LPanel menuPanel = new LPanel(SUMGUI.leftDimensions);
+    Close closeHandler = new Close();
+    Open openHandler = new Open();
     ArrayList<SPSettingPanel> panels = new ArrayList<SPSettingPanel>();
     SPSettingPanel activePanel;
 
+    /**
+     * Creates a new Main Menu with the desired menu color.
+     * @param menuColor
+     */
     public SPMainMenuPanel(Color menuColor) {
 	this.setLayout(null);
 	setSize(SUMGUI.middleLeftDimensions.getSize());
 	setLocation(0, 0);
-	add(menu);
+	add(menuPanel);
 	setOpaque(false);
 	color = menuColor;
     }
 
+    /**
+     * Creates a new Main Menu with the default menu color.
+     */
     public SPMainMenuPanel() {
 	this(SUMGUI.light);
     }
 
+    /**
+     * Adds the desired logo to the top portion of the main menu.
+     * @param logo
+     */
     public void addLogo(URL logo) {
 	try {
 	    int height = 150;
 	    customLogo = new LImagePane(logo);
 	    customLogo.setMaxSize(SUMGUI.leftDimensions.width, height);
 	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 0);
-	    menu.Add(customLogo);
+	    menuPanel.Add(customLogo);
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
 	}
     }
 
+    /**
+     * Adds the version number just under the logo's position.
+     * @param version
+     */
     public void setVersion(String version) {
 	setVersion(version, new Point(customLogo.getX(), customLogo.getHeight() + customLogo.getY() + 3));
     }
 
+    /**
+     * Adds the version number at the desired location.
+     * @param version
+     * @param location
+     */
     public void setVersion(String version, Point location) {
 	this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
 	this.version.setLocation(location);
-	menu.Add(this.version);
+	menuPanel.Add(this.version);
     }
 
-    public SPMainMenuConfig addMenu(SPSettingPanel panel, boolean checkBox, LSaveFile save, Enum setting) {
-	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header.getText(), checkBox, true, color, new Point(xPlacement, yPlacement), save, setting);
+    /**
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * @param panel Panel to add to the main menu
+     * @param checkBoxPresent 
+     * @param save Save to tie to.
+     * @param setting Setting to tie to.
+     * @return The main menu GUI component
+     */
+    public SPMainMenuConfig addMenu(SPSettingPanel panel, boolean checkBoxPresent, LSaveFile save, Enum setting) {
+	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header.getText(), checkBoxPresent, color, new Point(xPlacement, yPlacement), save, setting);
 	yPlacement += spacing;
-	menuConfig.addActionListener(panel.getOpenHandler(this));
-	menu.add(menuConfig);
+	menuConfig.addActionListener(panel.getOpenHandler());
+	menuPanel.add(menuConfig);
 	return menuConfig;
     }
 
+    /**
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * @param panel Panel to add to the main menu
+     * @return The main menu GUI component
+     */
+    public SPMainMenuConfig addMenu(SPSettingPanel panel){
+	return addMenu(panel, false, null, null);
+    }
+
+    /**
+     * Opens and displays a panel.
+     * @param panel
+     */
     public void openPanel(SPSettingPanel panel) {
 	if (activePanel != null) {
 	    activePanel.setVisible(false);
@@ -96,16 +141,16 @@ public class SPMainMenuPanel extends JPanel {
 	activePanel.setVisible(true);
     }
 
-    public ActionListener getOpenHandler() {
+    ActionListener getOpenHandler() {
 	return openHandler;
     }
 
-    public void open() {
+    void open() {
 	setVisible(true);
 	repaint();
     }
 
-    public void close() {
+    void close() {
 	SwingUtilities.invokeLater(
 		new Runnable() {
 
@@ -119,7 +164,7 @@ public class SPMainMenuPanel extends JPanel {
 
     }
 
-    public class Close implements ActionListener {
+    class Close implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -127,7 +172,7 @@ public class SPMainMenuPanel extends JPanel {
 	}
     }
 
-    public class Open implements ActionListener {
+    class Open implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {

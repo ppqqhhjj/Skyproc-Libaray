@@ -26,6 +26,9 @@ public enum Type {
      * TES4: Used in headers. Internal version?
      */
     INTV,
+    /**
+     *
+     */
     INCC,
 
     /**
@@ -839,17 +842,41 @@ public enum Type {
      *
      */
     GMST,
+    /**
+     *
+     */
     ENCH,
+    /**
+     *
+     */
     LVLI,
+    /**
+     * 
+     */
     LVLG,
+    /**
+     *
+     */
     AVIF,
+    /**
+     *
+     */
     AVSK,
 
+    /**
+     *
+     */
     QUST,
+    /**
+     *
+     */
     NEXT,
-    
+
+    /**
+     *
+     */
     ECZN,
-    
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

@@ -23,9 +23,21 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LAreaChart extends LChart {
 
     ArrayList<XYSeries> series = new ArrayList<XYSeries>();
+    /**
+     *
+     */
     public XYPlot plot;
     XYSeriesCollection collection;
 
+    /**
+     *
+     * @param title_
+     * @param size_
+     * @param titleColor
+     * @param seriesColor
+     * @param XLabel
+     * @param YLabel
+     */
     public LAreaChart(String title_, Dimension size_, Color titleColor, Color seriesColor,
 	    String XLabel, String YLabel) {
 	super(title_, size_);
@@ -76,16 +88,29 @@ public class LAreaChart extends LChart {
 		this.getSize().width / 2 + 4, this.getSize().height - 36);
     }
 
+    /**
+     *
+     */
     public void clear() {
 	for (XYSeries s : series) {
 	    s.clear();
 	}
     }
 
+    /**
+     *
+     * @param nthSeries
+     * @param x
+     * @param y
+     */
     public void putPoint(int nthSeries, double x, double y) {
 	series.get(nthSeries).add(x, y);
     }
 
+    /**
+     *
+     * @param seriesColor
+     */
     public final void addSeries(Color seriesColor) {
 	XYSeries seriesNew = new XYSeries("Series");
 	series.add(seriesNew);
@@ -95,6 +120,9 @@ public class LAreaChart extends LChart {
 	renderer.setSeriesPaint(series.size() - 1, seriesColor);
     }
 
+    /**
+     *
+     */
     public void resetDomain() {
 	Range domain = plot.getDataRange(plot.getDomainAxis());
 	double set = domain.getLowerBound();

@@ -23,6 +23,13 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     boolean centered = true;
     LCheckBox done = new LCheckBox("", LFonts.Typo3(1), Color.BLACK);
 
+    /**
+     *
+     * @param width
+     * @param height
+     * @param footerF
+     * @param footerC
+     */
     public LProgressBar(final int width, final int height, final Font footerF, final Color footerC) {
 	bar = new JProgressBar(0, 100);
 	bar.setSize(width, height);
@@ -45,6 +52,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	bar.setLocation(bar.getWidth() / 2, 0);
     }
 
+    /**
+     *
+     * @param centered
+     */
     public void setCentered(boolean centered) {
 	this.centered = centered;
 	status.setLocation(bar.getX(), status.getY());
@@ -69,6 +80,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	}
     }
 
+    /**
+     *
+     * @param y
+     */
     public void setStatusOffset(int y) {
 	status.setLocation(status.getX(), status.getY() + y);
     }
@@ -90,6 +105,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	}
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setDoneListener(ChangeListener c) {
 	done = new LCheckBox("", done.getFont(), Color.BLACK);
 	done.addChangeListener(c);
@@ -152,6 +171,10 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 	}
     }
 
+    /**
+     * 
+     * @param label
+     */
     public void setStatusLabel(LLabel label) {
 	status.setVisible(false);
 	status = label;

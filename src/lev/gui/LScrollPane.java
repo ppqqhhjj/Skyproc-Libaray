@@ -13,14 +13,18 @@ import javax.swing.JScrollPane;
  */
 public class LScrollPane extends JScrollPane {
 
+    /**
+     *
+     * @param c
+     */
     public LScrollPane (Component c) {
 	super(c);
     }
-    
+
     @Override
     public void setOpaque(boolean arg0) {
 	super.setOpaque(false);
 	getViewport().setOpaque(false);
     }
-    
+
 }

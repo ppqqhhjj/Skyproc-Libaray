@@ -31,6 +31,9 @@ public enum GRUP_TYPE {
      * Magic Effects
      */
     MGEF,
+    /**
+     *
+     */
     ENCH,
     /**
      * Spells
@@ -64,11 +67,17 @@ public enum GRUP_TYPE {
      * Leveled Lists
      */
     LVLN,
+    /**
+     *
+     */
     LVLI,
     /**
      * Image Spaces
      */
     QUST,
+    /**
+     *
+     */
     IMGS,
     /**
      * Form Lists
@@ -78,11 +87,17 @@ public enum GRUP_TYPE {
      * Perks
      */
     PERK,
+    /**
+     * 
+     */
     AVIF,
     /**
      * Armatures
      */
     ARMA,
+    /**
+     *
+     */
     ECZN;
 
     static boolean unfinished (GRUP_TYPE g) {
@@ -93,7 +108,7 @@ public enum GRUP_TYPE {
 		return false;
 	}
     }
-    
+
     static GRUP_TYPE toRecord (Enum e) {
 	return GRUP_TYPE.valueOf(e.toString());
     }

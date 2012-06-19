@@ -57,7 +57,13 @@ public class LComponent extends Container {
 	final Component thisC = this;
 	setLocation(x, c.getY() + c.getHeight() / 2 - thisC.getHeight() / 2);
     }
-    
+
+    /**
+     * Puts this component underneath another vertically.
+     * @param c
+     * @param x
+     * @param yOffset
+     */
     public void putUnder (final Component c, final int x, final int yOffset) {
 	setLocation(x, c.getY() + c.getHeight() + yOffset);
     }

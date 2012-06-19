@@ -30,7 +30,9 @@ import lev.gui.*;
 import skyproc.*;
 
 /**
- *
+ * SUM - SkyProc Unified Manager<br>
+ * This is the main program that hooks together various SkyProc patchers and streamlines
+ * their patching processing.
  * @author Justin Swanson
  */
 public class SUMprogram implements SUM {
@@ -47,6 +49,11 @@ public class SUMprogram implements SUM {
     Color blue = new Color(85, 50, 181);
     Font settingFont = new Font("Serif", Font.BOLD, 14);
 
+    /**
+     * Main function that starts the program and GUI.
+     * @param args "-test" Opens up the SkyProc tester program instead of SUM
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 	if (handleArgs(args)) {
 	    SUMprogram sum = new SUMprogram();
@@ -54,7 +61,7 @@ public class SUMprogram implements SUM {
 	}
     }
 
-   static boolean handleArgs(String[] args) {
+    static boolean handleArgs(String[] args) {
 	ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
 	if (argsList.contains("-test")) {
 	    SkyProcTester.runTests();
@@ -173,6 +180,10 @@ public class SUMprogram implements SUM {
 	return out;
     }
 
+    /**
+     * Returns the modlisting used for the exported patch.
+     * @return
+     */
     @Override
     public ModListing getListing() {
 	return new ModListing("SUM", false);
@@ -184,7 +195,7 @@ public class SUMprogram implements SUM {
 	JPanel hookMenu;
 
 	HookMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super("Patcher List", save, parent_, blue);
+	    super("Patcher List", parent_, blue, save);
 	    initialize();
 	}
 
@@ -220,7 +231,7 @@ public class SUMprogram implements SUM {
 	LCheckBox mergePatches;
 
 	OptionsMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super("SUM Options", save, parent_, blue);
+	    super("SUM Options", parent_, blue, save);
 	}
 
 	@Override
@@ -230,13 +241,13 @@ public class SUMprogram implements SUM {
 		importOnStartup = new LCheckBox("Import On Startup", settingFont, SUMGUI.light);
 		importOnStartup.addShadow();
 		importOnStartup.tie(SUMSettings.IMPORT_AT_START, saveFile, SUMGUI.helpPanel, false);
-		last = setPlacement(importOnStartup, last);
+		setPlacement(importOnStartup);
 		AddSetting(importOnStartup);
 
 		mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
 		mergePatches.addShadow();
 		mergePatches.tie(SUMSettings.MERGE_PATCH, saveFile, SUMGUI.helpPanel, false);
-		last = setPlacement(mergePatches, last);
+		setPlacement(mergePatches);
 		AddSetting(mergePatches);
 
 		alignRight();
@@ -368,23 +379,35 @@ public class SUMprogram implements SUM {
 	}
     }
 
-    public enum SUMSettings {
+    enum SUMSettings {
 
 	MERGE_PATCH,
 	IMPORT_AT_START;
     }
 
     // SUM methods
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
 	return "SkyProc Unified Manager";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
-    public GRUP_TYPE[] duplicateOriginalsReport() {
+    public GRUP_TYPE[] dangerousRecordReport() {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public GRUP_TYPE[] importRequests() {
 	GRUP_TYPE[] out = new GRUP_TYPE[0];
@@ -392,56 +415,100 @@ public class SUMprogram implements SUM {
 	return out;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean importAtStart() {
 	return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasStandardMenu() {
 	return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public SPMainMenuPanel getStandardMenu() {
 	return mmenu;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasCustomMenu() {
 	return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
-    public JFrame getCustomMenu() {
+    public JFrame openCustomMenu() {
 	return null;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasLogo() {
 	return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public URL getLogo() {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasSave() {
 	return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public LSaveFile getSave() {
 	return saveFile;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getVersion() {
 	return "1.0";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Mod getExportPatch() {
 	Mod patch = new Mod(getListing());
@@ -450,11 +517,19 @@ public class SUMprogram implements SUM {
 	return patch;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Color getHeaderColor() {
 	return Color.BLUE;
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Override
     public void runChangesToPatch() throws Exception {
 	if (saveFile.getBool(SUMSettings.MERGE_PATCH)) {

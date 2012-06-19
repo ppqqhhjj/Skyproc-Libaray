@@ -17,7 +17,7 @@ import lev.gui.resources.LImages;
 import skyproc.SPGlobal;
 
 /**
- *
+ * A GUI window frame for LProgress bar.  Used in SUMGUI.
  * @author Justin Swanson
  */
 public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
@@ -28,8 +28,18 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     Dimension GUIsize = new Dimension(250, 100);
     LImagePane backgroundPanel;
     JFrame guiRef;
+    /**
+     * JFrame operation to execute when the window is closed.
+     */
     public int closeOp = JFrame.DO_NOTHING_ON_CLOSE;
 
+    /**
+     *
+     * @param header
+     * @param headerC
+     * @param footer
+     * @param footerC
+     */
     public LProgressBarFrame(final Font header, final Color headerC, final Font footer, final Color footerC) {
 	bar = new LProgressBar(150, 15, footer, footerC);
 	addComponents(header, headerC);
@@ -60,6 +70,9 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	setResizable(false);
     }
 
+    /**
+     * Sets the progress bar to exit the program when it is closed.
+     */
     public void setExitOnClose() {
 	closeOp = JFrame.DISPOSE_ON_CLOSE;
     }
@@ -74,10 +87,19 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	bar.incrementBar();
     }
 
+    /**
+     * Sets the location to display relative to the GUI ref object assigned.
+     * @param x
+     * @param y
+     */
     public void setCorrectLocation(int x, int y) {
 	correctLocation = new Dimension(x, y);
     }
 
+    /**
+     * Moves the progress bar window to the relatively correct location, relative
+     *  to the GUI ref object assigned.
+     */
     public final void moveToCorrectLocation() {
 	if (guiRef != null) {
 	    Rectangle r = guiRef.getBounds();
@@ -90,6 +112,9 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	bar.setStatus(input_);
     }
 
+    /**
+     * Opens and displays the progress bar frame.
+     */
     public void open() {
 	SwingUtilities.invokeLater(new Runnable() {
 
@@ -101,6 +126,11 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	});
     }
 
+    /**
+     * Opens and displays the progress bar frame, and adds a listener
+     *  that will execute when the progress bar is done.
+     * @param c
+     */
     public void open(ChangeListener c) {
 	open();
 	setDoneListener(c);
@@ -110,11 +140,18 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	bar.setDoneListener(c);
     }
 
+    /**
+     * Makes the progress bar invisible.
+     */
     public void close() {
 	setVisible(false);
 //	bar.done.setSelected(!bar.done.isSelected());
     }
 
+    /**
+     * Sets the GUI ref object for relative positioning.
+     * @param ref
+     */
     public void setGUIref(JFrame ref) {
 	guiRef = ref;
     }

@@ -20,7 +20,6 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     /**
-     * @param args the command line arguments
      */
     public static void runTests() {
 	setSkyProcGlobal();

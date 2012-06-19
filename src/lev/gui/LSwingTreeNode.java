@@ -12,10 +12,21 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class LSwingTreeNode extends DefaultMutableTreeNode {
 
+    /**
+     *
+     * @param node
+     * @return True if children contains a node equal to the parameter.
+     */
     public boolean contains(LSwingTreeNode node) {
 	return (get(node) != null);
     }
 
+    /**
+     * Recursively searches the node's children for one equal
+     * to the input and returns it.
+     * @param node
+     * @return
+     */
     public LSwingTreeNode get(LSwingTreeNode node) {
 	if (this.children != null) {
 	    for (Object rhs : this.children) {

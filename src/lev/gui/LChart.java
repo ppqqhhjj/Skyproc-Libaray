@@ -19,15 +19,29 @@ import org.jfree.chart.JFreeChart;
  */
 public class LChart extends JPanel {
 
+    /**
+     *
+     */
     public JFreeChart chart;
     ChartPanel cPanel;
     LLabel title;
 
+    /**
+     *
+     * @param title_
+     * @param size_
+     */
     public LChart(String title_, Dimension size_) {
         this.setLayout(null);
         super.setSize(size_.width, size_.height);
     }
 
+    /**
+     *
+     * @param title_
+     * @param size_
+     * @param c
+     */
     protected void init(String title_, Dimension size_, Color c) {
 
         if (title_ != null) {

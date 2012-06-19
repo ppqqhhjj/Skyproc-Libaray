@@ -339,6 +339,15 @@ public class Ln {
 	return out;
     }
 
+    /**
+     * Recursively returns all files inside of a directory and its
+     * subdirectories.
+     * @param src Folder to recursively search
+     * @param addDirs Include directories as files in the list, followed by
+     * their contents.
+     * @return List of all files inside the folder and subfolders within the
+     * depth parameters.
+     */
     public static ArrayList<File> generateFileList(File src, boolean addDirs) {
 	return generateFileList(src, -1, -1, addDirs);
     }
@@ -609,6 +618,11 @@ public class Ln {
 	}
     }
 
+    /**
+     * Returns the file extension string. Eg "Hello.jpg" returns "jpg"
+     * @param f
+     * @return
+     */
     public static String getFileType(File f) {
 	if (f.isFile() && f.getName().indexOf(".") != -1) {
 	    return f.getName().substring(f.getName().lastIndexOf(".") + 1);
@@ -617,6 +631,12 @@ public class Ln {
 	}
     }
 
+    /**
+     * True if file extension is equal to input, case insensitive.
+     * @param f
+     * @param fileType
+     * @return
+     */
     public static boolean isFileType(File f, String fileType) {
 	return getFileType(f).equalsIgnoreCase(fileType);
     }
@@ -1116,14 +1136,33 @@ public class Ln {
 	}
     }
 
+    /**
+     * Converts byte number to megabyte number
+     * @param numBytes
+     * @return
+     */
     public static long toMB(long numBytes) {
 	return numBytes / 1048576;
     }
 
+    /**
+     * Converts byte number to kilobyte number
+     * @param numBytes
+     * @return
+     */
     public static long toKB(long numBytes) {
 	return numBytes / 1024;
     }
 
+    /**
+     * Asks the user to locate a file, and saves the location for next time.  On second runthrough, the
+     *  user will not be asked, and the backup file will be used instead.
+     * @param fileMessageToAskUserFor
+     * @param backupFileLocation
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static File manualFindFile(String fileMessageToAskUserFor, File backupFileLocation) throws FileNotFoundException, IOException {
 	// Check for save file
 	if (backupFileLocation.isFile()) {
@@ -1149,6 +1188,17 @@ public class Ln {
 	return fileLocation;
     }
 
+    /**
+     * A simple comparison function that compares two files byte by byte, and
+     * reports the positions of any differences (eg. file1[i] != file2[i]).
+     *
+     * @param testFile File to test to keyFile.
+     * @param keyFile Validation file to be used as a desired example.
+     * @param numErrorsToPrint Number of differences to print.
+     * @return True if files matched with NO differences.
+     * @throws FileNotFoundException 
+     * @throws IOException
+     */
     public static boolean validateCompare(File testFile, File keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
 	boolean print = numErrorsToPrint != 0;
 	if (keyFile.isFile() && testFile.isFile()) {
@@ -1205,24 +1255,39 @@ public class Ln {
      * @param keyFile Validation file to be used as a desired example.
      * @param numErrorsToPrint Number of differences to print.
      * @return True if files matched with NO differences.
+     * @throws FileNotFoundException
+     * @throws IOException
      */
     public static boolean validateCompare(String testFile, String keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
 	return validateCompare(new File(testFile), new File(keyFile), numErrorsToPrint);
     }
 
-    public static boolean isDescendant(TreePath path1, TreePath path2) {
-	int count1 = path1.getPathCount();
-	int count2 = path2.getPathCount();
+    /**
+     *
+     * @param parent
+     * @param child
+     * @return True if child is a descendant of parent
+     */
+    public static boolean isDescendant(TreePath parent, TreePath child) {
+	int count1 = parent.getPathCount();
+	int count2 = child.getPathCount();
 	if (count1 <= count2) {
 	    return false;
 	}
 	while (count1 != count2) {
-	    path1 = path1.getParentPath();
+	    parent = parent.getParentPath();
 	    count1--;
 	}
-	return path1.equals(path2);
+	return parent.equals(child);
     }
 
+    /**
+     * Returns a string representation of the tree's expansion state.  To be used
+     *  to revert back to it later.
+     * @param tree
+     * @param row
+     * @return
+     */
     public static String getExpansionState(JTree tree, int row) {
 	TreePath rowPath = tree.getPathForRow(row);
 	StringBuilder buf = new StringBuilder();
@@ -1240,6 +1305,12 @@ public class Ln {
 	return buf.toString();
     }
 
+    /**
+     * Restores a tree's expansion state to a previously saved string representation.
+     * @param tree
+     * @param row
+     * @param expansionState
+     */
     public static void restoreExpanstionState(JTree tree, int row, String expansionState) {
 	StringTokenizer stok = new StringTokenizer(expansionState, ",");
 	while (stok.hasMoreTokens()) {
@@ -1248,6 +1319,13 @@ public class Ln {
 	}
     }
 
+    /**
+     * A list of all the class files in a jar.
+     * @param jarPath
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static ArrayList<String> getClasses(File jarPath) throws FileNotFoundException, IOException {
 	JarEntry jarEntry;
 	JarInputStream jarFile = new JarInputStream(new FileInputStream(jarPath));
@@ -1264,6 +1342,16 @@ public class Ln {
 	return out;
     }
 
+    /**
+     * loads all classes in a jar.  Optionally can skip any that throw exceptions.
+     * @param jarPath
+     * @param skipBad
+     * @return
+     * @throws MalformedURLException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static ArrayList<Class> loadClasses(File jarPath, boolean skipBad) throws MalformedURLException, FileNotFoundException, IOException, ClassNotFoundException {
 	ArrayList<String> classPaths = getClasses(jarPath);
 	ArrayList<Class> out = new ArrayList<Class>(classPaths.size());
@@ -1284,6 +1372,12 @@ public class Ln {
 	return out;
     }
 
+    /**
+     * Exports contents of a stream to a string.
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static String convertStreamToStr(InputStream is) throws IOException {
 
 	if (is != null) {
@@ -1306,6 +1400,12 @@ public class Ln {
 	}
     }
 
+    /**
+     * Custom JSON parser that exports it as a JSON file string.
+     * @param object
+     * @param exclude
+     * @return
+     */
     public static String toJsonPretty(JsonElement object, String... exclude) {
 	String out = "{\n";
 	ArrayList<String> excludeList = new ArrayList<String>(Arrays.asList(exclude));

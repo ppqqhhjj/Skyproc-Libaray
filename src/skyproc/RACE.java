@@ -617,6 +617,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     * 
+     * @param gender
+     * @param value
+     */
     public void setHeight(Gender gender, float value) {
 	switch (gender) {
 	    case MALE:
@@ -626,6 +631,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public float getHeight(Gender gender) {
 	switch (gender) {
 	    case MALE:

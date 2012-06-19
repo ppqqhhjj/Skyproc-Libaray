@@ -131,11 +131,23 @@ public class ECZN extends MajorRecord {
         }
     }
 
+    /**
+     *
+     */
     public enum ECZNFlags {
 
-        NeverResets(1),
-        MatchPCBelowMin(2),
-        DisableCombatBoundary(4),;
+	/**
+	 *
+	 */
+	NeverResets(1),
+	/**
+	 *
+	 */
+	MatchPCBelowMin(2),
+	/**
+	 *
+	 */
+	DisableCombatBoundary(4),;
         int value;
 
         ECZNFlags(int value) {
@@ -143,50 +155,100 @@ public class ECZN extends MajorRecord {
         }
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(ECZNFlags flag) {
         return DATA.flags.get(flag.value);
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(ECZNFlags flag, boolean on) {
         this.DATA.flags.set(flag.value, on);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getLocation() {
         return DATA.location;
     }
 
+    /**
+     *
+     * @param location
+     */
     public void setLocation(FormID location) {
         this.DATA.location = location;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxLevel() {
         return DATA.maxLevel;
     }
 
+    /**
+     *
+     * @param maxLevel
+     */
     public void setMaxLevel(int maxLevel) {
         this.DATA.maxLevel = maxLevel;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMinLevel() {
         return DATA.minLevel;
     }
 
+    /**
+     *
+     * @param minLevel
+     */
     public void setMinLevel(int minLevel) {
         this.DATA.minLevel = minLevel;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getOwner() {
         return DATA.owner;
     }
 
+    /**
+     *
+     * @param owner
+     */
     public void setOwner(FormID owner) {
         this.DATA.owner = owner;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRank() {
         return DATA.rank;
     }
 
+    /**
+     *
+     * @param rank
+     */
     public void setRank(int rank) {
         this.DATA.rank = rank;
     }

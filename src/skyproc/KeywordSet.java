@@ -112,10 +112,15 @@ public class KeywordSet extends SubRecord {
 	}
     }
 
+    /**
+     *
+     * @param set
+     * @return True if every keyword in this set is contained in the parameter's set.
+     */
     public boolean containedIn(KeywordSet set) {
 	return keywords.containedIn(set.keywords);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {

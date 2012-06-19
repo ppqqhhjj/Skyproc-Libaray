@@ -23,6 +23,9 @@ public class LImagePane extends JPanel {
     int IMG_WIDTH = 0;
     int IMG_HEIGHT = 0;
 
+    /**
+     * Creates an image pane with no set image.
+     */
     public LImagePane() {
         setLayout(null);
     }
@@ -96,6 +99,11 @@ public class LImagePane extends JPanel {
         setImage(ImageIO.read(in));
     }
 
+    /**
+     * 
+     * @param url
+     * @throws IOException
+     */
     final public void setImage(URL url) throws IOException {
 	setImage(ImageIO.read(url));
     }

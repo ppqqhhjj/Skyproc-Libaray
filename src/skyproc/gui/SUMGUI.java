@@ -20,32 +20,59 @@ import skyproc.SPGlobal;
 import skyproc.SPImporter;
 
 /**
- *
+ * The standard GUI setup used in SUM.  This can be used to create GUIs that manage
+ * your settings, handle savefiles, and hook directly into SUM.
  * @author Justin Swanson
  */
 public class SUMGUI extends JFrame {
 
     static JFrame singleton = null;
+    /**
+     * Bounds of the SUM GUI.
+     */
     public final static Rectangle fullDimensions = new Rectangle(0, 0, 950, 632);
+    /**
+     * Bounds of the left column
+     */
     public final static Rectangle leftDimensions = new Rectangle(0, 0, 299, fullDimensions.height - 28); // For status update
+    /**
+     * Bounds of the middle column
+     */
     public final static Rectangle middleDimensions = new Rectangle(leftDimensions.x + leftDimensions.width + 7, 0, 330, fullDimensions.height);
+    /**
+     * Bounds of the right column
+     */
     public final static Rectangle rightDimensions = new Rectangle(middleDimensions.x + middleDimensions.width + 7, 0, 305, fullDimensions.height);
+    /**
+     * Bounds of the two right columns
+     */
     public final static Rectangle middleRightDimensions = new Rectangle(middleDimensions.x, 0, rightDimensions.x + rightDimensions.width, fullDimensions.height);
+    /**
+     * Bounds of the two left columns
+     */
     public final static Rectangle middleLeftDimensions = new Rectangle(0, 0, middleDimensions.x + middleDimensions.width, middleDimensions.height);
     static final Color light = new Color(238, 233, 204);
     static final Color lightGray = new Color(190, 190, 190);
     static final Color darkGray = new Color(110, 110, 110);
     static final Color lightred = Color.red;
-    static public boolean importAtStart = false;
     static SUM hook;
     static final String header = "SUM";
-    public static Thread parser;
+    /**
+     * Import/Export background thread is stored here for access.
+     */
+    static public Thread parser;
     static boolean imported = false;
     static boolean exitRequested = false;
-    public static LProgressBarFrame progress = new LProgressBarFrame(
+    /**
+     * Progress bar frame that pops up at the end when creating the patch.
+     */
+    static public LProgressBarFrame progress = new LProgressBarFrame(
 	    new Font("SansSerif", Font.PLAIN, 12), Color.GRAY,
 	    new Font("SansSerif", Font.PLAIN, 10), Color.lightGray);
-    public static LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
+    /**
+     * Help panel on the right column of the GUI.
+     */
+    static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
     // Non static
     static LImagePane backgroundPanel;
     LLabel willMakePatch;
@@ -170,6 +197,10 @@ public class SUMGUI extends JFrame {
 
     }
 
+    /**
+     * Opens and hooks onto a program that implements the SUM interface.
+     * @param hook Program to open and hook to
+     */
     public static void open(final SUM hook) {
 	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
@@ -178,7 +209,7 @@ public class SUMGUI extends JFrame {
 	    public void run() {
 		if (singleton == null) {
 		    if (hook.hasCustomMenu()) {
-			singleton = hook.getCustomMenu();
+			singleton = hook.openCustomMenu();
 		    } else {
 			singleton = new SUMGUI();
 		    }
@@ -205,7 +236,7 @@ public class SUMGUI extends JFrame {
 	return this.getHeight() - 28;
     }
 
-    static public void closingGUIwindow() {
+    static void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
 
 	progress.setExitOnClose();
@@ -220,6 +251,10 @@ public class SUMGUI extends JFrame {
 	runThread();
     }
 
+    /**
+     * Immediately saves settings to file, closes debug logs, and exits the program.<br>
+     * NO patch is generated.
+     */
     static public void exitProgram() {
 	SPGlobal.log(header, "Exit requested.");
 	if (hook.hasSave()) {
@@ -283,6 +318,9 @@ public class SUMGUI extends JFrame {
 	return backgroundPanel.add(comp);
     }
 
+    /**
+     * Interface that hooks SkyProc's progress bar output to the SUM GUI's progress bar display.
+     */
     public class SUMProgress implements LProgressBarInterface {
 
 	@Override
@@ -306,6 +344,12 @@ public class SUMGUI extends JFrame {
 	    }
 	}
 
+	/**
+	 *
+	 * @param min
+	 * @param max
+	 * @param status
+	 */
 	@Override
 	public void setStatus(int min, int max, String status) {
 	    progress.setStatus(min, max, status);
@@ -329,26 +373,45 @@ public class SUMGUI extends JFrame {
 	    progress.setBar(in);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public int getBar() {
 	    return progress.getBar();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public int getMax() {
 	    return progress.getMax();
 	}
 
+	/**
+	 *
+	 * @param on
+	 */
 	@Override
 	public void pause(boolean on) {
 	    progress.pause(on);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public boolean paused() {
 	    return progress.paused();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void done() {
 	    progress.done();

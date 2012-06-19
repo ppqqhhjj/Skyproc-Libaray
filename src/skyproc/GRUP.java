@@ -248,6 +248,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	addRecordSilent(item);
     }
 
+    /**
+     *
+     * @return A list of all records in the GRUP
+     */
     public ArrayList<T> getRecords() {
         return listRecords;
     }

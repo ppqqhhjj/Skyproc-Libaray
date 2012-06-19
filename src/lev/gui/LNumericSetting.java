@@ -19,6 +19,15 @@ public class LNumericSetting extends LUserSetting<Integer> {
 
     LSpinner setting;
 
+    /**
+     *
+     * @param text
+     * @param font
+     * @param c
+     * @param min
+     * @param max
+     * @param step
+     */
     public LNumericSetting(String text, Font font, Color c, int min, Integer max, int step) {
         super(text, font, c);
         setting = new LSpinner(text, min, min, max, step, Integer.toString(max).length());
@@ -42,14 +51,26 @@ public class LNumericSetting extends LUserSetting<Integer> {
         setVisible(true);
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setValue(String s) {
         setValue(Integer.parseInt(s));
     }
 
+    /**
+     *
+     * @param i
+     */
     public void setValue(int i) {
         setting.setValue(i);
     }
 
+    /**
+     *
+     * @param d
+     */
     public void setValue(double d) {
         setValue(Double.toString(d));
     }
@@ -59,6 +80,13 @@ public class LNumericSetting extends LUserSetting<Integer> {
 	setting.tie(s, save_, help_, hoverHandler);
     }
 
+    /**
+     *
+     * @param s
+     * @param save
+     * @param help_
+     * @param hoverListener
+     */
     @Override
     public void linkTo(Enum s, LSaveFile save, LHelpPanel help_, boolean hoverListener) {
 	setting.linkTo(s, save, help_, hoverListener);
@@ -79,10 +107,18 @@ public class LNumericSetting extends LUserSetting<Integer> {
 	setting.addFocusListener(arg0);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void addChangeListener(ChangeListener c) {
         setting.addChangeListener(c);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setColor(Color c) {
         titleLabel.setForeground(c);
     }
@@ -98,7 +134,7 @@ public class LNumericSetting extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
 	setting.addUpdateHandlers();
     }
 
@@ -107,8 +143,12 @@ public class LNumericSetting extends LUserSetting<Integer> {
 	return setting.revertTo(m);
     }
 
+    /**
+     * 
+     * @param hoverListener
+     */
     @Override
-    public void addHelpHandler(boolean hoverListener) {
+    protected void addHelpHandler(boolean hoverListener) {
 	setting.addHelpHandler(hoverListener);
     }
 

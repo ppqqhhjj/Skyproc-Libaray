@@ -15,6 +15,9 @@ import javax.swing.Scrollable;
  */
 public class LPanel extends JPanel implements Scrollable {
 
+    /**
+     *
+     */
     public LPanel () {
 	setLayout(null);
 	setSize(1,1);
@@ -22,16 +25,29 @@ public class LPanel extends JPanel implements Scrollable {
 	setVisible(true);
     }
 
+    /**
+     *
+     * @param r
+     */
     public LPanel (Rectangle r) {
 	this();
 	setBounds(r);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public LPanel (int x, int y){
 	this();
 	setLocation(x,y);
     }
 
+    /**
+     * 
+     * @param input
+     */
     public void Add(Component input) {
 	input.setVisible(true);
 	add(input);

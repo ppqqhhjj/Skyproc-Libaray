@@ -15,9 +15,15 @@ import javax.swing.JTextField;
  * @author Justin Swanson
  */
 public class LTextField extends LUserSetting<String> {
-    
+
     JTextField field;
-    
+
+    /**
+     *
+     * @param title_
+     * @param font
+     * @param shade
+     */
     public LTextField (String title_, Font font, Color shade) {
         super(title_, font, shade);
         field = new JTextField();
@@ -27,27 +33,39 @@ public class LTextField extends LUserSetting<String> {
 	field.setVisible(true);
 	setVisible(true);
     }
-    
+
     @Override
     final public void setSize(int x, int y) {
         super.setSize(x, y);
         field.setSize(x - titleLabel.getWidth() - 10, y);
 	field.setLocation(titleLabel.getWidth() + 10, 0);
     }
-    
+
+    /**
+     *
+     * @param a
+     */
     public void addActionListener(ActionListener a) {
         field.addActionListener(a);
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
 	field.addActionListener(new UpdateHandler());
     }
-    
+
+    /**
+     *
+     * @param s
+     */
     public void setText(String s) {
 	field.setText(s);
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public String getText() {
 	return field.getText();
     }
@@ -64,6 +82,10 @@ public class LTextField extends LUserSetting<String> {
 	return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getValue() {
 	return field.getText();
@@ -79,6 +101,10 @@ public class LTextField extends LUserSetting<String> {
 	field.setBackground(Color.white);
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
     public void addHelpHandler(boolean hoverListener) {
 	field.addFocusListener(new HelpFocusHandler());

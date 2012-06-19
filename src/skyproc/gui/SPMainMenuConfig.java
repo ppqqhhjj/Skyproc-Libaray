@@ -13,15 +13,27 @@ import lev.gui.LLabel;
 import lev.gui.LSaveFile;
 
 /**
- *
+ * An main menu GUI component that is used in SUMGUI.
  * @author Justin Swanson
  */
 public class SPMainMenuConfig extends LCheckBoxConfig {
 
-    public SPMainMenuConfig(String title_, Boolean cBoxPresent, Boolean large, Color color, Point location, LSaveFile saveFile, Enum setting) {
+    /**
+     * Creates a main menu GUI line tied to a savefile.
+     * @param title_ Text to display
+     * @param checkbox Whether to include a checkbox
+     * @param color Color to display
+     * @param location Location of the component
+     * @param saveFile Savefile to tie to
+     * @param setting Setting to tie to
+     */
+    public SPMainMenuConfig(String title_, boolean checkbox, Color color, Point location, LSaveFile saveFile, Enum setting) {
 	super(title_);
+	boolean large = true;
+	boolean saveField = saveFile != null && setting != null && checkbox;
+
 	help = SUMGUI.helpPanel;
-	if (saveFile != null && setting != null) {
+	if (saveField) {
 	    save = saveFile;
 	    saveTie = setting;
 	    setHelpInfo(saveTie, save);
@@ -37,7 +49,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	button = new LButton(buttonText);
 	button.addActionListener(new UpdateHelpActionHandler());
 
-	if (cBoxPresent) {
+	if (saveField) {
 	    cbox = new LSpecialCheckBox(title, new Font("Serif", Font.PLAIN, size), color, this);
 	    cbox.setOffset(5);
 	    cbox.tie(setting, save, help, false);
@@ -49,7 +61,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	}
 
 	if (!large) {
-	    if (cBoxPresent) {
+	    if (saveField) {
 		cbox.setOffset(2);
 	    }
 	    button.setLocation(button.getX(), button.getY() + 1);
@@ -58,7 +70,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	}
 
 	add(button);
-	if (cBoxPresent) {
+	if (saveField) {
 	    add(cbox);
 	    setLocation(location.x - button.getWidth() - cbox.getWidth() - spacing, location.y);
 	    setSize(cbox.getWidth() + button.getWidth() + spacing, cbox.getHeight());
@@ -67,6 +79,15 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	    setLocation(location.x - button.getWidth() - titleLabel.getWidth() - spacing, location.y);
 	    setSize(titleLabel.getWidth() + button.getWidth() + spacing, titleLabel.getHeight());
 	}
+    }
 
+    /**
+     * Creates a main menu GUI line
+     * @param title_ Text to display
+     * @param color Color to display
+     * @param location Location to place the component
+     */
+    public SPMainMenuConfig(String title_, Color color, Point location) {
+	this(title_, false, color, location, null, null);
     }
 }

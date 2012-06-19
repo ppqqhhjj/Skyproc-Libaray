@@ -25,14 +25,37 @@ import lev.Ln;
  */
 public class LSwingTree extends LComponent {
 
+    /**
+     *
+     */
     protected JScrollPane scrollPane;
+    /**
+     *
+     */
     protected JPanel panel;
+    /**
+     *
+     */
     protected JTree tree;
+    /**
+     *
+     */
     protected DefaultTreeModel model;
+    /**
+     *
+     */
     protected int topMargin = 0;
+    /**
+     *
+     */
     protected int leftMargin = 0;
     String state;
 
+    /**
+     *
+     * @param width
+     * @param height
+     */
     public LSwingTree(int width, int height) {
         super();
 
@@ -54,35 +77,65 @@ public class LSwingTree extends LComponent {
         setVisible(true);
     }
 
+    /**
+     *
+     * @param m
+     */
     public void setModel(TreeModel m) {
         tree.setModel(m);
     }
 
+    /**
+     *
+     * @return
+     */
     public JTree getTree() {
         return tree;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void expand(Boolean b) {
         Ln.expandAll(tree, b);
     }
 
+    /**
+     *
+     */
     public void expandRoot() {
         tree.expandPath(new TreePath((TreeNode) tree.getModel().getRoot()));
     }
 
+    /**
+     *
+     * @param x
+     */
     public final void setRowHeight(int x) {
         tree.setRowHeight(x);
     }
 
+    /**
+     *
+     */
     public void removeBorder() {
         scrollPane.setViewportBorder(null);
         scrollPane.setBorder(null);
     }
 
+    /**
+     *
+     * @param t
+     */
     public void addTreeSelectionListener(TreeSelectionListener t) {
         tree.addTreeSelectionListener(t);
     }
 
+    /**
+     *
+     * @param t
+     */
     public void addTreeExpansionListener(TreeExpansionListener t) {
         tree.addTreeExpansionListener(t);
     }
@@ -92,31 +145,59 @@ public class LSwingTree extends LComponent {
 	tree.addMouseListener(l);
     }
 
+    /**
+     *
+     * @param ma
+     */
     public void addMouseListener(MouseAdapter ma) {
 	tree.addMouseListener(ma);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRowCount() {
         return tree.getRowCount();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRowHeight() {
         return tree.getRowHeight();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTotalRowHeight() {
         return getRowCount() * getRowHeight();
     }
 
+    /**
+     *
+     * @param b
+     */
     public void adaptToScrollbar(BoundedRangeModel b) {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setModel(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public TreePath[] getSelectionPaths () {
 	return tree.getSelectionPaths();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getExpandedRows() {
         ArrayList<Integer> out = new ArrayList<Integer>();
         TreePath path;
@@ -129,6 +210,10 @@ public class LSwingTree extends LComponent {
         return out;
     }
 
+    /**
+     *
+     * @param rows
+     */
     public void expandRows(ArrayList<Integer> rows) {
         for (int i : rows) {
             TreePath path = tree.getPathForRow(i);
@@ -143,6 +228,11 @@ public class LSwingTree extends LComponent {
         resetScrollSize();
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setMargin(int x, int y) {
         topMargin = y;
         leftMargin = x;
@@ -193,6 +283,9 @@ public class LSwingTree extends LComponent {
         }
     }
 
+    /**
+     *
+     */
     public class CustomTreeUI extends BasicTreeUI {
 
         @Override
@@ -213,10 +306,18 @@ public class LSwingTree extends LComponent {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public TreeNode getRoot() {
         return (TreeNode) tree.getModel().getRoot();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> rootRows() {
         ArrayList<Integer> out = new ArrayList<Integer>();
 
@@ -232,30 +333,59 @@ public class LSwingTree extends LComponent {
         return out;
     }
 
+    /**
+     *
+     * @param row
+     * @return
+     */
     public String getExpansionState(int row) {
 	return Ln.getExpansionState(tree, row);
     }
 
+    /**
+     *
+     * @param row
+     * @param state
+     */
     public void restoreExpansionState (int row, String state) {
 	Ln.restoreExpanstionState(tree, row, state);
     }
 
+    /**
+     *
+     */
     public void saveExpansionState () {
 	state = getExpansionState(0);
     }
 
+    /**
+     *
+     */
     public void restoreExpansionState () {
 	restoreExpansionState(0, state);
     }
 
+    /**
+     *
+     * @param node
+     */
     public void nodeChanged (TreeNode node) {
 	model.nodeChanged(node);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getLeadSelectionRow () {
 	return tree.getLeadSelectionRow();
     }
 
+    /**
+     *
+     * @param row
+     * @return
+     */
     public TreePath getPathForRow(int row) {
 	return tree.getPathForRow(row);
     }

@@ -225,6 +225,11 @@ public class LShrinkArray {
         return Float.intBitsToFloat(extractInt(0, 4));
     }
 
+    /**
+     * 
+     * @param amount
+     * @return
+     */
     public boolean extractBool(int amount) {
 	if (extract(amount)[0] == 0) {
 	    return false;

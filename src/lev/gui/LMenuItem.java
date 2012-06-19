@@ -16,20 +16,36 @@ public class LMenuItem extends LHelpComponent {
 
     JMenuItem menuItem;
 
+    /**
+     *
+     * @param title_
+     */
     public LMenuItem (String title_) {
 	super(title_);
 	menuItem = new JMenuItem(title_);
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
-    public void addHelpHandler(boolean hoverListener) {
+    protected void addHelpHandler(boolean hoverListener) {
 	menuItem.addMouseListener(new HelpMouseHandler());
     }
 
+    /**
+     *
+     * @return
+     */
     public JMenuItem getItem() {
 	return menuItem;
     }
 
+    /**
+     * 
+     * @param a
+     */
     public void addActionListener (ActionListener a) {
 	menuItem.addActionListener(a);
     }

@@ -867,10 +867,18 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
+    /**
+     * 
+     * @param weap
+     */
     public void setTemplate(FormID weap) {
 	CNAM.setForm(weap);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getTemplate () {
 	return CNAM.getForm();
     }

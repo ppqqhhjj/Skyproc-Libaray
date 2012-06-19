@@ -27,6 +27,12 @@ public class LCheckBox extends LUserSetting<Boolean> {
     private JCheckBox cbox;
     ArrayList<LComponent> underlings = new ArrayList<LComponent>();
 
+    /**
+     *
+     * @param text
+     * @param font
+     * @param shade
+     */
     public LCheckBox(String text, Font font, Color shade) {
 	super(text, font, shade);
 	int spacing = 5;
@@ -46,11 +52,21 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	add(cbox);
     }
 
+    /**
+     *
+     * @param text
+     * @param font
+     * @param shade
+     * @param location
+     */
     public LCheckBox(String text, Font font, Color shade, Point location) {
 	this(text, font, shade);
 	setLocation(location);
     }
 
+    /**
+     *
+     */
     public void addShadow() {
 	titleLabel.addShadow();
     }
@@ -61,14 +77,26 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	cbox.setFocusable(focusable);
     }
 
+    /**
+     *
+     * @param offset
+     */
     public void setOffset(int offset) {
 	cbox.setLocation(cbox.getX(), offset);
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setSelected(Boolean b) {
 	cbox.setSelected(b);
     }
 
+    /**
+     *
+     * @return
+     */
     public Boolean isSelected() {
 	return cbox.isSelected();
     }
@@ -85,10 +113,18 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	return true;
     }
 
+    /**
+     *
+     * @param l
+     */
     public void addActionListener(ActionListener l) {
 	cbox.addActionListener(l);
     }
 
+    /**
+     *
+     * @param l
+     */
     public void addChangeListener(ChangeListener l) {
 	cbox.addChangeListener(l);
     }
@@ -98,6 +134,10 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	return cbox.isSelected();
     }
 
+    /**
+     *
+     * @param c
+     */
     public void addAsUnderling(LComponent c) {
 	underlings.add(c);
 	visibilityUpdate();
@@ -139,6 +179,10 @@ public class LCheckBox extends LUserSetting<Boolean> {
 	}
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
     public void addHelpHandler(boolean hoverListener) {
 	cbox.addFocusListener(new HelpFocusHandler());
@@ -149,20 +193,31 @@ public class LCheckBox extends LUserSetting<Boolean> {
     }
 
     @Override
-    public final void addUpdateHandlers() {
+    protected final void addUpdateHandlers() {
 	cbox.addActionListener(new UpdateHandler());
 	cbox.addChangeListener(new UpdateChangeHandler());
     }
 
+    /**
+     *
+     * @param c
+     */
     public void removeChangeListener(ChangeListener c) {
 	cbox.removeChangeListener(c);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setColor(Color c) {
 	titleLabel.setForeground(c);
     }
 
-    public class ClickText implements MouseListener {
+    /**
+     *
+     */
+    class ClickText implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {

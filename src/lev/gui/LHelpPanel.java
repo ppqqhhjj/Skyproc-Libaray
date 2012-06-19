@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import lev.gui.resources.LImages;
 
 /**
- *
+ * A panel that displays help information.
  * @author Justin Swanson
  */
 public class LHelpPanel extends LPanel {
@@ -26,6 +26,15 @@ public class LHelpPanel extends LPanel {
     Boolean hideArrow = false;
     static int spacing = 75;
 
+    /**
+     *
+     * @param bounds
+     * @param titleFont
+     * @param titleC
+     * @param contentC
+     * @param leftArrow
+     * @param arrowX
+     */
     public LHelpPanel(Rectangle bounds, Font titleFont, Color titleC, Color contentC, boolean leftArrow, int arrowX) {
 	y = - 100;
 	arrowx = arrowX;
@@ -59,20 +68,20 @@ public class LHelpPanel extends LPanel {
 	}
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setHeaderColor (Color c) {
 	setting.setForeground(c);
     }
 
-    public void setSetting(String title_) {
+    public void setTitle(String title_) {
 	setting.setText("   " + title_);
 	setting.setSize(setting.getPreferredSize());
     }
 
-    public void setSetting(LLabel l) {
-	setSetting(l.getText());
-    }
-
-    public void setSettingPos(int y_) {
+    public void setTitleHeight(int y_) {
 	if (y_ == -1) {
 	    y = spacing;
 	} else {
@@ -84,6 +93,10 @@ public class LHelpPanel extends LPanel {
 
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setContent(String text) {
 	hideArrow = false;
 	help.setText(text);
@@ -114,31 +127,54 @@ public class LHelpPanel extends LPanel {
 	}
     }
 
+    /**
+     * Appends text to the content string.
+     * @param text
+     */
     public void addContent(String text) {
 	help.append(text);
 	evalPositioning();
     }
 
+    /**
+     * Clears the bottom panel of the help area.
+     */
     public void clearBottomArea() {
 	bottomArea.removeAll();
 	bottomArea.setVisible(false);
     }
 
+    /**
+     * Adds a component to the separate bottom area panel.
+     * @param c
+     */
     public void addToBottomArea(Component c) {
 	bottomArea.Add(c);
 	bottomArea.setVisible(true);
     }
 
+    /**
+     *
+     * @param y
+     */
     public void setBottomAreaHeight(int y) {
 	int limit = bottomArea.getY() + bottomArea.getHeight();
 	bottomArea.setSize(bottomArea.getWidth(), y);
 	bottomArea.setLocation(0, limit - bottomArea.getHeight());
     }
 
+    /**
+     *
+     * @param on
+     */
     public void setBottomAreaVisible(boolean on) {
 	bottomArea.setVisible(on);
     }
 
+    /**
+     *
+     * @param b
+     */
     public void textVisible(Boolean b) {
 	textVisible = b;
 	setting.setVisible(b);
@@ -146,10 +182,17 @@ public class LHelpPanel extends LPanel {
 	repaint();
     }
 
+    /**
+     *
+     */
     public void hideArrow() {
 	hideArrow = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public Dimension getBottomSize() {
 	return bottomArea.getSize();
     }

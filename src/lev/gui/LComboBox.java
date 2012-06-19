@@ -19,6 +19,10 @@ public class LComboBox extends LUserSetting<Integer> {
     JComboBox box;
     String previous;
 
+    /**
+     *
+     * @param title_
+     */
     public LComboBox(String title_) {
 	super(title_);
 	box = new JComboBox();
@@ -33,22 +37,41 @@ public class LComboBox extends LUserSetting<Integer> {
 	box.setSize(x, y);
     }
 
+    /**
+     *
+     * @param a
+     */
     public void addActionListener(ActionListener a) {
 	box.addActionListener(a);
     }
 
+    /**
+     *
+     * @return
+     */
     public Object getSelectedItem() {
 	return box.getSelectedItem();
     }
 
+    /**
+     *
+     */
     public void removeAllItems() {
 	box.removeAllItems();
     }
 
+    /**
+     * 
+     * @param o
+     */
     public void addItem(Object o) {
 	box.addItem(o);
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setSelectedIndex(int in) {
 	if (box.getItemCount() <= in) {
 	    box.setSelectedIndex(box.getItemCount() - 1);
@@ -59,6 +82,10 @@ public class LComboBox extends LUserSetting<Integer> {
 	}
     }
 
+    /**
+     *
+     * @param o
+     */
     public void switchTo(Object o) {
 	for (int i = 0; i < box.getItemCount(); i++) {
 	    if (box.getItemAt(i).toString().equals(o.toString())) {
@@ -67,6 +94,9 @@ public class LComboBox extends LUserSetting<Integer> {
 	}
     }
 
+    /**
+     *
+     */
     public void savePrevious() {
 	if (box.getSelectedItem() != null) {
 	    previous = box.getSelectedItem().toString();
@@ -75,12 +105,19 @@ public class LComboBox extends LUserSetting<Integer> {
 	}
     }
 
+    /**
+     *
+     */
     public void switchToPrevious() {
 	if (previous != null) {
 	    switchTo(previous);
 	}
     }
 
+    /**
+     *
+     * @param mouseListener
+     */
     @Override
     public void addHelpHandler(boolean mouseListener) {
 	box.addFocusListener(new HelpFocusHandler());
@@ -90,7 +127,7 @@ public class LComboBox extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
 	box.addActionListener(new UpdateHandler());
     }
 

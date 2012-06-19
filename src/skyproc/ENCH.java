@@ -103,9 +103,18 @@ public class ENCH extends MagicItem {
 	}
     }
 
+    /**
+     *
+     */
     public enum EnchantType {
 
+	/**
+	 *
+	 */
 	Enchantment(6),
+	/**
+	 *
+	 */
 	StaffEnchantment(12);
 	int value;
 
@@ -123,9 +132,18 @@ public class ENCH extends MagicItem {
 	}
     }
 
+    /**
+     *
+     */
     public enum ENCHFlag {
 
+	/**
+	 *
+	 */
 	ManualCalc(0),
+	/**
+	 *
+	 */
 	ExtendDurationOnRecast(3);
 	int value;
 
@@ -134,74 +152,148 @@ public class ENCH extends MagicItem {
 	}
     }
 
+    /**
+     *
+     * @param cost
+     */
     public void setBaseCost(int cost) {
 	ENIT.baseCost = cost;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getBaseCost() {
 	return ENIT.baseCost;
     }
 
+    /**
+     *
+     * @param in
+     * @param on
+     */
     public void set(ENCHFlag in, boolean on) {
 	ENIT.flags.set(in.value, on);
     }
 
+    /**
+     * 
+     * @param in
+     * @return
+     */
     public boolean get(ENCHFlag in) {
 	return ENIT.flags.get(in.value);
     }
 
+    /**
+     *
+     * @param type
+     */
     public void setCastType(CastType type) {
 	ENIT.castType = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public CastType getCastType() {
 	return ENIT.castType;
     }
 
+    /**
+     *
+     * @param amount
+     */
     public void setChargeAmount(int amount) {
 	ENIT.chargeAmount = amount;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChargeAmount() {
 	return ENIT.chargeAmount;
     }
 
+    /**
+     *
+     * @param type
+     */
     public void setDeliveryType(DeliveryType type) {
 	ENIT.targetType = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public DeliveryType getDeliveryType() {
 	return ENIT.targetType;
     }
 
+    /**
+     *
+     * @param type
+     */
     public void setEnchantType(EnchantType type) {
 	ENIT.enchantType = type;
     }
 
+    /**
+     *
+     * @return
+     */
     public EnchantType getEnchantType() {
 	return ENIT.enchantType;
     }
 
+    /**
+     *
+     * @param time
+     */
     public void setChargeTime(float time) {
 	ENIT.chargeTime = time;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getChargeTime() {
 	return ENIT.chargeTime;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setBaseEnchantment(FormID id) {
 	ENIT.baseEnchantment = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getBaseEnchantment () {
 	return ENIT.baseEnchantment;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setWornRestrictions (FormID id) {
 	ENIT.wornRestrictions = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getWornRestrictions () {
 	return ENIT.wornRestrictions;
     }

@@ -239,6 +239,9 @@ public class LDebug {
         }
     }
 
+    /**
+     * Calls wrapUp() then exits the program.
+     */
     public static void wrapUpAndExit() {
 	try {
 	    wrapUp();
@@ -246,11 +249,19 @@ public class LDebug {
 	}
 	System.exit(0);
     }
-    
+
+    /**
+     *
+     * @return The path the log is writing to.
+     */
     public String getOpenPath() {
 	return openFile;
     }
-    
+
+    /**
+     *
+     * @return The next line number to be written.
+     */
     public int line() {
 	return this.debugCounter;
     }

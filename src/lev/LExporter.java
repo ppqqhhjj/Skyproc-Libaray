@@ -15,6 +15,11 @@ public class LExporter {
 
     private BufferedOutputStream output;
 
+    /**
+     *
+     * @param file File to open an exporter to.
+     * @throws FileNotFoundException
+     */
     public LExporter (File file) throws FileNotFoundException {
 	this(file.getPath());
     }
@@ -79,6 +84,11 @@ public class LExporter {
         write(Ln.toByteArray(input, size, size));
     }
 
+    /**
+     *
+     * @param input
+     * @throws IOException
+     */
     public void write(int input) throws IOException {
 	write(Ln.toByteArray(input));
     }
@@ -102,6 +112,12 @@ public class LExporter {
         write(Ln.toByteArray(input), size);
     }
 
+    /**
+     *
+     * @param input Boolean to write
+     * @param size Number of bytes to write
+     * @throws IOException
+     */
     public void write(boolean input, int size) throws IOException {
 	if (input) {
 	    write(1,size);

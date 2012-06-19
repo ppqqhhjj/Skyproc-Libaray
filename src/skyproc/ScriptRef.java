@@ -256,23 +256,23 @@ public class ScriptRef extends Record implements Iterable<String> {
     void addProperty(String propertyName, Integer ... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
-    
+
     void addProperty(String propertyName, Float ... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
-    
+
     void addProperty(String propertyName, Boolean ... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
-    
+
     void addProperty(String propertyName, FormID ... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
-    
+
     void addProperty(String propertyName, String ... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
-    
+
     /**
      * Adds a boolean property to the script, checks for duplicates.
      *
@@ -316,27 +316,57 @@ public class ScriptRef extends Record implements Iterable<String> {
 	removeProperty(propertyName);
 	addProperty(propertyName, floatProperty);
     }
-    
+
+    /**
+     * Adds a float array property to the script, checks for duplicates.
+     *
+     * @param propertyName Property name to add
+     * @param floatProperty Float array to assign to property
+     */
     public void setProperty(String propertyName, Float ... floatProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, floatProperty);
     }
-    
+
+    /**
+     * Adds a int array property to the script, checks for duplicates.
+     *
+     * @param propertyName Property name to add
+     * @param intProperty Int array to assign to property
+     */
     public void setProperty(String propertyName, Integer ... intProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, intProperty);
     }
-    
+
+    /**
+     * Adds a boolean array property to the script, checks for duplicates.
+     *
+     * @param propertyName Property name to add
+     * @param boolProperty 
+     */
     public void setProperty(String propertyName, Boolean ... boolProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, boolProperty);
     }
-    
+
+    /**
+     * Adds a string array property to the script, checks for duplicates.
+     *
+     * @param propertyName Property name to add
+     * @param stringProperty String array to assign to property
+     */
     public void setProperty(String propertyName, String ... stringProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, stringProperty);
     }
-    
+
+    /**
+     * Adds a FormID array property to the script, checks for duplicates.
+     *
+     * @param propertyName Property name to add
+     * @param formProperty FormID array to assign to property
+     */
     public void setProperty(String propertyName, FormID ... formProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, formProperty);

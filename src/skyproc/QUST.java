@@ -11,17 +11,20 @@ package skyproc;
 public class QUST extends MajorRecordNamed {
 
     static Type[] types = { Type.QUST };
-    
+
+    /**
+     * Returns the scripts package of the QUST
+     */
     public ScriptPackage scripts = new ScriptPackage();
-    SubData DNAM = new SubData(Type.DNAM);    
-    SubData NEXT = new SubData(Type.NEXT);    
+    SubData DNAM = new SubData(Type.DNAM);
+    SubData NEXT = new SubData(Type.NEXT);
     SubData ANAM = new SubData(Type.ANAM);
-    
+
     QUST () {
-	super();	
+	super();
 	init();
     }
-    
+
     QUST (Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
 	DNAM.setData(0x111,12);
@@ -29,20 +32,20 @@ public class QUST extends MajorRecordNamed {
 	ANAM.initialize(4);
 	init();
     }
-    
+
     final void init() {
 	subRecords.remove(Type.FULL);
-	
+
 	subRecords.add(scripts);
 	subRecords.add(FULL);
 	subRecords.add(DNAM);
 	subRecords.add(NEXT);
 	subRecords.add(ANAM);
     }
-    
+
     @Override
     Type[] getTypes() {
 	return types;
     }
-    
+
 }

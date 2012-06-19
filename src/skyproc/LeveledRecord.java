@@ -56,18 +56,36 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      */
     public enum LVLFlag {
 
+	/**
+	 *
+	 */
 	CalcAllLevelsEqualOrBelowPC,
+	/**
+	 *
+	 */
 	CalcForEachItemInCount;
     }
 
+    /**
+     *
+     */
     public void clearEntries() {
 	entries.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<LVLO> getEntries() {
 	return entries.toPublic();
     }
 
+    /**
+     * Returns all non-leveled list entries, with leveled list entries recursively
+     *  replaced with their contents.
+     * @return
+     */
     public ArrayList<LVLO> getFlattenedEntries() {
 	ArrayList<LVLO> out = new ArrayList<LVLO>();
 	for (LVLO entry : getEntries()) {
@@ -80,7 +98,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
 	}
 	return out;
     }
-    
+
     /**
      * Adds the desired entry to the LVLN. Duplicates are accepted.
      *

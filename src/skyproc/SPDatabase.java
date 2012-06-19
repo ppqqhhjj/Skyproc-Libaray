@@ -82,6 +82,11 @@ public class SPDatabase implements Iterable<Mod> {
 	modLookup.remove(listing);
     }
 
+    /**
+     * Returns the nth mod in the database.
+     * @param index
+     * @return
+     */
     public Mod getMod(int index) {
         return modLookup.get(addedplugins.get(index));
     }

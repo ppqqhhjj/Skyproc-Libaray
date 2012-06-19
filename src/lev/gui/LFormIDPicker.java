@@ -29,6 +29,12 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     JList addedList;
     JScrollPane scroll;
 
+    /**
+     *
+     * @param title
+     * @param font
+     * @param c
+     */
     public LFormIDPicker(String title, Font font, Color c) {
 	super(title, font, c);
 	titleLabel.addShadow();
@@ -83,7 +89,7 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
 	add.addActionListener(new UpdateHandler());
 	remove.addActionListener(new UpdateHandler());
     }
@@ -115,6 +121,10 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     public void clearHighlight() {
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
     public void addHelpHandler(boolean hoverListener) {
 	FocusListener f = new HelpFocusHandler();
@@ -128,23 +138,39 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
 	    remove.addMouseListener(l);
 	}
     }
-    
+
+    /**
+     *
+     * @param ids
+     */
     public void load(ArrayList<FormID> ids) {
 	for (FormID id : ids) {
 	    addForm(id);
 	}
     }
-    
+
+    /**
+     *
+     * @param ids
+     */
     public void load(FormID[] ids) {
 	for (FormID id : ids) {
 	    addForm(id);
 	}
     }
-    
+
+    /**
+     * 
+     * @param id
+     */
     public void addForm(FormID id) {
 	model.addElement(add);
     }
-    
+
+    /**
+     *
+     * @param ids
+     */
     public void load(String[][] ids) {
 	ArrayList<FormID> out = new ArrayList<FormID>(ids.length);
 	for (String[] id : ids) {
@@ -152,7 +178,11 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
 	}
 	load(out);
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getPickedIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>(model.getSize());
 	for (int i = 0 ; i < model.getSize() ; i++) {

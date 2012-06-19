@@ -8,7 +8,9 @@ import java.util.Map.Entry;
 import java.util.*;
 
 /**
- *
+ * A map which has values which are ArrayLists of type V.
+ * @param <K>
+ * @param <V>
  * @author Justin Swanson
  */
 public class LMergeMap<K, V> {
@@ -17,10 +19,19 @@ public class LMergeMap<K, V> {
     boolean sorted;
     boolean unique;
 
+    /**
+     *
+     * @param sorted Whether to use TreeMap as the container.
+     */
     public LMergeMap(Boolean sorted) {
 	this(sorted, true);
     }
 
+    /**
+     *
+     * @param sorted Whether to use TreeMap as the container.
+     * @param unique Whether to check for object uniqueness before adding to the list.
+     */
     public LMergeMap(Boolean sorted, Boolean unique) {
 	if (sorted) {
 	    map = new TreeMap<K, ArrayList<V>>();
@@ -31,20 +42,37 @@ public class LMergeMap<K, V> {
 	this.unique = unique;
     }
 
+    /**
+     * 
+     */
     public void clear() {
 	map.clear();
     }
 
+    /**
+     *
+     * @param in
+     */
     public void addAll (LMergeMap<K,V> in) {
 	for (K k : in.keySet()) {
 	    map.put(k, in.get(k));
 	}
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public boolean containsKey(K key) {
 	return map.containsKey(key);
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public boolean containsValue(V value) {
 	for (ArrayList<V> vals : map.values()) {
 	    for (V v : vals) {
@@ -56,26 +84,52 @@ public class LMergeMap<K, V> {
 	return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Entry<K, ArrayList<V>>> entrySet() {
 	return map.entrySet();
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public ArrayList<V> get(K key) {
 	return map.get(key);
     }
 
+    /**
+     *
+     * @return
+     */
     public int hashcode() {
 	return map.hashCode();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEmpty() {
 	return map.isEmpty();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<K> keySet() {
 	return map.keySet();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void put(K key, V value) {
 	if (!map.containsKey(key)) {
 	    map.put(key, new ArrayList<V>());
@@ -85,6 +139,11 @@ public class LMergeMap<K, V> {
 	}
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void put(K key, ArrayList<V> value) {
 	if (!map.containsKey(key)) {
 	    map.put(key, value);
@@ -95,16 +154,28 @@ public class LMergeMap<K, V> {
 	}
     }
 
+    /**
+     *
+     * @param key
+     */
     public void remove(K key) {
 	if (map.containsKey(key)) {
 	    map.get(key).clear();
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
 	return map.size();
     }
 
+    /**
+     *
+     * @return Number of real values in the MergeMap; Not the number of Key<>ArrayList combinations
+     */
     public int numVals() {
 	int sum = 0;
 	for (ArrayList<V> vals : map.values()) {
@@ -113,10 +184,18 @@ public class LMergeMap<K, V> {
 	return sum;
     }
 
+    /**
+     *
+     * @return
+     */
     public Collection<ArrayList<V>> values() {
 	return map.values();
     }
 
+    /**
+     *
+     * @return All values in the mergemap.
+     */
     public ArrayList<V> valuesFlat() {
 	ArrayList<V> out = new ArrayList<V>();
 	for (ArrayList<V> vals : map.values()) {
@@ -125,6 +204,10 @@ public class LMergeMap<K, V> {
 	return out;
     }
 
+    /**
+     *
+     * @return A map with the first value of each key.
+     */
     public Map<K,V> flatten() {
 	Map<K,V> out;
 	if (sorted) {
@@ -141,6 +224,10 @@ public class LMergeMap<K, V> {
 	return out;
     }
 
+    /**
+     * Flips the mergemap so keys become values.
+     * @return
+     */
     public LMergeMap<V, K> flip() {
 	LMergeMap<V, K> flip = new LMergeMap<V, K>(sorted, unique);
 	for (K key : map.keySet()) {
@@ -151,6 +238,9 @@ public class LMergeMap<K, V> {
 	return flip;
     }
 
+    /**
+     *
+     */
     public void print() {
 	for (K key : map.keySet()) {
 	    System.out.println(key.toString());

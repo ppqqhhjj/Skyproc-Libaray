@@ -85,6 +85,10 @@ public class FormID implements Comparable, Serializable {
 	this.master = master;
     }
 
+    /**
+     * Copy constructor.  Creates a separate but identical formid.
+     * @param in
+     */
     public FormID(FormID in) {
 	System.arraycopy(in.form, 0, form, 0, in.form.length);
 	master = in.master;
@@ -238,10 +242,14 @@ public class FormID implements Comparable, Serializable {
 	return true;
     }
 
+    /**
+     *
+     * @return True if equal to FormID.NULL
+     */
     public boolean isNull() {
 	return equals(FormID.NULL);
     }
-    
+
     /**
      *
      * @return

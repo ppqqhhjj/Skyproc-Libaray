@@ -148,8 +148,12 @@ public class LButton extends LHelpComponent {
 	button.setText(in);
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
-    public void addHelpHandler(boolean hoverListener) {
+    protected void addHelpHandler(boolean hoverListener) {
 	if (hoverListener) {
 	    button.addMouseListener(new LHelpComponent.HelpMouseHandler());
 	}

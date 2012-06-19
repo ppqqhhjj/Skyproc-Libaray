@@ -18,15 +18,41 @@ import javax.swing.SwingUtilities;
  */
 public class LCheckBoxConfig extends LUserSetting {
 
+    /**
+     *
+     */
     public LSpecialCheckBox cbox;
+    /**
+     *
+     */
     public LButton button;
+    /**
+     *
+     */
     public static String buttonText = "Open";
+    /**
+     *
+     */
     public static int spacing = 18;
 
+    /**
+     *
+     * @param title_
+     */
     protected LCheckBoxConfig (String title_) {
         super(title_);
     }
 
+    /**
+     *
+     * @param title_
+     * @param size
+     * @param style
+     * @param shade
+     * @param help_
+     * @param save_
+     * @param setting
+     */
     public LCheckBoxConfig(String title_, int size, int style, Color shade, LHelpPanel help_, LSaveFile save_, Enum setting) {
         super(title_);
         help = help_;
@@ -47,6 +73,9 @@ public class LCheckBoxConfig extends LUserSetting {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void updateHelp() {
         this.requestFocus();
@@ -77,13 +106,13 @@ public class LCheckBoxConfig extends LUserSetting {
     private void updateHelpHelper() {
         super.updateHelp();
         if (help != null) {
-            help.setSettingPos(-1);
+            help.setTitleHeight(-1);
             help.hideArrow();
         }
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -97,27 +126,50 @@ public class LCheckBoxConfig extends LUserSetting {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param hoverHandler
+     */
     @Override
-    public void addHelpHandler(boolean hoverHandler) {
+    protected void addHelpHandler(boolean hoverHandler) {
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setButtonOffset (int in) {
         button.setLocation(button.getX(), cbox.getY() + in);
         setSize(getWidth(), button.getHeight() + in);
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setOffset(int in) {
         cbox.setOffset(in);
     }
 
+    /**
+     *
+     */
     public void addShadow () {
         cbox.addShadow();
     }
 
+    /**
+     *
+     * @return
+     */
     public JComponent getSource() {
         return button.getSource();
     }
 
+    /**
+     *
+     * @param a
+     */
     public void addActionListener(ActionListener a) {
         button.addActionListener(a);
     }
@@ -132,21 +184,37 @@ public class LCheckBoxConfig extends LUserSetting {
         cbox.clearHighlight();
     }
 
+    /**
+     *
+     */
     protected class LSpecialCheckBox extends LCheckBox {
 
         LHelpComponent forwardTo;
 
-        public LSpecialCheckBox(String text, Font font, Color shade, LHelpComponent forwardTo_) {
+	/**
+	 *
+	 * @param text
+	 * @param font
+	 * @param shade
+	 * @param forwardTo_
+	 */
+	public LSpecialCheckBox(String text, Font font, Color shade, LHelpComponent forwardTo_) {
             super(text, font, shade);
             forwardTo = forwardTo_;
         }
 
-        @Override
+	/**
+	 *
+	 */
+	@Override
         public void updateHelp() {
             forwardTo.updateHelp();
         }
     }
 
+    /**
+     *
+     */
     public class UpdateHelpActionHandler implements ActionListener {
 
         @Override

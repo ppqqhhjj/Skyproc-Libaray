@@ -487,10 +487,20 @@ public class MGEF extends MajorRecordDescription {
 	OnHit
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(SpellEffectFlag flag, boolean on) {
 	DATA.flags.set(flag.value, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(SpellEffectFlag flag) {
 	return DATA.flags.get(flag.value);
     }

@@ -56,9 +56,20 @@ public class SPGlobal {
      * automatically.
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
+    /**
+     * To be used when implementing the SUM interface.  Add this SUMpath to the beginning of any
+     * pathing to access files in your SkyProc patcher program.  This will allow SUM to add extra directory
+     *  pathing when it hooks onto your patcher program.
+     */
     public static String SUMpath = "";
     static File skyProcDocuments;
 
+    /**
+     * Returns a File path to the SkyProc Documents folder.
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static File getSkyProcDocuments() throws FileNotFoundException, IOException {
 	if (skyProcDocuments == null) {
 	    File myDocs = SPGlobal.getMyDocumentsSkyrimFolder();
@@ -132,10 +143,22 @@ public class SPGlobal {
 	return SPDatabase.queryMajor(query, SPGlobal.getDB(), grup_types);
     }
 
+    /**
+     * Returns the My Documents Skyrim folder where the ini's are located.
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     static public File getMyDocumentsSkyrimFolder() throws FileNotFoundException, IOException {
 	return getSkyrimINI().getParentFile();
     }
 
+    /**
+     * Returns the Skyrim.ini file in the My Documents folder.
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     static public File getSkyrimINI() throws FileNotFoundException, IOException {
 	File myDocuments = Ln.getMyDocuments();
 	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
@@ -163,6 +186,12 @@ public class SPGlobal {
 	return ini;
     }
 
+    /**
+     * Returns the plugins.txt file that contains load order information.
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     static public String getPluginsTxt() throws FileNotFoundException, IOException {
 	String dataFolder = System.getenv("LOCALAPPDATA");
 
@@ -329,12 +358,23 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Logs to a specially created log that was previously created using newSpecialLog().
+     * @param e The enum you defined to symbolize the "key" to the special log.
+     * @param header
+     * @param print
+     */
     public static void logSpecial(Enum e, String header, String... print) {
 	if (log != null) {
 	    SPGlobal.log.logSpecial(e, header, print);
 	}
     }
 
+    /**
+     * Creates a new special log with any enum value as the key.
+     * @param e Any enum you define to symbolize the "key" to the special log.
+     * @param logName
+     */
     public static void newSpecialLog(Enum e, String logName) {
 	if (log != null) {
 	    SPGlobal.log.addSpecial(e, logName);
@@ -430,6 +470,10 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Returns the path to the debug folder.
+     * @return
+     */
     public static String pathToDebug() {
 	return pathToDebug;
     }

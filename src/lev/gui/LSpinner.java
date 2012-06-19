@@ -20,6 +20,15 @@ public class LSpinner extends LUserSetting<Integer> {
 
     JSpinner spinner;
 
+    /**
+     *
+     * @param title
+     * @param init
+     * @param min
+     * @param max
+     * @param step
+     * @param width
+     */
     public LSpinner(String title, int init, int min, int max, int step, int width) {
 	super(title);
 	SpinnerModel model = new SpinnerNumberModel(init, min, max, step);
@@ -33,7 +42,7 @@ public class LSpinner extends LUserSetting<Integer> {
     }
 
     @Override
-    public void addUpdateHandlers() {
+    protected void addUpdateHandlers() {
 	spinner.addChangeListener(new UpdateChangeHandler());
     }
 
@@ -49,13 +58,21 @@ public class LSpinner extends LUserSetting<Integer> {
 	return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Integer getValue() {
 	return (Integer) spinner.getValue();
     }
 
+    /**
+     *
+     * @param hoverListener
+     */
     @Override
-    public void addHelpHandler(boolean hoverListener) {
+    protected void addHelpHandler(boolean hoverListener) {
 	JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
 	editor.getTextField().addFocusListener(new HelpFocusHandler());
 	if (hoverListener) {
@@ -68,6 +85,10 @@ public class LSpinner extends LUserSetting<Integer> {
 	}
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setValue(int in) {
 	spinner.setValue(in);
     }
@@ -78,6 +99,10 @@ public class LSpinner extends LUserSetting<Integer> {
 	editor.getTextField().addFocusListener(arg0);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void addChangeListener(ChangeListener c) {
 	spinner.addChangeListener(c);
     }

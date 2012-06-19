@@ -48,10 +48,18 @@ public class LVLI extends LeveledRecord {
 	return new LVLI();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setGlobalForm (FormID id) {
 	LVLG.setForm(id);
     }
 
+    /**
+     * s
+     * @return
+     */
     public FormID getGlobalForm () {
 	return LVLG.getForm();
     }
