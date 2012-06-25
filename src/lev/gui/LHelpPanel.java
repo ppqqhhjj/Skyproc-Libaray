@@ -12,6 +12,7 @@ import lev.gui.resources.LImages;
 
 /**
  * A panel that displays help information.
+ *
  * @author Justin Swanson
  */
 public class LHelpPanel extends LPanel {
@@ -25,6 +26,22 @@ public class LHelpPanel extends LPanel {
     Boolean textVisible = false;
     Boolean hideArrow = false;
     static int spacing = 75;
+
+    @Override
+    public void revalidate() {
+	super.revalidate();
+	if (bottomArea != null) {
+	    bottomArea.revalidate();
+	}
+    }
+
+    @Override
+    public void repaint() {
+	super.repaint();
+	if (bottomArea != null) {
+	    bottomArea.repaint();
+	}
+    }
 
     /**
      *
@@ -72,7 +89,7 @@ public class LHelpPanel extends LPanel {
      *
      * @param c
      */
-    public void setHeaderColor (Color c) {
+    public void setHeaderColor(Color c) {
 	setting.setForeground(c);
     }
 
@@ -129,6 +146,7 @@ public class LHelpPanel extends LPanel {
 
     /**
      * Appends text to the content string.
+     *
      * @param text
      */
     public void addContent(String text) {
@@ -146,6 +164,7 @@ public class LHelpPanel extends LPanel {
 
     /**
      * Adds a component to the separate bottom area panel.
+     *
      * @param c
      */
     public void addToBottomArea(Component c) {

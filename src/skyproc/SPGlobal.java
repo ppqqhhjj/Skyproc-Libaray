@@ -1,14 +1,11 @@
 package skyproc;
 
-import skyproc.gui.SPProgressBarPlug;
 import java.io.*;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import lev.Ln;
 import lev.debug.LDebug;
-import skyproc.exceptions.BadMod;
 
 /**
  * Global variables/settings of SkyProc.
@@ -322,6 +319,20 @@ public class SPGlobal {
     public static void loggingSync(Boolean on) {
 	if (log != null) {
 	    SPGlobal.log.loggingSync(on);
+	}
+    }
+
+    public static void loggingAsync(Boolean on) {
+	if (log != null) {
+	    SPGlobal.log.loggingAsync(on);
+	}
+    }
+
+    public static boolean loggingAsync(){
+	if (log != null) {
+	    return SPGlobal.log.loggingAsync();
+	} else {
+	    return false;
 	}
     }
 

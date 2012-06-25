@@ -28,6 +28,7 @@ public class LImagePane extends JPanel {
      */
     public LImagePane() {
         setLayout(null);
+	setOpaque(false);
     }
 
     /**
@@ -87,7 +88,8 @@ public class LImagePane extends JPanel {
         setMinimumSize(size);
         setMaximumSize(size);
         setSize(size);
-        this.revalidate();
+        revalidate();
+	repaint();
     }
 
     /**
@@ -100,7 +102,7 @@ public class LImagePane extends JPanel {
     }
 
     /**
-     * 
+     *
      * @param url
      * @throws IOException
      */
