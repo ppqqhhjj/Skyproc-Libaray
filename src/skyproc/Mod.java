@@ -1,6 +1,5 @@
 package skyproc;
 
-import skyproc.gui.SPProgressBarPlug;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,9 +10,9 @@ import javax.swing.JOptionPane;
 import lev.*;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
-import skyproc.exceptions.BadMod;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
+import skyproc.gui.SPProgressBarPlug;
 
 /**
  * A mod is a collection of GRUPs which contain records. Mods are used to create
@@ -30,6 +29,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<GMST> gameSettings = new GRUP<GMST>(this, new GMST());
     GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
     GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
+    GRUP<GLOB> globals = new GRUP<GLOB>(this, new GLOB());
     GRUP<FACT> factions = new GRUP<FACT>(this, new FACT());
     GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
     GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
@@ -101,6 +101,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(gameSettings.getContainedType(), gameSettings);
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(textures.getContainedType(), textures);
+	GRUPs.put(globals.getContainedType(), globals);
 	factions.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(factions.getContainedType(), factions);
 	GRUPs.put(races.getContainedType(), races);
@@ -952,10 +953,19 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing ActorValue records
+     * @return The GRUP containing Encounter Zone records
      */
     public GRUP<ECZN> getEncounterZones() {
 	return encounterZones;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Global records
+     */
+    public GRUP<GLOB> getGlobals() {
+	return globals;
     }
 
     /**

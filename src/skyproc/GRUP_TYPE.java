@@ -19,6 +19,7 @@ public enum GRUP_TYPE {
      * Texture Sets
      */
     TXST,
+    GLOB,
     /**
      * Factions
      */
@@ -88,7 +89,7 @@ public enum GRUP_TYPE {
      */
     PERK,
     /**
-     * 
+     *
      */
     AVIF,
     /**

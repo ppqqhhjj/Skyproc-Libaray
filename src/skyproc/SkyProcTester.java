@@ -43,7 +43,7 @@ public class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.ECZN};
+	GRUP_TYPE[] types = {GRUP_TYPE.GLOB};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPImporter importer = new SPImporter();

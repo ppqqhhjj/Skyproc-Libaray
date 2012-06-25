@@ -851,7 +851,7 @@ public enum Type {
      */
     LVLI,
     /**
-     * 
+     *
      */
     LVLG,
     /**
@@ -876,6 +876,9 @@ public enum Type {
      *
      */
     ECZN,
+
+    GLOB,
+    FLTV,
 
     /**
      * NPC_: Marks DNAM position?

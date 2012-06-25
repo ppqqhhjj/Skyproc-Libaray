@@ -94,8 +94,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	revision = in.extract(4);
 	version = in.extract(4);
 
-	if (isCompressed()) {
-	    majorFlags.set(18, false);
+	if (get(MajorFlags.Compressed)) {
+	    set(MajorFlags.Compressed, false);
 	    in.correctForCompression();
 	    logSync(getTypes().toString(), "Decompressed");
 	}
@@ -169,14 +169,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     }
 
-    Boolean isCompressed() {
-	if (majorFlags.get(18)) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
-
     void setException(Enum input) {
 	exception = input;
     }
@@ -221,7 +213,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	setEdidNoConsistency(edid);
 	Consistency.addEntry(edid, this.getForm());
     }
-    
+
     final void setEdidNoConsistency (String edid) {
 	edid = Consistency.getAvailableEDID(edidFilter(edid));
 	FormID oldFormID = Consistency.getOldForm(edid);
@@ -234,7 +226,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     static String edidFilter (String edid) {
 	return edid.replaceAll(" ", "");
     }
-    
+
     /**
      *
      * @return The current EDID string.
@@ -415,5 +407,31 @@ public abstract class MajorRecord extends Record implements Serializable {
 	Record getNew() {
 	    return getNull();
 	}
+    }
+
+    public enum MajorFlags {
+	Deleted (5),
+	RelatedToShields (6),
+	HiddenFromLocalMap (9),
+	QuestItemPersistentRef (10),
+	InitiallyDisabled(11),
+	Ignored(12),
+	VisibleWhenDistant(15),
+	DangerousOffLimits(17),
+	Compressed(18),
+	CantWait(19);
+
+	int value;
+	MajorFlags(int value) {
+	    this.value = value;
+	}
+    }
+
+    public void set(MajorFlags flag, Boolean on) {
+	majorFlags.set(flag.value, on);
+    }
+
+    public boolean get(MajorFlags flag) {
+	return majorFlags.get(flag.value);
     }
 }
