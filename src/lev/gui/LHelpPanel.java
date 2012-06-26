@@ -93,6 +93,10 @@ public class LHelpPanel extends LPanel {
 	setting.setForeground(c);
     }
 
+    public void setHeaderFont (Font f) {
+	setting.setFont(f);
+    }
+
     public void setTitle(String title_) {
 	setting.setText("   " + title_);
 	setting.setSize(setting.getPreferredSize());
