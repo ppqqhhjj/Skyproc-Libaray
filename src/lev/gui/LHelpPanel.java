@@ -27,22 +27,6 @@ public class LHelpPanel extends LPanel {
     Boolean hideArrow = false;
     static int spacing = 75;
 
-    @Override
-    public void revalidate() {
-	super.revalidate();
-	if (bottomArea != null) {
-	    bottomArea.revalidate();
-	}
-    }
-
-    @Override
-    public void repaint() {
-	super.repaint();
-	if (bottomArea != null) {
-	    bottomArea.repaint();
-	}
-    }
-
     /**
      *
      * @param bounds
@@ -76,6 +60,22 @@ public class LHelpPanel extends LPanel {
 	add(bottomArea);
 
 	setVisible(true);
+    }
+
+    @Override
+    public void revalidate() {
+	super.revalidate();
+	if (bottomArea != null) {
+	    bottomArea.revalidate();
+	}
+    }
+
+    @Override
+    public void repaint() {
+	super.repaint();
+	if (bottomArea != null) {
+	    bottomArea.repaint();
+	}
     }
 
     @Override

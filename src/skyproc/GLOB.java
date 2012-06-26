@@ -6,6 +6,7 @@ package skyproc;
 
 import java.util.zip.DataFormatException;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -22,7 +23,23 @@ public class GLOB extends MajorRecord {
 
     GLOB () {
 	super();
+	init();
+    }
 
+    public GLOB(Mod modToOriginateFrom, String edid, GLOBType type) {
+	super(modToOriginateFrom, edid);
+	init();
+	FNAM.data = new byte[1];
+	setType(type);
+    }
+
+    public GLOB(Mod modToOriginateFrom, String edid, GLOBType type, float value, Boolean constant) {
+	this(modToOriginateFrom, edid, type);
+	setValue(value);
+	setConstant(constant);
+    }
+
+    final void init() {
 	subRecords.add(FNAM);
 	subRecords.add(FLTV);
     }
@@ -58,7 +75,7 @@ public class GLOB extends MajorRecord {
 	return GLOBType.Float;
     }
 
-    public void setType (GLOBType type) {
+    final public void setType (GLOBType type) {
 	FNAM.data[0] = (byte) type.value;
     }
 
@@ -79,15 +96,19 @@ public class GLOB extends MajorRecord {
 	return FLTV.data;
     }
 
-    public void setValue (Float value) {
+    final public void setValue (Float value) {
 	FLTV.data = value;
+    }
+
+    final public void setValue (Boolean value) {
+	setValue((float)Integer.valueOf(Ln.convertBoolTo1(value)));
     }
 
     public boolean isConstant () {
 	return get(MajorFlags.RelatedToShields);
     }
 
-    public void setConstant (boolean on) {
+    final public void setConstant (boolean on) {
 	set(MajorFlags.RelatedToShields, on);
     }
 }
