@@ -1505,18 +1505,25 @@ public class NPC_ extends Actor implements Serializable {
 	switch (stat) {
 	    case SPELL_POINTS_BASE:
 		ACBS.magickaOffset = value;
+		break;
 	    case FATIGUE_BASE:
 		ACBS.fatigueOffset = value;
+		break;
 	    case LEVEL:
 		ACBS.level = value;
+		break;
 	    case MIN_CALC_LEVEL:
 		ACBS.minCalcLevel = value;
+		break;
 	    case MAX_CALC_LEVEL:
 		ACBS.maxCalcLevel = value;
+		break;
 	    case SPEED_MULT:
 		ACBS.speed = value;
+		break;
 	    case DISPOSITION_BASE:
 		ACBS.dispositionBase = value;
+		break;
 	}
     }
 
@@ -2164,7 +2171,7 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getShortName() {
