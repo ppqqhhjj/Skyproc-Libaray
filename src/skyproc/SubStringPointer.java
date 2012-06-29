@@ -2,9 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFileChannel;

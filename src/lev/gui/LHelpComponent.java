@@ -4,6 +4,7 @@
  */
 package lev.gui;
 
+import java.awt.Font;
 import java.awt.event.*;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;

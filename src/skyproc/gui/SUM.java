@@ -7,6 +7,7 @@ package skyproc.gui;
 import java.awt.Color;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import lev.gui.LSaveFile;
 import skyproc.GRUP_TYPE;
@@ -40,7 +41,9 @@ public interface SUM {
      *
      * @return An array of the types of records that this patcher would like to import and have access to.
      */
-    public GRUP_TYPE[] importRequests();
+    //public GRUP_TYPE[] importRequests();
+    
+    public ArrayList<GRUP_TYPE> importRequests();
     /**
      *
      * @return Whether the standard GUI should start importing the mods as soon as it opens.

@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
@@ -17,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class ScriptProperty extends Record {
+class ScriptProperty extends Record implements Serializable {
 
     StringNonNull name = new StringNonNull();
     int unknown = 1;
@@ -293,7 +294,7 @@ class ScriptProperty extends Record {
 	String print();
     }
 
-    class StringData implements ScriptData {
+    class StringData implements ScriptData, Serializable {
 
 	String data;
 
@@ -324,7 +325,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class IntData implements ScriptData {
+    class IntData implements ScriptData, Serializable {
 
 	int data;
 
@@ -354,7 +355,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class BooleanData implements ScriptData {
+    class BooleanData implements ScriptData, Serializable {
 
 	boolean data;
 
@@ -388,7 +389,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class FormIDData implements ScriptData {
+    class FormIDData implements ScriptData, Serializable {
 
 	byte[] data;
 	FormID id;
@@ -433,7 +434,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class FloatData implements ScriptData {
+    class FloatData implements ScriptData, Serializable {
 
 	float data;
 
@@ -463,7 +464,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class IntegerArrayData implements ScriptData {
+    class IntegerArrayData implements ScriptData, Serializable {
 
 	ArrayList<Integer> data;
 
@@ -504,7 +505,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class StringArrayData implements ScriptData {
+    class StringArrayData implements ScriptData, Serializable {
 
 	ArrayList<String> data;
 
@@ -551,7 +552,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class FormArrayData implements ScriptData {
+    class FormArrayData implements ScriptData, Serializable {
 
 	ArrayList<FormIDData> data;
 
@@ -594,7 +595,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class BoolArrayData implements ScriptData {
+    class BoolArrayData implements ScriptData, Serializable {
 
 	ArrayList<Boolean> data;
 
@@ -639,7 +640,7 @@ class ScriptProperty extends Record {
 	}
     }
 
-    class FloatArrayData implements ScriptData {
+    class FloatArrayData implements ScriptData, Serializable {
 
 	ArrayList<Float> data;
 

@@ -147,7 +147,9 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     // Inner Classes
-    static class CSDTpackage extends SubRecord implements Serializable {
+    
+    //Moved CSDT package to public, so sound packages could be merged as single packages.
+    public static class CSDTpackage extends SubRecord implements Serializable {
 
 	SubData CSDT = new SubData(Type.CSDT);
 	ArrayList<SoundPair> soundPairs = new ArrayList<SoundPair>();
@@ -365,7 +367,8 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class TINIpackage extends SubRecord implements Serializable {
+    //Moved to public as packages should be taken en masse to prevent odd bugs & to be merged.
+    public static class TINIpackage extends SubRecord implements Serializable {
 
 	SubData TINI = new SubData(Type.TINI);
 	SubData TINC = new SubData(Type.TINC);
@@ -1505,18 +1508,25 @@ public class NPC_ extends Actor implements Serializable {
 	switch (stat) {
 	    case SPELL_POINTS_BASE:
 		ACBS.magickaOffset = value;
+                break;
 	    case FATIGUE_BASE:
 		ACBS.fatigueOffset = value;
+                break;
 	    case LEVEL:
 		ACBS.level = value;
+                break;
 	    case MIN_CALC_LEVEL:
 		ACBS.minCalcLevel = value;
+                break;
 	    case MAX_CALC_LEVEL:
 		ACBS.maxCalcLevel = value;
+                break;
 	    case SPEED_MULT:
 		ACBS.speed = value;
+                break;
 	    case DISPOSITION_BASE:
 		ACBS.dispositionBase = value;
+                break;
 	}
     }
 
@@ -2185,5 +2195,92 @@ public class NPC_ extends Actor implements Serializable {
      */
     public SoundVolume getSoundVolume() {
 	return SoundVolume.values()[NAM8.data];
+    }
+    
+    public byte[] getNAM9() {
+        return NAM9.getData();
+    }
+    
+    public void setNAM9(byte[] data) {
+        NAM9.setData(data);
+    }
+    
+    public ArrayList<TINIpackage> getTinting() {
+        return tintPackages.collection;
+    }
+    
+    public boolean addTinting(TINIpackage tinting) {
+	return tintPackages.add(tinting);
+    }
+
+    public boolean removeTinting(TINIpackage tinting) {
+	return tintPackages.remove(tinting);
+    }
+
+    public void clearTinting() {
+	tintPackages.clear();
+    }
+    
+    public ArrayList<CSDTpackage> getSounds() {
+        return soundPackages.collection;
+    }
+    
+    public boolean addSound(CSDTpackage sounds) {
+	return soundPackages.add(sounds);
+    }
+
+    public boolean removeSound(CSDTpackage sounds) {
+	return soundPackages.remove(sounds);
+    }
+
+    public void clearSounds() {
+	soundPackages.clear();
+    }
+    
+    public byte[] getQNAM() {
+        return QNAM.getData();
+    }
+    
+    public void setQNAM(byte[] in) {
+        QNAM.setData(in);
+    }
+    
+    public byte[] getNAMA() {
+        return NAMA.getData();
+    }
+    
+    public void setNAMA(byte[] in) {
+        NAMA.setData(in);
+    }
+    
+    public ArrayList<FormID> getPNAMs() {
+	return SubList.subFormToPublic(PNAMs);
+    }
+
+    /**
+     *
+     * @param spellReference FormID of the spell to give to the NPC.
+     * @return True if spell was added.
+     */
+    public boolean addPNAM(FormID pnam) {
+	return PNAMs.add(new SubForm(Type.PNAM, pnam));
+    }
+
+    /**
+     * Removes a spell from the NPC. If a spell with this FormID does not exist,
+     * this spell does nothing.
+     *
+     * @param spellReference FormID of the spell to remove from the NPC
+     * @return True if spell was removed.
+     */
+    public boolean removePNAM(FormID pnam) {
+	return PNAMs.remove(new SubForm(Type.PNAM, pnam));
+    }
+
+    /**
+     *
+     */
+    public void clearPNAMs() {
+	PNAMs.clear();
     }
 }

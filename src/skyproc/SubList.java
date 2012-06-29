@@ -231,6 +231,22 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	}
 	return out;
     }
+    
+    static ArrayList<String> subStringToPublic (SubList<SubString> in) {
+	ArrayList<String> out = new ArrayList<String>(in.size());
+	for (SubString s : in) {
+	    out.add(s.string);
+	}
+	return out;
+    }
+    
+    static ArrayList<byte[]> subDataToPublic (SubList<SubData> in) {
+	ArrayList<byte[]> out = new ArrayList<byte[]>(in.size());
+	for (SubData s : in) {
+	    out.add(s.data);
+	}
+	return out;
+    }
 
     ArrayList<T> toPublic () {
 	ArrayList<T> out = new ArrayList<T>(size());

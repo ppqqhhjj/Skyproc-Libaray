@@ -47,6 +47,11 @@ public class LButton extends LHelpComponent {
 	this(title);
 	setSize(size);
     }
+    
+    public LButton(String title, int x, int y) {
+	this(title);
+	setSize(x, y);
+    }
 
     /**
      *

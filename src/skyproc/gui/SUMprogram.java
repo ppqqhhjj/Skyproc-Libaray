@@ -82,7 +82,7 @@ public class SUMprogram implements SUM {
 
 	for (PatcherLink link : links) {
 	    // Compile all needed GRUPs
-	    importRequests.addAll(Arrays.asList(link.hook.importRequests()));
+	    importRequests.addAll((link.hook.importRequests()));
 	    // Block SUM patches from being imported)
 	    SPGlobal.addModToSkip(link.hook.getListing());
 	}
@@ -409,9 +409,9 @@ public class SUMprogram implements SUM {
      * @return
      */
     @Override
-    public GRUP_TYPE[] importRequests() {
-	GRUP_TYPE[] out = new GRUP_TYPE[0];
-	out = importRequests.toArray(out);
+    public ArrayList<GRUP_TYPE> importRequests() {
+        ArrayList<GRUP_TYPE> out = new ArrayList<>();
+        out.addAll(importRequests);
 	return out;
     }
 

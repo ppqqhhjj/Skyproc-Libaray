@@ -193,7 +193,8 @@ class Consistency {
 		JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency information.<br><br>"
 			+ "This means your savegame has a good chance of having mismatched records.<br><br>"
 			+ "It would be greatly appreciated if you sent the failed consistency file located in<br>"
-			+ "Files/ to Leviathan1753 for analysis.</html>");
+			+ "Files/ to Leviathan1753 for analysis."
+                        + "<br><br> If this is the first time running the patch, please ignore this message.</html>");
 	    }
 	}
     }
