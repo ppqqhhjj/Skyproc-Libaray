@@ -1,6 +1,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
@@ -67,5 +68,27 @@ public class SubFormInt extends SubFormData {
      */
     public int getNum() {
 	return num;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + this.num;
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof SubList)) {
+            return false;
+        }
+        SubFormInt s = (SubFormInt) o; // Convert the object to a Person
+        return (this.ID.equals(s.ID) && Arrays.equals(this.data, s.data));
     }
 }

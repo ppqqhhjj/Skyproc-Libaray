@@ -6,8 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -134,5 +133,30 @@ class SubData extends SubRecord {
     @Override
     ArrayList<FormID> allFormIDs (boolean deep) {
 	return new ArrayList<FormID>(0);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Arrays.hashCode(this.data);
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            {
+                return true;
+            }
+            if (o == null)
+            {
+                return false;
+            }
+            if (!(o instanceof byte[]))
+            {
+                return false;
+            }
+            byte[] b = (byte[]) o;
+            return (Arrays.equals(this.data, b));
     }
 }

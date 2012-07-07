@@ -71,4 +71,18 @@ class SubFloat extends SubRecord {
     ArrayList<FormID> allFormIDs (boolean deep) {
 	return new ArrayList<FormID>(0);
     }
+    
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof SubFloat)) {
+            return false;
+        }
+        SubFloat s = (SubFloat) o; // Convert the object to a Person
+        return (Float.compare(this.data, s.data) == 0);
+    }
 }

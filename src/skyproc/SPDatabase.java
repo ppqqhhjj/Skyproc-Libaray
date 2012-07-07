@@ -31,7 +31,7 @@ public class SPDatabase implements Iterable<Mod> {
     /**
      * Creates a new SPDatabase container to load mods into.
      */
-    SPDatabase() {
+    public SPDatabase() {
     }
 
     /**
