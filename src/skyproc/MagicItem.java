@@ -57,7 +57,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	float castDuration = 0;
 	float range = 0;
 	boolean valid = true;
-	SubForm perkType = new SubForm(Type.PERK);
+	FormID perkType = new FormID();
 
 	SPIT() {
 	    super(Type.SPIT);
@@ -86,7 +86,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	    targetType = DeliveryType.values()[in.extractInt(4)];
 	    castDuration = in.extractFloat();
 	    range = in.extractFloat();
-	    perkType.setForm(in.extract(4));
+	    perkType.setInternal(in.extract(4));
 
 	    if (logging()) {
 		logSync("", "SPIT record: ");
@@ -94,7 +94,7 @@ abstract class MagicItem extends MajorRecordDescription {
 			+ ", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);
 		logSync("", "  " + "cast type: " + castType + ", targetType: " + targetType
 			+ ", Cast Duration: " + castDuration
-			+ ", Spell Range: " + range + ", Perk for Spell: " + perkType.print());
+			+ ", Spell Range: " + range + ", Perk for Spell: " + perkType);
 	    }
 
 	    valid = true;
@@ -112,7 +112,7 @@ abstract class MagicItem extends MajorRecordDescription {
 		out.write(targetType.ordinal());
 		out.write(castDuration);
 		out.write(range);
-		out.write(perkType.getFormArray(true), 4);
+		perkType.export(out);
 	    }
 	}
 
@@ -137,8 +137,8 @@ abstract class MagicItem extends MajorRecordDescription {
 	@Override
 	ArrayList<FormID> allFormIDs (boolean deep) {
 	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		out.add(perkType.ID);
+		ArrayList<FormID> out = new ArrayList<FormID>(1);
+		out.add(perkType);
 		return out;
 	    } else {
 		return new ArrayList<FormID>(0);

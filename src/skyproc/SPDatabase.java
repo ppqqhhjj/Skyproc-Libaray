@@ -13,7 +13,7 @@ import skyproc.exceptions.Uninitialized;
 public class SPDatabase implements Iterable<Mod> {
 
     static ArrayList<ModListing> activePlugins = new ArrayList<ModListing>();
-    ArrayList<ModListing> addedplugins = new ArrayList<ModListing>();
+    ArrayList<ModListing> addedPlugins = new ArrayList<ModListing>();
     Map<ModListing, Mod> modLookup = new TreeMap<ModListing, Mod>();
     SPExceptionDbInterface exceptionsDb = new SPExceptionDbInterface<SPExceptionDbInterface.NullException>() {
 
@@ -32,6 +32,12 @@ public class SPDatabase implements Iterable<Mod> {
      * Creates a new SPDatabase container to load mods into.
      */
     SPDatabase() {
+    }
+
+    void clear() {
+	activePlugins.clear();
+	addedPlugins.clear();
+	modLookup.clear();
     }
 
     /**
@@ -78,7 +84,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param listing ModListing to remove.
      */
     public void removeMod(ModListing listing) {
-	addedplugins.remove(listing);
+	addedPlugins.remove(listing);
 	modLookup.remove(listing);
     }
 
@@ -88,7 +94,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return
      */
     public Mod getMod(int index) {
-        return modLookup.get(addedplugins.get(index));
+        return modLookup.get(addedPlugins.get(index));
     }
 
     /**
@@ -97,7 +103,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return the number of mods
      */
     public int numMods() {
-        return addedplugins.size();
+        return addedPlugins.size();
     }
 
     /**
@@ -237,7 +243,7 @@ public class SPDatabase implements Iterable<Mod> {
      */
     public void add(Mod m) {
 	removeMod(m.getInfo());
-	addedplugins.add(m.getInfo());
+	addedPlugins.add(m.getInfo());
 	modLookup.put(m.getInfo(), m);
     }
 

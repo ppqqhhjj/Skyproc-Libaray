@@ -100,7 +100,13 @@ public class AMMO extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(1);
+		out.add(projectile);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
     }
 

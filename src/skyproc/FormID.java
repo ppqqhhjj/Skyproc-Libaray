@@ -20,6 +20,7 @@ import lev.Ln;
  */
 public class FormID implements Comparable, Serializable {
 
+    static ArrayList<FormID> allIDs = new ArrayList<FormID>();
     boolean valid = false;
     byte[] form = new byte[4];
     ModListing master = null;
@@ -29,6 +30,9 @@ public class FormID implements Comparable, Serializable {
     public static final FormID NULL = new FormID();
 
     FormID() {
+	if (SPGlobal.testing) {
+	    allIDs.add(this);
+	}
     }
 
     /**
@@ -67,6 +71,7 @@ public class FormID implements Comparable, Serializable {
      * @param master The mod from which this formID originates.
      */
     public FormID(byte[] id, ModListing master) {
+	this();
 	set(id);
 	this.master = master;
     }
@@ -81,12 +86,14 @@ public class FormID implements Comparable, Serializable {
     }
 
     FormID(int id, ModListing master) {
+	this();
 	setInternal(Ln.toByteArray(id));
 	this.master = master;
     }
 
     /**
-     * Copy constructor.  Creates a separate but identical formid.
+     * Copy constructor. Creates a separate but identical formid.
+     *
      * @param in
      */
     public FormID(FormID in) {

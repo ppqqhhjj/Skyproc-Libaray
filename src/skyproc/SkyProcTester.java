@@ -9,6 +9,7 @@ import java.io.IOException;
 import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
+import skyproc.exceptions.BadMod;
 import skyproc.exceptions.BadRecord;
 import skyproc.gui.SPDefaultGUI;
 import skyproc.gui.SPProgressBarPlug;
@@ -26,6 +27,7 @@ public class SkyProcTester {
 
 	try {
 
+	    SPGlobal.testing = true;
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	    validate();
 	    gui.finished();
@@ -43,11 +45,8 @@ public class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.GLOB};
+	GRUP_TYPE[] types = {GRUP_TYPE.ENCH};
 //	GRUP_TYPE[] types = GRUP_TYPE.values();
-
-	SPImporter importer = new SPImporter();
-	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
 
 	SPProgressBarPlug.progress.reset();
 	SPProgressBarPlug.progress.setMax(types.length);
@@ -62,18 +61,33 @@ public class SkyProcTester {
 
     }
 
-    private static boolean test(GRUP_TYPE type) throws IOException, BadRecord {
+    private static boolean test(GRUP_TYPE type) throws IOException, BadRecord, BadMod {
+	System.out.println("Testing " + type);
 	SPProgressBarPlug.progress.setStatus("Validating " + type);
 	SPProgressBarPlug.progress.pause(true);
+
+	FormID.allIDs.clear();
+	SPImporter importer = new SPImporter();
+	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, type);
+	boolean badIDs = false;
+	boolean passed = true;
+	for (FormID id : FormID.allIDs) {
+	    if (!id.isNull() && id.getMaster() == null) {
+		System.out.println("A bad id: " + id);
+		badIDs = true;
+		passed = false;
+		break;
+	    }
+	}
+	if (badIDs) {
+	    System.out.println("Some FormIDs were unstandardized!!");
+	}
 
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
 	patch.setAuthor("Leviathan1753");
 	patch.export(new LExporter(SPGlobal.pathToData + patch.getName()), patch);
-
-	boolean passed = true;
-	System.out.println("Testing Record Lengths " + type);
 	if (type != GRUP_TYPE.ENCH) {
 	    passed = passed && SPExporter.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 	}

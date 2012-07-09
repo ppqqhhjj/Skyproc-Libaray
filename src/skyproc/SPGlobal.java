@@ -20,6 +20,7 @@ public class SPGlobal {
     static Mod globalPatchOut;
     static SPLogger log;
     static SPDatabase globalDatabase = new SPDatabase();
+    static boolean testing = false;
     /*
      * Customizable Strings
      */

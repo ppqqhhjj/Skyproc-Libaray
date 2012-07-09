@@ -316,7 +316,7 @@ public class SPEL extends MagicItem {
      * @return The PERK ref associated with the SPEL.
      */
     public FormID getPerkRef() {
-	return SPIT.perkType.getForm();
+	return SPIT.perkType;
     }
 
     /**
@@ -327,7 +327,7 @@ public class SPEL extends MagicItem {
      * have to confirm the accuracy yourself for now.
      */
     public void setPerkRef(FormID perkRef) throws NotFound {
-	SPIT.perkType.setForm(perkRef);
+	SPIT.perkType = perkRef;
     }
 
 }

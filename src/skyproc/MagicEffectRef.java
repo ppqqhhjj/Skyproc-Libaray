@@ -15,8 +15,8 @@ import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
 /**
- * A Magic Effect reference object that is used to represent attached MGEF records on
- * spells.
+ * A Magic Effect reference object that is used to represent attached MGEF
+ * records on spells.
  *
  * @author Justin Swanson
  */
@@ -131,7 +131,7 @@ public class MagicEffectRef extends SubShell {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
+	ArrayList<FormID> allFormIDs(boolean deep) {
 	    return new ArrayList<FormID>(0);
 	}
     }

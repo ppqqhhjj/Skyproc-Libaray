@@ -99,7 +99,14 @@ public class ENCH extends MagicItem {
 
 	@Override
 	ArrayList<FormID> allFormIDs(boolean deep) {
-	    return super.allFormIDs(deep);
+	    if (deep) {
+		ArrayList<FormID> out = new ArrayList<FormID>(2);
+		out.add(baseEnchantment);
+		out.add(wornRestrictions);
+		return out;
+	    } else {
+		return new ArrayList<FormID>(0);
+	    }
 	}
     }
 
@@ -178,7 +185,7 @@ public class ENCH extends MagicItem {
     }
 
     /**
-     * 
+     *
      * @param in
      * @return
      */
@@ -278,7 +285,7 @@ public class ENCH extends MagicItem {
      *
      * @return
      */
-    public FormID getBaseEnchantment () {
+    public FormID getBaseEnchantment() {
 	return ENIT.baseEnchantment;
     }
 
@@ -286,7 +293,7 @@ public class ENCH extends MagicItem {
      *
      * @param id
      */
-    public void setWornRestrictions (FormID id) {
+    public void setWornRestrictions(FormID id) {
 	ENIT.wornRestrictions = id;
     }
 
@@ -294,7 +301,7 @@ public class ENCH extends MagicItem {
      *
      * @return
      */
-    public FormID getWornRestrictions () {
+    public FormID getWornRestrictions() {
 	return ENIT.wornRestrictions;
     }
 }
