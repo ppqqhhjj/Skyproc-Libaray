@@ -74,11 +74,6 @@ public class BodyTemplate extends SubRecord {
 	return old ? 8 : 12;
     }
 
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
-
     /**
      * An enum containg various body part slots.
      *

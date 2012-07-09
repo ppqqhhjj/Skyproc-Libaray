@@ -23,7 +23,7 @@ public class LVLO extends SubShell {
     static Type[] types = {Type.LVLO, Type.COED};
 
     /**
-     * 
+     *
      * @param id
      * @param level
      * @param count
@@ -72,7 +72,7 @@ public class LVLO extends SubShell {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
+	ArrayList<FormID> allFormIDs() {
 	    ArrayList<FormID> out = new ArrayList<FormID>(1);
 	    out.add(entry);
 	    return out;
@@ -112,7 +112,7 @@ public class LVLO extends SubShell {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
+	ArrayList<FormID> allFormIDs() {
 	    ArrayList<FormID> out = new ArrayList<FormID>(1);
 	    out.add(owner);
 	    return out;

@@ -60,35 +60,35 @@ class ScriptProperty extends Record {
 	data = tmp;
     }
 
-    public ScriptProperty(String name, Integer ... in) {
+    public ScriptProperty(String name, Integer... in) {
 	this(name);
 	IntegerArrayData tmp = new IntegerArrayData();
 	tmp.data = new ArrayList<Integer>(Arrays.asList(in));
 	data = tmp;
     }
 
-    public ScriptProperty(String name, String ... in) {
+    public ScriptProperty(String name, String... in) {
 	this(name);
 	StringArrayData tmp = new StringArrayData();
 	tmp.data = new ArrayList<String>(Arrays.asList(in));
 	data = tmp;
     }
 
-    public ScriptProperty(String name, Float ... in) {
+    public ScriptProperty(String name, Float... in) {
 	this(name);
 	FloatArrayData tmp = new FloatArrayData();
 	tmp.data = new ArrayList<Float>(Arrays.asList(in));
 	data = tmp;
     }
 
-    public ScriptProperty(String name, Boolean ... in) {
+    public ScriptProperty(String name, Boolean... in) {
 	this(name);
 	BoolArrayData tmp = new BoolArrayData();
 	tmp.data = new ArrayList<Boolean>(Arrays.asList(in));
 	data = tmp;
     }
 
-    public ScriptProperty(String name, FormID ... in) {
+    public ScriptProperty(String name, FormID... in) {
 	this(name);
 	FormArrayData tmp = new FormArrayData();
 	ArrayList<FormIDData> list = new ArrayList<FormIDData>(in.length);
@@ -109,16 +109,12 @@ class ScriptProperty extends Record {
 	}
     }
 
-    ArrayList<FormID> allFormIDs(boolean deep) {
-	if (deep) {
-	    ArrayList<FormID> out = new ArrayList<FormID>(0);
-	    if (getType().equals(ScriptPropertyType.FormID)) {
-		out.add(((FormIDData) data).id);
-	    }
-	    return out;
-	} else {
-	    return new ArrayList<FormID>(0);
+    ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	if (getType().equals(ScriptPropertyType.FormID)) {
+	    out.add(((FormIDData) data).id);
 	}
+	return out;
     }
 
     @Override
@@ -400,7 +396,7 @@ class ScriptProperty extends Record {
 	    data[3] = -1;
 	}
 
-	FormIDData (FormID in) {
+	FormIDData(FormID in) {
 	    this();
 	    id = in;
 	}

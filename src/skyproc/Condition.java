@@ -171,18 +171,14 @@ class Condition extends SubShell {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(5);
-		out.add(comparisonValueForm);
-		out.add(param1form);
-		out.add(param2form);
-		out.add(reference);
-		out.add(param3form);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(5);
+	    out.add(comparisonValueForm);
+	    out.add(param1form);
+	    out.add(param2form);
+	    out.add(reference);
+	    out.add(param3form);
+	    return out;
 	}
 
 	@Override

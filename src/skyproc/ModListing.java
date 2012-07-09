@@ -173,11 +173,6 @@ public class ModListing extends SubRecord implements Comparable {
 	return hash;
     }
 
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
-
     /**
      * Compare funtion is as follows:<br> 1) A master always is less than a
      * non-master plugin<br> 2) The global patch always is greater<br> 3) A

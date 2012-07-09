@@ -184,16 +184,12 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(soundPairs.size());
-		for (SoundPair pairs : soundPairs) {
-		    out.add(pairs.CSDI.ID);
-		}
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(soundPairs.size());
+	    for (SoundPair pairs : soundPairs) {
+		out.add(pairs.CSDI.ID);
 	    }
+	    return out;
 	}
 
 	class SoundPair implements Serializable {
@@ -358,11 +354,6 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(gearedUpWeapons, 1);
 	    out.write(fluff2, 3);
 	}
-
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class TINIpackage extends SubRecord implements Serializable {
@@ -452,11 +443,6 @@ public class NPC_ extends Actor implements Serializable {
 		    && TINV.isValid()
 		    && TIAS.isValid();
 	}
-
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class ACBS extends SubRecord implements Serializable {
@@ -537,11 +523,6 @@ public class NPC_ extends Actor implements Serializable {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 24;
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
 	}
     }
 
@@ -624,11 +605,6 @@ public class NPC_ extends Actor implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 20;
 	}
-
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class ATKD extends SubRecord implements Serializable {
@@ -701,15 +677,11 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		out.add(attackSpell);
-		out.add(attackType);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    out.add(attackSpell);
+	    out.add(attackType);
+	    return out;
 	}
     }
 

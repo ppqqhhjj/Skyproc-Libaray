@@ -130,9 +130,4 @@ class SubData extends SubRecord {
     public void clear() {
         data = null;
     }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
 }

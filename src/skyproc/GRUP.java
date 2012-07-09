@@ -167,10 +167,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	}
     }
 
-    ArrayList<FormID> allFormIDs(boolean deep) {
+    ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T item : listRecords) {
-	    out.addAll(item.allFormIDs(deep));
+	    out.addAll(item.allFormIDs());
 	}
 	return out;
     }
@@ -263,7 +263,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     void standardizeMaster(T item) {
-	ArrayList<FormID> set = item.allFormIDs(true);
+	ArrayList<FormID> set = item.allFormIDs();
 	for (FormID id : set) {
 	    id.standardize(srcMod);
 	}

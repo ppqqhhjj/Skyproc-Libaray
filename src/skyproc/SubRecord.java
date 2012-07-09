@@ -95,7 +95,7 @@ public abstract class SubRecord extends Record {
 	return true;
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs () {
 	return new ArrayList<FormID>(0);
     }
 

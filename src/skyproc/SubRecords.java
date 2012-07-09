@@ -160,10 +160,10 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	}
     }
 
-    public ArrayList<FormID> allFormIDs (boolean deep) {
+    public ArrayList<FormID> allFormIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (SubRecord s : list) {
-            out.addAll(s.allFormIDs(deep));
+            out.addAll(s.allFormIDs());
         }
 	return out;
     }

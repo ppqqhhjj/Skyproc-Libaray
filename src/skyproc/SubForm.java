@@ -192,7 +192,7 @@ class SubForm extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>(1);
 	out.add(ID);
 	return out;

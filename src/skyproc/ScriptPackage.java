@@ -54,16 +54,12 @@ public class ScriptPackage extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	if (deep) {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
-	    for (ScriptRef s : scripts) {
-		out.addAll(s.allFormIDs(deep));
-	    }
-	    return out;
-	} else {
-	    return new ArrayList<FormID>(0);
+    ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = new ArrayList<FormID>(2);
+	for (ScriptRef s : scripts) {
+	    out.addAll(s.allFormIDs());
 	}
+	return out;
     }
 
     @Override

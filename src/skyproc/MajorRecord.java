@@ -113,10 +113,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	subRecords.importSubRecords(in, mask);
     }
 
-    ArrayList<FormID> allFormIDs(boolean deep) {
+    ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	out.add(ID);
-	out.addAll(subRecords.allFormIDs(deep));
+	out.addAll(subRecords.allFormIDs());
 	return out;
     }
 

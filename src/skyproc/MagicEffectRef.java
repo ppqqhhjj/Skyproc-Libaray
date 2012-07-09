@@ -129,11 +129,6 @@ public class MagicEffectRef extends SubShell {
 	int getContentLength(Mod srcMod) {
 	    return 12;
 	}
-
-	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     // Get/Set

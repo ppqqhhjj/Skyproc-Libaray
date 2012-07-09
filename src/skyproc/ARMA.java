@@ -125,16 +125,12 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(altTextures.size());
-		for (AltTexture t : altTextures) {
-		    out.add(t.texture);
-		}
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(altTextures.size());
+	    for (AltTexture t : altTextures) {
+		out.add(t.texture);
 	    }
+	    return out;
 	}
 
 	@Override
@@ -287,8 +283,6 @@ public class ARMA extends MajorRecord {
 	    hash = 29 * hash + this.index;
 	    return hash;
 	}
-
-
     }
 
     class DNAM extends SubRecord {
@@ -349,10 +343,6 @@ public class ARMA extends MajorRecord {
 	    return 12;
 	}
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     // Get/set
@@ -443,10 +433,9 @@ public class ARMA extends MajorRecord {
      * @param rhs Other ARMA record.
      * @param gender Gender of the pack to compare.
      * @param perspective Perspective of the pack to compare
-     * @return true if:<br>
-     * Both sets are empty.<br>
-     *  or <br>
-     * Each set contains matching Alt Textures with the same name and TXST formID reference, in the same corresponding indices.
+     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
+     * matching Alt Textures with the same name and TXST formID reference, in
+     * the same corresponding indices.
      */
     public boolean equalAltTextures(ARMA rhs, Gender gender, Perspective perspective) {
 	ArrayList<AltTexture> alts = getAltTextures(gender, perspective);

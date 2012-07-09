@@ -67,8 +67,4 @@ class SubFloat extends SubRecord {
         data = 0;
     }
 
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
 }

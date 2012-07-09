@@ -67,10 +67,4 @@ class SubFlag extends SubRecord {
     int getContentLength(Mod srcMod) {
 	return flags.length();
     }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
-
 }

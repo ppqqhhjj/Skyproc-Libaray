@@ -101,15 +101,11 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		out.add(addiction);
-		out.add(useSound);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    out.add(addiction);
+	    out.add(useSound);
+	    return out;
 	}
 
 	@Override

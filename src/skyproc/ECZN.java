@@ -27,108 +27,104 @@ public class ECZN extends MajorRecord {
      * Creates a new ECZN record.
      */
     ECZN() {
-        super();
-        subRecords.add(DATA);
+	super();
+	subRecords.add(DATA);
     }
 
     @Override
     Type[] getTypes() {
-        return type;
+	return type;
     }
 
     @Override
     Record getNew() {
-        return new ECZN();
+	return new ECZN();
     }
 
     static class DATA extends SubRecord implements Serializable {
 
-        private FormID owner = new FormID();
-        private FormID location = new FormID();
-        private int rank = 0;
-        private int minLevel = 0;
-        LFlags flags = new LFlags(1);
-        private int maxLevel = 0;
-        private boolean valid = true;
+	private FormID owner = new FormID();
+	private FormID location = new FormID();
+	private int rank = 0;
+	private int minLevel = 0;
+	LFlags flags = new LFlags(1);
+	private int maxLevel = 0;
+	private boolean valid = true;
 
-        DATA() {
-            super(Type.DATA);
-            valid = false;
-        }
+	DATA() {
+	    super(Type.DATA);
+	    valid = false;
+	}
 
-        DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
+	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
 
-        @Override
-        SubRecord getNew(Type type) {
-            return new DATA();
-        }
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DATA();
+	}
 
-        @Override
-        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
+	@Override
+	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
 
-            owner.setInternal(in.extract(4));
-            location.setInternal(in.extract(4));
-            rank = in.extractInt(1);
-            minLevel = in.extractInt(1);
-            flags.set(in.extract(1));
-            maxLevel = in.extractInt(1);
+	    owner.setInternal(in.extract(4));
+	    location.setInternal(in.extract(4));
+	    rank = in.extractInt(1);
+	    minLevel = in.extractInt(1);
+	    flags.set(in.extract(1));
+	    maxLevel = in.extractInt(1);
 
-            if (logging()) {
-                logSync("", "DATA record: ");
-                logSync("", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
-                logSync("", "  " + "Required Rank: " + rank + ", Minimum Level: " + minLevel);
-                logSync("", "  " + "Max Level: " + maxLevel + ", Flags: " + flags);
-            }
+	    if (logging()) {
+		logSync("", "DATA record: ");
+		logSync("", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
+		logSync("", "  " + "Required Rank: " + rank + ", Minimum Level: " + minLevel);
+		logSync("", "  " + "Max Level: " + maxLevel + ", Flags: " + flags);
+	    }
 
-            valid = true;
-        }
+	    valid = true;
+	}
 
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                owner.export(out);
-                location.export(out);
-                out.write(rank, 1);
-                out.write(minLevel, 1);
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		owner.export(out);
+		location.export(out);
+		out.write(rank, 1);
+		out.write(minLevel, 1);
 		flags.export();
-                out.write(maxLevel, 1);
-            }
-        }
+		out.write(maxLevel, 1);
+	    }
+	}
 
-        @Override
-        public void clear() {
-        }
+	@Override
+	public void clear() {
+	}
 
-        @Override
-        Boolean isValid() {
-            return valid;
-        }
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
 
-        @Override
-        int getContentLength(Mod srcMod) {
-            if (isValid()) {
-                return 12;
-            } else {
-                return 0;
-            }
-        }
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (isValid()) {
+		return 12;
+	    } else {
+		return 0;
+	    }
+	}
 
-        @Override
-        ArrayList<FormID> allFormIDs(boolean deep) {
-            if (deep) {
-                ArrayList<FormID> out = new ArrayList<FormID>(2);
-                out.add(owner);
-                out.add(location);
-                return out;
-            } else {
-                return new ArrayList<FormID>(0);
-            }
-        }
+	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    out.add(owner);
+	    out.add(location);
+	    return out;
+	}
     }
 
     /**
@@ -148,11 +144,11 @@ public class ECZN extends MajorRecord {
 	 *
 	 */
 	DisableCombatBoundary(4),;
-        int value;
+	int value;
 
-        ECZNFlags(int value) {
-            this.value = value;
-        }
+	ECZNFlags(int value) {
+	    this.value = value;
+	}
     }
 
     /**
@@ -161,7 +157,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public boolean get(ECZNFlags flag) {
-        return DATA.flags.get(flag.value);
+	return DATA.flags.get(flag.value);
     }
 
     /**
@@ -170,7 +166,7 @@ public class ECZN extends MajorRecord {
      * @param on
      */
     public void set(ECZNFlags flag, boolean on) {
-        this.DATA.flags.set(flag.value, on);
+	this.DATA.flags.set(flag.value, on);
     }
 
     /**
@@ -178,7 +174,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public FormID getLocation() {
-        return DATA.location;
+	return DATA.location;
     }
 
     /**
@@ -186,7 +182,7 @@ public class ECZN extends MajorRecord {
      * @param location
      */
     public void setLocation(FormID location) {
-        this.DATA.location = location;
+	this.DATA.location = location;
     }
 
     /**
@@ -194,7 +190,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getMaxLevel() {
-        return DATA.maxLevel;
+	return DATA.maxLevel;
     }
 
     /**
@@ -202,7 +198,7 @@ public class ECZN extends MajorRecord {
      * @param maxLevel
      */
     public void setMaxLevel(int maxLevel) {
-        this.DATA.maxLevel = maxLevel;
+	this.DATA.maxLevel = maxLevel;
     }
 
     /**
@@ -210,7 +206,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getMinLevel() {
-        return DATA.minLevel;
+	return DATA.minLevel;
     }
 
     /**
@@ -218,7 +214,7 @@ public class ECZN extends MajorRecord {
      * @param minLevel
      */
     public void setMinLevel(int minLevel) {
-        this.DATA.minLevel = minLevel;
+	this.DATA.minLevel = minLevel;
     }
 
     /**
@@ -226,7 +222,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public FormID getOwner() {
-        return DATA.owner;
+	return DATA.owner;
     }
 
     /**
@@ -234,7 +230,7 @@ public class ECZN extends MajorRecord {
      * @param owner
      */
     public void setOwner(FormID owner) {
-        this.DATA.owner = owner;
+	this.DATA.owner = owner;
     }
 
     /**
@@ -242,7 +238,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getRank() {
-        return DATA.rank;
+	return DATA.rank;
     }
 
     /**
@@ -250,6 +246,6 @@ public class ECZN extends MajorRecord {
      * @param rank
      */
     public void setRank(int rank) {
-        this.DATA.rank = rank;
+	this.DATA.rank = rank;
     }
 }

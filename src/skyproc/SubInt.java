@@ -79,9 +79,4 @@ class SubInt extends SubRecord {
     Boolean isValid() {
 	return valid;
     }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
 }

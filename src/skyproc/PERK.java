@@ -55,13 +55,11 @@ public class PERK extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	ArrayList<FormID> out = super.allFormIDs(deep);
-	out.addAll(perkSections.allFormIDs(deep));
+    ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = super.allFormIDs();
+	out.addAll(perkSections.allFormIDs());
 	return out;
     }
-
-
 
     // Custom importSubRecords because Bethesda reused header titles in the same record.
     @Override
@@ -181,12 +179,8 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		return subPackage.allFormIDs(deep);
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    return subPackage.allFormIDs();
 	}
     }
 
@@ -281,12 +275,8 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		return EPFD.allFormIDs(deep);
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    return EPFD.allFormIDs();
 	}
     }
 
@@ -351,11 +341,6 @@ public class PERK extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return PRKC.getTotalLength(srcMod)
 		    + CTDAs.getTotalLength(srcMod);
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
 	}
     }
 

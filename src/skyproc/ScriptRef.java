@@ -76,16 +76,12 @@ public class ScriptRef extends Record implements Iterable<String> {
 	}
     }
 
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	if (deep) {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
-	    for (ScriptProperty s : properties) {
-		out.addAll(s.allFormIDs(deep));
-	    }
-	    return out;
-	} else {
-	    return new ArrayList<FormID>(0);
+    ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = new ArrayList<FormID>();
+	for (ScriptProperty s : properties) {
+	    out.addAll(s.allFormIDs());
 	}
+	return out;
     }
 
     @Override
@@ -253,23 +249,23 @@ public class ScriptRef extends Record implements Iterable<String> {
 	properties.add(new ScriptProperty(propertyName, floatProperty));
     }
 
-    void addProperty(String propertyName, Integer ... in) {
+    void addProperty(String propertyName, Integer... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
 
-    void addProperty(String propertyName, Float ... in) {
+    void addProperty(String propertyName, Float... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
 
-    void addProperty(String propertyName, Boolean ... in) {
+    void addProperty(String propertyName, Boolean... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
 
-    void addProperty(String propertyName, FormID ... in) {
+    void addProperty(String propertyName, FormID... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
 
-    void addProperty(String propertyName, String ... in) {
+    void addProperty(String propertyName, String... in) {
 	properties.add(new ScriptProperty(propertyName, in));
     }
 
@@ -323,7 +319,7 @@ public class ScriptRef extends Record implements Iterable<String> {
      * @param propertyName Property name to add
      * @param floatProperty Float array to assign to property
      */
-    public void setProperty(String propertyName, Float ... floatProperty) {
+    public void setProperty(String propertyName, Float... floatProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, floatProperty);
     }
@@ -334,7 +330,7 @@ public class ScriptRef extends Record implements Iterable<String> {
      * @param propertyName Property name to add
      * @param intProperty Int array to assign to property
      */
-    public void setProperty(String propertyName, Integer ... intProperty) {
+    public void setProperty(String propertyName, Integer... intProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, intProperty);
     }
@@ -343,9 +339,9 @@ public class ScriptRef extends Record implements Iterable<String> {
      * Adds a boolean array property to the script, checks for duplicates.
      *
      * @param propertyName Property name to add
-     * @param boolProperty 
+     * @param boolProperty
      */
-    public void setProperty(String propertyName, Boolean ... boolProperty) {
+    public void setProperty(String propertyName, Boolean... boolProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, boolProperty);
     }
@@ -356,7 +352,7 @@ public class ScriptRef extends Record implements Iterable<String> {
      * @param propertyName Property name to add
      * @param stringProperty String array to assign to property
      */
-    public void setProperty(String propertyName, String ... stringProperty) {
+    public void setProperty(String propertyName, String... stringProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, stringProperty);
     }
@@ -367,7 +363,7 @@ public class ScriptRef extends Record implements Iterable<String> {
      * @param propertyName Property name to add
      * @param formProperty FormID array to assign to property
      */
-    public void setProperty(String propertyName, FormID ... formProperty) {
+    public void setProperty(String propertyName, FormID... formProperty) {
 	removeProperty(propertyName);
 	addProperty(propertyName, formProperty);
     }

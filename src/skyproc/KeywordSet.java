@@ -77,8 +77,8 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return keywords.allFormIDs(deep);
+    ArrayList<FormID> allFormIDs () {
+	return keywords.allFormIDs();
     }
 
     /**

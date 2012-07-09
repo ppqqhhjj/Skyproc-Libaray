@@ -56,8 +56,8 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs(boolean deep) {
-	return subRecords.allFormIDs(deep);
+    ArrayList<FormID> allFormIDs() {
+	return subRecords.allFormIDs();
     }
 
     @Override

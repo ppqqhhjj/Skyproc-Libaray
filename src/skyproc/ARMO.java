@@ -140,10 +140,6 @@ public class ARMO extends MajorRecordDescription {
 	    return 8;
 	}
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     // Get/Set

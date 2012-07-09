@@ -98,15 +98,11 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		out.add(baseEnchantment);
-		out.add(wornRestrictions);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    out.add(baseEnchantment);
+	    out.add(wornRestrictions);
+	    return out;
 	}
     }
 

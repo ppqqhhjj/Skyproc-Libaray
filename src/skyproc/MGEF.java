@@ -280,27 +280,23 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		out.add(relatedID);
-		out.add(lightID);
-		out.add(hitShader);
-		out.add(enchantShader);
-		out.add(projectileID);
-		out.add(explosionID);
-		out.add(castingArt);
-		out.add(hitEffectArt);
-		out.add(impactData);
-		out.add(dualCastID);
-		out.add(enchantArtID);
-		out.add(equipAbility);
-		out.add(imageSpaceModID);
-		out.add(perkID);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(14);
+	    out.add(relatedID);
+	    out.add(lightID);
+	    out.add(hitShader);
+	    out.add(enchantShader);
+	    out.add(projectileID);
+	    out.add(explosionID);
+	    out.add(castingArt);
+	    out.add(hitEffectArt);
+	    out.add(impactData);
+	    out.add(dualCastID);
+	    out.add(enchantArtID);
+	    out.add(equipAbility);
+	    out.add(imageSpaceModID);
+	    out.add(perkID);
+	    return out;
 	}
     }
 
@@ -353,16 +349,12 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(2);
-		for (Sound s : sounds) {
-		    out.add(s.soundID);
-		}
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>();
+	    for (Sound s : sounds) {
+		out.add(s.soundID);
 	    }
+	    return out;
 	}
 
 	class Sound {

@@ -25,11 +25,11 @@ abstract class MagicItem extends MajorRecordDescription {
     SubList<MagicEffectRef> magicEffects = new SubList<MagicEffectRef>(new MagicEffectRef());
     public KeywordSet keywords = new KeywordSet();
 
-    MagicItem () {
+    MagicItem() {
 	super();
     }
 
-    MagicItem (Mod modToOriginateFrom, String edid) {
+    MagicItem(Mod modToOriginateFrom, String edid) {
 	super(modToOriginateFrom, edid);
     }
 
@@ -40,9 +40,9 @@ abstract class MagicItem extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	ArrayList<FormID> out = super.allFormIDs(deep);
-	out.addAll(magicEffects.allFormIDs(deep));
+    ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = super.allFormIDs();
+	out.addAll(magicEffects.allFormIDs());
 	return out;
     }
 
@@ -135,18 +135,14 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    if (deep) {
-		ArrayList<FormID> out = new ArrayList<FormID>(1);
-		out.add(perkType);
-		return out;
-	    } else {
-		return new ArrayList<FormID>(0);
-	    }
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    out.add(perkType);
+	    return out;
 	}
     }
 
-    public ArrayList<MagicEffectRef> getMagicEffects () {
+    public ArrayList<MagicEffectRef> getMagicEffects() {
 	return magicEffects.toPublic();
     }
 
@@ -162,7 +158,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	magicEffects.add(new MagicEffectRef(magicEffect.getForm()));
     }
 
-    public void clearMagicEffects () {
+    public void clearMagicEffects() {
 	magicEffects.clear();
     }
 }

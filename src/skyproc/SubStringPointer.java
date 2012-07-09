@@ -166,11 +166,6 @@ class SubStringPointer extends SubRecord {
 	}
     }
 
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
-
     enum Files {
 
 	STRINGS, ILSTRINGS, DLSTRINGS;

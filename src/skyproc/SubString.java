@@ -141,9 +141,4 @@ class SubString extends SubRecord {
         hash = 29 * hash + (this.string != null ? this.string.toUpperCase().hashCode() : 0);
         return hash;
     }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
 }

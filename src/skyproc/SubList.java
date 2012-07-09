@@ -250,10 +250,10 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T item : collection) {
-            out.addAll(item.allFormIDs(deep));
+            out.addAll(item.allFormIDs());
         }
 	return out;
     }

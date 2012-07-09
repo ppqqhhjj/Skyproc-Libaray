@@ -103,10 +103,10 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T s : set.values()) {
-	    out.addAll(s.allFormIDs(deep));
+	    out.addAll(s.allFormIDs());
 	}
 	return out;
     }

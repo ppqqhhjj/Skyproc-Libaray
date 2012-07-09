@@ -132,10 +132,6 @@ public class IMGS extends MajorRecord {
             }
         }
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class CNAM extends SubRecord {
@@ -204,10 +200,6 @@ public class IMGS extends MajorRecord {
             }
         }
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class TNAM extends SubRecord {
@@ -280,10 +272,6 @@ public class IMGS extends MajorRecord {
             }
         }
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     static class DNAM extends SubRecord {
@@ -354,10 +342,6 @@ public class IMGS extends MajorRecord {
             }
         }
 
-	@Override
-	ArrayList<FormID> allFormIDs (boolean deep) {
-	    return new ArrayList<FormID>(0);
-	}
     }
 
     /**

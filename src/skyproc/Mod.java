@@ -343,10 +343,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    ArrayList<FormID> allFormIDs(boolean deep) {
+    ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (GRUP g : GRUPs.values()) {
-	    out.addAll(g.allFormIDs(deep));
+	    out.addAll(g.allFormIDs());
 	}
 	return out;
     }
@@ -590,7 +590,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	// Confirm all formID references are added as
 	// masters, even if no actual major record from that
 	// mod was added.
-	for (FormID ID : srcMod.allFormIDs(true)) {
+	for (FormID ID : srcMod.allFormIDs()) {
 	    if (!ID.equals(FormID.NULL)) {
 		this.addMaster(ID.getMaster());
 	    }
@@ -1277,11 +1277,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs(boolean deep) {
-	    return new ArrayList<FormID>(0);
 	}
     }
 

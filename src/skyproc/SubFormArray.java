@@ -73,7 +73,7 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
+    ArrayList<FormID> allFormIDs () {
 	ArrayList<FormID> out = new ArrayList<FormID>(IDs.size());
 	for (FormID id : IDs) {
 	    out.add(id);
@@ -123,7 +123,7 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
 	}
 	return true;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -145,6 +145,6 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
 	hash = 17 * hash + (this.IDs != null ? this.IDs.hashCode() : 0);
 	return hash;
     }
-    
-    
+
+
 }
