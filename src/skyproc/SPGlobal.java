@@ -323,12 +323,20 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Turns the LLogger async log on/off.
+     * @param on
+     */
     public static void loggingAsync(Boolean on) {
 	if (log != null) {
 	    SPGlobal.log.loggingAsync(on);
 	}
     }
 
+    /**
+     *
+     * @return Whether the LLogger's async log is on/off.
+     */
     public static boolean loggingAsync(){
 	if (log != null) {
 	    return SPGlobal.log.loggingAsync();

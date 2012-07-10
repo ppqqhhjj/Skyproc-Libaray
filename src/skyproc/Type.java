@@ -877,7 +877,13 @@ public enum Type {
      */
     ECZN,
 
+    /**
+     *
+     */
     GLOB,
+    /**
+     *
+     */
     FLTV,
 
     /**

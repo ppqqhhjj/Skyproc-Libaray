@@ -166,10 +166,18 @@ public class LLogger {
 	loggingSync = on;
     }
 
+    /**
+     *
+     * @return Whether the LLogger's async log is on/off.
+     */
     public boolean loggingAsync() {
 	return loggingAsync && logging && mainLogSwitch;
     }
 
+    /**
+     * Turns the LLogger async log on/off.
+     * @param on
+     */
     public void loggingAsync(Boolean on) {
 	loggingAsync = on;
     }

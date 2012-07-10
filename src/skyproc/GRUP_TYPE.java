@@ -19,6 +19,9 @@ public enum GRUP_TYPE {
      * Texture Sets
      */
     TXST,
+    /**
+     * 
+     */
     GLOB,
     /**
      * Factions

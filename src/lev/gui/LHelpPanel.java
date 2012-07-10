@@ -93,15 +93,27 @@ public class LHelpPanel extends LPanel {
 	setting.setForeground(c);
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setHeaderFont (Font f) {
 	setting.setFont(f);
     }
 
+    /**
+     *
+     * @param title_
+     */
     public void setTitle(String title_) {
 	setting.setText("   " + title_);
 	setting.setSize(setting.getPreferredSize());
     }
 
+    /**
+     * 
+     * @param y_
+     */
     public void setTitleHeight(int y_) {
 	if (y_ == -1) {
 	    y = spacing;

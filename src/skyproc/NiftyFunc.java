@@ -145,7 +145,21 @@ public class NiftyFunc {
 	quest.FULL.setText(script.getName() + " Quest");
 	return quest;
     }
-    
+
+    /**
+     * A function that starts a new java program with more memory.
+     * Use this to allocate more memory for your SkyProc program by simply putting
+     * the name of your jar file as the jarpath.  This function will automatically
+     * open a second instance of your program, giving it more memory, and
+     * close the first program if the second is opened properly.
+     * @param startingMem Memory to start the new program with.
+     * @param maxMem Max amount of memory to allow the new program to use.
+     * @param jarPath Path to the jar file to open.  Usually, just put the name of
+     * your jar.
+     * @param args Any special main function args you want to give to the second program.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void allocateMoreMemory(String startingMem, String maxMem, String jarPath, String ... args) throws IOException, InterruptedException {
 	String[] argsInternal = new String[args.length + 5];
 	argsInternal[0] = "java";

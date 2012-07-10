@@ -409,16 +409,49 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     }
 
+    /**
+     *
+     */
     public enum MajorFlags {
+	/**
+	 *
+	 */
 	Deleted (5),
+	/**
+	 *
+	 */
 	RelatedToShields (6),
+	/**
+	 *
+	 */
 	HiddenFromLocalMap (9),
+	/**
+	 * 
+	 */
 	QuestItemPersistentRef (10),
+	/**
+	 *
+	 */
 	InitiallyDisabled(11),
+	/**
+	 *
+	 */
 	Ignored(12),
+	/**
+	 *
+	 */
 	VisibleWhenDistant(15),
+	/**
+	 *
+	 */
 	DangerousOffLimits(17),
+	/**
+	 *
+	 */
 	Compressed(18),
+	/**
+	 *
+	 */
 	CantWait(19);
 
 	int value;
@@ -427,10 +460,20 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(MajorFlags flag, Boolean on) {
 	majorFlags.set(flag.value, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(MajorFlags flag) {
 	return majorFlags.get(flag.value);
     }

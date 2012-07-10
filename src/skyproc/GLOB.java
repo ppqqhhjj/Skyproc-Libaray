@@ -26,6 +26,12 @@ public class GLOB extends MajorRecord {
 	init();
     }
 
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param edid
+     * @param type
+     */
     public GLOB(Mod modToOriginateFrom, String edid, GLOBType type) {
 	super(modToOriginateFrom, edid);
 	init();
@@ -33,6 +39,14 @@ public class GLOB extends MajorRecord {
 	setType(type);
     }
 
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param edid
+     * @param type
+     * @param value
+     * @param constant
+     */
     public GLOB(Mod modToOriginateFrom, String edid, GLOBType type, float value, Boolean constant) {
 	this(modToOriginateFrom, edid, type);
 	setValue(value);
@@ -54,9 +68,21 @@ public class GLOB extends MajorRecord {
 	return types;
     }
 
+    /**
+     *
+     */
     public enum GLOBType {
+	/**
+	 *
+	 */
 	Short (0x73),
+	/**
+	 *
+	 */
 	Long (0x6C),
+	/**
+	 *
+	 */
 	Float (0x66);
 
 	int value;
@@ -66,6 +92,10 @@ public class GLOB extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public GLOBType getType () {
 	if ((int)FNAM.data[0] == GLOBType.Short.value) {
 	    return GLOBType.Short;
@@ -75,6 +105,10 @@ public class GLOB extends MajorRecord {
 	return GLOBType.Float;
     }
 
+    /**
+     *
+     * @param type
+     */
     final public void setType (GLOBType type) {
 	FNAM.data[0] = (byte) type.value;
     }
@@ -92,22 +126,42 @@ public class GLOB extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public float getValue () {
 	return FLTV.data;
     }
 
+    /**
+     * 
+     * @param value
+     */
     final public void setValue (Float value) {
 	FLTV.data = value;
     }
 
+    /**
+     *
+     * @param value
+     */
     final public void setValue (Boolean value) {
 	setValue((float)Integer.valueOf(Ln.convertBoolTo1(value)));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isConstant () {
 	return get(MajorFlags.RelatedToShields);
     }
 
+    /**
+     *
+     * @param on
+     */
     final public void setConstant (boolean on) {
 	set(MajorFlags.RelatedToShields, on);
     }
