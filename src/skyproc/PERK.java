@@ -218,7 +218,9 @@ public class PERK extends MajorRecordDescription {
 	    EPFT.export(out, srcMod);
 	    EPF2.export(out, srcMod);
 	    EPF3.export(out, srcMod);
-	    EPFD.export(out, srcMod);
+	    if (EPFD != null) {
+		EPFD.export(out, srcMod);
+	    }
 	}
 
 	@Override
@@ -242,7 +244,11 @@ public class PERK extends MajorRecordDescription {
 		    EPF3.parseData(in);
 		    break;
 		case EPFD:
-		    EPFD.parseData(in);
+		    if (EPFD != null) {
+			EPFD.parseData(in);
+		    } else {
+			throw new BadRecord("EPFD did not get initialized.");
+		    }
 		    break;
 		default:
 		    PRKCs.parseData(in);
@@ -267,18 +273,23 @@ public class PERK extends MajorRecordDescription {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return DATA.getTotalLength(srcMod)
+	    int out = DATA.getTotalLength(srcMod)
 		    + PRKCs.getTotalLength(srcMod)
 		    + EPFT.getTotalLength(srcMod)
-		    + EPFD.getTotalLength(srcMod)
 		    + EPF2.getTotalLength(srcMod)
 		    + EPF3.getTotalLength(srcMod);
+	    if (EPFD != null) {
+		out += EPFD.getTotalLength(srcMod);
+	    }
+	    return out;
 	}
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
 	    ArrayList<FormID> out = new ArrayList<FormID>();
-	    out.addAll(EPFD.allFormIDs());
+	    if (EPFD != null) {
+		out.addAll(EPFD.allFormIDs());
+	    }
 	    out.addAll(PRKCs.allFormIDs());
 	    return out;
 	}
@@ -351,7 +362,6 @@ public class PERK extends MajorRecordDescription {
 	ArrayList<FormID> allFormIDs() {
 	    return CTDAs.allFormIDs();
 	}
-
     }
 
     enum PerkType {
