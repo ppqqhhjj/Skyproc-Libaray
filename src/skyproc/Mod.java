@@ -631,7 +631,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 
 	// Check if any duplicate EDIDS or FormIDS
-	Set<String> edids = new HashSet<String>();
+	Map<String, MajorRecord> edids = new HashMap<String, MajorRecord>();
 	Set<FormID> IDs = new HashSet<FormID>();
 	boolean bad = false;
 	for (GRUP g : GRUPs.values()) {
@@ -640,11 +640,14 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 		if (SPGlobal.logging()) {
 		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "Export", "Exporting " + m);
 		}
-		if (edids.contains(m.getEDID())) {
+		if (edids.keySet().contains(m.getEDID())
+			&& (m.getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo)
+			|| edids.get(m.getEDID()).getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo))) {
 		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
+		    SPGlobal.logError("EDID Check", "    With: " + edids.get(m.getEDID()));
 		    bad = true;
 		} else {
-		    edids.add(m.getEDID());
+		    edids.put(m.getEDID(), m);
 		}
 		if (IDs.contains(m.getForm())) {
 		    SPGlobal.logError("FormID Check", "Error! Duplicate FormID " + m);
