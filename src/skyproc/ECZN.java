@@ -95,7 +95,7 @@ public class ECZN extends MajorRecord {
 		location.export(out);
 		out.write(rank, 1);
 		out.write(minLevel, 1);
-		flags.export();
+		out.write(flags.export(), 1);
 		out.write(maxLevel, 1);
 	    }
 	}

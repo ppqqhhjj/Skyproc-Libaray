@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
@@ -19,6 +20,8 @@ import skyproc.gui.SPProgressBarPlug;
  * @author Justin Swanson
  */
 public class SkyProcTester {
+
+    static ArrayList<String> badIDs;
 
     /**
      */
@@ -43,10 +46,19 @@ public class SkyProcTester {
 
     private static void validate() throws Exception {
 
+	badIDs = new ArrayList<String>();
+	badIDs.add("0010B115");  //EnchSilverSword
+	badIDs.add("0010A27F");  //TrapLightningRune
+	badIDs.add("0010A27E");  //TrapFrostRune
+	badIDs.add("00073328");  //TrapFireRune
+	badIDs.add("00018A45");  //RiverwoodZone
+	badIDs.add("0000001E");  //NoZoneZone
+
+
 	SubStringPointer.shortNull = false;
 
-	GRUP_TYPE[] types = {GRUP_TYPE.ENCH};
-//	GRUP_TYPE[] types = GRUP_TYPE.values();
+//	GRUP_TYPE[] types = {GRUP_TYPE.FACT};
+	GRUP_TYPE[] types = GRUP_TYPE.values();
 
 	SPProgressBarPlug.progress.reset();
 	SPProgressBarPlug.progress.setMax(types.length);
@@ -69,18 +81,20 @@ public class SkyProcTester {
 	FormID.allIDs.clear();
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, type);
-	boolean badIDs = false;
+	boolean idFail = false;
 	boolean passed = true;
 	for (FormID id : FormID.allIDs) {
-	    if (!id.isNull() && id.getMaster() == null) {
+	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id.toString())) {
 		System.out.println("A bad id: " + id);
-		badIDs = true;
+		idFail = true;
 		passed = false;
 		break;
 	    }
 	}
-	if (badIDs) {
+	if (idFail) {
 	    System.out.println("Some FormIDs were unstandardized!!");
+	} else {
+	    System.out.println("All FormIDs properly standardized.");
 	}
 
 	Mod patch = new Mod(new ModListing("Test.esp"));

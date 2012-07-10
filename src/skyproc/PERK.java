@@ -22,7 +22,7 @@ public class PERK extends MajorRecordDescription {
      * A script package containing scripts and their properties
      */
     public ScriptPackage scripts = new ScriptPackage();
-    SubList<SubData> CTDAs = new SubList<SubData>(new SubData(Type.CTDA));
+    SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
     SubData DATA = new SubData(Type.DATA);
     SubData NNAM = new SubData(Type.NNAM);
     SubString ICON = new SubString(Type.ICON, true);
@@ -58,6 +58,7 @@ public class PERK extends MajorRecordDescription {
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = super.allFormIDs();
 	out.addAll(perkSections.allFormIDs());
+	out.addAll(CTDAs.allFormIDs());
 	return out;
     }
 
@@ -276,7 +277,10 @@ public class PERK extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    return EPFD.allFormIDs();
+	    ArrayList<FormID> out = new ArrayList<FormID>();
+	    out.addAll(EPFD.allFormIDs());
+	    out.addAll(PRKCs.allFormIDs());
+	    return out;
 	}
     }
 
@@ -342,6 +346,12 @@ public class PERK extends MajorRecordDescription {
 	    return PRKC.getTotalLength(srcMod)
 		    + CTDAs.getTotalLength(srcMod);
 	}
+
+	@Override
+	ArrayList<FormID> allFormIDs() {
+	    return CTDAs.allFormIDs();
+	}
+
     }
 
     enum PerkType {

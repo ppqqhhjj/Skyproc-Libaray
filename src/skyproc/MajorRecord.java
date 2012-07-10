@@ -110,7 +110,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-	subRecords.importSubRecords(in, mask);
+ 	subRecords.importSubRecords(in, mask);
     }
 
     ArrayList<FormID> allFormIDs() {
