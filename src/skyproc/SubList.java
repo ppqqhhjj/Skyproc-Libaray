@@ -230,7 +230,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     static ArrayList<Integer> subIntToPublic(SubList<SubInt> in) {
         ArrayList<Integer> out = new ArrayList<Integer>(in.size());
         for (SubInt s : in) {
-            out.add(s.data);
+            out.add(s.get());
         }
         return out;
     }

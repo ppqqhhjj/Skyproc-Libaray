@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 class SubInt extends SubRecord {
 
-    int data;
+    private int data;
     int length = 4;
     boolean valid = false;
 
@@ -43,6 +43,15 @@ class SubInt extends SubRecord {
 	return length;
     }
 
+    public void set (int in) {
+	data = in;
+	valid = true;
+    }
+    
+    public int get () {
+	return data;
+    }
+    
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);

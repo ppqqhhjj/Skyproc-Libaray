@@ -147,7 +147,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @param x
 	 */
 	public void setX(int x) {
-	    XNAM.data = x;
+	    XNAM.set(x);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @return
 	 */
 	public int getX() {
-	    return XNAM.data;
+	    return XNAM.get();
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @param y
 	 */
 	public void setY(int y) {
-	    YNAM.data = y;
+	    YNAM.set(y);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @return
 	 */
 	public int getY() {
-	    return YNAM.data;
+	    return YNAM.get();
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class AVIF extends MajorRecordDescription {
 	 */
 	public void addPointer (int index) {
 	    SubInt cnam = new SubInt(Type.CNAM);
-	    cnam.data = index;
+	    cnam.set(index);
 	    CNAMs.add(cnam);
 	}
 
@@ -252,7 +252,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @param ref
 	 */
 	public void addPointer (PerkReference ref) {
-	    addPointer(ref.INAM.data);
+	    addPointer(ref.INAM.get());
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @param index
 	 */
 	public void setIndex (int index) {
-	    INAM.data = index;
+	    INAM.set(index);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class AVIF extends MajorRecordDescription {
 	 * @return
 	 */
 	public int getIndex () {
-	    return INAM.data;
+	    return INAM.get();
 	}
     }
 

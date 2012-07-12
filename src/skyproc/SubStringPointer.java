@@ -42,7 +42,7 @@ class SubStringPointer extends SubRecord {
 
     @Override
     Boolean isValid() {
-	return text.isValid() && !text.print().equals("");
+	return (text.isValid() && !text.print().equals("")) || forceExport;
     }
 
     @Override
@@ -52,13 +52,15 @@ class SubStringPointer extends SubRecord {
 		data.setData(Ln.toByteArray(srcMod.addOutString(text.string, file), 4));
 		data.export(out, srcMod);
 	    } else {
-		text.export(out, srcMod);
+		if (text.isValid()) {
+		    text.export(out, srcMod);
+		} else if (forceExport) {
+		    if (data.getData().length < 4 && !shortNull) {
+			data.setData(0, 4);
+		    }
+		    data.export(out, srcMod);
+		}
 	    }
-	} else if (forceExport) {
-	    if (data.getData().length < 4 && !shortNull) {
-		data.setData(0, 4);
-	    }
-	    data.export(out, srcMod);
 	}
     }
 
@@ -115,7 +117,7 @@ class SubStringPointer extends SubRecord {
 			    logSync("", r.toString() + " " + file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
 			}
 		    }
-		    data.setData(0,1); // Invalidate data to stop export
+		    data.setData(0, 1); // Invalidate data to stop export
 		}
 	    }
 	} else {
@@ -137,15 +139,15 @@ class SubStringPointer extends SubRecord {
 	if (isValid()) {
 	    if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 		return 4; // length of 4
-	    } else {
+	    } else if (text.isValid()) {
 		return text.getContentLength(srcMod);
 	    }
+	}
+	
+	if (shortNull) {
+	    return 1;
 	} else {
-	    if (shortNull) {
-		return 1;
-	    } else {
-		return 4; // empty data with 4 zeros
-	    }
+	    return 4; // empty data with 4 zeros
 	}
     }
 

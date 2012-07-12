@@ -82,17 +82,16 @@ public abstract class SubRecord extends Record {
     }
 
     abstract SubRecord getNew(Type type);
-    
+
     boolean confirmLink() {
 	return true;
     }
 
-    ArrayList<FormID> allFormIDs () {
+    ArrayList<FormID> allFormIDs() {
 	return new ArrayList<FormID>(0);
     }
 
     void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
-
     }
 
     @Override

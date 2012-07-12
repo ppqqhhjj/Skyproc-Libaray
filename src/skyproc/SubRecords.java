@@ -37,10 +37,12 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 
     void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : list) {
-//            if (s.getTypes()[0] == Type.FULL) {
-//                int test = 2343;
-//            }
-	    s.export(out, srcMod);
+	    if (s.isValid()) {
+		if (s.type[0] == Type.CSDT) {
+		    int wer = 23;
+		}
+		s.export(out, srcMod);
+	    }
 	}
     }
 

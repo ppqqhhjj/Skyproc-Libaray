@@ -54,15 +54,32 @@ public class SkyProcTester {
 	badIDs.add("00018A45");  //RiverwoodZone
 	badIDs.add("0000001E");  //NoZoneZone
 
-
 	SubStringPointer.shortNull = false;
 
-//	GRUP_TYPE[] types = {GRUP_TYPE.FACT};
+//	GRUP_TYPE[] types = {GRUP_TYPE.PERK};
 	GRUP_TYPE[] types = GRUP_TYPE.values();
 
+	FormID.allIDs.clear();
+	SPImporter importer = new SPImporter();
+	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
+	boolean idFail = false;
+	for (FormID id : FormID.allIDs) {
+	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id.toString())) {
+		System.out.println("A bad id: " + id);
+		idFail = true;
+		break;
+	    }
+	}
+	if (idFail) {
+	    System.out.println("Some FormIDs were unstandardized!!");
+	    return;
+	} else {
+	    System.out.println("All FormIDs properly standardized.");
+	}
+	
 	SPProgressBarPlug.progress.reset();
 	SPProgressBarPlug.progress.setMax(types.length);
-
+	
 	for (GRUP_TYPE g : types) {
 	    if (!test(g)) {
 		SPProgressBarPlug.progress.setStatus("FAILED: " + g);
@@ -78,25 +95,7 @@ public class SkyProcTester {
 	SPProgressBarPlug.progress.setStatus("Validating " + type);
 	SPProgressBarPlug.progress.pause(true);
 
-	FormID.allIDs.clear();
-	SPImporter importer = new SPImporter();
-	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, type);
-	boolean idFail = false;
 	boolean passed = true;
-	for (FormID id : FormID.allIDs) {
-	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id.toString())) {
-		System.out.println("A bad id: " + id);
-		idFail = true;
-		passed = false;
-		break;
-	    }
-	}
-	if (idFail) {
-	    System.out.println("Some FormIDs were unstandardized!!");
-	} else {
-	    System.out.println("All FormIDs properly standardized.");
-	}
-
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);

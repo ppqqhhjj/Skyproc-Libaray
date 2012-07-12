@@ -206,12 +206,10 @@ public class NPC_ extends Actor implements Serializable {
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
-	    if (isValid()) {
-		CSDT.export(out, srcMod);
-		for (SoundPair pair : soundPairs) {
-		    pair.CSDI.export(out, srcMod);
-		    pair.CSDC.export(out, srcMod);
-		}
+	    CSDT.export(out, srcMod);
+	    for (SoundPair pair : soundPairs) {
+		pair.CSDI.export(out, srcMod);
+		pair.CSDC.export(out, srcMod);
 	    }
 	}
 
@@ -222,7 +220,7 @@ public class NPC_ extends Actor implements Serializable {
 	    int size = Ln.arrayToInt(in.extractInts(2));
 	    switch (t) {
 		case CSDT:
-		    CSDT.data = in.extractInt(size);
+		    CSDT.set(in.extractInt(size));
 		    break;
 		case CSDI:
 		    if (size == 4) {
@@ -234,8 +232,8 @@ public class NPC_ extends Actor implements Serializable {
 		    }
 		    break;
 		case CSDC:
-		    SubInt CSDC = new SubInt(Type.CSDC);
-		    CSDC.data = in.extractInt(size);
+		    SubInt CSDC = new SubInt(Type.CSDC, 1);
+		    CSDC.set(in.extractInt(size));
 		    soundPairs.get(soundPairs.size() - 1).setChance(CSDC);
 		    break;
 		default:
@@ -267,12 +265,12 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	public final void setLocation(SoundLocation loc) {
-	    CSDT.data = loc.ordinal();
+	    CSDT.set(loc.ordinal());
 	}
 
 	public SoundLocation getLocation() {
-	    if (CSDT.data < SoundLocation.values().length) {
-		return SoundLocation.values()[CSDT.data];
+	    if (CSDT.get() < SoundLocation.values().length) {
+		return SoundLocation.values()[CSDT.get()];
 	    } else {
 		return SoundLocation.Idle;
 	    }
@@ -335,11 +333,11 @@ public class NPC_ extends Actor implements Serializable {
 		chance = 100;
 	    }
 
-	    CSDC.data = chance;
+	    CSDC.set(chance);
 	}
 
 	public int getChance() {
-	    return CSDC.data;
+	    return CSDC.get();
 	}
 
 	public final void setSound(FormID sound) {
@@ -773,6 +771,7 @@ public class NPC_ extends Actor implements Serializable {
 	float chinOverbite = 0;
 	float eyesForward = 0;
 	byte[] unknown = new byte[4];
+	boolean valid = false;
 
 	NAM9() {
 	    super(Type.NAM9);
@@ -824,6 +823,12 @@ public class NPC_ extends Actor implements Serializable {
 	    chinOverbite = in.extractFloat();
 	    eyesForward = in.extractFloat();
 	    unknown = in.extract(4);
+	    valid = true;
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
 	}
 
 	@Override
@@ -836,15 +841,16 @@ public class NPC_ extends Actor implements Serializable {
 	    return 76;
 	}
     }
-    
+
     static class NAMA extends SubRecord implements Serializable {
 
 	int nose;
 	int unknown;
 	int eyes;
 	int mouth;
-	
-	NAMA () {
+	boolean valid = false;
+
+	NAMA() {
 	    super(Type.NAMA);
 	}
 
@@ -864,18 +870,23 @@ public class NPC_ extends Actor implements Serializable {
 	    unknown = in.extractInt(4);
 	    eyes = in.extractInt(4);
 	    mouth = in.extractInt(4);
+	    valid = true;
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new NAMA();
 	}
 
 	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
 	int getContentLength(Mod srcMod) {
 	    return 16;
 	}
-	
     }
 
     /**
@@ -2382,7 +2393,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param vol
      */
     public void setSoundVolume(SoundVolume vol) {
-	NAM8.data = vol.ordinal();
+	NAM8.set(vol.ordinal());
     }
 
     /**
@@ -2390,7 +2401,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public SoundVolume getSoundVolume() {
-	return SoundVolume.values()[NAM8.data];
+	return SoundVolume.values()[NAM8.get()];
     }
 
     public void setFaceValue(FacePart part, float value) {
@@ -2447,6 +2458,7 @@ public class NPC_ extends Actor implements Serializable {
 		NAM9.eyesForward = value;
 		break;
 	}
+	NAM9.valid = true;
     }
 
     public float getFaceValue(FacePart part) {
@@ -2523,33 +2535,36 @@ public class NPC_ extends Actor implements Serializable {
     public float getFaceTint(RGB color) {
 	return QNAM.get(color);
     }
-    
-    public void setFaceTint (RGB color, float value) {
+
+    public void setFaceTint(RGB color, float value) {
 	QNAM.set(color, value);
     }
-    
+
     public int getNosePreset() {
 	return NAMA.nose;
     }
-    
+
     public void setNosePreset(int val) {
 	NAMA.nose = val;
+	NAMA.valid = true;
     }
 
     public int getEyePreset() {
 	return NAMA.eyes;
     }
-    
+
     public void setEyePreset(int val) {
 	NAMA.eyes = val;
+	NAMA.valid = true;
     }
-    
+
     public int getMouthPreset() {
 	return NAMA.mouth;
     }
-    
-    public void setMouthPreset (int val) {
+
+    public void setMouthPreset(int val) {
 	NAMA.mouth = val;
+	NAMA.valid = true;
     }
 
     public ArrayList<FormID> getHeadParts() {
