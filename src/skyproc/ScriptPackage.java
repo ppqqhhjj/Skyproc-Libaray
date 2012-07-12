@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ScriptPackage extends SubRecord {
+public class ScriptPackage extends SubRecord implements Serializable {
 
     int version = 5;
     int unknown = 2;

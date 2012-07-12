@@ -10,7 +10,7 @@ import skyproc.exceptions.Uninitialized;
  *
  * @author Justin Swanson
  */
-public class SPDatabase implements Iterable<Mod> {
+class SPDatabase implements Iterable<Mod> {
 
     static ArrayList<ModListing> activePlugins = new ArrayList<ModListing>();
     ArrayList<ModListing> addedPlugins = new ArrayList<ModListing>();

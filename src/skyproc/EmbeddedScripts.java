@@ -66,7 +66,6 @@ class EmbeddedScripts {
 		}
 		outString += "));";
 		outStrings.add(outString);
-
 	    } catch (NumberFormatException ex) {
 		log.write("  Skipped");
 	    }

@@ -9710,7 +9710,13 @@ public class GMST extends MajorRecord {
 	/**
 	 *
 	 */
-	iXPRewardSpeechChallengeVeryHard;
+	iXPRewardSpeechChallengeVeryHard,
+        
+        iHoursToRespawnCell,
+        iHoursToRespawnCellCleared,
+        iDaysToRespawnVendor,
+        iHoursToClearCorpses,
+        iMaxAttachedArrows;
     }
 
     /**

@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class ScriptProperty extends Record {
+class ScriptProperty extends Record implements Serializable {
 
     StringNonNull name = new StringNonNull();
     int unknown = 1;

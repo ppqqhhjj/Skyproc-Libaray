@@ -63,7 +63,11 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
 	/**
 	 *
 	 */
-	CalcForEachItemInCount;
+	CalcForEachItemInCount,
+        /**
+	 *
+	 */
+        UseAll;
     }
 
     /**
