@@ -71,11 +71,6 @@ class SubInt extends SubRecord {
     }
 
     @Override
-    public void clear() {
-	data = 0;
-    }
-
-    @Override
     Boolean isValid() {
 	return valid;
     }

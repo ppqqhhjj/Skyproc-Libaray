@@ -54,11 +54,6 @@ class SubFlag extends SubRecord {
     }
 
     @Override
-    public void clear() {
-	flags.clear();
-    }
-
-    @Override
     public Boolean isValid() {
 	return flags != null;
     }

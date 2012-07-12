@@ -5,9 +5,6 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -99,11 +96,6 @@ class SubString extends SubRecord {
     @Override
     SubRecord getNew(Type type_) {
         return new SubString(type_, nullterm);
-    }
-
-    @Override
-    public void clear() {
-        string = "";
     }
 
     @Override

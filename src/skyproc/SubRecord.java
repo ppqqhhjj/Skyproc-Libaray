@@ -82,15 +82,7 @@ public abstract class SubRecord extends Record {
     }
 
     abstract SubRecord getNew(Type type);
-
-    /**
-     * Clears the record to "factory settings". The actual changes depend on
-     * each specific extension of the record.
-     */
-    public void clear() {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     boolean confirmLink() {
 	return true;
     }

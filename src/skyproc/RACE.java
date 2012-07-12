@@ -188,7 +188,7 @@ public class RACE extends MajorRecordDescription {
         }
     }
 
-    public static class ATKDpackage extends SubShell {
+    static class ATKDpackage extends SubShell {
 
         SubData ATKD = new SubData(Type.ATKD);
         SubString ATKE = new SubString(Type.ATKE, true);
@@ -226,7 +226,7 @@ public class RACE extends MajorRecordDescription {
         }
     }
 
-    public static class HKXmodel extends SubShell {
+    static class HKXmodel extends SubShell {
 
         SubString MODL = new SubString(Type.MODL, true);
         SubData MODT = new SubData(Type.MODT);
@@ -262,7 +262,7 @@ public class RACE extends MajorRecordDescription {
         }
     }
 
-    public static class HeadData extends SubShell {
+    static class HeadData extends SubShell {
 
         private static Type[] types = {Type.NAM0};
         SubData NAM0 = new SubData(Type.NAM0);
@@ -897,18 +897,6 @@ public class RACE extends MajorRecordDescription {
         this.DATA.unarmedReach = unarmedReach;
     }
 
-    public ArrayList<ATKDpackage> getAttackData() {
-        return ATKDs.collection;
-    }
-
-    public boolean addAttackData(ATKDpackage attackData) {
-        return ATKDs.add(attackData);
-    }
-
-    public boolean removeAttackData(ATKDpackage attackData) {
-        return ATKDs.remove(attackData);
-    }
-
     public void clearAttackData() {
         ATKDs.clear();
     }
@@ -959,18 +947,6 @@ public class RACE extends MajorRecordDescription {
 
     public void setUnarmedEquipSlot(FormID id) {
         UNES.setForm(id);
-    }
-
-    public ArrayList<HeadData> getTinting() {
-        return headData.collection;
-    }
-
-    public boolean addTinting(HeadData head) {
-        return headData.add(head);
-    }
-
-    public boolean removeTinting(HeadData head) {
-        return headData.remove(head);
     }
 
     public void clearTinting() {
@@ -1029,203 +1005,5 @@ public class RACE extends MajorRecordDescription {
         QNAM.clear();
     }
     
-    //Unknown data merging (to prevent bugs)
-    public void setPNAM(byte[] in) {
-        PNAM.setData(in);
-    }
-    
-    public byte[] getPNAM() {
-        return PNAM.getData();
-    }
-    
-    public void setTINL(byte[] in) {
-        TINL.setData(in);
-    }
-    
-    public byte[] getTINL() {
-        return TINL.getData();
-    }
-    
-    public void setUNAM(byte[] in) {
-        UNAM.setData(in);
-    }
-    
-    public byte[] getUNAM() {
-        return UNAM.getData();
-    }
-    
-    public void setVNAM(byte[] in) {
-        VNAM.setData(in);
-    }
-    
-    public byte[] getVNAM() {
-        return VNAM.getData();
-    }
-    
-    public void setWKMV(FormID in) {
-        WKMV.setForm(in);
-    }
-    
-    public FormID getWKMV() {
-        return WKMV.getForm();
-    }
-    
-    public void setRNMV(FormID in) {
-        RNMV.setForm(in);
-    }
-    
-    public FormID getRNMV() {
-        return RNMV.getForm();
-    }
-    
-    public void setSNMV(FormID in) {
-        SNMV.setForm(in);
-    }
-    
-    public FormID getSNMV() {
-        return SNMV.getForm();
-    }
-    
-    public void setSWMV(FormID in) {
-        SWMV.setForm(in);
-    }
-    
-    public FormID getSWMV() {
-        return SWMV.getForm();
-    }
-    
-    public void setFLMV(FormID in) {
-        FLMV.setForm(in);
-    }
-    
-    public FormID getFLMV() {
-        return FLMV.getForm();
-    }
-    
-    public ArrayList<String> getMTNMs() {
-        return SubList.subStringToPublic(MTNMs);
-    }
-    
-    public void addMTNM(String in) {
-        SubString out = new SubString(Type.MTNM, false);
-        out.setString(in);
-        MTNMs.add(out);
-    }
-    
-    public void removeMTNM(String in) {
-        SubString out = new SubString(Type.MTNM, false);
-        out.setString(in);
-        MTNMs.remove(out);
-    }
-    
-    public void clearMTNMs() {
-        MTNMs.clear();
-    }
-    
-    public ArrayList<String> getNAMEs() {
-        return SubList.subStringToPublic(NAMEs);
-    }
-    
-    public void addNAME(String in) {
-        SubString out = new SubString(Type.NAME, true);
-        out.setString(in);
-        NAMEs.add(out);
-    }
-    
-    public void removeNAME(String in) {
-        SubString out = new SubString(Type.NAME, true);
-        out.setString(in);
-        NAMEs.remove(out);
-    }
-    
-    public void clearNAMEs() {
-        NAMEs.clear();
-    }
-    
-    public ArrayList<String> getPHTN() {
-        return SubList.subStringToPublic(PHTN);
-    }
-    
-    public void addPHTN(String in) {
-        SubString out = new SubString(Type.PHTN, true);
-        out.setString(in);
-        PHTN.add(out);
-    }
-    
-    public void removePHTN(String in) {
-        SubString out = new SubString(Type.PHTN, true);
-        out.setString(in);
-        PHTN.remove(out);
-    }
-    
-    public void clearPHTN() {
-        PHTN.clear();
-    }
-    
-    public ArrayList<byte[]> getPHWT() {
-        return SubList.subDataToPublic(PHWT);
-    }
-    
-    public void addPHWT(byte[] in) {
-        SubData out = new SubData(Type.PHWT, in);
-        PHWT.add(out);
-    }
-    
-    public void removePHWT(byte[] in) {
-        SubData out = new SubData(Type.PHWT, in);
-        PHWT.remove(out);
-    }
-    
-    public void clearPHWT() {
-        PHWT.clear();
-    }
-    
-    public byte[] getSkills() {
-        return DATA.fluff1;
-    }
-    
-    public void setSkills(byte[] in) {
-        DATA.fluff1 = in;
-    }
-    
-    public byte[] getFluff2() {
-        return DATA.fluff2;
-    }
-    
-    public void setFluff2(byte[] in) {
-        DATA.fluff2 = in;
-    }
-    
-    public byte[] getFluff3() {
-        return DATA.fluff3;
-    }
-    
-    public void setFluff3(byte[] in) {
-        DATA.fluff3 = in;
-    }
-    
-    public byte[] getFluff4() {
-        return DATA.fluff4;
-    }
-    
-    public void setFluff4(byte[] in) {
-        DATA.fluff4 = in;
-    }
-    
-    public byte[] getFluff5() {
-        return DATA.fluff5;
-    }
-    
-    public void setFluff5(byte[] in) {
-        DATA.fluff5 = in;
-    }
-    
-    public byte[] getFluff6() {
-        return DATA.fluff6;
-    }
-    
-    public void setFluff6(byte[] in) {
-        DATA.fluff6 = in;
-    }
     
 }

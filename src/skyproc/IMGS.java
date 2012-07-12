@@ -115,10 +115,6 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        public void clear() {
-        }
-
-        @Override
         Boolean isValid() {
             return valid;
         }
@@ -180,10 +176,6 @@ public class IMGS extends MajorRecord {
                 out.write(brightness);
                 out.write(contrast);
             }
-        }
-
-        @Override
-        public void clear() {
         }
 
         @Override
@@ -255,10 +247,6 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        public void clear() {
-        }
-
-        @Override
         Boolean isValid() {
             return valid;
         }
@@ -314,14 +302,6 @@ public class IMGS extends MajorRecord {
         @Override
         SubRecord getNew(Type type) {
             return new DNAM();
-        }
-
-        @Override
-        public void clear() {
-            DOFstrength = 0;
-            DOFdistance = 0;
-            DOFrange = 0;
-            unknown = null;
         }
 
         @Override

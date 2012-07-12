@@ -249,7 +249,8 @@ public class SPImporter {
     }
     
     public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
-	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
+	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -296,7 +297,8 @@ public class SPImporter {
     }
     
     public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
-	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
+	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -317,7 +319,8 @@ public class SPImporter {
     }
     
     public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
-	return importMods(mods, SPGlobal.pathToData, grup_targets);
+	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -423,66 +426,6 @@ public class SPImporter {
 	return outSet;
     }
     
-    public Set<Mod> importMods(ArrayList<ModListing> mods, String path, ArrayList<GRUP_TYPE> grup_targets) {
-
-	SPGlobal.sync(true);
-	if (SPGlobal.logging()) {
-	    SPGlobal.logMain(header, "Starting import of targets: ");
-	    String grups = "";
-	    for (GRUP_TYPE g : grup_targets) {
-		grups += "   " + g.toString() + " ";
-	    }
-	    SPGlobal.logMain(header, grups);
-	    SPGlobal.logMain(header, "In mods: ");
-	    for (ModListing m : mods) {
-		SPGlobal.logMain(header, "   " + m.print());
-	    }
-
-	}
-	String header = "Import Mods";
-	String debugPath = "Mod Import/";
-
-	Set<Mod> outSet = new TreeSet<Mod>();
-
-	curMod = 1;
-	maxMod = mods.size();
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(mods.size() * (grup_targets.size() + extraStepsPerMod), "Importing plugins.");
-
-	for (int i = 0; i < mods.size(); i++) {
-	    String mod = mods.get(i).print();
-	    int curBar = SPProgressBarPlug.progress.getBar();
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
-	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
-		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
-		try {
-		    outSet.add(importMod(new ModListing(mod), path, true, grup_targets));
-		} catch (BadMod ex) {
-		    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
-		    SPGlobal.logError(header, "  " + ex.toString());
-		} catch (Exception e) {
-		    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
-		    SPGlobal.logError(header, "  Message: " + e);
-		    SPGlobal.logError(header, "  Stack: ");
-		    for (StackTraceElement s : e.getStackTrace()) {
-			SPGlobal.logError(header, "  " + s.toString());
-		    }
-		}
-	    } else {
-		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
-	    }
-	    SPProgressBarPlug.progress.setBar(curBar + (grup_targets.size() + extraStepsPerMod));
-	    curMod++;
-	}
-
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(header, "Done Importing Mods.");
-	    SPGlobal.logMain(header, "Done Importing Mods.");
-	}
-	SPGlobal.sync(false);
-	return outSet;
-    }
-
     /**
      * Looks for a mod matching the ModListing inside the given path. If
      * properly located, it imports only GRUPS specified in the parameter.
@@ -504,14 +447,6 @@ public class SPImporter {
 	return importMod(listing, path, true, grup_targets);
     }
     
-    public Mod importMod(ModListing listing, String path, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
-	curMod = 1;
-	maxMod = 1;
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(grup_targets.size() + extraStepsPerMod);
-	return importMod(listing, path, true, grup_targets);
-    }
-
     /**
      * Looks for a mod matching the ModListing inside the given path. If
      * properly located, it imports only GRUPS specified in the parameter.
@@ -586,63 +521,6 @@ public class SPImporter {
 
     }
     
-    Mod importMod(ModListing listing, String path, Boolean addtoDb, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
-	int curBar = SPProgressBarPlug.progress.getBar();
-	try {
-	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
-            grups.addAll(grup_targets);
-
-	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
-	    LFileChannel input = new LFileChannel(path + listing.print());
-	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
-
-	    if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
-		importStrings(plugin);
-	    }
-
-	    ArrayList<Type> typeTargets = new ArrayList<Type>();
-	    for (GRUP_TYPE g : grup_targets) {
-		if (!GRUP_TYPE.unfinished(g)) {
-		    typeTargets.add(Type.toRecord(g));
-		}
-	    }
-
-	    Type result;
-	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
-		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
-		plugin.parseData(result, extractGRUPData(input), masks);
-		typeTargets.remove(result);
-		SPGlobal.flush();
-		SPProgressBarPlug.progress.incrementBar();
-		if (grups.isEmpty()) {
-		    break;
-		}
-	    }
-
-	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.size());
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
-	    plugin.fetchStringPointers();
-	    plugin.standardizeMasters();
-	    SPProgressBarPlug.progress.incrementBar();
-	    input.close();
-
-	    if (addtoDb) {
-		SPGlobal.getDB().add(plugin);
-	    }
-
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
-
-	    return plugin;
-	} catch (Exception e) {
-	    SPGlobal.logException(e);
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
-	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.size() + extraStepsPerMod);
-	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
-	}
-
-    }
-
     static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
 	if (Ln.arrayToString(in.readInInts(0, 4)).equals("TES4")) {
 	    int size = Ln.arrayToInt(in.readInInts(0, 4)) + 24;  // +24 for TES4 extra info

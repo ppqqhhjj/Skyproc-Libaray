@@ -265,11 +265,6 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	public void clear() {
-	    throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	Boolean isValid() {
 	    return true;
 	}
@@ -331,11 +326,6 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	SubRecord getNew(Type type) {
 	    return new SNDD();
-	}
-
-	@Override
-	public void clear() {
-	    throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override

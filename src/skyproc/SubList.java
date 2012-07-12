@@ -133,7 +133,6 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
         return collection.size();
     }
 
-    @Override
     public void clear() {
         collection.clear();
     }

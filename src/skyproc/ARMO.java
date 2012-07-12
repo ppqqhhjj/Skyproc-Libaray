@@ -126,11 +126,6 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	public void clear() {
-	    throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	Boolean isValid() {
 	    return true;
 	}

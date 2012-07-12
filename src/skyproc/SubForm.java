@@ -153,11 +153,6 @@ class SubForm extends SubRecord {
         return new SubForm(type_);
     }
 
-    @Override
-    public void clear() {
-        ID = new FormID();
-    }
-
     /**
      * Takes the FormID into the equals calculations
      *

@@ -52,12 +52,6 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	return map.get(in);
     }
 
-    void clear() {
-	for (SubRecord s : list) {
-	    s.clear();
-	}
-    }
-
     boolean isValid() {
 	for (SubRecord s : list) {
 	    if (!s.isValid()) {

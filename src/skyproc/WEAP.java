@@ -192,11 +192,6 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
         Boolean isValid() {
             return true;
         }
@@ -239,13 +234,6 @@ public class WEAP extends MajorRecordDescription {
         @Override
         SubRecord getNew(Type type) {
             return new DATA();
-        }
-
-        @Override
-        public void clear() {
-            value = 0;
-            weight = 0;
-            damage = 0;
         }
 
         @Override
@@ -299,11 +287,6 @@ public class WEAP extends MajorRecordDescription {
         @Override
         SubRecord getNew(Type type) {
             return new CRDT();
-        }
-
-        @Override
-        final public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
@@ -872,118 +855,5 @@ public class WEAP extends MajorRecordDescription {
      */
     public FormID getTemplate() {
         return CNAM.getForm();
-    }
-
-    //Unknown data.
-    public byte[] getDNAMUnknown1() {
-        return DNAM.unknown1;
-    }
-
-    public void setDNAMUnknown1(byte[] unknown1) {
-        this.DNAM.unknown1 = unknown1;
-    }
-
-    public byte[] getDNAMUnknown2() {
-        return DNAM.unknown2;
-    }
-
-    public void setDNAMUnknown2(byte[] unknown2) {
-        this.DNAM.unknown2 = unknown2;
-    }
-
-    public byte[] getDNAMUnknown3() {
-        return DNAM.unknown3;
-    }
-
-    public void setDNAMUnknown3(byte[] unknown3) {
-        this.DNAM.unknown3 = unknown3;
-    }
-
-    public byte[] getDNAMUnknown5() {
-        return DNAM.unknown5;
-    }
-
-    public void setDNAMUnknown5(byte[] unknown5) {
-        this.DNAM.unknown5 = unknown5;
-    }
-
-    public byte[] getDNAMUnknown6() {
-        return DNAM.unknown6;
-    }
-
-    public void setDNAMUnknown6(byte[] unknown6) {
-        this.DNAM.unknown6 = unknown6;
-    }
-
-    public byte[] getDNAMUnknown7() {
-        return DNAM.unknown7;
-    }
-
-    public void setDNAMUnknown7(byte[] unknown7) {
-        this.DNAM.unknown7 = unknown7;
-    }
-
-    public byte[] getDNAMUnknown8() {
-        return DNAM.unknown8;
-    }
-
-    public void setDNAMUnknown8(byte[] unknown8) {
-        this.DNAM.unknown8 = unknown8;
-    }
-
-    public byte[] getCRDTUnknown() {
-        return CRDT.unknown;
-    }
-
-    public void setCRDTUnknown(byte[] unknown) {
-        this.CRDT.unknown = unknown;
-    }
-
-    public byte[] getCRDTUnknown0() {
-        return CRDT.unknown0;
-    }
-
-    public void setCRDTUnknown0(byte[] unknown0) {
-        this.CRDT.unknown0 = unknown0;
-    }
-    
-    public FormID getBAMT() {
-        return BAMT.getForm();
-    }
-
-    public void setBAMT(FormID BAMT) {
-        this.BAMT = new SubForm(Type.BAMT, BAMT);
-    }
-
-    public FormID getBIDS() {
-        return BIDS.getForm();
-    }
-
-    public void setBIDS(FormID BIDS) {
-        this.BIDS = new SubForm(Type.BIDS, BIDS);
-    }
-
-    public FormID getSNAM() {
-        return SNAM.getForm();
-    }
-
-    public void setSNAM(FormID SNAM) {
-        this.SNAM = new SubForm(Type.SNAM, SNAM);
-    }
-
-    public byte[] getVNAM() {
-        return VNAM.getData();
-    }
-
-    public void setVNAM(byte[] VNAM) {
-        this.VNAM = new SubData(Type.VNAM, VNAM);
-    }
-
-    public FormID getWNAM() {
-        return WNAM.getForm();
-    }
-
-    public void setWNAM(FormID WNAM) {
-        this.WNAM = new SubForm(Type.WNAM, WNAM);
     }
 }

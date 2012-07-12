@@ -126,16 +126,6 @@ class SubData extends SubRecord {
     }
 
     @Override
-    public void clear() {
-        data = null;
-    }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
         hash = 23 * hash + Arrays.hashCode(this.data);

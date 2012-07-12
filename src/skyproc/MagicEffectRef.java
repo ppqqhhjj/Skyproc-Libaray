@@ -116,11 +116,6 @@ public class MagicEffectRef extends SubShell {
 	}
 
 	@Override
-	public void clear() {
-	    throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	Boolean isValid() {
 	    return true;
 	}

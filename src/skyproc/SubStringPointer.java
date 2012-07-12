@@ -36,12 +36,6 @@ class SubStringPointer extends SubRecord {
 	return new SubStringPointer(type, SubStringPointer.Files.STRINGS);
     }
 
-    @Override
-    public void clear() {
-	text.clear();
-	data.clear();
-    }
-
     void setText(String textIn) {
 	text.setString(textIn);
     }

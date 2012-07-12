@@ -31,11 +31,6 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    public void clear() {
-	subRecords.clear();
-    }
-
-    @Override
     Boolean isValid() {
 	return subRecords.isValid();
     }

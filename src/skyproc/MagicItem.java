@@ -117,10 +117,6 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	public void clear() {
-	}
-
-	@Override
 	Boolean isValid() {
 	    return valid;
 	}

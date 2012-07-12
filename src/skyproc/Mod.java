@@ -25,34 +25,34 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     TES4 header = new TES4();
     ModListing modInfo;
-    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<GRUP_TYPE, GRUP>(GRUP_TYPE.class);
-    GRUP<GMST> gameSettings = new GRUP<GMST>(this, new GMST());
-    GRUP<KYWD> keywords = new GRUP<KYWD>(this, new KYWD());
-    GRUP<TXST> textures = new GRUP<TXST>(this, new TXST());
-    GRUP<GLOB> globals = new GRUP<GLOB>(this, new GLOB());
-    GRUP<FACT> factions = new GRUP<FACT>(this, new FACT());
-    GRUP<RACE> races = new GRUP<RACE>(this, new RACE());
-    GRUP<MGEF> magicEffects = new GRUP<MGEF>(this, new MGEF());
-    GRUP<ENCH> enchantments = new GRUP<ENCH>(this, new ENCH());
-    GRUP<SPEL> spells = new GRUP<SPEL>(this, new SPEL());
-    GRUP<ARMO> armors = new GRUP<ARMO>(this, new ARMO());
-    GRUP<INGR> ingredients = new GRUP<INGR>(this, new INGR());
-    GRUP<ALCH> alchemy = new GRUP<ALCH>(this, new ALCH());
-    GRUP<WEAP> weapons = new GRUP<WEAP>(this, new WEAP());
-    GRUP<AMMO> ammo = new GRUP<AMMO>(this, new AMMO());
-    GRUP<NPC_> NPCs = new GRUP<NPC_>(this, new NPC_());
-    GRUP<LVLN> leveledCreatures = new GRUP<LVLN>(this, new LVLN());
-    GRUP<LVLI> leveledItems = new GRUP<LVLI>(this, new LVLI());
-    GRUP<QUST> quests = new GRUP<QUST>(this, new QUST());
-    GRUP<IMGS> imageSpaces = new GRUP<IMGS>(this, new IMGS());
-    GRUP<FLST> formLists = new GRUP<FLST>(this, new FLST());
-    GRUP<PERK> perks = new GRUP<PERK>(this, new PERK());
-    GRUP<AVIF> actorValues = new GRUP<AVIF>(this, new AVIF());
-    GRUP<ARMA> armatures = new GRUP<ARMA>(this, new ARMA());
-    GRUP<ECZN> encounterZones = new GRUP<ECZN>(this, new ECZN());
-    Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<SubStringPointer.Files, Map<Integer, Integer>>(SubStringPointer.Files.class);
-    private ArrayList<String> outStrings = new ArrayList<String>();
-    private ArrayList<String> outDLStrings = new ArrayList<String>();
+    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
+    GRUP<GMST> gameSettings = new GRUP<>(this, new GMST());
+    GRUP<KYWD> keywords = new GRUP<>(this, new KYWD());
+    GRUP<TXST> textures = new GRUP<>(this, new TXST());
+    GRUP<GLOB> globals = new GRUP<>(this, new GLOB());
+    GRUP<FACT> factions = new GRUP<>(this, new FACT());
+    GRUP<RACE> races = new GRUP<>(this, new RACE());
+    GRUP<MGEF> magicEffects = new GRUP<>(this, new MGEF());
+    GRUP<ENCH> enchantments = new GRUP<>(this, new ENCH());
+    GRUP<SPEL> spells = new GRUP<>(this, new SPEL());
+    GRUP<ARMO> armors = new GRUP<>(this, new ARMO());
+    GRUP<INGR> ingredients = new GRUP<>(this, new INGR());
+    GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
+    GRUP<WEAP> weapons = new GRUP<>(this, new WEAP());
+    GRUP<AMMO> ammo = new GRUP<>(this, new AMMO());
+    GRUP<NPC_> NPCs = new GRUP<>(this, new NPC_());
+    GRUP<LVLN> leveledCreatures = new GRUP<>(this, new LVLN());
+    GRUP<LVLI> leveledItems = new GRUP<>(this, new LVLI());
+    GRUP<QUST> quests = new GRUP<>(this, new QUST());
+    GRUP<IMGS> imageSpaces = new GRUP<>(this, new IMGS());
+    GRUP<FLST> formLists = new GRUP<>(this, new FLST());
+    GRUP<PERK> perks = new GRUP<>(this, new PERK());
+    GRUP<AVIF> actorValues = new GRUP<>(this, new AVIF());
+    GRUP<ARMA> armatures = new GRUP<>(this, new ARMA());
+    GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
+    Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
+    private ArrayList<String> outStrings = new ArrayList<>();
+    private ArrayList<String> outDLStrings = new ArrayList<>();
     private ArrayList<String> outILStrings = new ArrayList<String>();
 
     /**
@@ -1265,7 +1265,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    return new HEDR();
 	}
 
-	@Override
 	final public void clear() {
 	    version = Ln.parseHexString("D7 A3 70 3F", 4);
 	    numRecords = 0;

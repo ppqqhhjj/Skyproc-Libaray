@@ -139,11 +139,6 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	public void clear() {
-	    altTextures.clear();
-	}
-
-	@Override
 	Boolean isValid() {
 	    return !altTextures.isEmpty();
 	}
@@ -325,11 +320,6 @@ public class ARMA extends MajorRecord {
 
 	@Override
 	SubRecord getNew(Type type) {
-	    throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void clear() {
 	    throw new UnsupportedOperationException("Not supported yet.");
 	}
 

@@ -33,12 +33,6 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    public void clear() {
-	counter.clear();
-	keywords.clear();
-    }
-
-    @Override
     Boolean isValid() {
 	return counter.isValid()
 		&& keywords.isValid();

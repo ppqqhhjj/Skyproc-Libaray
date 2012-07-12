@@ -38,11 +38,6 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     }
 
     @Override
-    public void clear() {
-        throw new UnsupportedOperationException("Not supported.");
-    }
-
-    @Override
     void export(LExporter out, Mod srcMod) throws IOException {
         super.export(out, srcMod);
         if (isValid()) {

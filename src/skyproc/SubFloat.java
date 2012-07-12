@@ -61,17 +61,8 @@ class SubFloat extends SubRecord {
 	    out.write(data);
 	}
     }
-
-    @Override
-    public void clear() {
-        data = 0;
-    }
-
-    @Override
-    ArrayList<FormID> allFormIDs (boolean deep) {
-	return new ArrayList<FormID>(0);
-    }
     
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -84,5 +75,12 @@ class SubFloat extends SubRecord {
         }
         SubFloat s = (SubFloat) o; // Convert the object to a Person
         return (Float.compare(this.data, s.data) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 67 * hash + Float.floatToIntBits(this.data);
+	return hash;
     }
 }

@@ -7,8 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -24,7 +22,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
 
     int version = 5;
     int unknown = 2;
-    ArrayList<ScriptRef> scripts = new ArrayList<ScriptRef>();
+    ArrayList<ScriptRef> scripts = new ArrayList<>();
 
     ScriptPackage() {
 	super(Type.VMAD);
@@ -33,11 +31,6 @@ public class ScriptPackage extends SubRecord implements Serializable {
     @Override
     SubRecord getNew(Type type) {
 	return new ScriptPackage();
-    }
-
-    @Override
-    public void clear() {
-	scripts.clear();
     }
 
     @Override

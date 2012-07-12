@@ -113,15 +113,6 @@ public class ModListing extends SubRecord implements Comparable {
 	return mast.getContentLength(srcMod) + data.getTotalLength(srcMod) + 4;  // For .esp
     }
 
-    /**
-     * Sets to the empty string and false master tag.
-     */
-    @Override
-    public void clear() {
-	mast.clear();
-	data.clear();
-    }
-
     @Override
     Boolean isValid() {
 	return mast.isValid();

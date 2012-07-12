@@ -1,10 +1,7 @@
 package skyproc;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -23,11 +20,11 @@ public class PERK extends MajorRecordDescription {
      * A script package containing scripts and their properties
      */
     public ScriptPackage scripts = new ScriptPackage();
-    SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
+    SubList<Condition> CTDAs = new SubList<>(new Condition());
     SubData DATA = new SubData(Type.DATA);
     SubForm NNAM = new SubForm(Type.NNAM);
     SubString ICON = new SubString(Type.ICON, true);
-    SubList<PRKEPackage> perkSections = new SubList<PRKEPackage>(new PRKEPackage());
+    SubList<PRKEPackage> perkSections = new SubList<>(new PRKEPackage());
     private static Type[] type = {Type.PERK};
 
     PERK() {
@@ -156,14 +153,7 @@ public class PERK extends MajorRecordDescription {
         SubRecord getNew(Type type) {
             return new PRKEPackage();
         }
-
-        @Override
-        public void clear() {
-            PRKE.clear();
-            PRKF.clear();
-            subPackage.clear();
-        }
-
+	
         @Override
         Boolean isValid() {
             return PRKE.isValid() && subPackage.isValid();
@@ -258,11 +248,6 @@ public class PERK extends MajorRecordDescription {
 	}
 
         @Override
-        public void clear() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
         Boolean isValid() {
             return true;
         }
@@ -340,13 +325,7 @@ public class PERK extends MajorRecordDescription {
         SubRecord getNew(Type type) {
             return new PRKCpackage();
         }
-
-        @Override
-        public void clear() {
-            PRKC.clear();
-            CTDAs.clear();
-        }
-
+	
         @Override
         Boolean isValid() {
             return PRKC.isValid()

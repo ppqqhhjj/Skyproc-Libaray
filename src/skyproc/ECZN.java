@@ -101,10 +101,6 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	public void clear() {
-	}
-
-	@Override
 	Boolean isValid() {
 	    return valid;
 	}
