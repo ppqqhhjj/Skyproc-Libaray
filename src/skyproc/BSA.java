@@ -4,7 +4,9 @@
  */
 package skyproc;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
@@ -235,7 +237,7 @@ public class BSA {
 
 	ArrayList<String> resources = new ArrayList<String>();
 	File ini = SPGlobal.getSkyrimINI();
-	
+
 	if (SPGlobal.logging()) {
 	    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
 	}
@@ -270,7 +272,51 @@ public class BSA {
 		line1 = true;
 		resources.addAll(0, processINIline(line));
 	    }
-
+	    
+	    if (!line1 || !line2) {
+		// If one of the lines is missing.
+//		throw new BadParameter("<html>Your Skyrim.ini file did not have BOTH lines: 'sResourceArchiveList' and 'sResourceArchiveList2'.<br>"
+//			+ "It cannot figure out which BSAs to load in.<br>"
+//			+ "Please confirm that those lines appear in your Skyrim.ini and have the proper BSAs listed.");
+		
+		//Assume standard BSA listing
+		if (!resources.contains("Skyrim - Misc.bsa")) {
+		    resources.add("Skyrim - Misc.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Shaders.bsa")) {
+		    resources.add("Skyrim - Shaders.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Textures.bsa")) {
+		    resources.add("Skyrim - Textures.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Interface.bsa")) {
+		    resources.add("Skyrim - Interface.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Animations.bsa")) {
+		    resources.add("Skyrim - Animations.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Meshes.bsa")) {
+		    resources.add("Skyrim - Meshes.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Sounds.bsa")) {
+		    resources.add("Skyrim - Sounds.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Sounds.bsa")) {
+		    resources.add("Skyrim - Voices.bsa");
+		}
+		
+		if (!resources.contains("Skyrim - Sounds.bsa")) {
+		    resources.add("Skyrim - VoicesExtra.bsa");
+		}
+	    }
+	    
 	    if (SPGlobal.logging()) {
 		SPGlobal.log(header, "BSA resource load order: ");
 		for (String s : resources) {
@@ -294,13 +340,6 @@ public class BSA {
 		} else if (SPGlobal.logging()) {
 		    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
 		}
-	    }
-
-	    if (!line1 || !line2) {
-		// If one of the lines is missing.
-		throw new BadParameter("<html>Your Skyrim.ini file did not have BOTH lines: 'sResourceArchiveList' and 'sResourceArchiveList2'.<br>"
-			+ "It cannot figure out which BSAs to load in.<br>"
-			+ "Please confirm that those lines appear in your Skyrim.ini and have the proper BSAs listed.");
 	    }
 
 	} catch (FileNotFoundException ex) {
@@ -448,9 +487,14 @@ public class BSA {
 	Iterator<BSA> bsas = BSAsIterator();
 	while (bsas.hasNext()) {
 	    BSA tmp = bsas.next();
-	    if (tmp.containsAny(types)) {
-		tmp.loadFolders();
-		out.add(tmp);
+	    try {
+		if (tmp.containsAny(types)) {
+		    tmp.loadFolders();
+		    out.add(tmp);
+		}
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
+		SPGlobal.logError("BSA", "Skipped BSA " + tmp);
 	    }
 	}
 	return out;
@@ -468,6 +512,11 @@ public class BSA {
 	int size;
 	long nameOffset;
 	long dataOffset;
+    }
+    
+    @Override
+    public String toString() {
+	return filePath;
     }
 
     /**

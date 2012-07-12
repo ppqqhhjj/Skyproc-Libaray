@@ -59,6 +59,8 @@ public class RACE extends MajorRecordDescription {
     SubList<SubString> PHTN = new SubList<SubString>(new SubString(Type.PHTN, true));
     SubList<SubData> PHWT = new SubList<SubData>(new SubData(Type.PHWT));
     SubList<HeadData> headData = new SubList<HeadData>(new HeadData());
+    SubForm NAM8 = new SubForm(Type.NAM8);
+    SubForm RNAM = new SubForm(Type.RNAM);
     SubForm WKMV = new SubForm(Type.WKMV);
     SubForm RNMV = new SubForm(Type.RNMV);
     SubForm SWMV = new SubForm(Type.SWMV);
@@ -110,6 +112,8 @@ public class RACE extends MajorRecordDescription {
 	subRecords.add(PHTN);
 	subRecords.add(PHWT);
 	subRecords.add(headData);
+	subRecords.add(NAM8);
+	subRecords.add(RNAM);
 	subRecords.add(WKMV);
 	subRecords.add(RNMV);
 	subRecords.add(SWMV);

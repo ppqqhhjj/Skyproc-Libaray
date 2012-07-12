@@ -30,7 +30,29 @@ class Condition extends SubShell {
 
     Condition() {
 	super(types);
+	init();
+    }
 
+    Condition(Operator op, int numOfCondFlags, FormID comparisonValueForm,
+	    float comparisonValueFloat, int functionIndex, FormID param1form,
+	    int param1int, FormID param2form, int param2int, RunOnType runType,
+	    FormID reference) {
+	this();
+
+	cond.operator = op;
+	cond.flags = new LFlags(numOfCondFlags);
+	cond.comparisonValueForm = comparisonValueForm;
+	cond.comparisonValueFloat = comparisonValueFloat;
+	cond.functionIndex = functionIndex;
+	cond.param1form = param1form;
+	cond.param1int = param1int;
+	cond.param2form = param2form;
+	cond.param2int = param2int;
+	cond.runType = runType;
+	cond.reference = reference;
+    }
+    
+    final void init() {
 	subRecords.add(cond);
 	subRecords.add(CIS1);
 	subRecords.add(CIS2);
