@@ -124,6 +124,7 @@ public interface SUM {
      * @return The preferred header color for your mod.
      */
     public Color getHeaderColor();
+    public boolean needsPatching();
     /**
      * This function should start the processing code of your patcher.<br>
      * Assume:<br>

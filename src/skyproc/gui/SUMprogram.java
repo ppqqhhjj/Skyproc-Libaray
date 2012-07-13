@@ -189,6 +189,16 @@ public class SUMprogram implements SUM {
 	return new ModListing("SUM", false);
     }
 
+    @Override
+    public boolean needsPatching() {
+	for (PatcherLink link : links) {
+	    if (link.hook.needsPatching()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     // Internal Classes
     class HookMenu extends SPSettingPanel {
 

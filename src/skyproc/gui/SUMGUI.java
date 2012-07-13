@@ -7,6 +7,7 @@ package skyproc.gui;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -75,10 +76,14 @@ public class SUMGUI extends JFrame {
     static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
     // Non static
     static LImagePane backgroundPanel;
-    LLabel willMakePatch;
-    LImagePane skyProcLogo;
-    JTextArea statusUpdate;
-    LLabel versionNum;
+    static LLabel patchNeededLabel;
+    static LCheckBox forcePatch;
+    static LImagePane skyProcLogo;
+    static JTextArea statusUpdate;
+    static LLabel versionNum;
+    static LButton cancelPatch;
+
+    static Font SUMFont = new Font("SansSerif", Font.PLAIN, 10);
 
     SUMGUI() {
 	super(hook.getName());
@@ -130,9 +135,18 @@ public class SUMGUI extends JFrame {
 	    backgroundPanel = new LImagePane(SUMGUI.class.getResource("background.jpg"));
 	    super.add(backgroundPanel);
 
-	    willMakePatch = new LLabel("A patch will be generated upon exit.", new Font("SansSerif", Font.PLAIN, 10), Color.GRAY);
-	    willMakePatch.setLocation(backgroundPanel.getWidth() - willMakePatch.getWidth() - 7, 5);
-	    backgroundPanel.add(willMakePatch);
+	    cancelPatch = new LButton("Cancel");
+	    cancelPatch.setLocation(backgroundPanel.getWidth() - cancelPatch.getWidth() - 5, 5);
+	    backgroundPanel.add(cancelPatch);
+
+	    forcePatch = new LCheckBox("Force Patch on Exit", SUMFont, Color.GRAY);
+	    forcePatch.setLocation(rightDimensions.x + 10, cancelPatch.getY() + cancelPatch.getHeight() / 2 - forcePatch.getHeight() / 2);
+	    forcePatch.setOffset(-4);
+	    backgroundPanel.add(forcePatch);
+
+	    patchNeededLabel = new LLabel("", SUMFont, Color.GRAY);
+	    patchNeededLabel.setLocation(forcePatch.getLocation());
+	    backgroundPanel.add(patchNeededLabel);
 
 	    progress.addWindowListener(new WindowListener() {
 
@@ -236,6 +250,24 @@ public class SUMGUI extends JFrame {
 	return this.getHeight() - 28;
     }
 
+    static void imported() {
+	SPProgressBarPlug.progress.setStatus("Done importing.");
+	if (needsPatching()) {
+	    patchNeededLabel.setText("A patch will be generated upon exit.");
+	    forcePatch.setVisible(false);
+	}
+    }
+
+    static boolean needsPatching() {
+
+	File lastModlist = new File (SPGlobal.pathToInternalFiles + "Last Masterlist.txt");
+	if (!lastModlist.isFile()) {
+	    return true;
+	}
+
+	return SUMGUI.hook.needsPatching();
+    }
+
     static void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
 
@@ -274,7 +306,7 @@ public class SUMGUI extends JFrame {
 		    SPGlobal.setGlobalPatch(hook.getExportPatch());
 		    SPImporter importer = new SPImporter();
 		    importer.importActiveMods(hook.importRequests());
-		    SPProgressBarPlug.progress.setStatus("Done importing.");
+		    imported();
 		}
 		if (exitRequested) {
 		    hook.runChangesToPatch();
