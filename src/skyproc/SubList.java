@@ -252,11 +252,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     ArrayList<T> toPublic() {
-        ArrayList<T> out = new ArrayList<T>(size());
-        for (T t : collection) {
-            out.add(t);
-        }
-        return out;
+        return collection;
     }
 
     /**

@@ -80,11 +80,7 @@ public class KeywordSet extends SubRecord {
      * @return
      */
     public ArrayList<FormID> getKeywordRefs() {
-	ArrayList<FormID> out = new ArrayList<FormID>(keywords.size());
-	for (FormID id : keywords) {
-	    out.add(id);
-	}
-	return out;
+	return keywords.IDs;
     }
 
     /**

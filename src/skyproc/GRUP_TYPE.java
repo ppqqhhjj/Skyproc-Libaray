@@ -20,7 +20,7 @@ public enum GRUP_TYPE {
      */
     TXST,
     /**
-     * 
+     *
      */
     GLOB,
     /**
@@ -55,6 +55,7 @@ public enum GRUP_TYPE {
      * Alchemy
      */
     ALCH,
+    COBJ,
     /**
      * Weapons
      */

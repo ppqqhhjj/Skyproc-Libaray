@@ -38,6 +38,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     GRUP<ARMO> armors = new GRUP<>(this, new ARMO());
     GRUP<INGR> ingredients = new GRUP<>(this, new INGR());
     GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
+    GRUP<COBJ> constructibleObjects = new GRUP<>(this, new COBJ());
     GRUP<WEAP> weapons = new GRUP<>(this, new WEAP());
     GRUP<AMMO> ammo = new GRUP<>(this, new AMMO());
     GRUP<NPC_> NPCs = new GRUP<>(this, new NPC_());
@@ -114,6 +115,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.put(ingredients.getContainedType(), ingredients);
 	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(alchemy.getContainedType(), alchemy);
+	GRUPs.put(constructibleObjects.getContainedType(), constructibleObjects);
 	GRUPs.put(weapons.getContainedType(), weapons);
 	ammo.dateStamp = new byte[]{(byte) 0x0E, (byte) 0x4D, (byte) 0x2B, 0};
 	GRUPs.put(ammo.getContainedType(), ammo);
@@ -969,6 +971,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      */
     public GRUP<GLOB> getGlobals() {
 	return globals;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Constructible Object records
+     */
+    public GRUP<COBJ> getConstructibleObjects() {
+	return constructibleObjects;
     }
 
     /**

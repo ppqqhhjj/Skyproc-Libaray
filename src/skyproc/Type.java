@@ -886,6 +886,9 @@ public enum Type {
      */
     FLTV,
 
+    COBJ,
+    BNAM,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

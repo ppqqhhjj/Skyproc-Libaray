@@ -23,6 +23,9 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
+    static GRUP_TYPE[] types = {GRUP_TYPE.COBJ};
+//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+
     /**
      */
     public static void runTests() {
@@ -56,9 +59,6 @@ public class SkyProcTester {
 
 	SubStringPointer.shortNull = false;
 
-//	GRUP_TYPE[] types = {GRUP_TYPE.PERK};
-	GRUP_TYPE[] types = GRUP_TYPE.values();
-
 	FormID.allIDs.clear();
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
@@ -76,10 +76,10 @@ public class SkyProcTester {
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}
-	
+
 	SPProgressBarPlug.progress.reset();
 	SPProgressBarPlug.progress.setMax(types.length);
-	
+
 	for (GRUP_TYPE g : types) {
 	    if (!test(g)) {
 		SPProgressBarPlug.progress.setStatus("FAILED: " + g);

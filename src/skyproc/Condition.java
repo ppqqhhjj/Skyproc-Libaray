@@ -6,8 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -21,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class Condition extends SubShell {
+public class Condition extends SubShell {
 
     static Type[] types = {Type.CTDA, Type.CIS1, Type.CIS2};
     Cond cond = new Cond();
@@ -33,25 +31,6 @@ class Condition extends SubShell {
 	init();
     }
 
-    Condition(Operator op, int numOfCondFlags, FormID comparisonValueForm,
-	    float comparisonValueFloat, int functionIndex, FormID param1form,
-	    int param1int, FormID param2form, int param2int, RunOnType runType,
-	    FormID reference) {
-	this();
-
-	cond.operator = op;
-	cond.flags = new LFlags(numOfCondFlags);
-	cond.comparisonValueForm = comparisonValueForm;
-	cond.comparisonValueFloat = comparisonValueFloat;
-	cond.functionIndex = functionIndex;
-	cond.param1form = param1form;
-	cond.param1int = param1int;
-	cond.param2form = param2form;
-	cond.param2int = param2int;
-	cond.runType = runType;
-	cond.reference = reference;
-    }
-    
     final void init() {
 	subRecords.add(cond);
 	subRecords.add(CIS1);
