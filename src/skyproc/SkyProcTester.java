@@ -5,8 +5,11 @@
 package skyproc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
@@ -114,6 +117,14 @@ public class SkyProcTester {
 	SPProgressBarPlug.progress.pause(false);
 	SPProgressBarPlug.progress.incrementBar();
 	return passed;
+    }
+
+    public static void parseEmbeddedScripts() {
+	try {
+	    EmbeddedScripts.parseScriptData();
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	}
     }
 
     private static void setSkyProcGlobal() {

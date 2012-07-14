@@ -11,7 +11,7 @@ import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
 import lev.Ln;
-import skyproc.EmbeddedScripts.Script;
+import skyproc.EmbeddedScripts.EmbeddedScript;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -136,7 +136,7 @@ public class Condition extends SubShell {
 	    functionIndex = in.extractInt(2);
 	    padding = in.extract(2);
 
-	    Script function = EmbeddedScripts.getScript(functionIndex);
+	    EmbeddedScript function = EmbeddedScripts.getScript(functionIndex);
 	    param1formF = function.isForm(0);
 	    param2formF = function.isForm(1);
 	    param3formF = function.isForm(2);
@@ -163,7 +163,7 @@ public class Condition extends SubShell {
 	    }
 
 	    if (SPGlobal.logging()) {
-		logSync("", "New Condition.  Function: " + function.name + ", index: " + functionIndex);
+		logSync("", "New Condition.  Function: " + function.toString() + ", index: " + functionIndex);
 		logSync("", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(CondFlag.UseGlobal));
 		logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat + ", Param 1: " + param1form + "|" + param1int);
 		logSync("", "  Param 2: " + param2form + "|" + param2int + ", Param 3: " + param3form + "|" + param3int);

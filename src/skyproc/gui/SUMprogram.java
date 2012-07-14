@@ -4,7 +4,6 @@
  */
 package skyproc.gui;
 
-import skyproc.SkyProcTester;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -17,7 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
@@ -37,9 +39,9 @@ import skyproc.*;
  */
 public class SUMprogram implements SUM {
 
-    ArrayList<String> exclude = new ArrayList<String>(2);
-    ArrayList<PatcherLink> links = new ArrayList<PatcherLink>();
-    Set<GRUP_TYPE> importRequests = new HashSet<GRUP_TYPE>();
+    ArrayList<String> exclude = new ArrayList<>(2);
+    ArrayList<PatcherLink> links = new ArrayList<>();
+    Set<GRUP_TYPE> importRequests = new HashSet<>();
     // GUI
     SPMainMenuPanel mmenu;
     HookMenu hookMenu;
@@ -62,9 +64,16 @@ public class SUMprogram implements SUM {
     }
 
     static boolean handleArgs(String[] args) {
-	ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
-	if (argsList.contains("-test")) {
+	ArrayList<String> argsList = new ArrayList<>();
+	for (String s : args) {
+	    argsList.add(s.toUpperCase());
+	}
+	if (argsList.contains("-TEST")) {
 	    SkyProcTester.runTests();
+	    return false;
+	}
+	if (argsList.contains("-EMBEDDEDSCRIPTGEN")) {
+	    SkyProcTester.parseEmbeddedScripts();
 	    return false;
 	}
 	return true;
