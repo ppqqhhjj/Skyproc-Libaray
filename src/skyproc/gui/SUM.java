@@ -70,7 +70,7 @@ public interface SUM {
      * Opens and displays the custom menu of your patcher and returns it.<br>
      * If you do not have a custom menu, simply put this line (after making sure hasCustomMenu() returns false):<br>
      * <i>throw new UnsupportedOperationException("Not supported yet.");</i>
-     * @return 
+     * @return
      */
     public JFrame openCustomMenu();
     /**
@@ -125,6 +125,7 @@ public interface SUM {
      */
     public Color getHeaderColor();
     public boolean needsPatching();
+    public void onExit(boolean patchWasGenerated) throws Exception;
     /**
      * This function should start the processing code of your patcher.<br>
      * Assume:<br>

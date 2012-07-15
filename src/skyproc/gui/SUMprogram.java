@@ -208,6 +208,10 @@ public class SUMprogram implements SUM {
 	return false;
     }
 
+    @Override
+    public void onExit(boolean patchWasGenerated) {
+    }
+
     // Internal Classes
     class HookMenu extends SPSettingPanel {
 

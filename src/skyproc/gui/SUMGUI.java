@@ -382,6 +382,7 @@ public class SUMGUI extends JFrame {
      */
     static public void exitProgram(boolean generatedPatch) {
 	SPGlobal.log(header, "Exit requested.");
+	parser.stop();
 	if (hook.hasSave()) {
 	    hook.getSave().saveToFile();
 	}
@@ -391,6 +392,11 @@ public class SUMGUI extends JFrame {
 	    } catch (IOException ex) {
 		SPGlobal.logException(ex);
 	    }
+	}
+	try {
+	    hook.onExit(generatedPatch);
+	} catch (Exception e) {
+	    SPGlobal.logException(e);
 	}
 	LDebug.wrapUpAndExit();
     }
