@@ -279,11 +279,22 @@ public class SUMGUI extends JFrame {
 	SPProgressBarPlug.progress.setStatus("Done importing.");
 	needsPatching = needsPatching();
 	if (needsPatching) {
+	}
+    }
+
+    public static void setPatchNeeded(boolean on) {
+	if (on) {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMain(header, "Patch needed.");
 	    }
 	    patchNeededLabel.setText("A patch will be generated upon exit.");
 	    forcePatch.setVisible(false);
+	} else {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch NOT needed.");
+	    }
+	    patchNeededLabel.setVisible(false);
+	    forcePatch.setVisible(true);
 	}
     }
 
