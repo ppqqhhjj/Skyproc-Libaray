@@ -147,6 +147,9 @@ public class SUMGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Closing program early because user cancelled.");
+		    }
 		    exitProgram(false);
 		}
 	    });
@@ -174,7 +177,9 @@ public class SUMGUI extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent arg0) {
 		    if (progress.closeOp == JFrame.DISPOSE_ON_CLOSE) {
-			SPGlobal.log(header, "Progress bar window closing");
+			if (SPGlobal.logging()) {
+			    SPGlobal.logMain(header, "Closing program early because progress bar was forced to close by user.");
+			}
 			exitProgram(false);
 		    }
 		}
@@ -379,39 +384,12 @@ public class SUMGUI extends JFrame {
 	exitRequested = true;
 	if (!imported && !needsImporting()) {
 	    SPProgressBarPlug.progress.done();
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Closing program early because it does not need importing.");
+	    }
 	    exitProgram(false);
 	} else {
-	    progress.addWindowListener(new WindowListener() {
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowActivated(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowClosing(WindowEvent arg0) {
-		    exitProgram(false);
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {
-		}
-	    });
+	    progress.setExitOnClose();
 	    progress.open();
 	}
 	runThread();
@@ -471,6 +449,10 @@ public class SUMGUI extends JFrame {
 
 		    }
 		    SPProgressBarPlug.progress.done();
+
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Closing program after successfully running patch.");
+		    }
 		    exitProgram(true);
 		}
 	    } catch (Exception e) {
@@ -479,6 +461,9 @@ public class SUMGUI extends JFrame {
 		JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'  Check the debug logs.");
 
 		// if exception occurs
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain(header, "Closing program after UNSUCCESSFULLY running import/patch.");
+		}
 		exitProgram(false);
 	    }
 	}
