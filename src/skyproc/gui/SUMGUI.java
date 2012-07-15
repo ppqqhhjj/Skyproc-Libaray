@@ -279,6 +279,9 @@ public class SUMGUI extends JFrame {
 	SPProgressBarPlug.progress.setStatus("Done importing.");
 	needsPatching = needsPatching();
 	if (needsPatching) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch needed.");
+	    }
 	    patchNeededLabel.setText("A patch will be generated upon exit.");
 	    forcePatch.setVisible(false);
 	}
@@ -326,6 +329,9 @@ public class SUMGUI extends JFrame {
 	    // Compile old and new Master lists
 	    File f = new File(pathToLastMasterlist);
 	    if (!f.isFile()) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain(header, "Patch needed because old master list file could not be found.");
+		}
 		return true;
 	    }
 	    ArrayList<String> oldList = Ln.loadFileToStrings(pathToLastMasterlist, true);
@@ -348,6 +354,9 @@ public class SUMGUI extends JFrame {
 			    break;
 			} else if (curImportedModsTmp.contains(oldList.get(j))) {
 			    //Matching mods out of order, need to patch
+			    if (SPGlobal.logging()) {
+				SPGlobal.logMain(header, "Patch needed because masters from before were in a different order.");
+			    }
 			    return true;
 			}
 		    }
@@ -356,6 +365,9 @@ public class SUMGUI extends JFrame {
 
 	    //If old masters are missing, need patch
 	    if (!oldList.isEmpty()) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain(header, "Patch needed because old masters are missing.");
+		}
 		return true;
 	    }
 
@@ -365,6 +377,9 @@ public class SUMGUI extends JFrame {
 		ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
 		for (GRUP_TYPE g : hook.importRequests()) {
 		    if (contained.contains(g)) {
+			if (SPGlobal.logging()) {
+			    SPGlobal.logMain(header, "Patch needed because a new mod had records patch might be interested in.");
+			}
 			return true;
 		    }
 		}
@@ -372,10 +387,16 @@ public class SUMGUI extends JFrame {
 
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch needed because exception was thrown in patch sensing code.");
+	    }
 	    return true;
 	}
 
 	//Don't need a patch, check for custom hook coding
+	if (SPGlobal.logging()) {
+	    SPGlobal.logMain(header, "Checking SUM hook to see if it wants to create a patch.");
+	}
 	return SUMGUI.hook.needsPatching();
     }
 
@@ -447,12 +468,14 @@ public class SUMGUI extends JFrame {
 			    JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\nPlease contact Leviathan1753.");
 			}
 
+			if (SPGlobal.logging()) {
+			    SPGlobal.logMain(header, "Closing program after successfully running patch.");
+			}
+		    }
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Closing program normally from thread.");
 		    }
 		    SPProgressBarPlug.progress.done();
-
-		    if (SPGlobal.logging()) {
-			SPGlobal.logMain(header, "Closing program after successfully running patch.");
-		    }
 		    exitProgram(true);
 		}
 	    } catch (Exception e) {
