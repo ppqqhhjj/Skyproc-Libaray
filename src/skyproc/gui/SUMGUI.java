@@ -381,6 +381,37 @@ public class SUMGUI extends JFrame {
 	    SPProgressBarPlug.progress.done();
 	    exitProgram(false);
 	} else {
+	    progress.addWindowListener(new WindowListener() {
+
+		@Override
+		public void windowClosed(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowActivated(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+		    exitProgram(false);
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0) {
+		}
+	    });
 	    progress.open();
 	}
 	runThread();
