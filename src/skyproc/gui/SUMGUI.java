@@ -5,6 +5,8 @@
 package skyproc.gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
@@ -13,8 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
@@ -139,6 +139,13 @@ public class SUMGUI extends JFrame {
 
 	    cancelPatch = new LButton("Cancel");
 	    cancelPatch.setLocation(backgroundPanel.getWidth() - cancelPatch.getWidth() - 5, 5);
+	    cancelPatch.addActionListener(new ActionListener () {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    exitProgram(false);
+		}
+	    });
 	    backgroundPanel.add(cancelPatch);
 
 	    forcePatch = new LCheckBox("Force Patch on Exit", SUMFont, Color.GRAY);
@@ -359,19 +366,10 @@ public class SUMGUI extends JFrame {
 
     static void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
-
-	progress.setExitOnClose();
-	progress.open(new ChangeListener() {
-
-	    @Override
-	    public void stateChanged(ChangeEvent e) {
-		exitProgram(true);
-	    }
-	});
 	exitRequested = true;
 	if (!imported && !needsImporting()) {
 	    SPProgressBarPlug.progress.done();
-	    exitProgram(true);
+	    exitProgram(false);
 	}
 	runThread();
     }
