@@ -312,6 +312,7 @@ public class SUMGUI extends JFrame {
 	    for (ModListing m : db.getImportedMods()) {
 		curImportedMods.add(m.print().toUpperCase());
 	    }
+	    curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
 
 	    //Remove matching mods, must be in order
 	    ArrayList<String> curImportedModsTmp = new ArrayList<>(curImportedMods);
@@ -322,6 +323,7 @@ public class SUMGUI extends JFrame {
 			if (oldList.get(j).equalsIgnoreCase(curName)) {
 			    oldList.remove(curName);
 			    curImportedMods.remove(curName);
+			    break;
 			} else if (curImportedModsTmp.contains(oldList.get(j))) {
 			    //Matching mods out of order, need to patch
 			    return true;
