@@ -301,26 +301,32 @@ public class SUMGUI extends JFrame {
     static boolean needsPatching() {
 
 	try {
+	    // Compile old and new Master lists
 	    File f = new File(pathToLastMasterlist);
 	    if (!f.isFile()) {
 		return true;
 	    }
 	    ArrayList<String> oldList = Ln.loadFileToStrings(pathToLastMasterlist, true);
-	    // Check old masterlist vs current
-
 	    SPDatabase db = SPGlobal.getDB();
-	    ArrayList<Mod> curMasterList = new ArrayList<>();
+	    ArrayList<String> curImportedMods = new ArrayList<>();
 	    for (ModListing m : db.getImportedMods()) {
-		curMasterList.add(db.getMod(m));
+		curImportedMods.add(m.print().toUpperCase());
 	    }
 
-	    //Remove matching mods
-	    ArrayList<Mod> curMasterListTmp = new ArrayList<>(curMasterList);
-	    for (Mod curMaster : curMasterListTmp) {
-		String curName = curMaster.getName().toUpperCase();
+	    //Remove matching mods, must be in order
+	    ArrayList<String> curImportedModsTmp = new ArrayList<>(curImportedMods);
+	    for (int i = 0; i < curImportedModsTmp.size(); i++) {
+		String curName = curImportedModsTmp.get(i);
 		if (oldList.contains(curName)) {
-		    oldList.remove(curName);
-		    curMasterList.remove(curMaster);
+		    for (int j = 0; j < oldList.size(); j++) {
+			if (oldList.get(j).equalsIgnoreCase(curName)) {
+			    oldList.remove(curName);
+			    curImportedMods.remove(curName);
+			} else if (curImportedModsTmp.contains(oldList.get(j))) {
+			    //Matching mods out of order, need to patch
+			    return true;
+			}
+		    }
 		}
 	    }
 
@@ -330,7 +336,8 @@ public class SUMGUI extends JFrame {
 	    }
 
 	    //Check new mods for any related ones.  If found, need patch.
-	    for (Mod curMaster : curMasterList) {
+	    for (String curString : curImportedMods) {
+		Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
 		ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
 		for (GRUP_TYPE g : hook.importRequests()) {
 		    if (contained.contains(g)) {
