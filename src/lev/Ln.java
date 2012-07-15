@@ -342,6 +342,7 @@ public class Ln {
     /**
      * Recursively returns all files inside of a directory and its
      * subdirectories.
+     *
      * @param src Folder to recursively search
      * @param addDirs Include directories as files in the list, followed by
      * their contents.
@@ -620,6 +621,7 @@ public class Ln {
 
     /**
      * Returns the file extension string. Eg "Hello.jpg" returns "jpg"
+     *
      * @param f
      * @return
      */
@@ -633,6 +635,7 @@ public class Ln {
 
     /**
      * True if file extension is equal to input, case insensitive.
+     *
      * @param f
      * @param fileType
      * @return
@@ -1138,6 +1141,7 @@ public class Ln {
 
     /**
      * Converts byte number to megabyte number
+     *
      * @param numBytes
      * @return
      */
@@ -1147,6 +1151,7 @@ public class Ln {
 
     /**
      * Converts byte number to kilobyte number
+     *
      * @param numBytes
      * @return
      */
@@ -1155,8 +1160,10 @@ public class Ln {
     }
 
     /**
-     * Asks the user to locate a file, and saves the location for next time.  On second runthrough, the
-     *  user will not be asked, and the backup file will be used instead.
+     * Asks the user to locate a file, and saves the location for next time. On
+     * second runthrough, the user will not be asked, and the backup file will
+     * be used instead.
+     *
      * @param fileMessageToAskUserFor
      * @param backupFileLocation
      * @return
@@ -1196,7 +1203,7 @@ public class Ln {
      * @param keyFile Validation file to be used as a desired example.
      * @param numErrorsToPrint Number of differences to print.
      * @return True if files matched with NO differences.
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      * @throws IOException
      */
     public static boolean validateCompare(File testFile, File keyFile, int numErrorsToPrint) throws FileNotFoundException, IOException {
@@ -1282,8 +1289,9 @@ public class Ln {
     }
 
     /**
-     * Returns a string representation of the tree's expansion state.  To be used
-     *  to revert back to it later.
+     * Returns a string representation of the tree's expansion state. To be used
+     * to revert back to it later.
+     *
      * @param tree
      * @param row
      * @return
@@ -1306,7 +1314,9 @@ public class Ln {
     }
 
     /**
-     * Restores a tree's expansion state to a previously saved string representation.
+     * Restores a tree's expansion state to a previously saved string
+     * representation.
+     *
      * @param tree
      * @param row
      * @param expansionState
@@ -1321,6 +1331,7 @@ public class Ln {
 
     /**
      * A list of all the class files in a jar.
+     *
      * @param jarPath
      * @return
      * @throws FileNotFoundException
@@ -1343,7 +1354,9 @@ public class Ln {
     }
 
     /**
-     * loads all classes in a jar.  Optionally can skip any that throw exceptions.
+     * loads all classes in a jar. Optionally can skip any that throw
+     * exceptions.
+     *
      * @param jarPath
      * @param skipBad
      * @return
@@ -1374,6 +1387,7 @@ public class Ln {
 
     /**
      * Exports contents of a stream to a string.
+     *
      * @param is
      * @return
      * @throws IOException
@@ -1402,6 +1416,7 @@ public class Ln {
 
     /**
      * Custom JSON parser that exports it as a JSON file string.
+     *
      * @param object
      * @param exclude
      * @return
@@ -1446,5 +1461,24 @@ public class Ln {
 	    }
 	}
 	return out;
+    }
+
+    public static ArrayList<String> loadFileToStrings(File f, boolean toUpper) throws IOException {
+	ArrayList out = new ArrayList<>();
+	BufferedReader in;
+	in = new BufferedReader(new FileReader(f));
+	String line;
+	while ((line = in.readLine()) != null) {
+	    if (toUpper) {
+		line = line.toUpperCase();
+	    }
+	    out.add(line);
+	}
+	in.close();
+	return out;
+    }
+
+    public static ArrayList<String> loadFileToStrings(String path, boolean toUpper) throws IOException {
+	return loadFileToStrings(new File(path), toUpper);
     }
 }

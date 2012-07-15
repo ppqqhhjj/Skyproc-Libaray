@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
 import skyproc.*;
@@ -74,7 +75,6 @@ public class SUMGUI extends JFrame {
      * Help panel on the right column of the GUI.
      */
     static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
-    // Non static
     static LImagePane backgroundPanel;
     static LLabel patchNeededLabel;
     static boolean needsPatching = true;
@@ -84,6 +84,8 @@ public class SUMGUI extends JFrame {
     static LLabel versionNum;
     static LButton cancelPatch;
     static Font SUMFont = new Font("SansSerif", Font.PLAIN, 10);
+    static String pathToLastMasterlist = SPGlobal.pathToInternalFiles + "Last Masterlist.txt";
+    static String pathToLastModlist = SPGlobal.pathToInternalFiles + "Last Modlist.txt";
 
     SUMGUI() {
 	super(hook.getName());
@@ -260,23 +262,51 @@ public class SUMGUI extends JFrame {
 	}
     }
 
-    static boolean needsPatching() {
+    static boolean needsImporting() {
 
-	File lastModlist = new File(SPGlobal.pathToLastMasterlist);
-	if (!lastModlist.isFile()) {
+	if (forcePatch.isSelected()) {
 	    return true;
 	}
-
-	// Check old masterlist vs current
 	try {
-
-	    // Import old and cur
-	    BufferedReader in = new BufferedReader(new FileReader(lastModlist));
-	    ArrayList<String> oldMasterList = new ArrayList<>();
-	    String line;
-	    while ((line = in.readLine()) != null) {
-		oldMasterList.add(line.toUpperCase());
+	    File f = new File(pathToLastModlist);
+	    if (!f.isFile()) {
+		return true;
 	    }
+
+	    ArrayList<String> oldList = Ln.loadFileToStrings(f, true);
+	    ArrayList<ModListing> curList = new ArrayList<>(SPImporter.getActiveModList());
+	    ArrayList<ModListing> curListTmp = new ArrayList<>(curList);
+
+	    if (curList.size() != oldList.size()) {
+		return true;
+	    }
+
+	    for (int i = 0; i < curList.size(); i++) {
+		ModListing m = curListTmp.get(i);
+		if (!oldList.get(i).equals(m.print().toUpperCase())) {
+		    return true;
+		}
+	    }
+
+	    //Don't need a patch, check for custom hook coding
+	    return SUMGUI.hook.needsPatching();
+
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	}
+
+	return true;
+    }
+
+    static boolean needsPatching() {
+
+	try {
+	    File f = new File(pathToLastMasterlist);
+	    if (!f.isFile()) {
+		return true;
+	    }
+	    ArrayList<String> oldList = Ln.loadFileToStrings(pathToLastMasterlist, true);
+	    // Check old masterlist vs current
 
 	    SPDatabase db = SPGlobal.getDB();
 	    ArrayList<Mod> curMasterList = new ArrayList<>();
@@ -288,14 +318,14 @@ public class SUMGUI extends JFrame {
 	    ArrayList<Mod> curMasterListTmp = new ArrayList<>(curMasterList);
 	    for (Mod curMaster : curMasterListTmp) {
 		String curName = curMaster.getName().toUpperCase();
-		if (oldMasterList.contains(curName)) {
-		    oldMasterList.remove(curName);
+		if (oldList.contains(curName)) {
+		    oldList.remove(curName);
 		    curMasterList.remove(curMaster);
 		}
 	    }
 
 	    //If old masters are missing, need patch
-	    if (!oldMasterList.isEmpty()) {
+	    if (!oldList.isEmpty()) {
 		return true;
 	    }
 
@@ -330,6 +360,10 @@ public class SUMGUI extends JFrame {
 	    }
 	});
 	exitRequested = true;
+	if (!imported && !needsImporting()) {
+	    SPProgressBarPlug.progress.done();
+	    exitProgram();
+	}
 	runThread();
     }
 
@@ -342,6 +376,11 @@ public class SUMGUI extends JFrame {
 	if (hook.hasSave()) {
 	    hook.getSave().saveToFile();
 	}
+	try {
+	    SPGlobal.getDB().exportModList(pathToLastModlist);
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	}
 	LDebug.wrapUpAndExit();
     }
 
@@ -352,11 +391,11 @@ public class SUMGUI extends JFrame {
 	    SPGlobal.log("START IMPORT THREAD", "Starting of process thread.");
 	    try {
 		if (!imported) {
-		    imported = true;
 		    SPGlobal.setGlobalPatch(hook.getExportPatch());
 		    SPImporter importer = new SPImporter();
 		    importer.importActiveMods(hook.importRequests());
 		    imported();
+		    imported = true;
 		}
 		if (exitRequested) {
 		    if (needsPatching || forcePatch.isSelected()) {
@@ -366,6 +405,7 @@ public class SUMGUI extends JFrame {
 			try {
 			    // Export your custom patch.
 			    SPGlobal.getGlobalPatch().export();
+			    SPGlobal.getGlobalPatch().exportMasterList(pathToLastMasterlist);
 			} catch (Exception ex) {
 			    // If something goes wrong, show an error message.
 			    SPGlobal.logException(ex);

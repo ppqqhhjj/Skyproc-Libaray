@@ -76,7 +76,7 @@ public class SubFormInt extends SubFormData {
         hash = 79 * hash + this.num;
         return hash;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -1,6 +1,11 @@
 package skyproc;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+import lev.Ln;
 import skyproc.exceptions.Uninitialized;
 
 /**
@@ -90,19 +95,36 @@ public class SPDatabase implements Iterable<Mod> {
 
     /**
      * Returns the nth mod in the database.
+     *
      * @param index
      * @return
      */
     public Mod getMod(int index) {
-        return modLookup.get(addedPlugins.get(index));
+	return modLookup.get(addedPlugins.get(index));
     }
 
-    public ArrayList<ModListing> getMods () {
+    public ArrayList<ModListing> getMods() {
 	return new ArrayList<>(addedPlugins);
     }
 
     public ArrayList<ModListing> getImportedMods() {
 	return new ArrayList<>(activePlugins);
+    }
+
+    public void exportModList(String path) throws IOException {
+	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
+	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));
+	for (ModListing m : SPImporter.getActiveModList()) {
+	    writer.write(m.toString() + "\n");
+	}
+	writer.close();
+
+	File modList = new File(path);
+	if (modList.isFile()) {
+	    modList.delete();
+	}
+
+	Ln.moveFile(modListTmp, modList, false);
     }
 
     /**
@@ -111,7 +133,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return the number of mods
      */
     public int numMods() {
-        return addedPlugins.size();
+	return addedPlugins.size();
     }
 
     /**
@@ -203,10 +225,10 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Querys the Database and returns the record that matches the FormID.  The
-     * version in the latest mod in the load order will be returned.
-     * <br> NOTE: it is recommended you use the version that only searches in
-     * specific GRUPs for speed reasons.
+     * Querys the Database and returns the record that matches the FormID. The
+     * version in the latest mod in the load order will be returned. <br> NOTE:
+     * it is recommended you use the version that only searches in specific
+     * GRUPs for speed reasons.
      *
      * @param query FormID to look for.
      * @param database Database to query
@@ -277,12 +299,12 @@ public class SPDatabase implements Iterable<Mod> {
 	return modLookup.values().iterator();
     }
 
-
     /**
      *
-     * @return An iterator that goes from the top of the load order down to the lowest priority at the end.
+     * @return An iterator that goes from the top of the load order down to the
+     * lowest priority at the end.
      */
-    public Iterator<Mod> reverseIter () {
+    public Iterator<Mod> reverseIter() {
 	Iterator<Mod> iter = iterator();
 	ArrayList<Mod> outList = new ArrayList<Mod>(modLookup.size());
 	while (iter.hasNext()) {
@@ -290,5 +312,4 @@ public class SPDatabase implements Iterable<Mod> {
 	}
 	return outList.iterator();
     }
-
 }

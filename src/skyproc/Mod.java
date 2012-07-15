@@ -671,14 +671,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
 	}
 
-	exportMasterList();
-
 	if (Consistency.automaticExport) {
 	    Consistency.export();
 	}
     }
 
-    void exportMasterList() throws IOException {
+    public void exportMasterList(String path) throws IOException {
 	File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));
 	for (ModListing m : this.getMasters()) {
@@ -686,7 +684,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 	writer.close();
 
-	File masterList = new File(SPGlobal.pathToLastMasterlist);
+	File masterList = new File(path);
 	if (masterList.isFile()) {
 	    masterList.delete();
 	}
