@@ -11,10 +11,14 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
@@ -139,7 +143,7 @@ public class SUMGUI extends JFrame {
 
 	    cancelPatch = new LButton("Cancel");
 	    cancelPatch.setLocation(backgroundPanel.getWidth() - cancelPatch.getWidth() - 5, 5);
-	    cancelPatch.addActionListener(new ActionListener () {
+	    cancelPatch.addActionListener(new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -232,6 +236,17 @@ public class SUMGUI extends JFrame {
 	    @Override
 	    public void run() {
 		if (singleton == null) {
+
+		    if (hook.hasSave()) {
+			hook.getSave().init();
+		    }
+
+		    try {
+			hook.onStart();
+		    } catch (Exception ex) {
+			SPGlobal.logException(ex);
+		    }
+
 		    if (hook.hasCustomMenu()) {
 			singleton = hook.openCustomMenu();
 		    } else {
@@ -239,17 +254,12 @@ public class SUMGUI extends JFrame {
 		    }
 		    progress.setGUIref(singleton);
 		    progress.moveToCorrectLocation();
-
-		    if (hook.hasSave()) {
-			hook.getSave().init();
+		    if (hook.hasStandardMenu()) {
+			singleton.add(hook.getStandardMenu());
 		    }
 
 		    if (hook.importAtStart()) {
 			runThread();
-		    }
-
-		    if (hook.hasStandardMenu()) {
-			singleton.add(hook.getStandardMenu());
 		    }
 		}
 	    }
@@ -370,6 +380,8 @@ public class SUMGUI extends JFrame {
 	if (!imported && !needsImporting()) {
 	    SPProgressBarPlug.progress.done();
 	    exitProgram(false);
+	} else {
+	    progress.open();
 	}
 	runThread();
     }

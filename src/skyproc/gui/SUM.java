@@ -5,7 +5,6 @@
 package skyproc.gui;
 
 import java.awt.Color;
-import java.io.File;
 import java.net.URL;
 import javax.swing.JFrame;
 import lev.gui.LSaveFile;
@@ -125,6 +124,7 @@ public interface SUM {
      */
     public Color getHeaderColor();
     public boolean needsPatching();
+    public void onStart () throws Exception;
     public void onExit(boolean patchWasGenerated) throws Exception;
     /**
      * This function should start the processing code of your patcher.<br>

@@ -32,9 +32,9 @@ import lev.gui.*;
 import skyproc.*;
 
 /**
- * SUM - SkyProc Unified Manager<br>
- * This is the main program that hooks together various SkyProc patchers and streamlines
- * their patching processing.
+ * SUM - SkyProc Unified Manager<br> This is the main program that hooks
+ * together various SkyProc patchers and streamlines their patching processing.
+ *
  * @author Justin Swanson
  */
 public class SUMprogram implements SUM {
@@ -53,6 +53,7 @@ public class SUMprogram implements SUM {
 
     /**
      * Main function that starts the program and GUI.
+     *
      * @param args "-test" Opens up the SkyProc tester program instead of SUM
      * @throws Exception
      */
@@ -191,6 +192,7 @@ public class SUMprogram implements SUM {
 
     /**
      * Returns the modlisting used for the exported patch.
+     *
      * @return
      */
     @Override
@@ -210,6 +212,24 @@ public class SUMprogram implements SUM {
 
     @Override
     public void onExit(boolean patchWasGenerated) {
+	for (PatcherLink l : links) {
+	    try {
+		l.hook.onExit(patchWasGenerated);
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
+	    }
+	}
+    }
+
+    @Override
+    public void onStart() {
+	for (PatcherLink l : links) {
+	    try {
+		l.hook.onStart();
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
+	    }
+	}
     }
 
     // Internal Classes
