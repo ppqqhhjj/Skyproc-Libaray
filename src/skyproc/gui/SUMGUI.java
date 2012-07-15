@@ -160,8 +160,9 @@ public class SUMGUI extends JFrame {
 	    forcePatch.setOffset(-4);
 	    backgroundPanel.add(forcePatch);
 
-	    patchNeededLabel = new LLabel("", SUMFont, Color.GRAY);
+	    patchNeededLabel = new LLabel("A patch will be generated upon exit.", SUMFont, Color.GRAY);
 	    patchNeededLabel.setLocation(forcePatch.getLocation());
+	    patchNeededLabel.setVisible(false);
 	    backgroundPanel.add(patchNeededLabel);
 
 	    progress.addWindowListener(new WindowListener() {
@@ -277,30 +278,21 @@ public class SUMGUI extends JFrame {
 
     static void imported() {
 	SPProgressBarPlug.progress.setStatus("Done importing.");
-	needsPatching = needsPatching();
-	if (needsPatching) {
-	}
+	setPatchNeeded(needsPatching());
     }
 
     public static void setPatchNeeded(boolean on) {
-	if (on) {
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMain(header, "Patch needed.");
-	    }
-	    patchNeededLabel.setText("A patch will be generated upon exit.");
-	    forcePatch.setVisible(false);
-	} else {
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMain(header, "Patch NOT needed.");
-	    }
-	    patchNeededLabel.setVisible(false);
-	    forcePatch.setVisible(true);
+	needsPatching = on;
+	if (SPGlobal.logging()) {
+	    SPGlobal.logMain(header, "Patch needed: " + on);
 	}
+	patchNeededLabel.setVisible(on);
+	forcePatch.setVisible(!on);
     }
 
     static boolean needsImporting() {
 
-	if (forcePatch.isSelected()) {
+	if (forcePatch.isSelected() || needsPatching) {
 	    return true;
 	}
 	try {
