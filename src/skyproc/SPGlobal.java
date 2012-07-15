@@ -42,6 +42,7 @@ public class SPGlobal {
      * also be used to store your own internal files.
      */
     public static String pathToInternalFiles = "Files/";
+    public static String pathToLastMasterlist = SPGlobal.pathToInternalFiles + "Last Masterlist.txt";
     /**
      * Skyproc will import and embed the language given by SPGlobal.language
      * every time a patch is created. To offer multi-language support, simply

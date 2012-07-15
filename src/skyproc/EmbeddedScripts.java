@@ -108,18 +108,20 @@ public class EmbeddedScripts {
 
     static void init() {
 	int maxIndex = 0;
-	for (EmbeddedScript s : EmbeddedScript.values()){
+	for (EmbeddedScript s : EmbeddedScript.values()) {
 	    if (maxIndex < s.index) {
 		maxIndex = s.index;
 	    }
 	}
-	indexing = new EmbeddedScript[maxIndex];
-	for (int i = 0 ; i < indexing.length ; i++) {
+	indexing = new EmbeddedScript[maxIndex + 1];
+	for (int i = 0; i < indexing.length; i++) {
 	    indexing[i] = EmbeddedScript.NULL;
 	}
 
 	for (EmbeddedScript s : EmbeddedScript.values()) {
-	    indexing[s.index] = s;
+	    if (!s.equals(EmbeddedScript.NULL)) {
+		indexing[s.index] = s;
+	    }
 	}
     }
 
@@ -138,15 +140,15 @@ public class EmbeddedScripts {
     public enum EmbeddedScript {
 
 	CanHaveFlames(153),
-	CanPayCrimeGold(497, ParamType.FormID),				    // Faction
+	CanPayCrimeGold(497, ParamType.FormID), // Faction
 	EPAlchemyGetMakingPoison(500),
-	EPAlchemyEffectHasHeyword(501, ParamType.FormID),		    // Keyword
-	EPTemperingItemHasKeyword(660, ParamType.FormID),		    // Keyword
-	EPModSkillUsage_IsAdvanceSkill(681, ParamType.FormID),		    // Actor Value
-	EPModSkillUsage_AdvanceObjectHasKeyword(691, ParamType.FormID),	    // Keyword
-	EPModSkillUsage_IsAdvanceAction(692, ParamType.Int),		    // Skill Action
-	EPMagic_SpellHasKeyword(693, ParamType.FormID),			    // Keyword
-	EPMagic_SpellHasSkill(696, ParamType.FormID),			    // Actor Value
+	EPAlchemyEffectHasHeyword(501, ParamType.FormID), // Keyword
+	EPTemperingItemHasKeyword(660, ParamType.FormID), // Keyword
+	EPModSkillUsage_IsAdvanceSkill(681, ParamType.FormID), // Actor Value
+	EPModSkillUsage_AdvanceObjectHasKeyword(691, ParamType.FormID), // Keyword
+	EPModSkillUsage_IsAdvanceAction(692, ParamType.Int), // Skill Action
+	EPMagic_SpellHasKeyword(693, ParamType.FormID), // Keyword
+	EPMagic_SpellHasSkill(696, ParamType.FormID), // Actor Value
 	EffectWasDualCast(724),
 	DoesNotExist(726),
 	CanFlyHere(731),

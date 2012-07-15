@@ -7,8 +7,8 @@ package skyproc.gui;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -17,12 +17,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lev.debug.LDebug;
 import lev.gui.*;
-import skyproc.SPGlobal;
-import skyproc.SPImporter;
+import skyproc.*;
 
 /**
- * The standard GUI setup used in SUM.  This can be used to create GUIs that manage
- * your settings, handle savefiles, and hook directly into SUM.
+ * The standard GUI setup used in SUM. This can be used to create GUIs that
+ * manage your settings, handle savefiles, and hook directly into SUM.
+ *
  * @author Justin Swanson
  */
 public class SUMGUI extends JFrame {
@@ -77,12 +77,12 @@ public class SUMGUI extends JFrame {
     // Non static
     static LImagePane backgroundPanel;
     static LLabel patchNeededLabel;
+    static boolean needsPatching = true;
     static LCheckBox forcePatch;
     static LImagePane skyProcLogo;
     static JTextArea statusUpdate;
     static LLabel versionNum;
     static LButton cancelPatch;
-
     static Font SUMFont = new Font("SansSerif", Font.PLAIN, 10);
 
     SUMGUI() {
@@ -213,6 +213,7 @@ public class SUMGUI extends JFrame {
 
     /**
      * Opens and hooks onto a program that implements the SUM interface.
+     *
      * @param hook Program to open and hook to
      */
     public static void open(final SUM hook) {
@@ -252,7 +253,8 @@ public class SUMGUI extends JFrame {
 
     static void imported() {
 	SPProgressBarPlug.progress.setStatus("Done importing.");
-	if (needsPatching()) {
+	needsPatching = needsPatching();
+	if (needsPatching) {
 	    patchNeededLabel.setText("A patch will be generated upon exit.");
 	    forcePatch.setVisible(false);
 	}
@@ -260,11 +262,59 @@ public class SUMGUI extends JFrame {
 
     static boolean needsPatching() {
 
-	File lastModlist = new File (SPGlobal.pathToInternalFiles + "Last Masterlist.txt");
+	File lastModlist = new File(SPGlobal.pathToLastMasterlist);
 	if (!lastModlist.isFile()) {
 	    return true;
 	}
 
+	// Check old masterlist vs current
+	try {
+
+	    // Import old and cur
+	    BufferedReader in = new BufferedReader(new FileReader(lastModlist));
+	    ArrayList<String> oldMasterList = new ArrayList<>();
+	    String line;
+	    while ((line = in.readLine()) != null) {
+		oldMasterList.add(line.toUpperCase());
+	    }
+
+	    SPDatabase db = SPGlobal.getDB();
+	    ArrayList<Mod> curMasterList = new ArrayList<>();
+	    for (ModListing m : db.getImportedMods()) {
+		curMasterList.add(db.getMod(m));
+	    }
+
+	    //Remove matching mods
+	    ArrayList<Mod> curMasterListTmp = new ArrayList<>(curMasterList);
+	    for (Mod curMaster : curMasterListTmp) {
+		String curName = curMaster.getName().toUpperCase();
+		if (oldMasterList.contains(curName)) {
+		    oldMasterList.remove(curName);
+		    curMasterList.remove(curMaster);
+		}
+	    }
+
+	    //If old masters are missing, need patch
+	    if (!oldMasterList.isEmpty()) {
+		return true;
+	    }
+
+	    //Check new mods for any related ones.  If found, need patch.
+	    for (Mod curMaster : curMasterList) {
+		ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
+		for (GRUP_TYPE g : hook.importRequests()) {
+		    if (contained.contains(g)) {
+			return true;
+		    }
+		}
+	    }
+
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	    return true;
+	}
+
+	//Don't need a patch, check for custom hook coding
 	return SUMGUI.hook.needsPatching();
     }
 
@@ -284,8 +334,8 @@ public class SUMGUI extends JFrame {
     }
 
     /**
-     * Immediately saves settings to file, closes debug logs, and exits the program.<br>
-     * NO patch is generated.
+     * Immediately saves settings to file, closes debug logs, and exits the
+     * program.<br> NO patch is generated.
      */
     static public void exitProgram() {
 	SPGlobal.log(header, "Exit requested.");
@@ -309,17 +359,20 @@ public class SUMGUI extends JFrame {
 		    imported();
 		}
 		if (exitRequested) {
-		    hook.runChangesToPatch();
+		    if (needsPatching || forcePatch.isSelected()) {
 
-		    try {
-			// Export your custom patch.
-			SPGlobal.getGlobalPatch().export();
-		    } catch (Exception ex) {
-			// If something goes wrong, show an error message.
-			SPGlobal.logException(ex);
-			JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\nPlease contact Leviathan1753.");
+			hook.runChangesToPatch();
+
+			try {
+			    // Export your custom patch.
+			    SPGlobal.getGlobalPatch().export();
+			} catch (Exception ex) {
+			    // If something goes wrong, show an error message.
+			    SPGlobal.logException(ex);
+			    JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\nPlease contact Leviathan1753.");
+			}
+
 		    }
-
 		    SPProgressBarPlug.progress.done();
 		    exitProgram();
 		}
@@ -351,7 +404,8 @@ public class SUMGUI extends JFrame {
     }
 
     /**
-     * Interface that hooks SkyProc's progress bar output to the SUM GUI's progress bar display.
+     * Interface that hooks SkyProc's progress bar output to the SUM GUI's
+     * progress bar display.
      */
     public class SUMProgress implements LProgressBarInterface {
 

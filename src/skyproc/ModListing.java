@@ -86,6 +86,11 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
+    public String toString() {
+	return print();
+    }
+
+    @Override
     void export(LExporter out, Mod srcMod) throws IOException {
 	String tmp = mast.string;
 	mast.string = print();

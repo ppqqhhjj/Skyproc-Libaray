@@ -1,8 +1,6 @@
 package skyproc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
@@ -289,6 +287,16 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	for (Object o : g) {
 	    MajorRecord m = (MajorRecord) o;
 	    out.add(makeCopy(m));
+	}
+	return out;
+    }
+
+    public ArrayList<GRUP_TYPE> getContainedTypes () {
+	ArrayList<GRUP_TYPE> out = new ArrayList<>();
+	for (GRUP g : GRUPs.values()) {
+	   if (!g.isEmpty()) {
+	       out.add(g.getContainedType());
+	   }
 	}
 	return out;
     }
@@ -663,9 +671,27 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
 	}
 
+	exportMasterList();
+
 	if (Consistency.automaticExport) {
 	    Consistency.export();
 	}
+    }
+
+    void exportMasterList() throws IOException {
+	File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
+	BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));
+	for (ModListing m : this.getMasters()) {
+	    writer.write(m.toString() + "\n");
+	}
+	writer.close();
+
+	File masterList = new File(SPGlobal.pathToLastMasterlist);
+	if (masterList.isFile()) {
+	    masterList.delete();
+	}
+
+	Ln.moveFile(masterListTmp, masterList, false);
     }
 
     int addOutString(String in, SubStringPointer.Files file) {

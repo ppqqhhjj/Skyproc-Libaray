@@ -97,6 +97,14 @@ public class SPDatabase implements Iterable<Mod> {
         return modLookup.get(addedPlugins.get(index));
     }
 
+    public ArrayList<ModListing> getMods () {
+	return new ArrayList<>(addedPlugins);
+    }
+
+    public ArrayList<ModListing> getImportedMods() {
+	return new ArrayList<>(activePlugins);
+    }
+
     /**
      * Returns the number of mods currently loaded into this SPDatabase
      *
