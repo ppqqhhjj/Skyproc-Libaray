@@ -334,7 +334,8 @@ public class SUMGUI extends JFrame {
 		}
 		return true;
 	    }
-	    ArrayList<String> oldList = Ln.loadFileToStrings(pathToLastMasterlist, true);
+	    ArrayList<String> oldMasterList = Ln.loadFileToStrings(pathToLastMasterlist, true);
+
 	    SPDatabase db = SPGlobal.getDB();
 	    ArrayList<String> curImportedMods = new ArrayList<>();
 	    for (ModListing m : db.getImportedMods()) {
@@ -342,17 +343,17 @@ public class SUMGUI extends JFrame {
 	    }
 	    curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
 
-	    //Remove matching mods, must be in order
+	    //Remove matching master mods, must be in order
 	    ArrayList<String> curImportedModsTmp = new ArrayList<>(curImportedMods);
 	    for (int i = 0; i < curImportedModsTmp.size(); i++) {
 		String curName = curImportedModsTmp.get(i);
-		if (oldList.contains(curName)) {
-		    for (int j = 0; j < oldList.size(); j++) {
-			if (oldList.get(j).equalsIgnoreCase(curName)) {
-			    oldList.remove(curName);
+		if (oldMasterList.contains(curName)) {
+		    for (int j = 0; j < oldMasterList.size(); j++) {
+			if (oldMasterList.get(j).equalsIgnoreCase(curName)) {
+			    oldMasterList.remove(curName);
 			    curImportedMods.remove(curName);
 			    break;
-			} else if (curImportedModsTmp.contains(oldList.get(j))) {
+			} else if (curImportedModsTmp.contains(oldMasterList.get(j))) {
 			    //Matching mods out of order, need to patch
 			    if (SPGlobal.logging()) {
 				SPGlobal.logMain(header, "Patch needed because masters from before were in a different order.");
@@ -364,14 +365,20 @@ public class SUMGUI extends JFrame {
 	    }
 
 	    //If old masters are missing, need patch
-	    if (!oldList.isEmpty()) {
+	    if (!oldMasterList.isEmpty()) {
 		if (SPGlobal.logging()) {
 		    SPGlobal.logMain(header, "Patch needed because old masters are missing.");
 		}
 		return true;
 	    }
 
-	    //Check new mods for any related ones.  If found, need patch.
+	    //Remove mods that were imported last time
+	    ArrayList<String> oldModList = Ln.loadFileToStrings(pathToLastModlist, true);
+	    for (String s : oldModList) {
+		curImportedMods.remove(s);
+	    }
+
+	    //Check new mods for any records patcher is interested in.  If found, need patch.
 	    for (String curString : curImportedMods) {
 		Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
 		ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
