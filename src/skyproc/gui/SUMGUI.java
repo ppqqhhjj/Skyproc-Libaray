@@ -164,7 +164,7 @@ public class SUMGUI extends JFrame {
 		public void windowClosing(WindowEvent arg0) {
 		    if (progress.closeOp == JFrame.DISPOSE_ON_CLOSE) {
 			SPGlobal.log(header, "Progress bar window closing");
-			exitProgram();
+			exitProgram(false);
 		    }
 		}
 
@@ -363,13 +363,13 @@ public class SUMGUI extends JFrame {
 
 	    @Override
 	    public void stateChanged(ChangeEvent e) {
-		exitProgram();
+		exitProgram(true);
 	    }
 	});
 	exitRequested = true;
 	if (!imported && !needsImporting()) {
 	    SPProgressBarPlug.progress.done();
-	    exitProgram();
+	    exitProgram(true);
 	}
 	runThread();
     }
@@ -378,15 +378,17 @@ public class SUMGUI extends JFrame {
      * Immediately saves settings to file, closes debug logs, and exits the
      * program.<br> NO patch is generated.
      */
-    static public void exitProgram() {
+    static public void exitProgram(boolean generatedPatch) {
 	SPGlobal.log(header, "Exit requested.");
 	if (hook.hasSave()) {
 	    hook.getSave().saveToFile();
 	}
-	try {
-	    SPGlobal.getDB().exportModList(pathToLastModlist);
-	} catch (IOException ex) {
-	    SPGlobal.logException(ex);
+	if (generatedPatch) {
+	    try {
+		SPGlobal.getDB().exportModList(pathToLastModlist);
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
 	}
 	LDebug.wrapUpAndExit();
     }
@@ -421,7 +423,7 @@ public class SUMGUI extends JFrame {
 
 		    }
 		    SPProgressBarPlug.progress.done();
-		    exitProgram();
+		    exitProgram(true);
 		}
 	    } catch (Exception e) {
 		System.err.println(e.toString());
@@ -429,7 +431,7 @@ public class SUMGUI extends JFrame {
 		JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'  Check the debug logs.");
 
 		// if exception occurs
-		exitProgram();
+		exitProgram(false);
 	    }
 	}
 
