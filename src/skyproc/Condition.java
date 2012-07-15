@@ -31,6 +31,11 @@ public class Condition extends SubShell {
 	init();
     }
 
+    public Condition(EmbeddedScript function) {
+	this();
+	cond.script = function;
+    }
+
     final void init() {
 	subRecords.add(cond);
 	subRecords.add(CIS1);
@@ -54,19 +59,12 @@ public class Condition extends SubShell {
 	byte[] fluff;
 	FormID comparisonValueForm = new FormID();
 	float comparisonValueFloat;
-	int functionIndex;
+	EmbeddedScript script;
 	byte[] padding;
-	FormID param1form = new FormID();
-	int param1int;
-	FormID param2form = new FormID();
-	int param2int;
+	FormID[] paramForm = new FormID[3];
+	int[] paramInt = new int[3];
 	RunOnType runType;
 	FormID reference = new FormID();
-	FormID param3form = new FormID();
-	int param3int;
-	boolean param1formF = false;
-	boolean param2formF = false;
-	boolean param3formF = false;
 
 	Cond() {
 	    super(Type.CTDA);
@@ -75,6 +73,7 @@ public class Condition extends SubShell {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
+	    //Flags and Operator
 	    LFlags tmp = new LFlags(Ln.toByteArray(operator.ordinal(), 1));
 	    for (int i = 3; i < 8; i++) {
 		tmp.set(i, flags.get(i));
@@ -82,6 +81,7 @@ public class Condition extends SubShell {
 	    out.write(tmp.export(), 1);
 	    out.write(fluff, 3);
 
+	    //Value
 	    if (get(CondFlag.UseGlobal)) {
 		// This FormID is flipped, so it's an odd export.
 		out.write(comparisonValueForm.get());
@@ -89,35 +89,39 @@ public class Condition extends SubShell {
 		out.write(comparisonValueFloat);
 	    }
 
-	    out.write(functionIndex, 2);
+	    //Function
+	    out.write(script.ordinal(), 2);
 	    out.write(padding, 2);
 
-	    if (param1formF) {
-		param1form.export(out);
+	    //Param1
+	    if (script.getType(Param.One) == ParamType.FormID) {
+		paramForm[0].export(out);
 	    } else {
-		out.write(param1int);
+		out.write(paramInt[0]);
 	    }
 
-	    if (param2formF) {
-		param2form.export(out);
+	    //Param2
+	    if (script.getType(Param.Two) == ParamType.FormID) {
+		paramForm[1].export(out);
 	    } else {
-		out.write(param2int);
+		out.write(paramInt[1]);
 	    }
 
 	    out.write(runType.ordinal());
 	    reference.export(out);
 
-	    if (param3formF) {
-		param3form.export(out);
+	    //Param3
+	    if (script.getType(Param.Three) == ParamType.FormID) {
+		paramForm[2].export(out);
 	    } else {
-		out.write(param3int);
+		out.write(paramInt[2]);
 	    }
 	}
 
 	@Override
 	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    // First byte is both operator and flags, ugly.
+	    //Flags and Operator
 	    flags.set(in.extract(1));
 	    LFlags tmp = new LFlags(flags.export());
 	    for (int i = 3; i < 8; i++) {
@@ -126,6 +130,7 @@ public class Condition extends SubShell {
 	    operator = Operator.values()[Ln.arrayToInt(tmp.export())];
 	    fluff = in.extract(3);
 
+	    //Value
 	    if (get(CondFlag.UseGlobal)) {
 		// Use public set here, because for some reason, this FormID is flipped
 		comparisonValueForm.set(in.extract(4));
@@ -133,52 +138,56 @@ public class Condition extends SubShell {
 		comparisonValueFloat = in.extractFloat();
 	    }
 
-	    functionIndex = in.extractInt(2);
+	    //Function
+	    script = EmbeddedScripts.getScript(in.extractInt(2));
 	    padding = in.extract(2);
 
-	    EmbeddedScript function = EmbeddedScripts.getScript(functionIndex);
-	    param1formF = function.isForm(0);
-	    param2formF = function.isForm(1);
-	    param3formF = function.isForm(2);
-
-	    if (param1formF) {
-		param1form.setInternal(in.extract(4));
+	    //Param1
+	    if (script.getType(Param.One) == ParamType.FormID) {
+		paramForm[0] = new FormID();
+		paramForm[0].setInternal(in.extract(4));
 	    } else {
-		param1int = in.extractInt(4);
+		paramInt[0] = in.extractInt(4);
 	    }
 
-	    if (param2formF) {
-		param2form.setInternal(in.extract(4));
+	    //Param2
+	    if (script.getType(Param.Two) == ParamType.FormID) {
+		paramForm[1] = new FormID();
+		paramForm[1].setInternal(in.extract(4));
 	    } else {
-		param2int = in.extractInt(4);
+		paramInt[1] = in.extractInt(4);
 	    }
 
 	    runType = RunOnType.values()[in.extractInt(4)];
 	    reference.setInternal(in.extract(4));
 
-	    if (param3formF) {
-		param3form.setInternal(in.extract(4));
+	    //Param3
+	    if (script.getType(Param.Three) == ParamType.FormID) {
+		paramForm[2] = new FormID();
+		paramForm[2].setInternal(in.extract(4));
 	    } else {
-		param3int = in.extractInt(4);
+		paramInt[2] = in.extractInt(4);
 	    }
 
 	    if (SPGlobal.logging()) {
-		logSync("", "New Condition.  Function: " + function.toString() + ", index: " + functionIndex);
+		logSync("", "New Condition.  Function: " + script.toString() + ", index: " + script.ordinal());
 		logSync("", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(CondFlag.UseGlobal));
-		logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat + ", Param 1: " + param1form + "|" + param1int);
-		logSync("", "  Param 2: " + param2form + "|" + param2int + ", Param 3: " + param3form + "|" + param3int);
+		logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat + ", Param 1: " + paramForm[0] + "|" + paramInt[0]);
+		logSync("", "  Param 2: " + paramForm[1] + "|" + paramInt[1] + ", Param 3: " + paramForm[2] + "|" + paramInt[2]);
 		logSync("", "  Run Type:" + runType + ", Reference: " + reference);
 	    }
 	}
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(5);
+	    ArrayList<FormID> out = new ArrayList<>(5);
 	    out.add(comparisonValueForm);
-	    out.add(param1form);
-	    out.add(param2form);
 	    out.add(reference);
-	    out.add(param3form);
+	    for (int i = 0 ; i < paramForm.length ; i++) {
+		if (paramForm[i] != null) {
+		    out.add(paramForm[i]);
+		}
+	    }
 	    return out;
 	}
 
@@ -204,6 +213,13 @@ public class Condition extends SubShell {
 
     public void set(CondFlag flag, boolean on) {
 	cond.flags.set(flag.value, on);
+    }
+
+    public void setParam(Param param, FormID id) {
+    }
+
+    public ParamType getParamType(Param param) {
+	return cond.script.getType(param);
     }
 
     public enum CondFlag {
@@ -240,5 +256,18 @@ public class Condition extends SubShell {
 	GreaterThanOrEqual,
 	LessThan,
 	LessThanOrEqual;
+    }
+
+    public enum Param {
+	One,
+	Two,
+	Three;
+    }
+
+    public enum ParamType {
+	FormID,
+	Int,
+	String,
+	Axis;
     }
 }

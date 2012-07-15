@@ -1,0 +1,20 @@
+14,		GetActorValue,								FormID: Actor Value
+118,	GetActorAggroRadiusViolated,
+153,	CanHaveFlames,
+414,	Exists,										FormID: Reference
+458,	GetActorCrimePlayerEnemy,					
+497,	CanPayCrimeGold,							FormID: Faction
+500,	EPAlchemyGetMakingPoison,			
+501,	EPAlchemyEffectHasHeyword,					FormID: Keyword
+554,	GetActorsInHigh,
+640,	GetActorValuePercent,						FormID: Actor Value
+660,	EPTemperingItemHasKeyword,					FormID: Keyword
+680,	GetActivationHeight,
+681,	EPModSkillUsage_IsAdvanceSkill,				FormID: Actor Value
+691,	EPModSkillUsage_AdvanceObjectHasKeyword,	FormID: Keyword
+692,	EPModSkillUsage_IsAdvanceAction,			Int: Skill Action
+693,	EPMagic_SpellHasKeyword,					FormID: Keyword
+696,	EPMagic_SpellHasSkill,						FormID: Actor Value
+724,	EffectWasDualCast,							
+726,	DoesNotExist,
+731,	CanFlyHere,

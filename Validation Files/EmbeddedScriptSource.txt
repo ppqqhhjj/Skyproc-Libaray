@@ -104,12 +104,6 @@
 4189	ref.	StopLook	 
 4190	ref.	EvaluatePackage (evp)	 
 4191	 	SendAssaultAlarm	Actor, UNK:17:Faction
-4192	 	EnablePlayerControls (epc)	Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer
- 	9 optional (0/1) values. movement|fighting|pov|looking|sneaking|menu|activate|journal|POV Type ex: 1 0 0 1 0 0 0 0 0
-4193	 	DisablePlayerControls (dpc)	Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer
- 	9 optional (0/1) values. movement|fighting|pov|looking|sneaking|menu|activate|journal|POV Type ex: 1 0 0 1 0 0 0 0 0
-4194	 	GetPlayerControlsDisabled (gpc)	Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer
- 	8 optional (0/1) values. movement|fighting|pov|looking|sneaking|menu|activate|journal ex: 1 0 0 1 0 0 0 0
 4195	ref.	GetHeadingAngle	UNK:4:ObjectReferenceID
 4196	ref.	PickIdle	 
 4197	ref.	IsWeaponMagicOut	 
