@@ -312,7 +312,6 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUP grup = GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0]));
 	if (!grup.contains(m.getForm())) {
 	    grup.addRecord(m);
-	    mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	}
     }
 
@@ -531,6 +530,23 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return sum;
     }
 
+    public ArrayList<MajorRecord> getRecords () {
+	ArrayList<MajorRecord> out = new ArrayList<>();
+	for (GRUP g : GRUPs.values()) {
+	    out.addAll(g.getRecords());
+	}
+	return out;
+    }
+
+    public boolean contains (FormID id) {
+	for (GRUP g : GRUPs.values()) {
+	    if (g.contains(id)){
+		return true;
+	    }
+	}
+	return false;
+    }
+
     int getTotalLength() {
 	return getContentLength() + header.getTotalLength(this);
     }
@@ -597,12 +613,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPProgressBarPlug.progress.reset();
 	SPProgressBarPlug.progress.setMax(fullGRUPS, "Exporting " + srcMod);
 
-	// Confirm all formID references are added as
-	// masters, even if no actual major record from that
-	// mod was added.
-	for (FormID ID : srcMod.allFormIDs()) {
-	    if (!ID.equals(FormID.NULL)) {
-		this.addMaster(ID.getMaster());
+	// Add all mods that contained any of the FormIDs used.
+	ArrayList<FormID> allForms = srcMod.allFormIDs();
+	for (ModListing m : SPGlobal.getDB().getImportedMods()) {
+	    Mod mod = SPGlobal.getDB().getMod(m);
+	    for (FormID ID : allForms) {
+		if (mod.contains(ID)) {
+		    this.addMaster(mod.modInfo);
+		    break;
+		}
 	    }
 	}
 	standardizeMasters();
