@@ -244,6 +244,7 @@ public class LDebug {
      */
     public static void wrapUpAndExit() {
 	try {
+	    LDebug.on(false);
 	    wrapUp();
 	} catch (IOException ex) {
 	}
