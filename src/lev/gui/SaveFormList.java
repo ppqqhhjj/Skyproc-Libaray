@@ -13,7 +13,7 @@ import skyproc.FormID;
 class SaveFormList extends Setting<FormID[]> {
 
     static String delimiter = "<#>";
-    
+
     public SaveFormList(String title_, FormID[] data_, Boolean inGame) {
         super(title_, data_, inGame);
     }
@@ -38,7 +38,7 @@ class SaveFormList extends Setting<FormID[]> {
 
     @Override
     public Setting<FormID[]> copyOf() {
-        SaveFormList out = new SaveFormList(title, data, forGame);
+        SaveFormList out = new SaveFormList(title, data, patchChanging);
 	out.data = new FormID[data.length];
 	for (int i = 0 ; i < data.length ; i++) {
 	    out.data[i] = new FormID(data[i]);

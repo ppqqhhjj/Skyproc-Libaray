@@ -10,8 +10,8 @@ package lev.gui;
  */
 class SaveInt extends Setting<Integer> {
 
-    public SaveInt(String title_, Integer data_, Boolean oblivion_) {
-        super(title_, data_, oblivion_);
+    public SaveInt(String title_, Integer data_, Boolean patchChanging) {
+        super(title_, data_, patchChanging);
     }
 
     @Override
@@ -26,7 +26,7 @@ class SaveInt extends Setting<Integer> {
 
     @Override
     public Setting<Integer> copyOf() {
-        SaveInt out = new SaveInt(title, data, forGame);
+        SaveInt out = new SaveInt(title, data, patchChanging);
         out.tie = tie;
         return out;
     }

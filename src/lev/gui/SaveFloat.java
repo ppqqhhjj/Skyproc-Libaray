@@ -10,8 +10,8 @@ package lev.gui;
  */
 class SaveFloat extends Setting<Float> {
 
-    public SaveFloat(String title_, Float data_, Boolean inGame) {
-        super(title_, data_, inGame);
+    public SaveFloat(String title_, Float data_, Boolean patchChanging) {
+        super(title_, data_, patchChanging);
     }
 
     @Override
@@ -26,7 +26,7 @@ class SaveFloat extends Setting<Float> {
 
     @Override
     public Setting<Float> copyOf() {
-        SaveFloat out = new SaveFloat(title, data, forGame);
+        SaveFloat out = new SaveFloat(title, data, patchChanging);
         out.tie = tie;
         return out;
     }

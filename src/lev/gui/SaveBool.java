@@ -12,8 +12,8 @@ import lev.Ln;
  */
 class SaveBool extends Setting<Boolean> {
 
-    public SaveBool(String title_, Boolean data_, Boolean in_game) {
-        super(title_, data_, in_game);
+    public SaveBool(String title_, Boolean data_, Boolean patchChanging) {
+        super(title_, data_, patchChanging);
     }
 
     @Override
@@ -28,7 +28,7 @@ class SaveBool extends Setting<Boolean> {
 
     @Override
     public Setting<Boolean> copyOf() {
-        SaveBool out = new SaveBool(title, data, forGame);
+        SaveBool out = new SaveBool(title, data, patchChanging);
         out.tie = tie;
         return out;
     }

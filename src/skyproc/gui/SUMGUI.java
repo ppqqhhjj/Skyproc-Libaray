@@ -81,7 +81,7 @@ public class SUMGUI extends JFrame {
     static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
     static LImagePane backgroundPanel;
     static LLabel patchNeededLabel;
-    static boolean needsPatching = true;
+    static boolean needsPatching = false;
     static LCheckBox forcePatch;
     static LImagePane skyProcLogo;
     static JTextArea statusUpdate;
@@ -278,7 +278,7 @@ public class SUMGUI extends JFrame {
 
     static void imported() {
 	SPProgressBarPlug.progress.setStatus("Done importing.");
-	setPatchNeeded(needsPatching());
+	setPatchNeeded(testNeedsPatching(true));
     }
 
     public static void setPatchNeeded(boolean on) {
@@ -292,7 +292,7 @@ public class SUMGUI extends JFrame {
 
     static boolean needsImporting() {
 
-	if (forcePatch.isSelected() || needsPatching) {
+	if (forcePatch.isSelected() || needsPatching || testNeedsPatching(false)) {
 	    return true;
 	}
 	try {
@@ -303,6 +303,7 @@ public class SUMGUI extends JFrame {
 
 	    ArrayList<String> oldList = Ln.loadFileToStrings(f, true);
 	    ArrayList<ModListing> curList = new ArrayList<>(SPImporter.getActiveModList());
+	    curList.remove(hook.getListing());
 	    ArrayList<ModListing> curListTmp = new ArrayList<>(curList);
 
 	    if (curList.size() != oldList.size()) {
@@ -326,81 +327,90 @@ public class SUMGUI extends JFrame {
 	return true;
     }
 
-    static boolean needsPatching() {
-
-	try {
-	    // Compile old and new Master lists
-	    File f = new File(pathToLastMasterlist);
-	    if (!f.isFile()) {
+    static boolean testNeedsPatching(boolean imported) {
+	if (hook.hasSave()) {
+	    if (hook.getSave().needsPatch()) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.logMain(header, "Patch needed because old master list file could not be found.");
+		    SPGlobal.logMain(header, "Patch needed because an important setting changed.");
 		}
 		return true;
 	    }
-	    ArrayList<String> oldMasterList = Ln.loadFileToStrings(pathToLastMasterlist, true);
+	}
+	if (imported) {
+	    try {
+		// Compile old and new Master lists
+		File f = new File(pathToLastMasterlist);
+		if (!f.isFile()) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Patch needed because old master list file could not be found.");
+		    }
+		    return true;
+		}
+		ArrayList<String> oldMasterList = Ln.loadFileToStrings(pathToLastMasterlist, true);
 
-	    SPDatabase db = SPGlobal.getDB();
-	    ArrayList<String> curImportedMods = new ArrayList<>();
-	    for (ModListing m : db.getImportedMods()) {
-		curImportedMods.add(m.print().toUpperCase());
-	    }
-	    curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
+		SPDatabase db = SPGlobal.getDB();
+		ArrayList<String> curImportedMods = new ArrayList<>();
+		for (ModListing m : db.getImportedMods()) {
+		    curImportedMods.add(m.print().toUpperCase());
+		}
+		curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
 
-	    //Remove matching master mods, must be in order
-	    ArrayList<String> curImportedModsTmp = new ArrayList<>(curImportedMods);
-	    for (int i = 0; i < curImportedModsTmp.size(); i++) {
-		String curName = curImportedModsTmp.get(i);
-		if (oldMasterList.contains(curName)) {
-		    for (int j = 0; j < oldMasterList.size(); j++) {
-			if (oldMasterList.get(j).equalsIgnoreCase(curName)) {
-			    oldMasterList.remove(curName);
-			    curImportedMods.remove(curName);
-			    break;
-			} else if (curImportedModsTmp.contains(oldMasterList.get(j))) {
-			    //Matching mods out of order, need to patch
+		//Remove matching master mods, must be in order
+		ArrayList<String> curImportedModsTmp = new ArrayList<>(curImportedMods);
+		for (int i = 0; i < curImportedModsTmp.size(); i++) {
+		    String curName = curImportedModsTmp.get(i);
+		    if (oldMasterList.contains(curName)) {
+			for (int j = 0; j < oldMasterList.size(); j++) {
+			    if (oldMasterList.get(j).equalsIgnoreCase(curName)) {
+				oldMasterList.remove(curName);
+				curImportedMods.remove(curName);
+				break;
+			    } else if (curImportedModsTmp.contains(oldMasterList.get(j))) {
+				//Matching mods out of order, need to patch
+				if (SPGlobal.logging()) {
+				    SPGlobal.logMain(header, "Patch needed because masters from before were in a different order.");
+				}
+				return true;
+			    }
+			}
+		    }
+		}
+
+		//If old masters are missing, need patch
+		if (!oldMasterList.isEmpty()) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Patch needed because old masters are missing.");
+		    }
+		    return true;
+		}
+
+		//Remove mods that were imported last time
+		ArrayList<String> oldModList = Ln.loadFileToStrings(pathToLastModlist, true);
+		for (String s : oldModList) {
+		    curImportedMods.remove(s);
+		}
+
+		//Check new mods for any records patcher is interested in.  If found, need patch.
+		for (String curString : curImportedMods) {
+		    Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
+		    ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
+		    for (GRUP_TYPE g : hook.importRequests()) {
+			if (contained.contains(g)) {
 			    if (SPGlobal.logging()) {
-				SPGlobal.logMain(header, "Patch needed because masters from before were in a different order.");
+				SPGlobal.logMain(header, "Patch needed because a new mod had records patch might be interested in.");
 			    }
 			    return true;
 			}
 		    }
 		}
-	    }
 
-	    //If old masters are missing, need patch
-	    if (!oldMasterList.isEmpty()) {
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
 		if (SPGlobal.logging()) {
-		    SPGlobal.logMain(header, "Patch needed because old masters are missing.");
+		    SPGlobal.logMain(header, "Patch needed because exception was thrown in patch sensing code.");
 		}
 		return true;
 	    }
-
-	    //Remove mods that were imported last time
-	    ArrayList<String> oldModList = Ln.loadFileToStrings(pathToLastModlist, true);
-	    for (String s : oldModList) {
-		curImportedMods.remove(s);
-	    }
-
-	    //Check new mods for any records patcher is interested in.  If found, need patch.
-	    for (String curString : curImportedMods) {
-		Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
-		ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
-		for (GRUP_TYPE g : hook.importRequests()) {
-		    if (contained.contains(g)) {
-			if (SPGlobal.logging()) {
-			    SPGlobal.logMain(header, "Patch needed because a new mod had records patch might be interested in.");
-			}
-			return true;
-		    }
-		}
-	    }
-
-	} catch (IOException ex) {
-	    SPGlobal.logException(ex);
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMain(header, "Patch needed because exception was thrown in patch sensing code.");
-	    }
-	    return true;
 	}
 
 	//Don't need a patch, check for custom hook coding

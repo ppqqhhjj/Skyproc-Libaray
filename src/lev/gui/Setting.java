@@ -5,6 +5,7 @@
 package lev.gui;
 
 import java.io.BufferedWriter;
+import java.util.Objects;
 import skyproc.exceptions.BadParameter;
 
 /**
@@ -17,18 +18,18 @@ public abstract class Setting<T> {
     T data;
     String title;
     LUserSetting<T> tie;
-    Boolean forGame;
+    Boolean patchChanging;
 
     /**
      *
      * @param title_
      * @param data_
-     * @param in_game
+     * @param patchChanging
      */
-    public Setting(String title_, T data_, Boolean in_game) {
+    public Setting(String title_, T data_, Boolean patchChanging) {
         title = title_;
         data = data_;
-        forGame = in_game;
+        this.patchChanging = patchChanging;
     }
 
     /**
@@ -113,7 +114,7 @@ public abstract class Setting<T> {
     }
 
     /**
-     * 
+     *
      * @param in
      * @throws BadParameter
      */
@@ -132,5 +133,35 @@ public abstract class Setting<T> {
      * @return
      */
     public abstract Setting<T> copyOf ();
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final Setting<T> other = (Setting<T>) obj;
+	if (!Objects.equals(this.data, other.data)) {
+	    return false;
+	}
+	if (!Objects.equals(this.title, other.title)) {
+	    return false;
+	}
+	if (!Objects.equals(this.patchChanging, other.patchChanging)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 5;
+	hash = 73 * hash + Objects.hashCode(this.data);
+	hash = 73 * hash + Objects.hashCode(this.title);
+	hash = 73 * hash + Objects.hashCode(this.patchChanging);
+	return hash;
+    }
 
 }

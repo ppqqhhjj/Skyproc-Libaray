@@ -175,8 +175,8 @@ public abstract class LSaveFile {
      * read in by Skyrim.
      * @param b Default value to assign the setting.
      */
-    protected void Add(Enum type, Boolean inGame, Boolean b) {
-	Add(type, new SaveBool(type.toString(), b, inGame));
+    protected void Add(Enum type, Boolean b, boolean patchChanging) {
+	Add(type, new SaveBool(type.toString(), b, patchChanging));
     }
 
     /**
@@ -187,8 +187,8 @@ public abstract class LSaveFile {
      * read in by Skyrim.
      * @param s Default value to assign the setting.
      */
-    protected void Add(Enum type, Boolean inGame, String s) {
-	Add(type, new SaveString(type.toString(), s, inGame));
+    protected void Add(Enum type, String s, boolean patchChanging) {
+	Add(type, new SaveString(type.toString(), s, patchChanging));
     }
 
     /**
@@ -199,8 +199,8 @@ public abstract class LSaveFile {
      * read in by Skyrim.
      * @param i Default value to assign the setting.
      */
-    protected void Add(Enum type, Boolean inGame, Integer i) {
-	Add(type, new SaveInt(type.toString(), i, inGame));
+    protected void Add(Enum type, Integer i, boolean patchChanging) {
+	Add(type, new SaveInt(type.toString(), i, patchChanging));
     }
 
     /**
@@ -211,8 +211,8 @@ public abstract class LSaveFile {
      * read in by Skyrim.
      * @param f Default value to assign the setting.
      */
-    protected void Add(Enum type, Boolean inGame, Float f) {
-	Add(type, new SaveFloat(type.toString(), f, inGame));
+    protected void Add(Enum type, Float f, boolean patchChanging) {
+	Add(type, new SaveFloat(type.toString(), f, patchChanging));
     }
 
     /**
@@ -321,6 +321,30 @@ public abstract class LSaveFile {
     void revertTo(Map<Enum, Setting> in, LUserSetting s) {
 	s.revertTo(in);
 	copyTo(in, tempCurSettings);
+    }
+
+    public boolean needsPatch() {
+	ArrayList<Setting> modified = getModifiedSettings();
+	for (Setting s : modified) {
+	    if (s.patchChanging) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public ArrayList<Setting> getModifiedSettings () {
+	return getDiff(saveSettings, curSettings);
+    }
+
+    public ArrayList<Setting> getDiff (Map<Enum, Setting> lhs, Map<Enum, Setting> rhs) {
+	ArrayList<Setting> out = new ArrayList<>();
+	for (Enum e : lhs.keySet()) {
+	    if (!lhs.get(e).equals(rhs.get(e))) {
+		out.add(rhs.get(e));
+	    }
+	}
+	return out;
     }
 
     /**
