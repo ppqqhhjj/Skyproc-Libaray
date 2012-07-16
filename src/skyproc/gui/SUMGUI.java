@@ -17,8 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
@@ -90,6 +88,7 @@ public class SUMGUI extends JFrame {
     static Font SUMFont = new Font("SansSerif", Font.PLAIN, 10);
     static String pathToLastMasterlist = SPGlobal.pathToInternalFiles + "Last Masterlist.txt";
     static String pathToLastModlist = SPGlobal.pathToInternalFiles + "Last Modlist.txt";
+    static File crashFile = new File(SPGlobal.pathToInternalFiles + "Last Crash State.txt");
 
     SUMGUI() {
 	super(hook.getName());
@@ -222,6 +221,10 @@ public class SUMGUI extends JFrame {
 
 	    SPProgressBarPlug.progress = new SUMProgress();
 
+	    if (crashFile.exists()) {
+		setPatchNeeded(true);
+	    }
+
 	    setVisible(true);
 
 	} catch (IOException ex) {
@@ -292,7 +295,8 @@ public class SUMGUI extends JFrame {
 
     static boolean needsImporting() {
 
-	if (forcePatch.isSelected() || needsPatching || testNeedsPatching(false)) {
+	if (forcePatch.isSelected() || testNeedsPatching(false)) {
+	    setPatchNeeded(true);
 	    return true;
 	}
 	try {
@@ -328,6 +332,10 @@ public class SUMGUI extends JFrame {
     }
 
     static boolean testNeedsPatching(boolean imported) {
+	if (needsPatching) {
+	    return true;
+	}
+	// Check if savefile has important settings changed
 	if (hook.hasSave()) {
 	    if (hook.getSave().needsPatch()) {
 		if (SPGlobal.logging()) {
@@ -336,6 +344,14 @@ public class SUMGUI extends JFrame {
 		return true;
 	    }
 	}
+	// Check if crashed earlier while needing to patch
+	if (crashFile.isFile()) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch needed because it closed prematurely earlier while needing to patch.");
+	    }
+	    return true;
+	}
+	// If imported, check master lists
 	if (imported) {
 	    try {
 		// Compile old and new Master lists
@@ -450,6 +466,17 @@ public class SUMGUI extends JFrame {
 		SPGlobal.getDB().exportModList(pathToLastModlist);
 	    } catch (IOException ex) {
 		SPGlobal.logException(ex);
+	    }
+	    if (crashFile.isFile()) {
+		crashFile.delete();
+	    }
+	} else if (needsPatching) {
+	    try {
+		BufferedWriter out = new BufferedWriter(new FileWriter(crashFile));
+		out.write("Closed prematurely while needing to patch");
+		out.close();
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
 	    }
 	}
 	try {
