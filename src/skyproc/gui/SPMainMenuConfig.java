@@ -14,12 +14,16 @@ import lev.gui.LSaveFile;
 
 /**
  * An main menu GUI component that is used in SUMGUI.
+ *
  * @author Justin Swanson
  */
 public class SPMainMenuConfig extends LCheckBoxConfig {
 
+    static int size = 20;
+
     /**
      * Creates a main menu GUI line tied to a savefile.
+     *
      * @param title_ Text to display
      * @param checkbox Whether to include a checkbox
      * @param color Color to display
@@ -27,9 +31,8 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
      * @param saveFile Savefile to tie to
      * @param setting Setting to tie to
      */
-    public SPMainMenuConfig(String title_, boolean checkbox, Color color, Point location, LSaveFile saveFile, Enum setting) {
-	super(title_);
-	boolean large = true;
+    public SPMainMenuConfig(LLabel title_, boolean checkbox, Color color, Point location, LSaveFile saveFile, Enum setting) {
+	super(title_.getText());
 	boolean saveField = saveFile != null && setting != null && checkbox;
 
 	help = SUMGUI.helpPanel;
@@ -39,35 +42,23 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	    setHelpInfo(saveTie, save);
 	}
 
-	int size;
-	if (large) {
-	    size = 20;
-	} else {
-	    size = 16;
-	}
-
 	button = new LButton(buttonText);
 	button.addActionListener(new UpdateHelpActionHandler());
 
+	Font font = title_.getFont().deriveFont(Font.PLAIN, size);
+
 	if (saveField) {
-	    cbox = new LSpecialCheckBox(title, new Font("Serif", Font.PLAIN, size), color, this);
+	    cbox = new LSpecialCheckBox(title, font, color, this);
 	    cbox.setOffset(5);
 	    cbox.tie(setting, save, help, false);
 	    cbox.setFocusable(false);
 	    button.setLocation(new Point(cbox.getWidth() + spacing, 0));
 	} else {
-	    titleLabel = new LLabel(title, new Font("Serif", Font.PLAIN, size), color);
+	    titleLabel = new LLabel(title, font, color);
 	    button.setLocation(new Point(titleLabel.getWidth() + spacing, 0));
 	}
 
-	if (!large) {
-	    if (saveField) {
-		cbox.setOffset(2);
-	    }
-	    button.setLocation(button.getX(), button.getY() + 1);
-	} else {
-	    button.setLocation(button.getX(), button.getY() + 4);
-	}
+	button.setLocation(button.getX(), button.getY() + 4);
 
 	add(button);
 	if (saveField) {
@@ -81,13 +72,4 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	}
     }
 
-    /**
-     * Creates a main menu GUI line
-     * @param title_ Text to display
-     * @param color Color to display
-     * @param location Location to place the component
-     */
-    public SPMainMenuConfig(String title_, Color color, Point location) {
-	this(title_, false, color, location, null, null);
-    }
 }

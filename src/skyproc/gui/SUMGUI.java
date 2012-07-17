@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,7 +86,7 @@ public class SUMGUI extends JFrame {
     static JTextArea statusUpdate;
     static LLabel versionNum;
     static LButton cancelPatch;
-    static Font SUMFont = new Font("SansSerif", Font.PLAIN, 10);
+    static Font SUMSmallFont = new Font("SansSerif", Font.PLAIN, 10);
     static String pathToLastMasterlist = SPGlobal.pathToInternalFiles + "Last Masterlist.txt";
     static String pathToLastModlist = SPGlobal.pathToInternalFiles + "Last Modlist.txt";
     static File crashFile = new File(SPGlobal.pathToInternalFiles + "Last Crash State.txt");
@@ -154,12 +155,12 @@ public class SUMGUI extends JFrame {
 	    });
 	    backgroundPanel.add(cancelPatch);
 
-	    forcePatch = new LCheckBox("Force Patch on Exit", SUMFont, Color.GRAY);
+	    forcePatch = new LCheckBox("Force Patch on Exit", SUMSmallFont, Color.GRAY);
 	    forcePatch.setLocation(rightDimensions.x + 10, cancelPatch.getY() + cancelPatch.getHeight() / 2 - forcePatch.getHeight() / 2);
 	    forcePatch.setOffset(-4);
 	    backgroundPanel.add(forcePatch);
 
-	    patchNeededLabel = new LLabel("A patch will be generated upon exit.", SUMFont, Color.GRAY);
+	    patchNeededLabel = new LLabel("A patch will be generated upon exit.", SUMSmallFont, Color.GRAY);
 	    patchNeededLabel.setLocation(forcePatch.getLocation());
 	    patchNeededLabel.setVisible(false);
 	    backgroundPanel.add(patchNeededLabel);
@@ -291,6 +292,14 @@ public class SUMGUI extends JFrame {
 	}
 	patchNeededLabel.setVisible(on);
 	forcePatch.setVisible(!on);
+    }
+
+    static void setBackgroundPicture (URL backgroundPicture) {
+	try {
+	    backgroundPanel.setImage(backgroundPicture);
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
+	}
     }
 
     static boolean needsImporting() {

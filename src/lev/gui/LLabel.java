@@ -22,7 +22,7 @@ public class LLabel extends LComponent {
     int shadowSpacing = 2;
 
     /**
-     * 
+     *
      * @param text
      * @param font
      * @param c
@@ -39,7 +39,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * Adds three copies of the primary label that are black and placed to 
+     * Adds three copies of the primary label that are black and placed to
      * mimic a shadow behind the primary label.
      */
     public void addShadow() {
@@ -66,7 +66,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getText () {
@@ -74,7 +74,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * 
+     *
      * @param input
      */
     public void setText (String input) {
@@ -92,7 +92,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * 
+     *
      * @param c
      */
     public void setFontColor (Color c) {
@@ -100,7 +100,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -112,7 +112,7 @@ public class LLabel extends LComponent {
     }
 
     /**
-     * 
+     *
      * @param c
      */
     @Override
@@ -121,5 +121,19 @@ public class LLabel extends LComponent {
         mainText.repaint();
     }
 
+    @Override
+    public Font getFont() {
+	return mainText.getFont();
+    }
+
+    @Override
+    public void setFont(Font font) {
+	mainText.setFont(font);
+	if (shadow != null) {
+	    shadow.setFont(font);
+	    shadow2.setFont(font);
+	    shadow3.setFont(font);
+	}
+    }
 
 }

@@ -6,6 +6,7 @@ package skyproc.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,6 +18,7 @@ import lev.gui.LImagePane;
 import lev.gui.LLabel;
 import lev.gui.LPanel;
 import lev.gui.LSaveFile;
+import lev.gui.resources.LFonts;
 import skyproc.SPGlobal;
 
 /**
@@ -105,7 +107,7 @@ public class SPMainMenuPanel extends JPanel {
      * @return The main menu GUI component
      */
     public SPMainMenuConfig addMenu(SPSettingPanel panel, boolean checkBoxPresent, LSaveFile save, Enum setting) {
-	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header.getText(), checkBoxPresent, color, new Point(xPlacement, yPlacement), save, setting);
+	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header, checkBoxPresent, color, new Point(xPlacement, yPlacement), save, setting);
 	yPlacement += spacing;
 	menuConfig.addActionListener(panel.getOpenHandler());
 	menuPanel.add(menuConfig);
@@ -171,6 +173,25 @@ public class SPMainMenuPanel extends JPanel {
 		public void mouseExited(MouseEvent e) {
 		}
 	    });
+	}
+    }
+
+    public void setBackgroundPicture(URL backgroundPicture) {
+	SUMGUI.setBackgroundPicture(backgroundPicture);
+    }
+
+    public void setMainFont(Font font, int helpSize, int headerSize, int menuSize) {
+	SUMGUI.helpPanel.setHeaderFont(font.deriveFont(Font.PLAIN, helpSize));
+	SPSettingPanel.font = font.deriveFont(Font.PLAIN, headerSize);
+	SPMainMenuConfig.size = menuSize;
+    }
+
+    public void setMainFont(URL fontURL, int helpSize, int headerSize, int menuSize) {
+	try {
+	    Font font = Font.createFont(Font.TRUETYPE_FONT, fontURL.openStream());
+	    setMainFont(font, helpSize, headerSize, menuSize);
+	} catch (IOException | FontFormatException ex) {
+	    SPGlobal.logException(ex);
 	}
     }
 

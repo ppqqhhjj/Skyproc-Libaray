@@ -68,6 +68,8 @@ public abstract class SPSettingPanel extends LPanel {
      */
     protected boolean initialized = false;
 
+    static Font font = new Font("Serif", Font.BOLD, 25);
+
     /**
      *
      * @param title
@@ -77,7 +79,7 @@ public abstract class SPSettingPanel extends LPanel {
     public SPSettingPanel(String title, SPMainMenuPanel parent_, Color headerColor) {
 	super(SUMGUI.fullDimensions);
 	parent = parent_;
-	header = new LLabel(title, new Font("Serif", Font.BOLD, 26), headerColor);
+	header = new LLabel(title, font, headerColor);
     }
 
     /**
@@ -282,6 +284,7 @@ public abstract class SPSettingPanel extends LPanel {
     public void open() {
 	parent.open();
 	initialize();
+	SUMGUI.helpPanel.reset();
 	parent.openPanel(this);
 	specialOpen(parent);
 	parent.revalidate();

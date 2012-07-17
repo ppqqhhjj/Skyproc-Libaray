@@ -111,7 +111,7 @@ public class LHelpPanel extends LPanel {
     }
 
     /**
-     * 
+     *
      * @param y_
      */
     public void setTitleHeight(int y_) {
@@ -230,5 +230,12 @@ public class LHelpPanel extends LPanel {
      */
     public Dimension getBottomSize() {
 	return bottomArea.getSize();
+    }
+
+    public void reset (){
+	clearBottomArea();
+	setTitle("");
+	setContent("");
+	hideArrow();
     }
 }
