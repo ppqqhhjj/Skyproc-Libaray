@@ -7,13 +7,12 @@ package skyproc.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import lev.gui.LImagePane;
 import lev.gui.LLabel;
 import lev.gui.LPanel;
@@ -37,9 +36,8 @@ public class SPMainMenuPanel extends JPanel {
      * Reference to the left column main menu panel.
      */
     protected LPanel menuPanel = new LPanel(SUMGUI.leftDimensions);
-    Close closeHandler = new Close();
-    Open openHandler = new Open();
     ArrayList<SPSettingPanel> panels = new ArrayList<SPSettingPanel>();
+    SPSettingPanel welcome = null;
     SPSettingPanel activePanel;
 
     /**
@@ -73,6 +71,7 @@ public class SPMainMenuPanel extends JPanel {
 	    customLogo.setMaxSize(SUMGUI.leftDimensions.width, height);
 	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 0);
 	    menuPanel.Add(customLogo);
+	    tieWelcomeAndLogo();
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
 	}
@@ -100,7 +99,7 @@ public class SPMainMenuPanel extends JPanel {
     /**
      * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
      * @param panel Panel to add to the main menu
-     * @param checkBoxPresent 
+     * @param checkBoxPresent
      * @param save Save to tie to.
      * @param setting Setting to tie to.
      * @return The main menu GUI component
@@ -141,8 +140,38 @@ public class SPMainMenuPanel extends JPanel {
 	activePanel.setVisible(true);
     }
 
-    ActionListener getOpenHandler() {
-	return openHandler;
+    public void setWelcomePanel (SPSettingPanel panel) {
+	welcome = panel;
+	welcome.open();
+	tieWelcomeAndLogo();
+    }
+
+    void tieWelcomeAndLogo () {
+	if (welcome != null && customLogo != null) {
+	    customLogo.addMouseListener(new MouseListener(){
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		    welcome.open();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+	    });
+	}
     }
 
     void open() {
@@ -150,40 +179,4 @@ public class SPMainMenuPanel extends JPanel {
 	repaint();
     }
 
-    void close() {
-	SwingUtilities.invokeLater(
-		new Runnable() {
-
-		    @Override
-		    public void run() {
-			setVisible(false);
-//                        if (openMainMenu != null)
-//                            openMainMenu.fire();
-		    }
-		});
-
-    }
-
-    class Close implements ActionListener {
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-	    close();
-	}
-    }
-
-    class Open implements ActionListener {
-
-	@Override
-	public void actionPerformed(ActionEvent event) {
-	    SwingUtilities.invokeLater(
-		    new Runnable() {
-
-			@Override
-			public void run() {
-			    open();
-			}
-		    });
-	}
-    }
 }
