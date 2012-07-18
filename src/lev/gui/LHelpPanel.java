@@ -237,5 +237,6 @@ public class LHelpPanel extends LPanel {
 	setTitle("");
 	setContent("");
 	hideArrow();
+	repaint();
     }
 }

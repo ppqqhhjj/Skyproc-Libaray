@@ -1481,4 +1481,10 @@ public class Ln {
     public static ArrayList<String> loadFileToStrings(String path, boolean toUpper) throws IOException {
 	return loadFileToStrings(new File(path), toUpper);
     }
+
+    public static void toUpper (ArrayList<String> in) {
+	for (int i = 0 ; i < in.size() ; i++) {
+	    in.set(i, in.get(i).toUpperCase());
+	}
+    }
 }

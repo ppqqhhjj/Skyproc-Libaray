@@ -7,6 +7,7 @@ package lev.gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +16,7 @@ import javax.swing.JPanel;
 
 /**
  * A customized JPanel that has a background image.
+ *
  * @author Justin Swanson
  */
 public class LImagePane extends JPanel {
@@ -22,12 +24,13 @@ public class LImagePane extends JPanel {
     private BufferedImage img;
     int IMG_WIDTH = 0;
     int IMG_HEIGHT = 0;
+    boolean allowAlpha = true;
 
     /**
      * Creates an image pane with no set image.
      */
     public LImagePane() {
-        setLayout(null);
+	setLayout(null);
 	setOpaque(false);
     }
 
@@ -37,8 +40,8 @@ public class LImagePane extends JPanel {
      * @throws IOException
      */
     public LImagePane(File img) throws IOException {
-        this();
-        setImage(ImageIO.read(img));
+	this();
+	setImage(ImageIO.read(img));
     }
 
     /**
@@ -47,8 +50,8 @@ public class LImagePane extends JPanel {
      * @throws IOException
      */
     public LImagePane(String img) throws IOException {
-        this();
-        setImage(ImageIO.read(new File(img)));
+	this();
+	setImage(ImageIO.read(new File(img)));
     }
 
     /**
@@ -56,8 +59,8 @@ public class LImagePane extends JPanel {
      * @param img
      */
     public LImagePane(BufferedImage img) {
-        this();
-        setImage(img);
+	this();
+	setImage(img);
     }
 
     /**
@@ -66,8 +69,8 @@ public class LImagePane extends JPanel {
      * @throws IOException
      */
     public LImagePane(URL url) throws IOException {
-        this();
-        setImage(url);
+	this();
+	setImage(url);
     }
 
     /**
@@ -78,18 +81,22 @@ public class LImagePane extends JPanel {
 	if (originalImage == null) {
 	    return;
 	}
-        if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
-            img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
-        } else {
-            img = originalImage;
-        }
-        Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-        setPreferredSize(size);
-        setMinimumSize(size);
-        setMaximumSize(size);
-        setSize(size);
-        revalidate();
-	repaint();
+	if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
+	    img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
+	} else {
+	    img = originalImage;
+	}
+	Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+	setPreferredSize(size);
+	setMinimumSize(size);
+	setMaximumSize(size);
+	setSize(size);
+	if (!allowAlpha) {
+	    removeAlpha();
+	} else {
+	    revalidate();
+	    repaint();
+	}
     }
 
     /**
@@ -98,7 +105,7 @@ public class LImagePane extends JPanel {
      * @throws IOException
      */
     final public void setImage(File in) throws IOException {
-        setImage(ImageIO.read(in));
+	setImage(ImageIO.read(in));
     }
 
     /**
@@ -116,9 +123,9 @@ public class LImagePane extends JPanel {
      * @param y
      */
     public void setMaxSize(int x, int y) {
-        IMG_WIDTH = x;
-        IMG_HEIGHT = y;
-        setImage(img);
+	IMG_WIDTH = x;
+	IMG_HEIGHT = y;
+	setImage(img);
     }
 
     Dimension calcSize(double x, double y) {
@@ -142,8 +149,22 @@ public class LImagePane extends JPanel {
      */
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img, 0, 0, null);
+	g.drawImage(img, 0, 0, null);
     }
 
+    public void allowAlpha(Boolean on) {
+	allowAlpha = on;
+    }
 
+    public void removeAlpha() {
+	RescaleOp op = new RescaleOp(new float[]{1.0f, 1.0f, 1.0f, /*
+		     * alpha scaleFactor
+		     */ 1.0f},
+		new float[]{0f, 0f, 0f, /*
+		     * alpha offset
+		     */ 256.0f}, null);
+	img = op.filter(img, null);
+	revalidate();
+	repaint();
+    }
 }
