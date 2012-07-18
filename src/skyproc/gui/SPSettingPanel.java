@@ -24,16 +24,6 @@ import lev.gui.*;
 public abstract class SPSettingPanel extends LPanel {
 
     /**
-     * Button at the bottom center column that will iterate over each item
-     * in the settings list and revert them to the default settings of the savefile field.
-     */
-    protected LButton defaults = new LButton("Set to Default");
-    /**
-     * Button at the bottom center column that will iterate over each item
-     * in the settings list and revert them to the last saved settings of the savefile field.
-     */
-    protected LButton save = new LButton("Revert to Saved");
-    /**
      * Reference to the Main Menu parent GUI object
      */
     protected SPMainMenuPanel parent;
@@ -42,7 +32,8 @@ public abstract class SPSettingPanel extends LPanel {
      */
     protected int spacing = 12;
     /**
-     * Reference to the position of the last-added setting or component added using Add() or AddSetting()
+     * Reference to the position of the last-added setting or component added
+     * using Add() or AddSetting()
      */
     protected Point last;
     /**
@@ -64,10 +55,10 @@ public abstract class SPSettingPanel extends LPanel {
      */
     protected LSaveFile saveFile;
     /**
-     * Flag to symbolize Panel has been initialized and the components have been created and added.
+     * Flag to symbolize Panel has been initialized and the components have been
+     * created and added.
      */
     protected boolean initialized = false;
-
     static Font font = new Font("Serif", Font.BOLD, 25);
 
     /**
@@ -76,7 +67,7 @@ public abstract class SPSettingPanel extends LPanel {
      * @param parent_
      * @param headerColor
      */
-    public SPSettingPanel(String title, SPMainMenuPanel parent_, Color headerColor) {
+    public SPSettingPanel(SPMainMenuPanel parent_, String title, Color headerColor) {
 	super(SUMGUI.fullDimensions);
 	parent = parent_;
 	header = new LLabel(title, font, headerColor);
@@ -89,144 +80,54 @@ public abstract class SPSettingPanel extends LPanel {
      * @param headerColor
      * @param saveFile_
      */
-    public SPSettingPanel(String title, SPMainMenuPanel parent_, Color headerColor, LSaveFile saveFile_) {
-	this(title, parent_, headerColor);
+    public SPSettingPanel(SPMainMenuPanel parent_, String title, Color headerColor, LSaveFile saveFile_) {
+	this(parent_, title, headerColor);
 	saveFile = saveFile_;
     }
 
     /**
-     * Function that creates all components and adds them to the GUI using
-     * Add() or AddSetting().<br><br>
-     * It should look like this:<br>
-     * <i>if (super.initialize()) {<br>
-     * <br>
-     *    //... Your initializing code ...<br>
-     * <br>
-     *    return true;<br>
-     * } else {<br>
-     *    return false;<br>
-     * }<br>
+     * Function that creates all components and adds them to the GUI using Add()
+     * or AddSetting().<br><br> It should look like this:<br> <i>if
+     * (super.initialize()) {<br> <br> //... Your initializing code ...<br> <br>
+     * return true;<br> } else {<br> return false;<br> }<br>
      *
-     * @return Whether the GUI was just initialized.  False if it has already been.
+     * @return Whether the GUI was just initialized. False if it has already
+     * been.
      */
-    public boolean initialize() {
-	if (!initialized) {
-	    settingsPanel = new LPanel(SUMGUI.middleDimensions);
+    public void initialize() {
+	settingsPanel = new LPanel(SUMGUI.middleDimensions);
+	settingsPanel.add(header);
+	add(settingsPanel);
 
-	    setVisible(true);
-	    int spacing = (settingsPanel.getWidth() - defaults.getWidth() - save.getWidth()) / 3;
+	header.addShadow();
+	header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 15);
 
-	    defaults.setLocation(spacing, settingsPanel.getHeight() - defaults.getHeight() - 15);
-	    defaults.addActionListener(new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-		    if (saveFile != null) {
-			for (LUserSetting s : settings) {
-			    saveFile.revertToDefault(s);
-			}
-			update();
-		    }
-		}
-	    });
-	    defaults.addMouseListener(new MouseListener() {
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		    if (saveFile != null) {
-			saveFile.peekDefaults();
-			update();
-		    }
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-		    if (saveFile != null) {
-			saveFile.clearPeek();
-			update();
-		    }
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-	    });
-
-	    save.setLocation(defaults.getX() + spacing + defaults.getWidth(), defaults.getY());
-	    save.addMouseListener(new MouseListener() {
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		    if (saveFile != null) {
-			saveFile.peekSaved();
-			update();
-		    }
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-		    if (saveFile != null) {
-			saveFile.clearPeek();
-			update();
-		    }
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-	    });
-	    save.addActionListener(new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-		    if (saveFile != null) {
-			for (LUserSetting s : settings) {
-			    saveFile.revertToSaved(s);
-			}
-			update();
-		    }
-		}
-	    });
-
-	    header.addShadow();
-	    header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 15);
-
-	    settingsPanel.add(defaults);
-	    settingsPanel.add(save);
-	    settingsPanel.add(header);
-	    add(settingsPanel);
-	    last = new Point(settingsPanel.getWidth(), 65);
-	    initialized = true;
-	    return true;
-	}
-	return false;
+	last = new Point(settingsPanel.getWidth(), 65);
+	
+	initialized = true;
+	setVisible(true);
     }
 
     /**
-     * Function that will be called after the Defaults and Saved buttons are pressed.<br>
-     * You may override it and add your own functionality.
+     * Function that will be called after the Defaults and Saved buttons are
+     * pressed.<br> You may override it and add your own functionality.
      */
     protected void update() {
     }
 
+    protected Point getSpacing (LButton in1, LButton in2, boolean left) {
+	int spacing = (settingsPanel.getWidth() - in1.getWidth() - in2.getWidth()) / 3;
+	if (left) {
+	    return new Point(spacing, settingsPanel.getHeight() - in1.getHeight() - 15);
+	} else {
+	    return new Point(in1.getX() + in1.getWidth() + spacing, settingsPanel.getHeight() - in2.getHeight() - 15);
+	}
+    }
+
     /**
-     * Adds a non-setting component to the panel and adds it to the components list.
+     * Adds a non-setting component to the panel and adds it to the components
+     * list.
+     *
      * @param c
      */
     @Override
@@ -236,7 +137,9 @@ public abstract class SPSettingPanel extends LPanel {
     }
 
     /**
-     * Adds a non-setting component to the panel and adds it to the settings AND components list.
+     * Adds a non-setting component to the panel and adds it to the settings AND
+     * components list.
+     *
      * @param c
      */
     public void AddSetting(LUserSetting c) {
@@ -246,6 +149,7 @@ public abstract class SPSettingPanel extends LPanel {
 
     /**
      * Sets the placement relative to the last component added.
+     *
      * @param c
      * @return The point the component was placed
      */
@@ -255,6 +159,7 @@ public abstract class SPSettingPanel extends LPanel {
 
     /**
      * Sets the placement to (x,y)
+     *
      * @param c
      * @param x
      * @param y
@@ -270,7 +175,8 @@ public abstract class SPSettingPanel extends LPanel {
     }
 
     /**
-     * Aligns each component to the right, as you would expect from a word processor's "align right".
+     * Aligns each component to the right, as you would expect from a word
+     * processor's "align right".
      */
     public void alignRight() {
 	for (Component c : components) {
@@ -279,7 +185,8 @@ public abstract class SPSettingPanel extends LPanel {
     }
 
     /**
-     * Function that opens, initializes if needed, and displays the settings panel.
+     * Function that opens, initializes if needed, and displays the settings
+     * panel.
      */
     public void open() {
 	parent.open();
@@ -313,7 +220,9 @@ public abstract class SPSettingPanel extends LPanel {
     }
 
     /**
-     * An empty function that can be overwritten to provide special directives to the open command.
+     * An empty function that can be overwritten to provide special directives
+     * to the open command.
+     *
      * @param parent
      */
     public void specialOpen(SPMainMenuPanel parent) {

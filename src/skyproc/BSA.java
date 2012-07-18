@@ -183,7 +183,7 @@ public class BSA {
     static public LShrinkArray getUsedFile(String filePath) throws IOException, DataFormatException {
 	File outsideBSA = new File(SPGlobal.pathToData + filePath);
 	if (outsideBSA.isFile()) {
-	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from outside BSA.");
+	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from loose files.");
 	    return new LShrinkArray(outsideBSA);
 	} else {
 	    Iterator<BSA> bsas = BSA.BSAsIterator();
@@ -272,51 +272,51 @@ public class BSA {
 		line1 = true;
 		resources.addAll(0, processINIline(line));
 	    }
-	    
+
 	    if (!line1 || !line2) {
 		// If one of the lines is missing.
 //		throw new BadParameter("<html>Your Skyrim.ini file did not have BOTH lines: 'sResourceArchiveList' and 'sResourceArchiveList2'.<br>"
 //			+ "It cannot figure out which BSAs to load in.<br>"
 //			+ "Please confirm that those lines appear in your Skyrim.ini and have the proper BSAs listed.");
-		
+
 		//Assume standard BSA listing
 		if (!resources.contains("Skyrim - Misc.bsa")) {
 		    resources.add("Skyrim - Misc.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Shaders.bsa")) {
 		    resources.add("Skyrim - Shaders.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Textures.bsa")) {
 		    resources.add("Skyrim - Textures.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Interface.bsa")) {
 		    resources.add("Skyrim - Interface.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Animations.bsa")) {
 		    resources.add("Skyrim - Animations.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Meshes.bsa")) {
 		    resources.add("Skyrim - Meshes.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Sounds.bsa")) {
 		    resources.add("Skyrim - Sounds.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Sounds.bsa")) {
 		    resources.add("Skyrim - Voices.bsa");
 		}
-		
+
 		if (!resources.contains("Skyrim - Sounds.bsa")) {
 		    resources.add("Skyrim - VoicesExtra.bsa");
 		}
 	    }
-	    
+
 	    if (SPGlobal.logging()) {
 		SPGlobal.log(header, "BSA resource load order: ");
 		for (String s : resources) {
@@ -513,7 +513,7 @@ public class BSA {
 	long nameOffset;
 	long dataOffset;
     }
-    
+
     @Override
     public String toString() {
 	return filePath;

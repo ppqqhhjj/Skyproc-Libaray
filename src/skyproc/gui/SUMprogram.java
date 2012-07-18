@@ -238,33 +238,26 @@ public class SUMprogram implements SUM {
 	JPanel hookMenu;
 
 	HookMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super("Patcher List", parent_, blue, save);
+	    super(parent_, "Patcher List", blue, save);
 	    initialize();
 	}
 
 	@Override
-	final public boolean initialize() {
-	    if (super.initialize()) {
+	final public void initialize() {
+	    super.initialize();
 
-		save.setVisible(false);
-		defaults.setVisible(false);
+	    hookMenu = new JPanel();
+	    hookMenu.setOpaque(false);
+	    hookMenu.setLayout(null);
 
-		hookMenu = new JPanel();
-		hookMenu.setOpaque(false);
-		hookMenu.setLayout(null);
-
-		hookMenuScroll = new LScrollPane(hookMenu);
-		hookMenuScroll.setSize(SUMGUI.middleDimensions.width,
-			SUMGUI.middleDimensions.height - 100);
-		hookMenuScroll.setLocation(0, 100);
-		hookMenuScroll.setOpaque(false);
-		hookMenuScroll.setBorder(null);
-		hookMenuScroll.setVisible(true);
-		Add(hookMenuScroll);
-
-		return true;
-	    }
-	    return false;
+	    hookMenuScroll = new LScrollPane(hookMenu);
+	    hookMenuScroll.setSize(SUMGUI.middleDimensions.width,
+		    SUMGUI.middleDimensions.height - 100);
+	    hookMenuScroll.setLocation(0, 100);
+	    hookMenuScroll.setOpaque(false);
+	    hookMenuScroll.setBorder(null);
+	    hookMenuScroll.setVisible(true);
+	    Add(hookMenuScroll);
 	}
     }
 
@@ -274,30 +267,27 @@ public class SUMprogram implements SUM {
 	LCheckBox mergePatches;
 
 	OptionsMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super("SUM Options", parent_, blue, save);
+	    super(parent_, "SUM Options", blue, save);
 	}
 
 	@Override
-	final public boolean initialize() {
-	    if (super.initialize()) {
+	final public void initialize() {
+	    super.initialize();
 
-		importOnStartup = new LCheckBox("Import On Startup", settingFont, SUMGUI.light);
-		importOnStartup.addShadow();
-		importOnStartup.tie(SUMSettings.IMPORT_AT_START, saveFile, SUMGUI.helpPanel, false);
-		setPlacement(importOnStartup);
-		AddSetting(importOnStartup);
+	    importOnStartup = new LCheckBox("Import On Startup", settingFont, SUMGUI.light);
+	    importOnStartup.addShadow();
+	    importOnStartup.tie(SUMSettings.IMPORT_AT_START, saveFile, SUMGUI.helpPanel, false);
+	    setPlacement(importOnStartup);
+	    AddSetting(importOnStartup);
 
-		mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
-		mergePatches.addShadow();
-		mergePatches.tie(SUMSettings.MERGE_PATCH, saveFile, SUMGUI.helpPanel, false);
-		setPlacement(mergePatches);
-		AddSetting(mergePatches);
+	    mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
+	    mergePatches.addShadow();
+	    mergePatches.tie(SUMSettings.MERGE_PATCH, saveFile, SUMGUI.helpPanel, false);
+	    setPlacement(mergePatches);
+	    AddSetting(mergePatches);
 
-		alignRight();
+	    alignRight();
 
-		return true;
-	    }
-	    return false;
 	}
     }
 
