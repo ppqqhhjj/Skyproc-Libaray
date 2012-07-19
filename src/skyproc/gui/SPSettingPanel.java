@@ -94,7 +94,7 @@ public abstract class SPSettingPanel extends LPanel {
      * @return Whether the GUI was just initialized. False if it has already
      * been.
      */
-    public void initialize() {
+    protected void initialize() {
 	settingsPanel = new LPanel(SUMGUI.middleDimensions);
 	settingsPanel.add(header);
 	add(settingsPanel);
@@ -103,7 +103,7 @@ public abstract class SPSettingPanel extends LPanel {
 	header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 15);
 
 	last = new Point(settingsPanel.getWidth(), 65);
-	
+
 	initialized = true;
 	setVisible(true);
     }
@@ -170,8 +170,12 @@ public abstract class SPSettingPanel extends LPanel {
 	if (c.getX() + c.getWidth() > rightMost) {
 	    rightMost = c.getX() + c.getWidth();
 	}
-	last = new Point(last.x, c.getY() + c.getHeight());
+	updateLast(c);
 	return last;
+    }
+
+    public void updateLast(Component c) {
+	last = new Point(last.x, c.getY() + c.getHeight());
     }
 
     /**

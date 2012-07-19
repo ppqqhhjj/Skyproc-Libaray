@@ -6,7 +6,7 @@ package lev.gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import javax.swing.SwingUtilities;
+import java.awt.Point;
 
 /**
  *
@@ -31,9 +31,10 @@ public class LComponent extends Container {
      * @param c Component to center to in the x direction.
      * @param y Height to be placed at.
      */
-    public void centerIn(final Component c, final int y) {
+    public Point centerIn(final Component c, final int y) {
 	final Component thisC = this;
 	setLocation(c.getWidth() / 2 - thisC.getWidth() / 2, y);
+	return this.getLocation();
     }
 
     /**
@@ -42,9 +43,10 @@ public class LComponent extends Container {
      * @param c Component to center on horizontally
      * @param y The Y position to be placed at.
      */
-    public void centerOn(final Component c, final int y) {
+    public Point centerOn(final Component c, final int y) {
 	final Component thisC = this;
 	setLocation(c.getX() + c.getWidth() / 2 - thisC.getWidth() / 2, y);
+	return this.getLocation();
     }
 
     /**
@@ -53,9 +55,10 @@ public class LComponent extends Container {
      * @param x The X position to be placed at.
      * @param c Component to center on vertically.
      */
-    public void centerOn(final int x, final Component c) {
+    public Point centerOn(final int x, final Component c) {
 	final Component thisC = this;
 	setLocation(x, c.getY() + c.getHeight() / 2 - thisC.getHeight() / 2);
+	return this.getLocation();
     }
 
     /**
@@ -64,7 +67,8 @@ public class LComponent extends Container {
      * @param x
      * @param yOffset
      */
-    public void putUnder (final Component c, final int x, final int yOffset) {
+    public Point putUnder (final Component c, final int x, final int yOffset) {
 	setLocation(x, c.getY() + c.getHeight() + yOffset);
+	return this.getLocation();
     }
 }

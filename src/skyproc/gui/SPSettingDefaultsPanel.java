@@ -54,7 +54,7 @@ public class SPSettingDefaultsPanel extends SPSettingPanel {
     }
 
     @Override
-    public void initialize() {
+    protected void initialize() {
 	super.initialize();
 
 	defaults.setLocation(getSpacing(defaults, save, true));

@@ -6,6 +6,7 @@ package lev.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JScrollPane;
@@ -33,9 +34,14 @@ public class LTextPane extends LComponent {
 	pane = new JTextPane();
 	doc = pane.getDocument();
 	pane.setOpaque(false);
-	pane.setForeground(c);
+	setVisible(true);
 	setSize(size_);
+	setForeground(c);
 	add(pane);
+    }
+
+    public LTextPane(int x, int y, Color c) {
+	this(new Dimension(x, y), c);
     }
 
     @Override
@@ -51,6 +57,11 @@ public class LTextPane extends LComponent {
 	} else {
 	    scroll.setSize(width, height);
 	}
+    }
+
+    @Override
+    public void setForeground(Color c) {
+	pane.setForeground(c);
     }
 
     /**
@@ -105,6 +116,18 @@ public class LTextPane extends LComponent {
      */
     public void setOpaque(Boolean b) {
 	pane.setOpaque(b);
+    }
+
+    public void setCentered() {
+	StyledDocument doc = pane.getStyledDocument();
+	SimpleAttributeSet center = new SimpleAttributeSet();
+	StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+	doc.setParagraphAttributes(0, doc.getLength(), center, false);
+    }
+
+    @Override
+    public void setFont (Font f) {
+	pane.setFont(f);
     }
 
     /**

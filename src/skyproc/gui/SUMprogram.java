@@ -243,7 +243,7 @@ public class SUMprogram implements SUM {
 	}
 
 	@Override
-	final public void initialize() {
+	protected final void initialize() {
 	    super.initialize();
 
 	    hookMenu = new JPanel();
@@ -271,7 +271,7 @@ public class SUMprogram implements SUM {
 	}
 
 	@Override
-	final public void initialize() {
+	protected final void initialize() {
 	    super.initialize();
 
 	    importOnStartup = new LCheckBox("Import On Startup", settingFont, SUMGUI.light);

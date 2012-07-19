@@ -45,7 +45,6 @@ public class LHelpPanel extends LPanel {
 	setBounds(bounds);
 
 	help = new LTextPane(new Dimension(getWidth() - 35, getHeight()), contentC);
-	help.setVisible(true);
 	help.addScroll();
 	help.setEditable(false);
 	add(setting);

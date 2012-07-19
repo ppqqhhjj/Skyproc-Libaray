@@ -24,21 +24,36 @@ public class LTextField extends LUserSetting<String> {
      * @param font
      * @param shade
      */
-    public LTextField (String title_, Font font, Color shade) {
-        super(title_, font, shade);
-        field = new JTextField();
-        add(field);
+    public LTextField(String title_, Font font, Color shade) {
+	super(title_, font, shade);
+	init();
+    }
+
+    public LTextField(String title_) {
+	super(title_);
+	init();
+    }
+
+    final void init() {
+	field = new JTextField();
+	add(field);
 	setSize(275, 22);
-	titleLabel.addShadow();
+	if (titleLabel != null) {
+	    titleLabel.addShadow();
+	}
 	field.setVisible(true);
 	setVisible(true);
     }
 
     @Override
     final public void setSize(int x, int y) {
-        super.setSize(x, y);
-        field.setSize(x - titleLabel.getWidth() - 10, y);
-	field.setLocation(titleLabel.getWidth() + 10, 0);
+	super.setSize(x, y);
+	if (titleLabel != null) {
+	    field.setSize(x - titleLabel.getWidth() - 10, y);
+	    field.setLocation(titleLabel.getWidth() + 10, 0);
+	} else {
+	    field.setSize(x, y);
+	}
     }
 
     /**
@@ -46,7 +61,7 @@ public class LTextField extends LUserSetting<String> {
      * @param a
      */
     public void addActionListener(ActionListener a) {
-        field.addActionListener(a);
+	field.addActionListener(a);
     }
 
     @Override
@@ -112,5 +127,4 @@ public class LTextField extends LUserSetting<String> {
 	    field.addMouseListener(new HelpMouseHandler());
 	}
     }
-
 }
