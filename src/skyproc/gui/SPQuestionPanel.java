@@ -6,6 +6,7 @@ package skyproc.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import lev.gui.LSaveFile;
 import lev.gui.LTextPane;
 
@@ -15,6 +16,9 @@ import lev.gui.LTextPane;
  */
 public abstract class SPQuestionPanel extends SPSettingPanel {
     protected LTextPane question;
+    protected SPSettingPanel cancel;
+    protected SPSettingPanel back;
+    protected SPSettingPanel next;
 
     /**
      *
@@ -22,19 +26,8 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
      * @param parent_
      * @param headerColor
      */
-    public SPQuestionPanel(SPMainMenuPanel parent_,String title, Color headerColor) {
+    public SPQuestionPanel(SPMainMenuPanel parent_, String title, Color headerColor) {
 	super(parent_, title, headerColor);
-    }
-
-    /**
-     *
-     * @param title
-     * @param parent_
-     * @param headerColor
-     * @param saveFile_
-     */
-    public SPQuestionPanel(SPMainMenuPanel parent_,String title, Color headerColor, LSaveFile saveFile_) {
-	super(parent_, title, headerColor, saveFile_);
     }
 
     @Override
@@ -43,6 +36,7 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
 
 	question = new LTextPane(settingsPanel.getWidth() - 20, 20, SUMGUI.light);
 	question.setEditable(false);
+	last = new Point(last.x, header.getY() + header.getHeight() + 10 - spacing * 2);
 	setPlacement(question);
 	Add(question);
 

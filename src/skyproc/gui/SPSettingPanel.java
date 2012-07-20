@@ -51,10 +51,6 @@ public abstract class SPSettingPanel extends LPanel {
     private ArrayList<Component> components = new ArrayList<Component>();
     private int rightMost = 0;
     /**
-     * SaveFile reference used by defaults and saved buttons
-     */
-    protected LSaveFile saveFile;
-    /**
      * Flag to symbolize Panel has been initialized and the components have been
      * created and added.
      */
@@ -71,18 +67,6 @@ public abstract class SPSettingPanel extends LPanel {
 	super(SUMGUI.fullDimensions);
 	parent = parent_;
 	header = new LLabel(title, font, headerColor);
-    }
-
-    /**
-     *
-     * @param title
-     * @param parent_
-     * @param headerColor
-     * @param saveFile_
-     */
-    public SPSettingPanel(SPMainMenuPanel parent_, String title, Color headerColor, LSaveFile saveFile_) {
-	this(parent_, title, headerColor);
-	saveFile = saveFile_;
     }
 
     /**
@@ -115,7 +99,7 @@ public abstract class SPSettingPanel extends LPanel {
     protected void update() {
     }
 
-    protected Point getSpacing (LButton in1, LButton in2, boolean left) {
+    protected Point getSpacing(LButton in1, LButton in2, boolean left) {
 	int spacing = (settingsPanel.getWidth() - in1.getWidth() - in2.getWidth()) / 3;
 	if (left) {
 	    return new Point(spacing, settingsPanel.getHeight() - in1.getHeight() - 15);
@@ -194,7 +178,9 @@ public abstract class SPSettingPanel extends LPanel {
      */
     public void open() {
 	parent.open();
-	initialize();
+	if (!initialized) {
+	    initialize();
+	}
 	SUMGUI.helpPanel.reset();
 	parent.openPanel(this);
 	specialOpen(parent);

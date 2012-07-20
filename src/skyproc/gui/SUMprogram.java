@@ -117,10 +117,10 @@ public class SUMprogram implements SUM {
     void openGUI() {
 	mmenu = new SPMainMenuPanel();
 
-	hookMenu = new HookMenu(mmenu, saveFile);
+	hookMenu = new HookMenu(mmenu);
 	mmenu.addMenu(hookMenu, false, saveFile, null);
 
-	optionsMenu = new OptionsMenu(mmenu, saveFile);
+	optionsMenu = new OptionsMenu(mmenu);
 	mmenu.addMenu(optionsMenu, false, saveFile, null);
 
 	SUMGUI.open(this);
@@ -237,8 +237,8 @@ public class SUMprogram implements SUM {
 
 	JPanel hookMenu;
 
-	HookMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super(parent_, "Patcher List", blue, save);
+	HookMenu(SPMainMenuPanel parent_) {
+	    super(parent_, "Patcher List", blue);
 	    initialize();
 	}
 
@@ -266,8 +266,8 @@ public class SUMprogram implements SUM {
 	LCheckBox importOnStartup;
 	LCheckBox mergePatches;
 
-	OptionsMenu(SPMainMenuPanel parent_, LSaveFile save) {
-	    super(parent_, "SUM Options", blue, save);
+	OptionsMenu(SPMainMenuPanel parent_) {
+	    super(parent_, "SUM Options", blue);
 	}
 
 	@Override

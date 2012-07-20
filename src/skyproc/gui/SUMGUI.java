@@ -12,8 +12,8 @@ import java.awt.event.WindowListener;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -66,6 +66,7 @@ public class SUMGUI extends JFrame {
      * Import/Export background thread is stored here for access.
      */
     static public Thread parser;
+    static public ProcessingThread parserRunnable;
     static boolean imported = false;
     static boolean exitRequested = false;
     /**
@@ -294,7 +295,7 @@ public class SUMGUI extends JFrame {
 	forcePatch.setVisible(!on);
     }
 
-    static void setBackgroundPicture (URL backgroundPicture) {
+    static void setBackgroundPicture(URL backgroundPicture) {
 	try {
 	    backgroundPanel.setImage(backgroundPicture);
 	} catch (IOException ex) {
@@ -498,6 +499,8 @@ public class SUMGUI extends JFrame {
 
     static class ProcessingThread implements Runnable {
 
+	public Set<Runnable> afterImporting = new HashSet<>();
+
 	@Override
 	public void run() {
 	    SPGlobal.log("START IMPORT THREAD", "Starting of process thread.");
@@ -508,6 +511,9 @@ public class SUMGUI extends JFrame {
 		    importer.importActiveMods(hook.importRequests());
 		    imported();
 		    imported = true;
+		    for (Runnable r : afterImporting) {
+			r.run();
+		    }
 		}
 		if (exitRequested) {
 		    if (needsPatching || forcePatch.isSelected()) {
@@ -553,10 +559,34 @@ public class SUMGUI extends JFrame {
     }
 
     static void runThread() {
+	runThread(null);
+    }
+
+    static void runThread(Runnable r) {
 	if (parser == null || !parser.isAlive()) {
-	    parser = new Thread(new ProcessingThread());
+	    parserRunnable = new ProcessingThread();
+	    parser = new Thread(parserRunnable);
+	    if (r != null) {
+		parserRunnable.afterImporting.add(r);
+	    }
 	    parser.start();
+	} else {
+	    if (r != null) {
+		parserRunnable.afterImporting.add(r);
+	    }
 	}
+    }
+
+    public static void startImport(Runnable codeToRunAfter) {
+	if (!imported) {
+	    runThread(codeToRunAfter);
+	} else {
+	    codeToRunAfter.run();
+	}
+    }
+
+    public static void startImport() {
+	runThread(null);
     }
 
     @Override

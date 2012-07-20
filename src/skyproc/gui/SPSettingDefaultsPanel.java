@@ -19,6 +19,8 @@ import lev.gui.LUserSetting;
  */
 public class SPSettingDefaultsPanel extends SPSettingPanel {
 
+    LSaveFile saveFile;
+
     /**
      * Button at the bottom center column that will iterate over each item in
      * the settings list and revert them to the default settings of the savefile
@@ -38,19 +40,9 @@ public class SPSettingDefaultsPanel extends SPSettingPanel {
      * @param parent_
      * @param headerColor
      */
-    public SPSettingDefaultsPanel(SPMainMenuPanel parent_, String title, Color headerColor) {
+    public SPSettingDefaultsPanel(SPMainMenuPanel parent_, String title, Color headerColor, LSaveFile saveFile) {
 	super(parent_, title, headerColor);
-    }
-
-    /**
-     *
-     * @param title
-     * @param parent_
-     * @param headerColor
-     * @param saveFile_
-     */
-    public SPSettingDefaultsPanel(SPMainMenuPanel parent_, String title, Color headerColor, LSaveFile saveFile_) {
-	super(parent_, title, headerColor, saveFile_);
+	this.saveFile = saveFile;
     }
 
     @Override

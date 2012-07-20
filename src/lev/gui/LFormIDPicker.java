@@ -80,7 +80,7 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     @Override
     final public void setSize(int arg0, int arg1) {
 	super.setSize(arg0, arg1);
-	titleLabel.setLocation(arg0 / 2 - titleLabel.getWidth() / 2, titleLabel.getY());
+//	titleLabel.setLocation(arg0 / 2 - titleLabel.getWidth() / 2, titleLabel.getY());
 	addPicker.setSize(arg0, addPicker.getHeight());
 	add.setSize((addPicker.getWidth() - 6) / 2, add.getHeight());
 	remove.setSize(addPicker.getWidth() - add.getWidth() - 6, remove.getHeight());
@@ -160,7 +160,7 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     }
 
     /**
-     * 
+     *
      * @param id
      */
     public void addForm(FormID id) {
