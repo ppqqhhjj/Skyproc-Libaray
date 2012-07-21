@@ -106,7 +106,7 @@ public class LCheckBoxConfig extends LUserSetting {
     private void updateHelpHelper() {
         super.updateHelp();
         if (help != null) {
-            help.setTitleHeight(-1);
+            help.setDefaultPos();
             help.hideArrow();
         }
     }

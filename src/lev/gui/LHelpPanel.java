@@ -113,7 +113,7 @@ public class LHelpPanel extends LPanel {
      *
      * @param y_
      */
-    public void setTitleHeight(int y_) {
+    public void setY(int y_) {
 	if (y_ == -1) {
 	    y = spacing;
 	} else {
@@ -122,7 +122,15 @@ public class LHelpPanel extends LPanel {
 	setting.setLocation(17, y - setting.getHeight() / 2);
 	help.setLocation(35, y + setting.getHeight() / 2);
 	evalPositioning();
+	repaint();
+    }
 
+    public void focusOn(Component c, int offset) {
+	setY(c.getY() + c.getHeight() / 2 + offset);
+    }
+
+    public void setDefaultPos() {
+	setY(-1);
     }
 
     /**
@@ -155,7 +163,7 @@ public class LHelpPanel extends LPanel {
 	if (bottomArea != null && bottomArea.isVisible()) {
 	    return getHeight() - bottomArea.getHeight();
 	} else {
-	    return getHeight();
+	    return getHeight() - 25;
 	}
     }
 

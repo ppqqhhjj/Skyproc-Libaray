@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 import javax.swing.JButton;
 
@@ -163,5 +164,16 @@ public class LButton extends LHelpComponent {
 	    button.addMouseListener(new LHelpComponent.HelpMouseHandler());
 	}
 	button.addActionListener(new LHelpComponent.HelpActionHandler());
+    }
+
+    @Override
+    public void setFocusable(boolean focusable) {
+	super.setFocusable(focusable);
+	button.setFocusable(focusable);
+    }
+
+    @Override
+    public void addFocusListener(FocusListener l) {
+	button.addFocusListener(l);
     }
 }

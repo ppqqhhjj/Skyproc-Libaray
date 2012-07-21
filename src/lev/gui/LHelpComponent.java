@@ -56,9 +56,9 @@ public abstract class LHelpComponent extends LComponent {
 	    help.setTitle(helpPrefix + title);
 	    help.setContent(helpInfo);
 	    if (followPos) {
-		help.setTitleHeight(getY() + getHeight() / 2 + helpYoffset);
+		help.focusOn(this, helpYoffset);
 	    } else {
-		help.setTitleHeight(-1);
+		help.setDefaultPos();
 		help.hideArrow();
 	    }
 	    help.textVisible(true);
