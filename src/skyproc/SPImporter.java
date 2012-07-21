@@ -389,13 +389,13 @@ public class SPImporter {
 
 	curMod = 1;
 	maxMod = mods.size();
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
+	SPProgressBarPlug.reset();
+	SPProgressBarPlug.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    int curBar = SPProgressBarPlug.progress.getBar();
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)));
+	    int curBar = SPProgressBarPlug.getBar();
+	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -412,9 +412,9 @@ public class SPImporter {
 		    }
 		}
 	    } else {
-		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
+		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
 	    }
-	    SPProgressBarPlug.progress.setBar(curBar + (grup_targets.length + extraStepsPerMod));
+	    SPProgressBarPlug.setBar(curBar + (grup_targets.length + extraStepsPerMod));
 	    curMod++;
 	}
 
@@ -442,8 +442,8 @@ public class SPImporter {
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
 	curMod = 1;
 	maxMod = 1;
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(grup_targets.length + extraStepsPerMod);
+	SPProgressBarPlug.reset();
+	SPProgressBarPlug.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
     
@@ -466,7 +466,7 @@ public class SPImporter {
     }
     */
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
-	int curBar = SPProgressBarPlug.progress.getBar();
+	int curBar = SPProgressBarPlug.getBar();
 	try {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
 
@@ -487,35 +487,35 @@ public class SPImporter {
 
 	    Type result;
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
+		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input), masks);
 		typeTargets.remove(result);
 		SPGlobal.flush();
-		SPProgressBarPlug.progress.incrementBar();
+		SPProgressBarPlug.incrementBar();
 		if (grups.isEmpty()) {
 		    break;
 		}
 	    }
 
-	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.length);
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
+	    SPProgressBarPlug.setBar(curBar + grup_targets.length);
+	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
-	    SPProgressBarPlug.progress.incrementBar();
+	    SPProgressBarPlug.incrementBar();
 	    input.close();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
 	    }
 
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
+	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPProgressBarPlug.progress.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
-	    SPProgressBarPlug.progress.setBar(curBar + grup_targets.length + extraStepsPerMod);
+	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
+	    SPProgressBarPlug.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 

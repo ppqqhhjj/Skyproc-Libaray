@@ -91,8 +91,8 @@ class Consistency {
 	}
 	Mod consistencyPatch;
 	try {
-	    SPProgressBarPlug.progress.reset();
-	    SPProgressBarPlug.progress.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
+	    SPProgressBarPlug.reset();
+	    SPProgressBarPlug.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
 	    SPImporter.getActiveModList();
 	    SPGlobal.newSyncLog("Mod Import/ConsistencyPatch.txt");
 	    boolean syncing = SPGlobal.sync();

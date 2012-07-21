@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 public class LTextField extends LUserSetting<String> {
 
     JTextField field;
+    LButton enterButton;
 
     /**
      *
@@ -37,9 +38,12 @@ public class LTextField extends LUserSetting<String> {
     final void init() {
 	field = new JTextField();
 	add(field);
-	setSize(275, 22);
 	if (titleLabel != null) {
 	    titleLabel.addShadow();
+	    field.setLocation(0, titleLabel.getHeight() + 5);
+	    setSize(275, 50);
+	} else {
+	    setSize(275, 22);
 	}
 	field.setVisible(true);
 	setVisible(true);
@@ -49,10 +53,14 @@ public class LTextField extends LUserSetting<String> {
     final public void setSize(int x, int y) {
 	super.setSize(x, y);
 	if (titleLabel != null) {
-	    field.setSize(x - titleLabel.getWidth() - 10, y);
-	    field.setLocation(titleLabel.getWidth() + 10, 0);
+	    field.setSize(x, y - titleLabel.getHeight() - 5);
 	} else {
 	    field.setSize(x, y);
+	}
+	if (enterButton != null) {
+	    field.setSize(x - enterButton.getWidth() - 10, field.getHeight());
+	    enterButton.setLocation(field.getX() + field.getWidth() + 10, field.getY());
+	    enterButton.setSize(enterButton.getWidth(), field.getHeight());
 	}
     }
 
@@ -126,5 +134,12 @@ public class LTextField extends LUserSetting<String> {
 	if (hoverListener) {
 	    field.addMouseListener(new HelpMouseHandler());
 	}
+    }
+
+    public void addEnterButton(String label, ActionListener done) {
+	enterButton = new LButton(label);
+	enterButton.addActionListener(done);
+	add(enterButton);
+	setSize(getSize().width, getSize().height);
     }
 }

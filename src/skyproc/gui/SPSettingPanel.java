@@ -69,6 +69,11 @@ public abstract class SPSettingPanel extends LPanel {
 	header = new LLabel(title, font, headerColor);
     }
 
+    @Override
+    public String getName() {
+	return header.getText();
+    }
+
     /**
      * Function that creates all components and adds them to the GUI using Add()
      * or AddSetting().<br><br> It should look like this:<br> <i>if
@@ -183,7 +188,7 @@ public abstract class SPSettingPanel extends LPanel {
 	}
 	SUMGUI.helpPanel.reset();
 	parent.openPanel(this);
-	specialOpen(parent);
+	onOpen(parent);
 	parent.revalidate();
     }
 
@@ -215,6 +220,14 @@ public abstract class SPSettingPanel extends LPanel {
      *
      * @param parent
      */
-    public void specialOpen(SPMainMenuPanel parent) {
+    public void onOpen(SPMainMenuPanel parent) {
+    }
+
+    void close (SPMainMenuPanel parent) {
+	setVisible(false);
+	onClose(parent);
+    }
+
+    public void onClose(SPMainMenuPanel parent) {
     }
 }

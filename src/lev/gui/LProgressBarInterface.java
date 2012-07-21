@@ -7,7 +7,7 @@ package lev.gui;
 /**
  * Interface that SkyProc expects and uses for progress bars.<br>
  * To get progress bar updates from SkyProc importing/exporting, create your own
- * progress bar GUI, and implement this interface.  Then set SPProgressBarPlug.progress
+ * progress bar GUI, and implement this interface.  Then set SPProgressBarPlug
  * to your GUI instance.
  * @author Justin Swanson
  */

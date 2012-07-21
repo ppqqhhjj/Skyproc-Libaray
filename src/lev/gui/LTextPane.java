@@ -77,6 +77,14 @@ public class LTextPane extends LComponent {
 	}
     }
 
+    public String getText() {
+	try {
+	    return doc.getText(0, doc.getLength());
+	} catch (BadLocationException ex) {
+	    return "ERROR";
+	}
+    }
+
     /**
      *
      */

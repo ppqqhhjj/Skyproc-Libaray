@@ -66,7 +66,7 @@ public class SUMGUI extends JFrame {
      * Import/Export background thread is stored here for access.
      */
     static public Thread parser;
-    static public ProcessingThread parserRunnable;
+    static ProcessingThread parserRunnable;
     static boolean imported = false;
     static boolean exitRequested = false;
     /**
@@ -221,7 +221,7 @@ public class SUMGUI extends JFrame {
 	    helpPanel.setBounds(rightDimensions);
 	    backgroundPanel.add(helpPanel);
 
-	    SPProgressBarPlug.progress = new SUMProgress();
+	    SPProgressBarPlug.addProgressBar(new SUMProgress());
 
 	    if (crashFile.exists()) {
 		setPatchNeeded(true);
@@ -282,7 +282,7 @@ public class SUMGUI extends JFrame {
     }
 
     static void imported() {
-	SPProgressBarPlug.progress.setStatus("Done importing.");
+	SPProgressBarPlug.setStatus("Done importing.");
 	setPatchNeeded(testNeedsPatching(true));
     }
 
@@ -450,7 +450,7 @@ public class SUMGUI extends JFrame {
 	SPGlobal.log(header, "Window Closing.");
 	exitRequested = true;
 	if (!imported && !needsImporting()) {
-	    SPProgressBarPlug.progress.done();
+	    SPProgressBarPlug.done();
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMain(header, "Closing program early because it does not need importing.");
 	    }
@@ -537,7 +537,7 @@ public class SUMGUI extends JFrame {
 		    if (SPGlobal.logging()) {
 			SPGlobal.logMain(header, "Closing program normally from thread.");
 		    }
-		    SPProgressBarPlug.progress.done();
+		    SPProgressBarPlug.done();
 		    exitProgram(true);
 		}
 	    } catch (Exception e) {

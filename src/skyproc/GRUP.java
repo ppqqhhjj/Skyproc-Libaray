@@ -162,7 +162,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		    logSync(this.toString(), t.toString());
 		}
 		t.export(out, srcMod);
-		SPProgressBarPlug.progress.incrementBar();
+		SPProgressBarPlug.incrementBar();
 	    }
 	}
     }
@@ -178,7 +178,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void fetchExceptions(SPDatabase database) {
 	for (T item : mapRecords.values()) {
 	    item.fetchException(database);
-	    SPProgressBarPlug.progress.incrementBar();
+	    SPProgressBarPlug.incrementBar();
 	}
     }
 

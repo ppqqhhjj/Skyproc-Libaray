@@ -1,5 +1,6 @@
 package skyproc.gui;
 
+import java.util.ArrayList;
 import lev.gui.LProgressBarInterface;
 
 /**
@@ -8,64 +9,87 @@ import lev.gui.LProgressBarInterface;
  */
 public class SPProgressBarPlug {
 
-    /**
-     * SkyProc's import and export functions hook up their progress output to this
-     * variable.  If you want to display import/export progress bar data on your
-     * GUI, then assign this variable to the progress bar you are displaying.
-     */
-    public static LProgressBarInterface progress = new ProgressBarPlaceholder();
+    static ArrayList<LProgressBarInterface> bars = new ArrayList<>();
 
-    static class ProgressBarPlaceholder implements LProgressBarInterface {
+    public static void addProgressBar (LProgressBarInterface progressBar) {
+	bars.add(progressBar);
+    }
 
-        @Override
-        public void setMax(int i) {
-        }
+    public static void setMax(int in) {
+	for (LProgressBarInterface p : bars) {
+	    p.setMax(in);
+	}
+    }
 
-        @Override
-        public void incrementBar() {
-        }
+    public static void setMax(int in, String status) {
+	for (LProgressBarInterface p : bars) {
+	    p.setMax(in, status);
+	}
+    }
 
-        @Override
-        public void reset() {
-        }
+    public static void setStatus(String status) {
+	for (LProgressBarInterface p : bars) {
+	    p.setStatus(status);
+	}
+    }
 
-        @Override
-        public void setBar(int i) {
-        }
+    public static void setStatus(int cur, int max, String status) {
+	for (LProgressBarInterface p : bars) {
+	    p.setStatus(cur, max, status);
+	}
+    }
 
-        @Override
-        public void setMax(int i, String string) {
-        }
+    public static void incrementBar() {
+	for (LProgressBarInterface p : bars) {
+	    p.incrementBar();
+	}
+    }
 
-        @Override
-        public void setStatus(String string) {
-        }
+    public static void reset() {
+	for (LProgressBarInterface p : bars) {
+	    p.reset();
+	}
+    }
 
-	@Override
-	public int getBar() {
+    public static void setBar(int in) {
+	for (LProgressBarInterface p : bars) {
+	    p.setBar(in);
+	}
+    }
+
+    public static int getBar() {
+	if (bars.isEmpty()) {
 	    return 0;
+	} else {
+	    return bars.get(0).getBar();
 	}
+    }
 
-	@Override
-	public int getMax() {
+    public static int getMax() {
+	if (bars.isEmpty()) {
 	    return 0;
+	} else {
+	    return bars.get(0).getMax();
 	}
+    }
 
-	@Override
-	public void setStatus(int min, int max, String status) {
+    public static void pause(boolean on) {
+	for (LProgressBarInterface p : bars) {
+	    p.pause(on);
 	}
+    }
 
-	@Override
-	public void pause(boolean on) {
-	}
-
-	@Override
-	public boolean paused() {
+    public static boolean paused() {
+	if (bars.isEmpty()) {
 	    return true;
+	} else {
+	    return bars.get(0).paused();
 	}
+    }
 
-	@Override
-	public void done() {
+    public static void done() {
+	for (LProgressBarInterface p : bars) {
+	    p.done();
 	}
     }
 

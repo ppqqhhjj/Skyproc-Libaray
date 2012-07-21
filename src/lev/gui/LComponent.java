@@ -71,4 +71,12 @@ public class LComponent extends Container {
 	setLocation(x, c.getY() + c.getHeight() + yOffset);
 	return this.getLocation();
     }
+
+    public int getBottom() {
+	return getY() + getHeight();
+    }
+
+    public int getRight() {
+	return getX() + getWidth();
+    }
 }

@@ -610,8 +610,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    fullGRUPS++;
 	}
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(fullGRUPS, "Exporting " + srcMod);
+	SPProgressBarPlug.reset();
+	SPProgressBarPlug.setMax(fullGRUPS, "Exporting " + srcMod);
 
 	// Add all mods that contained any of the FormIDs used.
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
@@ -638,25 +638,25 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
-		SPProgressBarPlug.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
+		SPProgressBarPlug.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
 	    }
 	    g.export(out, srcMod);
 	    if (!g.isEmpty()) {
-		SPProgressBarPlug.progress.incrementBar();
+		SPProgressBarPlug.incrementBar();
 	    }
 	}
 
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPProgressBarPlug.progress.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
+	    SPProgressBarPlug.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
-	    SPProgressBarPlug.progress.incrementBar();
+	    SPProgressBarPlug.incrementBar();
 	} else {
 	    deleteStringsFiles();
 	}
 	out.close();
-	SPProgressBarPlug.progress.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
+	SPProgressBarPlug.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
 
 
 	// Check if any duplicate EDIDS or FormIDS

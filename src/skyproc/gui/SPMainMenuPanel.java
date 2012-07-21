@@ -129,7 +129,7 @@ public class SPMainMenuPanel extends JPanel {
      */
     public void openPanel(SPSettingPanel panel) {
 	if (activePanel != null) {
-	    activePanel.setVisible(false);
+	    activePanel.close(this);
 	}
 	int index = panels.indexOf(panel);
 	if (index != -1) {

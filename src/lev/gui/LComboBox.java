@@ -5,6 +5,7 @@
 package lev.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import javax.swing.JComboBox;
@@ -14,10 +15,10 @@ import lev.gui.LHelpComponent.HelpFocusHandler;
  *
  * @author Justin Swanson
  */
-public class LComboBox extends LUserSetting<Integer> {
+public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 
-    JComboBox box;
-    String previous;
+    JComboBox<T> box;
+    T previous;
 
     /**
      *
@@ -25,7 +26,16 @@ public class LComboBox extends LUserSetting<Integer> {
      */
     public LComboBox(String title_) {
 	super(title_);
-	box = new JComboBox();
+	init();
+    }
+
+    protected LComboBox(String title_, Font font, Color shade) {
+	super(title_, font, shade);
+	init();
+    }
+
+    void init() {
+	box = new JComboBox<>();
 	add(box);
 	box.setVisible(true);
 	setVisible(true);
@@ -49,8 +59,8 @@ public class LComboBox extends LUserSetting<Integer> {
      *
      * @return
      */
-    public Object getSelectedItem() {
-	return box.getSelectedItem();
+    public T getSelectedItem() {
+	return (T) box.getSelectedItem();
     }
 
     /**
@@ -61,10 +71,10 @@ public class LComboBox extends LUserSetting<Integer> {
     }
 
     /**
-     * 
+     *
      * @param o
      */
-    public void addItem(Object o) {
+    public void addItem(T o) {
 	box.addItem(o);
     }
 
@@ -86,9 +96,9 @@ public class LComboBox extends LUserSetting<Integer> {
      *
      * @param o
      */
-    public void switchTo(Object o) {
+    public void switchTo(T o) {
 	for (int i = 0; i < box.getItemCount(); i++) {
-	    if (box.getItemAt(i).toString().equals(o.toString())) {
+	    if (box.getItemAt(i).equals(o)) {
 		setSelectedIndex(i);
 	    }
 	}
@@ -99,7 +109,7 @@ public class LComboBox extends LUserSetting<Integer> {
      */
     public void savePrevious() {
 	if (box.getSelectedItem() != null) {
-	    previous = box.getSelectedItem().toString();
+	    previous = getSelectedItem();
 	} else {
 	    previous = null;
 	}

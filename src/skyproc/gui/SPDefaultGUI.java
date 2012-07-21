@@ -14,6 +14,7 @@ import lev.gui.resources.LImages;
 
 /**
  * A GUI setup that offered as an easy out-of-the-box GUI option.
+ *
  * @author Justin Swanson
  */
 public class SPDefaultGUI extends JFrame {
@@ -36,7 +37,7 @@ public class SPDefaultGUI extends JFrame {
     public SPDefaultGUI(final String yourPatcherName, final String yourDescription) {
 	super(yourPatcherName);
 	pbar = new LProgressBar(250, 15, new Font("SansSerif", Font.PLAIN, 11), new Color(180, 180, 180));
-	SPProgressBarPlug.progress = pbar;
+	SPProgressBarPlug.addProgressBar(pbar);
 	SwingUtilities.invokeLater(new Runnable() {
 
 	    @Override
@@ -83,7 +84,6 @@ public class SPDefaultGUI extends JFrame {
 	    pbar.centerIn(this, patching.getY() + patching.getHeight() + 5);
 	    pbar.setCentered(false);
 	    pbar.setStatusOffset(-5);
-	    SPProgressBarPlug.progress = pbar;
 	    LLabel status = new LLabel(". . .", new Font("SansSerif", Font.PLAIN, 11), new Color(160, 160, 160));
 	    pbar.setStatusLabel(status);
 	    status.setLocation(8, getHeight() - status.getHeight() - 36);
@@ -125,18 +125,21 @@ public class SPDefaultGUI extends JFrame {
 
 	    @Override
 	    public void run() {
-		backgroundPanel.add(c,0);
+		backgroundPanel.add(c, 0);
 	    }
 	});
 	return c;
     }
 
     /**
-     * This function will replace the default text-based header with an image you supply.
+     * This function will replace the default text-based header with an image
+     * you supply.
+     *
      * @param logo URL to an image.
-     * @param descriptionOffset Y-offset to give the description box, to help align where
-     * it should begin in relation to your image.
-     * @throws IOException If the image given by the URL cannot be loaded properly.
+     * @param descriptionOffset Y-offset to give the description box, to help
+     * align where it should begin in relation to your image.
+     * @throws IOException If the image given by the URL cannot be loaded
+     * properly.
      */
     public void replaceHeader(final URL logo, final int descriptionOffset) throws IOException {
 	patcherLogo = new LImagePane(logo);

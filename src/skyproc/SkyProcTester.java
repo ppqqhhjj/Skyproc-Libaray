@@ -80,23 +80,23 @@ public class SkyProcTester {
 	    System.out.println("All FormIDs properly standardized.");
 	}
 
-	SPProgressBarPlug.progress.reset();
-	SPProgressBarPlug.progress.setMax(types.length);
+	SPProgressBarPlug.reset();
+	SPProgressBarPlug.setMax(types.length);
 
 	for (GRUP_TYPE g : types) {
 	    if (!test(g)) {
-		SPProgressBarPlug.progress.setStatus("FAILED: " + g);
+		SPProgressBarPlug.setStatus("FAILED: " + g);
 		break;
 	    }
-	    SPProgressBarPlug.progress.setStatus("Validating DONE");
+	    SPProgressBarPlug.setStatus("Validating DONE");
 	}
 
     }
 
     private static boolean test(GRUP_TYPE type) throws IOException, BadRecord, BadMod {
 	System.out.println("Testing " + type);
-	SPProgressBarPlug.progress.setStatus("Validating " + type);
-	SPProgressBarPlug.progress.pause(true);
+	SPProgressBarPlug.setStatus("Validating " + type);
+	SPProgressBarPlug.pause(true);
 
 	boolean passed = true;
 	Mod patch = new Mod(new ModListing("Test.esp"));
@@ -114,8 +114,8 @@ public class SkyProcTester {
 	    System.out.println("Didn't have a source file to validate bytes to.");
 	}
 
-	SPProgressBarPlug.progress.pause(false);
-	SPProgressBarPlug.progress.incrementBar();
+	SPProgressBarPlug.pause(false);
+	SPProgressBarPlug.incrementBar();
 	return passed;
     }
 
