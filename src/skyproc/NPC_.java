@@ -1789,6 +1789,10 @@ public class NPC_ extends Actor implements Serializable {
 	return TPLT.getForm();
     }
 
+    public boolean isTemplated() {
+	return !getTemplate().equals(FormID.NULL);
+    }
+
     /**
      *
      * @param raceRef

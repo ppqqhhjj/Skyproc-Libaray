@@ -236,7 +236,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return The first MajorRecord that matches, or null if none were found.
      */
     static public MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
-	if (query.getMaster() != null) {
+	if (query != null && query.getMaster() != null) {
 	    Iterator<Mod> revOrder = database.reverseIter();
 	    while (revOrder.hasNext()) {
 		Mod next = revOrder.next();

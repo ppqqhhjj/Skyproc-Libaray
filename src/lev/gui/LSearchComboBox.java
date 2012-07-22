@@ -6,11 +6,12 @@ package lev.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
+import java.awt.event.MouseListener;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
@@ -22,7 +23,7 @@ import javax.swing.event.DocumentListener;
  */
 public class LSearchComboBox<T extends Object> extends LComboBox<T> {
 
-    ArrayList<T> backup;
+    Set<T> backup;
     JTextField search;
     static String searchText = "Search...";
     LButton enterButton;
@@ -35,7 +36,7 @@ public class LSearchComboBox<T extends Object> extends LComboBox<T> {
     public LSearchComboBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
 	titleLabel.addShadow();
-	backup = new ArrayList<>();
+	backup = new TreeSet<>();
 	box.setLocation(box.getX(), titleLabel.getY() + titleLabel.getHeight() + 10);
 	search = new JTextField();
 	search.setLocation(titleLabel.getX() + titleLabel.getWidth() + 10, 0);
@@ -109,7 +110,7 @@ public class LSearchComboBox<T extends Object> extends LComboBox<T> {
 	backup.clear();
     }
 
-    public int getBackupListSize () {
+    public int getBackupListSize() {
 	return backup.size();
     }
 
@@ -119,8 +120,27 @@ public class LSearchComboBox<T extends Object> extends LComboBox<T> {
 	backup.add(o);
     }
 
+    @Override
+    public void addFocusListener(FocusListener f) {
+	super.addFocusListener(f);
+	if (enterButton != null) {
+	    enterButton.addFocusListener(f);
+	}
+	search.addFocusListener(f);
+    }
+
+    @Override
+    public void addMouseListener(MouseListener m) {
+	super.addMouseListener(m);
+	if (enterButton != null) {
+	    enterButton.addMouseListener(m);
+	}
+	search.addMouseListener(m);
+    }
+
     public void reset() {
 	setText(searchText);
+	filterItems();
     }
 
     public void setText(String s) {

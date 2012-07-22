@@ -4,73 +4,163 @@ import java.util.ArrayList;
 import lev.gui.LProgressBarInterface;
 
 /**
- * A boundary class that will eventually offer an interface to the the LevGUI library.
+ * A boundary class that will eventually offer an interface to the the LevGUI
+ * library.
+ *
  * @author Justin Swanson
  */
 public class SPProgressBarPlug {
 
-    static ArrayList<LProgressBarInterface> bars = new ArrayList<>();
+    static final ArrayList<LProgressBarInterface> bars = new ArrayList<>();
 
-    public static void addProgressBar (LProgressBarInterface progressBar) {
+    static {
+	bars.add(new Placeholder());
+    }
+
+    public static void addProgressBar(LProgressBarInterface progressBar) {
 	bars.add(progressBar);
+	progressBar.setBar(getBar());
+	progressBar.setMax(getMax());
+	progressBar.pause(paused());
+    }
+
+    static class Placeholder implements LProgressBarInterface {
+
+	int max = 0;
+	int cur = 0;
+	boolean paused = false;
+
+	@Override
+	public void setMax(int in) {
+	    if (!paused) {
+		max = in;
+	    }
+	}
+
+	@Override
+	public void setMax(int in, String status) {
+	    setMax(in);
+	}
+
+	@Override
+	public void setStatus(String status) {
+	}
+
+	@Override
+	public void setStatus(int cur, int max, String status) {
+	    setMax(max);
+	    setBar(cur);
+	}
+
+	@Override
+	public void incrementBar() {
+	    if (!paused) {
+		cur++;
+	    }
+	}
+
+	@Override
+	public void reset() {
+	    if (!paused) {
+		cur = 0;
+	    }
+	}
+
+	@Override
+	public void setBar(int in) {
+	    if (!paused) {
+		cur = in;
+	    }
+	}
+
+	@Override
+	public int getBar() {
+	    return cur;
+	}
+
+	@Override
+	public int getMax() {
+	    return max;
+	}
+
+	@Override
+	public void pause(boolean on) {
+	    paused = on;
+	}
+
+	@Override
+	public boolean paused() {
+	    return paused;
+	}
+
+	@Override
+	public void done() {
+	    setBar(getMax());
+	}
     }
 
     public static void setMax(int in) {
-	for (LProgressBarInterface p : bars) {
-	    p.setMax(in);
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setMax(in);
+	    }
 	}
     }
 
     public static void setMax(int in, String status) {
-	for (LProgressBarInterface p : bars) {
-	    p.setMax(in, status);
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setMax(in, status);
+	    }
 	}
     }
 
     public static void setStatus(String status) {
-	for (LProgressBarInterface p : bars) {
-	    p.setStatus(status);
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setStatus(status);
+	    }
 	}
     }
 
     public static void setStatus(int cur, int max, String status) {
-	for (LProgressBarInterface p : bars) {
-	    p.setStatus(cur, max, status);
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setStatus(cur, max, status);
+	    }
 	}
     }
 
     public static void incrementBar() {
-	for (LProgressBarInterface p : bars) {
-	    p.incrementBar();
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.incrementBar();
+	    }
 	}
     }
 
     public static void reset() {
-	for (LProgressBarInterface p : bars) {
-	    p.reset();
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.reset();
+	    }
 	}
     }
 
     public static void setBar(int in) {
-	for (LProgressBarInterface p : bars) {
-	    p.setBar(in);
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setBar(in);
+	    }
 	}
     }
 
     public static int getBar() {
-	if (bars.isEmpty()) {
-	    return 0;
-	} else {
-	    return bars.get(0).getBar();
-	}
+	return bars.get(0).getBar();
     }
 
     public static int getMax() {
-	if (bars.isEmpty()) {
-	    return 0;
-	} else {
-	    return bars.get(0).getMax();
-	}
+	return bars.get(0).getMax();
     }
 
     public static void pause(boolean on) {
@@ -80,11 +170,7 @@ public class SPProgressBarPlug {
     }
 
     public static boolean paused() {
-	if (bars.isEmpty()) {
-	    return true;
-	} else {
-	    return bars.get(0).paused();
-	}
+	return bars.get(0).paused();
     }
 
     public static void done() {
@@ -92,5 +178,4 @@ public class SPProgressBarPlug {
 	    p.done();
 	}
     }
-
 }

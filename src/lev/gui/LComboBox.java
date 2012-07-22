@@ -5,8 +5,11 @@
 package lev.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseListener;
 import java.util.Map;
 import javax.swing.JComboBox;
 import lev.gui.LHelpComponent.HelpFocusHandler;
@@ -130,15 +133,39 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
      */
     @Override
     public void addHelpHandler(boolean mouseListener) {
-	box.addFocusListener(new HelpFocusHandler());
+	addFocusListener(new HelpFocusHandler());
 	if (mouseListener) {
-	    box.addMouseListener(new HelpMouseHandler());
+	    addMouseListener(new HelpMouseHandler());
+	}
+    }
+
+    @Override
+    public void addFocusListener(FocusListener f) {
+	super.addFocusListener(f);
+	for (Component c : box.getComponents()) {
+	    c.addFocusListener(f);
+	}
+    }
+
+    @Override
+    public void addMouseListener(MouseListener m) {
+	super.addMouseListener(m);
+	box.addMouseListener(m);
+	for (Component c : box.getComponents()) {
+	    c.addMouseListener(m);
+	}
+	if (titleLabel != null) {
+	    titleLabel.addMouseListener(m);
 	}
     }
 
     @Override
     protected void addUpdateHandlers() {
 	box.addActionListener(new UpdateHandler());
+    }
+
+    public boolean isEmpty() {
+	return box.getModel().getSize() == 0;
     }
 
     @Override

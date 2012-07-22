@@ -172,7 +172,7 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
     }
 
     /**
-     * 
+     *
      * @param label
      */
     public void setStatusLabel(LLabel label) {
@@ -192,6 +192,7 @@ public class LProgressBar extends LComponent implements LProgressBarInterface {
 
     @Override
     public void done() {
+	setBar(getMax());
 	done.setSelected(true);
     }
 }
