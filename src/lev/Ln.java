@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.jar.JarEntry;
@@ -1195,6 +1196,43 @@ public class Ln {
 	return fileLocation;
     }
 
+    public static File[] fileDialog() {
+	JFileChooser fd = new JFileChooser(".");
+	fd.setMultiSelectionEnabled(true);
+	File[] fileLocation = new File[0];
+	if (fd.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	    // Save file location
+	    fileLocation = fd.getSelectedFiles();
+	}
+	return fileLocation;
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+	if (!destFile.exists()) {
+	    destFile.createNewFile();
+	}
+
+	FileChannel source = null;
+	FileChannel destination = null;
+	try {
+	    source = new FileInputStream(sourceFile).getChannel();
+	    destination = new FileOutputStream(destFile).getChannel();
+	    destination.transferFrom(source, 0, source.size());
+	} finally {
+	    if (source != null) {
+		source.close();
+	    }
+	    if (destination != null) {
+		destination.close();
+	    }
+	}
+    }
+
+    public static void copyFileToDir(File sourceFile, File destDir) throws IOException {
+	File to = new File (destDir.getPath() + "\\" + sourceFile.getName());
+	copyFile(sourceFile, to);
+    }
+
     /**
      * A simple comparison function that compares two files byte by byte, and
      * reports the positions of any differences (eg. file1[i] != file2[i]).
@@ -1441,8 +1479,14 @@ public class Ln {
 	if (object.isJsonArray()) {
 	    JsonArray array = object.getAsJsonArray();
 	    out += "\n" + tabs + "[";
+	    boolean firstIndex = true;
 	    for (JsonElement entry : array) {
-		out += "\n" + toJsonPretty(entry, depth + 1, exclude);
+		if (firstIndex) {
+		    firstIndex = false;
+		} else {
+		    out += ",";
+		}
+		out += toJsonPretty(entry, depth + 1, exclude);
 	    }
 	    out += "\n" + tabs + "]";
 	} else if (object.isJsonObject()) {
@@ -1482,8 +1526,8 @@ public class Ln {
 	return loadFileToStrings(new File(path), toUpper);
     }
 
-    public static void toUpper (ArrayList<String> in) {
-	for (int i = 0 ; i < in.size() ; i++) {
+    public static void toUpper(ArrayList<String> in) {
+	for (int i = 0; i < in.size(); i++) {
 	    in.set(i, in.get(i).toUpperCase());
 	}
     }

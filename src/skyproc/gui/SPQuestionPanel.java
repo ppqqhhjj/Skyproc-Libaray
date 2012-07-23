@@ -33,11 +33,10 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
      * @param headerColor
      */
     public SPQuestionPanel(SPMainMenuPanel parent_, String title, Color headerColor,
-	    SPSettingPanel cancel, SPSettingPanel back, SPSettingPanel next) {
+	    SPSettingPanel cancel, SPSettingPanel back) {
 	super(parent_, title, headerColor);
 	this.cancelPanel = cancel;
 	this.backPanel = back;
-	this.nextPanel = next;
     }
 
     @Override
@@ -46,61 +45,93 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
 
 	question = new LTextPane(settingsPanel.getWidth() - 20, 20, SUMGUI.light);
 	question.setEditable(false);
-	last = new Point(last.x, header.getY() + header.getHeight() + 10 - spacing * 2);
-	setPlacement(question);
-	Add(question);
+	question.centerIn(settingsPanel, header.getBottom() + 10);
+	settingsPanel.add(question);
 
-	if (cancelPanel != null) {
-	    cancelButton = new LButton("Cancel");
-	    cancelButton.setLocation(15, settingsPanel.getHeight() - cancelButton.getHeight() - 10);
-	    cancelButton.addActionListener(new ActionListener(){
+	last = new Point(last.x, question.getBottom());
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	cancelButton = new LButton("Cancel");
+	cancelButton.setLocation(15, settingsPanel.getHeight() - cancelButton.getHeight() - 10);
+	cancelButton.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (testCancel()) {
 		    onCancel();
 		    cancelPanel.open();
 		}
-	    });
-	    Add(cancelButton);
-	}
+	    }
+	});
+	settingsPanel.add(cancelButton);
 
-	if (backPanel != null) {
-	    backButton = new LButton("Back");
-	    backButton.setLocation(settingsPanel.getWidth() / 2 - backButton.getWidth() / 2, settingsPanel.getHeight() - backButton.getHeight() - 10);
-	    backButton.addActionListener(new ActionListener(){
+	backButton = new LButton("Back");
+	backButton.setLocation(settingsPanel.getWidth() / 2 - backButton.getWidth() / 2, settingsPanel.getHeight() - backButton.getHeight() - 10);
+	backButton.addActionListener(new ActionListener() {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (testBack()) {
 		    onBack();
 		    backPanel.open();
 		}
-	    });
-	    Add(backButton);
-	}
+	    }
+	});
+	settingsPanel.add(backButton);
 
-	if (nextPanel != null) {
-	    nextButton = new LButton("Next");
-	    nextButton.setLocation(settingsPanel.getWidth() - nextButton.getWidth() - 15, settingsPanel.getHeight() - cancelButton.getHeight() - 10);
-	    nextButton.addActionListener(new ActionListener(){
+	nextButton = new LButton("Next");
+	nextButton.setLocation(settingsPanel.getWidth() - nextButton.getWidth() - 15, settingsPanel.getHeight() - cancelButton.getHeight() - 10);
+	nextButton.addActionListener(new ActionListener() {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (testNext()) {
 		    onNext();
 		    nextPanel.open();
 		}
-	    });
-	    Add(nextButton);
-	}
+	    }
+	});
+	settingsPanel.add(nextButton);
+
+	setCancel(cancelPanel);
+	setBack(backPanel);
+	setNext(nextPanel);
     }
 
-    public void onCancel (){
-    };
+    public void setCancel(SPSettingPanel in) {
+	cancelPanel = in;
+	cancelButton.setVisible(in != null);
+    }
 
-    public void onBack (){
-    };
+    public void setBack(SPSettingPanel in) {
+	backPanel = in;
+	backButton.setVisible(in != null);
+    }
 
-    public void onNext (){
-    };
+    public void setNext(SPSettingPanel in) {
+	nextPanel = in;
+	nextButton.setVisible(in != null);
+    }
+
+    public boolean testCancel() {
+	return true;
+    }
+
+    public boolean testBack() {
+	return true;
+    }
+
+    public boolean testNext() {
+	return true;
+    }
+
+    public void onCancel() {
+    }
+
+    public void onBack() {
+    }
+
+    public void onNext() {
+    }
 
     public void setQuestionFont(Font f) {
 	question.setFont(f);
