@@ -21,7 +21,7 @@ import javax.swing.event.DocumentListener;
  *
  * @author Justin Swanson
  */
-public class LSearchComboBox<T extends Object> extends LComboBox<T> {
+public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 
     Set<T> backup;
     JTextField search;
@@ -33,7 +33,7 @@ public class LSearchComboBox<T extends Object> extends LComboBox<T> {
      *
      * @param title_
      */
-    public LSearchComboBox(String title_, Font font, Color shade) {
+    public LComboSearchBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
 	titleLabel.addShadow();
 	backup = new TreeSet<>();

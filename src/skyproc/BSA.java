@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LFlags;
@@ -84,6 +86,7 @@ public class BSA {
 	if (loaded) {
 	    return;
 	}
+	loaded = true;
 	String fileName, folderName;
 	int fileCounter = 0;
 	in.pos(offset);
@@ -121,7 +124,6 @@ public class BSA {
 	    }
 	    SPGlobal.log(header, "Loaded BSA: " + getFilePath());
 	}
-	loaded = true;
     }
 
     /**
@@ -161,7 +163,7 @@ public class BSA {
 	if (!(file = Ln.getFilepathCaseInsensitive(file)).getPath().equals("")) {
 	    return file.getName();
 	}
-	Iterator<BSA> bsas = BSA.BSAsIterator();
+	Iterator<BSA> bsas = BSA.iterator();
 	while (bsas.hasNext()) {
 	    tmp = bsas.next().getFilename(filePath);
 	    if (!tmp.equals("")) {
@@ -186,7 +188,7 @@ public class BSA {
 	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from loose files.");
 	    return new LShrinkArray(outsideBSA);
 	} else {
-	    Iterator<BSA> bsas = BSA.BSAsIterator();
+	    Iterator<BSA> bsas = BSA.iterator();
 	    BSA tmp, bsa = null;
 	    while (bsas.hasNext()) {
 		tmp = bsas.next();
@@ -204,46 +206,45 @@ public class BSA {
 	return null;
     }
 
-    static void loadPluginLoadOrder() throws IOException {
+    static void loadPluginLoadOrder() {
 	if (pluginLoadOrder != null) {
 	    return;
 	}
 	if (SPGlobal.logging()) {
 	    SPGlobal.log(header, "Loading in active plugin BSA headers.");
 	}
-	ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
-	pluginLoadOrder = new ArrayList<BSA>();
-	for (ModListing m : activeMods) {
-	    File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
-	    if (bsaPath.exists()) {
-		try {
-		    BSA bsa = new BSA(bsaPath, false);
-		    pluginLoadOrder.add(bsa);
-		} catch (FileNotFoundException ex) {
-		    SPGlobal.logException(ex);
-		} catch (BadParameter ex) {
-		    SPGlobal.logException(ex);
+	try {
+	    ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
+	    pluginLoadOrder = new ArrayList<>();
+	    for (ModListing m : activeMods) {
+		File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
+		if (bsaPath.exists()) {
+		    try {
+			BSA bsa = new BSA(bsaPath, false);
+			pluginLoadOrder.add(bsa);
+		    } catch (IOException | BadParameter ex) {
+			SPGlobal.logException(ex);
+		    }
+		} else if (SPGlobal.logging()) {
+		    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
 		}
-	    } else if (SPGlobal.logging()) {
-		SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
 	    }
+	} catch (IOException ex) {
+	    SPGlobal.logException(ex);
 	}
     }
 
-    static void loadResourceLoadOrder() throws IOException, BadParameter {
+    static void loadResourceLoadOrder() {
 	if (resourceLoadOrder != null) {
 	    return;
 	}
-
-	ArrayList<String> resources = new ArrayList<String>();
-	File ini = SPGlobal.getSkyrimINI();
-
-	if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
-	}
-
-	// Load it in
 	try {
+	    ArrayList<String> resources = new ArrayList<String>();
+	    File ini = SPGlobal.getSkyrimINI();
+
+	    if (SPGlobal.logging()) {
+		SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
+	    }
 	    LFileChannel input = new LFileChannel(ini);
 	    boolean line1 = false, line2 = false;
 
@@ -342,9 +343,8 @@ public class BSA {
 		}
 	    }
 
-	} catch (FileNotFoundException ex) {
+	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
-	    throw new BadParameter("BSA load order could not be properly established.  Check logs for more information.");
 	}
     }
 
@@ -480,11 +480,11 @@ public class BSA {
      * @throws IOException
      * @throws BadParameter If Skyrim.ini does not have the BSA load order lines
      */
-    public static ArrayList<BSA> loadInBSAs(FileType... types) throws IOException, BadParameter {
+    public static ArrayList<BSA> loadInBSAs(FileType... types) {
 	loadResourceLoadOrder();
 	loadPluginLoadOrder();
 	ArrayList<BSA> out = new ArrayList<BSA>();
-	Iterator<BSA> bsas = BSAsIterator();
+	Iterator<BSA> bsas = iterator();
 	while (bsas.hasNext()) {
 	    BSA tmp = bsas.next();
 	    try {
@@ -500,11 +500,15 @@ public class BSA {
 	return out;
     }
 
-    static Iterator<BSA> BSAsIterator() {
-	ArrayList<BSA> order = new ArrayList<BSA>(resourceLoadOrder.size() + pluginLoadOrder.size());
+    static Iterator<BSA> iterator() {
+	return getBSAs().iterator();
+    }
+
+    static ArrayList<BSA> getBSAs() {
+	ArrayList<BSA> order = new ArrayList<>(resourceLoadOrder.size() + pluginLoadOrder.size());
 	order.addAll(resourceLoadOrder);
 	order.addAll(pluginLoadOrder);
-	return order.iterator();
+	return order;
     }
 
     class BSAFileRef {

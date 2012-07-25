@@ -104,11 +104,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
-	
-	    if (getEDID().equals("DA11Cannibalism")) {
-		int wer = 23;
-	    }
-	    
+
+//	    if (getEDID().equals("DA11Cannibalism")) {
+//		int wer = 23;
+//	    }
+
 
 	importSubRecords(in, mask);
 	subRecords.printSummary();
@@ -165,11 +165,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
-	    
-	    if (getEDID().equals("DA11Cannibalism")) {
-		int wer = 23;
-	    }
-	    
+
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
@@ -435,7 +431,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	 */
 	HiddenFromLocalMap (9),
 	/**
-	 * 
+	 *
 	 */
 	QuestItemPersistentRef (10),
 	/**

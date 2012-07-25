@@ -39,7 +39,7 @@ public class SkyProcStarter {
              * Initializing Debug Log and Globals
              */
             // Go up two folders:  SkyprocPatchers/YourFolderName/
-            SPGlobal.pathToData = "../../";
+            SPGlobal.pathToData = "..\\..\\";
             SPGlobal.createGlobalLog();
             // Turn Debugging off except for errors
             SPGlobal.logging(false);

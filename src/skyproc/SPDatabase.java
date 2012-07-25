@@ -17,9 +17,9 @@ import skyproc.exceptions.Uninitialized;
  */
 public class SPDatabase implements Iterable<Mod> {
 
-    static ArrayList<ModListing> activePlugins = new ArrayList<ModListing>();
-    ArrayList<ModListing> addedPlugins = new ArrayList<ModListing>();
-    Map<ModListing, Mod> modLookup = new TreeMap<ModListing, Mod>();
+    static ArrayList<ModListing> activePlugins = new ArrayList<>();
+    ArrayList<ModListing> addedPlugins = new ArrayList<>();
+    Map<ModListing, Mod> modLookup = new TreeMap<>();
     SPExceptionDbInterface exceptionsDb = new SPExceptionDbInterface<SPExceptionDbInterface.NullException>() {
 
 	@Override

@@ -581,7 +581,8 @@ public class SUMGUI extends JFrame {
 	if (!imported) {
 	    runThread(codeToRunAfter);
 	} else {
-	    codeToRunAfter.run();
+	    Thread t = new Thread(codeToRunAfter);
+	    t.start();
 	}
     }
 

@@ -291,12 +291,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
-    public ArrayList<GRUP_TYPE> getContainedTypes () {
+    public ArrayList<GRUP_TYPE> getContainedTypes() {
 	ArrayList<GRUP_TYPE> out = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
-	   if (!g.isEmpty()) {
-	       out.add(g.getContainedType());
-	   }
+	    if (!g.isEmpty()) {
+		out.add(g.getContainedType());
+	    }
 	}
 	return out;
     }
@@ -353,9 +353,17 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
+	ArrayList<FormID> tmp = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
-	    out.addAll(g.allFormIDs());
+	    tmp.addAll(g.allFormIDs());
+	}
+	ArrayList<FormID> out = new ArrayList<>(tmp.size());
+	for (FormID id : tmp) {
+	    if (id != null) {
+		out.add(id);
+	    } else {
+		SPGlobal.logError(this.toString(), "AllFormIDs return null formid reference.");
+	    }
 	}
 	return out;
     }
@@ -530,7 +538,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return sum;
     }
 
-    public ArrayList<MajorRecord> getRecords () {
+    public ArrayList<MajorRecord> getRecords() {
 	ArrayList<MajorRecord> out = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
 	    out.addAll(g.getRecords());
@@ -538,9 +546,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
-    public boolean contains (FormID id) {
+    public boolean contains(FormID id) {
 	for (GRUP g : GRUPs.values()) {
-	    if (g.contains(id)){
+	    if (g.contains(id)) {
 		return true;
 	    }
 	}
@@ -617,10 +625,12 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
 	for (ModListing m : SPGlobal.getDB().getImportedMods()) {
 	    Mod mod = SPGlobal.getDB().getMod(m);
-	    for (FormID ID : allForms) {
-		if (mod.contains(ID)) {
-		    this.addMaster(mod.modInfo);
-		    break;
+	    if (mod != null) { // If mod was bad and skipped
+		for (FormID ID : allForms) {
+		    if (mod.contains(ID)) {
+			this.addMaster(mod.modInfo);
+			break;
+		    }
 		}
 	    }
 	}

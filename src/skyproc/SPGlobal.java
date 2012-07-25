@@ -35,7 +35,7 @@ public class SPGlobal {
      * subfolder of "Data/". (ex "Data/SkyProc Patchers/My SkyProc Patcher/My
      * Patcher.jar")
      */
-    public static String pathToData = "../../";
+    public static String pathToData = "..\\..\\";
     /**
      * A default path to "internal files". This is currently only used for
      * saving custom path information for Skyrim.ini and plugins.txt. This can

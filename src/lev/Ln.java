@@ -266,6 +266,36 @@ public class Ln {
 	makeDirs(file.getPath());
     }
 
+    public static boolean equals(ArrayList lhs, ArrayList rhs, boolean ordered) {
+	if (lhs == null && rhs == null) {
+	    return true;
+	} else if (lhs == null || rhs == null) {
+	    return false;
+	}
+
+	if (lhs.size() != rhs.size()) {
+	    return false;
+	}
+
+	if (ordered) {
+	    for (int i = 0 ; i < lhs.size() ; i++) {
+		if (!lhs.get(i).equals(rhs.get(i))) {
+		    return false;
+		}
+	    }
+	} else {
+	    ArrayList tmp = new ArrayList(rhs);
+	    for (Object o : lhs) {
+		tmp.remove(o);
+	    }
+	    if (!tmp.isEmpty()) {
+		return false;
+	    }
+	}
+
+	return true;
+    }
+
     /**
      * Makes the directories associated with a file.
      *

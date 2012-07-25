@@ -20,7 +20,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SPImporter {
 
     private static String header = "Importer";
-    Map<Type, Mask> masks = new EnumMap<Type, Mask>(Type.class);
+    Map<Type, Mask> masks = new EnumMap<>(Type.class);
     int curMod = 1;
     int maxMod = 1;
     static int extraStepsPerMod = 1;
@@ -247,7 +247,7 @@ public class SPImporter {
     public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) {
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
     }
-    
+
     public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
@@ -295,7 +295,7 @@ public class SPImporter {
     public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException {
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
     }
-    
+
     public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
@@ -317,7 +317,7 @@ public class SPImporter {
     public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) {
 	return importMods(mods, SPGlobal.pathToData, grup_targets);
     }
-    
+
     public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
@@ -367,7 +367,7 @@ public class SPImporter {
      * manipulated.
      */
     public Set<Mod> importMods(ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
-        
+
 	SPGlobal.sync(true);
 	if (SPGlobal.logging()) {
 	    SPGlobal.logMain(header, "Starting import of targets: ");
@@ -425,7 +425,7 @@ public class SPImporter {
 	SPGlobal.sync(false);
 	return outSet;
     }
-    
+
     /**
      * Looks for a mod matching the ModListing inside the given path. If
      * properly located, it imports only GRUPS specified in the parameter.
@@ -446,7 +446,7 @@ public class SPImporter {
 	SPProgressBarPlug.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
-    
+
     /**
      * Looks for a mod matching the ModListing inside the given path. If
      * properly located, it imports only GRUPS specified in the parameter.
@@ -458,7 +458,7 @@ public class SPImporter {
      * manipulated.
      * @throws BadMod If SkyProc runs into any unexpected data structures, or
      * has any error importing a mod at all.
-     
+
     public Mod importMod(ModListing listing, String path, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
 	GRUP_TYPE[] types = new GRUP_TYPE[grup_targets.size()];
 	types = grup_targets.toArray(types);
@@ -520,7 +520,7 @@ public class SPImporter {
 	}
 
     }
-    
+
     static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
 	if (Ln.arrayToString(in.readInInts(0, 4)).equals("TES4")) {
 	    int size = Ln.arrayToInt(in.readInInts(0, 4)) + 24;  // +24 for TES4 extra info

@@ -289,15 +289,8 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	FACEGEN_TEXTURES
     }
 
-
-    /**
-     *
-     * @return An iterator that steps through each record in the GRUP, in the
-     * order they were added.
-     */
-    @Override
-    public Iterator<String> iterator() {
-	ArrayList<String> temp = new ArrayList<String>();
+    public ArrayList<String> getTextures() {
+	ArrayList<String> temp = new ArrayList<>();
 	temp.add(colorMap.string);
 	temp.add(normalMap.string);
 	temp.add(maskMap.string);
@@ -306,7 +299,17 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	temp.add(environmentMap.string);
 	temp.add(TX06.string);
 	temp.add(specularityMap.string);
-	return temp.iterator();
+	return temp;
+    }
+
+    /**
+     *
+     * @return An iterator that steps through each record in the GRUP, in the
+     * order they were added.
+     */
+    @Override
+    public Iterator<String> iterator() {
+	return getTextures().iterator();
     }
 //    public enum TXST_to_NIF {
 //	Diffuse(0),

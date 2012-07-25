@@ -43,7 +43,7 @@ public class LMergeMap<K, V> {
     }
 
     /**
-     * 
+     *
      */
     public void clear() {
 	map.clear();
@@ -161,6 +161,7 @@ public class LMergeMap<K, V> {
     public void remove(K key) {
 	if (map.containsKey(key)) {
 	    map.get(key).clear();
+	    map.remove(key);
 	}
     }
 
@@ -241,13 +242,15 @@ public class LMergeMap<K, V> {
     /**
      *
      */
-    public void print() {
+    public ArrayList<String> print() {
+	ArrayList<String> out = new ArrayList<>();
 	for (K key : map.keySet()) {
-	    System.out.println(key.toString());
+	    out.add(key.toString());
 	    for (V vals : get(key)) {
-		System.out.println("   " + vals.toString());
+		out.add("   " + vals.toString());
 	    }
 	}
+	return out;
     }
 
 }
