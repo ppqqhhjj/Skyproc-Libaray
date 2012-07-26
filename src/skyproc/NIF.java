@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lev.LFileChannel;
+import lev.LPair;
 import lev.LShrinkArray;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
@@ -330,8 +329,9 @@ public class NIF {
 	return out;
     }
 
-    public Map<String, ArrayList<String>> extractTextures() {
-	Map<String, ArrayList<String>> out = new HashMap<>();
+    //In order list of pairs of Node name + list of textures
+    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() {
+	ArrayList<LPair<String, ArrayList<String>>> out = new ArrayList<>();
 	Map<Integer, NIF.Node> BiLightingShaderProperties = getNodes(NIF.NodeType.BSLIGHTINGSHADERPROPERTY);
 	Map<Integer, NIF.Node> BiShaderTextureNodes = getNodes(NIF.NodeType.BSSHADERTEXTURESET);
 	Map<Integer, ArrayList<String>> BiShaderTextureSets = new HashMap<>();
@@ -346,7 +346,8 @@ public class NIF {
 	    int textureLink = BiLightingShaderProperties.get(key).data.extractInt(40, 4);
 	    ArrayList<String> textures = BiShaderTextureSets.get(textureLink);
 	    if (textures != null) {
-		out.put(name, new ArrayList<>(textures));
+		LPair pair = new LPair(name, new ArrayList<>(textures));
+		out.add(pair);
 	    }
 	}
 

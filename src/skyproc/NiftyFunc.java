@@ -184,4 +184,11 @@ public class NiftyFunc {
 	    System.exit(0);
 	}
     }
+
+    public static String EDIDtrimmer (String origEDID) {
+	origEDID = origEDID.replaceAll(" ", "");
+	origEDID = origEDID.replaceAll(":", "_");
+	origEDID = origEDID.replaceAll("-", "_");
+	return origEDID;
+    }
 }

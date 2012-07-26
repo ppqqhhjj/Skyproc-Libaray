@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.SubStringPointer.Files;
@@ -39,6 +40,28 @@ public abstract class MajorRecord extends Record implements Serializable {
 	Consistency.addEntry(getEDID(), ID);
 	Consistency.newIDs.add(ID);
 	modToOriginateFrom.addRecordSilent(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final MajorRecord other = (MajorRecord) obj;
+	if (!Objects.equals(this.ID, other.ID)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 3;
+	hash = 37 * hash + Objects.hashCode(this.ID);
+	return hash;
     }
 
     /**

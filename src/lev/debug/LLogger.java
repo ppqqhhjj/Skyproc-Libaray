@@ -121,13 +121,15 @@ public class LLogger {
      */
     public void logError(String header, String... log) {
 	LDebug logger = sync() ? synced : asynced;
-	logMain("ERROR", "File " + logger.getOpenPath());
-	logMain("ERROR", "   Line " + logger.line());
-	String message = "   Message: ";
+	logMain("ERROR", " /=== ERROR!");
+	logMain("ERROR", "(==== File: " + logger.getOpenPath());
+	logMain("ERROR", " \\=== Line: " + logger.line());
+	String message = "  \\== Message: ";
 	for (String s : log) {
 	    message += s;
 	}
 	logMain("ERROR", message);
+	logMain("ERROR", "   \\========================================>");
 	logSync(header, log);
 	flush();
     }
