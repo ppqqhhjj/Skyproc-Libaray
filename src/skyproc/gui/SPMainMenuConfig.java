@@ -33,7 +33,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
      */
     public SPMainMenuConfig(LLabel title_, boolean checkbox, Color color, Point location, LSaveFile saveFile, Enum setting) {
 	super(title_.getText());
-	boolean saveField = saveFile != null && setting != null && checkbox;
+	boolean saveField = saveFile != null && setting != null;
 
 	help = SUMGUI.helpPanel;
 	if (saveField) {
@@ -47,7 +47,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 
 	Font font = title_.getFont().deriveFont(Font.PLAIN, size);
 
-	if (saveField) {
+	if (checkbox) {
 	    cbox = new LSpecialCheckBox(title, font, color, this);
 	    cbox.setOffset(5);
 	    cbox.tie(setting, save, help, false);
@@ -61,7 +61,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	button.setLocation(button.getX(), button.getY() + 4);
 
 	add(button);
-	if (saveField) {
+	if (checkbox) {
 	    add(cbox);
 	    setLocation(location.x - button.getWidth() - cbox.getWidth() - spacing, location.y);
 	    setSize(cbox.getWidth() + button.getWidth() + spacing, cbox.getHeight());
