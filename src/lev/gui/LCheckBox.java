@@ -54,18 +54,6 @@ public class LCheckBox extends LUserSetting<Boolean> {
 
     /**
      *
-     * @param text
-     * @param font
-     * @param shade
-     * @param location
-     */
-    public LCheckBox(String text, Font font, Color shade, Point location) {
-	this(text, font, shade);
-	setLocation(location);
-    }
-
-    /**
-     *
      */
     public void addShadow() {
 	titleLabel.addShadow();

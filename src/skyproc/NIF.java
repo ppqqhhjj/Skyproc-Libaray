@@ -70,9 +70,13 @@ public class NIF {
 	if (SPGlobal.debugNIFimport) {
 	    SPGlobal.logSync(header, "Loading nif file");
 	}
-	if (!in.extractString(20).equals("Gamebryo File Format")) {
-	    throw new BadParameter(fileName + " was not a NIF file.");
+	if (!in.getString(20).equals("Gamebryo File Format")) {
+	    byte first = in.extract(1)[0];
+	    if (!in.extractString((int) first, 20).equals("Gamebryo File Format")) {
+		throw new BadParameter(fileName + " was not a NIF file.");
+	    }
 	}
+
 	in.extractLine();
 
 	//BlockTypes

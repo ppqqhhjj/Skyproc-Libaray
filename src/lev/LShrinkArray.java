@@ -226,7 +226,7 @@ public class LShrinkArray {
     }
 
     /**
-     * 
+     *
      * @param amount
      * @return
      */
@@ -238,6 +238,14 @@ public class LShrinkArray {
 	}
     }
 
+    public String getString(int amount) {
+        return Ln.arrayToString(getInts(0,amount));
+    }
+
+    public String getString(int skip, int amount) {
+        return Ln.arrayToString(getInts(skip, amount));
+    }
+
     /**
      * Extracts the specified number of bytes after skipping the desired amount,
      * and returns the string representation.<br>
@@ -247,7 +255,9 @@ public class LShrinkArray {
      * @return String representation of the bytes read.
      */
     public String extractString(int skip, int amount) {
-        return Ln.arrayToString(getInts(skip, amount));
+        String out = getString(skip, amount);
+	skip(skip + amount);
+	return out;
     }
 
     /**
@@ -257,7 +267,9 @@ public class LShrinkArray {
      * @return String representation of the bytes read.
      */
     public String extractString(int amount) {
-        return Ln.arrayToString(extractInts(amount));
+	String out = getString(amount);
+	skip(amount);
+	return out;
     }
 
     /**
