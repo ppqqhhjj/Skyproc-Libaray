@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import lev.gui.LButton;
 import lev.gui.LTextPane;
 
@@ -57,8 +58,12 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if (testCancel()) {
-		    onCancel();
-		    cancelPanel.open();
+		    int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel?", "Confirm Cancel",
+			    JOptionPane.YES_NO_OPTION);
+		    if (answer == JOptionPane.YES_OPTION) {
+			onCancel();
+			cancelPanel.open();
+		    }
 		}
 	    }
 	});

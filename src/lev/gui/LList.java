@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
  *
  * @author Justin Swanson
  */
-public class LList<T extends Object> extends LComponent implements Iterable<T> {
+public class LList<T extends Object> extends LHelpComponent implements Iterable<T> {
 
     DefaultListModel<T> model;
     JList list;
@@ -32,6 +32,7 @@ public class LList<T extends Object> extends LComponent implements Iterable<T> {
     static int spacing = 15;
 
     public LList(String title, Font font, Color color) {
+	super(title);
 	this.title = new LLabel(title, font, color);
 	this.title.addShadow();
 	add(this.title);
@@ -53,7 +54,6 @@ public class LList<T extends Object> extends LComponent implements Iterable<T> {
 	});
 	Add(remove);
 
-	setSize(200, 150);
     }
 
     @Override
@@ -125,5 +125,10 @@ public class LList<T extends Object> extends LComponent implements Iterable<T> {
 	    out.add((T) o);
 	}
 	return out;
+    }
+
+    @Override
+    protected void addHelpHandler(boolean hoverListener) {
+	addMouseListener(new HelpMouseHandler());
     }
 }

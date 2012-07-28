@@ -37,7 +37,7 @@ public class LLogger {
      */
     public LLogger(String debugPath) {
 	this.debugPath = debugPath;
-	Ln.removeDirectory(new File(debugPath));
+	Ln.deleteDirectory(new File(debugPath));
 	main = new LDebug(debugPath + "=--Debug Overview--=.txt", 50);
 	asynced = new LDebug(debugPath + "Asynchronous log.txt", 50);
 	synced = new LDebug();

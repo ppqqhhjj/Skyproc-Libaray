@@ -222,7 +222,7 @@ public class Ln {
      * @param directory
      * @return
      */
-    public static boolean removeDirectory(File directory) {
+    public static boolean deleteDirectory(File directory) {
 
 	if (directory == null) {
 	    return false;
@@ -243,7 +243,7 @@ public class Ln {
 		File entry = new File(directory, list[i]);
 
 		if (entry.isDirectory()) {
-		    if (!removeDirectory(entry)) {
+		    if (!deleteDirectory(entry)) {
 			return false;
 		    }
 		} else {
