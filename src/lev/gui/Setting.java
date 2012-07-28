@@ -6,6 +6,7 @@ package lev.gui;
 
 import java.io.BufferedWriter;
 import java.util.Objects;
+import java.util.Set;
 import skyproc.exceptions.BadParameter;
 
 /**
@@ -54,6 +55,10 @@ public abstract class Setting<T> {
      */
     public Integer getInt() {
         return (Integer)data;
+    }
+
+    public Set<String> getStrings() {
+	return (Set<String>) data;
     }
 
     /**
@@ -109,7 +114,6 @@ public abstract class Setting<T> {
      * @throws BadParameter
      */
     public void readSetting(String input) throws java.io.IOException, BadParameter {
-        input = input.substring(input.indexOf(" to ") + 4);
         parse(input.trim());
     }
 

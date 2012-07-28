@@ -7,6 +7,7 @@ package lev.gui;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import skyproc.SPGlobal;
@@ -110,11 +111,23 @@ public abstract class LSaveFile {
 		String inStr;
 		String settingTitle;
 		while (input.ready()) {
-		    inStr = input.readLine();
+		    inStr = input.readLine().trim();
+		    if (inStr.equals("")) {
+			continue;
+		    }
 		    settingTitle = inStr.substring(4, inStr.indexOf(" to "));
+		    inStr = inStr.substring(inStr.indexOf(" to ") + 4);
 		    for (Enum s : saveSettings.keySet()) {
 			if (saveSettings.containsKey(s)) {
 			    if (saveSettings.get(s).getTitle().equals(settingTitle)) {
+				// Multiline setting
+				if (saveSettings.get(s).getClass() == SaveStringSet.class) {
+				    int num = Integer.valueOf(inStr.trim());
+				    inStr = "";
+				    for (int i = 0 ; i < num ; i++) {
+					inStr += input.readLine();
+				    }
+				}
 				saveSettings.get(s).readSetting(inStr);
 				curSettings.get(s).readSetting(inStr);
 			    }
@@ -201,6 +214,18 @@ public abstract class LSaveFile {
      */
     protected void Add(Enum type, Integer i, boolean patchChanging) {
 	Add(type, new SaveInt(type.toString(), i, patchChanging));
+    }
+
+    /**
+     * Adds a setting of type integer.
+     *
+     * @param type Enum to be associated with.
+     * @param inGame Defines this setting to be exported to an INI file to be
+     * read in by Skyrim.
+     * @param i Default value to assign the setting.
+     */
+    protected void Add(Enum type, Set<String> strs, boolean patchChanging) {
+	Add(type, new SaveStringSet(type.toString(), strs, patchChanging));
     }
 
     /**
@@ -375,5 +400,15 @@ public abstract class LSaveFile {
      */
     public Boolean getBool(Enum s) {
 	return curSettings.get(s).getBool();
+    }
+
+    /**
+     * Returns the value of the setting, and assumes it's a boolean value.
+     *
+     * @param s
+     * @return
+     */
+    public Set<String> getStrings(Enum s) {
+	return curSettings.get(s).getStrings();
     }
 }

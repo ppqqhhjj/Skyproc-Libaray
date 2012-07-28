@@ -14,8 +14,8 @@ class SaveFormList extends Setting<FormID[]> {
 
     static String delimiter = "<#>";
 
-    public SaveFormList(String title_, FormID[] data_, Boolean inGame) {
-        super(title_, data_, inGame);
+    public SaveFormList(String title_, FormID[] data_, Boolean patchChanging) {
+        super(title_, data_, patchChanging);
     }
 
     @Override
