@@ -138,23 +138,31 @@ public class NIF {
 	for (int i = 0; i < numStrings; i++) {
 	    strings.add(in.extractString(in.extractInt(4)));
 	}
-	int j = 0;
-	for (int i = 0; i < numBlocks && j < strings.size(); i++) {
-	    NodeType type = nodes.get(i).type;
-	    if (type == NodeType.NINODE || type == NodeType.NITRISHAPE || type == NodeType.BSINVMARKER) {
-		nodes.get(i).title = strings.get(j++);
-		if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
-		    SPGlobal.log(header, "  [" + i + "]: " + nodes.get(i).type + ", string: " + nodes.get(i).title);
-		}
-	    }
-	}
 	in.skip(4); // unknown int
 
 	for (int i = 0; i < numBlocks; i++) {
 	    nodes.get(i).data = new LShrinkArray(in, nodes.get(i).size);
 	    in.skip(nodes.get(i).size);
 	}
+
+	//Set titles
+	for (int i = 0; i < numBlocks ; i++) {
+	    NodeType type = nodes.get(i).type;
+	    if (type == NodeType.NINODE
+		    || type == NodeType.NITRISHAPE
+		    || type == NodeType.BSINVMARKER
+		    || type == NodeType.BSBEHAVIORGRAPHEXTRADATA) {
+		Node n = nodes.get(i);
+		int stringIndex = n.data.getInts(0, 4)[0];
+		n.title = strings.get(stringIndex);
+		if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
+		    SPGlobal.log(header, "  [" + i + "]: " + nodes.get(i).type + ", string: " + nodes.get(i).title);
+		}
+	    }
+	}
     }
+
+
 
     /**
      * A single Node and its data in the nif file.
@@ -201,6 +209,8 @@ public class NIF {
 	 *
 	 */
 	NINODE,
+	BSBEHAVIORGRAPHEXTRADATA,
+	NICONTROLLERSEQUENCE,
 	/**
 	 *
 	 */
@@ -293,6 +303,7 @@ public class NIF {
 	for (int i = 0; i < nodes.size(); i++) {
 	    Node n = getNode(i);
 	    if (n.type == NodeType.NITRISHAPE) {
+
 		name = n.title;
 	    }
 	    if (n.type == type) {
