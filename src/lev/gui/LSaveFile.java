@@ -124,7 +124,7 @@ public abstract class LSaveFile {
 				if (saveSettings.get(s).getClass() == SaveStringSet.class) {
 				    int num = Integer.valueOf(inStr.trim());
 				    inStr = "";
-				    for (int i = 0 ; i < num ; i++) {
+				    for (int i = 0; i < num; i++) {
 					inStr += input.readLine();
 				    }
 				}
@@ -137,7 +137,9 @@ public abstract class LSaveFile {
 
 	    } catch (Exception e) {
 		JOptionPane.showMessageDialog(null, "Error in reading in save file. Reverting to default settings.");
-		init();
+		initSettings();
+		initHelp();
+		initialized = true;
 	    }
 	}
     }
@@ -358,11 +360,11 @@ public abstract class LSaveFile {
 	return false;
     }
 
-    public ArrayList<Setting> getModifiedSettings () {
+    public ArrayList<Setting> getModifiedSettings() {
 	return getDiff(saveSettings, curSettings);
     }
 
-    public ArrayList<Setting> getDiff (Map<Enum, Setting> lhs, Map<Enum, Setting> rhs) {
+    public ArrayList<Setting> getDiff(Map<Enum, Setting> lhs, Map<Enum, Setting> rhs) {
 	ArrayList<Setting> out = new ArrayList<>();
 	for (Enum e : lhs.keySet()) {
 	    if (!lhs.get(e).equals(rhs.get(e))) {

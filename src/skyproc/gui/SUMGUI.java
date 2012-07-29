@@ -468,9 +468,6 @@ public class SUMGUI extends JFrame {
      */
     static public void exitProgram(boolean generatedPatch) {
 	SPGlobal.log(header, "Exit requested.");
-	if (hook.hasSave()) {
-	    hook.getSave().saveToFile();
-	}
 	if (generatedPatch) {
 	    try {
 		SPGlobal.getDB().exportModList(pathToLastModlist);
@@ -493,6 +490,9 @@ public class SUMGUI extends JFrame {
 	    hook.onExit(generatedPatch);
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
+	}
+	if (hook.hasSave()) {
+	    hook.getSave().saveToFile();
 	}
 	LDebug.wrapUpAndExit();
     }
