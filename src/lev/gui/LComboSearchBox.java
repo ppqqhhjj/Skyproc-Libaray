@@ -120,6 +120,10 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	backup.add(o);
     }
 
+    public void addBoxActionListener(ActionListener f) {
+	super.addActionListener(f);
+    }
+
     @Override
     public void addFocusListener(FocusListener f) {
 	super.addFocusListener(f);
@@ -141,6 +145,7 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
     public void reset() {
 	setText(searchText);
 	filterItems();
+	super.reset();
     }
 
     public void setText(String s) {

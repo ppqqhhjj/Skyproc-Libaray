@@ -176,4 +176,11 @@ public class LButton extends LHelpComponent {
     public void addFocusListener(FocusListener l) {
 	button.addFocusListener(l);
     }
+
+    public void clearActionHandlers() {
+	ActionListener[] ls = button.getListeners(ActionListener.class);
+	for (ActionListener a : ls) {
+	    button.removeActionListener(a);
+	}
+    }
 }

@@ -90,8 +90,8 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if (testNext()) {
-		    nextPanel.open();
 		    onNext();
+		    nextPanel.open();
 		}
 	    }
 	});

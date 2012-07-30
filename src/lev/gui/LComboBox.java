@@ -66,6 +66,10 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 	return (T) box.getSelectedItem();
     }
 
+    public void reset() {
+	box.setSelectedIndex(-1);
+    }
+
     /**
      *
      */
@@ -88,8 +92,8 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
     public void setSelectedIndex(int in) {
 	if (box.getItemCount() <= in) {
 	    box.setSelectedIndex(box.getItemCount() - 1);
-	} else if (in < 0) {
-	    box.setSelectedIndex(0);
+	} else if (in < -1) {
+	    box.setSelectedIndex(-1);
 	} else {
 	    box.setSelectedIndex(in);
 	}

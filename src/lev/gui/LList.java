@@ -8,12 +8,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -22,7 +26,7 @@ import javax.swing.JScrollPane;
 public class LList<T extends Object> extends LHelpComponent implements Iterable<T> {
 
     DefaultListModel<T> model;
-    JList list;
+    JList<T> list;
     JScrollPane scroll;
     LLabel title;
     boolean unique;
@@ -76,6 +80,20 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	}
     }
 
+    public void addElements(Collection<T> in) {
+	for (T t : in) {
+	    addElement(t);
+	}
+    }
+
+    public List<T> getSelectedElements() {
+	return list.getSelectedValuesList();
+    }
+
+    public T getSelectedElement() {
+	return list.getSelectedValue();
+    }
+
     public void removeSelected() {
 	for (Object o : list.getSelectedValuesList()) {
 	    model.removeElement(o);
@@ -102,8 +120,29 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	setSize(getSize().width, getSize().height);
     }
 
+    public void setRemoveButton(String title, ActionListener a) {
+	remove.setText(title);
+	remove.clearActionHandlers();
+	remove.addActionListener(a);
+    }
+
     public void setUnique(boolean on) {
 	unique = on;
+    }
+
+    public void addListSelectionListener(ListSelectionListener l) {
+	list.addListSelectionListener(l);
+    }
+
+    @Override
+    public void addMouseListener(MouseListener m) {
+	super.addMouseListener(m);
+	remove.addMouseListener(m);
+	if (accept != null) {
+	    accept.addMouseListener(m);
+	}
+	scroll.addMouseListener(m);
+	list.addMouseListener(m);
     }
 
     @Override
