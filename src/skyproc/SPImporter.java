@@ -118,8 +118,17 @@ public class SPImporter {
 		}
 
 		while (line != null) {
+		    if (line.indexOf("#") >= 0) {
+			line = line.substring(0, line.indexOf("#"));
+		    }
+		    line = line.trim();
+		    if (line.equals("")) {
+			line = ModFile.readLine();
+			continue;
+		    }
 		    pluginName = new File(SPGlobal.pathToData + line);
-		    if (!SPGlobal.modsToSkip.contains(new ModListing(line))) {
+		    if (!SPGlobal.modsToSkip.contains(new ModListing(line))
+			    && !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
 			if (pluginName.isFile()) {
 			    if (!lines.contains(line)) {
 				SPGlobal.logSync(header, "Adding mod: " + line);
@@ -458,13 +467,12 @@ public class SPImporter {
      * manipulated.
      * @throws BadMod If SkyProc runs into any unexpected data structures, or
      * has any error importing a mod at all.
-
-    public Mod importMod(ModListing listing, String path, ArrayList<GRUP_TYPE> grup_targets) throws BadMod {
-	GRUP_TYPE[] types = new GRUP_TYPE[grup_targets.size()];
-	types = grup_targets.toArray(types);
-	return importMod(listing, path, types);
-    }
-    */
+     *
+     * public Mod importMod(ModListing listing, String path,
+     * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_TYPE[] types =
+     * new GRUP_TYPE[grup_targets.size()]; types = grup_targets.toArray(types);
+     * return importMod(listing, path, types); }
+     */
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
 	int curBar = SPProgressBarPlug.getBar();
 	try {

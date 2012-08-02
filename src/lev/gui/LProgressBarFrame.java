@@ -4,17 +4,12 @@
  */
 package lev.gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
-import lev.debug.LDebug;
 import lev.gui.resources.LImages;
-import skyproc.SPGlobal;
 
 /**
  * A GUI window frame for LProgress bar.  Used in SUMGUI.
@@ -53,7 +48,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 	} catch (IOException ex) {
 	}
 	backgroundPanel.setVisible(true);
-	add(backgroundPanel);
+	super.add(backgroundPanel);
 
 	setSize(GUIsize);
 	setResizable(false);
@@ -199,5 +194,11 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     @Override
     public void done() {
 	bar.done();
+    }
+
+    @Override
+    public Component add(Component c) {
+	backgroundPanel.add(c);
+	return c;
     }
 }

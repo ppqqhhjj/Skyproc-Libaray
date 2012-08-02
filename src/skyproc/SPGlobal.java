@@ -107,7 +107,8 @@ public class SPGlobal {
     public static Mod getGlobalPatch() {
 	return globalPatchOut;
     }
-    static ArrayList<ModListing> modsToSkip = new ArrayList<ModListing>();
+    static ArrayList<ModListing> modsToSkip = new ArrayList<>();
+    static ArrayList<String> modsToSkipStr = new ArrayList<>();
 
     /**
      *
@@ -115,6 +116,10 @@ public class SPGlobal {
      */
     public static void addModToSkip(ModListing m) {
 	modsToSkip.add(m);
+    }
+
+    public static void addModToSkip(String keyword) {
+	modsToSkipStr.add(keyword);
     }
 
     /**

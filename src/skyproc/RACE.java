@@ -988,22 +988,22 @@ public class RACE extends MajorRecordDescription {
                 HKXrecords.set.get(Type.FNAM).MODL.setString(s);
         }
     }
-    
+
     public ArrayList<FormID> getEquipSlots() {
         return SubList.subFormToPublic(QNAM);
     }
-    
+
     public void addEquipSlot(FormID in) {
         QNAM.add(new SubForm(Type.QNAM, in));
     }
-    
+
     public void removeEquipSlot(FormID in) {
         QNAM.remove(new SubForm(Type.QNAM, in));
     }
-    
+
     public void clearEquipSlots() {
         QNAM.clear();
     }
-    
-    
+
+
 }

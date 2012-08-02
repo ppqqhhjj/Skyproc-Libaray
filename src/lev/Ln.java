@@ -1561,4 +1561,14 @@ public class Ln {
 	    in.set(i, in.get(i).toUpperCase());
 	}
     }
+
+    public static boolean hasAnyKeywords (String target, ArrayList<String> keywords) {
+	target = target.toUpperCase();
+	for (String s : keywords) {
+	    if (target.contains(s.toUpperCase())) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }
