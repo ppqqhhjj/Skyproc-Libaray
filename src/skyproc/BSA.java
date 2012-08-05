@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LFlags;
@@ -26,7 +24,7 @@ import skyproc.exceptions.BadParameter;
 public class BSA {
 
     static ArrayList<BSA> resourceLoadOrder;
-    static ArrayList<BSA> pluginLoadOrder;
+    static Map<ModListing, BSA> pluginLoadOrder = new TreeMap<>();
     static String header = "BSA";
     String filePath;
     int offset;
@@ -126,6 +124,10 @@ public class BSA {
 	}
     }
 
+    public boolean loaded() {
+	return loaded;
+    }
+
     /**
      *
      * @param filePath filepath to query for and retrieve.
@@ -138,7 +140,7 @@ public class BSA {
     public LShrinkArray getFile(String filePath) throws IOException, DataFormatException {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
-	    in.pos(ref.dataOffset);
+	    in.pos(getFileLocation(ref));
 	    LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0, ref.size));
 	    if (archiveFlags.get(2)) {
 		out.correctForCompression();
@@ -146,6 +148,26 @@ public class BSA {
 	    return out;
 	}
 	return new LShrinkArray(new byte[0]);
+    }
+
+    long getFileLocation(BSAFileRef ref) {
+	return ref.dataOffset;
+    }
+
+    public long getFileLocation(String filePath) {
+	BSAFileRef ref;
+	if ((ref = getFileRef(filePath)) != null) {
+	    return getFileLocation(ref);
+	}
+	return -1;
+    }
+
+    public long getFileLocation(File f) {
+	return getFileLocation(f.getPath());
+    }
+
+    public LShrinkArray getFile(File f) throws IOException, DataFormatException {
+	return getFile(f.getPath());
     }
 
     String getFilename(String filePath) throws IOException {
@@ -215,19 +237,8 @@ public class BSA {
 	}
 	try {
 	    ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
-	    pluginLoadOrder = new ArrayList<>();
 	    for (ModListing m : activeMods) {
-		File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
-		if (bsaPath.exists()) {
-		    try {
-			BSA bsa = new BSA(bsaPath, false);
-			pluginLoadOrder.add(bsa);
-		    } catch (IOException | BadParameter ex) {
-			SPGlobal.logException(ex);
-		    }
-		} else if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
-		}
+		pluginLoadOrder.put(m, getBSA(m));
 	    }
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
@@ -239,7 +250,7 @@ public class BSA {
 	    return;
 	}
 	try {
-	    ArrayList<String> resources = new ArrayList<String>();
+	    ArrayList<String> resources = new ArrayList<>();
 	    File ini = SPGlobal.getSkyrimINI();
 
 	    if (SPGlobal.logging()) {
@@ -275,11 +286,6 @@ public class BSA {
 	    }
 
 	    if (!line1 || !line2) {
-		// If one of the lines is missing.
-//		throw new BadParameter("<html>Your Skyrim.ini file did not have BOTH lines: 'sResourceArchiveList' and 'sResourceArchiveList2'.<br>"
-//			+ "It cannot figure out which BSAs to load in.<br>"
-//			+ "Please confirm that those lines appear in your Skyrim.ini and have the proper BSAs listed.");
-
 		//Assume standard BSA listing
 		if (!resources.contains("Skyrim - Misc.bsa")) {
 		    resources.add("Skyrim - Misc.bsa");
@@ -326,7 +332,7 @@ public class BSA {
 		SPGlobal.log(header, "Loading in their headers.");
 	    }
 
-	    resourceLoadOrder = new ArrayList<BSA>(resources.size());
+	    resourceLoadOrder = new ArrayList<>(resources.size());
 	    for (String s : resources) {
 		File bsaPath = new File(SPGlobal.pathToData + s);
 		if (bsaPath.exists()) {
@@ -382,6 +388,10 @@ public class BSA {
      */
     public boolean hasFile(String filePath) {
 	return getFileRef(filePath) != null;
+    }
+
+    public boolean hasFile(File f) {
+	return hasFile(f.getPath());
     }
 
     /**
@@ -483,7 +493,7 @@ public class BSA {
     public static ArrayList<BSA> loadInBSAs(FileType... types) {
 	loadResourceLoadOrder();
 	loadPluginLoadOrder();
-	ArrayList<BSA> out = new ArrayList<BSA>();
+	ArrayList<BSA> out = new ArrayList<>();
 	Iterator<BSA> bsas = iterator();
 	while (bsas.hasNext()) {
 	    BSA tmp = bsas.next();
@@ -507,8 +517,43 @@ public class BSA {
     static ArrayList<BSA> getBSAs() {
 	ArrayList<BSA> order = new ArrayList<>(resourceLoadOrder.size() + pluginLoadOrder.size());
 	order.addAll(resourceLoadOrder);
-	order.addAll(pluginLoadOrder);
+	order.addAll(pluginLoadOrder.values());
 	return order;
+    }
+
+    static public BSA getBSA(ModListing m) {
+	if (pluginLoadOrder.containsKey(m)) {
+	    return pluginLoadOrder.get(m);
+	}
+
+	File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
+	if (bsaPath.exists()) {
+	    try {
+		BSA bsa = new BSA(bsaPath, false);
+		return bsa;
+	    } catch (IOException | BadParameter ex) {
+		SPGlobal.logException(ex);
+		return null;
+	    }
+	}
+
+	if (SPGlobal.logging()) {
+	    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
+	}
+	return null;
+    }
+
+    static public BSA getBSA(Mod m) {
+	return getBSA(m.getInfo());
+    }
+
+    static public boolean hasBSA(ModListing m) {
+	File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
+	return bsaPath.exists();
+    }
+
+    static public boolean hasBSA(Mod m) {
+	return hasBSA(m.getInfo());
     }
 
     class BSAFileRef {

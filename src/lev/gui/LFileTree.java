@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import lev.Ln;
 
 /**
  *
@@ -32,7 +33,7 @@ public class LFileTree {
 
     public void addFile(String path) {
 	ArrayList<String> list = new ArrayList<>();
-	path = path.replace("\\", "/");
+	path = Ln.standardizeFilePath(path);
 	list.addAll(Arrays.asList(path.split("/")));
 	addFile(root, list);
     }

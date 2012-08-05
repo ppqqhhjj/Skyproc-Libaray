@@ -52,7 +52,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
-    private ArrayList<String> outILStrings = new ArrayList<String>();
+    private ArrayList<String> outILStrings = new ArrayList<>();
 
     /**
      * Creates an empty Mod with the name and master flag set to match info.
@@ -377,7 +377,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     void fetchStringPointers() throws IOException {
 	Map<SubStringPointer.Files, LFileChannel> streams = null;
 	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
-	    streams = new EnumMap<SubStringPointer.Files, LFileChannel>(SubStringPointer.Files.class);
+	    streams = new EnumMap<>(SubStringPointer.Files.class);
 	    for (Files f : SubStringPointer.Files.values()) {
 		addStream(streams, f);
 	    }
@@ -389,7 +389,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     void addStream(Map<SubStringPointer.Files, LFileChannel> streams, SubStringPointer.Files file) {
 	try {
-	    streams.put(file, new LFileChannel(SPImporter.pathToStringFile(this, file)));
+	    streams.put(file, new LFileChannel(SPGlobal.pathToData + SPImporter.pathToStringFile(this, file)));
 	} catch (FileNotFoundException ex) {
 	    logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
 	}
@@ -641,6 +641,10 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
 	    SPGlobal.sync(true);
 	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
+	    logSync(this.getName(), "Masters: ");
+	    for (String s : this.getMastersStrings()) {
+		logSync(this.getName(), "   " + s);
+	    }
 	}
 
 	header.export(out, srcMod);

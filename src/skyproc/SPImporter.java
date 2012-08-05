@@ -3,6 +3,7 @@ package skyproc;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -553,15 +554,37 @@ public class SPImporter {
 	}
     }
 
-    static void importStrings(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException {
+    static void importStrings(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException, DataFormatException {
+
+	String strings = pathToStringFile(plugin, file);
+	File stringsFile = new File(SPGlobal.pathToData + strings);
+	LShrinkArray in = null;
+	int numRecords = 0;
+	int recordsSize = 0;
 
 	// Open file
-	LFileChannel istream = new LFileChannel(pathToStringFile(plugin, file));
-
-	// Read header
-	int numRecords = istream.readInInt(0, 4);
-	int recordsSize = numRecords * 8 + 8;
-	LShrinkArray in = new LShrinkArray(istream.readInByteBuffer(4, recordsSize));
+	if (stringsFile.isFile()) {
+	    LFileChannel istream = new LFileChannel(stringsFile);
+	    // Read header
+	    numRecords = istream.readInInt(0, 4);
+	    recordsSize = numRecords * 8 + 8;
+	    in = new LShrinkArray(istream.readInByteBuffer(4, recordsSize));
+	} else if (BSA.hasBSA(plugin)) {
+	    //In BSA
+ 	    BSA bsa = BSA.getBSA(plugin);
+	    bsa.loadFolders();
+	    if (bsa.hasFile(strings)) {
+		in = bsa.getFile(strings);
+	    } else {
+		SPGlobal.logError(header, plugin.toString() + " had no Strings file in BSA.");
+		return;
+	    }
+	    numRecords = in.extractInt(4);
+	    recordsSize = numRecords * 8 + 8;
+	} else {
+	    SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
+	    return;
+	}
 
 	// Read entry pairs
 	for (int i = 0; i < numRecords; i++) {
@@ -571,7 +594,7 @@ public class SPImporter {
     }
 
     static String pathToStringFile(Mod plugin, SubStringPointer.Files file) {
-	return SPGlobal.pathToData + "Strings/" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + SPGlobal.language + "." + file;
+	return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + SPGlobal.language + "." + file;
     }
 
     static Type scanToRecordStart(LFileChannel in, ArrayList<Type> target) throws java.io.IOException {

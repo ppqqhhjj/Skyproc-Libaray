@@ -1571,4 +1571,8 @@ public class Ln {
 	}
 	return false;
     }
+
+    public static String standardizeFilePath(String filePath) {
+	return filePath.replace("\\", "/");
+    }
 }
