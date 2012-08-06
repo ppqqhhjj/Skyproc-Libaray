@@ -162,12 +162,13 @@ public abstract class LChannel {
 	byte[] stop = new byte[0];
 	while (available() > 0 && stop.length == 0) {
 	    in = read();
-	    if ((stop = search.next(in)).length == 0) {
+	    stop = search.next(in);
+	    if (stop.length == 0) {
 		buffer.add((byte) in);
 	    }
 	}
 	byte[] out = new byte[buffer.size() - (stop.length - 1)];
-	for (int i = 0; i < buffer.size() - (stop.length - 1); i++) {
+	for (int i = 0; i < buffer.size() - (stop.length - 1) && i < buffer.size() ; i++) {
 	    out[i] = buffer.get(i);
 	}
 	return out;

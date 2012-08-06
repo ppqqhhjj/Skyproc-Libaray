@@ -251,38 +251,42 @@ public class BSA {
 	}
 	try {
 	    ArrayList<String> resources = new ArrayList<>();
-	    File ini = SPGlobal.getSkyrimINI();
-
-	    if (SPGlobal.logging()) {
-		SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
-	    }
-	    LFileChannel input = new LFileChannel(ini);
 	    boolean line1 = false, line2 = false;
+	    try {
+		File ini = SPGlobal.getSkyrimINI();
 
-	    String line = "";
-	    // First line
-	    while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
-		line = input.readLine();
-	    }
-	    if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
-		line2 = true;
-		resources.addAll(processINIline(line));
-	    } else {
-		line1 = true;
-		resources.addAll(0, processINIline(line));
-	    }
+		if (SPGlobal.logging()) {
+		    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
+		}
+		LFileChannel input = new LFileChannel(ini);
 
-	    // Second line
-	    line = "";
-	    while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
-		line = Ln.cleanLine(input.readLine(), "#");
-	    }
-	    if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
-		line2 = true;
-		resources.addAll(processINIline(line));
-	    } else {
-		line1 = true;
-		resources.addAll(0, processINIline(line));
+		String line = "";
+		// First line
+		while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
+		    line = input.readLine();
+		}
+		if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
+		    line2 = true;
+		    resources.addAll(processINIline(line));
+		} else {
+		    line1 = true;
+		    resources.addAll(0, processINIline(line));
+		}
+
+		// Second line
+		line = "";
+		while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
+		    line = Ln.cleanLine(input.readLine(), "#");
+		}
+		if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
+		    line2 = true;
+		    resources.addAll(processINIline(line));
+		} else {
+		    line1 = true;
+		    resources.addAll(0, processINIline(line));
+		}
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
 	    }
 
 	    if (!line1 || !line2) {
@@ -339,9 +343,7 @@ public class BSA {
 		    try {
 			BSA bsa = new BSA(bsaPath, false);
 			resourceLoadOrder.add(bsa);
-		    } catch (BadParameter ex) {
-			SPGlobal.logException(ex);
-		    } catch (FileNotFoundException ex) {
+		    } catch (BadParameter | FileNotFoundException ex) {
 			SPGlobal.logException(ex);
 		    }
 		} else if (SPGlobal.logging()) {
