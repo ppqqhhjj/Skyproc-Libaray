@@ -191,4 +191,28 @@ public class NiftyFunc {
 	origEDID = origEDID.replaceAll("-", "_");
 	return origEDID;
     }
+
+    /*
+     * Only supports XX.XX.XX.XX with numbers for X
+     */
+    public static int versionToNum(String version) {
+	String tmp = "";
+	for (int i = 0 ; i < version.length() ; i++) {
+	    if (Character.isDigit(version.charAt(i))
+		    || version.charAt(i) == '.') {
+		tmp += version.charAt(i);
+	    }
+	}
+	version = tmp;
+	String[] split = version.split("\\.");
+	int out = 0;
+	for(int i = 0 ; i < split.length && i < 4 ; i++) {
+	    int next = Integer.valueOf(split[i]) * 1000000;
+	    if (i != 0) {
+		next /= Math.pow(100, i);
+	    }
+	    out += next;
+	}
+	return out;
+    }
 }
