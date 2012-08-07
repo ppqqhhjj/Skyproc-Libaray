@@ -271,6 +271,8 @@ public class SUMGUI extends JFrame {
 
 		    if (hook.importAtStart()) {
 			runThread();
+		    } else if (testNeedsPatching(false)) {
+			setPatchNeeded(true);
 		    }
 		}
 	    }
