@@ -375,7 +375,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
     }
 
     void fetchStringPointers() throws IOException {
-	Map<SubStringPointer.Files, LFileChannel> streams = null;
+	Map<SubStringPointer.Files, LChannel> streams = null;
 	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
 	    streams = new EnumMap<>(SubStringPointer.Files.class);
 	    for (Files f : SubStringPointer.Files.values()) {
@@ -387,10 +387,27 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    void addStream(Map<SubStringPointer.Files, LFileChannel> streams, SubStringPointer.Files file) {
+    void addStream(Map<SubStringPointer.Files, LChannel> streams, SubStringPointer.Files file) {
 	try {
-	    streams.put(file, new LFileChannel(SPGlobal.pathToData + SPImporter.pathToStringFile(this, file)));
-	} catch (FileNotFoundException ex) {
+	    String stringPath = SPImporter.pathToStringFile(this, file);
+	    File stringFile = new File(SPGlobal.pathToData + stringPath);
+	    if (stringFile.isFile()) {
+		streams.put(file, new LFileChannel(stringFile));
+		return;
+	    } else if (BSA.hasBSA(getInfo())) {
+		BSA bsa = BSA.getBSA(getInfo());
+		if (bsa.hasFile(stringPath)) {
+		    LByteChannel stream = new LByteChannel();
+		    stream.openStream(bsa.getFile(stringPath));
+		    streams.put(file, stream);
+		}
+		return;
+	    }
+
+	    if (SPGlobal.logging()) {
+		logSync(getName(), "No strings file for " + file);
+	    }
+	} catch (IOException | DataFormatException ex) {
 	    logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
 	}
     }

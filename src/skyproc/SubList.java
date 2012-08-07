@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
@@ -23,7 +23,7 @@ import skyproc.exceptions.BadRecord;
  */
 class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
-    ArrayList<T> collection = new ArrayList<T>();
+    ArrayList<T> collection = new ArrayList<>();
     T prototype;
     Type counterType = Type.NULL;
     boolean allowDups = true;
@@ -274,7 +274,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
         for (SubRecord s : collection) {
             s.fetchStringPointers(srcMod, r, streams);
         }

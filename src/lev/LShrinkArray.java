@@ -137,7 +137,7 @@ public class LShrinkArray {
      * @return The remaining contents as a byte array.
      */
     public byte[] extractAllBytes() {
-        return extract(0,length());
+        return extract(length());
     }
 
     /**

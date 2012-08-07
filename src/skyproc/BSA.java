@@ -493,6 +493,7 @@ public class BSA {
     public static ArrayList<BSA> loadInBSAs(FileType... types) {
 	loadResourceLoadOrder();
 	loadPluginLoadOrder();
+	deleteOverlap();
 	ArrayList<BSA> out = new ArrayList<>();
 	Iterator<BSA> bsas = iterator();
 	while (bsas.hasNext()) {
@@ -508,6 +509,12 @@ public class BSA {
 	    }
 	}
 	return out;
+    }
+
+    static void deleteOverlap() {
+	for (BSA b : pluginLoadOrder.values()) {
+	    resourceLoadOrder.remove(b);
+	}
     }
 
     static Iterator<BSA> iterator() {
@@ -530,6 +537,7 @@ public class BSA {
 	if (bsaPath.exists()) {
 	    try {
 		BSA bsa = new BSA(bsaPath, false);
+		pluginLoadOrder.put(m, bsa);
 		return bsa;
 	    } catch (IOException | BadParameter ex) {
 		SPGlobal.logException(ex);
@@ -554,6 +562,28 @@ public class BSA {
 
     static public boolean hasBSA(Mod m) {
 	return hasBSA(m.getInfo());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final BSA other = (BSA) obj;
+	if (!Objects.equals(this.filePath, other.filePath)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 19 * hash + Objects.hashCode(this.filePath);
+	return hash;
     }
 
     class BSAFileRef {

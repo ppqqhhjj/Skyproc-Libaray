@@ -219,7 +219,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return exception != null;
     }
 
-    void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
 	subRecords.fetchStringPointers(srcMod, this, streams);
     }
 

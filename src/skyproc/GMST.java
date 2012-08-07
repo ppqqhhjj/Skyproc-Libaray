@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
@@ -263,7 +263,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void fetchStringPointers(Mod srcMod, Record r, Map<Files, LFileChannel> streams) throws IOException {
+	void fetchStringPointers(Mod srcMod, Record r, Map<Files, LChannel> streams) throws IOException {
 	    DATAs.fetchStringPointers(srcMod, r, streams);
 	}
     }
@@ -9711,7 +9711,7 @@ public class GMST extends MajorRecord {
 	 *
 	 */
 	iXPRewardSpeechChallengeVeryHard,
-        
+
         iHoursToRespawnCell,
         iHoursToRespawnCellCleared,
         iDaysToRespawnVendor,
@@ -11565,7 +11565,7 @@ public class GMST extends MajorRecord {
 	 */
 	sRSMEyes,
 	/**
-	 * 
+	 *
 	 */
 	sRSMFace,
 	/**

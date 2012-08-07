@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
@@ -182,7 +182,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	}
     }
 
-    void fetchStringPointers(Mod srcMod, Map<Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
 	for (MajorRecord r : listRecords) {
 	    r.fetchStringPointers(srcMod, streams);
 	}

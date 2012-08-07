@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
@@ -148,7 +148,7 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	return map.keySet();
     }
 
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
 	for (SubRecord s : list) {
 	    s.fetchStringPointers(srcMod, r, streams);
 	}

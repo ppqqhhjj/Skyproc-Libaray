@@ -558,9 +558,9 @@ public class SPImporter {
 
 	String strings = pathToStringFile(plugin, file);
 	File stringsFile = new File(SPGlobal.pathToData + strings);
-	LShrinkArray in = null;
-	int numRecords = 0;
-	int recordsSize = 0;
+	LShrinkArray in;
+	int numRecords;
+	int recordsSize;
 
 	// Open file
 	if (stringsFile.isFile()) {
@@ -581,6 +581,8 @@ public class SPImporter {
 	    }
 	    numRecords = in.extractInt(4);
 	    recordsSize = numRecords * 8 + 8;
+	    //Skip bytes 4-8
+	    in.skip(4);
 	} else {
 	    SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
 	    return;

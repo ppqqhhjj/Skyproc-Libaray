@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -61,7 +61,7 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
 	subRecords.fetchStringPointers(srcMod, r, streams);
     }
 }

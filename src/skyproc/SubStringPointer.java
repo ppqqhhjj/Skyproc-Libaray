@@ -1,11 +1,10 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
 import skyproc.Mod.Mod_Flags;
@@ -73,13 +72,13 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LFileChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    if (data.isValid() && streams.containsKey(file)) {
 		int index = Ln.arrayToInt(data.getData());
 		if (srcMod.strings.get(file).containsKey(index)) {
 		    int offset = srcMod.strings.get(file).get(index);
-		    LFileChannel stream = streams.get(file);
+		    LChannel stream = streams.get(file);
 
 		    stream.pos(offset);
 
@@ -143,7 +142,7 @@ class SubStringPointer extends SubRecord {
 		return text.getContentLength(srcMod);
 	    }
 	}
-	
+
 	if (shortNull) {
 	    return 1;
 	} else {
