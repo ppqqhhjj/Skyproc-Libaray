@@ -47,7 +47,14 @@ public class SPGlobal {
      * every time a patch is created. To offer multi-language support, simply
      * give the users of your program ability to adjust this setting.
      */
-    public static String language = "English";
+    public static Language language = Language.English;
+    public static enum Language {
+	English,
+	Spanish,
+	Italian,
+	French,
+	German;
+    }
     /**
      * The path from the .jar location to create/look for the file used to
      * remember where the plugins.txt file is if the program cannot locate it

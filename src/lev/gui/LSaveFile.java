@@ -219,6 +219,18 @@ public abstract class LSaveFile {
     }
 
     /**
+     * Adds a setting of type enum.
+     *
+     * @param type Enum to be associated with.
+     * @param inGame Defines this setting to be exported to an INI file to be
+     * read in by Skyrim.
+     * @param i Default value to assign the setting.
+     */
+    protected void Add(Enum type, Enum e, boolean patchChanging) {
+	Add(type, new SaveEnum(type.toString(), e, patchChanging));
+    }
+
+    /**
      * Adds a setting of type integer.
      *
      * @param type Enum to be associated with.
