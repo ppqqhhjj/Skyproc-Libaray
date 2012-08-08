@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -46,12 +47,15 @@ class SubInt extends SubRecord {
     public void set (int in) {
 	data = in;
 	valid = true;
+        if (logging()) {
+            logSync(toString(), "Setting " + toString() + " to " + print());
+        }
     }
-    
+
     public int get () {
 	return data;
     }
-    
+
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);

@@ -123,12 +123,12 @@ public class NPC_ extends Actor implements Serializable {
 	subRecords.add(NAM7);
 	subRecords.add(NAM8);
 	subRecords.add(CSCR);
+	subRecords.add(soundPackages);
 	subRecords.add(DOFT);
 	subRecords.add(SOFT);
 	subRecords.add(DPLT);
 	subRecords.add(CRIF);
 	subRecords.add(FTST);
-	subRecords.add(soundPackages);
 	subRecords.add(QNAM);
 	subRecords.add(NAM9);
 	subRecords.add(NAMA);
@@ -226,6 +226,7 @@ public class NPC_ extends Actor implements Serializable {
 		    if (size == 4) {
 			SubForm CSDI = new SubForm(Type.CSDI);
 			CSDI.setForm(in.extract(size));
+			CSDI.ID.valid = true;
 			soundPairs.add(new SoundPair(CSDI));
 		    } else {
 			throw new BadRecord("CSDI data length was not 4, as expected to be a formID");
