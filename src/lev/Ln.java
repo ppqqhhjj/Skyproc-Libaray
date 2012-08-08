@@ -278,7 +278,7 @@ public class Ln {
 	}
 
 	if (ordered) {
-	    for (int i = 0 ; i < lhs.size() ; i++) {
+	    for (int i = 0; i < lhs.size(); i++) {
 		if (!lhs.get(i).equals(rhs.get(i))) {
 		    return false;
 		}
@@ -407,7 +407,9 @@ public class Ln {
     public static String arrayToString(byte[] input) {
 	String output = "";
 	for (int i = 0; i < input.length; i++) {
-	    output = output + (char) input[i];
+	    if (input[i] != 0) {
+		output = output + (char) input[i];
+	    }
 	}
 	return output;
     }
@@ -1259,7 +1261,7 @@ public class Ln {
     }
 
     public static void copyFileToDir(File sourceFile, File destDir) throws IOException {
-	File to = new File (destDir.getPath() + "\\" + sourceFile.getName());
+	File to = new File(destDir.getPath() + "\\" + sourceFile.getName());
 	copyFile(sourceFile, to);
     }
 
@@ -1562,7 +1564,7 @@ public class Ln {
 	}
     }
 
-    public static boolean hasAnyKeywords (String target, ArrayList<String> keywords) {
+    public static boolean hasAnyKeywords(String target, ArrayList<String> keywords) {
 	target = target.toUpperCase();
 	for (String s : keywords) {
 	    if (target.contains(s.toUpperCase())) {
