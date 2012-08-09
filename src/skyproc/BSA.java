@@ -25,6 +25,7 @@ public class BSA {
 
     static ArrayList<BSA> resourceLoadOrder;
     static Map<ModListing, BSA> pluginLoadOrder = new TreeMap<>();
+    static boolean pluginsLoaded = false;
     static String header = "BSA";
     String filePath;
     int offset;
@@ -35,6 +36,7 @@ public class BSA {
     int fileNameLength;
     LFlags fileFlags;
     boolean loaded = false;
+    boolean bad = false;
     Map<String, Map<String, BSAFileRef>> folders;
     LFileChannel in = new LFileChannel();
 
@@ -51,7 +53,7 @@ public class BSA {
 	offset = in.readInInt(0, 4);
 	archiveFlags = new LFlags(in.readInBytes(0, 4));
 	folderCount = in.readInInt(0, 4);
-	folders = new HashMap<String, Map<String, BSAFileRef>>(folderCount);
+	folders = new HashMap<>(folderCount);
 	fileCount = in.readInInt(0, 4);
 	folderNameLength = in.readInInt(0, 4);
 	fileNameLength = in.readInInt(0, 4);
@@ -80,47 +82,53 @@ public class BSA {
 	this(filePath, true);
     }
 
-    final void loadFolders() throws IOException {
+    final void loadFolders() {
 	if (loaded) {
 	    return;
 	}
 	loaded = true;
-	String fileName, folderName;
-	int fileCounter = 0;
-	in.pos(offset);
-	LShrinkArray folderData = new LShrinkArray(in.readInByteBuffer(0, folderCount * 16));
-	in.pos(folderNameLength + fileCount * 16 + folderCount * 17 + offset);
-	LShrinkArray fileNames = new LShrinkArray(in.readInByteBuffer(0, fileNameLength));
-	for (int i = 0; i < folderCount; i++) {
-	    folderData.skip(8); // Skip Hash
-	    int count = folderData.extractInt(4);
-	    Map<String, BSAFileRef> files = new HashMap<String, BSAFileRef>(count);
-	    int fileRecordOffset = folderData.extractInt(4);
+	try {
+	    String fileName, folderName;
+	    int fileCounter = 0;
+	    in.pos(offset);
+	    LShrinkArray folderData = new LShrinkArray(in.readInByteBuffer(0, folderCount * 16));
+	    in.pos(folderNameLength + fileCount * 16 + folderCount * 17 + offset);
+	    LShrinkArray fileNames = new LShrinkArray(in.readInByteBuffer(0, fileNameLength));
+	    for (int i = 0; i < folderCount; i++) {
+		folderData.skip(8); // Skip Hash
+		int count = folderData.extractInt(4);
+		Map<String, BSAFileRef> files = new HashMap<>(count);
+		int fileRecordOffset = folderData.extractInt(4);
 
-	    in.pos(fileRecordOffset - fileNameLength);
-	    folderName = in.readInString(0, in.read() - 1) + "\\";
-	    in.offset(1);
-	    folders.put(folderName.toUpperCase(), files);
-	    if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-		SPGlobal.log(header, "Loaded folder: " + folderName);
-	    }
-	    for (int j = 0; j < count; j++) {
-		BSAFileRef f = new BSAFileRef();
-		f.size = in.readInInt(8, 4); // Skip Hash
-		f.dataOffset = in.readInLong(0, 4);
-		fileName = fileNames.extractString();
-		files.put(fileName.toUpperCase(), f);
+		in.pos(fileRecordOffset - fileNameLength);
+		folderName = in.readInString(0, in.read() - 1) + "\\";
+		in.offset(1);
+		folders.put(folderName.toUpperCase(), files);
 		if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-		    SPGlobal.log(header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
-		    fileCounter++;
+		    SPGlobal.log(header, "Loaded folder: " + folderName);
+		}
+		for (int j = 0; j < count; j++) {
+		    BSAFileRef f = new BSAFileRef();
+		    f.size = in.readInInt(8, 4); // Skip Hash
+		    f.dataOffset = in.readInLong(0, 4);
+		    fileName = fileNames.extractString();
+		    files.put(fileName.toUpperCase(), f);
+		    if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
+			SPGlobal.log(header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
+			fileCounter++;
+		    }
 		}
 	    }
-	}
-	if (SPGlobal.logging()) {
-	    if (SPGlobal.debugBSAimport) {
-		SPGlobal.log(header, "Loaded " + fileCounter + " files.");
+	    if (SPGlobal.logging()) {
+		if (SPGlobal.debugBSAimport) {
+		    SPGlobal.log(header, "Loaded " + fileCounter + " files.");
+		}
+		SPGlobal.log(header, "Loaded BSA: " + getFilePath());
 	    }
-	    SPGlobal.log(header, "Loaded BSA: " + getFilePath());
+	} catch (Exception e) {
+	    SPGlobal.logException(e);
+	    SPGlobal.logError("BSA", "Skipped BSA " + this);
+	    bad = true;
 	}
     }
 
@@ -229,7 +237,7 @@ public class BSA {
     }
 
     static void loadPluginLoadOrder() {
-	if (pluginLoadOrder != null) {
+	if (pluginsLoaded) {
 	    return;
 	}
 	if (SPGlobal.logging()) {
@@ -238,11 +246,18 @@ public class BSA {
 	try {
 	    ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
 	    for (ModListing m : activeMods) {
-		pluginLoadOrder.put(m, getBSA(m));
+		if (!pluginLoadOrder.containsKey(m)) {
+		    BSA bsa = getBSA(m);
+		    if (bsa != null) {
+			pluginLoadOrder.put(m, bsa);
+		    }
+		}
 	    }
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
 	}
+
+	pluginsLoaded = true;
     }
 
     static void loadResourceLoadOrder() {
@@ -432,7 +447,7 @@ public class BSA {
      * values.
      */
     public Map<String, ArrayList<String>> getFiles() {
-	Map<String, ArrayList<String>> out = new HashMap<String, ArrayList<String>>(folders.size());
+	Map<String, ArrayList<String>> out = new HashMap<>(folders.size());
 	for (String folder : folders.keySet()) {
 	    out.put(folder, new ArrayList<String>(folders.get(folder).values().size()));
 	    for (String file : folders.get(folder).keySet()) {
@@ -468,7 +483,31 @@ public class BSA {
      * @return True if BSA contains files of that type.
      */
     public boolean contains(FileType fileType) {
-	return fileFlags.get(fileType.ordinal());
+	if (!fileFlags.isZeros()) {
+	    return fileFlags.get(fileType.ordinal());
+	} else {
+	    return manualContains(fileType);
+	}
+    }
+
+    boolean manualContains(FileType fileType) {
+	FileType[] types = new FileType[1];
+	types[0] = fileType;
+	return manualContains(types);
+    }
+
+    boolean manualContains(FileType[] fileTypes) {
+	loadFolders();
+	for (String folder : folders.keySet()) {
+	    for (String file : folders.get(folder).keySet()) {
+		for (FileType type : fileTypes) {
+		    if (file.endsWith(type.toString())) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
     }
 
     /**
@@ -477,12 +516,16 @@ public class BSA {
      * @return True if BSA contains any of the filetypes.
      */
     public boolean containsAny(FileType[] fileTypes) {
-	for (FileType f : fileTypes) {
-	    if (contains(f)) {
-		return true;
+	if (!fileFlags.isZeros()) {
+	    for (FileType f : fileTypes) {
+		if (contains(f)) {
+		    return true;
+		}
 	    }
+	    return false;
+	} else {
+	    return manualContains(fileTypes);
 	}
-	return false;
     }
 
     /**
@@ -501,7 +544,7 @@ public class BSA {
 	while (bsas.hasNext()) {
 	    BSA tmp = bsas.next();
 	    try {
-		if (tmp.containsAny(types)) {
+		if (!tmp.bad && tmp.containsAny(types)) {
 		    tmp.loadFolders();
 		    out.add(tmp);
 		}

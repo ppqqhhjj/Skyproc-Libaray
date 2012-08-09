@@ -94,6 +94,15 @@ public class LFlags implements Serializable {
         }
     }
 
+    public boolean isZeros() {
+	for (boolean b : flags) {
+	    if (b) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
     /**
      *
      * @return String of 1's and 0's.  Beep boop beep.
