@@ -105,7 +105,7 @@ public class SkyProcTester {
 	patch.setAuthor("Leviathan1753");
 	patch.export(new LExporter(SPGlobal.pathToData + patch.getName()), patch);
 	if (type != GRUP_TYPE.ENCH) {
-	    passed = passed && SPExporter.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
+	    passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 	}
 	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
 	if (validF.isFile()) {

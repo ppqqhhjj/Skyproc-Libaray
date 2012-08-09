@@ -4,9 +4,11 @@
  */
 package skyproc;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.swing.JOptionPane;
+import lev.LFileChannel;
 import lev.Ln;
 
 /**
@@ -147,27 +149,29 @@ public class NiftyFunc {
     }
 
     /**
-     * A function that starts a new java program with more memory.
-     * Use this to allocate more memory for your SkyProc program by simply putting
-     * the name of your jar file as the jarpath.  This function will automatically
-     * open a second instance of your program, giving it more memory, and
-     * close the first program if the second is opened properly.
+     * A function that starts a new java program with more memory. Use this to
+     * allocate more memory for your SkyProc program by simply putting the name
+     * of your jar file as the jarpath. This function will automatically open a
+     * second instance of your program, giving it more memory, and close the
+     * first program if the second is opened properly.
+     *
      * @param startingMem Memory to start the new program with.
      * @param maxMem Max amount of memory to allow the new program to use.
-     * @param jarPath Path to the jar file to open.  Usually, just put the name of
-     * your jar.
-     * @param args Any special main function args you want to give to the second program.
+     * @param jarPath Path to the jar file to open. Usually, just put the name
+     * of your jar.
+     * @param args Any special main function args you want to give to the second
+     * program.
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void allocateMoreMemory(String startingMem, String maxMem, String jarPath, String ... args) throws IOException, InterruptedException {
+    public static void allocateMoreMemory(String startingMem, String maxMem, String jarPath, String... args) throws IOException, InterruptedException {
 	String[] argsInternal = new String[args.length + 5];
 	argsInternal[0] = "java";
 	argsInternal[1] = "-jar";
 	argsInternal[2] = "-Xms" + startingMem;
 	argsInternal[3] = "-Xmx" + maxMem;
 	argsInternal[4] = jarPath;
-	for (int i = 5 ; i < args.length + 5 ; i++) {
+	for (int i = 5; i < args.length + 5; i++) {
 	    argsInternal[i] = args[i - 5];
 	}
 	ProcessBuilder proc = new ProcessBuilder(argsInternal);
@@ -185,7 +189,7 @@ public class NiftyFunc {
 	}
     }
 
-    public static String EDIDtrimmer (String origEDID) {
+    public static String EDIDtrimmer(String origEDID) {
 	origEDID = origEDID.replaceAll(" ", "");
 	origEDID = origEDID.replaceAll(":", "_");
 	origEDID = origEDID.replaceAll("-", "_");
@@ -197,7 +201,7 @@ public class NiftyFunc {
      */
     public static int versionToNum(String version) {
 	String tmp = "";
-	for (int i = 0 ; i < version.length() ; i++) {
+	for (int i = 0; i < version.length(); i++) {
 	    if (Character.isDigit(version.charAt(i))
 		    || version.charAt(i) == '.') {
 		tmp += version.charAt(i);
@@ -206,7 +210,7 @@ public class NiftyFunc {
 	version = tmp;
 	String[] split = version.split("\\.");
 	int out = 0;
-	for(int i = 0 ; i < split.length && i < 4 ; i++) {
+	for (int i = 0; i < split.length && i < 4; i++) {
 	    int next = Integer.valueOf(split[i]) * 1000000;
 	    if (i != 0) {
 		next /= Math.pow(100, i);
@@ -214,5 +218,100 @@ public class NiftyFunc {
 	    out += next;
 	}
 	return out;
+    }
+    static String recordLengths = "Record Lengths";
+
+    /**
+     * Reads in the file and confirms that all GRUPs and Major Records have
+     * correct lengths. It does not explicitly check subrecord lengths, but due
+     * to the recursive nature of SkyProc, these will be implicitly checked as
+     * well by confirming Major Record length.
+     *
+     * This will bug out if strings inside records contain major record types
+     * (ex. "SomeEDIDforMGEF", would fail because of "MGEF")
+     *
+     * @param testFile Path to the file to test.
+     * @param numErrorsToPrint Number of error messages to print before
+     * stopping.
+     * @return True if the file had correct record lengths.
+     */
+    public static boolean validateRecordLengths(String testFilePath, int numErrorsToPrint) {
+	boolean correct = true;
+	int numErrors = 0;
+	try {
+	    LFileChannel input = new LFileChannel(testFilePath);
+
+	    correct = testHeaderLength(input);
+
+	    String inputStr;
+	    //Test GRUPs
+	    String majorRecordType = "NULL";
+	    int grupLength = 0;
+	    long grupPos = input.pos();
+	    int length;
+	    long start = 0;
+	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
+
+		inputStr = input.readInString(0, 4);
+		if (inputStr.equals("GRUP")) {
+		    long inputPos = input.pos();
+		    if (inputPos - grupPos - 4 != grupLength) {
+			SPGlobal.logError(recordLengths, "GRUP " + majorRecordType + " is wrong. (" + Ln.prettyPrintHex(grupPos) + ")");
+			numErrors++;
+			correct = false;
+		    }
+		    grupPos = input.pos() - 4;
+		    grupLength = input.readInInt(0, 4);
+		    majorRecordType = input.readInString(0, 4);
+		    input.offset(12);
+		} else if (inputStr.equals(majorRecordType)) {
+		    start = input.pos() - 4;
+		    length = input.readInInt(0, 4);
+		    input.offset(16 + length);
+		} else {
+		    SPGlobal.logError(recordLengths, "GRUP " + majorRecordType + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
+		    numErrors++;
+		    correct = false;
+		}
+	    }
+
+
+	} catch (FileNotFoundException ex) {
+	    SPGlobal.logError(recordLengths, "File could not be found.");
+	} catch (IOException ex) {
+	    SPGlobal.logError(recordLengths, "File I/O error.");
+	}
+
+
+	if (correct) {
+	    SPGlobal.log(recordLengths, "Validated.");
+	} else {
+	    SPGlobal.logError(recordLengths, "NOT Validated.");
+	}
+	return correct;
+    }
+
+    static boolean testHeaderLength(LFileChannel input) throws IOException {
+	// Check header
+	String inputStr;
+	boolean correct = true;
+	int length = input.readInInt(4, 4);
+	input.offset(length + 16);
+	if (input.available() > 0) {
+	    // Next should be a GRUP
+	    inputStr = input.readInString(0, 4);
+	    if (!"GRUP".equals(inputStr)) {
+		SPGlobal.logError("Mod Header", "Header length is wrong.");
+		correct = false;
+	    }
+	    input.offset(-4);
+	} else if (input.available() < 0) {
+	    SPGlobal.logError("Mod Header", "Header length is wrong.");
+	    correct = false;
+	} else {
+	    SPGlobal.logError("Mod Header", "File header was correct, but there were no GRUPS.  Validated.");
+	    return true;
+	}
+	return correct;
     }
 }

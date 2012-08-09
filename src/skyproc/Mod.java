@@ -626,6 +626,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException, BadRecord {
+
+	// Progress Bar Setup
 	int fullGRUPS = 0;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
@@ -653,6 +655,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 	standardizeMasters();
 
+	// Export Header
 	header.setNumRecords(numRecords());
 	if (logging()) {
 	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
@@ -666,6 +669,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 	header.export(out, srcMod);
 
+	// Export GRUPs
 	int count = 1;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
@@ -677,6 +681,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    }
 	}
 
+	// Export or clean up STRINGS files
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    SPProgressBarPlug.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
@@ -691,8 +696,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 
 
 	// Check if any duplicate EDIDS or FormIDS
-	Map<String, MajorRecord> edids = new HashMap<String, MajorRecord>();
-	Set<FormID> IDs = new HashSet<FormID>();
+	Map<String, MajorRecord> edids = new HashMap<>();
+	Set<FormID> IDs = new HashSet<>();
 	boolean bad = false;
 	for (GRUP g : GRUPs.values()) {
 	    for (Object o : g.listRecords) {
@@ -719,6 +724,16 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 	if (bad) {
 	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
+	}
+
+	// Validate all record lengths are correct
+	try {
+	    if (!NiftyFunc.validateRecordLengths(SPGlobal.pathToInternalFiles + "tmp.esp", 5)) {
+		SPGlobal.logError("Record Length Check", "Record lengths were off.");
+		throw new BadRecord("Record lengths are off.");
+	    }
+	} catch (Exception e) {
+	    SPGlobal.logException(e);
 	}
 
 	if (Consistency.automaticExport) {
