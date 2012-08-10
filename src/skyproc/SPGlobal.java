@@ -53,7 +53,8 @@ public class SPGlobal {
 	Spanish,
 	Italian,
 	French,
-	German;
+	German,
+	Russian;
     }
     /**
      * The path from the .jar location to create/look for the file used to
