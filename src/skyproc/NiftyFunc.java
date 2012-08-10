@@ -250,6 +250,7 @@ public class NiftyFunc {
 	    long grupPos = input.pos();
 	    int length;
 	    long start = 0;
+	    String EDID = "";
 	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
 
 		inputStr = input.readInString(0, 4);
@@ -267,14 +268,18 @@ public class NiftyFunc {
 		} else if (inputStr.equals(majorRecordType)) {
 		    start = input.pos() - 4;
 		    length = input.readInInt(0, 4);
-		    input.offset(16 + length);
+		    input.offset(16);
+		    int edidLength = input.readInInt(4, 2);
+		    EDID = input.readInString(0, edidLength);
+		    input.offset(length - 6 - EDID.length() - 1);
 		} else {
-		    SPGlobal.logError(recordLengths, "GRUP " + majorRecordType + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
+		    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
 		    numErrors++;
 		    correct = false;
 		}
 	    }
 
+	    input.close();
 
 	} catch (FileNotFoundException ex) {
 	    SPGlobal.logError(recordLengths, "File could not be found.");

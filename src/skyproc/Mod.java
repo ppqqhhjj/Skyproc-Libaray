@@ -727,13 +727,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	// Validate all record lengths are correct
-	try {
-	    if (!NiftyFunc.validateRecordLengths(SPGlobal.pathToInternalFiles + "tmp.esp", 5)) {
-		SPGlobal.logError("Record Length Check", "Record lengths were off.");
-		throw new BadRecord("Record lengths are off.");
-	    }
-	} catch (Exception e) {
-	    SPGlobal.logException(e);
+	if (!NiftyFunc.validateRecordLengths(SPGlobal.pathToInternalFiles + "tmp.esp", 1)) {
+	    SPGlobal.logError("Record Length Check", "Record lengths were off.");
+	    throw new BadRecord("Record lengths are off.");
 	}
 
 	if (Consistency.automaticExport) {
