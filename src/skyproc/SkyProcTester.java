@@ -26,8 +26,8 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-    static GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.NPC_};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
      */
@@ -121,7 +121,7 @@ public class SkyProcTester {
 
     public static void parseEmbeddedScripts() {
 	try {
-	    EmbeddedScripts.parseScriptData();
+	    EmbeddedScripts.generateEnums();
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
 	}
