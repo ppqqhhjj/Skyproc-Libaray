@@ -6,6 +6,7 @@ package skyproc;
 
 import java.util.HashMap;
 import java.util.Map;
+import skyproc.ConditionOption.Cond_FormID;
 import skyproc.EmbeddedScripts.Param;
 import skyproc.EmbeddedScripts.ParamType;
 
@@ -23,13 +24,18 @@ public class Condition extends SubShell {
 
     Condition() {
 	super(types);
-	init();
-    }
-
-    final void init() {
 	subRecords.add(cond);
 	subRecords.add(CIS1);
 	subRecords.add(CIS2);
+    }
+
+    Condition(P_NoParams function) {
+	this();
+    }
+
+    Condition(P_FormID function, FormID id) {
+	this();
+	cond.option = new Cond_FormID();
     }
 
     @Override
