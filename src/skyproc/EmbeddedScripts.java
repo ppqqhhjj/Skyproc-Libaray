@@ -145,9 +145,6 @@ public class EmbeddedScripts {
 		    } else if (parameter.contains("CRIME")) {
 			parameterMask.add(ParamType.CrimeType);
 			log.write("  Parameter " + parameter + " " + ParamType.CrimeType + "\n");
-		    } else if (parameter.contains("FORM TYPE")) {
-			parameterMask.add(ParamType.FormType);
-			log.write("  Parameter " + parameter + " " + ParamType.FormType + "\n");
 		    } else if (parameter.contains("CASTING SOURCE")) {
 			parameterMask.add(ParamType.CastingSource);
 			log.write("  Parameter " + parameter + " " + ParamType.CastingSource + "\n");
@@ -304,7 +301,6 @@ public class EmbeddedScripts {
 	Axis,
 	Gender,
 	CrimeType,
-	FormType,
 	CastingSource,
 	WardState,
 	Float,

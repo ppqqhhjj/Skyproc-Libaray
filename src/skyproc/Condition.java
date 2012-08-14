@@ -6,7 +6,24 @@ package skyproc;
 
 import java.util.HashMap;
 import java.util.Map;
+import skyproc.ConditionOption.Cond_Axis;
+import skyproc.ConditionOption.Cond_CastingSource;
+import skyproc.ConditionOption.Cond_CastingSource_FormID;
 import skyproc.ConditionOption.Cond_FormID;
+import skyproc.ConditionOption.Cond_FormID_Axis;
+import skyproc.ConditionOption.Cond_FormID_CastingSource;
+import skyproc.ConditionOption.Cond_FormID_CrimeType;
+import skyproc.ConditionOption.Cond_FormID_Float;
+import skyproc.ConditionOption.Cond_FormID_FormID;
+import skyproc.ConditionOption.Cond_FormID_Int;
+import skyproc.ConditionOption.Cond_FormID_String;
+import skyproc.ConditionOption.Cond_Gender;
+import skyproc.ConditionOption.Cond_Int;
+import skyproc.ConditionOption.Cond_Int_FormID;
+import skyproc.ConditionOption.Cond_Int_FormID_Int;
+import skyproc.ConditionOption.Cond_Int_Int;
+import skyproc.ConditionOption.Cond_String;
+import skyproc.ConditionOption.Cond_WardState;
 import skyproc.EmbeddedScripts.Param;
 import skyproc.EmbeddedScripts.ParamType;
 
@@ -35,7 +52,94 @@ public class Condition extends SubShell {
 
     Condition(P_FormID function, FormID id) {
 	this();
-	cond.option = new Cond_FormID();
+	cond.option = new Cond_FormID(id);
+    }
+
+    Condition(P_Axis function, Axis a) {
+	this();
+	cond.option = new Cond_Axis(a);
+    }
+
+    Condition(P_FormID_CastingSource function, FormID id, CastingSource source) {
+	this();
+	cond.option = new Cond_FormID_CastingSource(id, source);
+    }
+
+    Condition(P_FormID_Int function, FormID id, int i) {
+	this();
+	cond.option = new Cond_FormID_Int(id, i);
+    }
+
+    Condition(P_FormID_FormID function, FormID id1, FormID id2) {
+	this();
+	cond.option = new Cond_FormID_FormID(id1, id2);
+    }
+
+    Condition(P_CastingSource_FormID function, CastingSource source, FormID id) {
+	this();
+	cond.option = new Cond_CastingSource_FormID(source, id);
+    }
+
+    Condition(P_Gender function, Gender g) {
+	this();
+	cond.option = new Cond_Gender(g);
+    }
+
+    Condition(P_CastingSource function, CastingSource source) {
+	this();
+	cond.option = new Cond_CastingSource(source);
+    }
+
+    Condition(P_Int_FormID_Int function, int i1, FormID id, int i2) {
+	this();
+	cond.option = new Cond_Int_FormID_Int(i1, id, i2);
+    }
+
+    Condition(P_Int_FormID function, int i1, FormID id) {
+	this();
+	cond.option = new Cond_Int_FormID(i1, id);
+    }
+
+    Condition(P_WardState function, WardState state) {
+	this();
+	cond.option = new Cond_WardState(state);
+    }
+
+    Condition(P_Int function, int i) {
+	this();
+	cond.option = new Cond_Int(i);
+    }
+
+    Condition(P_FormID_String function, FormID id, String s) {
+	this();
+	cond.option = new Cond_FormID_String(id, s);
+	CIS2.setString(s);
+    }
+
+    Condition(P_FormID_Axis function, FormID id, Axis a) {
+	this();
+	cond.option = new Cond_FormID_Axis(id, a);
+    }
+
+    Condition(P_FormID_CrimeType function, FormID id, CrimeType c) {
+	this();
+	cond.option = new Cond_FormID_CrimeType(id, c);
+    }
+
+    Condition(P_FormID_Float function, FormID id, float f) {
+	this();
+	cond.option = new Cond_FormID_Float(id, f);
+    }
+
+    Condition(P_Int_Int function, int i1, int i2) {
+	this();
+	cond.option = new Cond_Int_Int(i1, i2);
+    }
+
+    Condition(P_String function, String s) {
+	this();
+	cond.option = new Cond_String(s);
+	CIS1.setString(s);
     }
 
     @Override
@@ -159,10 +263,6 @@ public class Condition extends SubShell {
 	    }
 
 	    for (P_Int_Int e : P_Int_Int.values()) {
-		scriptMap.put(e.index, e);
-	    }
-
-	    for (P_FormType e : P_FormType.values()) {
 		scriptMap.put(e.index, e);
 	    }
 
@@ -590,10 +690,12 @@ public class Condition extends SubShell {
     public enum P_Int {
 
 	MenuMode(36),
+	GetIsUsedItemType(247),
 	IsInCombat(289),
 	GetInCurrentLocAlias(360),
 	IsPlayerActionActive(368),
 	IsLimbGone(397),
+	GetIsObjectType(432),
 	GetIsCreatureType(437),
 	GetIsAlignment(473),
 	IsInCriticalStage(528),
@@ -743,30 +845,6 @@ public class Condition extends SubShell {
 	}
     }
 
-    public enum P_FormType {
-
-	GetIsUsedItemType(247),
-	GetIsObjectType(432);
-	int index;
-
-	P_FormType(int index) {
-	    this.index = index;
-	}
-
-	public ParamType getType(Param p) {
-	    switch (p) {
-		case One:
-		    return ParamType.FormType;
-		case Two:
-		    return ParamType.NULL;
-		case Three:
-		    return ParamType.NULL;
-		default:
-		    return ParamType.NULL;
-	    }
-	}
-    }
-
     public enum P_String {
 
 	GetGraphVariableFloat(447),
@@ -876,6 +954,7 @@ public class Condition extends SubShell {
 	IsCloudy(267),
 	IsSmallBump(274),
 	IsHorseStolen(282),
+	IsSneaking(286),
 	IsRunning(287),
 	GetFriendHit(288),
 	IsInInterior(300),
@@ -917,7 +996,6 @@ public class Condition extends SubShell {
 	IsLeftUp(465),
 	GetDestructionStage(470),
 	IsProtected(476),
-	IsSneaking(481),
 	IsCarryable(487),
 	GetConcussed(488),
 	GetMapMarkerVisible(491),
@@ -962,6 +1040,7 @@ public class Condition extends SubShell {
 	GetIntimidateSuccess(655),
 	GetArrestedState(656),
 	GetArrestingActor(657),
+	EPTemperingItemIsEnchanted(659),
 	IsAttacking(672),
 	IsPowerAttacking(673),
 	IsLastHostileActor(674),

@@ -149,6 +149,7 @@
 278,	IsOwner,					FormID: Actor
 280,	IsCellOwner,					FormID: Cell, FormID: Actor
 282,	IsHorseStolen,
+286,	IsSneaking,
 287,	IsRunning,
 288,	GetFriendHit,
 289,	IsInCombat,					Int: Boolean
@@ -230,7 +231,6 @@
 476,	IsProtected,
 477,	GetThreatRatio,					FormID: Reference
 479,	GetIsUsedItemEquipType,			FormID: Equip Slot
-481,	IsSneaking,
 487,	IsCarryable,
 488,	GetConcussed,	
 491,	GetMapMarkerVisible,		
@@ -343,6 +343,7 @@
 655,	GetIntimidateSuccess,
 656,	GetArrestedState,
 657,	GetArrestingActor,
+659,	EPTemperingItemIsEnchanted,	
 660,	EPTemperingItemHasKeyword,			FormID: Keyword
 664,	GetReplacedItemType,				Int: Casting Source
 672,	IsAttacking,
