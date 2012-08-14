@@ -48,98 +48,122 @@ public class Condition extends SubShell {
 
     Condition(P_NoParams function) {
 	this();
+	init(function, function.index);
     }
 
     Condition(P_FormID function, FormID id) {
 	this();
 	cond.option = new Cond_FormID(id);
+	init(function, function.index);
     }
 
     Condition(P_Axis function, Axis a) {
 	this();
 	cond.option = new Cond_Axis(a);
+	init(function, function.index);
     }
 
     Condition(P_FormID_CastingSource function, FormID id, CastingSource source) {
 	this();
 	cond.option = new Cond_FormID_CastingSource(id, source);
+	init(function, function.index);
     }
 
     Condition(P_FormID_Int function, FormID id, int i) {
 	this();
 	cond.option = new Cond_FormID_Int(id, i);
+	init(function, function.index);
     }
 
     Condition(P_FormID_FormID function, FormID id1, FormID id2) {
 	this();
 	cond.option = new Cond_FormID_FormID(id1, id2);
+	init(function, function.index);
     }
 
     Condition(P_CastingSource_FormID function, CastingSource source, FormID id) {
 	this();
 	cond.option = new Cond_CastingSource_FormID(source, id);
+	init(function, function.index);
     }
 
     Condition(P_Gender function, Gender g) {
 	this();
 	cond.option = new Cond_Gender(g);
+	init(function, function.index);
     }
 
     Condition(P_CastingSource function, CastingSource source) {
 	this();
 	cond.option = new Cond_CastingSource(source);
+	init(function, function.index);
     }
 
     Condition(P_Int_FormID_Int function, int i1, FormID id, int i2) {
 	this();
 	cond.option = new Cond_Int_FormID_Int(i1, id, i2);
+	init(function, function.index);
     }
 
     Condition(P_Int_FormID function, int i1, FormID id) {
 	this();
 	cond.option = new Cond_Int_FormID(i1, id);
+	init(function, function.index);
     }
 
     Condition(P_WardState function, WardState state) {
 	this();
 	cond.option = new Cond_WardState(state);
+	init(function, function.index);
     }
 
     Condition(P_Int function, int i) {
 	this();
 	cond.option = new Cond_Int(i);
+	init(function, function.index);
     }
 
     Condition(P_FormID_String function, FormID id, String s) {
 	this();
 	cond.option = new Cond_FormID_String(id, s);
 	CIS2.setString(s);
+	init(function, function.index);
     }
 
     Condition(P_FormID_Axis function, FormID id, Axis a) {
 	this();
 	cond.option = new Cond_FormID_Axis(id, a);
+	init(function, function.index);
     }
 
     Condition(P_FormID_CrimeType function, FormID id, CrimeType c) {
 	this();
 	cond.option = new Cond_FormID_CrimeType(id, c);
+	init(function, function.index);
     }
 
     Condition(P_FormID_Float function, FormID id, float f) {
 	this();
 	cond.option = new Cond_FormID_Float(id, f);
+	init(function, function.index);
     }
 
     Condition(P_Int_Int function, int i1, int i2) {
 	this();
 	cond.option = new Cond_Int_Int(i1, i2);
+	init(function, function.index);
     }
 
     Condition(P_String function, String s) {
 	this();
 	cond.option = new Cond_String(s);
 	CIS1.setString(s);
+	init(function, function.index);
+    }
+
+    final void init(Enum function, int index) {
+	cond.option.script = function;
+	cond.option.index = index;
     }
 
     @Override
@@ -172,6 +196,54 @@ public class Condition extends SubShell {
 	CondFlag(int value) {
 	    this.value = value;
 	}
+    }
+
+    public void setValue(FormID id) {
+	cond.comparisonValueForm = id;
+    }
+
+    public void setValue(float f) {
+	cond.comparisonValueFloat = f;
+    }
+
+    public FormID getValueGlobal() {
+	return cond.comparisonValueForm;
+    }
+
+    public float getValueFloat() {
+	return cond.comparisonValueFloat;
+    }
+
+    public void setOperator(Operator o) {
+	cond.operator = o;
+    }
+
+    public Operator getOperator() {
+	return cond.operator;
+    }
+
+    public void setRunOnType (RunOnType t) {
+	cond.option.runType = t;
+    }
+
+    public RunOnType getRunOnType () {
+	return cond.option.runType;
+    }
+
+    public void setReference (FormID id) {
+	cond.option.reference = id;
+    }
+
+    public FormID getReference () {
+	return cond.option.reference;
+    }
+
+    public Enum getFunction () {
+	return cond.option.script;
+    }
+
+    public int getFunctionIndex () {
+	return cond.option.index;
     }
 
     public enum RunOnType {

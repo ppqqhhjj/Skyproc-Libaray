@@ -23,7 +23,7 @@ public class ConditionBase extends SubRecord {
     Condition.Operator operator;
     LFlags flags = new LFlags(1);
     byte[] fluff;
-    FormID comparisonValueForm = new FormID();
+    FormID comparisonValueForm;
     float comparisonValueFloat;
     byte[] padding;
     ConditionOption option;
@@ -73,6 +73,7 @@ public class ConditionBase extends SubRecord {
 	//Value
 	if (get(Condition.CondFlag.UseGlobal)) {
 	    // Use public set here, because for some reason, this FormID is flipped
+	    comparisonValueForm = new FormID();
 	    comparisonValueForm.set(in.extract(4));
 	} else {
 	    comparisonValueFloat = in.extractFloat();
@@ -95,7 +96,9 @@ public class ConditionBase extends SubRecord {
     @Override
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>(5);
-	out.add(comparisonValueForm);
+	if (comparisonValueForm != null) {
+	    out.add(comparisonValueForm);
+	}
 	out.addAll(option.allFormIDs());
 	return out;
     }
