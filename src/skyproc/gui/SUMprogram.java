@@ -116,6 +116,7 @@ public class SUMprogram implements SUM {
 
     void openGUI() {
 	mmenu = new SPMainMenuPanel();
+	mmenu.addLogo(this.getLogo());
 
 	hookMenu = new HookMenu(mmenu);
 	mmenu.addMenu(hookMenu, false, saveFile, null);
@@ -223,6 +224,16 @@ public class SUMprogram implements SUM {
 
     @Override
     public void onStart() {
+	for (PatcherLink l : links) {
+	    try {
+		if (l.hook.hasSave()) {
+		    l.hook.getSave().init();
+		}
+	    } catch (Exception e) {
+		SPGlobal.logException(e);
+	    }
+	}
+
 	for (PatcherLink l : links) {
 	    try {
 		l.hook.onStart();
@@ -385,16 +396,49 @@ public class SUMprogram implements SUM {
 
 	final void initMenu() {
 	    menu = hook.getStandardMenu();
-	    LButton close = new LButton("Close");
-	    close.addActionListener(new ActionListener() {
+	    final LImagePane close;
+	    try {
+		close = new LImagePane(SUMprogram.class.getResource("BackToSUMdark.png"));
+		close.addMouseListener(new MouseListener() {
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-		    menu.setVisible(false);
-		    mmenu.setVisible(true);
-		}
-	    });
-	    menu.add(close);
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+			menu.setVisible(false);
+			mmenu.setVisible(true);
+			SUMGUI.helpPanel.reset();
+		    }
+
+		    @Override
+		    public void mousePressed(MouseEvent e) {
+		    }
+
+		    @Override
+		    public void mouseReleased(MouseEvent e) {
+		    }
+
+		    @Override
+		    public void mouseEntered(MouseEvent e) {
+			try {
+			    close.setImage(SUMprogram.class.getResource("BackToSUM.png"));
+			} catch (IOException ex) {
+			    SPGlobal.logException(ex);
+			}
+		    }
+
+		    @Override
+		    public void mouseExited(MouseEvent e) {
+			try {
+			    close.setImage(SUMprogram.class.getResource("BackToSUMdark.png"));
+			} catch (IOException ex) {
+			    SPGlobal.logException(ex);
+			}
+		    }
+		});
+		close.setLocation(0, 510);
+		menu.add(close);
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
 	    SUMGUI.singleton.add(menu);
 	}
     }
@@ -499,7 +543,7 @@ public class SUMprogram implements SUM {
      */
     @Override
     public boolean hasLogo() {
-	return false;
+	return true;
     }
 
     /**
@@ -508,7 +552,7 @@ public class SUMprogram implements SUM {
      */
     @Override
     public URL getLogo() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return SUMprogram.class.getResource("SUM program2.png");
     }
 
     /**

@@ -38,7 +38,7 @@ public class SPMainMenuPanel extends JPanel {
      * Reference to the left column main menu panel.
      */
     protected LPanel menuPanel = new LPanel(SUMGUI.leftDimensions);
-    ArrayList<SPSettingPanel> panels = new ArrayList<SPSettingPanel>();
+    ArrayList<SPSettingPanel> panels = new ArrayList<>();
     SPSettingPanel welcome = null;
     SPSettingPanel activePanel;
 
@@ -71,7 +71,7 @@ public class SPMainMenuPanel extends JPanel {
 	    int height = 150;
 	    customLogo = new LImagePane(logo);
 	    customLogo.setMaxSize(SUMGUI.leftDimensions.width, height);
-	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 0);
+	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 14);
 	    menuPanel.Add(customLogo);
 	    tieWelcomeAndLogo();
 	} catch (IOException ex) {
