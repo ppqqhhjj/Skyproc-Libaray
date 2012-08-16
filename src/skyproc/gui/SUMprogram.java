@@ -7,25 +7,19 @@ package skyproc.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
@@ -58,9 +52,17 @@ public class SUMprogram implements SUM {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-	if (handleArgs(args)) {
-	    SUMprogram sum = new SUMprogram();
-	    sum.runProgram();
+	try {
+	    if (handleArgs(args)) {
+		SUMprogram sum = new SUMprogram();
+		sum.runProgram();
+	    }
+	} catch (Exception e) {
+	    // If a major error happens, print it everywhere and display a message box.
+	    System.err.println(e.toString());
+	    SPGlobal.logException(e);
+	    JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'  Check the debug logs.");
+	    SPGlobal.closeDebug();
 	}
     }
 
@@ -128,28 +130,30 @@ public class SUMprogram implements SUM {
     }
 
     void initLinkGUIs() {
-	SwingUtilities.invokeLater(new Runnable() {
-
-	    @Override
-	    public void run() {
-
-		SwingUtilities.invokeLater(new Runnable() {
-
-		    @Override
-		    public void run() {
-			for (PatcherLink link : links) {
-			    try {
-				link.setup();
-				hookMenu.hookMenu.add(link);
-				hookMenu.revalidate();
-			    } catch (Exception ex) {
-				Logger.getLogger(SUMprogram.class.getName()).log(Level.SEVERE, null, ex);
-			    }
-			}
-		    }
-		});
+//	SwingUtilities.invokeLater(new Runnable() {
+//
+//	    @Override
+//	    public void run() {
+//
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//		    @Override
+//		    public void run() {
+	ArrayList<PatcherLink> linkTmp = new ArrayList<>(links);
+	for (PatcherLink link : linkTmp) {
+	    try {
+		link.setup();
+		hookMenu.hookMenu.add(link);
+		hookMenu.revalidate();
+	    } catch (Exception ex) {
+		SPGlobal.logException(ex);
+		links.remove(link);
 	    }
-	});
+	}
+//		    }
+//		});
+//	    }
+//	});
     }
 
     void getHooks() {
@@ -164,16 +168,8 @@ public class SUMprogram implements SUM {
 			links.add(new PatcherLink((SUM) c.newInstance(), jar));
 		    }
 		}
-	    } catch (MalformedURLException ex) {
+	    } catch (Exception ex) {
 		SPGlobal.logException(ex);
-	    } catch (FileNotFoundException ex) {
-		SPGlobal.logException(ex);
-	    } catch (IOException ex) {
-		SPGlobal.logException(ex);
-	    } catch (ClassNotFoundException ex) {
-		SPGlobal.logException(ex);
-	    } catch (InstantiationException ex) {
-	    } catch (IllegalAccessException ex) {
 	    }
 	}
 

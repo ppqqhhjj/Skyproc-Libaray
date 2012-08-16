@@ -244,6 +244,9 @@ public class SUMGUI extends JFrame {
      * @param hook Program to open and hook to
      */
     public static void open(final SUM hook) {
+	if (SPGlobal.logging()) {
+	    SPGlobal.logMain("Run Location", "Program running from: " + (new File(".").getAbsolutePath()));
+	}
 	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
 
