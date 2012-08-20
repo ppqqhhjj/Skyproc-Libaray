@@ -5,13 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -21,9 +17,8 @@ import skyproc.exceptions.BadRecord;
  */
 class SubInt extends SubRecord {
 
-    private int data;
+    private Integer data;
     int length = 4;
-    boolean valid = false;
 
     SubInt(Type type) {
 	super(type);
@@ -46,7 +41,6 @@ class SubInt extends SubRecord {
 
     public void set (int in) {
 	data = in;
-	valid = true;
         if (logging()) {
             logSync(toString(), "Setting " + toString() + " to " + print());
         }
@@ -60,7 +54,6 @@ class SubInt extends SubRecord {
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	data = in.extractInt(length);
-	valid = true;
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
@@ -85,6 +78,6 @@ class SubInt extends SubRecord {
 
     @Override
     Boolean isValid() {
-	return valid;
+	return data != null;
     }
 }

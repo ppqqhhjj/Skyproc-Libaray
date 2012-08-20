@@ -106,11 +106,7 @@ public abstract class Record extends ExportRecord implements Serializable {
     abstract int getFluffLength();
 
     int getTotalLength(Mod srcMod) {
-	if (isValid()) {
-	    return getContentLength(srcMod) + getHeaderLength();
-	} else {
-	    return 0;
-	}
+	return getContentLength(srcMod) + getHeaderLength();
     }
 
     abstract int getContentLength(Mod srcMod);

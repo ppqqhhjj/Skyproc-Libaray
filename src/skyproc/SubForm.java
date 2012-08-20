@@ -23,14 +23,14 @@ class SubForm extends SubRecord {
     FormID ID = new FormID();
 
     void setForm(byte[] in) throws BadParameter {
-        if (logging()) {
-            logSync(toString(), "Setting " + toString() + " FormID: " + Ln.printHex(in, false, true));
-        }
-        ID.setInternal(in);
+	if (logging()) {
+	    logSync(toString(), "Setting " + toString() + " FormID: " + Ln.printHex(in, false, true));
+	}
+	ID.setInternal(in);
     }
 
     void copyForm(FormID in) {
-        ID = new FormID(in);
+	ID = new FormID(in);
     }
 
     /**
@@ -38,11 +38,11 @@ class SubForm extends SubRecord {
      * @param id FormID to set the record's to.
      */
     public void setForm(FormID id) {
-        ID = id;
+	ID = id;
     }
 
     byte[] getFormArray(Boolean master) {
-        return ID.getInternal(master);
+	return ID.getInternal(master);
     }
 
     /**
@@ -50,7 +50,7 @@ class SubForm extends SubRecord {
      * @return The FormID string of the Major Record.
      */
     public String getFormStr() {
-        return ID.getArrayStr(true);
+	return ID.getArrayStr(true);
     }
 
     /**
@@ -58,11 +58,11 @@ class SubForm extends SubRecord {
      * @return The name of the mod from which this Major Record originates.
      */
     public ModListing getFormMaster() {
-        return ID.getMaster();
+	return ID.getMaster();
     }
 
     FormID copyOfForm() {
-        return new FormID(ID);
+	return new FormID(ID);
     }
 
     /**
@@ -72,85 +72,79 @@ class SubForm extends SubRecord {
      * @return The FormID object of the Sub Record.
      */
     public FormID getForm() {
-        return ID;
+	return ID;
     }
 
     SubForm(Type type_) {
-        super(type_);
+	super(type_);
     }
 
     SubForm(Type[] type_) {
-        super(type_);
+	super(type_);
     }
 
     SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
-        this(type_);
-        parseData(in);
+	this(type_);
+	parseData(in);
     }
 
     SubForm(Type type, FormID form) {
-        this(type);
-        setForm(form);
+	this(type);
+	setForm(form);
     }
 
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        super.parseData(in);
-        setForm(in.extract(4));
+	super.parseData(in);
+	setForm(in.extract(4));
     }
 
     @Override
     public String toString() {
-        if (isValid()) {
-            return ID.toString() + " - " + super.toString();
-        } else {
-            return super.toString();
-        }
+	if (isValid()) {
+	    return ID.toString() + " - " + super.toString();
+	} else {
+	    return super.toString();
+	}
     }
 
     @Override
     Boolean isValid() {
-        return ID.isValid();
+	return ID.isValid();
     }
 
     @Override
     public String print() {
-        return ID.getFormStr();
+	return ID.getFormStr();
     }
 
     @Override
     boolean confirmLink() {
-        if (SPGlobal.globalDatabase != null) {
-            return confirmLink(SPGlobal.globalDatabase);
-        } else {
-            return true;
-        }
+	if (SPGlobal.globalDatabase != null) {
+	    return confirmLink(SPGlobal.globalDatabase);
+	} else {
+	    return true;
+	}
     }
 
     boolean confirmLink(SPDatabase db) {
-        return true;
+	return true;
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        if (isValid()) {
-            return ID.getContentLength();
-        } else {
-            return 0;
-        }
+	return ID.getContentLength();
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-        super.export(out, srcMod);
-        if (isValid()) {
-            ID.export(out);
-        }
+	super.export(out, srcMod);
+	ID.export(out);
     }
 
     @Override
     SubRecord getNew(Type type_) {
-        return new SubForm(type_);
+	return new SubForm(type_);
     }
 
     /**
@@ -161,17 +155,17 @@ class SubForm extends SubRecord {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final SubForm other = (SubForm) obj;
-        if (this.ID != other.ID && (this.ID == null || !this.ID.equals(other.ID))) {
-            return false;
-        }
-        return true;
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubForm other = (SubForm) obj;
+	if (this.ID != other.ID && (this.ID == null || !this.ID.equals(other.ID))) {
+	    return false;
+	}
+	return true;
     }
 
     /**
@@ -181,13 +175,13 @@ class SubForm extends SubRecord {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + (this.ID != null ? this.ID.hashCode() : 0);
-        return hash;
+	int hash = 7;
+	hash = 29 * hash + (this.ID != null ? this.ID.hashCode() : 0);
+	return hash;
     }
 
     @Override
-    ArrayList<FormID> allFormIDs () {
+    ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<FormID>(1);
 	out.add(ID);
 	return out;

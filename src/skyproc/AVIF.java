@@ -19,7 +19,7 @@ public class AVIF extends MajorRecordDescription {
     SubString ANAM = new SubString(Type.ANAM, true);
     SubData CNAM = new SubData(Type.CNAM);
     SubData AVSK = new SubData(Type.AVSK);
-    SubList<PerkReference> perks = new SubList<PerkReference>(new PerkReference());
+    SubList<PerkReference> perks = new SubList<>(new PerkReference());
 
     static Type[] types = {Type.AVIF};
 
@@ -79,7 +79,7 @@ public class AVIF extends MajorRecordDescription {
 	SubFloat HNAM = new SubFloat(Type.HNAM);
 	SubFloat VNAM = new SubFloat(Type.VNAM);
 	SubForm SNAM = new SubForm(Type.SNAM);
-	SubList<SubInt> CNAMs = new SubList<SubInt>(new SubInt(Type.CNAM));
+	SubList<SubInt> CNAMs = new SubList<>(new SubInt(Type.CNAM));
 	SubInt INAM = new SubInt(Type.INAM);
 	static Type[] types = {Type.PNAM, Type.FNAM, Type.XNAM, Type.YNAM,
 	    Type.HNAM, Type.VNAM, Type.SNAM, Type.INAM};
@@ -91,7 +91,7 @@ public class AVIF extends MajorRecordDescription {
 
 	final void init () {
 	    subRecords.add(PNAM);
-	    PNAM.ID.valid = true;
+	    subRecords.forceExport(Type.PNAM);
 	    subRecords.add(FNAM);
 	    subRecords.add(XNAM);
 	    subRecords.add(YNAM);
@@ -105,12 +105,6 @@ public class AVIF extends MajorRecordDescription {
 	@Override
 	Boolean isValid() {
 	    return true;
-	}
-
-	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
-	    PNAM.ID.valid = true;
 	}
 
 	@Override
@@ -231,7 +225,7 @@ public class AVIF extends MajorRecordDescription {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void clearPointers() {
 	    CNAMs.clear();

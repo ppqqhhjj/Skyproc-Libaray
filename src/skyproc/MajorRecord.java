@@ -133,7 +133,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
- 	subRecords.importSubRecords(in, mask);
+	subRecords.importSubRecords(in, mask);
     }
 
     ArrayList<FormID> allFormIDs() {
@@ -164,11 +164,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     @Override
     int getContentLength(Mod srcMod) {
-	if (isValid()) {
-	    return subRecords.length(srcMod);
-	} else {
-	    return 0;
-	}
+	return subRecords.length(srcMod);
     }
 
     @Override
@@ -180,10 +176,12 @@ public abstract class MajorRecord extends Record implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
+	    if (getEDID().equals("AVEnchanting")) {
+		int wer = 23;
+	    }
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
-
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
@@ -237,7 +235,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	Consistency.addEntry(edid, this.getForm());
     }
 
-    final void setEdidNoConsistency (String edid) {
+    final void setEdidNoConsistency(String edid) {
 	edid = Consistency.getAvailableEDID(edidFilter(edid));
 	FormID oldFormID = Consistency.getOldForm(edid);
 	if (oldFormID != null) {
@@ -246,7 +244,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	EDID.setString(edid);
     }
 
-    static String edidFilter (String edid) {
+    static String edidFilter(String edid) {
 	return edid.replaceAll(" ", "");
     }
 
@@ -436,22 +434,23 @@ public abstract class MajorRecord extends Record implements Serializable {
      *
      */
     public enum MajorFlags {
+
 	/**
 	 *
 	 */
-	Deleted (5),
+	Deleted(5),
 	/**
 	 *
 	 */
-	RelatedToShields (6),
+	RelatedToShields(6),
 	/**
 	 *
 	 */
-	HiddenFromLocalMap (9),
+	HiddenFromLocalMap(9),
 	/**
 	 *
 	 */
-	QuestItemPersistentRef (10),
+	QuestItemPersistentRef(10),
 	/**
 	 *
 	 */
@@ -476,8 +475,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	 *
 	 */
 	CantWait(19);
-
 	int value;
+
 	MajorFlags(int value) {
 	    this.value = value;
 	}

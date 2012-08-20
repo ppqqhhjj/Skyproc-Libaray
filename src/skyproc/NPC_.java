@@ -226,7 +226,6 @@ public class NPC_ extends Actor implements Serializable {
 		    if (size == 4) {
 			SubForm CSDI = new SubForm(Type.CSDI);
 			CSDI.setForm(in.extract(size));
-			CSDI.ID.valid = true;
 			soundPairs.add(new SoundPair(CSDI));
 		    } else {
 			throw new BadRecord("CSDI data length was not 4, as expected to be a formID");

@@ -20,14 +20,13 @@ import lev.Ln;
  */
 public class FormID implements Comparable, Serializable {
 
-    static ArrayList<FormID> allIDs = new ArrayList<FormID>();
-    boolean valid = false;
+    static ArrayList<FormID> allIDs = new ArrayList<>();
+    public static final FormID NULL = new FormID();
     byte[] form = new byte[4];
     ModListing master = null;
     /**
      * An empty FormID for easy NULL checking.
      */
-    public static final FormID NULL = new FormID();
 
     FormID() {
 	if (SPGlobal.testing) {
@@ -117,7 +116,6 @@ public class FormID implements Comparable, Serializable {
 	    form = new byte[4];
 	    System.arraycopy(id, 0, form, 0, id.length);
 	}
-	valid = !equals(NULL);
     }
 
     void export(LExporter out) throws IOException {
@@ -213,7 +211,7 @@ public class FormID implements Comparable, Serializable {
     }
 
     Boolean isValid() {
-	return valid;
+	return !equals(NULL);
     }
 
     Boolean isStandardized() {

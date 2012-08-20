@@ -21,8 +21,9 @@ import skyproc.exceptions.BadRecord;
  */
 class SubRecords implements Iterable<SubRecord>, Serializable {
 
-    private ArrayList<SubRecord> list = new ArrayList<SubRecord>();
-    private Map<Type, SubRecord> map = new EnumMap<Type, SubRecord>(Type.class);
+    private ArrayList<SubRecord> list = new ArrayList<>();
+    private Map<Type, SubRecord> map = new EnumMap<>(Type.class);
+    private Set<Type> forceExport = new HashSet<>(0);
 
     public void add(SubRecord r) {
 	for (Type t : r.getTypes()) {
@@ -33,10 +34,14 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 
     void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : list) {
-	    if (s.isValid()) {
+	    if (shouldExport(s)) {
 		s.export(out, srcMod);
 	    }
 	}
+    }
+
+    public void forceExport(Type t) {
+	forceExport.add(t);
     }
 
     public boolean contains(Type t) {
@@ -131,9 +136,15 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     public int length(Mod srcMod) {
 	int length = 0;
 	for (SubRecord s : list) {
-	    length += s.getTotalLength(srcMod);
+	    if (shouldExport(s)) {
+		length += s.getTotalLength(srcMod);
+	    }
 	}
 	return length;
+    }
+
+    public boolean shouldExport(SubRecord s) {
+	return s.isValid() || forceExport.contains(s.getTypes()[0]);
     }
 
     public ArrayList<SubRecord> getRecords() {

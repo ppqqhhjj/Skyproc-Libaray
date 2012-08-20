@@ -1,9 +1,11 @@
 package skyproc;
 
-import skyproc.gui.SPProgressBarPlug;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -12,6 +14,7 @@ import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
+import skyproc.gui.SPProgressBarPlug;
 
 /**
  * A GRUP is a collection of Major Records.
@@ -24,8 +27,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     byte[] grupType = new byte[4];
     byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
     byte[] version = new byte[4];
-    ArrayList<T> listRecords = new ArrayList<T>();
-    Map<FormID, T> mapRecords = new HashMap<FormID, T>();
+    ArrayList<T> listRecords = new ArrayList<>();
+    Map<FormID, T> mapRecords = new HashMap<>();
     Mod srcMod;
     T prototype;
     private static final Type[] type = {Type.GRUP};
@@ -253,7 +256,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return A list of all records in the GRUP
      */
     public ArrayList<T> getRecords() {
-        return listRecords;
+	return listRecords;
     }
 
     void standardizeMasters() {
@@ -358,7 +361,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     int getContentLength(Mod srcMod) {
 	int length = getHeaderLength();
 	for (T t : listRecords) {
-	    length += t.getTotalLength(srcMod);
+	    if (t.isValid()) {
+		length += t.getTotalLength(srcMod);
+	    }
 	}
 	return length;
     }
