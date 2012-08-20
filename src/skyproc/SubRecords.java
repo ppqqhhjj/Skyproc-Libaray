@@ -31,10 +31,6 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	list.add(r);
     }
 
-    public void addSilent(SubRecord r) {
-	list.add(r);
-    }
-
     void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : list) {
 	    if (s.isValid()) {

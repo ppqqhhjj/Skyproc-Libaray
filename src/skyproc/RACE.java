@@ -93,12 +93,12 @@ public class RACE extends MajorRecordDescription {
 	NAM1.forceExport(true);
 	subRecords.add(NAM1);
 	EGTrecords.forceMarkers = true;
-	subRecords.addSilent(EGTrecords);
+	subRecords.add(EGTrecords);
 	subRecords.add(GNAM);
 	NAM3.forceExport(true);
 	subRecords.add(NAM3);
 	HKXrecords.forceMarkers = true;
-	subRecords.addSilent(HKXrecords);
+	subRecords.add(HKXrecords);
 	subRecords.add(NAM4);
 	subRecords.add(NAM5);
 	subRecords.add(NAM7);
@@ -211,7 +211,7 @@ public class RACE extends MajorRecordDescription {
         SubData INDX = new SubData(Type.INDX);
         SubString MODL = new SubString(Type.MODL, true);
         SubData MODT = new SubData(Type.MODT);
-        private static Type[] types = {Type.INDX, Type.MODL, Type.MODT};
+        private static Type[] types = {Type.INDX};
 
         public EGTmodel() {
             super(types);
@@ -230,7 +230,7 @@ public class RACE extends MajorRecordDescription {
 
         SubString MODL = new SubString(Type.MODL, true);
         SubData MODT = new SubData(Type.MODT);
-        private static Type[] types = {Type.MODL, Type.MODT};
+        private static Type[] types = {};
 
         public HKXmodel() {
             super(types);
