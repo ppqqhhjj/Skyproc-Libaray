@@ -62,7 +62,7 @@ public class PERK extends MajorRecordDescription {
 
     // Custom importSubRecords because Bethesda reused header titles in the same record.
     @Override
-    void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
 	Boolean insidePRKE = false;
 	while (!in.isEmpty()) {
@@ -86,7 +86,7 @@ public class PERK extends MajorRecordDescription {
 			    break;
 			}
 		    default:
-			subRecords.importSubRecord(in, mask);
+			subRecords.importSubRecord(in);
 		}
 	    } else {
 		throw new BadRecord(getTypes()[0].toString() + " doesn't know what to do with a " + nextType.toString() + " record.");

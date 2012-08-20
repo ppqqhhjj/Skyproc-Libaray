@@ -1,7 +1,6 @@
 package skyproc;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +9,6 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -36,10 +34,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     GRUP(Mod srcMod_, T prototype) {
 	srcMod = srcMod_;
 	this.prototype = prototype;
-    }
-
-    void parseData(ByteBuffer in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-	parseData(new LShrinkArray(in), mask);
     }
 
     @Override
@@ -83,11 +77,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	parseData(in, null);
-    }
-
-    void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	in.skip(4); // GRUP type
 	grupType = in.extract(4);
@@ -100,7 +90,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    T item = (T) prototype.getNew();
 	    try {
 
-		item.parseData(item.extractRecordData(in), mask);
+		item.parseData(item.extractRecordData(in));
 
 		// Customizable middle stage for specialized GRUPs
 		parseDataHelper(item);
@@ -116,8 +106,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		    logSync(toString(), "=============== DONE ==============");
 		}
 	    } catch (java.nio.BufferUnderflowException e) {
-		handleBadRecord(item, e.toString());
-	    } catch (BadRecord e) {
 		handleBadRecord(item, e.toString());
 	    }
 	    flush();

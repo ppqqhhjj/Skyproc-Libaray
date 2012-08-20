@@ -11,7 +11,6 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -38,12 +37,6 @@ public abstract class SubRecord extends Record {
     @Override
     void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-    }
-
-    final void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-	if (mask == null || mask.allowed.get(Record.getNextType(in)) == true) {
-	    parseData(in);
-	}
     }
 
     @Override

@@ -119,8 +119,8 @@ public class GLOB extends MajorRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in, mask);
+    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in);
 	if (SPGlobal.logging()) {
 	    logSync("GLOB", "Constant: " + get(MajorFlags.RelatedToShields));
 	}
@@ -135,7 +135,7 @@ public class GLOB extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param value
      */
     final public void setValue (Float value) {

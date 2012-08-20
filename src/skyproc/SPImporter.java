@@ -2,12 +2,14 @@ package skyproc;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
-import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadMod;
 import skyproc.gui.SPProgressBarPlug;
@@ -21,7 +23,6 @@ import skyproc.gui.SPProgressBarPlug;
 public class SPImporter {
 
     private static String header = "Importer";
-    Map<Type, Mask> masks = new EnumMap<>(Type.class);
     int curMod = 1;
     int maxMod = 1;
     static int extraStepsPerMod = 1;
@@ -65,17 +66,6 @@ public class SPImporter {
 	public void main(String args[]) {
 	    (new Thread(new StartImportThread())).start();
 	}
-    }
-
-    /**
-     * Adds the specified mask to SPImporter as a filter.<br><br> Once the
-     * importer has imported every record type allowed in the mask, it will move
-     * on to the next record in the GRUP.
-     *
-     * @param m Mask filter to add to the importer
-     */
-    public void addMask(Mask m) {
-	masks.put(m.type, m);
     }
 
     /**
@@ -498,7 +488,7 @@ public class SPImporter {
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
-		plugin.parseData(result, extractGRUPData(input), masks);
+		plugin.parseData(result, extractGRUPData(input));
 		typeTargets.remove(result);
 		SPGlobal.flush();
 		SPProgressBarPlug.incrementBar();

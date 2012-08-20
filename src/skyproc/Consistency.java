@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lev.Ln;
-import skyproc.MajorRecord.Mask;
 import skyproc.gui.SPProgressBarPlug;
 
 /**
@@ -83,12 +82,6 @@ class Consistency {
 	    return;
 	}
 	SPImporter importer = new SPImporter();
-	// Only import EDIDs
-	for (GRUP_TYPE g : GRUP_TYPE.values()) {
-	    Mask m = MajorRecord.getMask(Type.toRecord(g));
-	    m.allow(Type.EDID);
-	    importer.addMask(m);
-	}
 	Mod consistencyPatch;
 	try {
 	    SPProgressBarPlug.reset();

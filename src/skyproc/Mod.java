@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import javax.swing.JOptionPane;
 import lev.*;
-import skyproc.MajorRecord.Mask;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -813,12 +812,8 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	header.setAuthor(in);
     }
 
-    void parseData(Type type, ByteBuffer data, Map<Type, Mask> masks) throws BadRecord, DataFormatException, BadParameter {
-	if (masks.containsKey(type)) {
-	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data, masks.get(type));
-	} else {
-	    GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
-	}
+    void parseData(Type type, ByteBuffer data) throws BadRecord, DataFormatException, BadParameter {
+	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
     }
 
     /**

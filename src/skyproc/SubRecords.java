@@ -11,7 +11,6 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import skyproc.MajorRecord.Mask;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -89,33 +88,17 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	}
     }
 
-    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	importSubRecords(in, null);
-    }
-
-    void importSubRecords(LShrinkArray in, Mask mask) throws BadRecord, BadParameter, DataFormatException {
-	while (!in.isEmpty() && (mask == null || !mask.done())) {
-	    importSubRecord(in, mask);
+    void importSubRecords(LShrinkArray in) throws BadRecord, BadParameter, DataFormatException {
+	while (!in.isEmpty()) {
+	    importSubRecord(in);
 	}
     }
 
-    void importSubRecord(LShrinkArray in) throws BadRecord, BadParameter, DataFormatException {
-	importSubRecord(in, null);
-    }
-
-    void importSubRecord(LShrinkArray in, Mask mask) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    SubRecord record = get(nextType);
-	    if (mask == null || mask.allowed.get(nextType)) {
-		record.parseData(record.extractRecordData(in));
-		if (mask != null) {
-		    mask.imported(nextType);
-		}
-	    } else {
-		record.extractRecordData(in);
-		SPGlobal.logSync(nextType.toString(), "Record blocked by mask");
-	    }
+	    record.parseData(record.extractRecordData(in));
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
 	}
