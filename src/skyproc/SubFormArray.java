@@ -49,7 +49,7 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         int size = IDs.size();
         for (int i = 0; i < size; i++) {

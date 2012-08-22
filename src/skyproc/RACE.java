@@ -133,7 +133,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     @Override
-    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType;
 	while (!in.isDone()) {
 	    nextType = getNextType(in);
@@ -470,7 +470,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    fluff1 = in.extract(16);
 	    maleHeight = in.extractFloat();

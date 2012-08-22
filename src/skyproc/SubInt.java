@@ -52,7 +52,7 @@ class SubInt extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	data = in.extractInt(length);
 	if (logging()) {

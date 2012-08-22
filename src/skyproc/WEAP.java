@@ -153,7 +153,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
             super.parseData(in);
             wtype = WeaponType.values()[in.extractInt(1)];
             unknown1 = in.extract(3);
@@ -222,7 +222,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
             super.parseData(in);
             value = in.extractInt(4);
             weight = in.extractFloat();
@@ -272,7 +272,7 @@ public class WEAP extends MajorRecordDescription {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
             super.parseData(in);
             critDmg = in.extractInt(2);
             unknown0 = in.extract(2);

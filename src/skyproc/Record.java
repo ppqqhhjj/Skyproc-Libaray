@@ -21,11 +21,11 @@ public abstract class Record extends ExportRecord implements Serializable {
     Record() {
     }
 
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
 	in.skip(getIdentifierLength() + getSizeLength());
     }
 
-    final void parseData(ByteBuffer in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(ByteBuffer in) throws BadRecord, BadParameter, DataFormatException, IOException {
 	parseData(new LShrinkArray(in));
     }
 
@@ -70,7 +70,7 @@ public abstract class Record extends ExportRecord implements Serializable {
 		+ Ln.printHex(Ln.toIntArray(str), true, false));
     }
 
-    static Type getNextType(LStream in) throws BadRecord {
+    static Type getNextType(LStream in) throws BadRecord, IOException {
 	return (matchType(Ln.arrayToString(in.getInts(0, 4))));
     }
 
@@ -82,12 +82,12 @@ public abstract class Record extends ExportRecord implements Serializable {
 	}
     }
 
-    private int extractRecordLength(LStream in) {
+    private int extractRecordLength(LStream in) throws IOException {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    LShrinkArray extractRecordData(LStream in) {
+    LShrinkArray extractRecordData(LStream in) throws IOException {
 	int recordLength = extractRecordLength(in);
 	LShrinkArray extracted = new LShrinkArray(in, recordLength);
 	in.skip(recordLength);

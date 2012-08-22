@@ -243,7 +243,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    switch (getType()) {
 		case String:
 		    DATAs.parseData(in);

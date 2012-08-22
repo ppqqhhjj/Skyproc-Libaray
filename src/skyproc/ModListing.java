@@ -27,7 +27,7 @@ public class ModListing extends SubRecord implements Comparable {
     static ModListing skyrim = new ModListing("Skyrim.esm");
     static ModListing update = new ModListing("Update.esm");
 
-    ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	this();
 	parseData(in);
     }
@@ -101,7 +101,7 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	switch (getNextType(in)) {
 	    case MAST:
 		mast.parseData(in);

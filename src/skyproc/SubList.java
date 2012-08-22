@@ -167,7 +167,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         Type t = getNextType(in);
         if (counterType != t) {
             if (t.equals(type[0])) {

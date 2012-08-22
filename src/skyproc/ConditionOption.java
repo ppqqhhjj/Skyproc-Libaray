@@ -81,7 +81,7 @@ public class ConditionOption {
 	exportParam3(out);
     }
 
-    public void parseData(LStream in) {
+    public void parseData(LStream in) throws IOException {
 	parseParam1(in);
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.setInternal(in.extract(4));
@@ -106,11 +106,11 @@ public class ConditionOption {
 	out.write(-1);
     }
 
-    public void parseParam1(LStream in) {
+    public void parseParam1(LStream in) throws IOException{
 	in.skip(8);
     }
 
-    public void parseParam3(LStream in) {
+    public void parseParam3(LStream in) throws IOException {
 	in.skip(4);
     }
 
@@ -140,7 +140,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -167,7 +167,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
 	    if (SPGlobal.logging()) {
@@ -204,7 +204,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -241,7 +241,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -278,7 +278,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -317,7 +317,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -344,7 +344,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -371,7 +371,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -415,7 +415,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -424,7 +424,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam3(LStream in) {
+	public void parseParam3(LStream in) throws IOException {
 	    p3 = in.extractInt(4);
 	}
     }
@@ -457,7 +457,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -484,7 +484,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -511,7 +511,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1 = in.extractInt(4);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -548,7 +548,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
@@ -585,7 +585,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
@@ -623,7 +623,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -660,7 +660,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1.setInternal(in.extract(4));
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
@@ -689,7 +689,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -715,7 +715,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LStream in) {
+	public void parseParam1(LStream in) throws IOException{
 	    p1 = in.extract(4);
 	}
     }

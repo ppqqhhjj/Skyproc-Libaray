@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
@@ -28,7 +27,7 @@ class SubData extends SubRecord {
         super(type_);
     }
 
-    SubData(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
+    SubData(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter, IOException {
         this(type_);
         parseData(in);
     }
@@ -55,7 +54,7 @@ class SubData extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         setData(in.extractAllBytes());
         if (logging()) {

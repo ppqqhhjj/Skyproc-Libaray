@@ -5,17 +5,13 @@
 package lev;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
  *
  * @author Justin Swanson
  */
-public abstract class LChannel {
-
-    boolean returnf = false;
-    long returnBack = 0;
+public abstract class LChannel extends LStream {
 
     public abstract int read() throws IOException;
 
@@ -181,49 +177,12 @@ public abstract class LChannel {
      * @throws IOException
      */
     final public void offset(final int offset) throws IOException {
-	if (returnBack != 0) {
-	    returnBack += offset;
-	}
 	pos(pos() + offset);
-    }
-
-    /**
-     * Jumps back to the marked location that was set using posAndReturn()
-     *
-     * @throws IOException
-     */
-    final public void jumpBack() throws IOException {
-	if (returnf) {
-	    pos(returnBack);
-	    returnf = false;
-	}
-    }
-
-    /**
-     * Moves to the desired position, but marks the current location for
-     * jumpBack().
-     *
-     * @param pos Position to move to.
-     * @throws IOException
-     */
-    final public void posAndReturn(long pos) throws IOException {
-	markReturn();
-	pos(pos);
     }
 
     public abstract void pos(long pos) throws IOException;
 
     public abstract long pos() throws IOException;
-
-    /**
-     * Marks the current position for jumpBack().
-     *
-     * @throws IOException
-     */
-    final public void markReturn() throws IOException {
-	returnBack = pos();
-	returnf = true;
-    }
 
     /**
      * Uses an LStringSearcher to read file contents until one of the targets is

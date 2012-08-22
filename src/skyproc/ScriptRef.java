@@ -42,12 +42,12 @@ public class ScriptRef extends Record implements Iterable<String> {
 	this.name.set(name);
     }
 
-    ScriptRef(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    ScriptRef(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	parseData(in);
     }
 
     @Override
-    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	name.set(in.extractString(in.extractInt(2)));
 	unknown = in.extractInt(1);
 	int propertyCount = in.extractInt(2);

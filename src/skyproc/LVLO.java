@@ -88,7 +88,7 @@ public class LVLO extends SubShell {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    level = in.extractInt(4);
 	    entry.setInternal(in.extract(4));
@@ -130,7 +130,7 @@ public class LVLO extends SubShell {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    owner.setInternal(in.extract(4));
 	    reqRank = in.extractInt(4);

@@ -57,7 +57,7 @@ public class ECZN extends MajorRecord {
 	    valid = false;
 	}
 
-	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    this();
 	    parseData(in);
 	}
@@ -68,7 +68,7 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 
 	    owner.setInternal(in.extract(4));

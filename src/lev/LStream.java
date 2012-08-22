@@ -4,6 +4,7 @@
  */
 package lev;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -16,20 +17,20 @@ public abstract class LStream {
 
     static Inflater decompresser = new Inflater();
 
-    public abstract Boolean isDone();
+    public abstract Boolean isDone() throws IOException ;
 
-    public abstract int remaining();
+    public abstract int remaining() throws IOException ;
 
-    public abstract void skip(final int skip);
+    public abstract void skip(final int skip) throws IOException ;
 
-    public abstract void jumpBack(final int amount);
+    public abstract void jumpBack(final int amount) throws IOException ;
 
     /**
      * Returns the remaining contents as an int array, but does NOT adjust the
      * bounds.
      * @return The remaining contents as an int array.
      */
-    public int[] getAllInts() {
+    public int[] getAllInts() throws IOException  {
         return getInts(0, remaining());
     }
 
@@ -39,7 +40,7 @@ public abstract class LStream {
      * to be empty.
      * @return The remaining contents as an int array.
      */
-    public int[] extractAllInts() {
+    public int[] extractAllInts() throws IOException  {
         return extractInts(0, remaining());
     }
 
@@ -49,7 +50,7 @@ public abstract class LStream {
      * bounds.
      * @return The remaining contents as a byte array.
      */
-    public byte[] getAllBytes() {
+    public byte[] getAllBytes() throws IOException {
         return getBytes(0, remaining());
     }
 
@@ -58,7 +59,7 @@ public abstract class LStream {
      * to be empty.
      * @return The remaining contents as a byte array.
      */
-    public byte[] extractAllBytes() {
+    public byte[] extractAllBytes() throws IOException {
         return extract(remaining());
     }
 
@@ -69,7 +70,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return byte array containing desired offset.
      */
-    public byte[] getBytes(int skip, int amount) {
+    public byte[] getBytes(int skip, int amount) throws IOException {
         byte[] out = extract(skip, amount);
         jumpBack(skip + amount);
         return out;
@@ -82,7 +83,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return int array containing desired offset.
      */
-    public int[] getInts(int skip, int amount) {
+    public int[] getInts(int skip, int amount) throws IOException {
         return Ln.toIntArray(getBytes(skip, amount));
     }
 
@@ -93,7 +94,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return int array containing desired offset.
      */
-    public int[] extractInts(int skip, int amount) {
+    public int[] extractInts(int skip, int amount) throws IOException {
         skip(skip);
         return Ln.toIntArray(extract(amount));
     }
@@ -104,7 +105,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return int array containing desired offset.
      */
-    public int[] extractInts (int amount) {
+    public int[] extractInts (int amount) throws IOException {
         return Ln.toIntArray(extract(amount));
     }
 
@@ -115,7 +116,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return little endian int that was represented by the extracted bytes.
      */
-    public int extractInt(int skip, int amount) {
+    public int extractInt(int skip, int amount) throws IOException {
         return Ln.arrayToInt(extract(skip, amount));
     }
 
@@ -125,7 +126,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return little endian int that was represented by the extracted bytes.
      */
-    public int extractInt(int amount) {
+    public int extractInt(int amount) throws IOException {
         return Ln.arrayToInt(extract(amount));
     }
 
@@ -134,7 +135,7 @@ public abstract class LStream {
      * Bumps the lower bound up so that following extracts do not extract the same data.
      * @return bytes that make up a line.
      */
-    public byte[] extractLine () {
+    public byte[] extractLine () throws IOException {
         return extractUntil(10);
     }
 
@@ -143,7 +144,7 @@ public abstract class LStream {
      * Bumps the lower bound up so that following extracts do not extract the same data.
      * @return Float represented by the next 4 bytes.
      */
-    public float extractFloat() {
+    public float extractFloat() throws IOException {
         return Float.intBitsToFloat(extractInt(0, 4));
     }
 
@@ -152,7 +153,7 @@ public abstract class LStream {
      * @param amount
      * @return
      */
-    public boolean extractBool(int amount) {
+    public boolean extractBool(int amount) throws IOException {
 	if (extract(amount)[0] == 0) {
 	    return false;
 	} else {
@@ -160,11 +161,11 @@ public abstract class LStream {
 	}
     }
 
-    public String getString(int amount) {
+    public String getString(int amount) throws IOException {
         return Ln.arrayToString(getInts(0,amount));
     }
 
-    public String getString(int skip, int amount) {
+    public String getString(int skip, int amount) throws IOException {
         return Ln.arrayToString(getInts(skip, amount));
     }
 
@@ -176,7 +177,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return String representation of the bytes read.
      */
-    public String extractString(int skip, int amount) {
+    public String extractString(int skip, int amount) throws IOException {
         String out = getString(skip, amount);
 	skip(skip + amount);
 	return out;
@@ -188,7 +189,7 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return String representation of the bytes read.
      */
-    public String extractString(int amount) {
+    public String extractString(int amount) throws IOException {
 	String out = getString(amount);
 	skip(amount);
 	return out;
@@ -200,11 +201,11 @@ public abstract class LStream {
      * Bumps the lower bound up so that following extracts do not extract the same data.
      * @return A null-terminated string.
      */
-    public String extractString() {
+    public String extractString() throws IOException {
         return Ln.arrayToString(extractUntil(0));
     }
 
-    public abstract byte[] extract(int amount);
+    public abstract byte[] extract(int amount) throws IOException;
 
     /**
      * Gets specified number of bytes after skipping the desired amount.<br>
@@ -213,19 +214,19 @@ public abstract class LStream {
      * @param amount Amount to read.
      * @return byte array containing desired offset.
      */
-    public byte[] extract(int skip, int amount) {
+    public byte[] extract(int skip, int amount) throws IOException {
         skip(skip);
         return extract(amount);
     }
 
-    public abstract byte[] extractUntil(int delimiter);
+    public abstract byte[] extractUntil(int delimiter) throws IOException;
 
     /**
      * Assumes the contents of the ShrinkArray is raw zipped data in its entirety, and nothing else.
      * It then unzips that data in the ShrinkArray.
      * @throws DataFormatException
      */
-    public LShrinkArray correctForCompression() throws DataFormatException {
+    public LShrinkArray correctForCompression() throws DataFormatException, IOException {
 
         int uncompressedSize = Ln.arrayToInt(extractInts(4));
 

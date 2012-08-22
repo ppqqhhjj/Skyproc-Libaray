@@ -63,7 +63,7 @@ public class PERK extends MajorRecordDescription {
 
     // Custom importSubRecords because Bethesda reused header titles in the same record.
     @Override
-    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType;
 	Boolean insidePRKE = false;
 	while (!in.isDone()) {
@@ -109,7 +109,7 @@ public class PERK extends MajorRecordDescription {
 	    PRKF.forceExport(true);
 	}
 
-	PRKEPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	PRKEPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    this();
 	    parseData(in);
 	}
@@ -122,7 +122,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    switch (getNextType(in)) {
 		case PRKE:
 		    PRKE.parseData(in);
@@ -193,7 +193,7 @@ public class PERK extends MajorRecordDescription {
 	    super(types);
 	}
 
-	PRKEComplexSubPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	PRKEComplexSubPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    this();
 	    parseData(in);
 	}
@@ -216,7 +216,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    switch (getNextType(in)) {
 		case DATA:
 		    DATA.parseData(in);
@@ -306,7 +306,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    switch (getNextType(in)) {
 		case PRKC:
 		    PRKC.parseData(in);

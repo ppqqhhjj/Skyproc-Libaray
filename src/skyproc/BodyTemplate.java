@@ -41,7 +41,7 @@ public class BodyTemplate extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	bodyParts = new LFlags(in.extract(4));
 	flags = new LFlags(in.extract(4));

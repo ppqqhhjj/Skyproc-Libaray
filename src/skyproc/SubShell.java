@@ -57,7 +57,7 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
 	subRecords.importSubRecords(in);
     }
 

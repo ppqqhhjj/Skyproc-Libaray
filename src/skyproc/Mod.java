@@ -64,7 +64,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	SPGlobal.getDB().add(this);
     }
 
-    Mod(ModListing info, ByteBuffer headerInfo) throws BadRecord, DataFormatException, BadParameter {
+    Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
 	this(info, true);
 	logSync("MOD", "Parsing header");
 	header.parseData(headerInfo);
@@ -812,7 +812,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	header.setAuthor(in);
     }
 
-    void parseData(Type type, ByteBuffer data) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(Type type, ByteBuffer data) throws Exception {
 	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
     }
 
@@ -1193,7 +1193,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	private int fluff3 = 0;
 	HEDR HEDR = new HEDR();
 	SubString author = new SubString(Type.CNAM, true);
-	SubSortedList<ModListing> masters = new SubSortedList<ModListing>(new ModListing());
+	SubSortedList<ModListing> masters = new SubSortedList<>(new ModListing());
 	SubString description = new SubString(Type.SNAM, true);
 	SubData INTV = new SubData(Type.INTV, defaultINTV);
 	SubData ONAM = new SubData(Type.ONAM);
@@ -1210,13 +1210,13 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    subRecords.add(INCC);
 	}
 
-	TES4(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	TES4(LShrinkArray in) throws Exception {
 	    this();
 	    parseData(in);
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException  {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
 	    fluff1 = Ln.arrayToInt(in.extractInts(4));
@@ -1314,7 +1314,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	    clear();
 	}
 
-	HEDR(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	HEDR(LShrinkArray in) throws Exception {
 	    this();
 	    parseData(in);
 	}
@@ -1344,7 +1344,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
 	    super.parseData(in);
 	    version = in.extract(4);
 	    numRecords = in.extractInt(4);

@@ -7,13 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
-import lev.LStream;
-import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.BadRecord;
 
 /**
  * An abstract class outlining the functionality of subrecords, which are
@@ -33,11 +28,6 @@ public abstract class SubRecord extends Record {
     SubRecord(Type type_) {
 	type = new Type[1];
 	type[0] = type_;
-    }
-
-    @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
     }
 
     @Override

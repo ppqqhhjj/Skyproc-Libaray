@@ -100,7 +100,7 @@ class ScriptProperty extends Record implements Serializable {
 	data = tmp;
     }
 
-    ScriptProperty(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    ScriptProperty(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	parseData(in);
     }
 
@@ -119,7 +119,7 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	name.set(in.extractString(in.extractInt(2)));
 	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
@@ -280,7 +280,7 @@ class ScriptProperty extends Record implements Serializable {
     // Data classes
     interface ScriptData {
 
-	void parseData(LStream in);
+	void parseData(LStream in) throws IOException;
 
 	int getContentLength();
 
@@ -296,7 +296,7 @@ class ScriptProperty extends Record implements Serializable {
 	String data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    data = in.extractString(in.extractInt(2));
 	}
 
@@ -327,7 +327,7 @@ class ScriptProperty extends Record implements Serializable {
 	int data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    data = in.extractInt(4);
 	}
 
@@ -357,7 +357,7 @@ class ScriptProperty extends Record implements Serializable {
 	boolean data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    data = in.extractBool(1);
 	}
 
@@ -403,7 +403,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    data = in.extract(4);
 	    id = new FormID();
 	    id.setInternal(in.extract(4));
@@ -436,7 +436,7 @@ class ScriptProperty extends Record implements Serializable {
 	float data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    data = in.extractFloat();
 	}
 
@@ -466,7 +466,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Integer> data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
 	    data = new ArrayList<Integer>(size);
 	    for (int i = 0; i < size; i++) {
@@ -507,7 +507,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<String> data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
 	    data = new ArrayList<String>(size);
 	    for (int i = 0; i < size; i++) {
@@ -554,7 +554,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<FormIDData> data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
 	    data = new ArrayList<FormIDData>(size);
 	    for (int i = 0; i < size; i++) {
@@ -597,7 +597,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Boolean> data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
 	    data = new ArrayList<Boolean>(size);
 	    for (int i = 0; i < size; i++) {
@@ -642,7 +642,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Float> data;
 
 	@Override
-	public void parseData(LStream in) {
+	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
 	    data = new ArrayList<Float>(size);
 	    for (int i = 0; i < size; i++) {

@@ -88,7 +88,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    fluff = in.extract(4);
 	    weight = in.extractFloat();
@@ -125,7 +125,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));

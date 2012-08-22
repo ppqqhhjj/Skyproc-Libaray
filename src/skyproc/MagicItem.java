@@ -6,8 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -23,7 +21,7 @@ import skyproc.exceptions.BadRecord;
 abstract class MagicItem extends MajorRecordDescription {
 
     SubData OBND = new SubData(Type.OBND);
-    SubList<MagicEffectRef> magicEffects = new SubList<MagicEffectRef>(new MagicEffectRef());
+    SubList<MagicEffectRef> magicEffects = new SubList<>(new MagicEffectRef());
     public KeywordSet keywords = new KeywordSet();
 
     MagicItem() {
@@ -65,7 +63,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	    valid = false;
 	}
 
-	SPIT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	SPIT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    this();
 	    parseData(in);
 	}
@@ -76,7 +74,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 
 	    baseCost = in.extractInt(4);

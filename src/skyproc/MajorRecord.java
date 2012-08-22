@@ -106,7 +106,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
 	super.parseData(in);
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
@@ -128,7 +128,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	subRecords.printSummary();
     }
 
-    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	subRecords.importSubRecords(in);
     }
 

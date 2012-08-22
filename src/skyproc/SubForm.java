@@ -84,7 +84,7 @@ class SubForm extends SubRecord {
 	super(type_);
     }
 
-    SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
+    SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter, IOException {
 	this(type_);
 	parseData(in);
     }
@@ -95,7 +95,7 @@ class SubForm extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	setForm(in.extract(4));
     }

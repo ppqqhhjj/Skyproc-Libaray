@@ -4,9 +4,9 @@
  */
 package skyproc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LShrinkArray;
 import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -44,7 +44,7 @@ public class AVIF extends MajorRecordDescription {
     }
 
     @Override
-    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType;
 	Boolean pastHeader = false;
 	while (!in.isDone()) {

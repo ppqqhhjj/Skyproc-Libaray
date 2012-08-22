@@ -26,7 +26,7 @@ public class MagicEffectRef extends SubShell {
     private static Type[] types = {Type.EFID, Type.EFIT, Type.CTDA, Type.CIS1, Type.CIS2};
     SubForm EFID = new SubForm(Type.EFID);
     EFIT EFIT = new EFIT();
-    SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
+    SubList<Condition> CTDAs = new SubList<>(new Condition());
 
     /**
      * @param magicEffectRef A formID to a MGEF record.
@@ -42,7 +42,7 @@ public class MagicEffectRef extends SubShell {
 	init();
     }
 
-    MagicEffectRef(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord {
+    MagicEffectRef(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord, IOException {
 	this();
 	parseData(in);
     }
@@ -104,7 +104,7 @@ public class MagicEffectRef extends SubShell {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    magnitude = in.extractFloat();
 	    AOE = in.extractInt(4);

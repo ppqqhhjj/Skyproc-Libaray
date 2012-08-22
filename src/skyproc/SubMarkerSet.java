@@ -63,7 +63,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type next = Record.getNextType(in);
 	if (markers.contains(next)) {
 	    logSync("", "Loaded Marker " + next);

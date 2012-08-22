@@ -75,7 +75,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
 	super.parseData(in);
 	in.skip(4); // GRUP type
 	grupType = in.extract(4);

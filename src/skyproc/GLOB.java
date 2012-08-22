@@ -4,6 +4,7 @@
  */
 package skyproc;
 
+import java.io.IOException;
 import java.util.zip.DataFormatException;
 import lev.LShrinkArray;
 import lev.LStream;
@@ -120,7 +121,7 @@ public class GLOB extends MajorRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	if (SPGlobal.logging()) {
 	    logSync("GLOB", "Constant: " + get(MajorFlags.RelatedToShields));

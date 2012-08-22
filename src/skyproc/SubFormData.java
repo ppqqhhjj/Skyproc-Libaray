@@ -22,7 +22,7 @@ class SubFormData extends SubForm {
 
     byte[] data;
 
-    SubFormData(Type type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    SubFormData(Type type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
         this(type);
         parseData(in);
     }
@@ -37,7 +37,7 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         setData(in.extract(4));
     }

@@ -112,7 +112,7 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();

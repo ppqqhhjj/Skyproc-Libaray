@@ -31,7 +31,7 @@ class SubFlag extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	flags.set(in.getAllBytes());
     }

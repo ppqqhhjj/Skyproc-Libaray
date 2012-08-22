@@ -75,7 +75,7 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));

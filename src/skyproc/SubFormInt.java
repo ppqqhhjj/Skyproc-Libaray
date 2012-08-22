@@ -35,7 +35,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         num = Ln.arrayToInt(data);
     }

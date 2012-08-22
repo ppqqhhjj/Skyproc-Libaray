@@ -32,13 +32,13 @@ class SubString extends SubRecord {
         nullterm = nullTerminated;
     }
 
-    SubString(LShrinkArray in, Type type_, boolean nullTerminated) throws BadRecord, DataFormatException, BadParameter {
+    SubString(LShrinkArray in, Type type_, boolean nullTerminated) throws BadRecord, DataFormatException, BadParameter, IOException {
         this(type_, nullTerminated);
         parseData(in);
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         if (nullterm) {
             string = Ln.arrayToString(in.extractInts(in.remaining() - 1));

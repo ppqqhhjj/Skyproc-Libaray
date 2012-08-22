@@ -59,7 +59,7 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	switch (getNextType(in)) {
 	    case KSIZ:
 		counter.parseData(in);

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
@@ -174,7 +176,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
 	    baseCost = in.extractFloat();
@@ -298,7 +300,7 @@ public class MGEF extends MajorRecordDescription {
 
     class SNDD extends SubRecord {
 
-	ArrayList<Sound> sounds = new ArrayList<Sound>();
+	ArrayList<Sound> sounds = new ArrayList<>();
 
 	SNDD() {
 	    super(Type.SNDD);
@@ -314,13 +316,17 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
-	    while (!in.isDone()) {
-		Sound sound = new Sound();
-		sound.sound = SoundData.values()[in.extractInt(4)];
-		sound.soundID.setInternal(in.extract(4));
-		sounds.add(sound);
+	    try {
+		while (!in.isDone()) {
+		    Sound sound = new Sound();
+		    sound.sound = SoundData.values()[in.extractInt(4)];
+		    sound.soundID.setInternal(in.extract(4));
+		    sounds.add(sound);
+		}
+	    } catch (IOException ex) {
+		Logger.getLogger(MGEF.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
 

@@ -89,13 +89,13 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	}
     }
 
-    void importSubRecords(LStream in) throws BadRecord, BadParameter, DataFormatException {
+    void importSubRecords(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
 	while (!in.isDone()) {
 	    importSubRecord(in);
 	}
     }
 
-    void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    SubRecord record = get(nextType);

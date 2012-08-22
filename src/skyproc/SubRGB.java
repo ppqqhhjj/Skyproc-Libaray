@@ -47,7 +47,7 @@ public class SubRGB extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	r = in.extractFloat();
 	g = in.extractFloat();

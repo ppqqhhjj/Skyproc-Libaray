@@ -112,7 +112,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    int numTextures = in.extractInt(4);
 	    for (int i = 0; i < numTextures; i++) {
@@ -179,11 +179,11 @@ public class ARMA extends MajorRecord {
 	    this.index = index;
 	}
 
-	AltTexture(LShrinkArray in) {
+	AltTexture(LShrinkArray in) throws IOException {
 	    parseData(in);
 	}
 
-	final void parseData(LShrinkArray in) {
+	final void parseData(LShrinkArray in) throws IOException {
 	    int strLength = in.extractInt(4);
 	    name = in.extractString(strLength);
 	    texture.setInternal(in.extract(4));
@@ -306,7 +306,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
 	    malePriority = in.extractInt(1);
 	    femalePriority = in.extractInt(1);

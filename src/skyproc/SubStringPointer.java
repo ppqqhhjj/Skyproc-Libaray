@@ -61,7 +61,7 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	data.parseData(in);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));

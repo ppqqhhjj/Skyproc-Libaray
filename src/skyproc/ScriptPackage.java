@@ -58,7 +58,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	super.parseData(in);
 	version = in.extractInt(2);
 	unknown = in.extractInt(2);

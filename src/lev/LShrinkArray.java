@@ -51,7 +51,7 @@ public class LShrinkArray extends LStream {
      * @param rhs LStream to copy bounds from.
      * @param high New upper limit to give to the ShrinkArray.
      */
-    public LShrinkArray(final LStream rhs, final int high) {
+    public LShrinkArray(final LStream rhs, final int high) throws IOException {
 	this(rhs);
 	buffer.limit(high);
     }
@@ -62,7 +62,7 @@ public class LShrinkArray extends LStream {
      *
      * @param rhs LStream to copy bounds from.
      */
-    public LShrinkArray(final LStream rhs) {
+    public LShrinkArray(final LStream rhs) throws IOException {
 	if (rhs.getClass() == getClass()) {
 	    LShrinkArray rhss = (LShrinkArray) rhs;
 	    buffer = rhss.buffer.slice();

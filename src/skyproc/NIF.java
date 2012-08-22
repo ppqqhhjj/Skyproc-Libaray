@@ -4,7 +4,9 @@
  */
 package skyproc;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,16 +57,16 @@ public class NIF {
      * @throws BadParameter If the data given to parse is malformed (by
      * SkyProc's standards)
      */
-    public NIF(String filename, LShrinkArray in) throws BadParameter {
+    public NIF(String filename, LShrinkArray in) throws BadParameter, IOException {
 	this.fileName = filename;
 	parseData(in);
     }
 
-    final void parseData(LShrinkArray in) throws BadParameter {
+    final void parseData(LShrinkArray in) throws BadParameter, IOException {
 	loadHeader(in);
     }
 
-    void loadHeader(LShrinkArray in) throws BadParameter {
+    void loadHeader(LShrinkArray in) throws BadParameter, IOException {
 
 	//Gamebryo header
 	if (SPGlobal.debugNIFimport) {
@@ -162,8 +164,6 @@ public class NIF {
 	}
     }
 
-
-
     /**
      * A single Node and its data in the nif file.
      */
@@ -191,7 +191,7 @@ public class NIF {
 	    type = n;
 	}
 
-	Node(Node in) {
+	Node(Node in) throws IOException {
 	    this.title = in.title;
 	    this.type = in.type;
 	    this.size = in.size;
@@ -266,7 +266,7 @@ public class NIF {
      * @return List of the node types in the nif file, in order.
      */
     public ArrayList<NodeType> getNodeTypes() {
-	ArrayList<NodeType> out = new ArrayList<NodeType>(nodes.size());
+	ArrayList<NodeType> out = new ArrayList<>(nodes.size());
 	for (int i = 0; i < nodes.size(); i++) {
 	    out.add(nodes.get(i).type);
 	}
@@ -278,7 +278,7 @@ public class NIF {
      * @param i
      * @return The ith node in the NIF object.
      */
-    public Node getNode(int i) {
+    public Node getNode(int i) throws IOException {
 	return new Node(nodes.get(i));
     }
 
@@ -297,7 +297,7 @@ public class NIF {
      * @return Map of all the Node objects matching the given type, with their
      * node index as keys.
      */
-    public Map<Integer, Node> getNodes(NodeType type) {
+    public Map<Integer, Node> getNodes(NodeType type) throws IOException {
 	Map<Integer, Node> out = new TreeMap<>();
 	String name = "";
 	for (int i = 0; i < nodes.size(); i++) {
@@ -345,7 +345,7 @@ public class NIF {
     }
 
     //In order list of pairs of Node name + list of textures
-    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() {
+    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() throws IOException {
 	ArrayList<LPair<String, ArrayList<String>>> out = new ArrayList<>();
 	Map<Integer, NIF.Node> BiLightingShaderProperties = getNodes(NIF.NodeType.BSLIGHTINGSHADERPROPERTY);
 	Map<Integer, NIF.Node> BiShaderTextureNodes = getNodes(NIF.NodeType.BSSHADERTEXTURESET);
@@ -375,9 +375,9 @@ public class NIF {
      * BSShaderTextureSet node or the function will fail.
      * @return List of the textures in the node.
      */
-    public static ArrayList<String> extractBSTextures(Node n) {
+    public static ArrayList<String> extractBSTextures(Node n) throws IOException {
 	int numTextures = n.data.extractInt(4);
-	ArrayList<String> maps = new ArrayList<String>(numTextures);
+	ArrayList<String> maps = new ArrayList<>(numTextures);
 	for (int i = 0; i < numTextures; i++) {
 	    maps.add(n.data.extractString(n.data.extractInt(4)));
 	}
