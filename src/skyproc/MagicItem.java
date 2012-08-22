@@ -12,6 +12,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -75,7 +76,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 
 	    baseCost = in.extractInt(4);

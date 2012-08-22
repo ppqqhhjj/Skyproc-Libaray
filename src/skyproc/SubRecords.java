@@ -11,6 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -88,13 +89,13 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	}
     }
 
-    void importSubRecords(LShrinkArray in) throws BadRecord, BadParameter, DataFormatException {
-	while (!in.isEmpty()) {
+    void importSubRecords(LStream in) throws BadRecord, BadParameter, DataFormatException {
+	while (!in.isDone()) {
 	    importSubRecord(in);
 	}
     }
 
-    void importSubRecord(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    SubRecord record = get(nextType);

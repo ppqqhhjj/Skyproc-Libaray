@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -111,7 +112,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    int numTextures = in.extractInt(4);
 	    for (int i = 0; i < numTextures; i++) {
@@ -305,7 +306,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    malePriority = in.extractInt(1);
 	    femalePriority = in.extractInt(1);

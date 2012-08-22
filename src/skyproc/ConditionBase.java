@@ -7,10 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LFlags;
-import lev.LShrinkArray;
-import lev.Ln;
+import lev.*;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -59,7 +56,7 @@ public class ConditionBase extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	//Flags and Operator
 	flags.set(in.extract(1));

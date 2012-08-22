@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -132,9 +133,9 @@ public class RACE extends MajorRecordDescription {
     }
 
     @Override
-    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
-	while (!in.isEmpty()) {
+	while (!in.isDone()) {
 	    nextType = getNextType(in);
 	    if (nextType == Type.NAM1) {
 		subRecords.importSubRecord(in); // import NAM1
@@ -148,7 +149,7 @@ public class RACE extends MajorRecordDescription {
 		}
 	    } else if (nextType == Type.NAM0) {
 		subRecords.importSubRecord(in); // import NAM0
-		while (!in.isEmpty() && getNextType(in) != Type.WKMV) {
+		while (!in.isDone() && getNextType(in) != Type.WKMV) {
 		    headData.parseData(headData.extractRecordData(in));
 		}
 	    } else {
@@ -469,7 +470,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    fluff1 = in.extract(16);
 	    maleHeight = in.extractFloat();

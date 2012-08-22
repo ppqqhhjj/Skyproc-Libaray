@@ -12,6 +12,7 @@ import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import lev.LShrinkArray;
+import lev.LStream;
 
 /**
  *
@@ -36,7 +37,7 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in);
         setData(in.extract(4));
     }

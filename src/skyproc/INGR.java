@@ -12,6 +12,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -87,7 +88,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    fluff = in.extract(4);
 	    weight = in.extractFloat();
@@ -124,7 +125,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));

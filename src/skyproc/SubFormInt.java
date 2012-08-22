@@ -6,6 +6,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -34,7 +35,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in);
         num = Ln.arrayToInt(data);
     }

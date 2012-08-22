@@ -151,7 +151,7 @@ public class BSA {
 	    in.pos(getFileLocation(ref));
 	    LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0, ref.size));
 	    if (archiveFlags.get(2)) {
-		out.correctForCompression();
+		out = out.correctForCompression();
 	    }
 	    return out;
 	}

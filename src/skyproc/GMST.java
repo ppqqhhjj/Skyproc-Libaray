@@ -11,6 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -242,7 +243,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getType()) {
 		case String:
 		    DATAs.parseData(in);

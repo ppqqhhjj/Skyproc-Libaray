@@ -3,10 +3,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
-import lev.LShrinkArray;
-import lev.Ln;
+import lev.*;
 import skyproc.Mod.Mod_Flags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -64,7 +61,7 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));

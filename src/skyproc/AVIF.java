@@ -7,6 +7,7 @@ package skyproc;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -43,10 +44,10 @@ public class AVIF extends MajorRecordDescription {
     }
 
     @Override
-    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
 	Boolean pastHeader = false;
-	while (!in.isEmpty()) {
+	while (!in.isDone()) {
 	    nextType = getNextType(in);
 	    if (nextType == Type.PNAM) {
 		pastHeader = true;

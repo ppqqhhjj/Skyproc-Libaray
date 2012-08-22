@@ -467,7 +467,7 @@ public class SPImporter {
     Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
 	int curBar = SPProgressBarPlug.getBar();
 	try {
-	    ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>(Arrays.asList(grup_targets));
+	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_targets));
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    LFileChannel input = new LFileChannel(path + listing.print());
@@ -477,7 +477,7 @@ public class SPImporter {
 		importStrings(plugin);
 	    }
 
-	    ArrayList<Type> typeTargets = new ArrayList<Type>();
+	    ArrayList<Type> typeTargets = new ArrayList<>();
 	    for (GRUP_TYPE g : grup_targets) {
 		if (!GRUP_TYPE.unfinished(g)) {
 		    typeTargets.add(Type.toRecord(g));

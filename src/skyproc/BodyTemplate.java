@@ -9,6 +9,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -40,11 +41,11 @@ public class BodyTemplate extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	bodyParts = new LFlags(in.extract(4));
 	flags = new LFlags(in.extract(4));
-	if (!in.isEmpty()) {
+	if (!in.isDone()) {
 	    armorType = in.extractInt(4);
 	} else {
 	    old = true;

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -74,7 +75,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             eyeAdaptSpeed = in.extractFloat();
@@ -153,7 +154,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             saturation = in.extractFloat();
@@ -218,7 +219,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             alpha = in.extractFloat();
@@ -288,12 +289,12 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
             DOFstrength = in.extractFloat();
             DOFdistance = in.extractFloat();
             DOFrange = in.extractFloat();
-            if (in.length() >= 4) {
+            if (in.remaining() >= 4) {
                 unknown = in.extract(4);
             }
             valid = true;

@@ -106,7 +106,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
@@ -115,7 +115,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	if (get(MajorFlags.Compressed)) {
 	    set(MajorFlags.Compressed, false);
-	    in.correctForCompression();
+	    in = in.correctForCompression();
 	    logSync(getTypes().toString(), "Decompressed");
 	}
 
@@ -128,7 +128,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	subRecords.printSummary();
     }
 
-    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	subRecords.importSubRecords(in);
     }
 

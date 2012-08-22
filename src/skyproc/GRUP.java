@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
-import lev.LShrinkArray;
+import lev.*;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -77,13 +75,13 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	in.skip(4); // GRUP type
 	grupType = in.extract(4);
 	dateStamp = in.extract(4);
 	version = in.extract(4);
-	while (!in.isEmpty()) {
+	while (!in.isDone()) {
 	    if (logging()) {
 		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	    }

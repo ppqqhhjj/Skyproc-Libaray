@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -37,7 +38,7 @@ class SubFloat extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	data = in.extractFloat();
 	if (logging()) {
@@ -61,7 +62,7 @@ class SubFloat extends SubRecord {
 	    out.write(data);
 	}
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

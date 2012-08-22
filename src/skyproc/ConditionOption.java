@@ -7,7 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import lev.LExporter;
-import lev.LShrinkArray;
+import lev.LStream;
+import lev.LStream;
 import skyproc.Condition.RunOnType;
 
 /**
@@ -80,7 +81,7 @@ public class ConditionOption {
 	exportParam3(out);
     }
 
-    public void parseData(LShrinkArray in) {
+    public void parseData(LStream in) {
 	parseParam1(in);
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.setInternal(in.extract(4));
@@ -105,11 +106,11 @@ public class ConditionOption {
 	out.write(-1);
     }
 
-    public void parseParam1(LShrinkArray in) {
+    public void parseParam1(LStream in) {
 	in.skip(8);
     }
 
-    public void parseParam3(LShrinkArray in) {
+    public void parseParam3(LStream in) {
 	in.skip(4);
     }
 
@@ -139,7 +140,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -166,7 +167,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
 	    if (SPGlobal.logging()) {
@@ -203,7 +204,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -240,7 +241,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -277,7 +278,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -316,7 +317,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -343,7 +344,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -370,7 +371,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -414,7 +415,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -423,7 +424,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam3(LShrinkArray in) {
+	public void parseParam3(LStream in) {
 	    p3 = in.extractInt(4);
 	}
     }
@@ -456,7 +457,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -483,7 +484,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -510,7 +511,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1 = in.extractInt(4);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -547,7 +548,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
@@ -584,7 +585,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
@@ -622,7 +623,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -659,7 +660,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1.setInternal(in.extract(4));
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
@@ -688,7 +689,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -714,7 +715,7 @@ public class ConditionOption {
 	}
 
 	@Override
-	public void parseParam1(LShrinkArray in) {
+	public void parseParam1(LStream in) {
 	    p1 = in.extract(4);
 	}
     }

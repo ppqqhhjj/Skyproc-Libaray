@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -62,10 +63,10 @@ public class PERK extends MajorRecordDescription {
 
     // Custom importSubRecords because Bethesda reused header titles in the same record.
     @Override
-    void importSubRecords(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
 	Boolean insidePRKE = false;
-	while (!in.isEmpty()) {
+	while (!in.isDone()) {
 	    nextType = getNextType(in);
 	    if (nextType == Type.PRKE) {
 		insidePRKE = true;
@@ -121,7 +122,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
 		case PRKE:
 		    PRKE.parseData(in);
@@ -215,7 +216,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
 		case DATA:
 		    DATA.parseData(in);
@@ -305,7 +306,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
 		case PRKC:
 		    PRKC.parseData(in);

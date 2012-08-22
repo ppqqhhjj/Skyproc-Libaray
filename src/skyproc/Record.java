@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -20,7 +21,7 @@ public abstract class Record extends ExportRecord implements Serializable {
     Record() {
     }
 
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	in.skip(getIdentifierLength() + getSizeLength());
     }
 
@@ -69,7 +70,7 @@ public abstract class Record extends ExportRecord implements Serializable {
 		+ Ln.printHex(Ln.toIntArray(str), true, false));
     }
 
-    static Type getNextType(LShrinkArray in) throws BadRecord {
+    static Type getNextType(LStream in) throws BadRecord {
 	return (matchType(Ln.arrayToString(in.getInts(0, 4))));
     }
 
@@ -81,12 +82,12 @@ public abstract class Record extends ExportRecord implements Serializable {
 	}
     }
 
-    private int extractRecordLength(LShrinkArray in) {
+    private int extractRecordLength(LStream in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    LShrinkArray extractRecordData(LShrinkArray in) {
+    LShrinkArray extractRecordData(LStream in) {
 	int recordLength = extractRecordLength(in);
 	LShrinkArray extracted = new LShrinkArray(in, recordLength);
 	in.skip(recordLength);

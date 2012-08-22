@@ -10,10 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
-import lev.LShrinkArray;
-import lev.Ln;
+import lev.*;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -170,7 +167,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
         Type t = getNextType(in);
         if (counterType != t) {
             if (t.equals(type[0])) {

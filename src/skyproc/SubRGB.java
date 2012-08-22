@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,7 +21,7 @@ public class SubRGB extends SubRecord {
     float r;
     float g;
     float b;
-    
+
     boolean valid = false;
 
     SubRGB(Type type, float red, float green, float blue) {
@@ -30,7 +31,7 @@ public class SubRGB extends SubRecord {
 	b = blue;
 	valid = true;
     }
-    
+
     SubRGB(Type type) {
 	super(type);
     }
@@ -46,7 +47,7 @@ public class SubRGB extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	r = in.extractFloat();
 	g = in.extractFloat();
@@ -120,7 +121,7 @@ public class SubRGB extends SubRecord {
 	}
 	valid = true;
     }
-    
+
     public float get (RGB color) {
 	if (!isValid()) {
 	    return 0;
@@ -133,5 +134,5 @@ public class SubRGB extends SubRecord {
 	    default:
 		return g;
 	}
-    }    
+    }
 }

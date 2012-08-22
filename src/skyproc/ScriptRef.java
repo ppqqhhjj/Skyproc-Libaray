@@ -6,12 +6,11 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -25,7 +24,7 @@ public class ScriptRef extends Record implements Iterable<String> {
 
     StringNonNull name = new StringNonNull();
     int unknown = 0;
-    ArrayList<ScriptProperty> properties = new ArrayList<ScriptProperty>();
+    ArrayList<ScriptProperty> properties = new ArrayList<>();
     private static final Type[] type = {Type.VMAD};
 
     ScriptRef() {
@@ -43,12 +42,12 @@ public class ScriptRef extends Record implements Iterable<String> {
 	this.name.set(name);
     }
 
-    ScriptRef(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    ScriptRef(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in);
     }
 
     @Override
-    final void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
 	unknown = in.extractInt(1);
 	int propertyCount = in.extractInt(2);

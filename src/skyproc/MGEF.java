@@ -12,6 +12,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
+import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -173,7 +174,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
 	    baseCost = in.extractFloat();
@@ -313,9 +314,9 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
-	    while (!in.isEmpty()) {
+	    while (!in.isDone()) {
 		Sound sound = new Sound();
 		sound.sound = SoundData.values()[in.extractInt(4)];
 		sound.soundID.setInternal(in.extract(4));

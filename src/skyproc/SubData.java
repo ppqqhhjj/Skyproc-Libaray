@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -54,7 +55,7 @@ class SubData extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in);
         setData(in.extractAllBytes());
         if (logging()) {
@@ -131,7 +132,7 @@ class SubData extends SubRecord {
         hash = 23 * hash + Arrays.hashCode(this.data);
         return hash;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o)

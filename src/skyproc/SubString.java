@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
+import lev.LStream;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -37,12 +38,12 @@ class SubString extends SubRecord {
     }
 
     @Override
-    void parseData(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in);
         if (nullterm) {
-            string = Ln.arrayToString(in.extractInts(in.length() - 1));
+            string = Ln.arrayToString(in.extractInts(in.remaining() - 1));
         } else {
-            string = Ln.arrayToString(in.extractInts(in.length()));
+            string = Ln.arrayToString(in.extractInts(in.remaining()));
         }
         if (logging()) {
             logSync(type.toString(), "Setting " + toString() + " to " + print());
