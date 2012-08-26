@@ -78,7 +78,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
 	super.parseData(in);
 	in.skip(4); // GRUP type
-	grupType = in.extract(4);
+	grupType = in.extract(4); // What kind of GRUP data it has.  Records, a Cell?
 	dateStamp = in.extract(4);
 	version = in.extract(4);
 	while (!in.isDone()) {

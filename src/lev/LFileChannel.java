@@ -16,7 +16,6 @@ public class LFileChannel extends LChannel {
 
     FileInputStream iStream;
     FileChannel iChannel;
-
     long end;
 
     /**
@@ -41,6 +40,17 @@ public class LFileChannel extends LChannel {
      */
     public LFileChannel(final File f) throws IOException {
 	openFile(f);
+    }
+
+    public LFileChannel(LStream rhs, long allocation) throws IOException {
+	if (rhs.getClass() == getClass()) {
+	    LFileChannel fc = (LFileChannel) rhs;
+	    iStream = fc.iStream;
+	    iChannel = fc.iChannel;
+	    end = iChannel.position() + allocation;
+	} else {
+	    throw new IOException ("LFileChannel couldn't copy a non-file channel stream.");
+	}
     }
 
     /**
@@ -156,7 +166,7 @@ public class LFileChannel extends LChannel {
 
     @Override
     public int remaining() throws IOException {
-	return (int)(end - iChannel.position());
+	return (int) (end - iChannel.position());
     }
 
     @Override
@@ -179,7 +189,7 @@ public class LFileChannel extends LChannel {
     @Override
     public byte[] extractUntil(int delimiter) throws IOException {
 	int counter = 1;
-	while(!isDone()) {
+	while (!isDone()) {
 	    if (iStream.read() != delimiter) {
 		counter++;
 	    } else {

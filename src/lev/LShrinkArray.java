@@ -22,7 +22,6 @@ import java.util.zip.Inflater;
  */
 public class LShrinkArray extends LStream {
 
-    private static String header = "Shrink Array";
     private ByteBuffer buffer;
 
     /**

@@ -489,6 +489,7 @@ public class SPImporter {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input));
+//		plugin.parseData(result, input);
 		typeTargets.remove(result);
 		SPGlobal.flush();
 		SPProgressBarPlug.incrementBar();

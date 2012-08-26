@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
-import lev.LStream;
-import lev.Ln;
+import lev.*;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -91,6 +88,12 @@ public abstract class Record extends ExportRecord implements Serializable {
 	int recordLength = extractRecordLength(in);
 	LShrinkArray extracted = new LShrinkArray(in, recordLength);
 	in.skip(recordLength);
+	return extracted;
+    }
+
+    LFileChannel extractRecordFile(LStream in) throws IOException {
+	int recordLength = extractRecordLength(in);
+	LFileChannel extracted = new LFileChannel(in, recordLength);
 	return extracted;
     }
 

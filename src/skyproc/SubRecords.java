@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
+import lev.LFileChannel;
 import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -22,7 +22,8 @@ import skyproc.exceptions.BadRecord;
 class SubRecords implements Iterable<SubRecord>, Serializable {
 
     private ArrayList<SubRecord> list = new ArrayList<>();
-    private Map<Type, SubRecord> map = new EnumMap<>(Type.class);
+    private Map<Type, SubRecord> map = new HashMap<>(0);
+    private Map<Type, Long> pos = new HashMap<>(0);
     private Set<Type> forceExport = new HashSet<>(0);
 
     public void add(SubRecord r) {
@@ -98,8 +99,12 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    SubRecord record = get(nextType);
-	    record.parseData(record.extractRecordData(in));
+	    if (in.getClass().equals(LFileChannel.class)) {
+		pos.put(nextType, ((LFileChannel) in).pos());
+	    } else {
+		SubRecord record = get(nextType);
+		record.parseData(record.extractRecordData(in));
+	    }
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
 	}
@@ -114,6 +119,8 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 		}
 	    }
 	    map.remove(in);
+	    pos.remove(in);
+	    forceExport.remove(in);
 	}
     }
 
