@@ -106,7 +106,6 @@ public class SUMGUI extends JFrame {
 	setLayout(null);
 	addComponents();
 	addWindowListener(new WindowListener() {
-
 	    @Override
 	    public void windowClosed(WindowEvent arg0) {
 	    }
@@ -148,7 +147,6 @@ public class SUMGUI extends JFrame {
 	    cancelPatch = new LButton("Cancel");
 	    cancelPatch.setLocation(backgroundPanel.getWidth() - cancelPatch.getWidth() - 5, 5);
 	    cancelPatch.addActionListener(new ActionListener() {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    if (SPGlobal.logging()) {
@@ -170,7 +168,6 @@ public class SUMGUI extends JFrame {
 	    backgroundPanel.add(patchNeededLabel);
 
 	    progress.addWindowListener(new WindowListener() {
-
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 		}
@@ -249,7 +246,6 @@ public class SUMGUI extends JFrame {
 	}
 	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		if (singleton == null) {
@@ -257,6 +253,8 @@ public class SUMGUI extends JFrame {
 		    if (hook.hasSave()) {
 			hook.getSave().init();
 		    }
+
+		    SPGlobal.setGlobalPatch(hook.getExportPatch());
 
 		    try {
 			hook.onStart();
@@ -353,6 +351,14 @@ public class SUMGUI extends JFrame {
 	if (needsPatching) {
 	    return true;
 	}
+	// Check if patch exists
+	if (!SPGlobal.getGlobalPatch().exists()) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch needed because no patch existed.");
+	    }
+	    return true;
+	}
+
 	// Check if savefile has important settings changed
 	if (hook.hasSave()) {
 	    if (hook.getSave().needsPatch()) {
@@ -514,7 +520,6 @@ public class SUMGUI extends JFrame {
 	    SPGlobal.log("START IMPORT THREAD", "Starting of process thread.");
 	    try {
 		if (!imported) {
-		    SPGlobal.setGlobalPatch(hook.getExportPatch());
 		    SPImporter importer = new SPImporter();
 		    importer.importActiveMods(hook.importRequests());
 		    imported();

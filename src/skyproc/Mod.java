@@ -169,13 +169,18 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
      *
      * @return True if no GRUP in the mod has any records.
      */
-    public Boolean isEmpty() {
+    public boolean isEmpty() {
 	for (GRUP g : GRUPs.values()) {
 	    if (g.numRecords() > 0) {
 		return false;
 	    }
 	}
 	return true;
+    }
+
+    public boolean exists() {
+	File f = new File (SPGlobal.pathToData + getInfo().print());
+	return f.exists();
     }
 
     FormID getNextID(String edid) {

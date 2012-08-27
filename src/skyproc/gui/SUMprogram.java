@@ -606,7 +606,6 @@ public class SUMprogram implements SUM {
     @Override
     public void runChangesToPatch() throws Exception {
 	if (saveFile.getBool(SUMSettings.MERGE_PATCH)) {
-	    SPGlobal.setGlobalPatch(getExportPatch());
 	    for (PatcherLink link : links) {
 		SPGlobal.SUMpath = link.path.getParentFile().getAbsolutePath();
 		link.hook.runChangesToPatch();
@@ -615,7 +614,6 @@ public class SUMprogram implements SUM {
 	    for (int i = 0; i < links.size(); i++) {
 		PatcherLink link = links.get(i);
 		SPGlobal.SUMpath = link.path.getParentFile().getAbsolutePath() + "\\";
-		SPGlobal.setGlobalPatch(link.hook.getExportPatch());
 		link.hook.runChangesToPatch();
 		if (i < links.size() - 1) { // Let normal routines export last patch
 		    SPGlobal.getGlobalPatch().export();
