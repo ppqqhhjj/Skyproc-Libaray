@@ -816,9 +816,9 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
     }
 
-    void parseData(Type type, LFileChannel data) throws Exception {
-	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
-    }
+//    void parseData(Type type, LFileChannel data) throws Exception {
+//	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
+//    }
 
     /**
      * Returns whether the given flag is on or off. <br> <br> An example use of

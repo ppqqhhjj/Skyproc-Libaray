@@ -99,12 +99,12 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    if (in.getClass().equals(LFileChannel.class)) {
-		pos.put(nextType, ((LFileChannel) in).pos());
-	    } else {
+//	    if (in.getClass().equals(LFileChannel.class)) {
+//		pos.put(nextType, ((LFileChannel) in).pos());
+//	    } else {
 		SubRecord record = get(nextType);
 		record.parseData(record.extractRecordData(in));
-	    }
+//	    }
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
 	}

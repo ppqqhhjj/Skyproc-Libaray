@@ -42,15 +42,11 @@ public class LFileChannel extends LChannel {
 	openFile(f);
     }
 
-    public LFileChannel(LStream rhs, long allocation) throws IOException {
-	if (rhs.getClass() == getClass()) {
-	    LFileChannel fc = (LFileChannel) rhs;
-	    iStream = fc.iStream;
-	    iChannel = fc.iChannel;
-	    end = iChannel.position() + allocation;
-	} else {
-	    throw new IOException ("LFileChannel couldn't copy a non-file channel stream.");
-	}
+    public LFileChannel(LFileChannel rhs, long allocation) throws IOException {
+	LFileChannel fc = (LFileChannel) rhs;
+	iStream = fc.iStream;
+	iChannel = fc.iChannel;
+	end = iChannel.position() + allocation;
     }
 
     /**
@@ -85,22 +81,6 @@ public class LFileChannel extends LChannel {
     }
 
     /**
-     * Reads in the desired bytes.
-     *
-     * @param skip Bytes to skip
-     * @param read Bytes to read and convert
-     * @return
-     * @throws IOException
-     */
-    @Override
-    final public byte[] readInBytes(final int skip, final int read) throws IOException {
-	offset(skip);
-	ByteBuffer allocate = ByteBuffer.allocate(read);
-	iChannel.read(allocate);
-	return allocate.array();
-    }
-
-    /**
      * Reads in the desired bytes and wraps them in a ByteBuffer.
      *
      * @param skip Bytes to skip
@@ -108,8 +88,8 @@ public class LFileChannel extends LChannel {
      * @return ByteBuffer containing read bytes.
      * @throws IOException
      */
-    final public ByteBuffer readInByteBuffer(int skip, int read) throws IOException {
-	offset(skip);
+    final public ByteBuffer extractByteBuffer(int skip, int read) throws IOException {
+	super.skip(skip);
 	ByteBuffer buf = ByteBuffer.allocate(read);
 	iChannel.read(buf);
 	buf.flip();
@@ -156,34 +136,18 @@ public class LFileChannel extends LChannel {
      */
     @Override
     final public int available() throws IOException {
-	return iStream.available();
+	return (int) (end - iChannel.position());
     }
 
-    @Override
     public Boolean isDone() throws IOException {
 	return iChannel.position() == end;
     }
 
     @Override
-    public int remaining() throws IOException {
-	return (int) (end - iChannel.position());
-    }
-
-    @Override
-    public void skip(int skip) throws IOException {
-	iChannel.position(iChannel.position() + skip);
-    }
-
-    @Override
-    public void jumpBack(int amount) throws IOException {
-	skip(-amount);
-    }
-
-    @Override
     public byte[] extract(int amount) throws IOException {
-	byte[] out = new byte[amount];
-	iStream.read(out);
-	return out;
+	ByteBuffer allocate = ByteBuffer.allocate(amount);
+	iChannel.read(allocate);
+	return allocate.array();
     }
 
     @Override

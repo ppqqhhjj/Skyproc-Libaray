@@ -294,7 +294,7 @@ public class IMGS extends MajorRecord {
             DOFstrength = in.extractFloat();
             DOFdistance = in.extractFloat();
             DOFrange = in.extractFloat();
-            if (in.remaining() >= 4) {
+            if (in.available() >= 4) {
                 unknown = in.extract(4);
             }
             valid = true;

@@ -1289,8 +1289,8 @@ public class Ln {
 		return false;
 	    }
 
-	    byte[] keyArray = keyIn.readInBytes(0, keyIn.available());
-	    byte[] testArray = testIn.readInBytes(0, testIn.available());
+	    byte[] keyArray = keyIn.extract(0, keyIn.available());
+	    byte[] testArray = testIn.extract(0, testIn.available());
 	    keyIn.close();
 	    testIn.close();
 

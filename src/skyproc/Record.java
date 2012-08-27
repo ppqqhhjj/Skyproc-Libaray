@@ -84,6 +84,11 @@ public abstract class Record extends ExportRecord implements Serializable {
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
+    private int extractRecordLength(LFileChannel in) throws IOException {
+	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
+		+ getSizeLength() + getIdentifierLength() + getFluffLength();
+    }
+
     LShrinkArray extractRecordData(LStream in) throws IOException {
 	int recordLength = extractRecordLength(in);
 	LShrinkArray extracted = new LShrinkArray(in, recordLength);
@@ -91,7 +96,7 @@ public abstract class Record extends ExportRecord implements Serializable {
 	return extracted;
     }
 
-    LFileChannel extractRecordFile(LStream in) throws IOException {
+    LFileChannel extractRecordFile(LFileChannel in) throws IOException {
 	int recordLength = extractRecordLength(in);
 	LFileChannel extracted = new LFileChannel(in, recordLength);
 	return extracted;

@@ -522,10 +522,10 @@ public class SPImporter {
     }
 
     static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
-	if (Ln.arrayToString(in.readInInts(0, 4)).equals("TES4")) {
-	    int size = Ln.arrayToInt(in.readInInts(0, 4)) + 24;  // +24 for TES4 extra info
-	    in.offset(-8); // To start of TES4 header
-	    return in.readInByteBuffer(0, size);
+	if (Ln.arrayToString(in.extractInts(0, 4)).equals("TES4")) {
+	    int size = Ln.arrayToInt(in.extractInts(0, 4)) + 24;  // +24 for TES4 extra info
+	    in.skip(-8); // To start of TES4 header
+	    return in.extractByteBuffer(0, size);
 	} else {
 	    throw new BadMod("Mod did not have TES4 at the start of the file.");
 	}
@@ -557,9 +557,9 @@ public class SPImporter {
 	if (stringsFile.isFile()) {
 	    LFileChannel istream = new LFileChannel(stringsFile);
 	    // Read header
-	    numRecords = istream.readInInt(0, 4);
+	    numRecords = istream.extractInt(0, 4);
 	    recordsSize = numRecords * 8 + 8;
-	    in = new LShrinkArray(istream.readInByteBuffer(4, recordsSize));
+	    in = new LShrinkArray(istream.extractByteBuffer(4, recordsSize));
 	} else if (BSA.hasBSA(plugin)) {
 	    //In BSA
  	    BSA bsa = BSA.getBSA(plugin);
@@ -595,12 +595,12 @@ public class SPImporter {
 	int size;
 
 	while (in.available() >= 12) {
-	    size = Ln.arrayToInt(in.readInInts(4, 4));
+	    size = Ln.arrayToInt(in.extractInts(4, 4));
 	    try {
-		type = Type.valueOf(Ln.arrayToString(in.readInInts(0, 4)));
+		type = Type.valueOf(Ln.arrayToString(in.extractInts(0, 4)));
 		for (Type t : target) {
 		    if (t.equals(type)) {
-			in.offset(-12); // Go to start of GRUP
+			in.skip(-12); // Go to start of GRUP
 			return type;
 		    }
 		}
@@ -608,19 +608,19 @@ public class SPImporter {
 		// In case the GRUP type isn't in program yet, we want to continue
 	    }
 	    // else skip GRUP
-	    in.offset(size - 12);  // -12 for parts already read in
+	    in.skip(size - 12);  // -12 for parts already read in
 	}
 
 	return Type.NULL;
     }
 
     static ByteBuffer extractGRUPData(LFileChannel in) throws IOException {
-	int size = Ln.arrayToInt(in.readInInts(4, 4));
+	int size = Ln.arrayToInt(in.extractInts(4, 4));
 	if (SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Extract GRUP size: " + Ln.prettyPrintHex(size));
 	}
-	in.offset(-8); // Back to start of GRUP
-	return in.readInByteBuffer(0, size);
+	in.skip(-8); // Back to start of GRUP
+	return in.extractByteBuffer(0, size);
     }
 
     static private String genStatus(ModListing mod) {

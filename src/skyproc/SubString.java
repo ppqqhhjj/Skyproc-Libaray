@@ -41,9 +41,9 @@ class SubString extends SubRecord {
     void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
         super.parseData(in);
         if (nullterm) {
-            string = Ln.arrayToString(in.extractInts(in.remaining() - 1));
+            string = Ln.arrayToString(in.extractInts(in.available() - 1));
         } else {
-            string = Ln.arrayToString(in.extractInts(in.remaining()));
+            string = Ln.arrayToString(in.extractInts(in.available()));
         }
         if (logging()) {
             logSync(type.toString(), "Setting " + toString() + " to " + print());

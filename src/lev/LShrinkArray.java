@@ -50,7 +50,7 @@ public class LShrinkArray extends LStream {
      * @param rhs LStream to copy bounds from.
      * @param high New upper limit to give to the ShrinkArray.
      */
-    public LShrinkArray(final LStream rhs, final int high) throws IOException {
+    public LShrinkArray(final LStream rhs, final int high) {
 	this(rhs);
 	buffer.limit(high);
     }
@@ -61,7 +61,7 @@ public class LShrinkArray extends LStream {
      *
      * @param rhs LStream to copy bounds from.
      */
-    public LShrinkArray(final LStream rhs) throws IOException {
+    public LShrinkArray(final LStream rhs) {
 	if (rhs.getClass() == getClass()) {
 	    LShrinkArray rhss = (LShrinkArray) rhs;
 	    buffer = rhss.buffer.slice();
@@ -79,7 +79,7 @@ public class LShrinkArray extends LStream {
      */
     public LShrinkArray(final File f) throws FileNotFoundException, IOException {
 	LFileChannel in = new LFileChannel(f);
-	buffer = ByteBuffer.wrap(in.readInBytes(0, in.available()));
+	buffer = ByteBuffer.wrap(in.extract(0, in.available()));
     }
 
     /**
@@ -96,7 +96,7 @@ public class LShrinkArray extends LStream {
      * @return Amount of bytes left in the bounds of the ShrinkArray.
      */
     @Override
-    public final int remaining() {
+    public final int available() {
 	return buffer.remaining();
     }
 

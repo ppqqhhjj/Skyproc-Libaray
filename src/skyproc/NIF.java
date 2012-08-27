@@ -45,7 +45,7 @@ public class NIF {
     public NIF(File f) throws FileNotFoundException, IOException, BadParameter {
 	LFileChannel in = new LFileChannel(f);
 	fileName = f.getPath();
-	parseData(new LShrinkArray(in.readInByteBuffer(0, in.available())));
+	parseData(new LShrinkArray(in.extractByteBuffer(0, in.available())));
     }
 
     /**
@@ -57,16 +57,16 @@ public class NIF {
      * @throws BadParameter If the data given to parse is malformed (by
      * SkyProc's standards)
      */
-    public NIF(String filename, LShrinkArray in) throws BadParameter, IOException {
+    public NIF(String filename, LShrinkArray in) throws BadParameter {
 	this.fileName = filename;
 	parseData(in);
     }
 
-    final void parseData(LShrinkArray in) throws BadParameter, IOException {
+    final void parseData(LShrinkArray in) throws BadParameter {
 	loadHeader(in);
     }
 
-    void loadHeader(LShrinkArray in) throws BadParameter, IOException {
+    void loadHeader(LShrinkArray in) throws BadParameter {
 
 	//Gamebryo header
 	if (SPGlobal.debugNIFimport) {
@@ -191,7 +191,7 @@ public class NIF {
 	    type = n;
 	}
 
-	Node(Node in) throws IOException {
+	Node(Node in) {
 	    this.title = in.title;
 	    this.type = in.type;
 	    this.size = in.size;
@@ -278,7 +278,7 @@ public class NIF {
      * @param i
      * @return The ith node in the NIF object.
      */
-    public Node getNode(int i) throws IOException {
+    public Node getNode(int i) {
 	return new Node(nodes.get(i));
     }
 
@@ -297,7 +297,7 @@ public class NIF {
      * @return Map of all the Node objects matching the given type, with their
      * node index as keys.
      */
-    public Map<Integer, Node> getNodes(NodeType type) throws IOException {
+    public Map<Integer, Node> getNodes(NodeType type) {
 	Map<Integer, Node> out = new TreeMap<>();
 	String name = "";
 	for (int i = 0; i < nodes.size(); i++) {
@@ -345,7 +345,7 @@ public class NIF {
     }
 
     //In order list of pairs of Node name + list of textures
-    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() throws IOException {
+    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() {
 	ArrayList<LPair<String, ArrayList<String>>> out = new ArrayList<>();
 	Map<Integer, NIF.Node> BiLightingShaderProperties = getNodes(NIF.NodeType.BSLIGHTINGSHADERPROPERTY);
 	Map<Integer, NIF.Node> BiShaderTextureNodes = getNodes(NIF.NodeType.BSSHADERTEXTURESET);
@@ -375,7 +375,7 @@ public class NIF {
      * BSShaderTextureSet node or the function will fail.
      * @return List of the textures in the node.
      */
-    public static ArrayList<String> extractBSTextures(Node n) throws IOException {
+    public static ArrayList<String> extractBSTextures(Node n) {
 	int numTextures = n.data.extractInt(4);
 	ArrayList<String> maps = new ArrayList<>(numTextures);
 	for (int i = 0; i < numTextures; i++) {

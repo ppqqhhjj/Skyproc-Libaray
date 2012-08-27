@@ -318,15 +318,11 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
-	    try {
-		while (!in.isDone()) {
-		    Sound sound = new Sound();
-		    sound.sound = SoundData.values()[in.extractInt(4)];
-		    sound.soundID.setInternal(in.extract(4));
-		    sounds.add(sound);
-		}
-	    } catch (IOException ex) {
-		Logger.getLogger(MGEF.class.getName()).log(Level.SEVERE, null, ex);
+	    while (!in.isDone()) {
+		Sound sound = new Sound();
+		sound.sound = SoundData.values()[in.extractInt(4)];
+		sound.soundID.setInternal(in.extract(4));
+		sounds.add(sound);
 	    }
 	}
 

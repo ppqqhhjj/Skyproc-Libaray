@@ -253,7 +253,7 @@ public class NiftyFunc {
 	    String EDID = "";
 	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
 
-		inputStr = input.readInString(0, 4);
+		inputStr = input.extractString(0, 4);
 		if (inputStr.equals("GRUP")) {
 		    long inputPos = input.pos();
 		    if (inputPos - grupPos - 4 != grupLength) {
@@ -262,16 +262,16 @@ public class NiftyFunc {
 			correct = false;
 		    }
 		    grupPos = input.pos() - 4;
-		    grupLength = input.readInInt(0, 4);
-		    majorRecordType = input.readInString(0, 4);
-		    input.offset(12);
+		    grupLength = input.extractInt(0, 4);
+		    majorRecordType = input.extractString(0, 4);
+		    input.skip(12);
 		} else if (inputStr.equals(majorRecordType)) {
 		    start = input.pos() - 4;
-		    length = input.readInInt(0, 4);
-		    input.offset(16);
-		    int edidLength = input.readInInt(4, 2);
-		    EDID = input.readInString(0, edidLength);
-		    input.offset(length - 6 - EDID.length() - 1);
+		    length = input.extractInt(0, 4);
+		    input.skip(16);
+		    int edidLength = input.extractInt(4, 2);
+		    EDID = input.extractString(0, edidLength);
+		    input.skip(length - 6 - EDID.length() - 1);
 		} else {
 		    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
 		    numErrors++;
@@ -300,16 +300,16 @@ public class NiftyFunc {
 	// Check header
 	String inputStr;
 	boolean correct = true;
-	int length = input.readInInt(4, 4);
-	input.offset(length + 16);
+	int length = input.extractInt(4, 4);
+	input.skip(length + 16);
 	if (input.available() > 0) {
 	    // Next should be a GRUP
-	    inputStr = input.readInString(0, 4);
+	    inputStr = input.extractString(0, 4);
 	    if (!"GRUP".equals(inputStr)) {
 		SPGlobal.logError("Mod Header", "Header length is wrong.");
 		correct = false;
 	    }
-	    input.offset(-4);
+	    input.skip(-4);
 	} else if (input.available() < 0) {
 	    SPGlobal.logError("Mod Header", "Header length is wrong.");
 	    correct = false;

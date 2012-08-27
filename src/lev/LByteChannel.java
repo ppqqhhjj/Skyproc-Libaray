@@ -47,14 +47,13 @@ public class LByteChannel extends LChannel {
 	return Ln.bToUInt(input[pos++]);
     }
 
-    @Override
     public byte[] readInBytes(int skip, int read) throws IOException {
-	offset(skip);
+	skip(skip);
 	byte[] out = new byte[read];
 	for (int i = 0 ; i < read ; i++) {
 	    out[i] = input[pos + i];
 	}
-	offset(read);
+	skip(read);
 	return out;
     }
 
@@ -75,17 +74,11 @@ public class LByteChannel extends LChannel {
 
     @Override
     public int available() throws IOException {
-	return (int)(input.length - pos());
+	return end - pos;
     }
 
-    @Override
     public Boolean isDone() throws IOException {
 	return pos == end;
-    }
-
-    @Override
-    public int remaining() throws IOException {
-	return end - pos;
     }
 
     @Override

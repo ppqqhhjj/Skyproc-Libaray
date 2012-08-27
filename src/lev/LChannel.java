@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Justin Swanson
  */
-public abstract class LChannel extends LStream {
+public abstract class LChannel {
 
     public abstract int read() throws IOException;
 
@@ -24,8 +24,8 @@ public abstract class LChannel extends LStream {
      * @return Long representation of read bytes
      * @throws IOException
      */
-    final public long readInLong(final int skip, final int read) throws IOException {
-	return Ln.arrayToLong(readInBytes(skip, read));
+    final public long extractLong(final int skip, final int read) throws IOException {
+	return Ln.arrayToLong(extract(skip, read));
     }
 
     /**
@@ -36,8 +36,8 @@ public abstract class LChannel extends LStream {
      * @return String representation of read bytes
      * @throws IOException
      */
-    final public String readInString(final int skip, final int read) throws IOException {
-	return Ln.arrayToString(readInBytes(skip, read));
+    final public String extractString(final int skip, final int read) throws IOException {
+	return Ln.arrayToString(extract(skip, read));
     }
 
     /**
@@ -49,8 +49,8 @@ public abstract class LChannel extends LStream {
      * @return Integer representation of read bytes
      * @throws IOException
      */
-    final public int readInInt(final int skip, final int read) throws IOException {
-	return Ln.arrayToInt(readInBytes(skip, read));
+    final public int extractInt(final int skip, final int read) throws IOException {
+	return Ln.arrayToInt(extract(skip, read));
     }
 
     /**
@@ -61,8 +61,14 @@ public abstract class LChannel extends LStream {
      * @return
      * @throws IOException
      */
-    final public int[] readInInts(final int skip, final int read) throws IOException {
-	return Ln.toIntArray(readInBytes(skip, read));
+    final public int[] extractInts(final int skip, final int read) throws IOException {
+	return Ln.toIntArray(extract(skip, read));
+    }
+
+    final public int[] getInts(final int skip, final int read) throws IOException {
+	int[] out = extractInts(skip, read);
+	jumpBack(skip + read);
+	return out;
     }
 
     /**
@@ -72,8 +78,8 @@ public abstract class LChannel extends LStream {
      * @return Next string in the file.
      * @throws IOException
      */
-    public String readString() throws IOException {
-	return Ln.arrayToString(readUntil(0));
+    public String extractString() throws IOException {
+	return Ln.arrayToString(extractUntil(0));
     }
 
     /**
@@ -81,10 +87,10 @@ public abstract class LChannel extends LStream {
      * @return
      * @throws IOException
      */
-    public String readLine() throws IOException {
+    public String extractLine() throws IOException {
 	byte[] read1 = { 10 };
 	byte[] read2 = { 13 , 10 };
-	return Ln.arrayToString(readUntil(read2, read1));
+	return Ln.arrayToString(extractUntil(read2, read1));
     }
 
     /**
@@ -95,8 +101,8 @@ public abstract class LChannel extends LStream {
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(char delimiter, int bufsize) throws IOException {
-	return readUntil((int) delimiter, bufsize);
+    public byte[] extractUntil(char delimiter, int bufsize) throws IOException {
+	return extractUntil((int) delimiter, bufsize);
     }
 
     /**
@@ -106,8 +112,8 @@ public abstract class LChannel extends LStream {
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(char delimiter) throws IOException {
-	return readUntil((int) delimiter);
+    public byte[] extractUntil(char delimiter) throws IOException {
+	return extractUntil((int) delimiter);
     }
 
     /**
@@ -117,12 +123,17 @@ public abstract class LChannel extends LStream {
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(int delimiter) throws IOException {
+    public byte[] extractUntil(int delimiter) throws IOException {
 	byte[] delimiterB = {(byte) delimiter};
-	return readUntil(delimiterB);
+	return extractUntil(delimiterB);
     }
 
-    public abstract byte[] readInBytes(final int skip, final int read) throws IOException;
+    public byte[] extract(final int skip, final int read) throws IOException {
+	skip(skip);
+	return extract(read);
+    }
+
+    public abstract byte[] extract(final int amount) throws IOException;
 
     /**
      * Reads in bytes until the delimiter is read.
@@ -132,7 +143,7 @@ public abstract class LChannel extends LStream {
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(int delimiter, int bufsize) throws IOException {
+    public byte[] extractUntil(int delimiter, int bufsize) throws IOException {
 	byte[] buffer = new byte[bufsize];
 	int counter = 0;
 	int in;
@@ -151,7 +162,7 @@ public abstract class LChannel extends LStream {
      * @return Byte array containing read data without delimiter.
      * @throws IOException
      */
-    public byte[] readUntil(byte[] ... delimiters) throws IOException {
+    public byte[] extractUntil(byte[] ... delimiters) throws IOException {
 	ArrayList<Byte> buffer = new ArrayList<>(50);
 	LByteSearcher search = new LByteSearcher(delimiters);
 	int in;
@@ -176,8 +187,12 @@ public abstract class LChannel extends LStream {
      * @param offset Desired offset.
      * @throws IOException
      */
-    final public void offset(final int offset) throws IOException {
+    public void skip(final int offset) throws IOException {
 	pos(pos() + offset);
+    }
+
+    public void jumpBack(int amount) throws IOException {
+	skip(-amount);
     }
 
     public abstract void pos(long pos) throws IOException;

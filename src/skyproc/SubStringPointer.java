@@ -89,8 +89,8 @@ class SubStringPointer extends SubRecord {
 			    text.setString(string);
 			    break;
 			default:
-			    int length = Ln.arrayToInt(stream.readInInts(0, 4));
-			    String in = Ln.arrayToString(stream.readInInts(0, length - 1)); // -1 to exclude null end
+			    int length = Ln.arrayToInt(stream.extractInts(0, 4));
+			    String in = Ln.arrayToString(stream.extractInts(0, length - 1)); // -1 to exclude null end
 			    if (!in.equals("")) {
 				text.setString(in);
 			    }

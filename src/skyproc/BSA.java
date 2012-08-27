@@ -47,17 +47,17 @@ public class BSA {
     BSA(String filePath, boolean load) throws FileNotFoundException, IOException, BadParameter {
 	this.filePath = filePath;
 	in.openFile(filePath);
-	if (!in.readInString(0, 3).equals("BSA") || in.readInInt(1, 4) != 104) {
+	if (!in.extractString(0, 3).equals("BSA") || in.extractInt(1, 4) != 104) {
 	    throw new BadParameter("Was not a BSA file of version 104: " + filePath);
 	}
-	offset = in.readInInt(0, 4);
-	archiveFlags = new LFlags(in.readInBytes(0, 4));
-	folderCount = in.readInInt(0, 4);
+	offset = in.extractInt(0, 4);
+	archiveFlags = new LFlags(in.extract(0, 4));
+	folderCount = in.extractInt(0, 4);
 	folders = new HashMap<>(folderCount);
-	fileCount = in.readInInt(0, 4);
-	folderNameLength = in.readInInt(0, 4);
-	fileNameLength = in.readInInt(0, 4);
-	fileFlags = new LFlags(in.readInBytes(0, 4));
+	fileCount = in.extractInt(0, 4);
+	folderNameLength = in.extractInt(0, 4);
+	fileNameLength = in.extractInt(0, 4);
+	fileFlags = new LFlags(in.extract(0, 4));
 	if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
 	    SPGlobal.log(header, "Imported " + filePath);
 	    SPGlobal.log(header, "Offset " + offset + ", archiveFlags: " + archiveFlags);
@@ -91,9 +91,9 @@ public class BSA {
 	    String fileName, folderName;
 	    int fileCounter = 0;
 	    in.pos(offset);
-	    LShrinkArray folderData = new LShrinkArray(in.readInByteBuffer(0, folderCount * 16));
+	    LShrinkArray folderData = new LShrinkArray(in.extract(0, folderCount * 16));
 	    in.pos(folderNameLength + fileCount * 16 + folderCount * 17 + offset);
-	    LShrinkArray fileNames = new LShrinkArray(in.readInByteBuffer(0, fileNameLength));
+	    LShrinkArray fileNames = new LShrinkArray(in.extract(0, fileNameLength));
 	    for (int i = 0; i < folderCount; i++) {
 		folderData.skip(8); // Skip Hash
 		int count = folderData.extractInt(4);
@@ -101,16 +101,16 @@ public class BSA {
 		int fileRecordOffset = folderData.extractInt(4);
 
 		in.pos(fileRecordOffset - fileNameLength);
-		folderName = in.readInString(0, in.read() - 1) + "\\";
-		in.offset(1);
+		folderName = in.extractString(0, in.read() - 1) + "\\";
+		in.skip(1);
 		folders.put(folderName.toUpperCase(), files);
 		if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
 		    SPGlobal.log(header, "Loaded folder: " + folderName);
 		}
 		for (int j = 0; j < count; j++) {
 		    BSAFileRef f = new BSAFileRef();
-		    f.size = in.readInInt(8, 4); // Skip Hash
-		    f.dataOffset = in.readInLong(0, 4);
+		    f.size = in.extractInt(8, 4); // Skip Hash
+		    f.dataOffset = in.extractLong(0, 4);
 		    fileName = fileNames.extractString();
 		    files.put(fileName.toUpperCase(), f);
 		    if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
@@ -149,7 +149,7 @@ public class BSA {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
 	    in.pos(getFileLocation(ref));
-	    LShrinkArray out = new LShrinkArray(in.readInByteBuffer(0, ref.size));
+	    LShrinkArray out = new LShrinkArray(in.extract(0, ref.size));
 	    if (archiveFlags.get(2)) {
 		out = out.correctForCompression();
 	    }
@@ -182,7 +182,7 @@ public class BSA {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
 	    in.pos(ref.nameOffset);
-	    return in.readString();
+	    return in.extractString();
 	}
 	return "";
     }
@@ -278,7 +278,7 @@ public class BSA {
 		String line = "";
 		// First line
 		while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
-		    line = input.readLine();
+		    line = input.extractLine();
 		}
 		if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
 		    line2 = true;
@@ -291,7 +291,7 @@ public class BSA {
 		// Second line
 		line = "";
 		while (input.available() > 0 && !line.toUpperCase().contains("SRESOURCEARCHIVELIST")) {
-		    line = Ln.cleanLine(input.readLine(), "#");
+		    line = Ln.cleanLine(input.extractLine(), "#");
 		}
 		if (line.toUpperCase().contains("SRESOURCEARCHIVELIST2")) {
 		    line2 = true;
