@@ -47,16 +47,6 @@ public class LByteChannel extends LChannel {
 	return Ln.bToUInt(input[pos++]);
     }
 
-    public byte[] readInBytes(int skip, int read) throws IOException {
-	skip(skip);
-	byte[] out = new byte[read];
-	for (int i = 0 ; i < read ; i++) {
-	    out[i] = input[pos + i];
-	}
-	skip(read);
-	return out;
-    }
-
     @Override
     public void pos(long pos) throws IOException {
 	this.pos = (int) pos;
@@ -92,13 +82,13 @@ public class LByteChannel extends LChannel {
     }
 
     @Override
-    public byte[] extract(int amount) throws IOException {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public byte[] extractUntil(int delimiter) throws IOException {
-	throw new UnsupportedOperationException("Not supported yet.");
+    public byte[] extract(int read) throws IOException {
+	byte[] out = new byte[read];
+	for (int i = 0 ; i < read ; i++) {
+	    out[i] = input[pos + i];
+	}
+	skip(read);
+	return out;
     }
 
 }

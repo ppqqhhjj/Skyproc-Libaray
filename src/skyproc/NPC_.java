@@ -168,7 +168,6 @@ public class NPC_ extends Actor implements Serializable {
 	    if (valid) {
 		for (SoundPair s : soundPairs) {
 		    valid = valid && s.CSDC.isValid();
-		    valid = valid && s.CSDI.isValid();
 		}
 	    }
 	    return valid;

@@ -172,9 +172,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	if (isValid()) {
-	    if (getEDID().equals("AVEnchanting")) {
-		int wer = 23;
-	    }
 	    if (logging() && SPGlobal.debugExportSummary) {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
 	    }
