@@ -148,7 +148,7 @@ public class NIF {
 	}
 
 	//Set titles
-	for (int i = 0; i < numBlocks ; i++) {
+	for (int i = 0; i < numBlocks; i++) {
 	    NodeType type = nodes.get(i).type;
 	    if (type == NodeType.NINODE
 		    || type == NodeType.NITRISHAPE
@@ -239,6 +239,7 @@ public class NIF {
 	 *
 	 */
 	BSLIGHTINGSHADERPROPERTY,
+	BSEFFECTSHADERPROPERTY,
 	/**
 	 *
 	 */
@@ -345,8 +346,8 @@ public class NIF {
     }
 
     //In order list of pairs of Node name + list of textures
-    public ArrayList<LPair<String, ArrayList<String>>> extractTextures() {
-	ArrayList<LPair<String, ArrayList<String>>> out = new ArrayList<>();
+    public Map<Integer, LPair<String, ArrayList<String>>> extractTextures() {
+	Map<Integer, LPair<String, ArrayList<String>>> out = new HashMap<>();
 	Map<Integer, NIF.Node> BiLightingShaderProperties = getNodes(NIF.NodeType.BSLIGHTINGSHADERPROPERTY);
 	Map<Integer, NIF.Node> BiShaderTextureNodes = getNodes(NIF.NodeType.BSSHADERTEXTURESET);
 	Map<Integer, ArrayList<String>> BiShaderTextureSets = new HashMap<>();
@@ -356,14 +357,23 @@ public class NIF {
 	    BiShaderTextureSets.put(i, NIF.extractBSTextures(BiShaderTextureNodes.get(i)));
 	}
 
-	for (Integer key : BiLightingShaderProperties.keySet()) {
-	    String name = BiLightingShaderProperties.get(key).title;
-	    int textureLink = BiLightingShaderProperties.get(key).data.extractInt(40, 4);
-	    ArrayList<String> textures = BiShaderTextureSets.get(textureLink);
-	    if (textures != null) {
-		LPair pair = new LPair(name, new ArrayList<>(textures));
-		out.add(pair);
+	Map<Integer, NIF.Node> together = new TreeMap<>();
+	together.putAll(BiLightingShaderProperties);
+	together.putAll(getNodes(NIF.NodeType.BSEFFECTSHADERPROPERTY));
+
+	int i = 0;
+	for (Integer key : together.keySet()) {
+	    // Only care if it's a texture set, but must still increment index if it's effects
+	    if (BiLightingShaderProperties.containsKey(key)) {
+		String name = BiLightingShaderProperties.get(key).title;
+		int textureLink = BiLightingShaderProperties.get(key).data.extractInt(40, 4);
+		ArrayList<String> textures = BiShaderTextureSets.get(textureLink);
+		if (textures != null) {
+		    LPair pair = new LPair(name, new ArrayList<>(textures));
+		    out.put(i, pair);
+		}
 	    }
+	    i++;
 	}
 
 	return out;
