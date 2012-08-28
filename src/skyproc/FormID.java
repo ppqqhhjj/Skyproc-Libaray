@@ -24,10 +24,10 @@ public class FormID implements Comparable, Serializable {
     public static final FormID NULL = new FormID();
     byte[] form = new byte[4];
     ModListing master = null;
+
     /**
      * An empty FormID for easy NULL checking.
      */
-
     FormID() {
 	if (SPGlobal.testing) {
 	    allIDs.add(this);
@@ -208,6 +208,21 @@ public class FormID implements Comparable, Serializable {
 	    }
 	}
 	form[3] = (byte) masters.size();
+    }
+
+    public static String[] parseString(String s) {
+	String[] ida = new String[2];
+	if (s.length() > 6) {
+	    ida[0] = s.substring(0, 6);
+	    String modName = s.substring(6);
+	    modName = Ln.cleanLine(modName, "//");
+	    modName = Ln.cleanLine(modName, ";");
+	    ida[1] = modName;
+	} else {
+	    ida[0] = "000000";
+	    ida[1] = SPGlobal.gameName + ".esm";
+	}
+	return ida;
     }
 
     Boolean isValid() {
