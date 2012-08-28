@@ -7,6 +7,8 @@ package skyproc.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedWriter;
@@ -90,6 +92,7 @@ public class SUMGUI extends JFrame {
     static JTextArea statusUpdate;
     static LLabel versionNum;
     static LButton cancelPatch;
+    static LButton startPatch;
     static Font SUMSmallFont = new Font("SansSerif", Font.PLAIN, 10);
     static String pathToLastMasterlist = SPGlobal.pathToInternalFiles + "Last Masterlist.txt";
     static String pathToLastModlist = SPGlobal.pathToInternalFiles + "Last Modlist.txt";
@@ -138,14 +141,92 @@ public class SUMGUI extends JFrame {
 	helpPanel.setHeaderColor(hook.getHeaderColor());
     }
 
+    public void closeWindow() {
+	WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+	Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+    }
+
     final void addComponents() {
 	try {
 
 	    backgroundPanel = new LImagePane(SUMGUI.class.getResource("background.jpg"));
 	    super.add(backgroundPanel);
 
+	    startPatch = new LButton("Patch");
+	    startPatch.setLocation(backgroundPanel.getWidth() - startPatch.getWidth() - 5, 5);
+	    startPatch.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain(header, "Starting patch because user pressed patch.");
+		    }
+		    closeWindow();
+		}
+	    });
+	    startPatch.addMouseListener(new MouseListener() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		    helpPanel.reset();
+		    helpPanel.setDefaultPos();
+		    helpPanel.setContent("This will create a patch if necessary and then exit the program.\n\n"
+			    + "NOTE: The big red exit button has the same effect.");
+		    helpPanel.setTitle("Start Patch and Exit");
+		    helpPanel.hideArrow();
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+	    });
+	    backgroundPanel.add(startPatch);
+
 	    cancelPatch = new LButton("Cancel");
-	    cancelPatch.setLocation(backgroundPanel.getWidth() - cancelPatch.getWidth() - 5, 5);
+	    cancelPatch.setLocation(startPatch.getX() - cancelPatch.getWidth() - 5, 5);
+	    cancelPatch.addMouseListener(new MouseListener() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		    helpPanel.reset();
+		    helpPanel.setContent("This will save your current program settings and exit the program "
+			    + "immediately without generating a patch.\n\n"
+			    + ""
+			    + "After doing so, it is recommended that "
+			    + "you start this patcher again and patch correctly before "
+			    + "playing the game again.\n\n"
+			    + ""
+			    + "NOTE: Clicking exit on the progress bar while patching has the same effect.");
+		    helpPanel.setTitle("Cancel and Exit");
+		    helpPanel.hideArrow();
+		    helpPanel.setDefaultPos();
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+	    });
 	    cancelPatch.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {

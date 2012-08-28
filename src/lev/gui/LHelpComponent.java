@@ -61,7 +61,6 @@ public abstract class LHelpComponent extends LComponent {
 		help.setDefaultPos();
 		help.hideArrow();
 	    }
-	    help.textVisible(true);
 	}
     }
 

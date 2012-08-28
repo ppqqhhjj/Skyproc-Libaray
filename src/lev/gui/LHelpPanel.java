@@ -23,7 +23,7 @@ public class LHelpPanel extends LPanel {
     int arrowx;
     int y;
     LPanel bottomArea;
-    Boolean textVisible = false;
+    Boolean textVisible = true;
     Boolean hideArrow = false;
     static int spacing = 75;
 
