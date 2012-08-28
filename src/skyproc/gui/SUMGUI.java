@@ -178,7 +178,6 @@ public class SUMGUI extends JFrame {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-		    helpPanel.reset();
 		    helpPanel.setDefaultPos();
 		    helpPanel.setContent("This will create a patch if necessary and then exit the program.\n\n"
 			    + "NOTE: The big red exit button has the same effect.");
@@ -209,7 +208,6 @@ public class SUMGUI extends JFrame {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-		    helpPanel.reset();
 		    helpPanel.setContent("This will save your current program settings and exit the program "
 			    + "immediately without generating a patch.\n\n"
 			    + ""

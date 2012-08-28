@@ -79,12 +79,13 @@ public class LImagePane extends JPanel {
      */
     final public void setImage(BufferedImage originalImage) {
 	if (originalImage == null) {
-	    return;
-	}
-	if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
-	    img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
+	    img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 	} else {
-	    img = originalImage;
+	    if (!(IMG_WIDTH == 0 && IMG_HEIGHT == 0)) {
+		img = Lg.resizeImageWithHint(originalImage, calcSize(originalImage.getWidth(), originalImage.getHeight()));
+	    } else {
+		img = originalImage;
+	    }
 	}
 	Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
 	setPreferredSize(size);

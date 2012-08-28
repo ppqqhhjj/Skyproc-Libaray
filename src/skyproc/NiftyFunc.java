@@ -205,6 +205,8 @@ public class NiftyFunc {
 	    if (Character.isDigit(version.charAt(i))
 		    || version.charAt(i) == '.') {
 		tmp += version.charAt(i);
+	    } else {
+		break;
 	    }
 	}
 	version = tmp;
