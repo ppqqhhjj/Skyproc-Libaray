@@ -97,7 +97,7 @@ public class SPImporter {
 
 	    try {
 		String line = ModFile.readLine();
-		ArrayList<String> lines = new ArrayList<String>();
+		ArrayList<String> lines = new ArrayList<>();
 		SPGlobal.logSync(header, "Loading in Active Plugins");
 		File pluginName;
 
@@ -113,23 +113,21 @@ public class SPImporter {
 			line = line.substring(0, line.indexOf("#"));
 		    }
 		    line = line.trim();
-		    if (line.equals("")) {
-			line = ModFile.readLine();
-			continue;
-		    }
-		    pluginName = new File(SPGlobal.pathToData + line);
-		    if (!SPGlobal.modsToSkip.contains(new ModListing(line))
-			    && !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
-			if (pluginName.isFile()) {
-			    if (!lines.contains(line)) {
-				SPGlobal.logSync(header, "Adding mod: " + line);
-				lines.add(line);
+		    if (!line.equals("")) {
+			pluginName = new File(SPGlobal.pathToData + line);
+			if (!SPGlobal.modsToSkip.contains(new ModListing(line))
+				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
+			    if (pluginName.isFile()) {
+				if (!Ln.containsIgnoreCase(lines, line)) {
+				    SPGlobal.logSync(header, "Adding mod: " + line);
+				    lines.add(line);
+				}
+			    } else if (SPGlobal.logging()) {
+				SPGlobal.logSync(header, "Mod didn't exist: ", line);
 			    }
 			} else if (SPGlobal.logging()) {
-			    SPGlobal.logSync(header, "Mod didn't exist: ", line);
+			    SPGlobal.logSync(header, "Mod was on the list to skip: " + line);
 			}
-		    } else if (SPGlobal.logging()) {
-			SPGlobal.logSync(header, "Mod was on the list to skip: " + line);
 		    }
 		    line = ModFile.readLine();
 		}
@@ -562,7 +560,7 @@ public class SPImporter {
 	    in = new LShrinkArray(istream.extractByteBuffer(4, recordsSize));
 	} else if (BSA.hasBSA(plugin)) {
 	    //In BSA
- 	    BSA bsa = BSA.getBSA(plugin);
+	    BSA bsa = BSA.getBSA(plugin);
 	    bsa.loadFolders();
 	    if (bsa.hasFile(strings)) {
 		in = bsa.getFile(strings);

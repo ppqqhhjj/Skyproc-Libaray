@@ -1577,4 +1577,13 @@ public class Ln {
     public static String standardizeFilePath(String filePath) {
 	return filePath.replace("\\", "/");
     }
+
+    public static boolean containsIgnoreCase(ArrayList<String> list, String s) {
+	for (String s1 : list) {
+	    if (s1.equalsIgnoreCase(s)) {
+		return true;
+	    }
+	}
+	return false;
+    }
 }
