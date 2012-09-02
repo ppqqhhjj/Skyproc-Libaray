@@ -225,6 +225,14 @@ public class FormID implements Comparable, Serializable {
 	return ida;
     }
 
+    public static FormID parseString(String[] s) {
+	if (s.length == 2 && s[0].length() == 6) {
+	    return new FormID(s[0], s[1]);
+	} else {
+	    return new FormID(FormID.NULL);
+	}
+    }
+
     Boolean isValid() {
 	return !equals(NULL);
     }

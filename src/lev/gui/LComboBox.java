@@ -32,12 +32,14 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 	init();
     }
 
-    protected LComboBox(String title_, Font font, Color shade) {
+    public LComboBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
+	titleLabel.addShadow();
 	init();
+	box.setLocation(box.getX(), titleLabel.getY() + titleLabel.getHeight() + 10);
     }
 
-    void init() {
+    final void init() {
 	box = new JComboBox<>();
 	add(box);
 	box.setVisible(true);
@@ -47,7 +49,11 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
     @Override
     public void setSize(int x, int y) {
 	super.setSize(x, y);
-	box.setSize(x, y);
+	if (titleLabel == null) {
+	    box.setSize(x, y);
+	} else {
+	    box.setSize(x, y - titleLabel.getY() - titleLabel.getHeight() - 10);
+	}
     }
 
     /**

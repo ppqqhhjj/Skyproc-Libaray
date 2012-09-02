@@ -82,8 +82,21 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * already existed in the list, and duplicates were not allowed.
      */
     public boolean add(T item) {
-        if (allowDups || !collection.contains(item)) {
+        if (allow(item)) {
             collection.add(item);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean allow(T item) {
+	return allowDups || !collection.contains(item);
+    }
+
+    public boolean addAtIndex(T item, int i) {
+	if (allow(item)) {
+            collection.add(i, item);
             return true;
         } else {
             return false;

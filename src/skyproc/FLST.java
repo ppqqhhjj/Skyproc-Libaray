@@ -14,7 +14,7 @@ public class FLST extends MajorRecord {
 
     private static Type[] types = { Type.FLST };
 
-    SubList<SubForm> LNAMs = new SubList<SubForm>(new SubForm(Type.LNAM));
+    SubList<SubForm> LNAMs = new SubList<>(new SubForm(Type.LNAM));
 
     FLST() {
 	super();
@@ -54,7 +54,6 @@ public class FLST extends MajorRecord {
      * @param entry FormID to add to the list.
      */
     public void addFormEntry(FormID entry) {
-
 	LNAMs.add(new SubForm(Type.LNAM, entry));
     }
 
@@ -64,5 +63,13 @@ public class FLST extends MajorRecord {
      */
     public void removeFormEntry(FormID entry) {
 	LNAMs.remove(new SubForm(Type.LNAM, entry));
+    }
+
+    public int getSize() {
+	return LNAMs.size();
+    }
+
+    public void addFormEntryAtIndex(FormID entry, int i) {
+	LNAMs.addAtIndex(new SubForm(Type.LNAM, entry), i);
     }
 }

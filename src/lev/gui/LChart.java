@@ -68,5 +68,4 @@ public class LChart extends JPanel {
         setOpaque(false);
     }
 
-
 }

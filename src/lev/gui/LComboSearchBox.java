@@ -35,9 +35,7 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
      */
     public LComboSearchBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
-	titleLabel.addShadow();
 	backup = new TreeSet<>();
-	box.setLocation(box.getX(), titleLabel.getY() + titleLabel.getHeight() + 10);
 	search = new JTextField();
 	search.setLocation(titleLabel.getX() + titleLabel.getWidth() + 10, 0);
 	search.setText(searchText);
@@ -93,7 +91,6 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
     public void setSize(int x, int y) {
 	super.setSize(x, y);
 	search.setSize(x - titleLabel.getWidth() - titleLabel.getX() - 10, titleLabel.getHeight());
-	box.setSize(x, y - titleLabel.getY() - titleLabel.getHeight() - 10);
 	if (enterButton != null) {
 	    enterButton.setLocation(x - enterButton.getWidth(), search.getY() + search.getHeight() + 10);
 	    box.setSize(x - enterButton.getWidth() - 10, box.getHeight());
@@ -142,6 +139,7 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	search.addMouseListener(m);
     }
 
+    @Override
     public void reset() {
 	setText(searchText);
 	filterItems();

@@ -6,10 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;

@@ -116,6 +116,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void parseDataHelper(T item) {
     }
 
+    public int size() {
+	return listRecords.size();
+    }
+
     /**
      * Prints contents of GRUP to the asynchronous log.
      *
