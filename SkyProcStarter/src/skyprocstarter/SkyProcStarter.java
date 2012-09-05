@@ -58,8 +58,14 @@ public class SkyProcStarter implements SUM {
 	return myPatchName;
     }
 
+    // This function labels any record types that you "multiply".
+    // For example, if you took all the armors in a mod list and made 3 copies,
+    // you would put ARMO here.
+    // This is to help monitor/prevent issues where multiple SkyProc patchers
+    // multiply the same record type to yeild a huge number of records.
     @Override
     public GRUP_TYPE[] dangerousRecordReport() {
+	// None
 	return new GRUP_TYPE[0];
     }
 
@@ -78,6 +84,9 @@ public class SkyProcStarter implements SUM {
 	return true;
     }
 
+    // This is where you add panels to the main menu.
+    // First create custom panel classes (as shown by YourFirstSettingsPanel),
+    // Then add them here.
     @Override
     public SPMainMenuPanel getStandardMenu() {
 	SPMainMenuPanel settingsMenu = new SPMainMenuPanel(getHeaderColor());
@@ -87,6 +96,7 @@ public class SkyProcStarter implements SUM {
 	return settingsMenu;
     }
 
+    // Usually false unless you want to make your own GUI
     @Override
     public boolean hasCustomMenu() {
 	return false;
@@ -129,7 +139,7 @@ public class SkyProcStarter implements SUM {
 
     @Override
     public Mod getExportPatch() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return new Mod(getListing());
     }
 
     @Override
@@ -137,19 +147,28 @@ public class SkyProcStarter implements SUM {
 	return headerColor;
     }
 
+    // Add any custom checks to determine if a patch is needed.
+    // On Automatic Variants, this function would check if any new packages were
+    // added or removed.
     @Override
     public boolean needsPatching() {
 	return false;
     }
 
+    // This function runs when the program opens to "set things up"
+    // It runs right after the save file is loaded, and before the GUI is displayed
     @Override
     public void onStart() throws Exception {
     }
 
+    // This function runs right as the program is about to close.
     @Override
     public void onExit(boolean patchWasGenerated) throws Exception {
     }
 
+    // This is where you should write the bulk of your code.
+    // Write the changes you would like to make to the patch,
+    // but DO NOT export it.  Exporting is handled internally.
     @Override
     public void runChangesToPatch() throws Exception {
 
@@ -158,7 +177,6 @@ public class SkyProcStarter implements SUM {
 	Mod merger = new Mod(getName() + "Merger", false);
 	merger.addAsOverrides(SPGlobal.getDB());
 
-	// Write your code here
-
+	// Write your changes to the patch here.
     }
 }
