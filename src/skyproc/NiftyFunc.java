@@ -4,6 +4,7 @@
  */
 package skyproc;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -223,6 +224,10 @@ public class NiftyFunc {
     }
     static String recordLengths = "Record Lengths";
 
+    public static boolean validateRecordLengths(File testFile, int numErrorsToPrint) {
+	return validateRecordLengths(testFile.getPath(), numErrorsToPrint);
+    }
+
     /**
      * Reads in the file and confirms that all GRUPs and Major Records have
      * correct lengths. It does not explicitly check subrecord lengths, but due
@@ -241,6 +246,12 @@ public class NiftyFunc {
 	boolean correct = true;
 	int numErrors = 0;
 	try {
+	    File file = new File(testFilePath);
+	    if (file.isFile()) {
+		SPGlobal.log("Validate", "Target file exists: " + file);
+	    } else {
+		SPGlobal.log("Validate", "Target file does NOT exist: " + file);
+	    }
 	    LFileChannel input = new LFileChannel(testFilePath);
 
 	    correct = testHeaderLength(input);
@@ -285,8 +296,10 @@ public class NiftyFunc {
 
 	} catch (FileNotFoundException ex) {
 	    SPGlobal.logError(recordLengths, "File could not be found.");
+	    SPGlobal.logException(ex);
 	} catch (IOException ex) {
 	    SPGlobal.logError(recordLengths, "File I/O error.");
+	    SPGlobal.logException(ex);
 	}
 
 

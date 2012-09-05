@@ -18,7 +18,7 @@ import skyproc.gui.SPProgressBarPlug;
  *
  * @author Justin Swanson
  */
-public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
+public class Mod implements Comparable, Iterable<GRUP> {
 
     TES4 header = new TES4();
     ModListing modInfo;
@@ -622,14 +622,15 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	if (backup.isFile()) {
 	    backup.delete();
 	}
-	export(new LExporter(tmp), this);
+	export(tmp, this);
 
 	Ln.moveFile(dest, backup, false);
 	Ln.moveFile(tmp, dest, false);
     }
 
-    @Override
-    void export(LExporter out, Mod srcMod) throws IOException, BadRecord {
+    void export(File outPath, Mod srcMod) throws IOException, BadRecord {
+
+	LExporter out = new LExporter(outPath);
 
 	// Progress Bar Setup
 	int fullGRUPS = 0;
@@ -731,7 +732,7 @@ public class Mod extends ExportRecord implements Comparable, Iterable<GRUP> {
 	}
 
 	// Validate all record lengths are correct
-	if (!NiftyFunc.validateRecordLengths(SPGlobal.pathToInternalFiles + "tmp.esp", 1)) {
+	if (!NiftyFunc.validateRecordLengths(outPath, 1)) {
 	    SPGlobal.logError("Record Length Check", "Record lengths were off.");
 	    throw new BadRecord("Record lengths are off.");
 	}

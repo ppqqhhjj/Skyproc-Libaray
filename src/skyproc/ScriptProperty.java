@@ -92,7 +92,7 @@ class ScriptProperty extends Record implements Serializable {
     public ScriptProperty(String name, FormID... in) {
 	this(name);
 	FormArrayData tmp = new FormArrayData();
-	ArrayList<FormIDData> list = new ArrayList<FormIDData>(in.length);
+	ArrayList<FormIDData> list = new ArrayList<>(in.length);
 	for (FormID id : in) {
 	    list.add(new FormIDData(id));
 	}
@@ -556,7 +556,7 @@ class ScriptProperty extends Record implements Serializable {
 	@Override
 	public void parseData(LStream in) throws IOException{
 	    int size = in.extractInt(4);
-	    data = new ArrayList<FormIDData>(size);
+	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		FormIDData id = new FormIDData();
 		id.parseData(in);
@@ -566,7 +566,7 @@ class ScriptProperty extends Record implements Serializable {
 
 	@Override
 	public int getContentLength() {
-	    return data.size() * 4 + 4;
+	    return data.size() * 8 + 4;
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public class SkyProcTester {
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
 	patch.setAuthor("Leviathan1753");
-	patch.export(new LExporter(SPGlobal.pathToData + patch.getName()), patch);
+	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
 	if (type != GRUP_TYPE.ENCH) {
 	    passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 	}

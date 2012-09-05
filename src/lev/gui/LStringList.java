@@ -39,7 +39,7 @@ public class LStringList extends LList<String> {
     public void setSize(int width, int height) {
 	super.setSize(width, height);
 	adder.setSize(width, adder.getHeight());
-	scroll.setSize(scroll.getWidth(), height - adder.getHeight() - remove.getHeight() - 20);
+	scroll.setSize(scroll.getWidth(), height - adder.getHeight() - remove.getHeight() - 52);
 	if (accept != null) {
 	    remove.putUnder(scroll, 0, 10);
 	    accept.setSize(remove.getSize());

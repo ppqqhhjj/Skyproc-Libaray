@@ -13,7 +13,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public abstract class Record extends ExportRecord implements Serializable {
+public abstract class Record implements Serializable {
 
     Record() {
     }
@@ -71,7 +71,6 @@ public abstract class Record extends ExportRecord implements Serializable {
 	return (matchType(Ln.arrayToString(in.getInts(0, 4))));
     }
 
-    @Override
     void export(LExporter out, Mod srcMod) throws IOException {
 	if (isValid()) {
 	    out.write(getTypes()[0].toString());
