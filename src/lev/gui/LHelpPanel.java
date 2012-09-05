@@ -41,7 +41,7 @@ public class LHelpPanel extends LPanel {
 	arrowx = arrowX;
 	arrow = (new ImageIcon(LImages.arrow(leftArrow))).getImage();
 
-	setting = new LLabel("  Setting Name", titleFont, titleC);
+	setting = new LLabel("  ", titleFont, titleC);
 	setBounds(bounds);
 
 	help = new LTextPane(new Dimension(getWidth() - 35, getHeight()), contentC);

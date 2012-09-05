@@ -92,7 +92,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     final void init(ModListing info) {
 	this.modInfo = info;
 	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
-	this.setFlag(Mod_Flags.STRING_TABLED, true);
+	this.setFlag(Mod_Flags.STRING_TABLED, false);
 	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
 	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
@@ -179,7 +179,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     public boolean exists() {
-	File f = new File (SPGlobal.pathToData + getInfo().print());
+	File f = new File(SPGlobal.pathToData + getInfo().print());
 	return f.exists();
     }
 
@@ -825,7 +825,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 //    void parseData(Type type, LFileChannel data) throws Exception {
 //	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
 //    }
-
     /**
      * Returns whether the given flag is on or off. <br> <br> An example use of
      * this function is as follows: <br> boolean isaMasterMod =
@@ -1226,7 +1225,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException  {
+	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
 	    fluff1 = Ln.arrayToInt(in.extractInts(4));
@@ -1287,7 +1286,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	int getContentLength(Mod srcMod) {
 	    int out = 0;
 	    out += HEDR.getTotalLength(srcMod);
-	    out += author.getTotalLength(srcMod);
+	    if (author.isValid()) {
+		out += author.getTotalLength(srcMod);
+	    }
 	    out += masters.getTotalLength(srcMod);
 	    return out;
 	}
