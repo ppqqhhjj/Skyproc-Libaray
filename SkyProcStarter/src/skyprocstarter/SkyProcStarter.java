@@ -1,10 +1,13 @@
 package skyprocstarter;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import lev.gui.LSaveFile;
+import skyproc.ARMO;
+import skyproc.FormID;
 import skyproc.GRUP_TYPE;
 import skyproc.Mod;
 import skyproc.ModListing;
@@ -20,21 +23,27 @@ import skyprocstarter.YourSaveFile.Settings;
  */
 public class SkyProcStarter implements SUM {
 
-    // The important functions to change are:
-    //  - getStandardMenu(), where you set up the GUI
-    //  - runChangesToPatch(), where you put all the processing code and add
-    //    records to the output patch
+    /* The important functions to change are:
+    *  - getStandardMenu(), where you set up the GUI
+    *  - Change the import requests to be the records you're interested in.
+    *  - runChangesToPatch(), where you put all the processing code and add
+    *    records to the output patch.
+    */
 
-    String myPatchName = "My Patch";
-    // The types of records you want your patcher to import
-    // At the moment, it imports NPC_ and LVLN records.  Change this to
-    // customize the import to what you need.
+    /* The types of records you want your patcher to import
+    * At the moment, it imports NPC_ and LVLN records.  Change this to
+    * customize the import to what you need.
+    */
     GRUP_TYPE[] importRequests = new GRUP_TYPE[]{
 	GRUP_TYPE.NPC_,
 	GRUP_TYPE.LVLN
     };
+    public static String myPatchName = "My Patch";
+    public static String authorName = "Me";
     public static String version = "1.0";
-    public static Color headerColor = Color.GRAY;
+    public static Color headerColor = new Color(66, 181, 184);  // Teal
+    public static Color settingsColor = new Color(72, 179, 58);  // Green
+    public static Font settingsFont = new Font("Serif", Font.BOLD, 15);
     public static LSaveFile save = new YourSaveFile();
 
     // Do not write the bulk of your program here
@@ -42,7 +51,7 @@ public class SkyProcStarter implements SUM {
     // at the bottom
     public static void main(String[] args) {
 	try {
-	    save.init();
+	    SPGlobal.createGlobalLog();
 	    SUMGUI.open(new SkyProcStarter());
 	} catch (Exception e) {
 	    // If a major error happens, print it everywhere and display a message box.
@@ -91,7 +100,8 @@ public class SkyProcStarter implements SUM {
     public SPMainMenuPanel getStandardMenu() {
 	SPMainMenuPanel settingsMenu = new SPMainMenuPanel(getHeaderColor());
 
-	settingsMenu.addMenu(new YourFirstSettingsPanel(settingsMenu), false, save, Settings.FirstSettingsPanelHelp);
+	settingsMenu.setWelcomePanel(new WelcomePanel(settingsMenu));
+	settingsMenu.addMenu(new OtherSettingsPanel(settingsMenu), false, save, Settings.OTHER_SETTINGS);
 
 	return settingsMenu;
     }
@@ -139,7 +149,9 @@ public class SkyProcStarter implements SUM {
 
     @Override
     public Mod getExportPatch() {
-	return new Mod(getListing());
+	Mod out = new Mod(getListing());
+	out.setAuthor(authorName);
+	return out;
     }
 
     @Override
@@ -178,5 +190,6 @@ public class SkyProcStarter implements SUM {
 	merger.addAsOverrides(SPGlobal.getDB());
 
 	// Write your changes to the patch here.
+	
     }
 }
