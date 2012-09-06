@@ -9,7 +9,16 @@ package skyproc;
  * @author Justin Swanson
  */
 public enum WardState {
+    /**
+     *
+     */
     None,
+    /**
+     *
+     */
     Absorb,
+    /**
+     *
+     */
     Break;
 }

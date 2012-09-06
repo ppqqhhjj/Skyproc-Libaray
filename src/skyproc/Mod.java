@@ -178,6 +178,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return true;
     }
 
+    /**
+     *
+     * @return True if the esp file exists for this mod in the data folder.
+     */
     public boolean exists() {
 	File f = new File(SPGlobal.pathToData + getInfo().print());
 	return f.exists();
@@ -295,6 +299,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
+    /**
+     *
+     * @return An arraylist containing the GRUP_TYPEs of non-empty GRUPs.
+     */
     public ArrayList<GRUP_TYPE> getContainedTypes() {
 	ArrayList<GRUP_TYPE> out = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -559,6 +567,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return sum;
     }
 
+    /**
+     *
+     * @return All Major Records from the mod.
+     */
     public ArrayList<MajorRecord> getRecords() {
 	ArrayList<MajorRecord> out = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -567,6 +579,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
+    /**
+     *
+     * @param id FormID to look for.
+     * @return True if mod contains parameter id.
+     */
     public boolean contains(FormID id) {
 	for (GRUP g : GRUPs.values()) {
 	    if (g.contains(id)) {
@@ -742,6 +759,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
+    /**
+     * Exports the master list of this mod to "Files/Last Masterlist.txt"<br>
+     * Used for checking if patches are needed.
+     * @param path
+     * @throws IOException
+     */
     public void exportMasterList(String path) throws IOException {
 	File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));

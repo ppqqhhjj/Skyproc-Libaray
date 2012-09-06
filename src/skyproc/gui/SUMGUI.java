@@ -141,6 +141,9 @@ public class SUMGUI extends JFrame {
 	helpPanel.setHeaderColor(hook.getHeaderColor());
     }
 
+    /**
+     * Closes the GUI and starts patching if needed. (as if user hit the exit button)
+     */
     public void closeWindow() {
 	WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 	Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
@@ -371,6 +374,10 @@ public class SUMGUI extends JFrame {
 	setPatchNeeded(testNeedsPatching(true));
     }
 
+    /**
+     * Sets the program to require a patch, and switches the GUI display.
+     * @param on
+     */
     public static void setPatchNeeded(boolean on) {
 	needsPatching = on;
 	if (SPGlobal.logging()) {
@@ -558,6 +565,7 @@ public class SUMGUI extends JFrame {
     /**
      * Immediately saves settings to file, closes debug logs, and exits the
      * program.<br> NO patch is generated.
+     * @param generatedPatch True if a patch was generated before exiting.
      */
     static public void exitProgram(boolean generatedPatch) {
 	SPGlobal.log(header, "Exit requested.");
@@ -669,6 +677,10 @@ public class SUMGUI extends JFrame {
 	}
     }
 
+    /**
+     * Starts importing desired mods.  Runs code after it's finished.
+     * @param codeToRunAfter Runnable object with code to execute after.
+     */
     public static void startImport(Runnable codeToRunAfter) {
 	if (!imported) {
 	    runThread(codeToRunAfter);
@@ -678,6 +690,9 @@ public class SUMGUI extends JFrame {
 	}
     }
 
+    /**
+     * Starts importing desired mods.
+     */
     public static void startImport() {
 	runThread(null);
     }

@@ -21,6 +21,9 @@ import lev.Ln;
 public class FormID implements Comparable, Serializable {
 
     static ArrayList<FormID> allIDs = new ArrayList<>();
+    /**
+     * FormID to compare to when determining NULL formIDs.
+     */
     public static final FormID NULL = new FormID();
     byte[] form = new byte[4];
     ModListing master = null;
@@ -210,6 +213,12 @@ public class FormID implements Comparable, Serializable {
 	form[3] = (byte) masters.size();
     }
 
+    /**
+     * Parses a string like "023abeSkyrim.esm" and returns:<br>
+     * ["023abe"]["Skyrim.esm"]
+     * @param s
+     * @return
+     */
     public static String[] parseString(String s) {
 	String[] ida = new String[2];
 	if (s.length() > 6) {
@@ -225,6 +234,11 @@ public class FormID implements Comparable, Serializable {
 	return ida;
     }
 
+    /**
+     * Expects something like ["023abe"]["Skyrim.esm"] and returns a FormID object.
+     * @param s String array of length 2. First index must be length 6.
+     * @return A FormID object representing the array, or NULL if malformed.
+     */
     public static FormID parseString(String[] s) {
 	if (s.length == 2 && s[0].length() == 6) {
 	    return new FormID(s[0], s[1]);

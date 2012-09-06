@@ -9,10 +9,24 @@ package skyproc;
  * @author Justin Swanson
  */
 public enum Axis {
+    /**
+     *
+     */
     X,
+    /**
+     *
+     */
     Y,
+    /**
+     *
+     */
     Z;
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static Axis get(String s) {
 	switch (s) {
 	    case "X":

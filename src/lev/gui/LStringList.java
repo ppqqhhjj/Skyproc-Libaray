@@ -17,6 +17,12 @@ public class LStringList extends LList<String> {
 
     LTextField adder;
 
+    /**
+     *
+     * @param title
+     * @param font
+     * @param color
+     */
     public LStringList(String title, Font font, Color color) {
 	super(title, font, color);
 

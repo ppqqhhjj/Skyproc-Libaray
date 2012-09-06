@@ -142,6 +142,9 @@ public class NPC_ extends Actor implements Serializable {
 	return new NPC_();
     }
 
+    /**
+     * Sound package containing sounds to play for different actions
+     */
     public static class SoundPackage extends SubRecord implements Serializable {
 
 	SubInt CSDT = new SubInt(Type.CSDT);
@@ -260,10 +263,18 @@ public class NPC_ extends Actor implements Serializable {
 	    return hash;
 	}
 
+	/**
+	 *
+	 * @param loc
+	 */
 	public final void setLocation(SoundLocation loc) {
 	    CSDT.set(loc.ordinal());
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public SoundLocation getLocation() {
 	    if (CSDT.get() < SoundLocation.values().length) {
 		return SoundLocation.values()[CSDT.get()];
@@ -272,20 +283,36 @@ public class NPC_ extends Actor implements Serializable {
 	    }
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public ArrayList<SoundPair> getSoundPairs() {
 	    return soundPairs;
 	}
 
+	/**
+	 *
+	 * @param pair
+	 */
 	public void addSoundPair(SoundPair pair) {
 	    soundPairs.add(pair);
 	}
     }
 
+    /**
+     * Pair containing sound to play and chance to play it
+     */
     public static class SoundPair implements Serializable {
 
 	SubForm CSDI;
 	SubInt CSDC = new SubInt(Type.CSDC);
 
+	/**
+	 *
+	 * @param sound
+	 * @param chance
+	 */
 	public SoundPair(FormID sound, int chance) {
 	    setChance(chance);
 	    setSound(sound);
@@ -322,6 +349,10 @@ public class NPC_ extends Actor implements Serializable {
 	    return hash;
 	}
 
+	/**
+	 *
+	 * @param chance
+	 */
 	public final void setChance(int chance) {
 	    if (chance < 0) {
 		chance = 0;
@@ -332,14 +363,26 @@ public class NPC_ extends Actor implements Serializable {
 	    CSDC.set(chance);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getChance() {
 	    return CSDC.get();
 	}
 
+	/**
+	 *
+	 * @param sound
+	 */
 	public final void setSound(FormID sound) {
 	    CSDI.setForm(sound);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public FormID getSound() {
 	    return CSDI.getForm();
 	}
@@ -433,6 +476,9 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
+    /**
+     *
+     */
     public static class TintPackage extends SubRecord implements Serializable {
 
 	SubData TINI = new SubData(Type.TINI);
@@ -922,15 +968,42 @@ public class NPC_ extends Actor implements Serializable {
 	SPELL_POINTS_BASE
     }
 
+    /**
+     *
+     */
     public enum SoundLocation {
 
+	/**
+	 *
+	 */
 	Idle,
+	/**
+	 *
+	 */
 	Aware,
+	/**
+	 *
+	 */
 	Attack,
+	/**
+	 *
+	 */
 	Hit,
+	/**
+	 *
+	 */
 	Death,
+	/**
+	 *
+	 */
 	Weapon,
+	/**
+	 *
+	 */
 	MovementLoop,
+	/**
+	 *
+	 */
 	ConsciousLoop;
     }
 
@@ -1206,25 +1279,82 @@ public class NPC_ extends Actor implements Serializable {
 	Disgusted,;
     }
 
+    /**
+     *
+     */
     public enum FacePart {
 
+	/**
+	 *
+	 */
 	NoseLongShort,
+	/**
+	 *
+	 */
 	NoseUpDown,
+	/**
+	 *
+	 */
 	JawUpDown,
+	/**
+	 *
+	 */
 	JawNarrowWide,
+	/**
+	 *
+	 */
 	JawForwardBack,
+	/**
+	 *
+	 */
 	CheeksUpDown,
+	/**
+	 *
+	 */
 	CheeksForwardBack,
+	/**
+	 *
+	 */
 	EyesUpDown,
+	/**
+	 *
+	 */
 	EyesInOut,
+	/**
+	 *
+	 */
 	BrowsUpDown,
+	/**
+	 *
+	 */
 	BrowsInOut,
+	/**
+	 *
+	 */
 	BrowsForwardBack,
+	/**
+	 *
+	 */
 	LipsUpDown,
+	/**
+	 *
+	 */
 	LipsInOut,
+	/**
+	 *
+	 */
 	ChinThinWide,
+	/**
+	 *
+	 */
 	ChinUpDown,
+	/**
+	 *
+	 */
 	ChinOverbite,
+	/**
+	 *
+	 */
 	EyesForwardBack;
     }
 
@@ -1785,6 +1915,10 @@ public class NPC_ extends Actor implements Serializable {
 	return TPLT.getForm();
     }
 
+    /**
+     *
+     * @return True if NPC has a template actor
+     */
     public boolean isTemplated() {
 	return !getTemplate().equals(FormID.NULL);
     }
@@ -2404,6 +2538,11 @@ public class NPC_ extends Actor implements Serializable {
 	return SoundVolume.values()[NAM8.get()];
     }
 
+    /**
+     *
+     * @param part
+     * @param value
+     */
     public void setFaceValue(FacePart part, float value) {
 	switch (part) {
 	    case NoseLongShort:
@@ -2461,6 +2600,11 @@ public class NPC_ extends Actor implements Serializable {
 	NAM9.valid = true;
     }
 
+    /**
+     *
+     * @param part
+     * @return
+     */
     public float getFaceValue(FacePart part) {
 	switch (part) {
 	    case NoseLongShort:
@@ -2500,95 +2644,163 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<TintPackage> getTinting() {
 	return tintPackages.collection;
     }
 
+    /**
+     *
+     * @param tinting
+     * @return
+     */
     public boolean addTinting(TintPackage tinting) {
 	return tintPackages.add(tinting);
     }
 
+    /**
+     *
+     * @param tinting
+     * @return
+     */
     public boolean removeTinting(TintPackage tinting) {
 	return tintPackages.remove(tinting);
     }
 
+    /**
+     *
+     */
     public void clearTinting() {
 	tintPackages.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<SoundPackage> getSounds() {
 	return soundPackages.collection;
     }
 
+    /**
+     *
+     * @param sounds
+     * @return
+     */
     public boolean addSoundPackage(SoundPackage sounds) {
 	return soundPackages.add(sounds);
     }
 
+    /**
+     *
+     * @param sounds
+     * @return
+     */
     public boolean removeSoundPackage(SoundPackage sounds) {
 	return soundPackages.remove(sounds);
     }
 
+    /**
+     *
+     */
     public void clearSoundPackages() {
 	soundPackages.clear();
     }
 
+    /**
+     *
+     * @param color
+     * @return
+     */
     public float getFaceTint(RGB color) {
 	return QNAM.get(color);
     }
 
+    /**
+     *
+     * @param color
+     * @param value
+     */
     public void setFaceTint(RGB color, float value) {
 	QNAM.set(color, value);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNosePreset() {
 	return NAMA.nose;
     }
 
+    /**
+     *
+     * @param val
+     */
     public void setNosePreset(int val) {
 	NAMA.nose = val;
 	NAMA.valid = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getEyePreset() {
 	return NAMA.eyes;
     }
 
+    /**
+     *
+     * @param val
+     */
     public void setEyePreset(int val) {
 	NAMA.eyes = val;
 	NAMA.valid = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMouthPreset() {
 	return NAMA.mouth;
     }
 
+    /**
+     *
+     * @param val
+     */
     public void setMouthPreset(int val) {
 	NAMA.mouth = val;
 	NAMA.valid = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getHeadParts() {
 	return SubList.subFormToPublic(PNAMs);
     }
 
     /**
      *
-     * @param spellReference FormID of the spell to give to the NPC.
-     * @return True if spell was added.
+     * @param pnam
      */
-    public boolean addHeadPart(FormID pnam) {
-	return PNAMs.add(new SubForm(Type.PNAM, pnam));
+    public void addHeadPart(FormID pnam) {
+	PNAMs.add(new SubForm(Type.PNAM, pnam));
     }
 
     /**
-     * Removes a spell from the NPC. If a spell with this FormID does not exist,
-     * this spell does nothing.
      *
-     * @param spellReference FormID of the spell to remove from the NPC
-     * @return True if spell was removed.
+     * @param pnam
      */
-    public boolean removeHeadPart(FormID pnam) {
-	return PNAMs.remove(new SubForm(Type.PNAM, pnam));
+    public void removeHeadPart(FormID pnam) {
+	PNAMs.remove(new SubForm(Type.PNAM, pnam));
     }
 
     /**

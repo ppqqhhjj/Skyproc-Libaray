@@ -43,12 +43,12 @@ public abstract class SPSettingPanel extends LPanel {
     /**
      * List of all the setting components added with AddSetting()
      */
-    protected ArrayList<LUserSetting> settings = new ArrayList<LUserSetting>();
+    protected ArrayList<LUserSetting> settings = new ArrayList<>();
     /**
      * Reference to the panel in the center column
      */
     protected LPanel settingsPanel;
-    private ArrayList<Component> components = new ArrayList<Component>();
+    private ArrayList<Component> components = new ArrayList<>();
     private int rightMost = 0;
     /**
      * Flag to symbolize Panel has been initialized and the components have been
@@ -80,8 +80,6 @@ public abstract class SPSettingPanel extends LPanel {
      * (super.initialize()) {<br> <br> //... Your initializing code ...<br> <br>
      * return true;<br> } else {<br> return false;<br> }<br>
      *
-     * @return Whether the GUI was just initialized. False if it has already
-     * been.
      */
     protected void initialize() {
 	settingsPanel = new LPanel(SUMGUI.middleDimensions);
@@ -104,6 +102,13 @@ public abstract class SPSettingPanel extends LPanel {
     protected void update() {
     }
 
+    /**
+     * Gets the spacing that should be given to two buttons.
+     * @param in1 Button on left
+     * @param in2 Button on right
+     * @param left To return spacing for left button?
+     * @return Spacing to be given target button.
+     */
     protected Point getSpacing(LButton in1, LButton in2, boolean left) {
 	int spacing = (settingsPanel.getWidth() - in1.getWidth() - in2.getWidth()) / 3;
 	if (left) {
@@ -163,6 +168,10 @@ public abstract class SPSettingPanel extends LPanel {
 	return last;
     }
 
+    /**
+     * Updates last GUI component tracker to be focused on c.  For use with setPlacement()
+     * @param c Component to set as the last GUI component placed.
+     */
     public void updateLast(Component c) {
 	last = new Point(last.x, c.getY() + c.getHeight());
     }
@@ -228,6 +237,10 @@ public abstract class SPSettingPanel extends LPanel {
 	onClose(parent);
     }
 
+    /**
+     * Code to run when panel is closing.
+     * @param parent Main menu panel stems from.
+     */
     public void onClose(SPMainMenuPanel parent) {
     }
 }

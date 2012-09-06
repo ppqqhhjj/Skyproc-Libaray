@@ -197,6 +197,10 @@ public class SUMprogram implements SUM {
 	return new ModListing("SUM", false);
     }
 
+    /**
+     *
+     * @return True if any hook needs patching.
+     */
     @Override
     public boolean needsPatching() {
 	for (PatcherLink link : links) {
@@ -207,6 +211,10 @@ public class SUMprogram implements SUM {
 	return false;
     }
 
+    /**
+     * Runs all hooks onExit() function
+     * @param patchWasGenerated
+     */
     @Override
     public void onExit(boolean patchWasGenerated) {
 	for (PatcherLink l : links) {
@@ -218,6 +226,9 @@ public class SUMprogram implements SUM {
 	}
     }
 
+    /**
+     * Runs all hooks onStart() function
+     */
     @Override
     public void onStart() {
 	for (PatcherLink l : links) {

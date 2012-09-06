@@ -186,8 +186,7 @@ public abstract class LSaveFile {
      * Adds a setting of type boolean.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
+     * @param patchChanging
      * @param b Default value to assign the setting.
      */
     protected void Add(Enum type, Boolean b, boolean patchChanging) {
@@ -198,9 +197,8 @@ public abstract class LSaveFile {
      * Adds a setting of type string.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
      * @param s Default value to assign the setting.
+     * @param patchChanging
      */
     protected void Add(Enum type, String s, boolean patchChanging) {
 	Add(type, new SaveString(type.toString(), s, patchChanging));
@@ -210,8 +208,7 @@ public abstract class LSaveFile {
      * Adds a setting of type integer.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
+     * @param patchChanging
      * @param i Default value to assign the setting.
      */
     protected void Add(Enum type, Integer i, boolean patchChanging) {
@@ -222,9 +219,8 @@ public abstract class LSaveFile {
      * Adds a setting of type enum.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
-     * @param i Default value to assign the setting.
+     * @param e
+     * @param patchChanging
      */
     protected void Add(Enum type, Enum e, boolean patchChanging) {
 	Add(type, new SaveEnum(type.toString(), e, patchChanging));
@@ -234,9 +230,8 @@ public abstract class LSaveFile {
      * Adds a setting of type integer.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
-     * @param i Default value to assign the setting.
+     * @param strs
+     * @param patchChanging 
      */
     protected void Add(Enum type, Set<String> strs, boolean patchChanging) {
 	Add(type, new SaveStringSet(type.toString(), strs, patchChanging));
@@ -246,9 +241,8 @@ public abstract class LSaveFile {
      * Adds a setting of type float.
      *
      * @param type Enum to be associated with.
-     * @param inGame Defines this setting to be exported to an INI file to be
-     * read in by Skyrim.
      * @param f Default value to assign the setting.
+     * @param patchChanging
      */
     protected void Add(Enum type, Float f, boolean patchChanging) {
 	Add(type, new SaveFloat(type.toString(), f, patchChanging));
@@ -362,6 +356,10 @@ public abstract class LSaveFile {
 	copyTo(in, tempCurSettings);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean needsPatch() {
 	ArrayList<Setting> modified = getModifiedSettings();
 	for (Setting s : modified) {
@@ -372,10 +370,20 @@ public abstract class LSaveFile {
 	return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Setting> getModifiedSettings() {
 	return getDiff(saveSettings, curSettings);
     }
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @return
+     */
     public ArrayList<Setting> getDiff(Map<Enum, Setting> lhs, Map<Enum, Setting> rhs) {
 	ArrayList<Setting> out = new ArrayList<>();
 	for (Enum e : lhs.keySet()) {

@@ -116,6 +116,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void parseDataHelper(T item) {
     }
 
+    /**
+     *
+     * @return Number of records the GRUP contains
+     */
     public int size() {
 	return listRecords.size();
     }

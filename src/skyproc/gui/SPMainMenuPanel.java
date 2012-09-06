@@ -142,6 +142,10 @@ public class SPMainMenuPanel extends JPanel {
 	activePanel.setVisible(true);
     }
 
+    /**
+     * Sets a panel to be displayed upon opening the program.
+     * @param panel
+     */
     public void setWelcomePanel (SPSettingPanel panel) {
 	welcome = panel;
 	welcome.open();
@@ -176,16 +180,34 @@ public class SPMainMenuPanel extends JPanel {
 	}
     }
 
+    /**
+     *
+     * @param backgroundPicture
+     */
     public void setBackgroundPicture(URL backgroundPicture) {
 	SUMGUI.setBackgroundPicture(backgroundPicture);
     }
 
+    /**
+     *
+     * @param font
+     * @param helpSize
+     * @param headerSize
+     * @param menuSize
+     */
     public void setMainFont(Font font, int helpSize, int headerSize, int menuSize) {
 	SUMGUI.helpPanel.setHeaderFont(font.deriveFont(Font.PLAIN, helpSize));
 	SPSettingPanel.font = font.deriveFont(Font.PLAIN, headerSize);
 	SPMainMenuConfig.size = menuSize;
     }
 
+    /**
+     *
+     * @param fontURL
+     * @param helpSize
+     * @param headerSize
+     * @param menuSize
+     */
     public void setMainFont(URL fontURL, int helpSize, int headerSize, int menuSize) {
 	try {
 	    Font font = Font.createFont(Font.TRUETYPE_FONT, fontURL.openStream());

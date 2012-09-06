@@ -39,6 +39,7 @@ public class SPSettingDefaultsPanel extends SPSettingPanel {
      * @param title
      * @param parent_
      * @param headerColor
+     * @param saveFile 
      */
     public SPSettingDefaultsPanel(SPMainMenuPanel parent_, String title, Color headerColor, LSaveFile saveFile) {
 	super(parent_, title, headerColor);

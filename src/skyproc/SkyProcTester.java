@@ -119,6 +119,9 @@ public class SkyProcTester {
 	return passed;
     }
 
+    /**
+     *
+     */
     public static void parseEmbeddedScripts() {
 	try {
 	    EmbeddedScripts.generateEnums();

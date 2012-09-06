@@ -19,12 +19,33 @@ import lev.gui.LTextPane;
  */
 public abstract class SPQuestionPanel extends SPSettingPanel {
 
+    /**
+     * Textbox with the question text to display.
+     */
     protected LTextPane question;
+    /**
+     *
+     */
     protected LButton cancelButton;
+    /**
+     * Panel to switch to when cancelling.
+     */
     protected SPSettingPanel cancelPanel;
+    /**
+     *
+     */
     protected LButton backButton;
+    /**
+     * Panel to switch to when pressing back.
+     */
     protected SPSettingPanel backPanel;
+    /**
+     *
+     */
     protected LButton nextButton;
+    /**
+     * Panel to switch to when pressing next.
+     */
     protected SPSettingPanel nextPanel;
 
     /**
@@ -32,6 +53,8 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
      * @param title
      * @param parent_
      * @param headerColor
+     * @param cancel Panel to open when cancel is pressed.
+     * @param back Panel to open when back is pressed.
      */
     public SPQuestionPanel(SPMainMenuPanel parent_, String title, Color headerColor,
 	    SPSettingPanel cancel, SPSettingPanel back) {
@@ -102,60 +125,112 @@ public abstract class SPQuestionPanel extends SPSettingPanel {
 	setNext(nextPanel);
     }
 
+    /**
+     *
+     * @param in Panel to switch to when cancelling.
+     */
     public void setCancel(SPSettingPanel in) {
 	cancelPanel = in;
 	cancelButton.setVisible(in != null);
     }
 
+    /**
+     *
+     * @param in Panel to switch to when pressing back.
+     */
     public void setBack(SPSettingPanel in) {
 	backPanel = in;
 	backButton.setVisible(in != null);
     }
 
+    /**
+     *
+     * @param in Panel to switch to when pressing next.
+     */
     public void setNext(SPSettingPanel in) {
 	nextPanel = in;
 	nextButton.setVisible(in != null);
     }
 
+    /**
+     *
+     * @return Test to see if pressing cancel should be allowed by user.
+     */
     public boolean testCancel() {
 	return true;
     }
 
+    /**
+     *
+     * @return Test to see if pressing back should be allowed by user.
+     */
     public boolean testBack() {
 	return true;
     }
 
+    /**
+     *
+     * @return Test to see if pressing next should be allowed by user.
+     */
     public boolean testNext() {
 	return true;
     }
 
+    /**
+     * Code to run when cancelling.
+     */
     public void onCancel() {
     }
 
+    /**
+     * Code to run when pressing back.
+     */
     public void onBack() {
     }
 
+    /**
+     * Code to run when pressing next.
+     */
     public void onNext() {
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setQuestionFont(Font f) {
 	question.setFont(f);
     }
 
+    /**
+     *
+     */
     public void setQuestionCentered() {
 	question.setCentered();
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setQuestionColor(Color c) {
 	question.setForeground(c);
     }
 
+    /**
+     *
+     * @param t
+     */
     public void setQuestionText(String t) {
 	question.setText(t);
 	question.setSize(question.getWidth(), (int) question.getPreferredSize().getHeight());
 	updateLast(question);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getQuestionText() {
 	return question.getText();
     }

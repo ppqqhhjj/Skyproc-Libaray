@@ -94,6 +94,10 @@ public class LFlags implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return True if all flags are set to false
+     */
     public boolean isZeros() {
 	for (boolean b : flags) {
 	    if (b) {

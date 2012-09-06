@@ -16,6 +16,12 @@ public class SaveStringSet extends Setting<Set<String>> {
 
     static String delimiter = "<#>";
 
+    /**
+     *
+     * @param title_
+     * @param data_
+     * @param patchChanging
+     */
     public SaveStringSet(String title_, Set<String> data_, Boolean patchChanging) {
 	super(title_, data_, patchChanging);
     }

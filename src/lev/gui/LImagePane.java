@@ -153,10 +153,17 @@ public class LImagePane extends JPanel {
 	g.drawImage(img, 0, 0, null);
     }
 
+    /**
+     *
+     * @param on
+     */
     public void allowAlpha(Boolean on) {
 	allowAlpha = on;
     }
 
+    /**
+     *
+     */
     public void removeAlpha() {
 	RescaleOp op = new RescaleOp(new float[]{1.0f, 1.0f, 1.0f, /*
 		     * alpha scaleFactor

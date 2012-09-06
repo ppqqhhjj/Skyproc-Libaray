@@ -15,7 +15,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ConditionBase extends SubRecord {
+class ConditionBase extends SubRecord {
 
     Condition.Operator operator;
     LFlags flags = new LFlags(1);

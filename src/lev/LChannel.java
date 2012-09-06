@@ -13,6 +13,11 @@ import java.util.ArrayList;
  */
 public abstract class LChannel {
 
+    /**
+     * Reads in one integer and moves the position up one
+     * @return
+     * @throws IOException
+     */
     public abstract int read() throws IOException;
 
     /**
@@ -65,6 +70,14 @@ public abstract class LChannel {
 	return Ln.toIntArray(extract(skip, read));
     }
 
+    /**
+     * Skips an amount of bytes, reads in amount of bytes and converts them to integers.<br>
+     * Does NOT move position.
+     * @param skip
+     * @param read
+     * @return
+     * @throws IOException
+     */
     final public int[] getInts(final int skip, final int read) throws IOException {
 	int[] out = extractInts(skip, read);
 	jumpBack(skip + read);
@@ -128,11 +141,26 @@ public abstract class LChannel {
 	return extractUntil(delimiterB);
     }
 
+    /**
+     * Skips an amount of bytes, reads in amount of bytes and converts them to integers.<br>
+     * Moves position forward.
+     * @param skip
+     * @param read
+     * @return
+     * @throws IOException
+     */
     public byte[] extract(final int skip, final int read) throws IOException {
 	skip(skip);
 	return extract(read);
     }
 
+    /**
+     * Reads in amount of bytes and converts them to integers.<br>
+     * Moves position forward.
+     * @param amount
+     * @return
+     * @throws IOException
+     */
     public abstract byte[] extract(final int amount) throws IOException;
 
     /**
@@ -191,12 +219,27 @@ public abstract class LChannel {
 	pos(pos() + offset);
     }
 
+    /**
+     * Moves position back an amount of bytes.
+     * @param amount
+     * @throws IOException
+     */
     public void jumpBack(int amount) throws IOException {
 	skip(-amount);
     }
 
+    /**
+     *
+     * @param pos
+     * @throws IOException
+     */
     public abstract void pos(long pos) throws IOException;
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public abstract long pos() throws IOException;
 
     /**
@@ -223,7 +266,16 @@ public abstract class LChannel {
 	return "";
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     public abstract void close() throws IOException;
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public abstract int available() throws IOException;
 }

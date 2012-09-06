@@ -10,8 +10,20 @@ package skyproc;
  */
 public enum CastingSource {
 
+    /**
+     *
+     */
     Left,
+    /**
+     *
+     */
     Right,
+    /**
+     *
+     */
     Voice,
+    /**
+     *
+     */
     Instant;
 }

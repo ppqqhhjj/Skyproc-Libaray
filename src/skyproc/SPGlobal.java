@@ -48,12 +48,33 @@ public class SPGlobal {
      * give the users of your program ability to adjust this setting.
      */
     public static Language language = Language.English;
+    /**
+     *
+     */
     public static enum Language {
+	/**
+	 *
+	 */
 	English,
+	/**
+	 *
+	 */
 	Spanish,
+	/**
+	 *
+	 */
 	Italian,
+	/**
+	 *
+	 */
 	French,
+	/**
+	 *
+	 */
 	German,
+	/**
+	 *
+	 */
 	Russian;
     }
     /**
@@ -126,6 +147,10 @@ public class SPGlobal {
 	modsToSkip.add(m);
     }
 
+    /**
+     *
+     * @param keyword
+     */
     public static void addModToSkip(String keyword) {
 	modsToSkipStr.add(keyword);
     }

@@ -57,6 +57,10 @@ public abstract class Setting<T> {
         return (Integer)data;
     }
 
+    /**
+     *
+     * @return Returns the value as a Set of Strings.  Could fail.
+     */
     public Set<String> getStrings() {
 	return (Set<String>) data;
     }

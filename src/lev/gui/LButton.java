@@ -49,6 +49,12 @@ public class LButton extends LHelpComponent {
 	setSize(size);
     }
 
+    /**
+     *
+     * @param title
+     * @param x
+     * @param y
+     */
     public LButton(String title, int x, int y) {
 	this(title);
 	setSize(x, y);
@@ -177,6 +183,9 @@ public class LButton extends LHelpComponent {
 	button.addFocusListener(l);
     }
 
+    /**
+     *
+     */
     public void clearActionHandlers() {
 	ActionListener[] ls = button.getListeners(ActionListener.class);
 	for (ActionListener a : ls) {

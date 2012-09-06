@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultTreeModel;
 import lev.Ln;
 
 /**
- *
+ * A structure to store and print file / directory contents.
  * @author Justin Swanson
  */
 public class LFileTree {
@@ -22,15 +22,26 @@ public class LFileTree {
     DefaultTreeModel tree;
     DefaultMutableTreeNode root;
 
+    /**
+     *
+     */
     public LFileTree() {
 	root = new DefaultMutableTreeNode("");
 	tree = new DefaultTreeModel(root);
     }
 
+    /**
+     *
+     * @param f
+     */
     public void addFile(File f) {
 	addFile(f.getPath());
     }
 
+    /**
+     *
+     * @param path
+     */
     public void addFile(String path) {
 	ArrayList<String> list = new ArrayList<>();
 	path = Ln.standardizeFilePath(path);
@@ -58,6 +69,10 @@ public class LFileTree {
 	addFile(newNode, path);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getList() {
 	ArrayList<String> out = new ArrayList<>();
 	for (Enumeration e = root.depthFirstEnumeration(); e.hasMoreElements();) {
@@ -67,6 +82,11 @@ public class LFileTree {
 	return out;
     }
 
+    /**
+     *
+     * @param fluff
+     * @return
+     */
     public String print(String fluff) {
 	String out = "";
 	for (Enumeration e = root.children(); e.hasMoreElements();) {

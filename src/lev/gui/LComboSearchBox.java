@@ -19,6 +19,7 @@ import javax.swing.event.DocumentListener;
 
 /**
  *
+ * @param <T> 
  * @author Justin Swanson
  */
 public class LComboSearchBox<T extends Object> extends LComboBox<T> {
@@ -32,6 +33,8 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
     /**
      *
      * @param title_
+     * @param font
+     * @param shade
      */
     public LComboSearchBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
@@ -107,6 +110,10 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	backup.clear();
     }
 
+    /**
+     *
+     * @return Returns size of the original content list, disregarding current search filter.
+     */
     public int getBackupListSize() {
 	return backup.size();
     }
@@ -117,6 +124,10 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	backup.add(o);
     }
 
+    /**
+     *
+     * @param f
+     */
     public void addBoxActionListener(ActionListener f) {
 	super.addActionListener(f);
     }
@@ -139,6 +150,9 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	search.addMouseListener(m);
     }
 
+    /**
+     *
+     */
     @Override
     public void reset() {
 	setText(searchText);
@@ -146,14 +160,27 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	super.reset();
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setText(String s) {
 	search.setText(s);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
 	return search.getText();
     }
 
+    /**
+     *
+     * @param label
+     * @param done
+     */
     public void addEnterButton(String label, ActionListener done) {
 	enterButton = new LButton(label);
 	enterButton.addActionListener(done);
@@ -184,6 +211,10 @@ public class LComboSearchBox<T extends Object> extends LComboBox<T> {
 	}
     }
 
+    /**
+     *
+     * @param d
+     */
     public final void addDocumentListener(DocumentListener d) {
 	search.getDocument().addDocumentListener(d);
     }

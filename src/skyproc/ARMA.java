@@ -548,6 +548,9 @@ public class ARMA extends MajorRecord {
 	return SubList.subFormToPublic(additionalRaces);
     }
 
+    /**
+     *
+     */
     public void clearAdditionalRaces() {
 	additionalRaces.clear();
     }

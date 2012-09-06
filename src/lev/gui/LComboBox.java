@@ -16,6 +16,7 @@ import lev.gui.LHelpComponent.HelpFocusHandler;
 
 /**
  *
+ * @param <T> 
  * @author Justin Swanson
  */
 public class LComboBox<T extends Object> extends LUserSetting<Integer> {
@@ -32,6 +33,12 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 	init();
     }
 
+    /**
+     *
+     * @param title_
+     * @param font
+     * @param shade
+     */
     public LComboBox(String title_, Font font, Color shade) {
 	super(title_, font, shade);
 	titleLabel.addShadow();
@@ -72,6 +79,9 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 	return (T) box.getSelectedItem();
     }
 
+    /**
+     *
+     */
     public void reset() {
 	box.setSelectedIndex(-1);
     }
@@ -174,6 +184,10 @@ public class LComboBox<T extends Object> extends LUserSetting<Integer> {
 	box.addActionListener(new UpdateHandler());
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEmpty() {
 	return box.getModel().getSize() == 0;
     }

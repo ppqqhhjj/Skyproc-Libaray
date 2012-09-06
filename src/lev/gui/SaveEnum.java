@@ -12,6 +12,12 @@ public class SaveEnum extends Setting<Enum> {
 
     Enum prototype;
 
+    /**
+     *
+     * @param title_
+     * @param data_
+     * @param patchChanging
+     */
     public SaveEnum(String title_, Enum data_, Boolean patchChanging) {
         super(title_, data_, patchChanging);
 	prototype = data_;

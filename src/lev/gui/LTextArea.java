@@ -40,6 +40,12 @@ public class LTextArea extends LComponent {
 	add(area);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param c
+     */
     public LTextArea(int x, int y, Color c) {
 	this(new Dimension(x, y), c);
     }
@@ -77,6 +83,10 @@ public class LTextArea extends LComponent {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
 	try {
 	    return doc.getText(0, doc.getLength());
@@ -156,10 +166,18 @@ public class LTextArea extends LComponent {
 	area.setCaretColor(c);
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setLineWrap (boolean b) {
 	area.setLineWrap(b);
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setWrapStyleWord(boolean b) {
 	area.setWrapStyleWord(b);
     }

@@ -266,6 +266,13 @@ public class Ln {
 	makeDirs(file.getPath());
     }
 
+    /**
+     * Tests whether two array lists have equal contents.
+     * @param lhs
+     * @param rhs
+     * @param ordered Whether the contents have to be in order to count as "equal"
+     * @return
+     */
     public static boolean equals(ArrayList lhs, ArrayList rhs, boolean ordered) {
 	if (lhs == null && rhs == null) {
 	    return true;
@@ -1228,6 +1235,10 @@ public class Ln {
 	return fileLocation;
     }
 
+    /**
+     * Opens a file dialog for user to pick files.
+     * @return Files user picked.
+     */
     public static File[] fileDialog() {
 	JFileChooser fd = new JFileChooser(".");
 	fd.setMultiSelectionEnabled(true);
@@ -1239,6 +1250,12 @@ public class Ln {
 	return fileLocation;
     }
 
+    /**
+     *
+     * @param sourceFile
+     * @param destFile
+     * @throws IOException
+     */
     public static void copyFile(File sourceFile, File destFile) throws IOException {
 	if (!destFile.exists()) {
 	    destFile.createNewFile();
@@ -1260,6 +1277,12 @@ public class Ln {
 	}
     }
 
+    /**
+     *
+     * @param sourceFile
+     * @param destDir
+     * @throws IOException
+     */
     public static void copyFileToDir(File sourceFile, File destDir) throws IOException {
 	File to = new File(destDir.getPath() + "\\" + sourceFile.getName());
 	copyFile(sourceFile, to);
@@ -1539,6 +1562,13 @@ public class Ln {
 	return out;
     }
 
+    /**
+     * Opens a file and loads in each line.
+     * @param f
+     * @param toUpper
+     * @return An ArrayList of all the text lines in the file.
+     * @throws IOException
+     */
     public static ArrayList<String> loadFileToStrings(File f, boolean toUpper) throws IOException {
 	ArrayList out = new ArrayList<>();
 	BufferedReader in;
@@ -1554,16 +1584,33 @@ public class Ln {
 	return out;
     }
 
+    /**
+     * Opens a file and loads in each line.
+     * @param path
+     * @param toUpper
+     * @return An ArrayList of all the text lines in the file.
+     * @throws IOException
+     */
     public static ArrayList<String> loadFileToStrings(String path, boolean toUpper) throws IOException {
 	return loadFileToStrings(new File(path), toUpper);
     }
 
+    /**
+     * Makes every item in the ArrayList uppercase
+     * @param in
+     */
     public static void toUpper(ArrayList<String> in) {
 	for (int i = 0; i < in.size(); i++) {
 	    in.set(i, in.get(i).toUpperCase());
 	}
     }
 
+    /**
+     * Checks string to see if it contains any of the keywords in the arraylist.
+     * @param target
+     * @param keywords
+     * @return
+     */
     public static boolean hasAnyKeywords(String target, ArrayList<String> keywords) {
 	target = target.toUpperCase();
 	for (String s : keywords) {
@@ -1574,10 +1621,21 @@ public class Ln {
 	return false;
     }
 
+    /**
+     * Replaces "\\" with "/"
+     * @param filePath
+     * @return
+     */
     public static String standardizeFilePath(String filePath) {
 	return filePath.replace("\\", "/");
     }
 
+    /**
+     * A contains() check that's case insensitive.
+     * @param list
+     * @param s
+     * @return
+     */
     public static boolean containsIgnoreCase(ArrayList<String> list, String s) {
 	for (String s1 : list) {
 	    if (s1.equalsIgnoreCase(s)) {

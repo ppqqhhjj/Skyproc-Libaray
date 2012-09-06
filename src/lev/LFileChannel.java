@@ -27,7 +27,7 @@ public class LFileChannel extends LChannel {
     /**
      *
      * @param path Path to open a channel to.
-     * @throws FileNotFoundException
+     * @throws IOException
      */
     public LFileChannel(final String path) throws IOException {
 	openFile(path);
@@ -36,12 +36,18 @@ public class LFileChannel extends LChannel {
     /**
      *
      * @param f File to open a channel to.
-     * @throws FileNotFoundException
+     * @throws IOException
      */
     public LFileChannel(final File f) throws IOException {
 	openFile(f);
     }
 
+    /**
+     *
+     * @param rhs
+     * @param allocation
+     * @throws IOException
+     */
     public LFileChannel(LFileChannel rhs, long allocation) throws IOException {
 	LFileChannel fc = (LFileChannel) rhs;
 	iStream = fc.iStream;
@@ -52,7 +58,7 @@ public class LFileChannel extends LChannel {
     /**
      *
      * @param path Path to open a channel to.
-     * @throws FileNotFoundException
+     * @throws IOException 
      */
     final public void openFile(final String path) throws IOException {
 	iStream = new FileInputStream(path);
@@ -63,7 +69,7 @@ public class LFileChannel extends LChannel {
     /**
      *
      * @param f File to open a channel to.
-     * @throws FileNotFoundException
+     * @throws IOException
      */
     final public void openFile(final File f) throws IOException {
 	openFile(f.getPath());
@@ -139,10 +145,21 @@ public class LFileChannel extends LChannel {
 	return (int) (end - iChannel.position());
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public Boolean isDone() throws IOException {
 	return iChannel.position() == end;
     }
 
+    /**
+     *
+     * @param amount
+     * @return
+     * @throws IOException
+     */
     @Override
     public byte[] extract(int amount) throws IOException {
 	ByteBuffer allocate = ByteBuffer.allocate(amount);

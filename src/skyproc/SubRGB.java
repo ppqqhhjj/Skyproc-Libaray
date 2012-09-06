@@ -107,6 +107,11 @@ public class SubRGB extends SubRecord {
 	return hash;
     }
 
+    /**
+     *
+     * @param color
+     * @param val
+     */
     public void set (RGB color, float val) {
 	switch (color) {
 	    case Red:
@@ -122,6 +127,11 @@ public class SubRGB extends SubRecord {
 	valid = true;
     }
 
+    /**
+     *
+     * @param color
+     * @return
+     */
     public float get (RGB color) {
 	if (!isValid()) {
 	    return 0;

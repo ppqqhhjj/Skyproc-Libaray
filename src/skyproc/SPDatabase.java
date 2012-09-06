@@ -103,14 +103,28 @@ public class SPDatabase implements Iterable<Mod> {
 	return modLookup.get(addedPlugins.get(index));
     }
 
+    /**
+     *
+     * @return All mod listings including ones on the load order + ones created while patching.
+     */
     public ArrayList<ModListing> getMods() {
 	return new ArrayList<>(addedPlugins);
     }
 
+    /**
+     *
+     * @return All mod listings that appear on the load order.
+     */
     public ArrayList<ModListing> getImportedMods() {
 	return new ArrayList<>(activePlugins);
     }
 
+    /**
+     * Exports the mod load order to "Files/Last Modlist.txt"<br>
+     * Used for checking if patches are needed.
+     * @param path
+     * @throws IOException
+     */
     public void exportModList(String path) throws IOException {
 	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));

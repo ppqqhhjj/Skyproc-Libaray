@@ -30,6 +30,7 @@ public class LComponent extends Container {
      *
      * @param c Component to center to in the x direction.
      * @param y Height to be placed at.
+     * @return
      */
     public Point centerIn(final Component c, final int y) {
 	final Component thisC = this;
@@ -42,6 +43,7 @@ public class LComponent extends Container {
      *
      * @param c Component to center on horizontally
      * @param y The Y position to be placed at.
+     * @return
      */
     public Point centerOn(final Component c, final int y) {
 	final Component thisC = this;
@@ -54,6 +56,7 @@ public class LComponent extends Container {
      *
      * @param x The X position to be placed at.
      * @param c Component to center on vertically.
+     * @return 
      */
     public Point centerOn(final int x, final Component c) {
 	final Component thisC = this;
@@ -66,16 +69,25 @@ public class LComponent extends Container {
      * @param c
      * @param x
      * @param yOffset
+     * @return
      */
     public Point putUnder (final Component c, final int x, final int yOffset) {
 	setLocation(x, c.getY() + c.getHeight() + yOffset);
 	return this.getLocation();
     }
 
+    /**
+     *
+     * @return Y position of it's bottom edge.
+     */
     public int getBottom() {
 	return getY() + getHeight();
     }
 
+    /**
+     *
+     * @return X position of it's right edge.
+     */
     public int getRight() {
 	return getX() + getWidth();
     }

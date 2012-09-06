@@ -886,7 +886,13 @@ public enum Type {
      */
     FLTV,
 
+    /**
+     *
+     */
     COBJ,
+    /**
+     *
+     */
     BNAM,
 
     /**

@@ -30,6 +30,10 @@ public class LTextField extends LUserSetting<String> {
 	init();
     }
 
+    /**
+     *
+     * @param title_
+     */
     public LTextField(String title_) {
 	super(title_);
 	init();
@@ -136,6 +140,11 @@ public class LTextField extends LUserSetting<String> {
 	}
     }
 
+    /**
+     * Adds an enter button with the desired listener.
+     * @param label
+     * @param done
+     */
     public void addEnterButton(String label, ActionListener done) {
 	enterButton = new LButton(label);
 	enterButton.addActionListener(done);

@@ -125,10 +125,18 @@ public class LHelpPanel extends LPanel {
 	repaint();
     }
 
+    /**
+     * Makes help section move to point at desired Component with a y offset.
+     * @param c
+     * @param offset
+     */
     public void focusOn(Component c, int offset) {
 	setY(c.getY() + c.getHeight() / 2 + offset);
     }
 
+    /**
+     * Moves the help section back to its default position.
+     */
     public void setDefaultPos() {
 	setY(-1);
     }
@@ -239,6 +247,9 @@ public class LHelpPanel extends LPanel {
 	return bottomArea.getSize();
     }
 
+    /**
+     * Hides the help panel and resets it for next time.
+     */
     public void reset (){
 	clearBottomArea();
 	setTitle("");

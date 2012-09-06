@@ -132,6 +132,10 @@ public class BSA {
 	}
     }
 
+    /**
+     *
+     * @return True if BSA has loaded it's folder listings.
+     */
     public boolean loaded() {
 	return loaded;
     }
@@ -162,7 +166,12 @@ public class BSA {
 	return ref.dataOffset;
     }
 
-    public long getFileLocation(String filePath) {
+    /**
+     *
+     * @param filePath
+     * @return
+     */
+    long getFileLocation(String filePath) {
 	BSAFileRef ref;
 	if ((ref = getFileRef(filePath)) != null) {
 	    return getFileLocation(ref);
@@ -170,10 +179,23 @@ public class BSA {
 	return -1;
     }
 
-    public long getFileLocation(File f) {
+    /**
+     *
+     * @param f
+     * @return
+     */
+    long getFileLocation(File f) {
 	return getFileLocation(f.getPath());
     }
 
+    /**
+     * Returns a ShrinkArray containing the data of the file desired. <br>
+     * Returns loose files if they exist, or the dominant BSA if they do not.
+     * @param f
+     * @return
+     * @throws IOException
+     * @throws DataFormatException
+     */
     public LShrinkArray getFile(File f) throws IOException, DataFormatException {
 	return getFile(f.getPath());
     }
@@ -407,6 +429,11 @@ public class BSA {
 	return getFileRef(filePath) != null;
     }
 
+    /**
+     *
+     * @param f
+     * @return
+     */
     public boolean hasFile(File f) {
 	return hasFile(f.getPath());
     }
@@ -532,8 +559,6 @@ public class BSA {
      *
      * @param types Types to load in.
      * @return List of all BSA files that contain any of the filetypes.
-     * @throws IOException
-     * @throws BadParameter If Skyrim.ini does not have the BSA load order lines
      */
     public static ArrayList<BSA> loadInBSAs(FileType... types) {
 	loadResourceLoadOrder();
@@ -573,6 +598,11 @@ public class BSA {
 	return order;
     }
 
+    /**
+     * Returns BSA object associated with modlisting, or null if there is none.
+     * @param m
+     * @return
+     */
     static public BSA getBSA(ModListing m) {
 	if (pluginLoadOrder.containsKey(m)) {
 	    return pluginLoadOrder.get(m);
@@ -596,15 +626,30 @@ public class BSA {
 	return null;
     }
 
+    /**
+     * Returns BSA object associated with mod, or null if there is none.
+     * @param m
+     * @return
+     */
     static public BSA getBSA(Mod m) {
 	return getBSA(m.getInfo());
     }
 
+    /**
+     *
+     * @param m
+     * @return
+     */
     static public boolean hasBSA(ModListing m) {
 	File bsaPath = new File(SPGlobal.pathToData + Ln.changeFileTypeTo(m.print(), "bsa"));
 	return bsaPath.exists();
     }
 
+    /**
+     *
+     * @param m
+     * @return
+     */
     static public boolean hasBSA(Mod m) {
 	return hasBSA(m.getInfo());
     }

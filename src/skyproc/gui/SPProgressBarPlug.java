@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import lev.gui.LProgressBarInterface;
 
 /**
- * A boundary class that will eventually offer an interface to the the LevGUI
- * library.
+ * A boundary class that lets SkyProcs importing interface with custom GUIs
  *
  * @author Justin Swanson
  */
@@ -17,6 +16,10 @@ public class SPProgressBarPlug {
 	bars.add(new Placeholder());
     }
 
+    /**
+     * Adds a progress bar to the list of bars to be updated with SkyProc import/export data.
+     * @param progressBar
+     */
     public static void addProgressBar(LProgressBarInterface progressBar) {
 	bars.add(progressBar);
 	progressBar.setBar(getBar());
@@ -99,6 +102,10 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @param in
+     */
     public static void setMax(int in) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -107,6 +114,11 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @param in
+     * @param status
+     */
     public static void setMax(int in, String status) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -115,6 +127,10 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @param status
+     */
     public static void setStatus(String status) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -123,6 +139,12 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @param cur
+     * @param max
+     * @param status
+     */
     public static void setStatus(int cur, int max, String status) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -131,6 +153,9 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     */
     public static void incrementBar() {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -139,6 +164,9 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     */
     public static void reset() {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -147,6 +175,10 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @param in
+     */
     public static void setBar(int in) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -155,24 +187,43 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getBar() {
 	return bars.get(0).getBar();
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getMax() {
 	return bars.get(0).getMax();
     }
 
+    /**
+     *
+     * @param on
+     */
     public static void pause(boolean on) {
 	for (LProgressBarInterface p : bars) {
 	    p.pause(on);
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean paused() {
 	return bars.get(0).paused();
     }
 
+    /**
+     *
+     */
     public static void done() {
 	for (LProgressBarInterface p : bars) {
 	    p.done();

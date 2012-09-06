@@ -289,6 +289,10 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	FACEGEN_TEXTURES
     }
 
+    /**
+     *
+     * @return All texture path names
+     */
     public ArrayList<String> getTextures() {
 	ArrayList<String> temp = new ArrayList<>();
 	temp.add(colorMap.string);

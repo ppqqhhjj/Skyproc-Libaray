@@ -40,6 +40,12 @@ public class LTextPane extends LComponent {
 	add(pane);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param c
+     */
     public LTextPane(int x, int y, Color c) {
 	this(new Dimension(x, y), c);
     }
@@ -77,6 +83,10 @@ public class LTextPane extends LComponent {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
 	try {
 	    return doc.getText(0, doc.getLength());
@@ -126,6 +136,9 @@ public class LTextPane extends LComponent {
 	pane.setOpaque(b);
     }
 
+    /**
+     * Makes the Text Pane center aligned
+     */
     public void setCentered() {
 	StyledDocument doc = pane.getStyledDocument();
 	SimpleAttributeSet center = new SimpleAttributeSet();

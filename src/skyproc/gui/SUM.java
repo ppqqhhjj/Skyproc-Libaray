@@ -123,8 +123,21 @@ public interface SUM {
      * @return The preferred header color for your mod.
      */
     public Color getHeaderColor();
+    /**
+     * Custom code to determine if a patch is needed (in addition to the normal SUM patch needed rules).
+     * @return Whether or not your program requires a patch.
+     */
     public boolean needsPatching();
+    /**
+     * Code to run before GUI displays.  This code runs AFTER your save is loaded.
+     * @throws Exception
+     */
     public void onStart () throws Exception;
+    /**
+     * Code to run before program closes.
+     * @param patchWasGenerated True if a patch was generated before calling this function.
+     * @throws Exception
+     */
     public void onExit(boolean patchWasGenerated) throws Exception;
     /**
      * This function should start the processing code of your patcher.<br>

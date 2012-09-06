@@ -9,11 +9,32 @@ package skyproc;
  * @author Justin Swanson
  */
 public enum CrimeType {
+    /**
+     *
+     */
     Steal,
-    PickPocket, 
+    /**
+     *
+     */
+    PickPocket,
+    /**
+     *
+     */
     Trespass,
+    /**
+     *
+     */
     Attack,
+    /**
+     *
+     */
     Murder,
+    /**
+     *
+     */
     EscapeJail,
+    /**
+     *
+     */
     WerewolfTransformation;
 }

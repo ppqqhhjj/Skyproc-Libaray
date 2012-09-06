@@ -246,6 +246,18 @@ public class SPImporter {
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
     }
 
+    /**
+     * Imports all mods in the user's Data/ folder, no matter if they are
+     * currently active or not. Imports only GRUPS specified in the parameter.
+     * If a mod being read in fits the criteria of isModToSkip(), then it will
+     * be omitted in the results.<br><br> Related settings in SPGlobal:<br> -
+     * pathToData
+     *
+     * @see SPGlobal
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @return A set of Mods with specified GRUPs imported and ready to be
+     * manipulated.
+     */
     public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
@@ -294,6 +306,23 @@ public class SPImporter {
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
     }
 
+    /**
+     * Loads in plugins.txt and reads in the mods the user has active, and loads
+     * only those that are also present in the data folder. Imports only GRUPS
+     * specified in the parameter. If a mod being read in fits the criteria of
+     * isModToSkip(), then it will be omitted in the results.<br><br> If the
+     * program cannot locate plugins.txt, it will prompt the user to locate the
+     * file themselves. Once they do, it will create a file and use that as a
+     * reference for future patch generations.<br><br> Related settings in
+     * SPGlobal:<br> - pluginsListPath<br> - pathToData<br> -
+     * pluginListBackupPath
+     *
+     * @see SPGlobal
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @return A set of Mods with specified GRUPs imported and ready to be
+     * manipulated.
+     * @throws IOException
+     */
     public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
@@ -316,6 +345,18 @@ public class SPImporter {
 	return importMods(mods, SPGlobal.pathToData, grup_targets);
     }
 
+    /**
+     * Looks for mods that match the given ModListings inside the data folder.
+     * It imports any that are properly located, and loads in only GRUPS
+     * specified in the parameter.<br><br> Related settings in SPGlobal:<br> -
+     * pathToData<br>
+     *
+     * @see SPGlobal
+     * @param mods ModListings to look for and import from the data folder.
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @return A set of Mods with specified GRUPs imported and ready to be
+     * manipulated.
+     */
     public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));

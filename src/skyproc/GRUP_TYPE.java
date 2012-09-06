@@ -55,6 +55,9 @@ public enum GRUP_TYPE {
      * Alchemy
      */
     ALCH,
+    /**
+     * Craftable Object
+     */
     COBJ,
     /**
      * Weapons

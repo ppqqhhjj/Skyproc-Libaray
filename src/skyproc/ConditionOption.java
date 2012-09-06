@@ -15,7 +15,7 @@ import skyproc.Condition.RunOnType;
  *
  * @author Justin Swanson
  */
-public class ConditionOption {
+class ConditionOption {
 
     int index;
     Enum script;

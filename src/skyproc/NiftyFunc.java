@@ -190,6 +190,11 @@ public class NiftyFunc {
 	}
     }
 
+    /**
+     * Replaces all "naughty" characters with "" or "_"
+     * @param origEDID
+     * @return
+     */
     public static String EDIDtrimmer(String origEDID) {
 	origEDID = origEDID.replaceAll(" ", "");
 	origEDID = origEDID.replaceAll(":", "_");
@@ -197,8 +202,11 @@ public class NiftyFunc {
 	return origEDID;
     }
 
-    /*
+    /**
+     * Converts a string version to a unique number<br>
      * Only supports XX.XX.XX.XX with numbers for X
+     * @param version
+     * @return
      */
     public static int versionToNum(String version) {
 	String tmp = "";
@@ -224,6 +232,20 @@ public class NiftyFunc {
     }
     static String recordLengths = "Record Lengths";
 
+    /**
+     * Reads in the file and confirms that all GRUPs and Major Records have
+     * correct lengths. It does not explicitly check subrecord lengths, but due
+     * to the recursive nature of SkyProc, these will be implicitly checked as
+     * well by confirming Major Record length.
+     *
+     * This will bug out if strings inside records contain major record types
+     * (ex. "SomeEDIDforMGEF", would fail because of "MGEF")
+     *
+     * @param testFile File to test.
+     * @param numErrorsToPrint Number of error messages to print before
+     * stopping.
+     * @return True if the file had correct record lengths.
+     */
     public static boolean validateRecordLengths(File testFile, int numErrorsToPrint) {
 	return validateRecordLengths(testFile.getPath(), numErrorsToPrint);
     }
@@ -237,7 +259,7 @@ public class NiftyFunc {
      * This will bug out if strings inside records contain major record types
      * (ex. "SomeEDIDforMGEF", would fail because of "MGEF")
      *
-     * @param testFile Path to the file to test.
+     * @param testFilePath Path to the file to test.
      * @param numErrorsToPrint Number of error messages to print before
      * stopping.
      * @return True if the file had correct record lengths.

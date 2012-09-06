@@ -513,11 +513,26 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     */
     public enum Size {
 
+	/**
+	 *
+	 */
 	SMALL,
+	/**
+	 *
+	 */
 	MEDIUM,
+	/**
+	 *
+	 */
 	LARGE,
+	/**
+	 *
+	 */
 	EXTRALARGE,}
 
     // Get / set
@@ -716,230 +731,457 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public float getAccelerationRate() {
 	return DATA.accelerationRate;
     }
 
+    /**
+     *
+     * @param accelerationRate
+     */
     public void setAccelerationRate(float accelerationRate) {
 	this.DATA.accelerationRate = accelerationRate;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getAimAngleTolerance() {
 	return DATA.aimAngleTolerance;
     }
 
+    /**
+     *
+     * @param aimAngleTolerance
+     */
     public void setAimAngleTolerance(float aimAngleTolerance) {
 	this.DATA.aimAngleTolerance = aimAngleTolerance;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getAngularAcceleration() {
 	return DATA.angularAcceleration;
     }
 
+    /**
+     *
+     * @param angularAcceleration
+     */
     public void setAngularAcceleration(float angularAcceleration) {
 	this.DATA.angularAcceleration = angularAcceleration;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getAngularTolerance() {
 	return DATA.angularTolerance;
     }
 
+    /**
+     *
+     * @param angularTolerance
+     */
     public void setAngularTolerance(float angularTolerance) {
 	this.DATA.angularTolerance = angularTolerance;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getBaseCarryWeight() {
 	return DATA.baseCarryWeight;
     }
 
+    /**
+     *
+     * @param baseCarryWeight
+     */
     public void setBaseCarryWeight(float baseCarryWeight) {
 	this.DATA.baseCarryWeight = baseCarryWeight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getBaseMass() {
 	return DATA.baseMass;
     }
 
+    /**
+     *
+     * @param baseMass
+     */
     public void setBaseMass(float baseMass) {
 	this.DATA.baseMass = baseMass;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDecelerationRate() {
 	return DATA.decelerationRate;
     }
 
+    /**
+     *
+     * @param decelerationRate
+     */
     public void setDecelerationRate(float decelerationRate) {
 	this.DATA.decelerationRate = decelerationRate;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFemaleWeight() {
 	return DATA.femaleWeight;
     }
 
+    /**
+     *
+     * @param femaleWeight
+     */
     public void setFemaleWeight(float femaleWeight) {
 	this.DATA.femaleWeight = femaleWeight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFlightRadius() {
 	return DATA.flightRadius;
     }
 
+    /**
+     *
+     * @param flightRadius
+     */
     public void setFlightRadius(float flightRadius) {
 	this.DATA.flightRadius = flightRadius;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getHealthRegen() {
 	return DATA.healthRegen;
     }
 
+    /**
+     *
+     * @param healthRegen
+     */
     public void setHealthRegen(float healthRegen) {
 	this.DATA.healthRegen = healthRegen;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getInjuredHealthPct() {
 	return DATA.injuredHealthPct;
     }
 
+    /**
+     *
+     * @param injuredHealthPct
+     */
     public void setInjuredHealthPct(float injuredHealthPct) {
 	this.DATA.injuredHealthPct = injuredHealthPct;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getMagickaRegen() {
 	return DATA.magickaRegen;
     }
 
+    /**
+     *
+     * @param magickaRegen
+     */
     public void setMagickaRegen(float magickaRegen) {
 	this.DATA.magickaRegen = magickaRegen;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getMaleHeight() {
 	return DATA.maleHeight;
     }
 
+    /**
+     *
+     * @param maleHeight
+     */
     public void setMaleHeight(float maleHeight) {
 	this.DATA.maleHeight = maleHeight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getMaleWeight() {
 	return DATA.maleWeight;
     }
 
+    /**
+     *
+     * @param maleWeight
+     */
     public void setMaleWeight(float maleWeight) {
 	this.DATA.maleWeight = maleWeight;
     }
 
+    /**
+     *
+     * @return
+     */
     public Size getSize() {
 	return DATA.size;
     }
 
+    /**
+     *
+     * @param size
+     */
     public void setSize(Size size) {
 	this.DATA.size = size;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getStaminaRegen() {
 	return DATA.staminaRegen;
     }
 
+    /**
+     *
+     * @param staminaRegen
+     */
     public void setStaminaRegen(float staminaRegen) {
 	this.DATA.staminaRegen = staminaRegen;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getStartingHealth() {
 	return DATA.startingHealth;
     }
 
+    /**
+     *
+     * @param startingHealth
+     */
     public void setStartingHealth(float startingHealth) {
 	this.DATA.startingHealth = startingHealth;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getStartingMagicka() {
 	return DATA.startingMagicka;
     }
 
+    /**
+     *
+     * @param startingMagicka
+     */
     public void setStartingMagicka(float startingMagicka) {
 	this.DATA.startingMagicka = startingMagicka;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getStartingStamina() {
 	return DATA.startingStamina;
     }
 
+    /**
+     *
+     * @param startingStamina
+     */
     public void setStartingStamina(float startingStamina) {
 	this.DATA.startingStamina = startingStamina;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getUnarmedDamage() {
 	return DATA.unarmedDamage;
     }
 
+    /**
+     *
+     * @param unarmedDamage
+     */
     public void setUnarmedDamage(float unarmedDamage) {
 	this.DATA.unarmedDamage = unarmedDamage;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getUnarmedReach() {
 	return DATA.unarmedReach;
     }
 
+    /**
+     *
+     * @param unarmedReach
+     */
     public void setUnarmedReach(float unarmedReach) {
 	this.DATA.unarmedReach = unarmedReach;
     }
 
+    /**
+     *
+     */
     public void clearAttackData() {
 	ATKDs.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getMaterialType() {
 	return NAM4.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setMaterialType(FormID id) {
 	NAM4.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getImpactDataSet() {
 	return NAM5.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setImpactDataSet(FormID id) {
 	NAM5.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getDecapitationFX() {
 	return NAM7.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setDecapitationFX(FormID id) {
 	NAM7.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getOpenLootSound() {
 	return ONAM.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setOpenLootSound(FormID id) {
 	ONAM.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getCloseLootSound() {
 	return LNAM.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setCloseLootSound(FormID id) {
 	LNAM.setForm(id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getUnarmedEquipSlot() {
 	return UNES.getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setUnarmedEquipSlot(FormID id) {
 	UNES.setForm(id);
     }
 
+    /**
+     *
+     */
     public void clearTinting() {
 	headData.clear();
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public String getLightingModels(Gender gender) {
 	switch (gender) {
 	    case MALE:
@@ -949,6 +1191,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @param s
+     */
     public void setLightingModels(Gender gender, String s) {
 	switch (gender) {
 	    case MALE:
@@ -958,6 +1205,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @return
+     */
     public String getPhysicsModels(Gender gender) {
 	switch (gender) {
 	    case MALE:
@@ -967,6 +1219,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param gender
+     * @param s
+     */
     public void setPhysicsModels(Gender gender, String s) {
 	switch (gender) {
 	    case MALE:
@@ -976,18 +1233,33 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getEquipSlots() {
 	return SubList.subFormToPublic(QNAM);
     }
 
+    /**
+     *
+     * @param in
+     */
     public void addEquipSlot(FormID in) {
 	QNAM.add(new SubForm(Type.QNAM, in));
     }
 
+    /**
+     *
+     * @param in
+     */
     public void removeEquipSlot(FormID in) {
 	QNAM.remove(new SubForm(Type.QNAM, in));
     }
 
+    /**
+     *
+     */
     public void clearEquipSlots() {
 	QNAM.clear();
     }

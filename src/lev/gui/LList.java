@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  *
+ * @param <T> 
  * @author Justin Swanson
  */
 public class LList<T extends Object> extends LHelpComponent implements Iterable<T> {
@@ -35,6 +36,12 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
     LButton accept;
     static int spacing = 15;
 
+    /**
+     *
+     * @param title
+     * @param font
+     * @param color
+     */
     public LList(String title, Font font, Color color) {
 	super(title);
 	this.title = new LLabel(title, font, color);
@@ -74,44 +81,79 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	}
     }
 
+    /**
+     *
+     * @param o
+     */
     public void addElement(T o) {
 	if (!unique || !model.contains(o)) {
 	    model.addElement(o);
 	}
     }
 
+    /**
+     *
+     * @param in
+     */
     public void addElements(Collection<T> in) {
 	for (T t : in) {
 	    addElement(t);
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public List<T> getSelectedElements() {
 	return list.getSelectedValuesList();
     }
 
+    /**
+     *
+     * @return
+     */
     public T getSelectedElement() {
 	return list.getSelectedValue();
     }
 
+    /**
+     *
+     */
     public void removeSelected() {
 	for (Object o : list.getSelectedValuesList()) {
 	    model.removeElement(o);
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public int numItems() {
 	return model.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEmpty() {
 	return model.isEmpty();
     }
 
+    /**
+     *
+     */
     public void clear() {
 	model.clear();
     }
 
+    /**
+     *
+     * @param title
+     * @param a
+     */
     public void addEnterButton(String title, ActionListener a) {
 	accept = new LButton(title);
 	accept.addActionListener(a);
@@ -120,16 +162,29 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	setSize(getSize().width, getSize().height);
     }
 
+    /**
+     *
+     * @param title
+     * @param a
+     */
     public void setRemoveButton(String title, ActionListener a) {
 	remove.setText(title);
 	remove.clearActionHandlers();
 	remove.addActionListener(a);
     }
 
+    /**
+     *
+     * @param on
+     */
     public void setUnique(boolean on) {
 	unique = on;
     }
 
+    /**
+     *
+     * @param l
+     */
     public void addListSelectionListener(ListSelectionListener l) {
 	list.addListSelectionListener(l);
     }
@@ -150,14 +205,24 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	return getAll().iterator();
     }
 
+    /**
+     *
+     */
     public void highlightChanged() {
 	list.setBackground(new Color(224, 121, 147));
     }
 
+    /**
+     *
+     */
     public void clearHighlight() {
 	list.setBackground(Color.white);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<T> getAll() {
 	ArrayList<T> out = new ArrayList<T>(model.size());
 	for (Object o : model.toArray()) {

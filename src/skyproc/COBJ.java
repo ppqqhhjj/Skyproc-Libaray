@@ -17,6 +17,9 @@ public class COBJ extends MajorRecord {
     SubForm BNAM = new SubForm(Type.BNAM);
     SubData NAM1 = new SubData(Type.NAM1);
 
+    /**
+     *
+     */
     public KeywordSet keywords = new KeywordSet();
 
     COBJ() {
@@ -41,46 +44,93 @@ public class COBJ extends MajorRecord {
 	return new COBJ();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Condition> getConditions  () {
 	return CONDs.toPublic();
     }
 
+    /**
+     *
+     * @param c
+     */
     public void addCondition (Condition c) {
 	CONDs.add(c);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void removeCondition (Condition c) {
 	CONDs.remove(c);
     }
 
+    /**
+     *
+     * @param itemReference
+     * @param count
+     * @return
+     */
     public boolean addIngredient(FormID itemReference, int count) {
 	return ingredients.add(new SubFormInt(Type.CNTO, itemReference, count));
     }
 
+    /**
+     *
+     * @param itemReference
+     * @return
+     */
     public boolean removeIngredient(FormID itemReference) {
 	return ingredients.remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getResultFormID() {
         return CNAM.getForm();
     }
 
+    /**
+     *
+     * @param form
+     */
     public void setResultFormID(FormID form) {
         CNAM.setForm(form);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getBenchKeywordFormID() {
         return BNAM.getForm();
     }
 
+    /**
+     *
+     * @param form
+     */
     public void setBenchKeywordFormID(FormID form) {
         BNAM.setForm(form);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getOutputQuantity() {
         return NAM1.toInt();
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setOutputQuantity(int n) {
         NAM1.setData(n);
     }

@@ -65,10 +65,19 @@ public class FLST extends MajorRecord {
 	LNAMs.remove(new SubForm(Type.LNAM, entry));
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSize() {
 	return LNAMs.size();
     }
 
+    /**
+     *
+     * @param entry
+     * @param i
+     */
     public void addFormEntryAtIndex(FormID entry, int i) {
 	LNAMs.addAtIndex(new SubForm(Type.LNAM, entry), i);
     }

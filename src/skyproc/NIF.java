@@ -209,7 +209,13 @@ public class NIF {
 	 *
 	 */
 	NINODE,
+	/**
+	 *
+	 */
 	BSBEHAVIORGRAPHEXTRADATA,
+	/**
+	 *
+	 */
 	NICONTROLLERSEQUENCE,
 	/**
 	 *
@@ -239,6 +245,9 @@ public class NIF {
 	 *
 	 */
 	BSLIGHTINGSHADERPROPERTY,
+	/**
+	 *
+	 */
 	BSEFFECTSHADERPROPERTY,
 	/**
 	 *
@@ -345,7 +354,10 @@ public class NIF {
 	return out;
     }
 
-    //In order list of pairs of Node name + list of textures
+    /**
+     *
+     * @return A map with node index numbers as key, and Pairs of Node Name + List of textures as value.
+     */
     public Map<Integer, LPair<String, ArrayList<String>>> extractTextures() {
 	Map<Integer, LPair<String, ArrayList<String>>> out = new HashMap<>();
 	Map<Integer, NIF.Node> BiLightingShaderProperties = getNodes(NIF.NodeType.BSLIGHTINGSHADERPROPERTY);

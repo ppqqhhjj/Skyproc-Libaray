@@ -4,7 +4,6 @@
  */
 package lev;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -17,12 +16,28 @@ public abstract class LStream {
 
     static Inflater decompresser = new Inflater();
 
+    /**
+     *
+     * @return True if Stream has no more bytes.
+     */
     public abstract Boolean isDone();
 
+    /**
+     *
+     * @return Number of bytes left in the stream
+     */
     public abstract int available();
 
+    /**
+     *
+     * @param skip Number of bytes to skip
+     */
     public abstract void skip(final int skip);
 
+    /**
+     *
+     * @param amount Number of bytes to move the position back
+     */
     public abstract void jumpBack(final int amount);
 
     /**
@@ -161,10 +176,23 @@ public abstract class LStream {
 	}
     }
 
+    /**
+     * Gets specified number of bytes and converts them to a string.  Does not adjust
+     * bounds.
+     * @param amount
+     * @return
+     */
     public String getString(int amount) {
         return Ln.arrayToString(getInts(0,amount));
     }
 
+    /**
+     * Gets specified number of bytes after skipping the desired amount and converts them to a string.  Does not adjust
+     * bounds.
+     * @param skip
+     * @param amount
+     * @return
+     */
     public String getString(int skip, int amount) {
         return Ln.arrayToString(getInts(skip, amount));
     }
@@ -205,6 +233,12 @@ public abstract class LStream {
         return Ln.arrayToString(extractUntil(0));
     }
 
+    /**
+     * Gets specified number of bytes.<br>
+     * Bumps the lower bound up so that following extracts do not extract the same data.
+     * @param amount
+     * @return
+     */
     public abstract byte[] extract(int amount);
 
     /**
@@ -219,11 +253,18 @@ public abstract class LStream {
         return extract(amount);
     }
 
+    /**
+     * Extracts bytes until the delimiter integer is extracted. (inclusive)
+     * Bumps the lower bound up so that following extracts do not extract the same data.
+     * @param delimiter
+     * @return
+     */
     public abstract byte[] extractUntil(int delimiter);
 
     /**
      * Assumes the contents of the ShrinkArray is raw zipped data in its entirety, and nothing else.
      * It then unzips that data in the ShrinkArray.
+     * @return new ShrinkArray with uncompressed data.
      * @throws DataFormatException
      */
     public LShrinkArray correctForCompression() throws DataFormatException {

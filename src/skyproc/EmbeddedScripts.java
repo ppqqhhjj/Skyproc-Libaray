@@ -10,12 +10,11 @@ import java.util.Scanner;
 import lev.LMergeMap;
 
 /**
- *
+ * Not actually used.  This class only has functions that deal with parsing hardcoded Embedded Script info.
+ * This then generates Java code that is actually used in SkyProc.
  * @author Justin Swanson
  */
 public class EmbeddedScripts {
-
-    static EmbeddedScript[] indexing;
 
     // Highly specific function meant to parse the function list from
     // mod.gib.me/skyrim/functions.html as an easier way to generate
@@ -188,6 +187,10 @@ public class EmbeddedScripts {
 	return out;
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     public static void generateEnum() throws IOException {
 	ArrayList<ScriptDef> scripts = parseScriptData();
 	String dir = "Validation Files/";
@@ -200,6 +203,10 @@ public class EmbeddedScripts {
 	out.close();
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     public static void generateEnums() throws IOException {
 	ArrayList<ScriptDef> scripts = parseScriptData();
 	String dir = "Validation Files/";
@@ -273,57 +280,70 @@ public class EmbeddedScripts {
 	out.close();
     }
 
-    // Generate string
-    static void init() {
-	int maxIndex = 0;
-	for (EmbeddedScript s : EmbeddedScript.values()) {
-	    if (maxIndex < s.index) {
-		maxIndex = s.index;
-	    }
-	}
-	indexing = new EmbeddedScript[maxIndex + 1];
-	for (int i = 0; i < indexing.length; i++) {
-	    indexing[i] = EmbeddedScript.NULL;
-	}
-
-	for (EmbeddedScript s : EmbeddedScript.values()) {
-	    if (!s.equals(EmbeddedScript.NULL)) {
-		indexing[s.index] = s;
-	    }
-	}
-    }
-
+    /**
+     *
+     */
     public enum ParamType {
 
+	/**
+	 *
+	 */
 	FormID,
+	/**
+	 *
+	 */
 	Int,
+	/**
+	 *
+	 */
 	String,
+	/**
+	 *
+	 */
 	Axis,
+	/**
+	 *
+	 */
 	Gender,
+	/**
+	 *
+	 */
 	CrimeType,
+	/**
+	 *
+	 */
 	CastingSource,
+	/**
+	 *
+	 */
 	WardState,
+	/**
+	 *
+	 */
 	Float,
+	/**
+	 *
+	 */
 	NULL;
     }
 
+    /**
+     *
+     */
     public enum Param {
 
+	/**
+	 *
+	 */
 	One,
+	/**
+	 *
+	 */
 	Two,
+	/**
+	 *
+	 */
 	Three;
-    }
-
-    static EmbeddedScript getScript(int index) {
-	if (indexing == null) {
-	    init();
-	}
-
-	if (index < indexing.length) {
-	    return indexing[index];
-	} else {
-	    return EmbeddedScript.NULL;
-	}
     }
 
     static class ScriptDef {
@@ -345,15 +365,4 @@ public class EmbeddedScripts {
 	}
     }
 
-    public enum EmbeddedScript {
-
-	NULL(-1);
-	int index;
-	ParamType[] paramsFormMask;
-
-	EmbeddedScript(int index, ParamType... params) {
-	    this.index = index;
-	    this.paramsFormMask = params;
-	}
-    }
 }
