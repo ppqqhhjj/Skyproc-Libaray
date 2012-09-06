@@ -51,9 +51,7 @@ class SubStringPointer extends SubRecord {
 		if (text.isValid()) {
 		    text.export(out, srcMod);
 		} else if (forceExport) {
-		    if (data.getData().length < 4 && !shortNull) {
-			data.setData(0, 4);
-		    }
+		    data.setData(0, shortNull? 1 : 4); // If short null 1, else 4
 		    data.export(out, srcMod);
 		}
 	    }
@@ -140,11 +138,7 @@ class SubStringPointer extends SubRecord {
 	    }
 	}
 
-	if (shortNull) {
-	    return 1;
-	} else {
-	    return 4; // empty data with 4 zeros
-	}
+	return shortNull ? 1 : 4; // returning null ptr length
     }
 
     @Override
