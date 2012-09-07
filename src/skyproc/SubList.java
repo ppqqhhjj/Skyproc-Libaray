@@ -233,7 +233,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     static ArrayList<SubFormInt> subFormIntToPublic(SubList<SubFormInt> in) {
-        ArrayList<SubFormInt> out = new ArrayList<SubFormInt>(in.size());
+        ArrayList<SubFormInt> out = new ArrayList<>(in.size());
         for (SubFormInt s : in) {
             out.add(s);
         }

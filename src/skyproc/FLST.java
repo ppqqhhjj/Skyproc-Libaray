@@ -45,7 +45,7 @@ public class FLST extends MajorRecord {
      *
      * @return List of all the FormIDs in the Form list.
      */
-    public ArrayList<FormID> getFromEntries() {
+    public ArrayList<FormID> getFormIDEntries() {
 	return SubList.subFormToPublic(LNAMs);
     }
 

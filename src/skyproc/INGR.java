@@ -73,7 +73,7 @@ public class INGR extends MagicItem {
 
     class DATA extends SubRecord {
 
-	byte[] fluff = new byte[4];
+	int value = 0;
 	float weight = 0;
 
 	DATA () {
@@ -83,14 +83,14 @@ public class INGR extends MagicItem {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(fluff,4);
+	    out.write(value);
 	    out.write(weight);
 	}
 
 	@Override
 	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
 	    super.parseData(in);
-	    fluff = in.extract(4);
+	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	    if (SPGlobal.logging()) {
 		logSync("", "Setting DATA:    Weight: " + weight);
@@ -235,6 +235,14 @@ public class INGR extends MagicItem {
      */
     public float getWeight() {
 	return DATA.weight;
+    }
+
+    public int getValue() {
+	return DATA.value;
+    }
+
+    public void setValue (int value) {
+	DATA.value = value;
     }
 
     /**
