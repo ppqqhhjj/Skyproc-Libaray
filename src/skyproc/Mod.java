@@ -34,6 +34,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<SPEL> spells = new GRUP<>(this, new SPEL());
     GRUP<ARMO> armors = new GRUP<>(this, new ARMO());
     GRUP<INGR> ingredients = new GRUP<>(this, new INGR());
+    GRUP<MISC> miscObjects = new GRUP<>(this, new MISC());
     GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
     GRUP<COBJ> constructibleObjects = new GRUP<>(this, new COBJ());
     GRUP<WEAP> weapons = new GRUP<>(this, new WEAP());
@@ -110,6 +111,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(armors.getContainedType(), armors);
 	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
 	GRUPs.put(ingredients.getContainedType(), ingredients);
+	miscObjects.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
+	GRUPs.put(miscObjects.getContainedType(), miscObjects);
 	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(alchemy.getContainedType(), alchemy);
 	GRUPs.put(constructibleObjects.getContainedType(), constructibleObjects);
@@ -1092,6 +1095,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<COBJ> getConstructibleObjects() {
 	return constructibleObjects;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Misc Object records
+     */
+    public GRUP<MISC> getMiscObjects() {
+	return miscObjects;
     }
 
     /**

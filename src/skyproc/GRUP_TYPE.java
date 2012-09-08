@@ -51,6 +51,7 @@ public enum GRUP_TYPE {
      * Ingredients
      */
     INGR,
+    MISC,
     /**
      * Alchemy
      */

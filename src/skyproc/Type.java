@@ -387,6 +387,9 @@ public enum Type {
      * NPC_: Destruction data?
      */
     DSTD,
+    DMDT,
+    DMDL,
+    DMDS,
     /**
      * NPC_: Destruction data?
      */
@@ -894,6 +897,9 @@ public enum Type {
      *
      */
     BNAM,
+
+    MISC,
+    MODB,
 
     /**
      * NPC_: Marks DNAM position?

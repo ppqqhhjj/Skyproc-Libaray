@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 public class Lg {
 
     /**
-     * 
+     *
      * @param originalImage Image to resize
      * @param size size to convert to
      * @return Resized image
@@ -33,7 +33,7 @@ public class Lg {
     }
 
     /**
-     * 
+     *
      * @param originalImage Image to resize
      * @param size size to convert to
      * @return Resized image
@@ -79,6 +79,17 @@ public class Lg {
             x = x * mod;
             y = y * mod;
         }
+        return new Dimension((int) x, (int) y);
+    }
+
+    static public Dimension calcSize(double x, double y, int minX, int minY, int maxX, int maxY) {
+	Dimension max = calcSize(x,y,maxX,maxY);
+	if (minX == 0 && minY == 0) {
+	    return max;
+	}
+	double xMod = 1.0 * minX / x;
+	double yMod = 1.0 * minY / y;
+
         return new Dimension((int) x, (int) y);
     }
 }
