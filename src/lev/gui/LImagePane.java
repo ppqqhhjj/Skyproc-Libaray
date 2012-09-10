@@ -118,6 +118,10 @@ public class LImagePane extends JPanel {
 	setImage(ImageIO.read(url));
     }
 
+    final public void setImage(String path) throws IOException {
+	setImage(ImageIO.read(new File(path)));
+    }
+
     /**
      *
      * @param x

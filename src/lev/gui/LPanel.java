@@ -45,7 +45,7 @@ public class LPanel extends JPanel implements Scrollable {
     }
 
     /**
-     * 
+     *
      * @param input
      */
     public void Add(Component input) {
@@ -78,4 +78,7 @@ public class LPanel extends JPanel implements Scrollable {
         return new Dimension(300,300);
     }
 
+    public void remeasure (Dimension size) {
+	setSize(size);
+    }
 }

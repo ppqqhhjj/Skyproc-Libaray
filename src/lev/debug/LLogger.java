@@ -262,4 +262,19 @@ public class LLogger {
     public void newLog(String filePath) {
 	asynced.openDebug(debugPath + filePath, 50);
     }
+
+    public void close() {
+	if (main != null) {
+	    main.closeDebugFile();
+	}
+	if (asynced != null) {
+	    asynced.closeDebugFile();
+	}
+	if (synced != null) {
+	    synced.closeDebugFile();
+	}
+	for (LDebug d : special.values()) {
+	    d.closeDebugFile();
+	}
+    }
 }

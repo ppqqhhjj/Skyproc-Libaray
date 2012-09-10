@@ -95,6 +95,10 @@ public abstract class LChannel {
 	return Ln.arrayToString(extractUntil(0));
     }
 
+    public String extractAllString() throws IOException {
+	return Ln.arrayToString(extract(0, available()));
+    }
+
     /**
      * Reads in a line until a newline character is found. (Byte of 10, or bytes 13 -> 10)
      * @return

@@ -39,6 +39,10 @@ public class Lg {
      * @return Resized image
      */
     static public BufferedImage resizeImageWithHint(BufferedImage originalImage, Dimension size) {
+	if (originalImage.getWidth() == size.width && originalImage.getHeight() == size.height) {
+	    return originalImage;
+	}
+
         int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
         BufferedImage resizedImage = new BufferedImage(size.width, size.height, type);
         Graphics2D g = resizedImage.createGraphics();

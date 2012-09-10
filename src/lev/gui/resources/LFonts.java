@@ -7,8 +7,7 @@ package lev.gui.resources;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URL;
 
 /**
  * Collection of embedded fonts that can be used.
@@ -23,13 +22,7 @@ public class LFonts {
      * @return
      */
     public static Font Typo3(float size) {
-	try {
-	    Font font = Font.createFont(Font.TRUETYPE_FONT, LFonts.class.getResource("Typo3-Medium.ttf").openStream());
-	    return font.deriveFont(size);
-	} catch (IOException ex) {
-	} catch (FontFormatException ex) {
-	}
-	return new Font("Serif", 3, 3);
+	return getFont("Typo3-Medium.ttf", size);
     }
 
     /**
@@ -38,13 +31,7 @@ public class LFonts {
      * @return
      */
     public static Font Neuropol(float size){
-	try {
-	    Font font = Font.createFont(Font.TRUETYPE_FONT, LFonts.class.getResource("NEUROPOL.ttf").openStream());
-	    return font.deriveFont(Font.PLAIN, size);
-	} catch (IOException ex) {
-	} catch (FontFormatException ex) {
-	}
-	return new Font("Serif", 3, 3);
+	return getFont("NEUROPOL.ttf", size);
     }
 
     /**
@@ -53,13 +40,7 @@ public class LFonts {
      * @return
      */
     public static Font OptimusPrinceps(float size) {
-	try {
-	    Font font = Font.createFont(Font.TRUETYPE_FONT, LFonts.class.getResource("OptimusPrincepsSemiBold.ttf").openStream());
-	    return font.deriveFont(size);
-	} catch (IOException ex) {
-	} catch (FontFormatException ex) {
-	}
-	return new Font("Serif", 3, 3);
+	return getFont("OptimusPrincepsSemiBold.ttf", size);
     }
 
     /**
@@ -68,11 +49,22 @@ public class LFonts {
      * @return
      */
     public static Font Oleo(float size) {
+	return getFont("OLEO.ttf", size);
+    }
+
+    public static Font MyriadPro (float size) {
+	return getFont("MyriadPro-Regular.ttf", size);
+    }
+
+    public static Font MyriadProBold (float size) {
+	return getFont("myriadwebpro-bold.ttf", size);
+    }
+
+    static Font getFont(String path, float size) {
 	try {
-	    Font font = Font.createFont(Font.TRUETYPE_FONT, LFonts.class.getResource("OLEO.ttf").openStream());
+	    Font font = Font.createFont(Font.TRUETYPE_FONT, LFonts.class.getResource(path).openStream());
 	    return font.deriveFont(Font.PLAIN, size);
-	} catch (IOException ex) {
-	} catch (FontFormatException ex) {
+	} catch (IOException | FontFormatException ex) {
 	}
 	return new Font("Serif", 3, 3);
     }

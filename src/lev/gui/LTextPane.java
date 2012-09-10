@@ -30,12 +30,11 @@ public class LTextPane extends LComponent {
      * @param size_
      * @param c
      */
-    public LTextPane(Dimension size_, Color c) {
+    public LTextPane(Color c) {
 	pane = new JTextPane();
 	doc = pane.getDocument();
 	pane.setOpaque(false);
 	setVisible(true);
-	setSize(size_);
 	setForeground(c);
 	add(pane);
     }
@@ -47,7 +46,18 @@ public class LTextPane extends LComponent {
      * @param c
      */
     public LTextPane(int x, int y, Color c) {
-	this(new Dimension(x, y), c);
+	this(c);
+	setSize(x,y);
+    }
+
+    /**
+     *
+     * @param size
+     * @param c
+     */
+    public LTextPane(Dimension size, Color c) {
+	this(c);
+	setSize(size);
     }
 
     @Override

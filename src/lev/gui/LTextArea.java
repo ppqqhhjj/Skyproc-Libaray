@@ -31,13 +31,8 @@ public class LTextArea extends LComponent {
      * @param c
      */
     public LTextArea(Dimension size_, Color c) {
-	area = new JTextArea();
-	doc = area.getDocument();
-	area.setOpaque(false);
-	setVisible(true);
+	this(c);
 	setSize(size_);
-	setForeground(c);
-	add(area);
     }
 
     /**
@@ -48,6 +43,15 @@ public class LTextArea extends LComponent {
      */
     public LTextArea(int x, int y, Color c) {
 	this(new Dimension(x, y), c);
+    }
+
+    public LTextArea(Color c) {
+	area = new JTextArea();
+	doc = area.getDocument();
+	area.setOpaque(false);
+	setVisible(true);
+	setForeground(c);
+	add(area);
     }
 
     @Override
