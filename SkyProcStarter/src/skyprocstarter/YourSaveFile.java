@@ -4,13 +4,13 @@
  */
 package skyprocstarter;
 
-import lev.gui.LSaveFile;
+import skyproc.SkyProcSave;
 
 /**
  *
  * @author Justin Swanson
  */
-public class YourSaveFile extends LSaveFile {
+public class YourSaveFile extends SkyProcSave {
 
     @Override
     protected void initSettings() {

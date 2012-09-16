@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.View;
+import javax.swing.text.html.StyleSheet;
 
 /**
  *
@@ -15,30 +16,30 @@ import javax.swing.text.View;
  */
 public class LEditorPane extends LComponent {
 
-    JEditorPane text;
+    JEditorPane pane;
 
-    LEditorPane() {
-	text = new JEditorPane();
-	text.setEditable(false);
-	text.setVisible(true);
+    public LEditorPane() {
+	pane = new JEditorPane();
+	pane.setEditable(false);
+	pane.setVisible(true);
 	setVisible(true);
-	add(text);
+	add(pane);
     }
 
     public void addHyperLinkListener(HyperlinkListener h) {
-	text.addHyperlinkListener(h);
+	pane.addHyperlinkListener(h);
     }
 
     public void setContentType(String s) {
-	text.setContentType(s);
+	pane.setContentType(s);
     }
 
     public String getText() {
-	return text.getText();
+	return pane.getText();
     }
 
     public void setText(String s) {
-	text.setText(s);
+	pane.setText(s);
     }
 
     @Override
@@ -49,18 +50,33 @@ public class LEditorPane extends LComponent {
     @Override
     public void setSize(int x, int y) {
 	super.setSize(x, y);
-	text.setSize(x, y);
+	pane.setSize(x, y);
+    }
+
+    public void setSize(int x) {
+	setSize(x, getHeight(x));
     }
 
     @Override
     public Dimension getPreferredSize() {
-	return text.getPreferredSize();
+	return pane.getPreferredSize();
     }
 
     public int getHeight(int width) {
-	View v = text.getUI().getRootView(text);
+	View v = pane.getUI().getRootView(pane);
 	v.setSize(width, Integer.MAX_VALUE);
 	int preferredHeight = (int) v.getPreferredSpan(View.Y_AXIS);
 	return preferredHeight;
+    }
+
+    public int getWidth(int height) {
+	View v = pane.getUI().getRootView(pane);
+	v.setSize(Integer.MAX_VALUE, height);
+	int preferredWidth = (int) v.getPreferredSpan(View.X_AXIS);
+	return preferredWidth;
+    }
+
+    public void setOpaque(boolean on) {
+	pane.setOpaque(on);
     }
 }

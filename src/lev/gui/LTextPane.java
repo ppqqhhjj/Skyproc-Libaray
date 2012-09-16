@@ -21,9 +21,9 @@ import javax.swing.text.*;
 public class LTextPane extends LComponent {
 
     static String header = "Text Pane";
-    JScrollPane scroll;
-    JTextPane pane;
-    Document doc;
+    protected JScrollPane scroll;
+    protected JTextPane pane;
+    protected Document doc;
 
     /**
      *
@@ -31,11 +31,15 @@ public class LTextPane extends LComponent {
      * @param c
      */
     public LTextPane(Color c) {
+	this();
+	setForeground(c);
+    }
+
+    public LTextPane() {
 	pane = new JTextPane();
 	doc = pane.getDocument();
 	pane.setOpaque(false);
 	setVisible(true);
-	setForeground(c);
 	add(pane);
     }
 
@@ -73,6 +77,17 @@ public class LTextPane extends LComponent {
 	} else {
 	    scroll.setSize(width, height);
 	}
+    }
+
+    public void setSize(int x) {
+	setSize(x, getHeight(x));
+    }
+
+    public int getHeight(int width) {
+	View v = pane.getUI().getRootView(pane);
+	v.setSize(width, Integer.MAX_VALUE);
+	int preferredHeight = (int) v.getPreferredSpan(View.Y_AXIS);
+	return preferredHeight;
     }
 
     @Override
@@ -194,6 +209,10 @@ public class LTextPane extends LComponent {
 	SimpleAttributeSet center = new SimpleAttributeSet();
 	StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 	doc.setParagraphAttributes(0, doc.getLength(), center, false);
+    }
+
+    public void setContentType(String s) {
+	pane.setContentType(s);
     }
 
     /**

@@ -115,7 +115,7 @@ public class LDebug {
      */
     public void w(final String header, final String... input) {
 
-        if (on && writer != null) {
+        if (on && writer != null && input.length > 0 ) {
             if (bannedHeaders.contains(input[0])) {
                 return;
             }
@@ -145,7 +145,6 @@ public class LDebug {
                         + e.getMessage());
                 e.printStackTrace();
             } catch (Exception e) {
-
                 System.err.println("Caught Exception: "
                         + e.getMessage());
                 e.printStackTrace();

@@ -452,6 +452,10 @@ public class SUMprogram implements SUM {
 
     class SUMsave extends LSaveFile {
 
+	SUMsave() {
+	    super(SPGlobal.pathToInternalFiles);
+	}
+
 	@Override
 	protected void initSettings() {
 	    Add(SUMSettings.IMPORT_AT_START, false, false);

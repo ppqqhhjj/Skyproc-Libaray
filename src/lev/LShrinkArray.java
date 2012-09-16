@@ -80,6 +80,7 @@ public class LShrinkArray extends LStream {
     public LShrinkArray(final File f) throws FileNotFoundException, IOException {
 	LFileChannel in = new LFileChannel(f);
 	buffer = ByteBuffer.wrap(in.extract(0, in.available()));
+	in.close();
     }
 
     /**

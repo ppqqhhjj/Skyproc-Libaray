@@ -268,9 +268,11 @@ public class Ln {
 
     /**
      * Tests whether two array lists have equal contents.
+     *
      * @param lhs
      * @param rhs
-     * @param ordered Whether the contents have to be in order to count as "equal"
+     * @param ordered Whether the contents have to be in order to count as
+     * "equal"
      * @return
      */
     public static boolean equals(ArrayList lhs, ArrayList rhs, boolean ordered) {
@@ -800,29 +802,39 @@ public class Ln {
      * @param expand
      */
     public static void expandAll(JTree tree, boolean expand) {
-	TreeNode root = (TreeNode) tree.getModel().getRoot();
-
 	// Traverse tree from root
-	expandAll(tree, new TreePath(root), expand);
+	expandAll(tree, expand, 0, Integer.MAX_VALUE);
     }
 
-    private static void expandAll(JTree tree, TreePath parent, boolean expand) {
+    private static void expandAll(JTree tree, boolean expand, int depth, int maxDepth) {
+	TreeNode root = (TreeNode) tree.getModel().getRoot();
+	expandAll(tree, new TreePath(root), expand, depth, maxDepth);
+    }
+
+    private static void expandAll(JTree tree, TreePath parent, boolean expand, int depth, int maxDepth) {
 	// Traverse children
 	TreeNode node = (TreeNode) parent.getLastPathComponent();
 	if (node.getChildCount() >= 0) {
 	    for (Enumeration e = node.children(); e.hasMoreElements();) {
 		TreeNode n = (TreeNode) e.nextElement();
 		TreePath path = parent.pathByAddingChild(n);
-		expandAll(tree, path, expand);
+		expandAll(tree, path, expand, depth + 1, maxDepth);
 	    }
 	}
 
 	// Expansion or collapse must be done bottom-up
 	if (expand) {
-	    tree.expandPath(parent);
+	    if (depth < maxDepth) {
+		tree.expandPath(parent);
+	    }
 	} else {
 	    tree.collapsePath(parent);
 	}
+    }
+
+    public static void expandToDepth(JTree tree, int depth) {
+	expandAll(tree, false);
+	expandAll(tree, true, 0, depth);
     }
 
     /**
@@ -1237,6 +1249,7 @@ public class Ln {
 
     /**
      * Opens a file dialog for user to pick files.
+     *
      * @return Files user picked.
      */
     public static File[] fileDialog() {
@@ -1564,6 +1577,7 @@ public class Ln {
 
     /**
      * Opens a file and loads in each line.
+     *
      * @param f
      * @param toUpper
      * @return An ArrayList of all the text lines in the file.
@@ -1586,6 +1600,7 @@ public class Ln {
 
     /**
      * Opens a file and loads in each line.
+     *
      * @param path
      * @param toUpper
      * @return An ArrayList of all the text lines in the file.
@@ -1597,6 +1612,7 @@ public class Ln {
 
     /**
      * Makes every item in the ArrayList uppercase
+     *
      * @param in
      */
     public static void toUpper(ArrayList<String> in) {
@@ -1607,6 +1623,7 @@ public class Ln {
 
     /**
      * Checks string to see if it contains any of the keywords in the arraylist.
+     *
      * @param target
      * @param keywords
      * @return
@@ -1623,6 +1640,7 @@ public class Ln {
 
     /**
      * Replaces "\\" with "/"
+     *
      * @param filePath
      * @return
      */
@@ -1632,6 +1650,7 @@ public class Ln {
 
     /**
      * A contains() check that's case insensitive.
+     *
      * @param list
      * @param s
      * @return
@@ -1643,5 +1662,13 @@ public class Ln {
 	    }
 	}
 	return false;
+    }
+
+    public static String getNAmount(int n, String s) {
+	String out = "";
+	for (int i = 0; i < n; i++) {
+	    out += s;
+	}
+	return out;
     }
 }

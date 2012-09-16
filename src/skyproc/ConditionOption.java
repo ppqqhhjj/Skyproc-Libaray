@@ -5,9 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import lev.LExporter;
-import lev.LStream;
 import lev.LStream;
 import skyproc.Condition.RunOnType;
 
@@ -15,7 +15,7 @@ import skyproc.Condition.RunOnType;
  *
  * @author Justin Swanson
  */
-class ConditionOption {
+class ConditionOption implements Serializable {
 
     int index;
     Enum script;

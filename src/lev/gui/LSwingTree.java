@@ -57,10 +57,14 @@ public class LSwingTree extends LComponent {
      * @param height
      */
     public LSwingTree(int width, int height) {
-        super();
+        this();
+        setSize(width, height);
+    }
 
-        tree = new JTree();
-	model = (DefaultTreeModel) tree.getModel();
+    public LSwingTree() {
+	super();
+	model = new DefaultTreeModel(new DefaultMutableTreeNode());
+        tree = new JTree(model);
         panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(Color.white);
@@ -73,7 +77,6 @@ public class LSwingTree extends LComponent {
         panel.add(scrollPane);
 
 	setRowHeight(20);
-        setSize(width, height);
         setVisible(true);
     }
 
@@ -83,6 +86,18 @@ public class LSwingTree extends LComponent {
      */
     public void setModel(TreeModel m) {
         tree.setModel(m);
+    }
+
+    public void clearTree() {
+	setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+    }
+
+    public void setRoot(TreeNode n) {
+	setModel(new DefaultTreeModel(n));
+    }
+
+    public void expandToDepth(int depth) {
+	Ln.expandToDepth(tree, depth);
     }
 
     /**
@@ -371,6 +386,14 @@ public class LSwingTree extends LComponent {
      */
     public void nodeChanged (TreeNode node) {
 	model.nodeChanged(node);
+    }
+
+    public TreeSelectionModel getSelectionModel() {
+	return tree.getSelectionModel();
+    }
+
+    public Object getLastSelectedPathComponent() {
+	return tree.getLastSelectedPathComponent();
     }
 
     /**

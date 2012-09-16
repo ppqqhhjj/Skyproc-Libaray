@@ -4,6 +4,7 @@
  */
 package lev.gui;
 
+import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -38,4 +39,30 @@ public class LSwingTreeNode extends DefaultMutableTreeNode {
 	return null;
     }
 
+    public ArrayList<Object> getAllObjects() {
+	return getAllObjects(false);
+    }
+
+    public ArrayList<Object> getAllObjects(boolean recursive) {
+	ArrayList<Object> out = new ArrayList<>();
+	if (children != null) {
+	    for (Object o : children) {
+		out.add(o);
+		if (recursive && o instanceof LSwingTreeNode) {
+		    LSwingTreeNode n = (LSwingTreeNode) o;
+		    out.addAll(n.getAllObjects(recursive));
+		}
+	    }
+	}
+	return out;
+    }
+
+    public void print(int depth) {
+	for (Object o : getAllObjects()) {
+	    if (o instanceof LSwingTreeNode) {
+		LSwingTreeNode n = (LSwingTreeNode) o;
+		n.print(depth + 1);
+	    }
+	}
+    }
 }

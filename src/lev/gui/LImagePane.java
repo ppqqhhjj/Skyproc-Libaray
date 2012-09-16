@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  *
  * @author Justin Swanson
  */
-public class LImagePane extends JPanel {
+public class LImagePane extends LPanel {
 
     private BufferedImage img;
     int IMG_WIDTH = 0;

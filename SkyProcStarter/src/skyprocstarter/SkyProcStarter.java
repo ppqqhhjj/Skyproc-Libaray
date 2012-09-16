@@ -6,8 +6,7 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import lev.gui.LSaveFile;
-import skyproc.ARMO;
-import skyproc.FormID;
+import skyproc.COBJ;
 import skyproc.GRUP_TYPE;
 import skyproc.Mod;
 import skyproc.ModListing;
@@ -35,8 +34,7 @@ public class SkyProcStarter implements SUM {
     * customize the import to what you need.
     */
     GRUP_TYPE[] importRequests = new GRUP_TYPE[]{
-	GRUP_TYPE.NPC_,
-	GRUP_TYPE.LVLN
+	GRUP_TYPE.COBJ
     };
     public static String myPatchName = "My Patch";
     public static String authorName = "Me";
@@ -190,6 +188,8 @@ public class SkyProcStarter implements SUM {
 	merger.addAsOverrides(SPGlobal.getDB());
 
 	// Write your changes to the patch here.
-	
+	for (COBJ c : merger.getConstructibleObjects()) {
+	    patch.makeCopy(c);
+	}
     }
 }

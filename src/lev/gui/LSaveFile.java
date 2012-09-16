@@ -28,28 +28,29 @@ import skyproc.SPGlobal;
  */
 public abstract class LSaveFile {
 
+    File location;
     /**
      * List containing default, save, temp, and current setting maps.
      */
-    ArrayList<Map<Enum, Setting>> maps = new ArrayList<Map<Enum, Setting>>();
+    ArrayList<Map<Enum, Setting>> maps = new ArrayList<>();
     private static String header = "SaveFile";
     /**
      * Stores the default values for each setting.
      */
-    public Map<Enum, Setting> defaultSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> defaultSettings = new TreeMap<>();
     /**
      * Stores the previously saved settings of the current end user.
      */
-    public Map<Enum, Setting> saveSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> saveSettings = new TreeMap<>();
     /**
      * Stores the current settings displayed on the GUI.
      */
-    public Map<Enum, Setting> curSettings = new TreeMap<Enum, Setting>();
-    Map<Enum, Setting> tempCurSettings = new TreeMap<Enum, Setting>();
+    public Map<Enum, Setting> curSettings = new TreeMap<>();
+    Map<Enum, Setting> tempCurSettings = new TreeMap<>();
     /**
      * Map containing the help text associated with settings in the saveFile.
      */
-    public Map<Enum, String> helpInfo = new TreeMap<Enum, String>();
+    public Map<Enum, String> helpInfo = new TreeMap<>();
     boolean initialized = false;
 
     /**
@@ -69,11 +70,20 @@ public abstract class LSaveFile {
     /**
      *
      */
-    protected LSaveFile() {
+    private LSaveFile() {
 	maps.add(defaultSettings);
 	maps.add(saveSettings);
 	maps.add(curSettings);
 	maps.add(tempCurSettings);
+    }
+
+    public LSaveFile(File location) {
+	this();
+	this.location = location;
+    }
+
+    public LSaveFile(String location) {
+	this(new File(location));
     }
 
     /**
@@ -102,7 +112,7 @@ public abstract class LSaveFile {
     protected abstract void initHelp();
 
     void readInSettings() {
-	File f = new File(SPGlobal.pathToInternalFiles + "Savefile");
+	File f = new File(location.getPath() + "/Savefile");
 	SPGlobal.log("SaveFile Import", "Starting import");
 	if (f.exists()) {
 	    try {
@@ -150,11 +160,11 @@ public abstract class LSaveFile {
      */
     public void saveToFile() {
 
-	File f = new File(SPGlobal.pathToInternalFiles);
+	File f = location;
 	if (!f.isDirectory()) {
 	    f.mkdirs();
 	}
-	f = new File(SPGlobal.pathToInternalFiles + "Savefile");
+	f = new File(f.getPath() + "/Savefile");
 	if (f.isFile()) {
 	    f.delete();
 	}
@@ -231,7 +241,7 @@ public abstract class LSaveFile {
      *
      * @param type Enum to be associated with.
      * @param strs
-     * @param patchChanging 
+     * @param patchChanging
      */
     protected void Add(Enum type, Set<String> strs, boolean patchChanging) {
 	Add(type, new SaveStringSet(type.toString(), strs, patchChanging));
@@ -432,5 +442,17 @@ public abstract class LSaveFile {
      */
     public Set<String> getStrings(Enum s) {
 	return curSettings.get(s).getStrings();
+    }
+
+    public void setStr(Enum e, String s) {
+	curSettings.get(e).setTo(s);
+    }
+
+    public void setInt(Enum e, int i) {
+	curSettings.get(e).setTo(i);
+    }
+
+    public void setBool(Enum e, boolean b) {
+	curSettings.get(e).setTo(b);
     }
 }
