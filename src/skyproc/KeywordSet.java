@@ -72,8 +72,8 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    ArrayList<FormID> allFormIDs () {
-	return keywords.allFormIDs();
+    ArrayList<FormID> allFormIDs() {
+	return keywords.IDs;
     }
 
     /**
@@ -81,7 +81,7 @@ public class KeywordSet extends SubRecord {
      * @return
      */
     public ArrayList<FormID> getKeywordRefs() {
-	return keywords.IDs;
+	return new ArrayList<>(keywords.IDs);
     }
 
     /**
@@ -101,6 +101,11 @@ public class KeywordSet extends SubRecord {
 	if (keywords.remove(keywordRef)) {
 	    counter.modValue(-1);
 	}
+    }
+
+    public void clearKeywordRefs () {
+	keywords.clear();
+	counter.setData(0, 4);
     }
 
     /**

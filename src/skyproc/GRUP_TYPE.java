@@ -107,7 +107,8 @@ public enum GRUP_TYPE {
     /**
      *
      */
-    ECZN;
+    ECZN,
+    OTFT;
 
     static boolean unfinished (GRUP_TYPE g) {
 	switch (g) {

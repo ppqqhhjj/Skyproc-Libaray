@@ -49,6 +49,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<AVIF> actorValues = new GRUP<>(this, new AVIF());
     GRUP<ARMA> armatures = new GRUP<>(this, new ARMA());
     GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
+    GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
@@ -131,6 +132,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(actorValues.getContainedType(), actorValues);
 	GRUPs.put(armatures.getContainedType(), armatures);
 	GRUPs.put(encounterZones.getContainedType(), encounterZones);
+	outfits.dateStamp = new byte[]{(byte) 0x17, (byte) 0x4E, (byte) 0x23, 0};
+	GRUPs.put(outfits.getContainedType(), outfits);
     }
 
     /**
@@ -1104,6 +1107,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<MISC> getMiscObjects() {
 	return miscObjects;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing outfit records
+     */
+    public GRUP<OTFT> getOutfits() {
+	return outfits;
     }
 
     /**

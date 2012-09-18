@@ -26,8 +26,8 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-    static GRUP_TYPE[] types = {GRUP_TYPE.MISC};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.OTFT};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
      */

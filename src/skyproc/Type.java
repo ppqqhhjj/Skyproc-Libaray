@@ -901,6 +901,8 @@ public enum Type {
     MISC,
     MODB,
 
+    OTFT,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags
