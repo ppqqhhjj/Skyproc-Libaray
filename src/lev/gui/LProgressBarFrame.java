@@ -12,7 +12,8 @@ import javax.swing.event.ChangeListener;
 import lev.gui.resources.LImages;
 
 /**
- * A GUI window frame for LProgress bar.  Used in SUMGUI.
+ * A GUI window frame for LProgress bar. Used in SUMGUI.
+ *
  * @author Justin Swanson
  */
 public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
@@ -43,10 +44,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     }
 
     final void addComponents(Font header, Color headerC) {
-	try {
-	    backgroundPanel = new LImagePane(LImages.multipurpose());
-	} catch (IOException ex) {
-	}
+	backgroundPanel = new LImagePane(LImages.multipurpose());
 	backgroundPanel.setVisible(true);
 	super.add(backgroundPanel);
 
@@ -84,6 +82,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 
     /**
      * Sets the location to display relative to the GUI ref object assigned.
+     *
      * @param x
      * @param y
      */
@@ -92,8 +91,8 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     }
 
     /**
-     * Moves the progress bar window to the relatively correct location, relative
-     *  to the GUI ref object assigned.
+     * Moves the progress bar window to the relatively correct location,
+     * relative to the GUI ref object assigned.
      */
     public final void moveToCorrectLocation() {
 	if (guiRef != null) {
@@ -112,7 +111,6 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
      */
     public void open() {
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		moveToCorrectLocation();
@@ -122,8 +120,9 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
     }
 
     /**
-     * Opens and displays the progress bar frame, and adds a listener
-     *  that will execute when the progress bar is done.
+     * Opens and displays the progress bar frame, and adds a listener that will
+     * execute when the progress bar is done.
+     *
      * @param c
      */
     public void open(ChangeListener c) {
@@ -145,6 +144,7 @@ public class LProgressBarFrame extends JFrame implements LProgressBarInterface {
 
     /**
      * Sets the GUI ref object for relative positioning.
+     *
      * @param ref
      */
     public void setGUIref(JFrame ref) {
