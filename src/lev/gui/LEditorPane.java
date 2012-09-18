@@ -5,10 +5,10 @@
 package lev.gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.View;
-import javax.swing.text.html.StyleSheet;
 
 /**
  *
@@ -58,8 +58,24 @@ public class LEditorPane extends LComponent {
     }
 
     @Override
+    public void setFont(Font f) {
+	pane.setFont(f);
+    }
+
+    public void honorDisplayProperties() {
+	pane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+    }
+
+    @Override
     public Dimension getPreferredSize() {
 	return pane.getPreferredSize();
+    }
+
+    public void compactContent(int maxWidth) {
+	setSize(maxWidth);
+	if (getPreferredSize().width < getWidth()) {
+	    setSize(getPreferredSize().width, getHeight());
+	}
     }
 
     public int getHeight(int width) {
@@ -72,8 +88,8 @@ public class LEditorPane extends LComponent {
     public int getWidth(int height) {
 	View v = pane.getUI().getRootView(pane);
 	v.setSize(Integer.MAX_VALUE, height);
-	int preferredWidth = (int) v.getPreferredSpan(View.X_AXIS);
-	return preferredWidth;
+	int prefWidth = (int) v.getPreferredSpan(View.X_AXIS);
+	return prefWidth;
     }
 
     public void setOpaque(boolean on) {
