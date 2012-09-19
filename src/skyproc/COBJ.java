@@ -87,6 +87,10 @@ public class COBJ extends MajorRecord {
 	return ingredients.remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
+    public void clearIngredients() {
+	ingredients.clear();
+    }
+
     public ArrayList<SubFormInt> getIngredients() {
 	return SubList.subFormIntToPublic(ingredients);
     }

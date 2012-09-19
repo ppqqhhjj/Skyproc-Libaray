@@ -514,6 +514,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     public static enum RACEFlags {
+
 	Playable,
 	FaceGenHead,
 	Child,
@@ -634,9 +635,15 @@ public class RACE extends MajorRecordDescription {
     public void setModel(Gender gender, String model) {
 	switch (gender) {
 	    case MALE:
+		if (!MFNAM.set.containsKey(Type.MNAM)) {
+		    MFNAM.set.put(Type.MNAM, new MFNAMdata());
+		}
 		MFNAM.set.get(Type.MNAM).ANAM.setString(model);
 		break;
 	    default:
+		if (!MFNAM.set.containsKey(Type.FNAM)) {
+		    MFNAM.set.put(Type.FNAM, new MFNAMdata());
+		}
 		MFNAM.set.get(Type.FNAM).ANAM.setString(model);
 		break;
 	}
@@ -650,10 +657,17 @@ public class RACE extends MajorRecordDescription {
     public String getModel(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return MFNAM.set.get(Type.MNAM).ANAM.string;
-	    default:
-		return MFNAM.set.get(Type.FNAM).ANAM.string;
+		if (MFNAM.set.containsKey(Type.MNAM)) {
+		    return MFNAM.set.get(Type.MNAM).ANAM.string;
+		}
+		break;
+	    case FEMALE:
+		if (MFNAM.set.containsKey(Type.FNAM)) {
+		    return MFNAM.set.get(Type.FNAM).ANAM.string;
+		}
+		break;
 	}
+	return "";
     }
 
     /**
