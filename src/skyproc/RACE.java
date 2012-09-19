@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LShrinkArray;
+import lev.LFlags;
 import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -21,7 +21,7 @@ import skyproc.exceptions.BadRecord;
 public class RACE extends MajorRecordDescription {
 
     private static final Type[] type = {Type.RACE};
-    SubList<SubForm> spells = new SubList<SubForm>(Type.SPCT, 4, new SubForm(Type.SPLO));
+    SubList<SubForm> spells = new SubList<>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm WNAM = new SubForm(Type.WNAM);
     /**
      *
@@ -32,8 +32,8 @@ public class RACE extends MajorRecordDescription {
      */
     public KeywordSet keywords = new KeywordSet();
     DATA DATA = new DATA();
-    SubMarkerSet<MFNAMdata> MFNAM = new SubMarkerSet<MFNAMdata>(new MFNAMdata(), Type.MNAM, Type.FNAM);
-    SubList<SubString> MTNMs = new SubList<SubString>(new SubString(Type.MTNM, false));
+    SubMarkerSet<MFNAMdata> MFNAM = new SubMarkerSet<>(new MFNAMdata(), Type.MNAM, Type.FNAM);
+    SubList<SubString> MTNMs = new SubList<>(new SubString(Type.MTNM, false));
     SubFormArray VTCK = new SubFormArray(Type.VTCK, 2);
     SubFormArray DNAM = new SubFormArray(Type.DNAM, 2);
     SubFormArray HCLF = new SubFormArray(Type.HCLF, 2);
@@ -41,7 +41,7 @@ public class RACE extends MajorRecordDescription {
     SubData PNAM = new SubData(Type.PNAM);
     SubData UNAM = new SubData(Type.UNAM);
     SubForm ATKR = new SubForm(Type.ATKR);
-    SubList<ATKDpackage> ATKDs = new SubList<ATKDpackage>(new ATKDpackage());
+    SubList<ATKDpackage> ATKDs = new SubList<>(new ATKDpackage());
     SubData NAM1 = new SubData(Type.NAM1);
     SubMarkerSet<EGTmodel> EGTrecords = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
     SubForm GNAM = new SubForm(Type.GNAM);
@@ -52,14 +52,14 @@ public class RACE extends MajorRecordDescription {
     SubForm NAM7 = new SubForm(Type.NAM7);
     SubForm ONAM = new SubForm(Type.ONAM);
     SubForm LNAM = new SubForm(Type.LNAM);
-    SubList<SubString> NAMEs = new SubList<SubString>(new SubString(Type.NAME, true));
-    SubList<MTYPpackage> MTYPs = new SubList<MTYPpackage>(new MTYPpackage());
+    SubList<SubString> NAMEs = new SubList<>(new SubString(Type.NAME, true));
+    SubList<MTYPpackage> MTYPs = new SubList<>(new MTYPpackage());
     SubData VNAM = new SubData(Type.VNAM);
-    SubList<SubForm> QNAM = new SubList<SubForm>(new SubForm(Type.QNAM));
+    SubList<SubForm> QNAM = new SubList<>(new SubForm(Type.QNAM));
     SubForm UNES = new SubForm(Type.UNES);
-    SubList<SubString> PHTN = new SubList<SubString>(new SubString(Type.PHTN, true));
-    SubList<SubData> PHWT = new SubList<SubData>(new SubData(Type.PHWT));
-    SubList<HeadData> headData = new SubList<HeadData>(new HeadData());
+    SubList<SubString> PHTN = new SubList<>(new SubString(Type.PHTN, true));
+    SubList<SubData> PHWT = new SubList<>(new SubData(Type.PHWT));
+    SubList<HeadData> headData = new SubList<>(new HeadData());
     SubForm NAM8 = new SubForm(Type.NAM8);
     SubForm RNAM = new SubForm(Type.RNAM);
     SubForm WKMV = new SubForm(Type.WKMV);
@@ -408,7 +408,7 @@ public class RACE extends MajorRecordDescription {
 	float femaleHeight = 0;
 	float maleWeight = 0;
 	float femaleWeight = 0;
-	byte[] fluff3 = new byte[4];
+	LFlags flags = new LFlags(4);
 	float startingHealth = 0;
 	float startingMagicka = 0;
 	float startingStamina = 0;
@@ -417,7 +417,7 @@ public class RACE extends MajorRecordDescription {
 	float accelerationRate = 0;
 	float decelerationRate = 0;
 	Size size = Size.MEDIUM;
-	byte[] fluff2 = new byte[8];
+	byte[] fluff3 = new byte[8];
 	float injuredHealthPct = 0;
 	byte[] fluff4 = new byte[4];
 	float healthRegen = 0;
@@ -444,7 +444,7 @@ public class RACE extends MajorRecordDescription {
 	    out.write(femaleHeight);
 	    out.write(maleWeight);
 	    out.write(femaleWeight);
-	    out.write(fluff2, 4);
+	    out.write(flags.export(), 4);
 	    out.write(startingHealth);
 	    out.write(startingMagicka);
 	    out.write(startingStamina);
@@ -477,7 +477,7 @@ public class RACE extends MajorRecordDescription {
 	    femaleHeight = in.extractFloat();
 	    maleWeight = in.extractFloat();
 	    femaleWeight = in.extractFloat();
-	    fluff2 = in.extract(4);
+	    flags.set(in.extract(4));
 	    startingHealth = in.extractFloat();
 	    startingMagicka = in.extractFloat();
 	    startingStamina = in.extractFloat();
@@ -513,6 +513,41 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    public static enum RACEFlags {
+	Playable,
+	FaceGenHead,
+	Child,
+	TiltFrontBack,
+	TiltLeftRight,
+	NoShadow,
+	Swims,
+	Flies,
+	Walks,
+	Immobile,
+	NotPushable,
+	NoCombatInWater,
+	NoRotatingToHeadTrack,
+	DontShowBloodSpray,
+	DontShowBloodDecal,
+	UsesHeadTrackAnims,
+	SpellsAlignWithMagicNode,
+	UseWorldRaycastsForFootIK,
+	AllowRagdollCollision,
+	RegenHPInCombat,
+	CantOpenDoors,
+	AllowPCDialogue,
+	NoKnockdowns,
+	AllowPickpocket,
+	AlwaysUseProxyController,
+	DontShowWeaponBlood,
+	OverlayHeadPartList,
+	OverrideHeadPartList,
+	CanPickupItems,
+	AllowMultipleMembraneShaders,
+	CanDualWeild,
+	AvoidsRoads;
+    }
+
     /**
      *
      */
@@ -536,6 +571,14 @@ public class RACE extends MajorRecordDescription {
 	EXTRALARGE,}
 
     // Get / set
+    public void set(RACEFlags flag, boolean on) {
+	DATA.flags.set(flag.ordinal(), on);
+    }
+
+    public boolean get(RACEFlags flag) {
+	return DATA.flags.get(flag.ordinal());
+    }
+
     /**
      *
      * @return FormID of the ARMO record that is worn.

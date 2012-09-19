@@ -22,7 +22,7 @@ public class LPanel extends JPanel implements Scrollable {
 	setLayout(null);
 	super.setSize(1,1);
 	setOpaque(false);
-	setVisible(true);
+	super.setVisible(true);
     }
 
     /**
