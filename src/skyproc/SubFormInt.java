@@ -86,10 +86,10 @@ public class SubFormInt extends SubFormData {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof SubList)) {
+        if (!(o instanceof SubFormInt)) {
             return false;
         }
-        SubFormInt s = (SubFormInt) o; // Convert the object to a Person
-        return (this.ID.equals(s.ID) && Arrays.equals(this.data, s.data));
+        SubFormInt s = (SubFormInt) o;
+        return this.ID.equals(s.ID);
     }
 }
