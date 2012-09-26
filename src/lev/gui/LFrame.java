@@ -17,6 +17,9 @@ import javax.swing.JFrame;
 public class LFrame extends JFrame {
 
     protected LImagePane background;
+    private static int marginX = 16;
+    private static int marginY = 38;
+
 
     public LFrame (String title) {
 	super(title);
@@ -36,20 +39,41 @@ public class LFrame extends JFrame {
 	return new Dimension(getRealWidth(), getRealHeight());
     }
 
+    public void setRealSize(int x, int y) {
+	setSize(x + marginX, y + marginY);
+    }
+
+    public void setRealSize(Dimension size) {
+	setRealSize(size.width, size.height);
+    }
+
     public int getRealWidth() {
-	return getWidth() - 16;
+	return getWidth() - marginX;
     }
 
     public int getRealHeight () {
-	return getHeight() - 38;
+	return getHeight() - marginY;
     }
 
     public Point defaultLocation() {
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	int y = 5;
 	int x = screen.width / 2 - getWidth() / 2;
-	if (x < 5) {
-	    x = 5;
+	if (x < 0) {
+	    x = 0;
+	}
+	return new Point(x, y);
+    }
+
+    public Point centerScreen() {
+	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+	int y = screen.height / 2 - getHeight() / 2;
+	int x = screen.width / 2 - getWidth() / 2;
+	if (x < 0) {
+	    x = 0;
+	}
+	if (y < 0) {
+	    y = 0;
 	}
 	return new Point(x, y);
     }

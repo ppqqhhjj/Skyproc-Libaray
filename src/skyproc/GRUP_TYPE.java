@@ -27,6 +27,7 @@ public enum GRUP_TYPE {
      * Factions
      */
     FACT,
+    HDPT,
     /**
      * Races
      */

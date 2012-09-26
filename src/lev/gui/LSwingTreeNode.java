@@ -23,8 +23,9 @@ public class LSwingTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * Recursively searches the node's children for one equal
-     * to the input and returns it.
+     * Recursively searches the node's children for one equal to the input and
+     * returns it.
+     *
      * @param node
      * @return
      */
@@ -39,17 +40,17 @@ public class LSwingTreeNode extends DefaultMutableTreeNode {
 	return null;
     }
 
-    public ArrayList<Object> getAllObjects() {
+    public ArrayList<LSwingTreeNode> getAllObjects() {
 	return getAllObjects(false);
     }
 
-    public ArrayList<Object> getAllObjects(boolean recursive) {
-	ArrayList<Object> out = new ArrayList<>();
+    public ArrayList<LSwingTreeNode> getAllObjects(boolean recursive) {
+	ArrayList<LSwingTreeNode> out = new ArrayList<>();
 	if (children != null) {
 	    for (Object o : children) {
-		out.add(o);
-		if (recursive && o instanceof LSwingTreeNode) {
-		    LSwingTreeNode n = (LSwingTreeNode) o;
+		LSwingTreeNode n = (LSwingTreeNode) o;
+		out.add(n);
+		if (recursive) {
 		    out.addAll(n.getAllObjects(recursive));
 		}
 	    }
@@ -63,6 +64,19 @@ public class LSwingTreeNode extends DefaultMutableTreeNode {
 		LSwingTreeNode n = (LSwingTreeNode) o;
 		n.print(depth + 1);
 	    }
+	}
+    }
+
+    public void mergeIn(LSwingTreeNode node) {
+	LSwingTreeNode existing = get(node);
+	if (existing != null) {
+	    for (Object o : node.getAllObjects()) {
+		if (o instanceof LSwingTreeNode) {
+		    existing.mergeIn((LSwingTreeNode) o);
+		}
+	    }
+	} else {
+	    this.add(node);
 	}
     }
 }

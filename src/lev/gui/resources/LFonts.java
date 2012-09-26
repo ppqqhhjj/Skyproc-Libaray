@@ -7,7 +7,6 @@ package lev.gui.resources;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Collection of embedded fonts that can be used.

@@ -2,28 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.gui;
+package skyproc.gui;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import lev.gui.LTextField;
 
 /**
  *
  * @author Justin Swanson
  */
-public class LStringList extends LList<String> {
+public class SPStringList extends SPLList<String> {
 
     LTextField adder;
 
     /**
      *
-     * @param title
+     * @param titleLabel
      * @param font
      * @param color
      */
-    public LStringList(String title, Font font, Color color) {
+    public SPStringList(String title, Font font, Color color) {
 	super(title, font, color);
 
 	adder = new LTextField("Adder");
@@ -35,7 +36,7 @@ public class LStringList extends LList<String> {
 		adder.setText("");
 	    }
 	});
-	adder.setLocation(0, this.title.getY() + this.title.getHeight() + 10);
+	adder.setLocation(0, this.titleLabel.getY() + this.titleLabel.getHeight() + 10);
 	Add(adder);
 
 	scroll.setLocation(scroll.getX(), adder.getBottom() + 10);

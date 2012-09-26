@@ -903,6 +903,8 @@ public enum Type {
 
     OTFT,
 
+    HDPT,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

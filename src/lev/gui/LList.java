@@ -5,15 +5,8 @@
 package lev.gui;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -21,66 +14,33 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  *
- * @param <T> 
  * @author Justin Swanson
  */
 public class LList<T extends Object> extends LHelpComponent implements Iterable<T> {
-
-    DefaultListModel<T> model;
-    JList<T> list;
-    JScrollPane scroll;
-    LLabel title;
-    boolean unique;
-    Comparator compare;
-    LButton remove;
-    LButton accept;
-    static int spacing = 15;
-
-    /**
-     *
-     * @param title
-     * @param font
-     * @param color
-     */
-    public LList(String title, Font font, Color color) {
+    
+    protected DefaultListModel<T> model;
+    protected JList<T> list;
+    protected JScrollPane scroll;
+    protected boolean unique;
+    protected Comparator compare;
+    static protected int spacing = 15;
+    
+    public LList(String title) {
 	super(title);
-	this.title = new LLabel(title, font, color);
-	this.title.addShadow();
-	add(this.title);
-
+	
 	model = new DefaultListModel();
 	list = new JList(model);
 	scroll = new JScrollPane(list);
 	scroll.setVisible(true);
-	scroll.setLocation(0, this.title.getY() + this.title.getHeight() + 10);
 	add(scroll);
-
-	remove = new LButton("Remove Selected");
-	remove.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		removeSelected();
-	    }
-	});
-	Add(remove);
-
     }
-
+    
     @Override
     public void setSize(int width, int height) {
 	super.setSize(width, height);
-	scroll.setSize(width, height - title.getHeight() - remove.getHeight() - 20);
-	remove.setSize((scroll.getWidth() - spacing) / 2, remove.getHeight());
-	if (accept != null) {
-	    remove.putUnder(scroll, 0, 10);
-	    accept.setSize(remove.getSize());
-	    accept.putUnder(scroll, remove.getRight() + spacing, 10);
-	} else {
-	    remove.centerOn(scroll, scroll.getY() + scroll.getHeight() + 10);
-	}
+	scroll.setSize(width, height);
     }
-
+    
     /**
      *
      * @param o
@@ -117,6 +77,10 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
 	return list.getSelectedValue();
     }
 
+    public void setSelectedElement(int index) {
+	list.setSelectedIndex(index);
+    }
+    
     /**
      *
      */
@@ -148,31 +112,7 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
     public void clear() {
 	model.clear();
     }
-
-    /**
-     *
-     * @param title
-     * @param a
-     */
-    public void addEnterButton(String title, ActionListener a) {
-	accept = new LButton(title);
-	accept.addActionListener(a);
-	Add(accept);
-	remove.setLocation(0, remove.getY());
-	setSize(getSize().width, getSize().height);
-    }
-
-    /**
-     *
-     * @param title
-     * @param a
-     */
-    public void setRemoveButton(String title, ActionListener a) {
-	remove.setText(title);
-	remove.clearActionHandlers();
-	remove.addActionListener(a);
-    }
-
+    
     /**
      *
      * @param on
@@ -192,10 +132,6 @@ public class LList<T extends Object> extends LHelpComponent implements Iterable<
     @Override
     public void addMouseListener(MouseListener m) {
 	super.addMouseListener(m);
-	remove.addMouseListener(m);
-	if (accept != null) {
-	    accept.addMouseListener(m);
-	}
 	scroll.addMouseListener(m);
 	list.addMouseListener(m);
     }

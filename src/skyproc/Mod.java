@@ -28,6 +28,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<TXST> textures = new GRUP<>(this, new TXST());
     GRUP<GLOB> globals = new GRUP<>(this, new GLOB());
     GRUP<FACT> factions = new GRUP<>(this, new FACT());
+    GRUP<HDPT> headParts = new GRUP<>(this, new HDPT());
     GRUP<RACE> races = new GRUP<>(this, new RACE());
     GRUP<MGEF> magicEffects = new GRUP<>(this, new MGEF());
     GRUP<ENCH> enchantments = new GRUP<>(this, new ENCH());
@@ -104,6 +105,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(globals.getContainedType(), globals);
 	factions.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(factions.getContainedType(), factions);
+	headParts.dateStamp = new byte[]{(byte) 0x18, (byte) 0x51, 3, 0};
+	GRUPs.put(headParts.getContainedType(), headParts);
 	GRUPs.put(races.getContainedType(), races);
 	GRUPs.put(magicEffects.getContainedType(), magicEffects);
 	enchantments.dateStamp = new byte[]{(byte) 0x12, (byte) 0x4A, (byte) 0x20, 0};
@@ -851,9 +854,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
     }
 
-//    void parseData(Type type, LFileChannel data) throws Exception {
-//	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
-//    }
     /**
      * Returns whether the given flag is on or off. <br> <br> An example use of
      * this function is as follows: <br> boolean isaMasterMod =
@@ -1116,6 +1116,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<OTFT> getOutfits() {
 	return outfits;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing outfit records
+     */
+    public GRUP<HDPT> getHeadParts() {
+	return headParts;
     }
 
     /**

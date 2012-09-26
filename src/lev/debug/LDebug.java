@@ -30,14 +30,14 @@ public class LDebug {
      */
     public static boolean timeElapsed = false;
     private static Boolean on = true;
-    private static ArrayList<String> bannedHeaders = new ArrayList<String>();
+    private static ArrayList<String> bannedHeaders = new ArrayList<>();
     private FileWriter writer;
     private int debugCounter = 0;
     private int spacing = 0;
     private long startTime;
     private String openFile;
     private long lastStamp = System.nanoTime();
-    private static ArrayList<LDebug> debugs = new ArrayList<LDebug>();
+    private static ArrayList<LDebug> debugs = new ArrayList<>();
 
     /**
      * Creates a debug log at the path desired, and with the given character
@@ -106,6 +106,10 @@ public class LDebug {
             System.err.println("Caught Exception: "
                     + e.getMessage());
         }
+    }
+
+    public void setSpacing(int spacing) {
+	this.spacing = spacing;
     }
 
     /**

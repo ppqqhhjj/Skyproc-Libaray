@@ -29,7 +29,7 @@ public class LLogger {
     private boolean loggingSync = true;
     private boolean loggingAsync = true;
     private static boolean mainLogSwitch = true;
-    private Map<Enum, LDebug> special = new HashMap<Enum, LDebug>();
+    private Map<Enum, LDebug> special = new HashMap<>();
 
     /**
      *
