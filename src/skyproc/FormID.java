@@ -194,6 +194,9 @@ public class FormID implements Comparable, Serializable {
     }
 
     void standardize(Mod srcMod) {
+	if (form[0] == (byte) 0xA7 && form[1] == (byte) 0x6E && srcMod.getName().contains("NPC_Overhaul")) {
+	    int wer = 23;
+	}
 	if (isValid()) {
 	    if (master == null) {
 		master = srcMod.getNthMaster(form[3]);

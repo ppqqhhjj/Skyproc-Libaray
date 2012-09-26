@@ -14,7 +14,7 @@ import java.util.TreeSet;
  */
 class SubSortedList<T extends SubRecord> extends SubList<T> {
 
-    TreeSet<T> sorter = new TreeSet<T>();
+    TreeSet<T> sorter = new TreeSet<>();
 
     SubSortedList(T prototype_) {
         super(prototype_);
@@ -78,5 +78,7 @@ class SubSortedList<T extends SubRecord> extends SubList<T> {
         return sorter.iterator();
     }
 
-
+    public Iterator<T> unsortedIterator() {
+	return super.iterator();
+    }
 }

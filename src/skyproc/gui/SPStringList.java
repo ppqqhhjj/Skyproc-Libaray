@@ -14,7 +14,7 @@ import lev.gui.LTextField;
  *
  * @author Justin Swanson
  */
-public class SPStringList extends SPLList<String> {
+public class SPStringList extends SPList<String> {
 
     LTextField adder;
 

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.gui;
+package skyproc.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import javax.swing.*;
+import lev.gui.LButton;
+import lev.gui.LUserSetting;
+import lev.gui.Setting;
 import skyproc.FormID;
 
 /**
@@ -97,7 +100,7 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
     @Override
     public boolean revertTo(Map<Enum, Setting> m) {
 	if (isTied()) {
-	    FormID[] list = (FormID[]) m.get(saveTie).data;
+	    FormID[] list = (FormID[]) m.get(saveTie).getData();
 	    model.removeAllElements();
 	    model.addElement(list);
 	}

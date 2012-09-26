@@ -18,6 +18,7 @@ public class HDPT extends MajorRecordNamed {
     SubInt PNAM = new SubInt(Type.PNAM);
     SubList<SubForm> HNAMs = new SubList<>(new SubForm(Type.HNAM));
     SubList<NAMs> NAMs = new SubList<>(new NAMs());
+    SubForm CNAM = new SubForm(Type.CNAM);
     SubForm TNAM = new SubForm(Type.TNAM);
     SubForm RNAM = new SubForm(Type.RNAM);
 
@@ -32,6 +33,7 @@ public class HDPT extends MajorRecordNamed {
 	subRecords.add(PNAM);
 	subRecords.add(HNAMs);
 	subRecords.add(NAMs);
+	subRecords.add(CNAM);
 	subRecords.add(TNAM);
 	subRecords.add(RNAM);
     }

@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package lev.gui;
+package skyproc.gui;
 
+import lev.gui.Setting;
 import skyproc.FormID;
 
 /**

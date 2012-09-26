@@ -286,7 +286,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The copied record.
      */
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
-	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
+	if (!m.getFormMaster().equals(SPGlobal.getGlobalPatch().getInfo())) {
+	    Mod mod = SPGlobal.getDB().modLookup.get(m.getFormMaster());
+	    if (mod == null) {
+		SPGlobal.logError("Make Copy", "Major Record " + m + " was from an unknown mod with a form master: " + m.getFormMaster());
+	    }
+	    mergeMasters(mod);
+	}
 	m = m.copyOf(this, newEDID);
 	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
 	return m;
@@ -439,8 +445,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The names of all the masters of the mod.
      */
     public ArrayList<String> getMastersStrings() {
-	ArrayList<String> out = new ArrayList<String>();
-	for (ModListing m : header.getMasters()) {
+	ArrayList<String> out = new ArrayList<>();
+	for (ModListing m : header.masters.collection) {
 	    out.add(m.print());
 	}
 	return out;
@@ -771,6 +777,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      * Exports the master list of this mod to "Files/Last Masterlist.txt"<br>
      * Used for checking if patches are needed.
+     *
      * @param path
      * @throws IOException
      */

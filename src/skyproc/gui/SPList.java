@@ -15,10 +15,10 @@ import lev.gui.LList;
 
 /**
  *
- * @param <T> 
+ * @param <T>
  * @author Justin Swanson
  */
-public class SPLList<T extends Object> extends LList {
+public class SPList<T extends Object> extends LList<T> {
 
     LLabel titleLabel;
     LButton remove;
@@ -30,12 +30,12 @@ public class SPLList<T extends Object> extends LList {
      * @param font
      * @param color
      */
-    public SPLList(String title, Font font, Color color) {
+    public SPList(String title, Font font, Color color) {
 	super(title);
 	this.titleLabel = new LLabel(title, font, color);
 	this.titleLabel.addShadow();
 	add(this.titleLabel);
-	
+
 	scroll.setLocation(0, this.titleLabel.getY() + this.titleLabel.getHeight() + 10);
 
 	remove = new LButton("Remove Selected");
@@ -58,7 +58,7 @@ public class SPLList<T extends Object> extends LList {
 	    accept.addMouseListener(m);
 	}
     }
-    
+
     @Override
     public void setSize(int width, int height) {
 	super.setSize(width, height);

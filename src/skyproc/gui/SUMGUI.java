@@ -580,6 +580,7 @@ public class SUMGUI extends JFrame {
 	    }
 	} else if (needsPatching) {
 	    try {
+		crashFile.mkdirs();
 		BufferedWriter out = new BufferedWriter(new FileWriter(crashFile));
 		out.write("Closed prematurely while needing to patch");
 		out.close();
