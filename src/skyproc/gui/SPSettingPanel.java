@@ -27,15 +27,7 @@ public abstract class SPSettingPanel extends LPanel {
      * Reference to the Main Menu parent GUI object
      */
     protected SPMainMenuPanel parent;
-    /**
-     * Spacing to be used between settings
-     */
-    protected int spacing = 12;
-    /**
-     * Reference to the position of the last-added setting or component added
-     * using Add() or AddSetting()
-     */
-    protected Point last;
+    private int rightMost = 0;
     /**
      * The top label
      */
@@ -49,7 +41,6 @@ public abstract class SPSettingPanel extends LPanel {
      */
     protected LPanel settingsPanel;
     private ArrayList<Component> components = new ArrayList<>();
-    private int rightMost = 0;
     /**
      * Flag to symbolize Panel has been initialized and the components have been
      * created and added.
@@ -142,51 +133,6 @@ public abstract class SPSettingPanel extends LPanel {
     }
 
     /**
-     * Sets the placement relative to the last component added.
-     *
-     * @param c
-     * @return The point the component was placed
-     */
-    public Point setPlacement(Component c) {
-	return setPlacement(c, last.x, last.y);
-    }
-
-    /**
-     * Sets the placement to (x,y)
-     *
-     * @param c
-     * @param x
-     * @param y
-     * @return The point the component was placed
-     */
-    public Point setPlacement(Component c, int x, int y) {
-	c.setLocation(x / 2 - c.getWidth() / 2, y + spacing);
-	if (c.getX() + c.getWidth() > rightMost) {
-	    rightMost = c.getX() + c.getWidth();
-	}
-	updateLast(c);
-	return last;
-    }
-
-    /**
-     * Updates last GUI component tracker to be focused on c.  For use with setPlacement()
-     * @param c Component to set as the last GUI component placed.
-     */
-    public void updateLast(Component c) {
-	last = new Point(last.x, c.getY() + c.getHeight());
-    }
-
-    /**
-     * Aligns each component to the right, as you would expect from a word
-     * processor's "align right".
-     */
-    public void alignRight() {
-	for (Component c : components) {
-	    c.setLocation(rightMost - c.getWidth(), c.getY());
-	}
-    }
-
-    /**
      * Function that opens, initializes if needed, and displays the settings
      * panel.
      */
@@ -242,5 +188,28 @@ public abstract class SPSettingPanel extends LPanel {
      * @param parent Main menu panel stems from.
      */
     public void onClose(SPMainMenuPanel parent) {
+    }
+
+    @Override
+    public Point setPlacement(Component c, int x, int y) {
+	c.setLocation(x / 2 - c.getWidth() / 2, y + spacing);
+	if (c.getX() + c.getWidth() > rightMost) {
+	    rightMost = c.getX() + c.getWidth();
+	}
+	updateLast(c);
+	return last;
+    }
+
+    /**
+     * Aligns each component to the right, as you would expect from a word
+     * processor's "align right".
+     */
+
+
+
+    public void alignRight() {
+	for (Component c : components) {
+	    c.setLocation(rightMost - c.getWidth(), c.getY());
+	}
     }
 }

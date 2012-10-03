@@ -26,6 +26,7 @@ import javax.swing.SwingUtilities;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
+import lev.gui.resources.LImages;
 import skyproc.*;
 
 /**
@@ -83,7 +84,7 @@ public class SUMGUI extends JFrame {
     /**
      * Help panel on the right column of the GUI.
      */
-    static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, true, 10);
+    static public LHelpPanel helpPanel = new LHelpPanel(rightDimensions, new Font("Serif", Font.BOLD, 25), light, lightGray, LImages.arrow(true, false), 10);
     static LImagePane backgroundPanel;
     static LLabel patchNeededLabel;
     static boolean needsPatching = false;
@@ -139,6 +140,7 @@ public class SUMGUI extends JFrame {
 	    }
 	});
 	helpPanel.setHeaderColor(hook.getHeaderColor());
+	helpPanel.setDefaultY(75);
     }
 
     /**
@@ -447,7 +449,7 @@ public class SUMGUI extends JFrame {
 
 	// Check if savefile has important settings changed
 	if (hook.hasSave()) {
-	    if (hook.getSave().needsPatch()) {
+	    if (hook.getSave().checkFlagOr(0)) {
 		if (SPGlobal.logging()) {
 		    SPGlobal.logMain(header, "Patch needed because an important setting changed.");
 		}
@@ -580,7 +582,7 @@ public class SUMGUI extends JFrame {
 	    }
 	} else if (needsPatching) {
 	    try {
-		crashFile.mkdirs();
+		Ln.makeDirs(crashFile);
 		BufferedWriter out = new BufferedWriter(new FileWriter(crashFile));
 		out.write("Closed prematurely while needing to patch");
 		out.close();
