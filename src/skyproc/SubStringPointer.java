@@ -59,7 +59,7 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
@@ -67,7 +67,7 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    if (data.isValid() && streams.containsKey(file)) {
 		int index = Ln.arrayToInt(data.getData());

@@ -71,7 +71,7 @@ public abstract class SubRecord extends Record {
 	return new ArrayList<FormID>(0);
     }
 
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
     }
 
     @Override

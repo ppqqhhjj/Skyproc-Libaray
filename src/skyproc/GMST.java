@@ -11,7 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -243,7 +243,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getType()) {
 		case String:
 		    DATAs.parseData(in);
@@ -264,7 +264,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void fetchStringPointers(Mod srcMod, Record r, Map<Files, LChannel> streams) throws IOException {
+	void fetchStringPointers(Mod srcMod, Record r, Map<Files, LChannel> streams) {
 	    DATAs.fetchStringPointers(srcMod, r, streams);
 	}
     }

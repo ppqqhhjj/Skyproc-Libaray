@@ -21,6 +21,7 @@ public class SPGlobal {
     static SPLogger log;
     static SPDatabase globalDatabase = new SPDatabase();
     static boolean testing = false;
+    static boolean streamMode = false;
     /*
      * Customizable Strings
      */

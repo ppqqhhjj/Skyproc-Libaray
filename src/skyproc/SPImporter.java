@@ -254,7 +254,8 @@ public class SPImporter {
      * pathToData
      *
      * @see SPGlobal
-     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to
+     * import
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
@@ -318,7 +319,8 @@ public class SPImporter {
      * pluginListBackupPath
      *
      * @see SPGlobal
-     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to
+     * import
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      * @throws IOException
@@ -353,7 +355,8 @@ public class SPImporter {
      *
      * @see SPGlobal
      * @param mods ModListings to look for and import from the data folder.
-     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to import
+     * @param grup_targets An arraylist of GRUP_TYPE with the desired types to
+     * import
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
@@ -511,6 +514,9 @@ public class SPImporter {
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    LFileChannel input = new LFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
+	    if (SPGlobal.streamMode) {
+		plugin.input = input;
+	    }
 
 	    if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
 		importStrings(plugin);
@@ -527,8 +533,11 @@ public class SPImporter {
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
-		plugin.parseData(result, extractGRUPData(input));
-//		plugin.parseData(result, input);
+		if (SPGlobal.streamMode) {
+//		    plugin.parseData(result, input);
+		} else {
+		    plugin.parseData(result, extractGRUPData(input));
+		}
 		typeTargets.remove(result);
 		SPGlobal.flush();
 		SPProgressBarPlug.incrementBar();
@@ -542,7 +551,6 @@ public class SPImporter {
 	    plugin.fetchStringPointers();
 	    plugin.standardizeMasters();
 	    SPProgressBarPlug.incrementBar();
-	    input.close();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);

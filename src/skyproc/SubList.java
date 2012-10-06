@@ -180,7 +180,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
         Type t = getNextType(in);
         if (counterType != t) {
             if (t.equals(type[0])) {
@@ -287,7 +287,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
         for (SubRecord s : collection) {
             s.fetchStringPointers(srcMod, r, streams);
         }

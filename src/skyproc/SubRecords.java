@@ -11,7 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LFileChannel;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -90,13 +90,13 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	}
     }
 
-    void importSubRecords(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
+    void importSubRecords(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	while (!in.isDone()) {
 	    importSubRecord(in);
 	}
     }
 
-    void importSubRecord(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 //	    if (in.getClass().equals(LFileChannel.class)) {
@@ -146,7 +146,7 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	return map.keySet();
     }
 
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
 	for (SubRecord s : list) {
 	    s.fetchStringPointers(srcMod, r, streams);
 	}

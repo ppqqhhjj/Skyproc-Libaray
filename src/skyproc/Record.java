@@ -18,11 +18,11 @@ public abstract class Record implements Serializable {
     Record() {
     }
 
-    void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
+    void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	in.skip(getIdentifierLength() + getSizeLength());
     }
 
-    final void parseData(ByteBuffer in) throws BadRecord, BadParameter, DataFormatException, IOException {
+    final void parseData(ByteBuffer in) throws BadRecord, BadParameter, DataFormatException {
 	parseData(new LShrinkArray(in));
     }
 
@@ -67,7 +67,7 @@ public abstract class Record implements Serializable {
 		+ Ln.printHex(Ln.toIntArray(str), true, false));
     }
 
-    static Type getNextType(LStream in) throws BadRecord, IOException {
+    static Type getNextType(LChannel in) throws BadRecord {
 	return (matchType(Ln.arrayToString(in.getInts(0, 4))));
     }
 
@@ -78,24 +78,24 @@ public abstract class Record implements Serializable {
 	}
     }
 
-    private int extractRecordLength(LStream in) throws IOException {
+    private int extractRecordLength(LChannel in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    private int extractRecordLength(LFileChannel in) throws IOException {
+    private int extractRecordLength(LFileChannel in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    LShrinkArray extractRecordData(LStream in) throws IOException {
+    LShrinkArray extractRecordData(LChannel in) {
 	int recordLength = extractRecordLength(in);
 	LShrinkArray extracted = new LShrinkArray(in, recordLength);
 	in.skip(recordLength);
 	return extracted;
     }
 
-    LFileChannel extractRecordFile(LFileChannel in) throws IOException {
+    LFileChannel extractRecordFile(LFileChannel in) {
 	int recordLength = extractRecordLength(in);
 	LFileChannel extracted = new LFileChannel(in, recordLength);
 	return extracted;

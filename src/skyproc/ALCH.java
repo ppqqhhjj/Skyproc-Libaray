@@ -6,13 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LStream;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -92,7 +89,7 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    value = in.extractInt(4);
 	    flags.set(in.extract(4));

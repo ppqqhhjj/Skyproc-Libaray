@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.Ln;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -46,7 +46,7 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	int size = IDs.size();
 	if (size != 0) {

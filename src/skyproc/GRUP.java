@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LChannel;
+import lev.LExporter;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -75,7 +76,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	in.skip(4); // GRUP type
 	grupType = in.extract(4); // What kind of GRUP data it has.  Records, a Cell?

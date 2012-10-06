@@ -305,8 +305,8 @@ public class NiftyFunc {
 		    length = input.extractInt(0, 4);
 		    input.skip(16);
 		    int edidLength = input.extractInt(4, 2);
-		    EDID = input.extractString(0, edidLength);
-		    input.skip(length - 6 - EDID.length() - 1);
+		    EDID = input.extractString(0, edidLength - 1);
+		    input.skip(length - 6 - EDID.length());
 		} else {
 		    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
 		    numErrors++;

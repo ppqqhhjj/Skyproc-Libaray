@@ -56,7 +56,7 @@ class ConditionBase extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	//Flags and Operator
 	flags.set(in.extract(1));

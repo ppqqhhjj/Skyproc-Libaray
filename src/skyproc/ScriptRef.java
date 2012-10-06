@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -42,12 +42,12 @@ public class ScriptRef extends Record implements Iterable<String> {
 	this.name.set(name);
     }
 
-    ScriptRef(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    ScriptRef(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in);
     }
 
     @Override
-    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
 	unknown = in.extractInt(1);
 	int propertyCount = in.extractInt(2);

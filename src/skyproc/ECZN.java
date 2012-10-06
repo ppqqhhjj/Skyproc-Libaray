@@ -11,7 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -57,7 +57,7 @@ public class ECZN extends MajorRecord {
 	    valid = false;
 	}
 
-	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    parseData(in);
 	}
@@ -68,7 +68,7 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 
 	    owner.setInternal(in.extract(4));

@@ -10,7 +10,7 @@ import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -75,7 +75,7 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));

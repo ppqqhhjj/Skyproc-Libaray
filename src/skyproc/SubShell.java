@@ -11,7 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -57,12 +57,12 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	subRecords.importSubRecords(in);
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) throws IOException {
+    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
 	subRecords.fetchStringPointers(srcMod, r, streams);
     }
 }

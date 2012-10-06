@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -84,7 +84,7 @@ class SubForm extends SubRecord {
 	super(type_);
     }
 
-    SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter, IOException {
+    SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
 	this(type_);
 	parseData(in);
     }
@@ -95,7 +95,7 @@ class SubForm extends SubRecord {
     }
 
     @Override
-    void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	setForm(in.extract(4));
     }

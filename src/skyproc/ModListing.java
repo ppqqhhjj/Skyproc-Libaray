@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -27,7 +27,7 @@ public class ModListing extends SubRecord implements Comparable {
     static ModListing skyrim = new ModListing("Skyrim.esm");
     static ModListing update = new ModListing("Update.esm");
 
-    ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	this();
 	parseData(in);
     }
@@ -101,7 +101,7 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+    final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
 	    case MAST:
 		mast.parseData(in);

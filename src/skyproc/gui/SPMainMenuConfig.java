@@ -39,7 +39,7 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	if (saveField) {
 	    save = saveFile;
 	    saveTie = setting;
-	    setHelpInfo(saveTie, save);
+	    linkTo(saveTie, save, help, true);
 	}
 
 	button = new LButton(buttonText);

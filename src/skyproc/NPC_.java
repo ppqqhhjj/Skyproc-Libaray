@@ -160,7 +160,7 @@ public class NPC_ extends Actor implements Serializable {
 	    super(types);
 	}
 
-	SoundPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	SoundPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    parseData(in);
 	}
@@ -213,7 +213,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    // Not calling super
 	    Type t = Type.valueOf(Ln.arrayToString(in.extractInts(4)));
 	    int size = Ln.arrayToInt(in.extractInts(2));
@@ -403,7 +403,7 @@ public class NPC_ extends Actor implements Serializable {
 	    super(Type.DNAM);
 	}
 
-	DNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	DNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    parseData(in);
 	}
@@ -440,7 +440,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    skills = in.extract(36);
 	    health = in.extractInt(2);
@@ -491,13 +491,13 @@ public class NPC_ extends Actor implements Serializable {
 	    super(types);
 	}
 
-	TintPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	TintPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    TINI.parseData(in);
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException {
 	    // Not calling super
 	    Type t = Type.valueOf(Ln.arrayToString(in.extractInts(4)));
 	    int size = Ln.arrayToInt(in.extractInts(2));
@@ -578,7 +578,7 @@ public class NPC_ extends Actor implements Serializable {
 	    super(Type.ACBS);
 	}
 
-	ACBS(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	ACBS(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    parseData(in);
 	}
@@ -589,7 +589,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    ACBSflags.set(in.extract(4));
 	    magickaOffset = in.extractInt(2);
@@ -655,7 +655,7 @@ public class NPC_ extends Actor implements Serializable {
 	    super(Type.AIDT);
 	}
 
-	AIDT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	AIDT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	    this();
 	    parseData(in);
 	}
@@ -666,7 +666,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    aggression = Aggression.values()[in.extractInt(1)];
 	    confidence = Confidence.values()[in.extractInt(1)];
@@ -752,7 +752,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();
@@ -844,7 +844,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    noseLong = in.extractFloat();
 	    noseUp = in.extractFloat();
@@ -906,7 +906,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    nose = in.extractInt(4);
 	    unknown = in.extractInt(4);

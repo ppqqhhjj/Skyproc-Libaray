@@ -51,6 +51,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<ARMA> armatures = new GRUP<>(this, new ARMA());
     GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
     GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
+    LFileChannel input;
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
@@ -1288,7 +1289,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
+	final void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
 	    fluff1 = Ln.arrayToInt(in.extractInts(4));
@@ -1418,7 +1419,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LStream in) throws BadRecord, BadParameter, DataFormatException, IOException {
+	final void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in);
 	    version = in.extract(4);
 	    numRecords = in.extractInt(4);

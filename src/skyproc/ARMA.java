@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.AltTextures.AltTexture;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -115,7 +115,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    malePriority = in.extractInt(1);
 	    femalePriority = in.extractInt(1);

@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -64,7 +64,7 @@ public class IMGS extends MajorRecord {
             valid = false;
         }
 
-        HNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        HNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             this();
             parseData(in);
         }
@@ -75,7 +75,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        final void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             eyeAdaptSpeed = in.extractFloat();
@@ -143,7 +143,7 @@ public class IMGS extends MajorRecord {
             valid = false;
         }
 
-        public CNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        public CNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             this();
             parseData(in);
         }
@@ -154,7 +154,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             saturation = in.extractFloat();
@@ -208,7 +208,7 @@ public class IMGS extends MajorRecord {
             valid = false;
         }
 
-        public TNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        public TNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
             this();
             parseData(in);
         }
@@ -219,7 +219,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
 
             alpha = in.extractFloat();
@@ -289,7 +289,7 @@ public class IMGS extends MajorRecord {
         }
 
         @Override
-        void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in);
             DOFstrength = in.extractFloat();
             DOFdistance = in.extractFloat();

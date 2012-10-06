@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import lev.LChannel;
 import lev.LExporter;
-import lev.LStream;
 import skyproc.Condition.RunOnType;
 
 /**
@@ -81,7 +81,7 @@ class ConditionOption implements Serializable {
 	exportParam3(out);
     }
 
-    public void parseData(LStream in) throws IOException {
+    public void parseData(LChannel in) {
 	parseParam1(in);
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.setInternal(in.extract(4));
@@ -106,11 +106,11 @@ class ConditionOption implements Serializable {
 	out.write(-1);
     }
 
-    public void parseParam1(LStream in) throws IOException{
+    public void parseParam1(LChannel in) {
 	in.skip(8);
     }
 
-    public void parseParam3(LStream in) throws IOException {
+    public void parseParam3(LChannel in) {
 	in.skip(4);
     }
 
@@ -140,7 +140,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -167,7 +167,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
 	    if (SPGlobal.logging()) {
@@ -204,7 +204,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -241,7 +241,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -278,7 +278,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -317,7 +317,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -344,7 +344,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -371,7 +371,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -415,7 +415,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -424,7 +424,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam3(LStream in) throws IOException {
+	public void parseParam3(LChannel in) {
 	    p3 = in.extractInt(4);
 	}
     }
@@ -457,7 +457,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -484,7 +484,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -511,7 +511,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1 = in.extractInt(4);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -548,7 +548,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
@@ -585,7 +585,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
@@ -623,7 +623,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -660,7 +660,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1.setInternal(in.extract(4));
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
@@ -689,7 +689,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -715,7 +715,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam1(LStream in) throws IOException{
+	public void parseParam1(LChannel in){
 	    p1 = in.extract(4);
 	}
     }

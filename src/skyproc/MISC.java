@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
-import lev.LStream;
+import lev.LChannel;
 import skyproc.AltTextures.AltTexture;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -80,7 +80,7 @@ public class MISC extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LStream in) throws BadRecord, DataFormatException, BadParameter, IOException {
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
