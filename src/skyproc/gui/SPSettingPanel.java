@@ -6,14 +6,13 @@ package skyproc.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Map;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import lev.gui.*;
 
@@ -39,6 +38,7 @@ public abstract class SPSettingPanel extends LPanel {
     /**
      * Reference to the panel in the center column
      */
+    protected LScrollPane scroll;
     protected LPanel settingsPanel;
     private ArrayList<Component> components = new ArrayList<>();
     /**
@@ -73,12 +73,18 @@ public abstract class SPSettingPanel extends LPanel {
      *
      */
     protected void initialize() {
+
 	settingsPanel = new LPanel(SUMGUI.middleDimensions);
 	settingsPanel.add(header);
-	add(settingsPanel);
+
+	scroll = new LScrollPane(settingsPanel);
+	scroll.setLocation(SUMGUI.middleDimensions.x, SUMGUI.middleDimensions.y);
+	scroll.setSize(SUMGUI.middleDimensions.width, SUMGUI.middleDimensions.height);
+	add(scroll);
 
 	header.addShadow();
 	header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 15);
+	settingsPanel.setPreferredSize(scroll.getSize());
 
 	last = new Point(settingsPanel.getWidth(), 65);
 
@@ -119,6 +125,10 @@ public abstract class SPSettingPanel extends LPanel {
     public final void Add(Component c) {
 	components.add(c);
 	settingsPanel.Add(c);
+	int range = c.getY() + c.getHeight();
+	if (range > settingsPanel.getPreferredSize().getHeight()) {
+	    settingsPanel.setPreferredSize(new Dimension(settingsPanel.getPreferredSize().width, range));
+	}
     }
 
     /**

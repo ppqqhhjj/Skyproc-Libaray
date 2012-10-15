@@ -78,26 +78,20 @@ public abstract class Record implements Serializable {
 	}
     }
 
-    private int extractRecordLength(LChannel in) {
+    public int getRecordLength(LChannel in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    private int extractRecordLength(LFileChannel in) {
-	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
-		+ getSizeLength() + getIdentifierLength() + getFluffLength();
-    }
-
-    LShrinkArray extractRecordData(LChannel in) {
-	int recordLength = extractRecordLength(in);
-	LShrinkArray extracted = new LShrinkArray(in, recordLength);
+    LChannel extractRecordData(LChannel in) {
+	LChannel extracted;
+	int recordLength = getRecordLength(in);
+	if (SPGlobal.streamMode && in instanceof LFileChannel) {
+	    extracted = new RecordChannel((LFileChannel) in, recordLength);
+	} else {
+	    extracted = new LShrinkArray(in, recordLength);
+	}
 	in.skip(recordLength);
-	return extracted;
-    }
-
-    LFileChannel extractRecordFile(LFileChannel in) {
-	int recordLength = extractRecordLength(in);
-	LFileChannel extracted = new LFileChannel(in, recordLength);
 	return extracted;
     }
 

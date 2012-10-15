@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import lev.Ln;
-import skyproc.exceptions.Uninitialized;
 
 /**
  * An organized set of Mods forces load order. It is somewhat unnecessary at the
@@ -20,18 +19,6 @@ public class SPDatabase implements Iterable<Mod> {
     static ArrayList<ModListing> activePlugins = new ArrayList<>();
     ArrayList<ModListing> addedPlugins = new ArrayList<>();
     Map<ModListing, Mod> modLookup = new TreeMap<>();
-    SPExceptionDbInterface exceptionsDb = new SPExceptionDbInterface<SPExceptionDbInterface.NullException>() {
-
-	@Override
-	public SPExceptionDbInterface.NullException getException(Record record) {
-	    return SPExceptionDbInterface.NullException.NULL;
-	}
-
-	@Override
-	public Boolean is(Record record, SPExceptionDbInterface.NullException exceptionType) {
-	    return false;
-	}
-    };
 
     /**
      * Creates a new SPDatabase container to load mods into.
@@ -263,20 +250,6 @@ public class SPDatabase implements Iterable<Mod> {
 	    }
 	}
 	return null;
-    }
-
-    void setExceptionDbInterface(SPExceptionDbInterface in) {
-	exceptionsDb = in;
-    }
-
-    void fetchExceptions() {
-	for (Mod m : modLookup.values()) {
-	    m.fetchExceptions(this);
-	}
-    }
-
-    Enum getException(Record in) throws Uninitialized {
-	return exceptionsDb.getException(in);
     }
 
     /**

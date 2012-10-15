@@ -79,7 +79,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	in.skip(4); // GRUP type
-	grupType = in.extract(4); // What kind of GRUP data it has.  Records, a Cell?
+	grupType = in.extract(4); // What kind of GRUP data it has. 
 	dateStamp = in.extract(4);
 	version = in.extract(4);
 	while (!in.isDone()) {
@@ -166,18 +166,11 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
+	ArrayList<FormID> out = new ArrayList<>();
 	for (T item : listRecords) {
 	    out.addAll(item.allFormIDs());
 	}
 	return out;
-    }
-
-    void fetchExceptions(SPDatabase database) {
-	for (T item : mapRecords.values()) {
-	    item.fetchException(database);
-	    SPProgressBarPlug.incrementBar();
-	}
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
@@ -370,7 +363,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-	ArrayList<T> temp = new ArrayList<T>();
+	ArrayList<T> temp = new ArrayList<>();
 	temp.addAll(listRecords);
 	return temp.iterator();
     }

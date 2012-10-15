@@ -396,12 +396,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
-    void fetchExceptions(SPDatabase database) {
-	for (GRUP g : GRUPs.values()) {
-	    g.fetchExceptions(database);
-	}
-    }
-
     void fetchStringPointers() throws IOException {
 	Map<SubStringPointer.Files, LChannel> streams = null;
 	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
@@ -858,7 +852,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	header.setAuthor(in);
     }
 
-    void parseData(Type type, ByteBuffer data) throws Exception {
+    void parseData(Type type, LChannel data) throws Exception {
 	GRUPs.get(GRUP_TYPE.toRecord(type)).parseData(data);
     }
 

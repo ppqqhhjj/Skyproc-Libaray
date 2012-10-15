@@ -3,11 +3,13 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LChannel;
+import lev.LExporter;
+import lev.LFlags;
+import lev.Ln;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -27,7 +29,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     byte[] revision = new byte[4];
     byte[] version = {0x28, 0, 0, 0};
     SubString EDID = new SubString(Type.EDID, true);
-    Enum exception;
 
     MajorRecord() {
 	subRecords.add(EDID);
@@ -108,6 +109,8 @@ public abstract class MajorRecord extends Record implements Serializable {
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
+	int werz = (int) in.pos();
+	
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
 	revision = in.extract(4);
@@ -123,6 +126,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
+	
+	int wer = (int) in.pos();
 
 	importSubRecords(in);
 	subRecords.printSummary();
@@ -147,9 +152,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     @Override
     public String print() {
 	logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + EDID.print());
-	if (hasException()) {
-	    logSync(getTypes().toString(), "Exception: " + exception.toString());
-	}
 	return "";
     }
 
@@ -181,33 +183,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(version, 4);
 	    subRecords.export(out, srcMod);
 	}
-    }
-
-    void setException(Enum input) {
-	exception = input;
-    }
-
-    Enum getException() {
-	if (hasException()) {
-	    return exception;
-	} else {
-	    return SPExceptionDbInterface.NullException.NULL;
-	}
-    }
-
-    void fetchException(SPDatabase database) {
-	try {
-	    setException(database.getException(this));
-	} catch (Uninitialized ex) {
-	    exception = SPExceptionDbInterface.NullException.NULL;
-	}
-	if (logging() && !exception.equals(SPExceptionDbInterface.NullException.NULL)) {
-	    logSync(toString(), "Exception fetched (", getException().toString() + ") for " + toString());
-	}
-    }
-
-    Boolean hasException() {
-	return exception != null;
     }
 
     void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
@@ -299,11 +274,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     static class Null_Major extends MajorRecord {
 
 	private static final Type[] type = {Type.NULL};
-
-	@Override
-	public void fetchException(SPDatabase database) {
-	}
-
+	
 	@Override
 	Type[] getTypes() {
 	    return type;
