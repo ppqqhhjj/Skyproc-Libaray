@@ -3,6 +3,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.exceptions.BadParameter;
@@ -15,6 +17,15 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class Record implements Serializable {
 
+    final static HashMap<String, Type> types;
+    static {
+	Type[] ta = Type.values();
+	types = new HashMap<>(ta.length);
+	for (Type t : ta) {
+	    types.put(t.toString(), t);
+	}
+    }
+    
     Record() {
     }
 
@@ -58,10 +69,9 @@ public abstract class Record implements Serializable {
     }
 
     static Type matchType(String str) throws BadRecord {
-	for (Type t : Type.values()) {
-	    if (t.toString().equals(str)) {
-		return t;
-	    }
+	Type out = types.get(str);
+	if (out != null) {
+	    return out;
 	}
 	throw new BadRecord("Record " + str + " ("
 		+ Ln.printHex(Ln.toIntArray(str), true, false));

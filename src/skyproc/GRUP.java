@@ -107,7 +107,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    } catch (java.nio.BufferUnderflowException e) {
 		handleBadRecord(item, e.toString());
 	    }
-	    flush();
 	}
 	if (logging()) {
 	    logSync(toString(), "Data exhausted");
@@ -138,7 +137,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    logSync(toString(), "=======================================================================");
 	    for (T t : mapRecords.values()) {
 		t.toString();
-		flush();
 	    }
 	}
 	return "";

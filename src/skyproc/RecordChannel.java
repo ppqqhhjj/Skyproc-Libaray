@@ -22,8 +22,9 @@ public class RecordChannel extends LFileChannel {
     }
     
     public RecordChannel (LFileChannel fc, int allocation) {
-	super(fc, allocation);
+	super();
 	pos = fc.pos();
+	slice(fc, allocation);
     }
     
     @Override

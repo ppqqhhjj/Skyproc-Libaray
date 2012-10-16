@@ -5,12 +5,8 @@
 package skyproc;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lev.LExporter;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
@@ -26,7 +22,7 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-//    static GRUP_TYPE[] types = {GRUP_TYPE.HDPT};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.RACE};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
@@ -52,7 +48,7 @@ public class SkyProcTester {
 
     private static void validate() throws Exception {
 
-	badIDs = new ArrayList<String>();
+	badIDs = new ArrayList<>();
 	badIDs.add("0010B115");  //EnchSilverSword
 	badIDs.add("0010A27F");  //TrapLightningRune
 	badIDs.add("0010A27E");  //TrapFrostRune
@@ -83,13 +79,13 @@ public class SkyProcTester {
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
 
-	for (GRUP_TYPE g : types) {
-	    if (!test(g)) {
-		SPProgressBarPlug.setStatus("FAILED: " + g);
-		break;
-	    }
-	    SPProgressBarPlug.setStatus("Validating DONE");
-	}
+//	for (GRUP_TYPE g : types) {
+//	    if (!test(g)) {
+//		SPProgressBarPlug.setStatus("FAILED: " + g);
+//		break;
+//	    }
+//	    SPProgressBarPlug.setStatus("Validating DONE");
+//	}
 
     }
 
@@ -131,8 +127,9 @@ public class SkyProcTester {
     }
 
     private static void setSkyProcGlobal() {
-	SPGlobal.createGlobalLog();
-	LDebug.timeElapsed = true;
+//	SPGlobal.createGlobalLog();
+//	LDebug.timeElapsed = true;
+	SPGlobal.logging(false);
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }
 }

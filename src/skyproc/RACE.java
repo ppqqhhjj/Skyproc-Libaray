@@ -7,9 +7,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -132,28 +132,46 @@ public class RACE extends MajorRecordDescription {
 	return new RACE();
     }
 
+    class RaceSubrecords extends SubRecords {
+
+	RaceSubrecords(SubRecords orig) {
+	    this.list = orig.list;
+	    this.forceExport = orig.forceExport;
+	    this.map = orig.map;
+	    this.pos = orig.pos;
+	}
+    }
+
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
 	while (!in.isDone()) {
 	    nextType = getNextType(in);
+	    subRecords.importSubRecord(in);
 	    if (nextType == Type.NAM1) {
-		subRecords.importSubRecord(in); // import NAM1
 		for (int i = 0; i < 8; i++) {
-		    EGTrecords.parseData(EGTrecords.extractRecordData(in));
+		    if (SPGlobal.streamMode) {
+			in.skip(EGTrecords.getRecordLength(in));
+		    } else {
+			EGTrecords.parseData(EGTrecords.extractRecordData(in));
+		    }
 		}
 	    } else if (nextType == Type.NAM3) {
-		subRecords.importSubRecord(in); // import NAM3
 		for (int i = 0; i < 6; i++) {
-		    HKXrecords.parseData(HKXrecords.extractRecordData(in));
+		    if (SPGlobal.streamMode) {
+			in.skip(EGTrecords.getRecordLength(in));
+		    } else {
+			HKXrecords.parseData(HKXrecords.extractRecordData(in));
+		    }
 		}
 	    } else if (nextType == Type.NAM0) {
-		subRecords.importSubRecord(in); // import NAM0
 		while (!in.isDone() && getNextType(in) != Type.WKMV) {
-		    headData.parseData(headData.extractRecordData(in));
+		    if (SPGlobal.streamMode) {
+			in.skip(EGTrecords.getRecordLength(in));
+		    } else {
+			headData.parseData(headData.extractRecordData(in));
+		    }
 		}
-	    } else {
-		subRecords.importSubRecord(in);
 	    }
 	}
     }
@@ -569,7 +587,8 @@ public class RACE extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	EXTRALARGE,}
+	EXTRALARGE,
+    }
 
     // Get / set
     public void set(RACEFlags flag, boolean on) {

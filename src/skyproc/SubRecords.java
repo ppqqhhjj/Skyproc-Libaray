@@ -20,10 +20,10 @@ import skyproc.exceptions.BadRecord;
  */
 class SubRecords implements Iterable<SubRecord>, Serializable {
 
-    private ArrayList<SubRecord> list = new ArrayList<>();
-    private Map<Type, SubRecord> map = new HashMap<>(0);
-    private Map<Type, Long> pos = new HashMap<>(0);
-    private Set<Type> forceExport = new HashSet<>(0);
+    protected ArrayList<SubRecord> list = new ArrayList<>();
+    protected Map<Type, SubRecord> map = new HashMap<>(0);
+    protected Map<Type, Long> pos = new HashMap<>(0);
+    protected Set<Type> forceExport = new HashSet<>(0);
 
     public void add(SubRecord r) {
 	for (Type t : r.getTypes()) {
@@ -96,10 +96,9 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     }
 
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	int wer = (int) in.pos();
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    if (in.getClass().equals(LFileChannel.class)) {
+	    if (in instanceof LFileChannel) {
 		pos.put(nextType, ((LFileChannel) in).pos());
 		in.skip(get(nextType).getRecordLength(in));
 	    } else {

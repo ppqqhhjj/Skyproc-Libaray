@@ -109,7 +109,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-	int werz = (int) in.pos();
 	
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
@@ -126,8 +125,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
-	
-	int wer = (int) in.pos();
 
 	importSubRecords(in);
 	subRecords.printSummary();

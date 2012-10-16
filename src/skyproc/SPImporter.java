@@ -535,7 +535,7 @@ public class SPImporter {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		if (SPGlobal.streamMode) {
-		    plugin.parseData(result, input);
+		    plugin.parseData(result, new RecordChannel(input, getGRUPsize(input)));
 		} else {
 		    plugin.parseData(result, extractGRUPData(input));
 		}
@@ -666,12 +666,16 @@ public class SPImporter {
     }
 
     static LShrinkArray extractGRUPData(LFileChannel in) throws IOException {
+	return new LShrinkArray(in.extractByteBuffer(0, getGRUPsize(in)));
+    }
+    
+    static int getGRUPsize(LFileChannel in) {
 	int size = Ln.arrayToInt(in.extractInts(4, 4));
 	if (SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Extract GRUP size: " + Ln.prettyPrintHex(size));
 	}
 	in.skip(-8); // Back to start of GRUP
-	return new LShrinkArray(in.extractByteBuffer(0, size));
+	return size;
     }
 
     static private String genStatus(ModListing mod) {
