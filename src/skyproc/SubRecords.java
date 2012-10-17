@@ -11,6 +11,7 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LFileChannel;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -98,8 +99,14 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    if (in instanceof LFileChannel) {
-		pos.put(nextType, ((LFileChannel) in).pos());
+	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
+		if (!pos.containsKey(nextType)) {
+		    long position = in.pos();
+		    if (SPGlobal.logging()) {
+			SPGlobal.logSync(nextType.toString(), nextType.toString() + " is at position: " + Ln.printHex(position));
+		    }
+		    pos.put(nextType, position);
+		}
 		in.skip(get(nextType).getRecordLength(in));
 	    } else {
 		SubRecord record = get(nextType);

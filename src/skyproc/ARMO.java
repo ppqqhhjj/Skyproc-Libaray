@@ -7,9 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -47,7 +46,7 @@ public class ARMO extends MajorRecordDescription {
      *
      */
     public KeywordSet keywords = new KeywordSet();
-    SubList<SubForm> MODLs = new SubList<SubForm>(new SubForm(Type.MODL));
+    SubList<SubForm> MODLs = new SubList<>(new SubForm(Type.MODL));
     DATA DATA = new DATA();
     SubData DNAM = new SubData(Type.DNAM);
     SubForm TNAM = new SubForm(Type.TNAM);

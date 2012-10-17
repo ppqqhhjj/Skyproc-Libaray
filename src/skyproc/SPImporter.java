@@ -512,7 +512,7 @@ public class SPImporter {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_targets));
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
-	    RecordChannel input = new RecordChannel(path + listing.print());
+	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
 	    plugin.input = input;
 	    if (SPGlobal.streamMode) {
@@ -534,11 +534,7 @@ public class SPImporter {
 	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
-		if (SPGlobal.streamMode) {
-		    plugin.parseData(result, new RecordChannel(input, getGRUPsize(input)));
-		} else {
-		    plugin.parseData(result, extractGRUPData(input));
-		}
+		plugin.parseData(result, extractGRUPData(input));
 		typeTargets.remove(result);
 		SPGlobal.flush();
 		SPProgressBarPlug.incrementBar();
@@ -665,10 +661,10 @@ public class SPImporter {
 	return Type.NULL;
     }
 
-    static LShrinkArray extractGRUPData(LFileChannel in) throws IOException {
-	return new LShrinkArray(in.extractByteBuffer(0, getGRUPsize(in)));
+    static RecordShrinkArray extractGRUPData(LFileChannel in) throws IOException {
+	return new RecordShrinkArray(in, getGRUPsize(in));
     }
-    
+
     static int getGRUPsize(LFileChannel in) {
 	int size = Ln.arrayToInt(in.extractInts(4, 4));
 	if (SPGlobal.logging()) {
