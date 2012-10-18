@@ -53,6 +53,30 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	return map.get(in);
     }
 
+    public SubString getSubString(Type in) {
+	return (SubString) get(in);
+    }
+
+    public void setSubString(Type in, String str) {
+	getSubString(in).setString(str);
+    }
+
+    public SubForm getSubForm(Type in) {
+	return (SubForm) get(in);
+    }
+
+    public void setSubForm(Type in, FormID id) {
+	getSubForm(in).setForm(id);
+    }
+
+    public SubFloat getSubFloat(Type in) {
+	return (SubFloat) get(in);
+    }
+
+    public void setSubFloat(Type in, float f) {
+	getSubFloat(in).set(f);
+    }
+
     boolean isValid() {
 	for (SubRecord s : list) {
 	    if (!s.isValid()) {

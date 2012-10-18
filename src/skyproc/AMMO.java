@@ -126,7 +126,7 @@ public class AMMO extends MajorRecordDescription {
      * @param path
      */
     public void setModel(String path) {
-	MODL.setString(path);
+	subRecords.setSubString(Type.MODL, path);
     }
 
     /**
@@ -134,7 +134,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public String getModel() {
-	return MODL.print();
+	return subRecords.getSubString(Type.MODL).print();
     }
 
     /**
@@ -142,7 +142,7 @@ public class AMMO extends MajorRecordDescription {
      * @param sound
      */
     public void setPickupSound(FormID sound) {
-	YNAM.setForm(sound);
+	subRecords.setSubForm(Type.YNAM, sound);
     }
 
     /**
@@ -150,7 +150,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public FormID getPickupSound() {
-	return YNAM.getForm();
+	return subRecords.getSubForm(Type.YNAM).getForm();
     }
 
     /**
@@ -158,7 +158,7 @@ public class AMMO extends MajorRecordDescription {
      * @param sound
      */
     public void setDropSound(FormID sound) {
-	ZNAM.setForm(sound);
+	subRecords.setSubForm(Type.ZNAM, sound);
     }
 
     /**
@@ -166,7 +166,11 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public FormID getDropSound() {
-	return ZNAM.getForm();
+	return subRecords.getSubForm(Type.ZNAM).getForm();
+    }
+
+    DATA getData() {
+	return (DATA) subRecords.get(Type.DATA);
     }
 
     /**
@@ -174,7 +178,7 @@ public class AMMO extends MajorRecordDescription {
      * @param projectile
      */
     public void setProjectile(FormID projectile) {
-	DATA.projectile = projectile;
+	getData().projectile = projectile;
     }
 
     /**
@@ -182,7 +186,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public FormID getProjectile() {
-	return DATA.projectile;
+	return getData().projectile;
     }
 
     /**
@@ -191,7 +195,7 @@ public class AMMO extends MajorRecordDescription {
      * @param on
      */
     public void set(AMMOFlag flag, boolean on) {
-	DATA.flags.set(flag.ordinal() + 1, on);
+	getData().flags.set(flag.ordinal() + 1, on);
     }
 
     /**
@@ -200,7 +204,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public boolean get(AMMOFlag flag) {
-	return DATA.flags.get(flag.ordinal() + 1);
+	return getData().flags.get(flag.ordinal() + 1);
     }
 
     /**
@@ -208,7 +212,7 @@ public class AMMO extends MajorRecordDescription {
      * @param damage
      */
     public void setDamage(float damage) {
-	DATA.damage = damage;
+	getData().damage = damage;
     }
 
     /**
@@ -216,7 +220,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public float getDamage() {
-	return DATA.damage;
+	return getData().damage;
     }
 
     /**
@@ -224,7 +228,7 @@ public class AMMO extends MajorRecordDescription {
      * @param gold
      */
     public void setValue(int gold) {
-	DATA.value = gold;
+	getData().value = gold;
     }
 
     /**
@@ -232,6 +236,6 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public int getValue() {
-	return DATA.value;
+	return getData().value;
     }
 }

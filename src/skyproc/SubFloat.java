@@ -80,4 +80,12 @@ class SubFloat extends SubRecord {
 	hash = 67 * hash + Float.floatToIntBits(this.data);
 	return hash;
     }
+    
+    public void set(float in) {
+	data = in;
+    }
+    
+    public float get() {
+	return data;
+    }
 }

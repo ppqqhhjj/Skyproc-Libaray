@@ -146,6 +146,27 @@ public class ARMA extends MajorRecord {
     }
 
     // Get/set
+    Type getModelPathType(Gender gender, Perspective perspective) {
+	switch (gender) {
+	    case MALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return Type.MOD2;
+		    case FIRST_PERSON:
+			return Type.MOD4;
+		}
+	    case FEMALE:
+		switch (perspective) {
+		    case THIRD_PERSON:
+			return Type.MOD3;
+		    case FIRST_PERSON:
+			return Type.MOD5;
+		}
+	    default:
+		return Type.MOD2;
+	}
+    }
+
     /**
      *
      * @param path Path of the .nif file to assign.
@@ -153,26 +174,7 @@ public class ARMA extends MajorRecord {
      * @param perspective Perspective to assign this model path to.
      */
     public void setModelPath(String path, Gender gender, Perspective perspective) {
-	switch (gender) {
-	    case MALE:
-		switch (perspective) {
-		    case THIRD_PERSON:
-			MOD2.setString(path);
-			return;
-		    case FIRST_PERSON:
-			MOD4.setString(path);
-			return;
-		}
-	    case FEMALE:
-		switch (perspective) {
-		    case THIRD_PERSON:
-			MOD3.setString(path);
-			return;
-		    case FIRST_PERSON:
-			MOD5.setString(path);
-			return;
-		}
-	}
+	subRecords.setSubString(getModelPathType(gender, perspective), path);
     }
 
     /**
@@ -183,20 +185,24 @@ public class ARMA extends MajorRecord {
      * if a model path does not exist for specified parameters.
      */
     public String getModelPath(Gender gender, Perspective perspective) {
+	return subRecords.getSubString(getModelPathType(gender, perspective)).print();
+    }
+
+    Type getAltTexType(Gender gender, Perspective perspective) {
 	switch (gender) {
 	    case MALE:
 		switch (perspective) {
 		    case THIRD_PERSON:
-			return MOD2.print();
+			return Type.MO2S;
 		    case FIRST_PERSON:
-			return MOD4.print();
+			return Type.MO4S;
 		}
 	    default:
 		switch (perspective) {
 		    case THIRD_PERSON:
-			return MOD3.print();
+			return Type.MO3S;
 		    default:
-			return MOD5.print();
+			return Type.MO5S;
 		}
 	}
     }
@@ -210,22 +216,8 @@ public class ARMA extends MajorRecord {
      * @return List of the AltTextures applied to the gender/perspective.
      */
     public ArrayList<AltTexture> getAltTextures(Gender gender, Perspective perspective) {
-	switch (gender) {
-	    case MALE:
-		switch (perspective) {
-		    case THIRD_PERSON:
-			return MO2S.altTextures;
-		    case FIRST_PERSON:
-			return MO4S.altTextures;
-		}
-	    default:
-		switch (perspective) {
-		    case THIRD_PERSON:
-			return MO3S.altTextures;
-		    default:
-			return MO5S.altTextures;
-		}
-	}
+	AltTextures t = (AltTextures) subRecords.get(getAltTexType(gender, perspective));
+	return t.altTextures;
     }
 
     /**
@@ -246,7 +238,7 @@ public class ARMA extends MajorRecord {
      * @param race
      */
     public void setRace(FormID race) {
-	RNAM.setForm(race);
+	subRecords.setSubForm(Type.RNAM, race);
     }
 
     /**
@@ -254,7 +246,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getRace() {
-	return RNAM.getForm();
+	return subRecords.getSubForm(Type.RNAM).getForm();
     }
 
     /**
@@ -265,10 +257,10 @@ public class ARMA extends MajorRecord {
     public void setSkinTexture(FormID skin, Gender gender) {
 	switch (gender) {
 	    case MALE:
-		maleSkinTexture.setForm(skin);
+		subRecords.setSubForm(Type.NAM0, skin);
 		return;
 	    case FEMALE:
-		femaleSkinTexture.setForm(skin);
+		subRecords.setSubForm(Type.NAM1, skin);
 		return;
 	}
     }
@@ -281,9 +273,9 @@ public class ARMA extends MajorRecord {
     public FormID getSkinTexture(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return maleSkinTexture.getForm();
+		return subRecords.getSubForm(Type.NAM0).getForm();
 	    default:
-		return femaleSkinTexture.getForm();
+		return subRecords.getSubForm(Type.NAM1).getForm();
 	}
     }
 
@@ -295,10 +287,10 @@ public class ARMA extends MajorRecord {
     public void setSkinSwap(FormID swapList, Gender gender) {
 	switch (gender) {
 	    case MALE:
-		maleSkinSwapList.setForm(swapList);
+		subRecords.getSubForm(Type.NAM2).setForm(swapList);
 		return;
 	    case FEMALE:
-		femaleSkinSwapList.setForm(swapList);
+		subRecords.getSubForm(Type.NAM3).setForm(swapList);
 	}
     }
 
@@ -310,9 +302,9 @@ public class ARMA extends MajorRecord {
     public FormID getSkinSwap(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return maleSkinSwapList.getForm();
+		return subRecords.getSubForm(Type.NAM2).getForm();
 	    default:
-		return femaleSkinSwapList.getForm();
+		return subRecords.getSubForm(Type.NAM3).getForm();
 	}
     }
 

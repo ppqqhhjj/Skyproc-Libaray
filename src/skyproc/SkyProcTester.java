@@ -79,13 +79,13 @@ public class SkyProcTester {
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
 
-//	for (GRUP_TYPE g : types) {
-//	    if (!test(g)) {
-//		SPProgressBarPlug.setStatus("FAILED: " + g);
-//		break;
-//	    }
-//	    SPProgressBarPlug.setStatus("Validating DONE");
-//	}
+	for (GRUP_TYPE g : types) {
+	    if (!test(g)) {
+		SPProgressBarPlug.setStatus("FAILED: " + g);
+		break;
+	    }
+	    SPProgressBarPlug.setStatus("Validating DONE");
+	}
 
     }
 
