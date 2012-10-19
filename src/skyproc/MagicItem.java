@@ -26,13 +26,6 @@ abstract class MagicItem extends MajorRecordDescription {
 
     MagicItem() {
 	super();
-    }
-
-    MagicItem(Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
-    }
-
-    void init() {
 	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
 	OBND.initialize(12);

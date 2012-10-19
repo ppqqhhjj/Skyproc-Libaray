@@ -20,12 +20,6 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
         subRecords.add(description);
     }
 
-    MajorRecordDescription(Mod mod, String edid) {
-        super(mod, edid);
-        description.forceExport = true;
-        subRecords.add(description);
-    }
-
     /**
      *
      * @return Description associated with the Major Record, or <NO TEXT> if empty.

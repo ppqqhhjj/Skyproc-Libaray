@@ -39,12 +39,6 @@ public class INGR extends MagicItem {
 
     INGR() {
 	super();
-	init();
-    }
-
-    @Override
-    final void init() {
-	super.init();
 	subRecords.add(scripts);
 	subRecords.add(OBND);
 	subRecords.add(FULL);

@@ -17,15 +17,15 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class Record implements Serializable {
 
-    final static HashMap<String, Type> types;
+    final static HashMap<String, Type> allTypes;
     static {
 	Type[] ta = Type.values();
-	types = new HashMap<>(ta.length);
+	allTypes = new HashMap<>(ta.length);
 	for (Type t : ta) {
-	    types.put(t.toString(), t);
+	    allTypes.put(t.toString(), t);
 	}
     }
-    
+
     Record() {
     }
 
@@ -69,7 +69,7 @@ public abstract class Record implements Serializable {
     }
 
     static Type matchType(String str) throws BadRecord {
-	Type out = types.get(str);
+	Type out = allTypes.get(str);
 	if (out != null) {
 	    return out;
 	}

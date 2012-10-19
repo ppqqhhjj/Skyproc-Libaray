@@ -34,12 +34,6 @@ public class ALCH extends MagicItem {
 
     ALCH() {
 	super();
-	init();
-    }
-
-    @Override
-    final void init() {
-	super.init();
 	subRecords.add(OBND);
 	subRecords.add(FULL);
 	subRecords.add(keywords);
@@ -55,7 +49,7 @@ public class ALCH extends MagicItem {
 	subRecords.add(ETYP);
 	subRecords.add(magicEffects);
     }
-
+    
     @Override
     Type[] getTypes() {
 	return type;
@@ -197,7 +191,7 @@ public class ALCH extends MagicItem {
     ENIT getEnit() {
 	return (ENIT) subRecords.get(Type.ENIT);
     }
-    
+
     /**
      *
      * @param value
@@ -263,7 +257,7 @@ public class ALCH extends MagicItem {
     public FormID getUseSound() {
 	return getEnit().useSound;
     }
-    
+
     /**
      *
      * @param weight

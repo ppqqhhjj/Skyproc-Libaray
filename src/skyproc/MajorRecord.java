@@ -33,9 +33,8 @@ public abstract class MajorRecord extends Record implements Serializable {
     MajorRecord() {
 	subRecords.add(EDID);
     }
-
-    MajorRecord(Mod modToOriginateFrom, String edid) {
-	this();
+    
+    void originateFrom(Mod modToOriginateFrom, String edid) {
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	Consistency.addEntry(getEDID(), ID);
@@ -109,7 +108,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-	
+
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
 	revision = in.extract(4);
@@ -271,7 +270,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     static class Null_Major extends MajorRecord {
 
 	private static final Type[] type = {Type.NULL};
-	
+
 	@Override
 	Type[] getTypes() {
 	    return type;

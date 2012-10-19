@@ -15,7 +15,7 @@ import skyproc.exceptions.NotFound;
  */
 abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO> {
 
-    SubList<LVLO> entries = new SubList<LVLO>(Type.LLCT, 1, new LVLO());
+    SubList<LVLO> entries = new SubList<>(Type.LLCT, 1, new LVLO());
     SubData OBND = new SubData(Type.OBND, 12);
     SubData LVLD = new SubData(Type.LVLD);
     SubFlag LVLF = new SubFlag(Type.LVLF, 1);
@@ -36,7 +36,8 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param edid EDID to assign the record. Make sure it's unique.
      */
     public LeveledRecord(Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
+	this();
+	originateFrom(modToOriginateFrom, edid);
 	LVLD.initialize(1);
 	OBND.initialize(12);
 	set(LVLFlag.CalcAllLevelsEqualOrBelowPC, true);

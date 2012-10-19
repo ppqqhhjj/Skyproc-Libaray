@@ -23,7 +23,8 @@ public class GLOB extends MajorRecord {
 
     GLOB () {
 	super();
-	init();
+	subRecords.add(FNAM);
+	subRecords.add(FLTV);
     }
 
     /**
@@ -33,8 +34,8 @@ public class GLOB extends MajorRecord {
      * @param type
      */
     public GLOB(Mod modToOriginateFrom, String edid, GLOBType type) {
-	super(modToOriginateFrom, edid);
-	init();
+	this();
+	originateFrom(modToOriginateFrom, edid);
 	FNAM.data = new byte[1];
 	setType(type);
     }
@@ -51,11 +52,6 @@ public class GLOB extends MajorRecord {
 	this(modToOriginateFrom, edid, type);
 	setValue(value);
 	setConstant(constant);
-    }
-
-    final void init() {
-	subRecords.add(FNAM);
-	subRecords.add(FLTV);
     }
 
     @Override

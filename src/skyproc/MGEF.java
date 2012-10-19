@@ -35,7 +35,7 @@ public class MGEF extends MajorRecordDescription {
     SubForm MODB = new SubForm(Type.MDOB);
     SubData OBND = new SubData(Type.OBND);
     SNDD sounds = new SNDD();
-    SubList<Condition> CONDs = new SubList<Condition>(new Condition());
+    SubList<Condition> CONDs = new SubList<>(new Condition());
     /**
      *
      */
@@ -48,7 +48,8 @@ public class MGEF extends MajorRecordDescription {
      * @param name
      */
     public MGEF(Mod modToOriginateFrom, String edid, String name) {
-	super(modToOriginateFrom, edid);
+	this();
+	originateFrom(modToOriginateFrom, edid);
 	this.setName(name);
 	init();
     }

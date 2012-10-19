@@ -36,8 +36,8 @@ public class KYWD extends MajorRecord {
      * @param edid EDID to assign the record.  Make sure it's unique.
      */
     public KYWD (Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
-	EDID.setString(edid);
+	this();
+	originateFrom(modToOriginateFrom, edid);
     }
 
     @Override

@@ -4,7 +4,6 @@
  */
 package skyproc;
 
-import java.util.Set;
 import skyproc.exceptions.NotFound;
 
 /**
@@ -30,7 +29,13 @@ public class SPEL extends MagicItem {
 
     SPEL() {
 	super();
-	init();
+	subRecords.add(OBND);
+	subRecords.add(FULL);
+	subRecords.add(MDOB);
+	subRecords.add(ETYP);
+	subRecords.add(description);
+	subRecords.add(SPIT);
+	subRecords.add(magicEffects);
     }
 
     /**
@@ -40,23 +45,11 @@ public class SPEL extends MagicItem {
      * @param edid
      */
     public SPEL(Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
-	init();
+	this();
+	originateFrom(modToOriginateFrom, edid);
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	ETYP.ID.standardize(modToOriginateFrom);
 	SPIT.valid = true;
-    }
-
-    @Override
-    final void init() {
-	super.init();
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(MDOB);
-	subRecords.add(ETYP);
-	subRecords.add(description);
-	subRecords.add(SPIT);
-	subRecords.add(magicEffects);
     }
 
     /**

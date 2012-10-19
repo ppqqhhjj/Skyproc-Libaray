@@ -25,8 +25,6 @@ public class ENCH extends MagicItem {
 
     ENCH() {
 	super();
-	init();
-
 	subRecords.add(OBND);
 	subRecords.add(FULL);
 	subRecords.add(ENIT);

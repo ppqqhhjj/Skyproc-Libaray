@@ -27,9 +27,11 @@ public class FLST extends MajorRecord {
      * @param edid EDID to give the new record.  Make sure it is unique.
      */
     public FLST (Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
-	subRecords.add(LNAMs);
+	this();
+	originateFrom(modToOriginateFrom, edid);
     }
+
+
 
     @Override
     Type[] getTypes() {

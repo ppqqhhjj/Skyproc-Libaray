@@ -37,8 +37,8 @@ public class GMST extends MajorRecord {
      * @param b
      */
     public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
-	super(modToOriginateFrom, setting.toString());
-	init();
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
 	setData(b);
     }
 
@@ -49,8 +49,8 @@ public class GMST extends MajorRecord {
      * @param s
      */
     public GMST(Mod modToOriginateFrom, StringSetting setting, String s) {
-	super(modToOriginateFrom, setting.toString());
-	init();
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
 	setData(s);
     }
 
@@ -61,8 +61,8 @@ public class GMST extends MajorRecord {
      * @param i
      */
     public GMST(Mod modToOriginateFrom, IntSetting setting, int i) {
-	super(modToOriginateFrom, setting.toString());
-	init();
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
 	setData(i);
     }
 
@@ -73,13 +73,9 @@ public class GMST extends MajorRecord {
      * @param f
      */
     public GMST(Mod modToOriginateFrom, FloatSetting setting, float f) {
-	super(modToOriginateFrom, setting.toString());
-	init();
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
 	setData(f);
-    }
-
-    final void init() {
-	subRecords.add(DATA);
     }
 
     @Override

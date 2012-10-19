@@ -38,17 +38,13 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @param edid The edid to give the new record (make it unique)
      */
     public TXST(Mod srcMod, String edid) {
-	super(srcMod, edid);
-	init();
+	this();
+	originateFrom(srcMod, edid);
 	OBND.setData(new byte[12]);
     }
 
     TXST() {
 	super();
-	init();
-    }
-
-    final void init() {
 	subRecords.add(OBND);
 	subRecords.add(colorMap);
 	subRecords.add(normalMap);

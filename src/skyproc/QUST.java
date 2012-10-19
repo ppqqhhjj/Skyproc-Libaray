@@ -22,18 +22,6 @@ public class QUST extends MajorRecordNamed {
 
     QUST () {
 	super();
-	init();
-    }
-
-    QUST (Mod modToOriginateFrom, String edid) {
-	super(modToOriginateFrom, edid);
-	DNAM.setData(0x111,12);
-	NEXT.forceExport(true);
-	ANAM.initialize(4);
-	init();
-    }
-
-    final void init() {
 	subRecords.remove(Type.FULL);
 
 	subRecords.add(scripts);
@@ -41,6 +29,17 @@ public class QUST extends MajorRecordNamed {
 	subRecords.add(DNAM);
 	subRecords.add(NEXT);
 	subRecords.add(ANAM);
+    }
+
+    QUST (Mod modToOriginateFrom, String edid) {
+	this();
+	originateFrom(modToOriginateFrom, edid);
+	DNAM.setData(0x111,12);
+	NEXT.forceExport(true);
+	ANAM.initialize(4);
+    }
+
+    final void init() {
     }
 
     @Override

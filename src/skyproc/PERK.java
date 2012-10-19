@@ -30,7 +30,7 @@ public class PERK extends MajorRecordDescription {
 
     PERK() {
 	super();
-	subRecords.remove(Type.FULL);  // Different order
+	subRecords.remove(Type.FULL);
 	subRecords.remove(Type.DESC);
 
 	subRecords.add(scripts);
