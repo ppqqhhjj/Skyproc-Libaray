@@ -135,8 +135,9 @@ public class RACE extends MajorRecordDescription {
     class RaceSubrecords extends SubRecords {
 
 	RaceSubrecords(SubRecords orig) {
-	    this.list = orig.list;
-	    this.forceExport = orig.forceExport;
+	    // int wer
+//	    this.list = orig.list;
+//	    this.forceExport = orig.forceExport;
 	    this.map = orig.map;
 	    this.pos = orig.pos;
 	}

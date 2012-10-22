@@ -33,7 +33,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     MajorRecord() {
 	subRecords.add(EDID);
     }
-    
+
     void originateFrom(Mod modToOriginateFrom, String edid) {
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());

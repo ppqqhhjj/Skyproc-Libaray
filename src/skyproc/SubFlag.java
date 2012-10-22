@@ -51,7 +51,7 @@ class SubFlag extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubFlag(type, 0);
+	return new SubFlag(type, flags.length());
     }
 
     @Override

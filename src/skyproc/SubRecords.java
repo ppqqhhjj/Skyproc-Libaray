@@ -19,38 +19,57 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubRecords implements Iterable<SubRecord>, Serializable {
+class SubRecords implements Serializable {
 
-    protected ArrayList<SubRecord> list = new ArrayList<>();
+    protected MajorPrototype prototype;
     protected Map<Type, SubRecord> map = new HashMap<>(0);
     protected Map<Type, Long> pos = new HashMap<>(0);
-    protected Set<Type> forceExport = new HashSet<>(0);
+
+    public SubRecords () {
+
+    }
+
+    public SubRecords (MajorPrototype proto) {
+	this.prototype = proto;
+    }
 
     public void add(SubRecord r) {
 	for (Type t : r.getTypes()) {
 	    map.put(t, r);
 	}
-	list.add(r);
     }
 
     void export(LExporter out, Mod srcMod) throws IOException {
-	for (SubRecord s : list) {
-	    if (shouldExport(s)) {
-		s.export(out, srcMod);
+	for (Type t : prototype.list) {
+	    if (contains(t)) {
+		SubRecord instance = get(t);
+		if (shouldExport(instance)) {
+		    instance.export(out, srcMod);
+		}
 	    }
 	}
     }
 
+    public boolean shouldExport(SubRecord s) {
+	return prototype.forceExport.contains(s.getType()) || s.isValid();
+    }
+
     public void forceExport(Type t) {
-	forceExport.add(t);
     }
 
     public boolean contains(Type t) {
-	return map.containsKey(t);
+	return prototype.contains(t);
     }
 
     public SubRecord get(Type in) {
-	return map.get(in);
+	if (map.containsKey(in)) {
+	    return map.get(in);
+	} else if (prototype.contains(in)) {
+	    map.put(in, prototype.get(in).getNew(in));
+	    return map.get(in);
+	} else {
+	    return null;
+	}
     }
 
     public SubString getSubString(Type in) {
@@ -77,8 +96,28 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 	getSubFloat(in).set(f);
     }
 
+    public SubData getSubData(Type in) {
+	return (SubData) get(in);
+    }
+
+    public void setSubData(Type in, byte[] b) {
+	getSubData(in).setData(b);
+    }
+
+    public SubFlag getSubFlag(Type in) {
+	return (SubFlag) get(in);
+    }
+
+    public void setSubFlag(Type in, int i, boolean b) {
+	getSubFlag(in).set(i, b);
+    }
+
+    public SubList getSubList(Type in) {
+	return (SubList) get(in);
+    }
+
     boolean isValid() {
-	for (SubRecord s : list) {
+	for (SubRecord s : map.values()) {
 	    if (!s.isValid()) {
 		return false;
 	    }
@@ -143,30 +182,22 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
 
     public void remove(Type in) {
 	if (map.containsKey(in)) {
-	    for (int i = 0; i < list.size(); i++) {
-		if (list.get(i).getTypes()[0].equals(in)) {
-		    list.remove(i);
-		    break;
-		}
-	    }
 	    map.remove(in);
+	}
+	if (pos.containsKey(in)) {
 	    pos.remove(in);
-	    forceExport.remove(in);
 	}
     }
 
     public int length(Mod srcMod) {
 	int length = 0;
-	for (SubRecord s : list) {
-	    if (shouldExport(s)) {
+	for (Type t : prototype.list) {
+	    SubRecord s = get(t);
+	    if (s != null && shouldExport(s)) {
 		length += s.getTotalLength(srcMod);
 	    }
 	}
 	return length;
-    }
-
-    public boolean shouldExport(SubRecord s) {
-	return s.isValid() || forceExport.contains(s.getTypes()[0]);
     }
 
     public ArrayList<SubRecord> getRecords() {
@@ -178,21 +209,16 @@ class SubRecords implements Iterable<SubRecord>, Serializable {
     }
 
     void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
-	for (SubRecord s : list) {
+	for (SubRecord s : map.values()) {
 	    s.fetchStringPointers(srcMod, r, streams);
 	}
     }
 
     public ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
-	for (SubRecord s : list) {
+	ArrayList<FormID> out = new ArrayList<>();
+	for (SubRecord s : map.values()) {
 	    out.addAll(s.allFormIDs());
 	}
 	return out;
-    }
-
-    @Override
-    public Iterator<SubRecord> iterator() {
-	return list.iterator();
     }
 }

@@ -86,10 +86,6 @@ public class AVIF extends MajorRecordDescription {
 
 	PerkReference() {
 	    super(types);
-	    init();
-	}
-
-	final void init () {
 	    subRecords.add(PNAM);
 	    subRecords.forceExport(Type.PNAM);
 	    subRecords.add(FNAM);
@@ -101,7 +97,7 @@ public class AVIF extends MajorRecordDescription {
 	    subRecords.add(CNAMs);
 	    subRecords.add(INAM);
 	}
-
+	
 	@Override
 	Boolean isValid() {
 	    return true;

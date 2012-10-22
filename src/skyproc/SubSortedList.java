@@ -26,6 +26,16 @@ class SubSortedList<T extends SubRecord> extends SubList<T> {
         this.allowDups = false;
     }
 
+    SubSortedList(SubSortedList rhs) {
+	super(rhs);
+	sorter.addAll(rhs.sorter);
+    }
+
+    @Override
+    SubRecord getNew(Type type) {
+	return new SubSortedList(this);
+    }
+
     @Override
     public T get(int i) {
         return (T)sorter.toArray()[i];

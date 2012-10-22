@@ -92,7 +92,7 @@ public class GLOB extends MajorRecord {
      *
      * @return
      */
-    public GLOBType getType () {
+    public GLOBType getGLOBType () {
 	if ((int)FNAM.data[0] == GLOBType.Short.value) {
 	    return GLOBType.Short;
 	} else if ((int)FNAM.data[0] == GLOBType.Long.value) {

@@ -175,7 +175,7 @@ class ScriptProperty extends Record implements Serializable {
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
 	name.export(out, srcMod);
-	out.write(getType().value, 1);
+	out.write(getPropertyType().value, 1);
 	out.write(unknown, 1);
 	data.export(out, srcMod);
     }
@@ -679,7 +679,7 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     // get/set
-    public ScriptPropertyType getType() {
+    public ScriptPropertyType getPropertyType() {
 	return data.getType();
     }
 }

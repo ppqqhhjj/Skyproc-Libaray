@@ -60,6 +60,10 @@ public abstract class Record implements Serializable {
 
     abstract Type[] getTypes();
 
+    Type getType() {
+	return getTypes()[0];
+    }
+
     Record getNew() {
 	throw new UnsupportedOperationException("Not supported yet.");
     }

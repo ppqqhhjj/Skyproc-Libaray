@@ -43,6 +43,15 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
         type[prototype_.type.length] = counterType;
     }
 
+    SubList(SubList rhs) {
+        super(rhs.prototype.type);
+	prototype = (T) rhs.prototype;
+	counterType = rhs.counterType;
+	allowDups = rhs.allowDups;
+	counterLength = rhs.counterLength;
+	collection.addAll(rhs.collection);
+    }
+
     @Override
     int getHeaderLength() {
         return 0;
@@ -195,7 +204,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     @Override
     SubRecord getNew(Type type) {
-        throw new UnsupportedOperationException("Not supported.");
+        return new SubList(this);
     }
 
     @Override

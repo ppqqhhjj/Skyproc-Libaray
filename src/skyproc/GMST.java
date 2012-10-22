@@ -92,7 +92,7 @@ public class GMST extends MajorRecord {
      *
      * @return The type of data this GMST contains.
      */
-    public GMSTType getType() {
+    public GMSTType getGMSTType() {
 	if (getEDID().length() == 0) {
 	    return GMSTType.Unknown;
 	}
@@ -229,7 +229,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
-	    switch (getType()) {
+	    switch (getGMSTType()) {
 		case String:
 		    DATAs.export(out, srcMod);
 		    break;
@@ -240,7 +240,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    switch (getType()) {
+	    switch (getGMSTType()) {
 		case String:
 		    DATAs.parseData(in);
 		    break;
@@ -251,7 +251,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    switch (getType()) {
+	    switch (getGMSTType()) {
 		case String:
 		    return DATAs.getContentLength(srcMod);
 		default:

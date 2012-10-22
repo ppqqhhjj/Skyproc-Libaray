@@ -20,7 +20,7 @@ import skyproc.gui.SPProgressBarPlug;
  */
 public class Mod implements Comparable, Iterable<GRUP> {
 
-    TES4 header = new TES4();
+    TES4 tes = new TES4();
     ModListing modInfo;
     Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
     GRUP<GMST> gameSettings = new GRUP<>(this, new GMST());
@@ -71,7 +71,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
 	this(info, true);
 	logSync("MOD", "Parsing header");
-	header.parseData(headerInfo);
+	tes.parseData(headerInfo);
     }
 
     Mod(ModListing info, boolean temp) {
@@ -160,8 +160,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the Nth master
      */
     public ModListing getNthMaster(int i) {
-	if (header.getMasters().size() > i) {
-	    return header.getMasters().get(i);
+	if (tes.getMasters().size() > i) {
+	    return tes.getMasters().get(i);
 	} else {
 	    return getInfo();
 	}
@@ -172,7 +172,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The number of masters in the mod.
      */
     public int numMasters() {
-	return header.getMasters().size();
+	return tes.getMasters().size();
     }
 
     /**
@@ -204,12 +204,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    return oldFormID;
 	} else {
 	    //Find next open FormID
-	    FormID possibleID = new FormID(header.HEDR.nextID++, getInfo());
+	    HEDR hedr = tes.getHEDR();
+	    FormID possibleID = new FormID(hedr.nextID++, getInfo());
 	    while (!Consistency.requestID(possibleID)) {
-		header.HEDR.nextID++;
-		if (header.HEDR.nextID > 0xFFFFFF) {
+		hedr.nextID++;
+		if (hedr.nextID > 0xFFFFFF) {
 		    if (!Consistency.cleaned) {
-			header.HEDR.nextID = HEDR.firstAvailableID;
+			hedr.nextID = HEDR.firstAvailableID;
 			Consistency.cleanConsistency();
 			return getNextID(edid);
 		    } else {
@@ -219,7 +220,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 		    }
 		}
-		possibleID = new FormID(header.HEDR.nextID++, getInfo());
+		possibleID = new FormID(hedr.nextID++, getInfo());
 	    }
 	    if (SPGlobal.debugConsistencyTies && SPGlobal.logging()) {
 		SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
@@ -229,7 +230,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void mergeMasters(Mod in) {
-	for (ModListing m : in.header.masters) {
+	for (ModListing m : in.tes.getMasters()) {
 	    addMaster(m);
 	}
 	if (!in.equals(SPGlobal.getGlobalPatch())) {
@@ -242,7 +243,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void addMaster(ModListing input) {
 	if (!getInfo().equals(input)) {
-	    header.addMaster(input);
+	    tes.addMaster(input);
 	}
     }
 
@@ -441,7 +442,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public ArrayList<String> getMastersStrings() {
 	ArrayList<String> out = new ArrayList<>();
-	for (ModListing m : header.masters.collection) {
+	for (ModListing m : tes.getMasters()) {
 	    out.add(m.print());
 	}
 	return out;
@@ -456,7 +457,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public ArrayList<ModListing> getMasters() {
 	ArrayList<ModListing> out = new ArrayList<ModListing>();
-	for (ModListing m : header.getMasters()) {
+	for (ModListing m : tes.getMasters()) {
 	    out.add(m);
 	}
 	return out;
@@ -604,7 +605,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     int getTotalLength() {
-	return getContentLength() + header.getTotalLength(this);
+	return getContentLength() + tes.getTotalLength(this);
     }
 
     int getContentLength() {
@@ -688,18 +689,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	standardizeMasters();
 
 	// Export Header
-	header.setNumRecords(numRecords());
+	tes.setNumRecords(numRecords());
 	if (logging()) {
 	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
 	    SPGlobal.sync(true);
-	    logSync(this.getName(), "Exporting " + header.HEDR.numRecords + " records.");
+	    logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
 	    logSync(this.getName(), "Masters: ");
 	    for (String s : this.getMastersStrings()) {
 		logSync(this.getName(), "   " + s);
 	    }
 	}
 
-	header.export(out, srcMod);
+	tes.export(out, srcMod);
 
 	// Export GRUPs
 	int count = 1;
@@ -849,7 +850,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param in Your name here.
      */
     public void setAuthor(String in) {
-	header.setAuthor(in);
+	tes.setAuthor(in);
     }
 
     void parseData(Type type, LChannel data) throws Exception {
@@ -866,7 +867,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return True if the given flag is on in the mod.
      */
     public boolean isFlag(Mod_Flags flag) {
-	return header.flags.get(flag.value);
+	return tes.flags.get(flag.value);
     }
 
     /**
@@ -879,7 +880,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param on What to set the flag to.
      */
     public final void setFlag(Mod_Flags flag, boolean on) {
-	header.flags.set(flag.value, on);
+	tes.flags.set(flag.value, on);
 	if (flag == Mod_Flags.MASTER) {
 	    getInfo().setMasterTag(on);
 	}
@@ -1252,29 +1253,26 @@ public class Mod implements Comparable, Iterable<GRUP> {
     // Internal Classes
     static class TES4 extends Record {
 
-	private static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
-	SubRecords subRecords = new SubRecords();
+	static final MajorPrototype prototype = new MajorPrototype();
+	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
+	static {
+	    prototype.add(new HEDR());
+	    prototype.add(new SubString(Type.CNAM, true));
+	    prototype.add(new SubSortedList<>(new ModListing()));
+	    prototype.add(new SubString(Type.SNAM, true));
+	    prototype.add(new SubData(Type.INTV, defaultINTV));
+	    prototype.add(new SubData(Type.ONAM));
+	    prototype.add(new SubData(Type.INCC));
+	}
+
+	SubRecords subRecords = new SubRecords(prototype);
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
 	private int fluff2 = 0;
 	private int fluff3 = 0;
-	HEDR HEDR = new HEDR();
-	SubString author = new SubString(Type.CNAM, true);
-	SubSortedList<ModListing> masters = new SubSortedList<>(new ModListing());
-	SubString description = new SubString(Type.SNAM, true);
-	SubData INTV = new SubData(Type.INTV, defaultINTV);
-	SubData ONAM = new SubData(Type.ONAM);
-	SubData INCC = new SubData(Type.INCC);
 	private static final Type[] type = {Type.TES4};
 
 	TES4() {
-	    subRecords.add(HEDR);
-	    subRecords.add(author);
-	    subRecords.add(description);
-	    subRecords.add(masters);
-	    subRecords.add(ONAM);
-	    subRecords.add(INTV);
-	    subRecords.add(INCC);
 	}
 
 	TES4(LShrinkArray in) throws Exception {
@@ -1314,25 +1312,23 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    out.write(fluff1);
 	    out.write(fluff2);
 	    out.write(fluff3);
-	    HEDR.export(out, srcMod);
-	    author.export(out, srcMod);
-	    masters.export(out, srcMod);
+	    subRecords.export(out, srcMod);
 	}
 
 	void addMaster(ModListing mod) {
-	    masters.add(mod);
+	    subRecords.getSubList(Type.MAST).add(mod);
 	}
 
 	void clearMasters() {
-	    masters.clear();
+	    subRecords.getSubList(Type.MAST).clear();
 	}
 
 	SubSortedList<ModListing> getMasters() {
-	    return masters;
+	    return (SubSortedList<ModListing>) subRecords.get(Type.MAST);
 	}
 
 	void setAuthor(String in) {
-	    author.setString(in);
+	    subRecords.getSubString(Type.CNAM).setString(in);
 	}
 
 	@Override
@@ -1343,11 +1339,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    int out = 0;
-	    out += HEDR.getTotalLength(srcMod);
-	    if (author.isValid()) {
-		out += author.getTotalLength(srcMod);
-	    }
-	    out += masters.getTotalLength(srcMod);
+	    out += subRecords.length(srcMod);
 	    return out;
 	}
 
@@ -1357,7 +1349,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	void setNumRecords(int num) {
-	    HEDR.setRecords(num);
+	    getHEDR().setRecords(num);
+	}
+
+	HEDR getHEDR() {
+	    return (HEDR) subRecords.get(Type.HEDR);
+	}
+
+	int getNumRecords () {
+	    return getHEDR().numRecords;
 	}
 
 	@Override
