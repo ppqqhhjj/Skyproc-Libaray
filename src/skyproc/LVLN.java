@@ -1,7 +1,5 @@
 package skyproc;
 
-import skyproc.exceptions.BadParameter;
-
 /**
  * Leveled List.  A list of entries used for spawnpoints when choosing which actor to
  * spawn.  Each entry contains a FormID of an actor, a level, and a count to spawn.
@@ -9,7 +7,7 @@ import skyproc.exceptions.BadParameter;
  */
 public class LVLN extends LeveledRecord {
 
-    private static final Type[] type = {Type.LVLN};
+    private final static Type[] type = {Type.LVLN};
     SubString MODL = new SubString(Type.MODL, true);
     SubData MODT = new SubData(Type.MODT);
     boolean circular = false;

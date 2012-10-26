@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.AltTextures.AltTexture;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -19,38 +19,26 @@ import skyproc.exceptions.BadRecord;
  */
 public class MISC extends MajorRecordNamed {
 
-    SubData OBND = new SubData(Type.OBND);
-    SubString MODL = new SubString(Type.MODL, true);
-    SubData MODT = new SubData(Type.MODT);
-    public ScriptPackage scripts = new ScriptPackage();
-    public KeywordSet keywords = new KeywordSet();
-    DATA DATA = new DATA();
-    AltTextures altTex = new AltTextures(Type.MODS);
-    SubForm YNAM = new SubForm(Type.YNAM);
-    SubForm ZNAM = new SubForm(Type.ZNAM);
-    SubString ICON = new SubString(Type.ICON, true);
-    SubString MICO = new SubString(Type.MICO, true);
-    DestructionData dest = new DestructionData();
-
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordNamed.namedProto);
+    static {
+	prototype.add(new ScriptPackage());
+	prototype.add(new SubData(Type.OBND));
+	prototype.reposition(Type.FULL);
+	prototype.add(new SubString(Type.MODL, true));
+	prototype.add(new SubData(Type.MODT));
+	prototype.add(new AltTextures(Type.MODS));
+	prototype.add(new SubString(Type.ICON, true));
+	prototype.add(new SubForm(Type.YNAM));
+	prototype.add(new SubForm(Type.ZNAM));
+	prototype.add(new KeywordSet());
+	prototype.add(new DATA());
+	prototype.add(new SubString(Type.MICO, true));
+	prototype.add(new DestructionData());
+    }
     static Type[] types = new Type[] { Type.MISC };
 
     MISC() {
 	super();
-	subRecords.remove(Type.FULL);
-
-	subRecords.add(scripts);
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(MODL);
-	subRecords.add(MODT);
-	subRecords.add(altTex);
-	subRecords.add(ICON);
-	subRecords.add(YNAM);
-	subRecords.add(ZNAM);
-	subRecords.add(keywords);
-	subRecords.add(DATA);
-	subRecords.add(MICO);
-	subRecords.add(dest);
     }
 
     @Override
@@ -63,7 +51,7 @@ public class MISC extends MajorRecordNamed {
 	return new MISC();
     }
 
-    class DATA extends SubRecord {
+    static class DATA extends SubRecord {
 
 	int value = 0;
 	float weight = 0;
@@ -101,34 +89,38 @@ public class MISC extends MajorRecordNamed {
     }
 
     public String getModel() {
-	return MODL.print();
+	return subRecords.getSubString(Type.MODL).print();
     }
 
     public void setModel(String path) {
-	MODL.setString(path);
+	subRecords.getSubString(Type.MODL).setString(path);
+    }
+
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
     }
 
     public void setValue (int value) {
-	DATA.value = value;
+	getDATA().value = value;
     }
 
     public int getValue () {
-	return DATA.value;
+	return getDATA().value;
     }
 
     public void setWeight(float weight) {
-	DATA.weight = weight;
+	getDATA().weight = weight;
     }
 
     public float getWeight () {
-	return DATA.weight;
+	return getDATA().weight;
     }
 
     /**
      * @return List of the AltTextures applied.
      */
     public ArrayList<AltTexture> getAltTextures() {
-	return altTex.altTextures;
+	return ((AltTextures) subRecords.get(Type.MODS)).altTextures;
     }
 
     /**
@@ -147,7 +139,7 @@ public class MISC extends MajorRecordNamed {
      * @param sound
      */
     public void setPickupSound(FormID sound) {
-	YNAM.setForm(sound);
+	subRecords.setSubForm(Type.YNAM, sound);
     }
 
     /**
@@ -155,7 +147,7 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public FormID getPickupSound() {
-	return YNAM.getForm();
+	return subRecords.getSubForm(Type.YNAM).getForm();
     }
 
     /**
@@ -163,7 +155,7 @@ public class MISC extends MajorRecordNamed {
      * @param sound
      */
     public void setDropSound(FormID sound) {
-	ZNAM.setForm(sound);
+	subRecords.setSubForm(Type.ZNAM, sound);
     }
 
     /**
@@ -171,22 +163,22 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public FormID getDropSound() {
-	return ZNAM.getForm();
+	return subRecords.getSubForm(Type.ZNAM).getForm();
     }
 
     public void setInventoryImage(String path) {
-	ICON.setString(path);
+	subRecords.setSubString(Type.ICON, path);
     }
 
     public String getInventoryImage() {
-	return ICON.print();
+	return subRecords.getSubString(Type.ICON).print();
     }
 
     public void setMessageImage(String path) {
-	MICO.setString(path);
+	subRecords.setSubString(Type.MICO, path);
     }
 
     public String getMessageImage () {
-	return MICO.print();
+	return subRecords.getSubString(Type.MICO).print();
     }
 }

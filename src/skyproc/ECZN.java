@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -21,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class ECZN extends MajorRecord {
 
-    private static final Type[] type = {Type.ECZN};
+    private final static Type[] type = {Type.ECZN};
     DATA DATA = new DATA();
 
     /**

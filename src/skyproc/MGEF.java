@@ -6,15 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -25,21 +20,24 @@ import skyproc.exceptions.BadRecord;
  */
 public class MGEF extends MajorRecordDescription {
 
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static {
+	prototype.add(new ScriptPackage());
+	prototype.reposition(Type.FULL);
+	prototype.add(new SubForm(Type.MDOB));
+	prototype.add(new KeywordSet());
+	prototype.add(new DATA());
+	prototype.add(new SNDD());
+	prototype.add(new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS));
+	prototype.forceExport(Type.DNAM);
+	SubStringPointer desc = (SubStringPointer) prototype.get(Type.DESC);
+	desc.file = SubStringPointer.Files.STRINGS;
+	prototype.reposition(Type.DESC);
+	prototype.add(new SubForm(Type.ESCE));
+	prototype.add(new SubList<>(new Condition()));
+	prototype.add(new SubData(Type.OBND));
+    }
     private static Type[] types = {Type.MGEF};
-    DATA DATA = new DATA();
-    SubForm ESCE = new SubForm(Type.ESCE);
-    /**
-     *
-     */
-    public KeywordSet keywords = new KeywordSet();
-    SubForm MODB = new SubForm(Type.MDOB);
-    SubData OBND = new SubData(Type.OBND);
-    SNDD sounds = new SNDD();
-    SubList<Condition> CONDs = new SubList<>(new Condition());
-    /**
-     *
-     */
-    public ScriptPackage scripts = new ScriptPackage();
 
     /**
      *
@@ -51,31 +49,11 @@ public class MGEF extends MajorRecordDescription {
 	this();
 	originateFrom(modToOriginateFrom, edid);
 	this.setName(name);
-	init();
     }
 
     MGEF() {
 	super();
-	init();
-    }
-
-    final void init() {
-	subRecords.remove(Type.FULL);
-	subRecords.remove(Type.DESC);
-	description = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
-	description.forceExport = true;
-	description.file = SubStringPointer.Files.STRINGS;
-
-	subRecords.add(scripts);
-	subRecords.add(FULL);
-	subRecords.add(MODB);
-	subRecords.add(keywords);
-	subRecords.add(DATA);
-	subRecords.add(sounds);
-	subRecords.add(description);
-	subRecords.add(ESCE);
-	subRecords.add(CONDs);
-	subRecords.add(OBND);
+	subRecords.prototype = prototype;
     }
 
     @Override
@@ -88,7 +66,7 @@ public class MGEF extends MajorRecordDescription {
 	return new MGEF();
     }
 
-    class DATA extends SubRecord {
+    static class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(4);
 	float baseCost = 0;
@@ -299,7 +277,7 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
-    class SNDD extends SubRecord {
+    static class SNDD extends SubRecord {
 
 	ArrayList<Sound> sounds = new ArrayList<>();
 
@@ -473,13 +451,17 @@ public class MGEF extends MajorRecordDescription {
 	OnHit
     }
 
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
+    }
+
     /**
      *
      * @param flag
      * @param on
      */
     public void set(SpellEffectFlag flag, boolean on) {
-	DATA.flags.set(flag.value, on);
+	getDATA().flags.set(flag.value, on);
     }
 
     /**
@@ -488,6 +470,10 @@ public class MGEF extends MajorRecordDescription {
      * @return
      */
     public boolean get(SpellEffectFlag flag) {
-	return DATA.flags.get(flag.value);
+	return getDATA().flags.get(flag.value);
+    }
+
+    public ScriptPackage getScripts() {
+	return (ScriptPackage) subRecords.get(Type.VMAD);
     }
 }

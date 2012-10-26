@@ -25,7 +25,7 @@ public class QUST extends MajorRecordNamed {
 	subRecords.remove(Type.FULL);
 
 	subRecords.add(scripts);
-	subRecords.add(FULL);
+//	subRecords.add(FULL);
 	subRecords.add(DNAM);
 	subRecords.add(NEXT);
 	subRecords.add(ANAM);
@@ -47,4 +47,5 @@ public class QUST extends MajorRecordNamed {
 	return types;
     }
 
+    
 }

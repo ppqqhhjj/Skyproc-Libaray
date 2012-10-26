@@ -25,7 +25,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     StringNonNull name = new StringNonNull();
     int unknown = 0;
     ArrayList<ScriptProperty> properties = new ArrayList<>();
-    private static final Type[] type = {Type.VMAD};
+    private final static Type[] type = {Type.VMAD};
 
     ScriptRef() {
     }

@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -21,14 +19,16 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class SubShell extends SubRecord {
 
-    SubRecords subRecords = new SubRecords();
+    SubRecords subRecords;
 
     SubShell(Type type_) {
 	super(type_);
+	subRecords = new SubRecordsSolo(type_);
     }
 
     SubShell(Type[] type_) {
 	super(type_);
+	subRecords = new SubRecordsSolo(type_);
     }
 
     @Override

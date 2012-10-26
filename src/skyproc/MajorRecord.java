@@ -13,7 +13,6 @@ import lev.Ln;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
-import skyproc.exceptions.Uninitialized;
 
 /**
  * A record contained in a GRUP. These are top level records that all have
@@ -23,15 +22,18 @@ import skyproc.exceptions.Uninitialized;
  */
 public abstract class MajorRecord extends Record implements Serializable {
 
-    SubRecords subRecords = new SubRecords();
+    static final SubRecordsPrototype majorProto = new SubRecordsPrototype();
+    static {
+	majorProto.add(new SubString(Type.EDID, true));
+    }
+    SubRecordsDerived subRecords = new SubRecordsDerived(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
     byte[] version = {0x28, 0, 0, 0};
-    SubString EDID = new SubString(Type.EDID, true);
+    SubString EDID = subRecords.getSubString(Type.EDID);
 
     MajorRecord() {
-	subRecords.add(EDID);
     }
 
     void originateFrom(Mod modToOriginateFrom, String edid) {
@@ -177,6 +179,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
+	    
+	    if (getEDID().equals("CW01BWraithPoison")) {
+		int wer = 23;
+	    }
+	    
 	    subRecords.export(out, srcMod);
 	}
     }
@@ -269,7 +276,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     static class Null_Major extends MajorRecord {
 
-	private static final Type[] type = {Type.NULL};
+	private final static Type[] type = {Type.NULL};
 
 	@Override
 	Type[] getTypes() {

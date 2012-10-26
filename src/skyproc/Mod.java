@@ -1253,7 +1253,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     // Internal Classes
     static class TES4 extends Record {
 
-	static final MajorPrototype prototype = new MajorPrototype();
+	static final SubRecordsPrototype prototype = new SubRecordsPrototype();
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static {
 	    prototype.add(new HEDR());
@@ -1265,12 +1265,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    prototype.add(new SubData(Type.INCC));
 	}
 
-	SubRecords subRecords = new SubRecords(prototype);
+	SubRecordsDerived subRecords = new SubRecordsDerived(prototype);
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
 	private int fluff2 = 0;
 	private int fluff3 = 0;
-	private static final Type[] type = {Type.TES4};
+	private final static Type[] type = {Type.TES4};
 
 	TES4() {
 	}

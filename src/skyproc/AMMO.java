@@ -7,10 +7,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,32 +19,22 @@ import skyproc.exceptions.BadRecord;
  */
 public class AMMO extends MajorRecordDescription {
 
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static {
+	prototype.add(new SubData(Type.OBND));
+	prototype.reposition(Type.FULL);
+	prototype.add(new SubString(Type.MODL, true));
+	prototype.add(new SubData(Type.MODT));
+	prototype.add(new SubForm(Type.YNAM));
+	prototype.add(new SubForm(Type.ZNAM));
+	prototype.reposition(Type.DESC);
+	prototype.add(new KeywordSet());
+	prototype.add(new DATA());
+    }
     static Type[] types = {Type.AMMO};
-    SubData OBND = new SubData(Type.OBND);
-    SubString MODL = new SubString(Type.MODL, true);
-    SubData MODT = new SubData(Type.MODT);
-    SubForm YNAM = new SubForm(Type.YNAM);
-    SubForm ZNAM = new SubForm(Type.ZNAM);
-    /**
-     *
-     */
-    public KeywordSet keywords = new KeywordSet();
-    DATA DATA = new DATA();
 
     AMMO() {
 	super();
-	subRecords.remove(Type.FULL);
-	subRecords.remove(Type.DESC);
-
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(MODL);
-	subRecords.add(MODT);
-	subRecords.add(YNAM);
-	subRecords.add(ZNAM);
-	subRecords.add(description);
-	subRecords.add(keywords);
-	subRecords.add(DATA);
     }
 
     @Override
@@ -58,7 +47,7 @@ public class AMMO extends MajorRecordDescription {
 	return types;
     }
 
-    class DATA extends SubRecord {
+    static class DATA extends SubRecord {
 
 	FormID projectile = new FormID();
 	LFlags flags = new LFlags(4);

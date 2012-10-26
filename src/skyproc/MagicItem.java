@@ -7,10 +7,10 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
 import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,23 +20,27 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class MagicItem extends MajorRecordDescription {
 
-    SubData OBND = new SubData(Type.OBND);
-    SubList<MagicEffectRef> magicEffects = new SubList<>(new MagicEffectRef());
-    public KeywordSet keywords = new KeywordSet();
+    static final SubRecordsPrototype magicItemProto = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static {
+	SubData OBND = new SubData(Type.OBND);
+	OBND.initialize(12);
+	magicItemProto.add(OBND);
+	magicItemProto.reposition(Type.FULL);
+	magicItemProto.reposition(Type.DESC);
+	magicItemProto.add(new SubList<>(new MagicEffectRef()));
+	magicItemProto.add(new KeywordSet());
+    }
 
     MagicItem() {
 	super();
-	subRecords.remove(Type.FULL);
-	subRecords.remove(Type.DESC);
-	OBND.initialize(12);
     }
 
-    @Override
-    ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = super.allFormIDs();
-	out.addAll(magicEffects.allFormIDs());
-	return out;
-    }
+//    @Override
+//    ArrayList<FormID> allFormIDs() {
+//	ArrayList<FormID> out = super.allFormIDs();
+//	out.addAll(magicEffects.allFormIDs());
+//	return out;
+//    }
 
     static class SPIT extends SubRecord {
 
@@ -131,22 +135,22 @@ abstract class MagicItem extends MajorRecordDescription {
     }
 
     public ArrayList<MagicEffectRef> getMagicEffects() {
-	return magicEffects.toPublic();
+	return subRecords.getSubList(Type.EFID).toPublic();
     }
 
     public void removeMagicEffect(MagicEffectRef magicEffect) {
-	magicEffects.remove(magicEffect);
+	subRecords.getSubList(Type.EFID).remove(magicEffect);
     }
 
     public void addMagicEffect(MagicEffectRef magicEffect) {
-	magicEffects.add(magicEffect);
+	subRecords.getSubList(Type.EFID).add(magicEffect);
     }
 
     public void addMagicEffect(MGEF magicEffect) {
-	magicEffects.add(new MagicEffectRef(magicEffect.getForm()));
+	subRecords.getSubList(Type.EFID).add(new MagicEffectRef(magicEffect.getForm()));
     }
 
     public void clearMagicEffects() {
-	magicEffects.clear();
+	subRecords.getSubList(Type.EFID).clear();
     }
 }

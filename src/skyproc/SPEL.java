@@ -12,7 +12,7 @@ import skyproc.exceptions.NotFound;
  */
 public class SPEL extends MagicItem {
 
-    static final Type[] type = {Type.SPEL};
+    final static Type[] type = {Type.SPEL};
     SubForm MDOB = new SubForm(Type.MDOB);
     SubForm ETYP = new SubForm(Type.ETYP);
     SPIT SPIT = new SPIT();
@@ -29,13 +29,13 @@ public class SPEL extends MagicItem {
 
     SPEL() {
 	super();
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(MDOB);
-	subRecords.add(ETYP);
-	subRecords.add(description);
-	subRecords.add(SPIT);
-	subRecords.add(magicEffects);
+//	subRecords.add(OBND);
+//	subRecords.add(FULL);
+//	subRecords.add(MDOB);
+//	subRecords.add(ETYP);
+//	subRecords.add(description);
+//	subRecords.add(SPIT);
+//	subRecords.add(magicEffects);
     }
 
     /**

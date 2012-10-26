@@ -24,7 +24,7 @@ class ScriptProperty extends Record implements Serializable {
     StringNonNull name = new StringNonNull();
     int unknown = 1;
     ScriptData data;
-    private static final Type[] types = {Type.VMAD};
+    private final static Type[] types = {Type.VMAD};
 
     ScriptProperty() {
     }

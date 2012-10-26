@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class ModListing extends SubRecord implements Comparable {
 
-    static private Type[] types = {Type.MAST, Type.DATA};
+    private static Type[] types = {Type.MAST, Type.DATA};
     SubString mast = new SubString(Type.MAST, true);
     SubData data = new SubData(Type.DATA);
     boolean master = false;

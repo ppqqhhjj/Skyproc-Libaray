@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord implements Iterable<String> {
 
-    static final MajorPrototype prototype = new MajorPrototype();
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype();
     static {
 	prototype.add(new SubData(Type.OBND));
 	prototype.add(new SubString(Type.TX00, true));
@@ -33,7 +33,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * with Nth functions
      */
     public static int NUM_MAPS = 8;
-    private static final Type[] type = {Type.TXST};
+    private final static Type[] type = {Type.TXST};
 
     /**
      * Constructor to create a blank new TXST record.

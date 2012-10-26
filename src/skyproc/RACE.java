@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class RACE extends MajorRecordDescription {
 
-    private static final Type[] type = {Type.RACE};
+    private final static Type[] type = {Type.RACE};
     SubList<SubForm> spells = new SubList<>(Type.SPCT, 4, new SubForm(Type.SPLO));
     SubForm WNAM = new SubForm(Type.WNAM);
     /**
@@ -130,17 +130,6 @@ public class RACE extends MajorRecordDescription {
     @Override
     Record getNew() {
 	return new RACE();
-    }
-
-    class RaceSubrecords extends SubRecords {
-
-	RaceSubrecords(SubRecords orig) {
-	    // int wer
-//	    this.list = orig.list;
-//	    this.forceExport = orig.forceExport;
-	    this.map = orig.map;
-	    this.pos = orig.pos;
-	}
     }
 
     @Override

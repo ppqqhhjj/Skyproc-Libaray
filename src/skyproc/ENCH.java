@@ -7,10 +7,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,16 +19,19 @@ import skyproc.exceptions.BadRecord;
  */
 public class ENCH extends MagicItem {
 
-    ENIT ENIT = new ENIT();
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MagicItem.magicItemProto);
+    static {
+	prototype.reposition(Type.OBND);
+	prototype.reposition(Type.FULL);
+	prototype.add(new ENIT());
+	prototype.reposition(Type.EFID);
+	prototype.reposition(Type.KYWD);
+    }
+
     static Type[] types = {Type.ENCH};
 
     ENCH() {
 	super();
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(ENIT);
-	subRecords.add(magicEffects);
-	subRecords.add(keywords);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class ENCH extends MagicItem {
 	return new ENCH();
     }
 
-    class ENIT extends SubRecord {
+    static class ENIT extends SubRecord {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);
@@ -154,12 +156,16 @@ public class ENCH extends MagicItem {
 	}
     }
 
+    ENIT getENIT() {
+	return (ENIT) subRecords.get(Type.ENIT);
+    }
+
     /**
      *
      * @param cost
      */
     public void setBaseCost(int cost) {
-	ENIT.baseCost = cost;
+	getENIT().baseCost = cost;
     }
 
     /**
@@ -167,7 +173,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public int getBaseCost() {
-	return ENIT.baseCost;
+	return getENIT().baseCost;
     }
 
     /**
@@ -176,7 +182,7 @@ public class ENCH extends MagicItem {
      * @param on
      */
     public void set(ENCHFlag in, boolean on) {
-	ENIT.flags.set(in.value, on);
+	getENIT().flags.set(in.value, on);
     }
 
     /**
@@ -185,7 +191,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public boolean get(ENCHFlag in) {
-	return ENIT.flags.get(in.value);
+	return getENIT().flags.get(in.value);
     }
 
     /**
@@ -193,7 +199,7 @@ public class ENCH extends MagicItem {
      * @param type
      */
     public void setCastType(CastType type) {
-	ENIT.castType = type;
+	getENIT().castType = type;
     }
 
     /**
@@ -201,7 +207,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public CastType getCastType() {
-	return ENIT.castType;
+	return getENIT().castType;
     }
 
     /**
@@ -209,7 +215,7 @@ public class ENCH extends MagicItem {
      * @param amount
      */
     public void setChargeAmount(int amount) {
-	ENIT.chargeAmount = amount;
+	getENIT().chargeAmount = amount;
     }
 
     /**
@@ -217,7 +223,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public int getChargeAmount() {
-	return ENIT.chargeAmount;
+	return getENIT().chargeAmount;
     }
 
     /**
@@ -225,7 +231,7 @@ public class ENCH extends MagicItem {
      * @param type
      */
     public void setDeliveryType(DeliveryType type) {
-	ENIT.targetType = type;
+	getENIT().targetType = type;
     }
 
     /**
@@ -233,7 +239,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public DeliveryType getDeliveryType() {
-	return ENIT.targetType;
+	return getENIT().targetType;
     }
 
     /**
@@ -241,7 +247,7 @@ public class ENCH extends MagicItem {
      * @param type
      */
     public void setEnchantType(EnchantType type) {
-	ENIT.enchantType = type;
+	getENIT().enchantType = type;
     }
 
     /**
@@ -249,7 +255,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public EnchantType getEnchantType() {
-	return ENIT.enchantType;
+	return getENIT().enchantType;
     }
 
     /**
@@ -257,7 +263,7 @@ public class ENCH extends MagicItem {
      * @param time
      */
     public void setChargeTime(float time) {
-	ENIT.chargeTime = time;
+	getENIT().chargeTime = time;
     }
 
     /**
@@ -265,7 +271,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public float getChargeTime() {
-	return ENIT.chargeTime;
+	return getENIT().chargeTime;
     }
 
     /**
@@ -273,7 +279,7 @@ public class ENCH extends MagicItem {
      * @param id
      */
     public void setBaseEnchantment(FormID id) {
-	ENIT.baseEnchantment = id;
+	getENIT().baseEnchantment = id;
     }
 
     /**
@@ -281,7 +287,7 @@ public class ENCH extends MagicItem {
      * @return
      */
     public FormID getBaseEnchantment() {
-	return ENIT.baseEnchantment;
+	return getENIT().baseEnchantment;
     }
 
     /**
@@ -289,7 +295,7 @@ public class ENCH extends MagicItem {
      * @param id
      */
     public void setWornRestrictions(FormID id) {
-	ENIT.wornRestrictions = id;
+	getENIT().wornRestrictions = id;
     }
 
     /**
@@ -297,6 +303,6 @@ public class ENCH extends MagicItem {
      * @return
      */
     public FormID getWornRestrictions() {
-	return ENIT.wornRestrictions;
+	return getENIT().wornRestrictions;
     }
 }

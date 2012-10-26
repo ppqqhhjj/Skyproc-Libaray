@@ -10,7 +10,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LChannel;
+import lev.LExporter;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 

@@ -28,7 +28,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     Map<FormID, T> mapRecords = new HashMap<>();
     Mod srcMod;
     T prototype;
-    private static final Type[] type = {Type.GRUP};
+    private final static Type[] type = {Type.GRUP};
 
     GRUP(Mod srcMod_, T prototype) {
 	srcMod = srcMod_;

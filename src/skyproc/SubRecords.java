@@ -10,8 +10,6 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LFileChannel;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -19,18 +17,11 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubRecords implements Serializable {
+abstract class SubRecords implements Serializable {
 
-    protected MajorPrototype prototype;
     protected Map<Type, SubRecord> map = new HashMap<>(0);
-    protected Map<Type, Long> pos = new HashMap<>(0);
 
-    public SubRecords () {
-
-    }
-
-    public SubRecords (MajorPrototype proto) {
-	this.prototype = proto;
+    public SubRecords() {
     }
 
     public void add(SubRecord r) {
@@ -39,37 +30,21 @@ class SubRecords implements Serializable {
 	}
     }
 
-    void export(LExporter out, Mod srcMod) throws IOException {
-	for (Type t : prototype.list) {
-	    if (contains(t)) {
-		SubRecord instance = get(t);
-		if (shouldExport(instance)) {
-		    instance.export(out, srcMod);
-		}
-	    }
-	}
-    }
+    protected abstract void export(LExporter out, Mod srcMod) throws IOException;
 
     public boolean shouldExport(SubRecord s) {
-	return prototype.forceExport.contains(s.getType()) || s.isValid();
+	return s.isValid();
     }
 
     public void forceExport(Type t) {
     }
 
     public boolean contains(Type t) {
-	return prototype.contains(t);
+	return map.containsKey(t);
     }
 
     public SubRecord get(Type in) {
-	if (map.containsKey(in)) {
-	    return map.get(in);
-	} else if (prototype.contains(in)) {
-	    map.put(in, prototype.get(in).getNew(in));
-	    return map.get(in);
-	} else {
-	    return null;
-	}
+	return map.get(in);
     }
 
     public SubString getSubString(Type in) {
@@ -102,6 +77,10 @@ class SubRecords implements Serializable {
 
     public void setSubData(Type in, byte[] b) {
 	getSubData(in).setData(b);
+    }
+
+    public void setSubData(Type in, int i) {
+	getSubData(in).setData(i);
     }
 
     public SubFlag getSubFlag(Type in) {
@@ -162,19 +141,8 @@ class SubRecords implements Serializable {
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
-		if (!pos.containsKey(nextType)) {
-		    long position = in.pos();
-		    if (SPGlobal.logging()) {
-			SPGlobal.logSync(nextType.toString(), nextType.toString() + " is at position: " + Ln.printHex(position));
-		    }
-		    pos.put(nextType, position);
-		}
-		in.skip(get(nextType).getRecordLength(in));
-	    } else {
-		SubRecord record = get(nextType);
-		record.parseData(record.extractRecordData(in));
-	    }
+	    SubRecord record = get(nextType);
+	    record.parseData(record.extractRecordData(in));
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
 	}
@@ -184,16 +152,12 @@ class SubRecords implements Serializable {
 	if (map.containsKey(in)) {
 	    map.remove(in);
 	}
-	if (pos.containsKey(in)) {
-	    pos.remove(in);
-	}
     }
 
     public int length(Mod srcMod) {
 	int length = 0;
-	for (Type t : prototype.list) {
-	    SubRecord s = get(t);
-	    if (s != null && shouldExport(s)) {
+	for (SubRecord s : map.values()) {
+	    if (shouldExport(s)) {
 		length += s.getTotalLength(srcMod);
 	    }
 	}

@@ -6,13 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -23,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class WEAP extends MajorRecordDescription {
 
-    private static final Type[] type = {Type.WEAP};
+    private final static Type[] type = {Type.WEAP};
     SubForm BAMT = new SubForm(Type.BAMT);
     SubForm BIDS = new SubForm(Type.BIDS);
     SubForm CNAM = new SubForm(Type.CNAM);
@@ -62,7 +59,7 @@ public class WEAP extends MajorRecordDescription {
 
         subRecords.add(scripts);
         subRecords.add(OBND);
-        subRecords.add(FULL);
+//        subRecords.add(FULL);
         subRecords.add(MODL);
         subRecords.add(MODT);
         subRecords.add(EITM);
@@ -72,7 +69,7 @@ public class WEAP extends MajorRecordDescription {
         subRecords.add(BIDS);
         subRecords.add(BAMT);
         subRecords.add(keywords);
-        subRecords.add(description);
+//        subRecords.add(description);
         subRecords.add(NNAM);
         subRecords.add(INAM);
         subRecords.add(SNAM);

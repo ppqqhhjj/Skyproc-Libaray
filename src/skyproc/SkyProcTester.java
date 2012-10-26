@@ -22,8 +22,8 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-    static GRUP_TYPE[] types = {GRUP_TYPE.TXST};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static GRUP_TYPE[] types = {GRUP_TYPE.ALCH};
+//    static GRUP_static Type[] types = GRUP_TYPE.values();
 
     /**
      */
@@ -129,7 +129,7 @@ public class SkyProcTester {
     private static void setSkyProcGlobal() {
 	SPGlobal.createGlobalLog();
 	LDebug.timeElapsed = true;
-	SPGlobal.logging(false);
+	SPGlobal.logging(true);
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }
 }

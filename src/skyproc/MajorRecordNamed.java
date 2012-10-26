@@ -9,11 +9,14 @@ import skyproc.SubStringPointer.Files;
  */
 public abstract class MajorRecordNamed extends MajorRecord implements Serializable {
 
-    SubStringPointer FULL = new SubStringPointer(Type.FULL, Files.STRINGS);
+    static final SubRecordsPrototype namedProto = new SubRecordsPrototype(MajorRecord.majorProto);
+    static {
+	namedProto.add(new SubStringPointer(Type.FULL, Files.STRINGS));
+    }
 
     MajorRecordNamed() {
         super();
-        subRecords.add(FULL);
+        subRecords.prototype = namedProto;
     }
 
     /**
@@ -21,7 +24,7 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
      * @return
      */
     public String getName() {
-        return FULL.print();
+        return subRecords.getSubString(Type.FULL).print();
     }
 
     /**
@@ -29,7 +32,7 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
      * @param in The string to set the in-game name to.
      */
     public void setName(String in) {
-        FULL.text.setString(in);
+        subRecords.setSubString(Type.FULL, in);
     }
 
 }

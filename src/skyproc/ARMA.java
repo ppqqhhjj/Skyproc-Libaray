@@ -6,11 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.AltTextures.AltTexture;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -22,62 +20,43 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMA extends MajorRecord {
 
-    private static final Type[] type = {Type.ARMA};
-    SubData BODT = new SubData(Type.BODT);  // flags of which bodyparts to take up
-    SubForm RNAM = new SubForm(Type.RNAM);
-    DNAM DNAM = new DNAM();
+    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecord.majorProto);
+    static {
+	prototype.add(new SubData(Type.BODT));
+	prototype.add(new SubForm(Type.RNAM));
+	prototype.add(new DNAM());
     // Third Person
     // Male
-    SubString MOD2 = new SubString(Type.MOD2, true);
-    SubList<SubData> MO2T = new SubList<>(new SubData(Type.MO2T));
-    AltTextures MO2S = new AltTextures(Type.MO2S);
+	prototype.add(new SubString(Type.MOD2, true));
+	prototype.add(new SubList<>(new SubData(Type.MO2T)));
+	prototype.add(new AltTextures(Type.MO2S));
     // Female
-    SubString MOD3 = new SubString(Type.MOD3, true);
-    SubList<SubData> MO3T = new SubList<>(new SubData(Type.MO3T));
-    AltTextures MO3S = new AltTextures(Type.MO3S);
+	prototype.add(new SubString(Type.MOD3, true));
+	prototype.add(new SubList<>(new SubData(Type.MO3T)));
+	prototype.add(new AltTextures(Type.MO3S));
     // First person
     // Male
-    SubString MOD4 = new SubString(Type.MOD4, true);
-    SubList<SubData> MO4T = new SubList<>(new SubData(Type.MO4T));
-    AltTextures MO4S = new AltTextures(Type.MO4S);
+	prototype.add(new SubString(Type.MOD4, true));
+	prototype.add(new SubList<>(new SubData(Type.MO4T)));
+	prototype.add(new AltTextures(Type.MO4S));
     // Female
-    SubString MOD5 = new SubString(Type.MOD5, true);
-    SubList<SubData> MO5T = new SubList<>(new SubData(Type.MO5T));
-    AltTextures MO5S = new AltTextures(Type.MO5S);
-    SubForm maleSkinTexture = new SubForm(Type.NAM0);
-    SubForm femaleSkinTexture = new SubForm(Type.NAM1);
-    SubForm maleSkinSwapList = new SubForm(Type.NAM2);
-    SubForm femaleSkinSwapList = new SubForm(Type.NAM3);
-    SubList<SubForm> additionalRaces = new SubList<>(new SubForm(Type.MODL));
-    SubForm footstepSound = new SubForm(Type.SNDD);
+	prototype.add(new SubString(Type.MOD5, true));
+	prototype.add(new SubList<>(new SubData(Type.MO5T)));
+	prototype.add(new AltTextures(Type.MO5S));
+	prototype.add(new SubForm(Type.NAM0));
+	prototype.add(new SubForm(Type.NAM1));
+	prototype.add(new SubForm(Type.NAM2));
+	prototype.add(new SubForm(Type.NAM3));
+	prototype.add(new SubList<>(new SubForm(Type.MODL)));
+	prototype.add(new SubForm(Type.SNDD));
+    }
+    private static final Type[] type = {Type.ARMA};
 
     /**
      * Armature Major Record
      */
     ARMA() {
 	super();
-
-	subRecords.add(BODT);
-	subRecords.add(RNAM);
-	subRecords.add(DNAM);
-	subRecords.add(MOD2);
-	subRecords.add(MO2T);
-	subRecords.add(MO2S);
-	subRecords.add(MOD3);
-	subRecords.add(MO3T);
-	subRecords.add(MO3S);
-	subRecords.add(MOD4);
-	subRecords.add(MO4T);
-	subRecords.add(MO4S);
-	subRecords.add(MOD5);
-	subRecords.add(MO5T);
-	subRecords.add(MO5S);
-	subRecords.add(maleSkinTexture);
-	subRecords.add(femaleSkinTexture);
-	subRecords.add(maleSkinSwapList);
-	subRecords.add(femaleSkinSwapList);
-	subRecords.add(additionalRaces);
-	subRecords.add(footstepSound);
     }
 
     @Override
@@ -90,7 +69,7 @@ public class ARMA extends MajorRecord {
 	return new ARMA();
     }
 
-    class DNAM extends SubRecord {
+    static class DNAM extends SubRecord {
 
 	int malePriority;
 	int femalePriority;
@@ -313,7 +292,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void addAdditionalRace(FormID addRace) {
-	additionalRaces.add(new SubForm(Type.MODL, addRace));
+	subRecords.getSubList(Type.MODL).add(new SubForm(Type.MODL, addRace));
     }
 
     /**
@@ -321,7 +300,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void removeAdditionalRace(FormID addRace) {
-	additionalRaces.remove(new SubForm(Type.MODL, addRace));
+	subRecords.getSubList(Type.MODL).remove(new SubForm(Type.MODL, addRace));
     }
 
     /**
@@ -329,14 +308,14 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getAdditionalRaces() {
-	return SubList.subFormToPublic(additionalRaces);
+	return SubList.subFormToPublic(subRecords.getSubList(Type.MODL));
     }
 
     /**
      *
      */
     public void clearAdditionalRaces() {
-	additionalRaces.clear();
+	subRecords.getSubList(Type.MODL).clear();
     }
 
     /**
@@ -344,7 +323,7 @@ public class ARMA extends MajorRecord {
      * @param footstep
      */
     public void setFootstepSound(FormID footstep) {
-	footstepSound.setForm(footstep);
+	subRecords.setSubForm(Type.SNDD, footstep);
     }
 
     /**
@@ -352,7 +331,11 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public FormID getFootstepSound() {
-	return footstepSound.getForm();
+	return subRecords.getSubForm(Type.SNDD).getForm();
+    }
+
+    DNAM getDNAM() {
+	return (DNAM) subRecords.get(Type.DNAM);
     }
 
     /**
@@ -363,10 +346,10 @@ public class ARMA extends MajorRecord {
     public void setPriority(int priority, Gender gender) {
 	switch (gender) {
 	    case MALE:
-		DNAM.malePriority = priority;
+		getDNAM().malePriority = priority;
 		return;
 	    case FEMALE:
-		DNAM.femalePriority = priority;
+		getDNAM().femalePriority = priority;
 		return;
 	}
     }
@@ -379,9 +362,9 @@ public class ARMA extends MajorRecord {
     public int getPriority(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return DNAM.malePriority;
+		return getDNAM().malePriority;
 	    default:
-		return DNAM.femalePriority;
+		return getDNAM().femalePriority;
 	}
     }
 
@@ -390,7 +373,7 @@ public class ARMA extends MajorRecord {
      * @param value
      */
     public void setDetectionSoundValue(int value) {
-	DNAM.detectionSoundValue = value;
+	getDNAM().detectionSoundValue = value;
     }
 
     /**
@@ -398,7 +381,7 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public int getDetectionSoundValue() {
-	return DNAM.detectionSoundValue;
+	return getDNAM().detectionSoundValue;
     }
 
     /**
@@ -406,7 +389,7 @@ public class ARMA extends MajorRecord {
      * @param adjust
      */
     public void setWeaponAdjust(float adjust) {
-	DNAM.weaponAdjust = adjust;
+	getDNAM().weaponAdjust = adjust;
     }
 
     /**
@@ -414,6 +397,6 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public float getWeaponAdjust() {
-	return DNAM.weaponAdjust;
+	return getDNAM().weaponAdjust;
     }
 }

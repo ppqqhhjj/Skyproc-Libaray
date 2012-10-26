@@ -4,31 +4,39 @@
  */
 package skyproc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
  * @author Justin Swanson
  */
-public class MajorPrototype {
+public class SubRecordsPrototype {
 
     protected ArrayList<Type> list = new ArrayList<>();
     protected Map<Type, SubRecord> map = new HashMap<>(0);
     protected Set<Type> forceExport = new HashSet<>(0);
 
-    public MajorPrototype () {
+    public SubRecordsPrototype () {
 	add(new SubString(Type.EDID, true));
+    }
+    
+    public SubRecordsPrototype (SubRecordsPrototype in) {
+	list.addAll(in.list);
+	map.putAll(in.map);
+	forceExport.addAll(in.forceExport);
     }
 
     public final void add(SubRecord r) {
+	remove(r.getType());
 	for (Type t : r.getTypes()) {
 	    map.put(t, r);
 	}
 	list.add(r.getType());
+    }
+    
+    public void reposition(Type t) {
+	list.remove(t);
+	list.add(t);
     }
 
     public void forceExport(Type t) {

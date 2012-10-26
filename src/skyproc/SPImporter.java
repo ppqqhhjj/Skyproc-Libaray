@@ -502,7 +502,7 @@ public class SPImporter {
      * has any error importing a mod at all.
      *
      * public Mod importMod(ModListing listing, String path,
-     * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_TYPE[] types =
+     * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_static Type[] types =
      * new GRUP_TYPE[grup_targets.size()]; types = grup_targets.toArray(types);
      * return importMod(listing, path, types); }
      */

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class COBJ extends MajorRecord {
 
-    private static final Type[] type = {Type.COBJ};
+    private final static Type[] type = {Type.COBJ};
 
     SubList<SubFormInt> ingredients = new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO));
     SubData COED = new SubData(Type.COED);

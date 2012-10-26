@@ -1,13 +1,10 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -17,7 +14,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class IMGS extends MajorRecord {
 
-    private static final Type[] type = {Type.IMGS};
+    private final static Type[] type = {Type.IMGS};
     private SubData ENAM = new SubData(Type.ENAM);
     private HNAM HNAM = new HNAM();
     private CNAM CNAM = new CNAM();

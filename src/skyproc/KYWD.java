@@ -10,7 +10,7 @@ package skyproc;
  */
 public class KYWD extends MajorRecord {
 
-    private static final Type[] type = {Type.KYWD};
+    private final static Type[] type = {Type.KYWD};
 
     SubData color = new SubData(Type.CNAM);
 

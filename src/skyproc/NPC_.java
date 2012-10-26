@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class NPC_ extends Actor implements Serializable {
 
-    private static final Type[] type = {Type.NPC_};
+    private final static Type[] type = {Type.NPC_};
     /**
      * A script package containing scripts and their properties
      */
@@ -106,7 +106,7 @@ public class NPC_ extends Actor implements Serializable {
 	subRecords.add(aiPackages);
 	subRecords.add(keywords);
 	subRecords.add(CNAM);
-	subRecords.add(FULL);
+//	subRecords.add(FULL);
 	subRecords.add(SHRT);
 	DATA.forceExport(true);
 	subRecords.add(DATA);

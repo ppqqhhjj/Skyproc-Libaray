@@ -20,36 +20,29 @@ import skyproc.exceptions.BadRecord;
  */
 public class ALCH extends MagicItem {
 
-    SubString MODL = new SubString(Type.MODL, true);
-    SubData MODT = new SubData(Type.MODT);
-    SubForm YNAM = new SubForm(Type.YNAM);
-    SubForm ZNAM = new SubForm(Type.ZNAM);
-    ENIT ENIT = new ENIT();
-    SubFloat DATA = new SubFloat(Type.DATA);
-    SubString ICON = new SubString(Type.ICON, true);
-    SubString MICO = new SubString(Type.MICO, true);
-    SubForm ETYP = new SubForm(Type.ETYP);
-    SubData MODS = new SubData(Type.MODS);
-    Type[] type = {Type.ALCH};
+    static final SubRecordsPrototype ALCHproto = new SubRecordsPrototype(MagicItem.magicItemProto);
+    static {
+	ALCHproto.remove(Type.DESC);
+	ALCHproto.add(new SubString(Type.MODL, true));
+	ALCHproto.add(new SubData(Type.MODT));
+	ALCHproto.add(new SubForm(Type.YNAM));
+	ALCHproto.add(new SubForm(Type.ZNAM));
+	ALCHproto.add(new SubData(Type.MODS));
+	ALCHproto.add(new SubFloat(Type.DATA));
+	ALCHproto.add(new ENIT());
+	ALCHproto.add(new SubString(Type.ICON, true));
+	ALCHproto.add(new SubString(Type.MICO, true));
+	ALCHproto.add(new SubForm(Type.ETYP));
+	ALCHproto.reposition(Type.EFID);
+    }
+
+    static Type[] type = {Type.ALCH};
 
     ALCH() {
 	super();
-	subRecords.add(OBND);
-	subRecords.add(FULL);
-	subRecords.add(keywords);
-	subRecords.add(MODL);
-	subRecords.add(MODT);
-	subRecords.add(YNAM);
-	subRecords.add(ZNAM);
-	subRecords.add(MODS);
-	subRecords.add(DATA);
-	subRecords.add(ENIT);
-	subRecords.add(ICON);
-	subRecords.add(MICO);
-	subRecords.add(ETYP);
-	subRecords.add(magicEffects);
+	subRecords.prototype = ALCHproto;
     }
-    
+
     @Override
     Type[] getTypes() {
 	return type;
@@ -60,7 +53,7 @@ public class ALCH extends MagicItem {
 	return new ALCH();
     }
 
-    class ENIT extends SubRecord {
+    static class ENIT extends SubRecord {
 
 	int value;
 	LFlags flags = new LFlags(4);

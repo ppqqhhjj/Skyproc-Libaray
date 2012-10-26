@@ -3,9 +3,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -34,8 +34,8 @@ public class PERK extends MajorRecordDescription {
 	subRecords.remove(Type.DESC);
 
 	subRecords.add(scripts);
-	subRecords.add(FULL);
-	subRecords.add(description);
+//	subRecords.add(FULL);
+//	subRecords.add(description);
 	subRecords.add(CTDAs);
 	subRecords.add(DATA);
 	subRecords.add(NNAM);
@@ -181,7 +181,7 @@ public class PERK extends MajorRecordDescription {
     //DATA, PRKC packages, and EPFT records
     static class PRKEComplexSubPackage extends SubRecord {
 
-	private static final Type[] types = {Type.DATA, Type.PRKC, Type.CTDA, Type.CIS1, Type.CIS2, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
+	private final static Type[] types = {Type.DATA, Type.PRKC, Type.CTDA, Type.CIS1, Type.CIS2, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
 	SubData DATA = new SubData(Type.DATA);
 	SubList<PRKCpackage> PRKCs = new SubList<PRKCpackage>(new PRKCpackage());
 	SubData EPFT = new SubData(Type.EPFT);

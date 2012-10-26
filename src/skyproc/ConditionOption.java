@@ -87,7 +87,7 @@ class ConditionOption implements Serializable {
 	reference.setInternal(in.extract(4));
 	parseParam3(in);
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(this.getClass().getName(), "  Run Type: " + runType + ", Reference: " + reference);
+	    SPGlobal.logSync(this.getClass().getSimpleName(), "  Run Type: " + runType + ", Reference: " + reference);
 	}
     }
 
@@ -144,7 +144,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
 	}
     }
@@ -171,7 +171,7 @@ class ConditionOption implements Serializable {
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Axis: " + axis);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Axis: " + axis);
 	    }
 	}
     }
@@ -208,7 +208,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1 + ", Casting Source: " + source);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Casting Source: " + source);
 	    }
 	}
     }
@@ -245,7 +245,7 @@ class ConditionOption implements Serializable {
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Casting Source: " + source + ", FormID: " + p2);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Casting Source: " + source + ", FormID: " + p2);
 	    }
 	}
     }
@@ -282,7 +282,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1 + ", Int: " + p2);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Int: " + p2);
 	    }
 	}
     }
@@ -321,7 +321,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID 1: " + p1 + ", FormID 2: " + p2);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID 1: " + p1 + ", FormID 2: " + p2);
 	    }
 	}
     }
@@ -348,7 +348,7 @@ class ConditionOption implements Serializable {
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Gender: " + g);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Gender: " + g);
 	    }
 	}
     }
@@ -375,7 +375,7 @@ class ConditionOption implements Serializable {
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Casting Source: " + source);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Casting Source: " + source);
 	    }
 	}
     }
@@ -419,7 +419,7 @@ class ConditionOption implements Serializable {
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Int 1: " + p1 + ", FormID: " + p1 + ", Int 2: " + p3);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int 1: " + p1 + ", FormID: " + p1 + ", Int 2: " + p3);
 	    }
 	}
 
@@ -461,7 +461,7 @@ class ConditionOption implements Serializable {
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Int: " + p1 + ", FormID: " + p2);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int: " + p1 + ", FormID: " + p2);
 	    }
 	}
     }
@@ -488,7 +488,7 @@ class ConditionOption implements Serializable {
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Ward State: " + state);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Ward State: " + state);
 	    }
 	}
     }
@@ -515,7 +515,7 @@ class ConditionOption implements Serializable {
 	    p1 = in.extractInt(4);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Int: " + p1);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int: " + p1);
 	    }
 	}
     }
@@ -552,7 +552,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
 	}
     }
@@ -590,7 +590,7 @@ class ConditionOption implements Serializable {
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1 + ", Axis: " + a);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Axis: " + a);
 	    }
 	}
     }
@@ -627,7 +627,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1 + ", Crime Type: " + c);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Crime Type: " + c);
 	    }
 	}
     }
@@ -664,7 +664,7 @@ class ConditionOption implements Serializable {
 	    p1.setInternal(in.extract(4));
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  FormID: " + p1 + ", Float: " + f);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Float: " + f);
 	    }
 	}
     }
@@ -693,7 +693,7 @@ class ConditionOption implements Serializable {
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(this.getClass().toString(), "  Int 1: " + i1 + ", Int 2: " + i2);
+		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int 1: " + i1 + ", Int 2: " + i2);
 	    }
 	}
     }
