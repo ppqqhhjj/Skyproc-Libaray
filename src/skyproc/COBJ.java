@@ -8,17 +8,19 @@ import java.util.ArrayList;
  */
 public class COBJ extends MajorRecord {
 
-    static final SubRecordsPrototype COBJproto = new SubRecordsPrototype(MajorRecord.majorProto);
+    static final SubRecordsPrototype COBJproto = new SubRecordsPrototype(MajorRecord.majorProto) {
 
-    static {
-	COBJproto.add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
-	COBJproto.add(new SubData(Type.COED));
-	COBJproto.add(new SubList<>(new Condition()));
-	COBJproto.add(new SubForm(Type.CNAM));
-	COBJproto.add(new SubForm(Type.BNAM));
-	COBJproto.add(new SubData(Type.NAM1));
-	COBJproto.add(new KeywordSet());
-    }
+	@Override
+	protected void addRecords() {
+	    add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	    add(new SubData(Type.COED));
+	    add(new SubList<>(new Condition()));
+	    add(new SubForm(Type.CNAM));
+	    add(new SubForm(Type.BNAM));
+	    add(new SubData(Type.NAM1));
+	    add(new KeywordSet());
+	}
+    };
     private final static Type[] type = {Type.COBJ};
 
     COBJ() {

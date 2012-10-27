@@ -21,10 +21,13 @@ import skyproc.exceptions.BadRecord;
  */
 public class ECZN extends MajorRecord {
 
-    static final SubRecordsPrototype ECZNproto = new SubRecordsPrototype(MajorRecord.majorProto);
-    static {
-	ECZNproto.add(new DATA());
-    }
+    static final SubRecordsPrototype ECZNproto = new SubRecordsPrototype(MajorRecord.majorProto) {
+
+	@Override
+	protected void addRecords() {
+	    add(new DATA());
+	}
+    };
     private final static Type[] type = {Type.ECZN};
 
     /**
@@ -154,7 +157,7 @@ public class ECZN extends MajorRecord {
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }
-    
+
     /**
      *
      * @param flag

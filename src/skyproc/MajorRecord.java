@@ -22,11 +22,14 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class MajorRecord extends Record implements Serializable {
 
-    static final SubRecordsPrototype majorProto = new SubRecordsPrototype();
+    static final SubRecordsPrototype majorProto = new SubRecordsPrototype() {
 
-    static {
-	majorProto.add(new SubString(Type.EDID, true));
-    }
+	@Override
+	protected void addRecords() {
+	    add(new SubString(Type.EDID, true));
+	}
+    };
+    
     SubRecordsDerived subRecords = new SubRecordsDerived(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);

@@ -19,23 +19,26 @@ import skyproc.exceptions.BadRecord;
  */
 public class MISC extends MajorRecordNamed {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordNamed.namedProto);
-    static {
-	prototype.add(new ScriptPackage());
-	prototype.add(new SubData(Type.OBND));
-	prototype.reposition(Type.FULL);
-	prototype.add(new SubString(Type.MODL, true));
-	prototype.add(new SubData(Type.MODT));
-	prototype.add(new AltTextures(Type.MODS));
-	prototype.add(new SubString(Type.ICON, true));
-	prototype.add(new SubForm(Type.YNAM));
-	prototype.add(new SubForm(Type.ZNAM));
-	prototype.add(new KeywordSet());
-	prototype.add(new DATA());
-	prototype.add(new SubString(Type.MICO, true));
-	prototype.add(new DestructionData());
-    }
-    static Type[] types = new Type[] { Type.MISC };
+    static final SubRecordsPrototype MISCproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+
+	@Override
+	protected void addRecords() {
+	    add(new ScriptPackage());
+	    add(new SubData(Type.OBND));
+	    reposition(Type.FULL);
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	    add(new AltTextures(Type.MODS));
+	    add(new SubString(Type.ICON, true));
+	    add(new SubForm(Type.YNAM));
+	    add(new SubForm(Type.ZNAM));
+	    add(new KeywordSet());
+	    add(new DATA());
+	    add(new SubString(Type.MICO, true));
+	    add(new DestructionData());
+	}
+    };
+    static Type[] types = new Type[]{Type.MISC};
 
     MISC() {
 	super();
@@ -56,7 +59,7 @@ public class MISC extends MajorRecordNamed {
 	int value = 0;
 	float weight = 0;
 
-	DATA () {
+	DATA() {
 	    super(Type.DATA);
 	}
 
@@ -100,11 +103,11 @@ public class MISC extends MajorRecordNamed {
 	return (DATA) subRecords.get(Type.DATA);
     }
 
-    public void setValue (int value) {
+    public void setValue(int value) {
 	getDATA().value = value;
     }
 
-    public int getValue () {
+    public int getValue() {
 	return getDATA().value;
     }
 
@@ -112,7 +115,7 @@ public class MISC extends MajorRecordNamed {
 	getDATA().weight = weight;
     }
 
-    public float getWeight () {
+    public float getWeight() {
 	return getDATA().weight;
     }
 
@@ -178,7 +181,7 @@ public class MISC extends MajorRecordNamed {
 	subRecords.setSubString(Type.MICO, path);
     }
 
-    public String getMessageImage () {
+    public String getMessageImage() {
 	return subRecords.getSubString(Type.MICO).print();
     }
 }

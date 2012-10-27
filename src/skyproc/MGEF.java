@@ -20,23 +20,26 @@ import skyproc.exceptions.BadRecord;
  */
 public class MGEF extends MajorRecordDescription {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
-    static {
-	prototype.add(new ScriptPackage());
-	prototype.reposition(Type.FULL);
-	prototype.add(new SubForm(Type.MDOB));
-	prototype.add(new KeywordSet());
-	prototype.add(new DATA());
-	prototype.add(new SNDD());
-	prototype.add(new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS));
-	prototype.forceExport(Type.DNAM);
-	SubStringPointer desc = (SubStringPointer) prototype.get(Type.DESC);
-	desc.file = SubStringPointer.Files.STRINGS;
-	prototype.reposition(Type.DESC);
-	prototype.add(new SubForm(Type.ESCE));
-	prototype.add(new SubList<>(new Condition()));
-	prototype.add(new SubData(Type.OBND));
-    }
+    static final SubRecordsPrototype MGEFproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+
+	@Override
+	protected void addRecords() {
+	    add(new ScriptPackage());
+	    reposition(Type.FULL);
+	    add(new SubForm(Type.MDOB));
+	    add(new KeywordSet());
+	    add(new DATA());
+	    add(new SNDD());
+	    add(new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS));
+	    forceExport(Type.DNAM);
+	    SubStringPointer desc = (SubStringPointer) get(Type.DESC);
+	    desc.file = SubStringPointer.Files.STRINGS;
+	    reposition(Type.DESC);
+	    add(new SubForm(Type.ESCE));
+	    add(new SubList<>(new Condition()));
+	    add(new SubData(Type.OBND));
+	}
+    };
     private static Type[] types = {Type.MGEF};
 
     /**
@@ -53,7 +56,7 @@ public class MGEF extends MajorRecordDescription {
 
     MGEF() {
 	super();
-	subRecords.prototype = prototype;
+	subRecords.prototype = MGEFproto;
     }
 
     @Override

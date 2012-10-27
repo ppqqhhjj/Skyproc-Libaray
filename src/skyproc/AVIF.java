@@ -12,18 +12,21 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * Actor value records and perk trees.
+ *
  * @author Justin Swanson
  */
 public class AVIF extends MajorRecordDescription {
 
-    static final SubRecordsPrototype AVIFproto = new SubRecordsPrototype(MajorRecordDescription.descProto);
-    static {
-	AVIFproto.add(new SubString(Type.ANAM, true));
-	AVIFproto.add(new SubData(Type.CNAM));
-	AVIFproto.add(new SubData(Type.AVSK));
-	AVIFproto.add(new SubList<>(new PerkReference()));
-    }
+    static final SubRecordsPrototype AVIFproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
 
+	@Override
+	protected void addRecords() {
+	    add(new SubString(Type.ANAM, true));
+	    add(new SubData(Type.CNAM));
+	    add(new SubData(Type.AVSK));
+	    add(new SubList<>(new PerkReference()));
+	}
+    };
     static Type[] types = {Type.AVIF};
 
     AVIF() {
@@ -100,7 +103,7 @@ public class AVIF extends MajorRecordDescription {
 	    subRecords.add(CNAMs);
 	    subRecords.add(INAM);
 	}
-	
+
 	@Override
 	Boolean isValid() {
 	    return true;
@@ -179,7 +182,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @return
 	 */
-	public float getHorizontalPos () {
+	public float getHorizontalPos() {
 	    return HNAM.data;
 	}
 
@@ -187,7 +190,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @param vert
 	 */
-	public void setVerticalPos (float vert) {
+	public void setVerticalPos(float vert) {
 	    VNAM.data = vert;
 	}
 
@@ -195,7 +198,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @return
 	 */
-	public float getVerticalPos () {
+	public float getVerticalPos() {
 	    return VNAM.data;
 	}
 
@@ -203,7 +206,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @param skill
 	 */
-	public void setSkill (FormID skill) {
+	public void setSkill(FormID skill) {
 	    SNAM.setForm(skill);
 	}
 
@@ -211,7 +214,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @return
 	 */
-	public FormID getSkill () {
+	public FormID getSkill() {
 	    return SNAM.getForm();
 	}
 
@@ -219,7 +222,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @return
 	 */
-	public ArrayList<Integer> getPointers () {
+	public ArrayList<Integer> getPointers() {
 	    return SubList.subIntToPublic(CNAMs);
 	}
 
@@ -234,7 +237,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @param index
 	 */
-	public void addPointer (int index) {
+	public void addPointer(int index) {
 	    SubInt cnam = new SubInt(Type.CNAM);
 	    cnam.set(index);
 	    CNAMs.add(cnam);
@@ -244,7 +247,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @param ref
 	 */
-	public void addPointer (PerkReference ref) {
+	public void addPointer(PerkReference ref) {
 	    addPointer(ref.INAM.get());
 	}
 
@@ -252,7 +255,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @param index
 	 */
-	public void setIndex (int index) {
+	public void setIndex(int index) {
 	    INAM.set(index);
 	}
 
@@ -260,7 +263,7 @@ public class AVIF extends MajorRecordDescription {
 	 *
 	 * @return
 	 */
-	public int getIndex () {
+	public int getIndex() {
 	    return INAM.get();
 	}
     }
@@ -277,7 +280,7 @@ public class AVIF extends MajorRecordDescription {
      *
      * @return
      */
-    public String getAbbreviation () {
+    public String getAbbreviation() {
 	return subRecords.getSubString(Type.ANAM).print();
     }
 
@@ -285,7 +288,7 @@ public class AVIF extends MajorRecordDescription {
      *
      * @return
      */
-    public ArrayList<PerkReference> getPerkReferences () {
+    public ArrayList<PerkReference> getPerkReferences() {
 	SubList out = subRecords.getSubList(Type.PNAM);
 	return out.collection;
     }

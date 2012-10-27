@@ -19,32 +19,35 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMO extends MajorRecordDescription {
 
-    static final SubRecordsPrototype ARMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
-    static {
-	ARMOprototype.add(new ScriptPackage());
-	ARMOprototype.add(new SubData(Type.OBND));
-	ARMOprototype.reposition(Type.FULL);
-	ARMOprototype.add(new SubForm(Type.EITM));
-	ARMOprototype.add(new SubString(Type.MOD2, true));
-	ARMOprototype.add(new SubData(Type.MO2T));
-	ARMOprototype.add(new SubData(Type.MO2S));
-	ARMOprototype.add(new SubString(Type.MOD4, true));
-	ARMOprototype.add(new SubData(Type.MO4T));
-	ARMOprototype.add(new SubData(Type.MO4S));
-	ARMOprototype.add(new BodyTemplate());
-	ARMOprototype.add(new SubForm(Type.YNAM));
-	ARMOprototype.add(new SubForm(Type.ZNAM));
-	ARMOprototype.add(new SubForm(Type.ETYP));
-	ARMOprototype.add(new SubForm(Type.BIDS));
-	ARMOprototype.add(new SubForm(Type.BAMT));
-	ARMOprototype.add(new SubForm(Type.RNAM));
-	ARMOprototype.add(new KeywordSet());
-	ARMOprototype.reposition(Type.DESC);
-	ARMOprototype.add(new SubList<>(new SubForm(Type.MODL)));
-	ARMOprototype.add(new DATA());
-	ARMOprototype.add(new SubData(Type.DNAM));
-	ARMOprototype.add(new SubForm(Type.TNAM));
-    }
+    static final SubRecordsPrototype ARMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+
+	@Override
+	protected void addRecords() {
+	    add(new ScriptPackage());
+	    add(new SubData(Type.OBND));
+	    reposition(Type.FULL);
+	    add(new SubForm(Type.EITM));
+	    add(new SubString(Type.MOD2, true));
+	    add(new SubData(Type.MO2T));
+	    add(new SubData(Type.MO2S));
+	    add(new SubString(Type.MOD4, true));
+	    add(new SubData(Type.MO4T));
+	    add(new SubData(Type.MO4S));
+	    add(new BodyTemplate());
+	    add(new SubForm(Type.YNAM));
+	    add(new SubForm(Type.ZNAM));
+	    add(new SubForm(Type.ETYP));
+	    add(new SubForm(Type.BIDS));
+	    add(new SubForm(Type.BAMT));
+	    add(new SubForm(Type.RNAM));
+	    add(new KeywordSet());
+	    reposition(Type.DESC);
+	    add(new SubList<>(new SubForm(Type.MODL)));
+	    add(new DATA());
+	    add(new SubData(Type.DNAM));
+	    add(new SubForm(Type.TNAM));
+	}
+    };
     private final static Type[] type = {Type.ARMO};
 
     /**
@@ -105,7 +108,6 @@ public class ARMO extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return 8;
 	}
-
     }
 
     // Get/Set

@@ -20,16 +20,19 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class MagicItem extends MajorRecordDescription {
 
-    static final SubRecordsPrototype magicItemProto = new SubRecordsPrototype(MajorRecordDescription.descProto);
-    static {
-	SubData OBND = new SubData(Type.OBND);
-	OBND.initialize(12);
-	magicItemProto.add(OBND);
-	magicItemProto.reposition(Type.FULL);
-	magicItemProto.reposition(Type.DESC);
-	magicItemProto.add(new SubList<>(new MagicEffectRef()));
-	magicItemProto.add(new KeywordSet());
-    }
+    static final SubRecordsPrototype magicItemProto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+
+	@Override
+	protected void addRecords() {
+	    SubData OBND = new SubData(Type.OBND);
+	    OBND.initialize(12);
+	    add(OBND);
+	    reposition(Type.FULL);
+	    reposition(Type.DESC);
+	    add(new SubList<>(new MagicEffectRef()));
+	    add(new KeywordSet());
+	}
+    };
 
     MagicItem() {
 	super();
@@ -41,7 +44,6 @@ abstract class MagicItem extends MajorRecordDescription {
 //	out.addAll(magicEffects.allFormIDs());
 //	return out;
 //    }
-
     static class SPIT extends SubRecord {
 
 	int baseCost = 0;

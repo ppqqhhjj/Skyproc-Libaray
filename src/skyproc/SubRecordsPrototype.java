@@ -10,22 +10,25 @@ import java.util.*;
  *
  * @author Justin Swanson
  */
-public class SubRecordsPrototype {
+public abstract class SubRecordsPrototype {
 
     protected ArrayList<Type> list = new ArrayList<>();
     protected Map<Type, SubRecord> map = new HashMap<>(0);
     protected Set<Type> forceExport = new HashSet<>(0);
 
     public SubRecordsPrototype() {
-	add(new SubString(Type.EDID, true));
+	addRecords();
     }
 
+    protected abstract void addRecords();
+    
     public SubRecordsPrototype(SubRecordsPrototype in) {
 	list.addAll(in.list);
 	for (SubRecord s : in.map.values()) {
 	    map.put(s.getType(), s.getNew(s.getType()));
 	}
 	forceExport.addAll(in.forceExport);
+	addRecords();
     }
 
     public final void add(SubRecord r) {

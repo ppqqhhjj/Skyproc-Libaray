@@ -20,36 +20,39 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMA extends MajorRecord {
 
-    static final SubRecordsPrototype ARMAprototype = new SubRecordsPrototype(MajorRecord.majorProto);
-    static {
-	ARMAprototype.add(new SubData(Type.BODT));
-	ARMAprototype.add(new SubForm(Type.RNAM));
-	ARMAprototype.add(new DNAM());
-    // Third Person
-    // Male
-	ARMAprototype.add(new SubString(Type.MOD2, true));
-	ARMAprototype.add(new SubList<>(new SubData(Type.MO2T)));
-	ARMAprototype.add(new AltTextures(Type.MO2S));
-    // Female
-	ARMAprototype.add(new SubString(Type.MOD3, true));
-	ARMAprototype.add(new SubList<>(new SubData(Type.MO3T)));
-	ARMAprototype.add(new AltTextures(Type.MO3S));
-    // First person
-    // Male
-	ARMAprototype.add(new SubString(Type.MOD4, true));
-	ARMAprototype.add(new SubList<>(new SubData(Type.MO4T)));
-	ARMAprototype.add(new AltTextures(Type.MO4S));
-    // Female
-	ARMAprototype.add(new SubString(Type.MOD5, true));
-	ARMAprototype.add(new SubList<>(new SubData(Type.MO5T)));
-	ARMAprototype.add(new AltTextures(Type.MO5S));
-	ARMAprototype.add(new SubForm(Type.NAM0));
-	ARMAprototype.add(new SubForm(Type.NAM1));
-	ARMAprototype.add(new SubForm(Type.NAM2));
-	ARMAprototype.add(new SubForm(Type.NAM3));
-	ARMAprototype.add(new SubList<>(new SubForm(Type.MODL)));
-	ARMAprototype.add(new SubForm(Type.SNDD));
-    }
+    static final SubRecordsPrototype ARMAprototype = new SubRecordsPrototype(MajorRecord.majorProto) {
+
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.BODT));
+	    add(new SubForm(Type.RNAM));
+	    add(new DNAM());
+	    // Third Person
+	    // Male
+	    add(new SubString(Type.MOD2, true));
+	    add(new SubList<>(new SubData(Type.MO2T)));
+	    add(new AltTextures(Type.MO2S));
+	    // Female
+	    add(new SubString(Type.MOD3, true));
+	    add(new SubList<>(new SubData(Type.MO3T)));
+	    add(new AltTextures(Type.MO3S));
+	    // First person
+	    // Male
+	    add(new SubString(Type.MOD4, true));
+	    add(new SubList<>(new SubData(Type.MO4T)));
+	    add(new AltTextures(Type.MO4S));
+	    // Female
+	    add(new SubString(Type.MOD5, true));
+	    add(new SubList<>(new SubData(Type.MO5T)));
+	    add(new AltTextures(Type.MO5S));
+	    add(new SubForm(Type.NAM0));
+	    add(new SubForm(Type.NAM1));
+	    add(new SubForm(Type.NAM2));
+	    add(new SubForm(Type.NAM3));
+	    add(new SubList<>(new SubForm(Type.MODL)));
+	    add(new SubForm(Type.SNDD));
+	}
+    };
     private static final Type[] type = {Type.ARMA};
 
     /**
@@ -122,7 +125,6 @@ public class ARMA extends MajorRecord {
 	int getContentLength(Mod srcMod) {
 	    return 12;
 	}
-
     }
 
     // Get/set

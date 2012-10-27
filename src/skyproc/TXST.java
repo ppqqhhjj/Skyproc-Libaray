@@ -13,26 +13,24 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord implements Iterable<String> {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype();
-    static {
-	prototype.add(new SubData(Type.OBND));
-	prototype.add(new SubString(Type.TX00, true));
-	prototype.add(new SubString(Type.TX01, true));
-	prototype.add(new SubString(Type.TX02, true));
-	prototype.add(new SubString(Type.TX03, true));
-	prototype.add(new SubString(Type.TX04, true));
-	prototype.add(new SubString(Type.TX05, true));
-	prototype.add(new SubString(Type.TX06, true));
-	prototype.add(new SubString(Type.TX07, true));
-	prototype.add(new SubData(Type.DODT));
-	prototype.add(new SubFlag(Type.DNAM, 2));
-    }
+    static final SubRecordsPrototype TXSTproto = new SubRecordsPrototype() {
 
-    /**
-     * The global constant holding the number of maps TXST records have for use
-     * with Nth functions
-     */
-    public static int NUM_MAPS = 8;
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.OBND));
+	    add(new SubString(Type.TX00, true));
+	    add(new SubString(Type.TX01, true));
+	    add(new SubString(Type.TX02, true));
+	    add(new SubString(Type.TX03, true));
+	    add(new SubString(Type.TX04, true));
+	    add(new SubString(Type.TX05, true));
+	    add(new SubString(Type.TX06, true));
+	    add(new SubString(Type.TX07, true));
+	    add(new SubData(Type.DODT));
+	    add(new SubFlag(Type.DNAM, 2));
+	}
+    };
+    static int NUM_MAPS = 8;
     private final static Type[] type = {Type.TXST};
 
     /**
@@ -49,7 +47,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 
     TXST() {
 	super();
-	subRecords.prototype = prototype;
+	subRecords.prototype = TXSTproto;
     }
 
     @Override
@@ -75,7 +73,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	}
     }
 
-    SubString getNthMapInternal (int i) {
+    SubString getNthMapInternal(int i) {
 	switch (i) {
 	    case 0:
 		return subRecords.getSubString(Type.TX00);
@@ -263,7 +261,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      */
     public ArrayList<String> getTextures() {
 	ArrayList<String> temp = new ArrayList<>();
-	for (int i = 0 ; i < NUM_MAPS ; i++) {
+	for (int i = 0; i < NUM_MAPS; i++) {
 	    temp.add(getNthMap(i));
 	}
 	return temp;

@@ -20,22 +20,24 @@ import skyproc.exceptions.BadRecord;
  */
 public class ALCH extends MagicItem {
 
-    static final SubRecordsPrototype ALCHproto = new SubRecordsPrototype(MagicItem.magicItemProto);
-    static {
-	ALCHproto.remove(Type.DESC);
-	ALCHproto.add(new SubString(Type.MODL, true));
-	ALCHproto.add(new SubData(Type.MODT));
-	ALCHproto.add(new SubForm(Type.YNAM));
-	ALCHproto.add(new SubForm(Type.ZNAM));
-	ALCHproto.add(new SubData(Type.MODS));
-	ALCHproto.add(new SubFloat(Type.DATA));
-	ALCHproto.add(new ENIT());
-	ALCHproto.add(new SubString(Type.ICON, true));
-	ALCHproto.add(new SubString(Type.MICO, true));
-	ALCHproto.add(new SubForm(Type.ETYP));
-	ALCHproto.reposition(Type.EFID);
-    }
+    static final SubRecordsPrototype ALCHproto = new SubRecordsPrototype(MagicItem.magicItemProto) {
 
+	@Override
+	protected void addRecords() {
+	    remove(Type.DESC);
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	    add(new SubForm(Type.YNAM));
+	    add(new SubForm(Type.ZNAM));
+	    add(new SubData(Type.MODS));
+	    add(new SubFloat(Type.DATA));
+	    add(new ENIT());
+	    add(new SubString(Type.ICON, true));
+	    add(new SubString(Type.MICO, true));
+	    add(new SubForm(Type.ETYP));
+	    reposition(Type.EFID);
+	}
+    };
     static Type[] type = {Type.ALCH};
 
     ALCH() {

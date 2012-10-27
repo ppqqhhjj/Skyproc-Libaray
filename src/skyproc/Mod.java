@@ -1253,19 +1253,21 @@ public class Mod implements Comparable, Iterable<GRUP> {
     // Internal Classes
     static class TES4 extends Record {
 
-	static final SubRecordsPrototype prototype = new SubRecordsPrototype();
-	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
-	static {
-	    prototype.add(new HEDR());
-	    prototype.add(new SubString(Type.CNAM, true));
-	    prototype.add(new SubSortedList<>(new ModListing()));
-	    prototype.add(new SubString(Type.SNAM, true));
-	    prototype.add(new SubData(Type.INTV, defaultINTV));
-	    prototype.add(new SubData(Type.ONAM));
-	    prototype.add(new SubData(Type.INCC));
-	}
+	static final SubRecordsPrototype TES4proto = new SubRecordsPrototype() {
 
-	SubRecordsDerived subRecords = new SubRecordsDerived(prototype);
+	    @Override
+	    protected void addRecords() {
+		add(new HEDR());
+		add(new SubString(Type.CNAM, true));
+		add(new SubSortedList<>(new ModListing()));
+		add(new SubString(Type.SNAM, true));
+		add(new SubData(Type.INTV, defaultINTV));
+		add(new SubData(Type.ONAM));
+		add(new SubData(Type.INCC));
+	    }
+	};
+	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
+	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
 	private int fluff2 = 0;
@@ -1356,7 +1358,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    return (HEDR) subRecords.get(Type.HEDR);
 	}
 
-	int getNumRecords () {
+	int getNumRecords() {
 	    return getHEDR().numRecords;
 	}
 
