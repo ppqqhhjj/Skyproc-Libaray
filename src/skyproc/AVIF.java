@@ -16,20 +16,19 @@ import skyproc.exceptions.BadRecord;
  */
 public class AVIF extends MajorRecordDescription {
 
-    SubString ANAM = new SubString(Type.ANAM, true);
-    SubData CNAM = new SubData(Type.CNAM);
-    SubData AVSK = new SubData(Type.AVSK);
-    SubList<PerkReference> perks = new SubList<>(new PerkReference());
+    static final SubRecordsPrototype AVIFproto = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static {
+	AVIFproto.add(new SubString(Type.ANAM, true));
+	AVIFproto.add(new SubData(Type.CNAM));
+	AVIFproto.add(new SubData(Type.AVSK));
+	AVIFproto.add(new SubList<>(new PerkReference()));
+    }
 
     static Type[] types = {Type.AVIF};
 
     AVIF() {
 	super();
-
-	subRecords.add(ANAM);
-	subRecords.add(CNAM);
-	subRecords.add(AVSK);
-	subRecords.add(perks);
+	subRecords.prototype = AVIFproto;
     }
 
     @Override
@@ -45,6 +44,9 @@ public class AVIF extends MajorRecordDescription {
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
+	if (getEDID().equals("AVEnchanting")) {
+	    int wer = 23;
+	}
 	Boolean pastHeader = false;
 	while (!in.isDone()) {
 	    nextType = getNextType(in);
@@ -55,6 +57,7 @@ public class AVIF extends MajorRecordDescription {
 		switch (getNextType(in)) {
 		    case CNAM:
 			if (pastHeader) {
+			    SubList perks = subRecords.getSubList(Type.PNAM);
 			    perks.parseData(perks.extractRecordData(in));
 			    break;
 			}
@@ -267,7 +270,7 @@ public class AVIF extends MajorRecordDescription {
      * @param abbr
      */
     public void setAbbreviation(String abbr) {
-	ANAM.setString(abbr);
+	subRecords.setSubString(Type.ANAM, abbr);
     }
 
     /**
@@ -275,7 +278,7 @@ public class AVIF extends MajorRecordDescription {
      * @return
      */
     public String getAbbreviation () {
-	return ANAM.print();
+	return subRecords.getSubString(Type.ANAM).print();
     }
 
     /**
@@ -283,6 +286,7 @@ public class AVIF extends MajorRecordDescription {
      * @return
      */
     public ArrayList<PerkReference> getPerkReferences () {
-	return perks.collection;
+	SubList out = subRecords.getSubList(Type.PNAM);
+	return out.collection;
     }
 }

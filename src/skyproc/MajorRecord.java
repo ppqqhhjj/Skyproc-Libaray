@@ -185,7 +185,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(revision, 4);
 	    out.write(version, 4);
 
-	    if (getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
+	    if (getEDID().equals("AVEnchanting")) {
 		int wer = 23;
 	    }
 

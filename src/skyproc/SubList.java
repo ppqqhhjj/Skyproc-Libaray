@@ -52,6 +52,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	allowDups = rhs.allowDups;
 	counterLength = rhs.counterLength;
 	collection.addAll(rhs.collection);
+	type = rhs.type;
     }
 
     @Override

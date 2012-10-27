@@ -8,30 +8,22 @@ import java.util.ArrayList;
  */
 public class COBJ extends MajorRecord {
 
+    static final SubRecordsPrototype COBJproto = new SubRecordsPrototype(MajorRecord.majorProto);
+
+    static {
+	COBJproto.add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	COBJproto.add(new SubData(Type.COED));
+	COBJproto.add(new SubList<>(new Condition()));
+	COBJproto.add(new SubForm(Type.CNAM));
+	COBJproto.add(new SubForm(Type.BNAM));
+	COBJproto.add(new SubData(Type.NAM1));
+	COBJproto.add(new KeywordSet());
+    }
     private final static Type[] type = {Type.COBJ};
-
-    SubList<SubFormInt> ingredients = new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO));
-    SubData COED = new SubData(Type.COED);
-    SubList<Condition> CONDs = new SubList<>(new Condition());
-    SubForm CNAM = new SubForm(Type.CNAM);
-    SubForm BNAM = new SubForm(Type.BNAM);
-    SubData NAM1 = new SubData(Type.NAM1);
-
-    /**
-     *
-     */
-    public KeywordSet keywords = new KeywordSet();
 
     COBJ() {
 	super();
-
-        subRecords.add(ingredients);
-        subRecords.add(COED);
-	subRecords.add(CONDs);
-        subRecords.add(CNAM);
-        subRecords.add(BNAM);
-        subRecords.add(NAM1);
-	subRecords.add(keywords);
+	subRecords.prototype = COBJproto;
     }
 
     @Override
@@ -48,24 +40,24 @@ public class COBJ extends MajorRecord {
      *
      * @return
      */
-    public ArrayList<Condition> getConditions  () {
-	return CONDs.toPublic();
+    public ArrayList<Condition> getConditions() {
+	return subRecords.getSubList(Type.CTDA).toPublic();
     }
 
     /**
      *
      * @param c
      */
-    public void addCondition (Condition c) {
-	CONDs.add(c);
+    public void addCondition(Condition c) {
+	subRecords.getSubList(Type.CTDA).add(c);
     }
 
     /**
      *
      * @param c
      */
-    public void removeCondition (Condition c) {
-	CONDs.remove(c);
+    public void removeCondition(Condition c) {
+	subRecords.getSubList(Type.CTDA).remove(c);
     }
 
     /**
@@ -75,7 +67,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public boolean addIngredient(FormID itemReference, int count) {
-	return ingredients.add(new SubFormInt(Type.CNTO, itemReference, count));
+	return subRecords.getSubList(Type.CNTO).add(new SubFormInt(Type.CNTO, itemReference, count));
     }
 
     /**
@@ -84,15 +76,15 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public boolean removeIngredient(FormID itemReference) {
-	return ingredients.remove(new SubFormInt(Type.CNTO, itemReference, 1));
+	return subRecords.getSubList(Type.CNTO).remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
     public void clearIngredients() {
-	ingredients.clear();
+	subRecords.getSubList(Type.CNTO).clear();
     }
 
     public ArrayList<SubFormInt> getIngredients() {
-	return SubList.subFormIntToPublic(ingredients);
+	return SubList.subFormIntToPublic(subRecords.getSubList(Type.CNTO));
     }
 
     /**
@@ -100,7 +92,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public FormID getResultFormID() {
-        return CNAM.getForm();
+	return subRecords.getSubForm(Type.CNAM).getForm();
     }
 
     /**
@@ -108,7 +100,7 @@ public class COBJ extends MajorRecord {
      * @param form
      */
     public void setResultFormID(FormID form) {
-        CNAM.setForm(form);
+	subRecords.setSubForm(Type.CNAM, form);
     }
 
     /**
@@ -116,7 +108,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public FormID getBenchKeywordFormID() {
-        return BNAM.getForm();
+	return subRecords.getSubForm(Type.BNAM).getForm();
     }
 
     /**
@@ -124,7 +116,7 @@ public class COBJ extends MajorRecord {
      * @param form
      */
     public void setBenchKeywordFormID(FormID form) {
-        BNAM.setForm(form);
+	subRecords.setSubForm(Type.BNAM, form);
     }
 
     /**
@@ -132,7 +124,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public int getOutputQuantity() {
-        return NAM1.toInt();
+	return subRecords.getSubData(Type.NAM1).toInt();
     }
 
     /**
@@ -140,7 +132,6 @@ public class COBJ extends MajorRecord {
      * @param n
      */
     public void setOutputQuantity(int n) {
-        NAM1.setData(n);
+	subRecords.setSubData(Type.NAM1, n);
     }
-
 }

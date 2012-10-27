@@ -22,7 +22,6 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
 
     MajorRecordDescription() {
 	super();
-	subRecords.prototype = descProto;
     }
 
     /**

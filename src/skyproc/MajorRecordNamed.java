@@ -16,7 +16,6 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
 
     MajorRecordNamed() {
         super();
-        subRecords.prototype = namedProto;
     }
 
     /**

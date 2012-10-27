@@ -19,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class SubShell extends SubRecord {
 
-    SubRecords subRecords;
+    SubRecordsSolo subRecords;
 
     SubShell(Type type_) {
 	super(type_);

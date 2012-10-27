@@ -21,15 +21,18 @@ import skyproc.exceptions.BadRecord;
  */
 public class ECZN extends MajorRecord {
 
+    static final SubRecordsPrototype ECZNproto = new SubRecordsPrototype(MajorRecord.majorProto);
+    static {
+	ECZNproto.add(new DATA());
+    }
     private final static Type[] type = {Type.ECZN};
-    DATA DATA = new DATA();
 
     /**
      * Creates a new ECZN record.
      */
     ECZN() {
 	super();
-	subRecords.add(DATA);
+	subRecords.prototype = ECZNproto;
     }
 
     @Override
@@ -148,13 +151,17 @@ public class ECZN extends MajorRecord {
 	}
     }
 
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
+    }
+    
     /**
      *
      * @param flag
      * @return
      */
     public boolean get(ECZNFlags flag) {
-	return DATA.flags.get(flag.value);
+	return getDATA().flags.get(flag.value);
     }
 
     /**
@@ -163,7 +170,7 @@ public class ECZN extends MajorRecord {
      * @param on
      */
     public void set(ECZNFlags flag, boolean on) {
-	this.DATA.flags.set(flag.value, on);
+	getDATA().flags.set(flag.value, on);
     }
 
     /**
@@ -171,7 +178,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public FormID getLocation() {
-	return DATA.location;
+	return getDATA().location;
     }
 
     /**
@@ -179,7 +186,7 @@ public class ECZN extends MajorRecord {
      * @param location
      */
     public void setLocation(FormID location) {
-	this.DATA.location = location;
+	getDATA().location = location;
     }
 
     /**
@@ -187,7 +194,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getMaxLevel() {
-	return DATA.maxLevel;
+	return getDATA().maxLevel;
     }
 
     /**
@@ -195,7 +202,7 @@ public class ECZN extends MajorRecord {
      * @param maxLevel
      */
     public void setMaxLevel(int maxLevel) {
-	this.DATA.maxLevel = maxLevel;
+	getDATA().maxLevel = maxLevel;
     }
 
     /**
@@ -203,7 +210,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getMinLevel() {
-	return DATA.minLevel;
+	return getDATA().minLevel;
     }
 
     /**
@@ -211,7 +218,7 @@ public class ECZN extends MajorRecord {
      * @param minLevel
      */
     public void setMinLevel(int minLevel) {
-	this.DATA.minLevel = minLevel;
+	getDATA().minLevel = minLevel;
     }
 
     /**
@@ -219,7 +226,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public FormID getOwner() {
-	return DATA.owner;
+	return getDATA().owner;
     }
 
     /**
@@ -227,7 +234,7 @@ public class ECZN extends MajorRecord {
      * @param owner
      */
     public void setOwner(FormID owner) {
-	this.DATA.owner = owner;
+	getDATA().owner = owner;
     }
 
     /**
@@ -235,7 +242,7 @@ public class ECZN extends MajorRecord {
      * @return
      */
     public int getRank() {
-	return DATA.rank;
+	return getDATA().rank;
     }
 
     /**
@@ -243,6 +250,6 @@ public class ECZN extends MajorRecord {
      * @param rank
      */
     public void setRank(int rank) {
-	this.DATA.rank = rank;
+	getDATA().rank = rank;
     }
 }

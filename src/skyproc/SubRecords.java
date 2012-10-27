@@ -35,10 +35,7 @@ abstract class SubRecords implements Serializable {
     public boolean shouldExport(SubRecord s) {
 	return s.isValid();
     }
-
-    public void forceExport(Type t) {
-    }
-
+    
     public boolean contains(Type t) {
 	return map.containsKey(t);
     }

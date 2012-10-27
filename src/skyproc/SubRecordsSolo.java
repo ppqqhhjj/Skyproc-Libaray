@@ -40,6 +40,10 @@ public class SubRecordsSolo extends SubRecords {
 	list.add(r);
     }
 
+    public void forceExport(Type t) {
+	forceExport.add(t);
+    }
+    
     @Override
     protected void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : list) {

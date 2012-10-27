@@ -19,19 +19,20 @@ import skyproc.exceptions.BadRecord;
  */
 public class ENCH extends MagicItem {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MagicItem.magicItemProto);
+    static final SubRecordsPrototype ENCHproto = new SubRecordsPrototype(MagicItem.magicItemProto);
     static {
-	prototype.reposition(Type.OBND);
-	prototype.reposition(Type.FULL);
-	prototype.add(new ENIT());
-	prototype.reposition(Type.EFID);
-	prototype.reposition(Type.KYWD);
+	ENCHproto.reposition(Type.OBND);
+	ENCHproto.reposition(Type.FULL);
+	ENCHproto.add(new ENIT());
+	ENCHproto.reposition(Type.EFID);
+	ENCHproto.reposition(Type.KYWD);
     }
 
     static Type[] types = {Type.ENCH};
 
     ENCH() {
 	super();
+	subRecords.prototype = ENCHproto;
     }
 
     @Override
