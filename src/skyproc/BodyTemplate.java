@@ -6,10 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -54,7 +53,7 @@ public class BodyTemplate extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	throw new UnsupportedOperationException("Not supported yet.");
+	return new BodyTemplate();
     }
 
     @Override

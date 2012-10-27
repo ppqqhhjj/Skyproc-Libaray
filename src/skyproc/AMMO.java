@@ -19,22 +19,23 @@ import skyproc.exceptions.BadRecord;
  */
 public class AMMO extends MajorRecordDescription {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static final SubRecordsPrototype AMMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
     static {
-	prototype.add(new SubData(Type.OBND));
-	prototype.reposition(Type.FULL);
-	prototype.add(new SubString(Type.MODL, true));
-	prototype.add(new SubData(Type.MODT));
-	prototype.add(new SubForm(Type.YNAM));
-	prototype.add(new SubForm(Type.ZNAM));
-	prototype.reposition(Type.DESC);
-	prototype.add(new KeywordSet());
-	prototype.add(new DATA());
+	AMMOprototype.add(new SubData(Type.OBND));
+	AMMOprototype.reposition(Type.FULL);
+	AMMOprototype.add(new SubString(Type.MODL, true));
+	AMMOprototype.add(new SubData(Type.MODT));
+	AMMOprototype.add(new SubForm(Type.YNAM));
+	AMMOprototype.add(new SubForm(Type.ZNAM));
+	AMMOprototype.reposition(Type.DESC);
+	AMMOprototype.add(new KeywordSet());
+	AMMOprototype.add(new DATA());
     }
     static Type[] types = {Type.AMMO};
 
     AMMO() {
 	super();
+	subRecords.prototype = AMMOprototype;
     }
 
     @Override

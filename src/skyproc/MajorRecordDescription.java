@@ -13,10 +13,10 @@ import skyproc.SubStringPointer.Files;
 public abstract class MajorRecordDescription extends MajorRecordNamed {
 
     static final SubRecordsPrototype descProto = new SubRecordsPrototype(MajorRecordNamed.namedProto);
-
     static {
 	SubStringPointer description = new SubStringPointer(Type.DESC, Files.DLSTRINGS);
 	description.forceExport = true;
+	descProto.forceExport(Type.DESC);
 	descProto.add(description);
     }
 

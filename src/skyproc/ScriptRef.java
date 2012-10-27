@@ -6,11 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -76,7 +75,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
+	ArrayList<FormID> out = new ArrayList<>();
 	for (ScriptProperty s : properties) {
 	    out.addAll(s.allFormIDs());
 	}

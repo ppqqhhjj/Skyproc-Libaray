@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -50,7 +49,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
 
     @Override
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>(2);
+	ArrayList<FormID> out = new ArrayList<>(2);
 	for (ScriptRef s : scripts) {
 	    out.addAll(s.allFormIDs());
 	}

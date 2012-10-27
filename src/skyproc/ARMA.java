@@ -20,35 +20,35 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMA extends MajorRecord {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecord.majorProto);
+    static final SubRecordsPrototype ARMAprototype = new SubRecordsPrototype(MajorRecord.majorProto);
     static {
-	prototype.add(new SubData(Type.BODT));
-	prototype.add(new SubForm(Type.RNAM));
-	prototype.add(new DNAM());
+	ARMAprototype.add(new SubData(Type.BODT));
+	ARMAprototype.add(new SubForm(Type.RNAM));
+	ARMAprototype.add(new DNAM());
     // Third Person
     // Male
-	prototype.add(new SubString(Type.MOD2, true));
-	prototype.add(new SubList<>(new SubData(Type.MO2T)));
-	prototype.add(new AltTextures(Type.MO2S));
+	ARMAprototype.add(new SubString(Type.MOD2, true));
+	ARMAprototype.add(new SubList<>(new SubData(Type.MO2T)));
+	ARMAprototype.add(new AltTextures(Type.MO2S));
     // Female
-	prototype.add(new SubString(Type.MOD3, true));
-	prototype.add(new SubList<>(new SubData(Type.MO3T)));
-	prototype.add(new AltTextures(Type.MO3S));
+	ARMAprototype.add(new SubString(Type.MOD3, true));
+	ARMAprototype.add(new SubList<>(new SubData(Type.MO3T)));
+	ARMAprototype.add(new AltTextures(Type.MO3S));
     // First person
     // Male
-	prototype.add(new SubString(Type.MOD4, true));
-	prototype.add(new SubList<>(new SubData(Type.MO4T)));
-	prototype.add(new AltTextures(Type.MO4S));
+	ARMAprototype.add(new SubString(Type.MOD4, true));
+	ARMAprototype.add(new SubList<>(new SubData(Type.MO4T)));
+	ARMAprototype.add(new AltTextures(Type.MO4S));
     // Female
-	prototype.add(new SubString(Type.MOD5, true));
-	prototype.add(new SubList<>(new SubData(Type.MO5T)));
-	prototype.add(new AltTextures(Type.MO5S));
-	prototype.add(new SubForm(Type.NAM0));
-	prototype.add(new SubForm(Type.NAM1));
-	prototype.add(new SubForm(Type.NAM2));
-	prototype.add(new SubForm(Type.NAM3));
-	prototype.add(new SubList<>(new SubForm(Type.MODL)));
-	prototype.add(new SubForm(Type.SNDD));
+	ARMAprototype.add(new SubString(Type.MOD5, true));
+	ARMAprototype.add(new SubList<>(new SubData(Type.MO5T)));
+	ARMAprototype.add(new AltTextures(Type.MO5S));
+	ARMAprototype.add(new SubForm(Type.NAM0));
+	ARMAprototype.add(new SubForm(Type.NAM1));
+	ARMAprototype.add(new SubForm(Type.NAM2));
+	ARMAprototype.add(new SubForm(Type.NAM3));
+	ARMAprototype.add(new SubList<>(new SubForm(Type.MODL)));
+	ARMAprototype.add(new SubForm(Type.SNDD));
     }
     private static final Type[] type = {Type.ARMA};
 
@@ -57,6 +57,7 @@ public class ARMA extends MajorRecord {
      */
     ARMA() {
 	super();
+	subRecords.prototype = ARMAprototype;
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ARMA extends MajorRecord {
 
 	@Override
 	SubRecord getNew(Type type) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    return new DNAM();
 	}
 
 	@Override

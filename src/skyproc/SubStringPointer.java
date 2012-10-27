@@ -3,7 +3,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LChannel;
+import lev.LExporter;
+import lev.Ln;
 import skyproc.Mod.Mod_Flags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -29,7 +31,9 @@ class SubStringPointer extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubStringPointer(type, SubStringPointer.Files.STRINGS);
+	SubStringPointer out = new SubStringPointer(type, file);
+	out.forceExport = forceExport;
+	return out;
     }
 
     void setText(String textIn) {

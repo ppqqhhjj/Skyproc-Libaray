@@ -19,31 +19,31 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMO extends MajorRecordDescription {
 
-    static final SubRecordsPrototype prototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
+    static final SubRecordsPrototype ARMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto);
     static {
-	prototype.add(new SubData(Type.OBND));
-	prototype.reposition(Type.FULL);
-	prototype.add(new ScriptPackage());
-	prototype.add(new SubForm(Type.EITM));
-	prototype.add(new SubString(Type.MOD2, true));
-	prototype.add(new SubData(Type.MO2T));
-	prototype.add(new SubData(Type.MO2S));
-	prototype.add(new SubString(Type.MOD4, true));
-	prototype.add(new SubData(Type.MO4T));
-	prototype.add(new SubData(Type.MO4S));
-	prototype.add(new BodyTemplate());
-	prototype.add(new SubForm(Type.YNAM));
-	prototype.add(new SubForm(Type.ZNAM));
-	prototype.add(new SubForm(Type.ETYP));
-	prototype.add(new SubForm(Type.BIDS));
-	prototype.add(new SubForm(Type.BAMT));
-	prototype.add(new SubForm(Type.RNAM));
-	prototype.add(new KeywordSet());
-	prototype.reposition(Type.DESC);
-	prototype.add(new SubList<>(new SubForm(Type.MODL)));
-	prototype.add(new DATA());
-	prototype.add(new SubData(Type.DNAM));
-	prototype.add(new SubForm(Type.TNAM));
+	ARMOprototype.add(new ScriptPackage());
+	ARMOprototype.add(new SubData(Type.OBND));
+	ARMOprototype.reposition(Type.FULL);
+	ARMOprototype.add(new SubForm(Type.EITM));
+	ARMOprototype.add(new SubString(Type.MOD2, true));
+	ARMOprototype.add(new SubData(Type.MO2T));
+	ARMOprototype.add(new SubData(Type.MO2S));
+	ARMOprototype.add(new SubString(Type.MOD4, true));
+	ARMOprototype.add(new SubData(Type.MO4T));
+	ARMOprototype.add(new SubData(Type.MO4S));
+	ARMOprototype.add(new BodyTemplate());
+	ARMOprototype.add(new SubForm(Type.YNAM));
+	ARMOprototype.add(new SubForm(Type.ZNAM));
+	ARMOprototype.add(new SubForm(Type.ETYP));
+	ARMOprototype.add(new SubForm(Type.BIDS));
+	ARMOprototype.add(new SubForm(Type.BAMT));
+	ARMOprototype.add(new SubForm(Type.RNAM));
+	ARMOprototype.add(new KeywordSet());
+	ARMOprototype.reposition(Type.DESC);
+	ARMOprototype.add(new SubList<>(new SubForm(Type.MODL)));
+	ARMOprototype.add(new DATA());
+	ARMOprototype.add(new SubData(Type.DNAM));
+	ARMOprototype.add(new SubForm(Type.TNAM));
     }
     private final static Type[] type = {Type.ARMO};
 
@@ -52,6 +52,7 @@ public class ARMO extends MajorRecordDescription {
      */
     ARMO() {
 	super();
+	subRecords.prototype = ARMOprototype;
     }
 
     @Override
@@ -92,7 +93,7 @@ public class ARMO extends MajorRecordDescription {
 
 	@Override
 	SubRecord getNew(Type type) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    return new DATA();
 	}
 
 	@Override

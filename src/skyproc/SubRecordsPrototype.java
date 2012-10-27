@@ -16,13 +16,15 @@ public class SubRecordsPrototype {
     protected Map<Type, SubRecord> map = new HashMap<>(0);
     protected Set<Type> forceExport = new HashSet<>(0);
 
-    public SubRecordsPrototype () {
+    public SubRecordsPrototype() {
 	add(new SubString(Type.EDID, true));
     }
-    
-    public SubRecordsPrototype (SubRecordsPrototype in) {
+
+    public SubRecordsPrototype(SubRecordsPrototype in) {
 	list.addAll(in.list);
-	map.putAll(in.map);
+	for (SubRecord s : in.map.values()) {
+	    map.put(s.getType(), s.getNew(s.getType()));
+	}
 	forceExport.addAll(in.forceExport);
     }
 
@@ -33,7 +35,7 @@ public class SubRecordsPrototype {
 	}
 	list.add(r.getType());
     }
-    
+
     public void reposition(Type t) {
 	list.remove(t);
 	list.add(t);

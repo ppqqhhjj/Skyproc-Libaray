@@ -79,7 +79,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	in.skip(4); // GRUP type
-	grupType = in.extract(4); // What kind of GRUP data it has. 
+	grupType = in.extract(4); // What kind of GRUP data it has.
 	dateStamp = in.extract(4);
 	version = in.extract(4);
 	while (!in.isDone()) {
@@ -173,6 +173,10 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
 	for (MajorRecord r : listRecords) {
+	    if (r.getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
+		int wer = 23;
+	    }
+
 	    r.fetchStringPointers(srcMod, streams);
 	}
     }

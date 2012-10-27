@@ -23,6 +23,7 @@ import skyproc.exceptions.BadRecord;
 public abstract class MajorRecord extends Record implements Serializable {
 
     static final SubRecordsPrototype majorProto = new SubRecordsPrototype();
+
     static {
 	majorProto.add(new SubString(Type.EDID, true));
     }
@@ -127,6 +128,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    Consistency.addEntry(EDID.print(), ID);
 	}
 
+	if (getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
+	    int wer = 23;
+	}
+
 	importSubRecords(in);
 	subRecords.printSummary();
     }
@@ -179,11 +184,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
-	    
-	    if (getEDID().equals("CW01BWraithPoison")) {
+
+	    if (getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
 		int wer = 23;
 	    }
-	    
+
 	    subRecords.export(out, srcMod);
 	}
     }

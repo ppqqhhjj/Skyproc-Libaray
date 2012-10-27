@@ -9,9 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -105,14 +104,14 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     void standardizeMasters(Mod srcMod) {
-	if (getType().equals(ScriptPropertyType.FormID)) {
+	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
 	    ((FormIDData) data).id.standardize(srcMod);
 	}
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
-	if (getType().equals(ScriptPropertyType.FormID)) {
+	ArrayList<FormID> out = new ArrayList<>();
+	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
 	    out.add(((FormIDData) data).id);
 	}
 	return out;
