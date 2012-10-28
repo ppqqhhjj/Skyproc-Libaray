@@ -7,9 +7,16 @@ package skyproc;
  */
 public class LVLN extends LeveledRecord {
 
+    static final SubRecordsPrototype LVLNproto = new SubRecordsPrototype(LeveledRecord.LeveledProto){
+
+	@Override
+	protected void addRecords() {
+	    remove(Type.FULL);
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	}
+    };
     private final static Type[] type = {Type.LVLN};
-    SubString MODL = new SubString(Type.MODL, true);
-    SubData MODT = new SubData(Type.MODT);
     boolean circular = false;
 
     /**
@@ -20,7 +27,7 @@ public class LVLN extends LeveledRecord {
      */
     LVLN() {
         super();
-        init();
+	subRecords.prototype = LVLNproto;
     }
 
     /**
@@ -30,18 +37,7 @@ public class LVLN extends LeveledRecord {
      */
     public LVLN(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);
-        init();
-    }
-
-    final void init() {
-	subRecords.remove(Type.FULL);
-
-        subRecords.add(OBND);
-        subRecords.add(LVLD);
-        subRecords.add(LVLF);
-        subRecords.add(entries);
-        subRecords.add(MODL);
-        subRecords.add(MODT);
+	subRecords.prototype = LVLNproto;
     }
 
     @Override
@@ -56,8 +52,8 @@ public class LVLN extends LeveledRecord {
     @Override
     public String print() {
         super.print();
-        logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + LVLF.print());
-        for (LVLO entry : entries) {
+        logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag(Type.LVLF).print());
+        for (LVLO entry : getEntries()) {
             entry.toString();
         }
         return "";
@@ -75,7 +71,7 @@ public class LVLN extends LeveledRecord {
      * @return Model path associated with the LVLN.
      */
     public String getModelPath() {
-        return MODL.print();
+        return subRecords.getSubString(Type.MODL).print();
     }
 
     /**
@@ -83,6 +79,6 @@ public class LVLN extends LeveledRecord {
      * @param in String to set the LVLN model path to.
      */
     public void setModelPath(String in) {
-        MODL.setString(in);
+        subRecords.setSubString(Type.MODL, in);
     }
 }

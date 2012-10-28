@@ -75,11 +75,7 @@ class SubFormArray extends SubRecord implements Iterable<FormID> {
 
     @Override
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>(IDs.size());
-	for (FormID id : IDs) {
-	    out.add(id);
-	}
-	return out;
+	return new ArrayList<>(IDs);
     }
 
     @Override

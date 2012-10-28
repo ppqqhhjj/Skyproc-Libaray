@@ -35,7 +35,7 @@ abstract class SubRecords implements Serializable {
     public boolean shouldExport(SubRecord s) {
 	return s.isValid();
     }
-    
+
     public boolean contains(Type t) {
 	return map.containsKey(t);
     }
@@ -86,6 +86,30 @@ abstract class SubRecords implements Serializable {
 
     public void setSubFlag(Type in, int i, boolean b) {
 	getSubFlag(in).set(i, b);
+    }
+
+    public SubInt getSubInt(Type in) {
+	return (SubInt) get(in);
+    }
+
+    public void setSubInt(Type in, int i) {
+	getSubInt(in).set(i);
+    }
+
+    public SubRGB getSubRGB(Type in) {
+	return (SubRGB) get(in);
+    }
+
+    public void setSubRGB(Type in, RGB c, float f) {
+	getSubRGB(in).set(c, f);
+    }
+
+    public KeywordSet getKeywords() {
+	return (KeywordSet) get(Type.KWDA);
+    }
+
+    public SubFormArray getSubFormArray(Type in) {
+	return (SubFormArray) get(in);
     }
 
     public SubList getSubList(Type in) {

@@ -23,16 +23,15 @@ public class INGR extends MagicItem {
 
 	@Override
 	protected void addRecords() {
-	    add(new ScriptPackage());
-	    reposition(Type.OBND);
-	    reposition(Type.FULL);
-	    reposition(Type.KWDA);
+	    after(new ScriptPackage(), Type.EDID);
+	    remove(Type.DESC);
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
 	    add(new DATA());
 	    add(new ENIT());
+	    reposition(Type.EFID);
 	    add(new SubString(Type.ICON, true));
 	    add(new SubString(Type.MICO, true));
 	    add(new SubForm(Type.ETYP));
@@ -42,6 +41,7 @@ public class INGR extends MagicItem {
 
     INGR() {
 	super();
+	subRecords.prototype = INGRproto;
     }
 
     @Override

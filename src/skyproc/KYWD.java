@@ -10,13 +10,18 @@ package skyproc;
  */
 public class KYWD extends MajorRecord {
 
-    private final static Type[] type = {Type.KYWD};
+    static final SubRecordsPrototype KYWDproto = new SubRecordsPrototype(MajorRecord.majorProto){
 
-    SubData color = new SubData(Type.CNAM);
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.CNAM));
+	}
+    };
+    private final static Type[] type = {Type.KYWD};
 
     KYWD () {
 	super();
-	subRecords.add(color);
+	subRecords.prototype = KYWDproto;
     }
 
     /**
@@ -27,7 +32,7 @@ public class KYWD extends MajorRecord {
      */
     public KYWD (Mod modToOriginateFrom, String edid, int color) {
 	this(modToOriginateFrom, edid);
-	this.color.setData(color);
+	subRecords.setSubData(Type.CNAM, color);
     }
 
     /**

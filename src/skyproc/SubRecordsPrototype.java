@@ -24,10 +24,11 @@ public abstract class SubRecordsPrototype {
 
     public SubRecordsPrototype(SubRecordsPrototype in) {
 	list.addAll(in.list);
-//	for (SubRecord s : in.map.values()) {
-//	    map.put(s.getType(), s.getNew(s.getType()));
-//	}
-	map.putAll(in.map);
+	for (Type t : in.map.keySet()) {
+	    SubRecord s = in.map.get(t);
+	    map.put(t, s.getNew(s.getType()));
+	}
+//	map.putAll(in.map);
 	forceExport.addAll(in.forceExport);
 	addRecords();
     }
@@ -40,12 +41,23 @@ public abstract class SubRecordsPrototype {
 	list.add(r.getType());
     }
 
+    public void before(SubRecord r, Type b) {
+	add(r);
+	list.remove(r.getType());
+	list.add(list.indexOf(b), r.getType());
+    }
+
+    public void after(SubRecord r, Type b) {
+	add(r);
+	list.remove(r.getType());
+	list.add(list.indexOf(b) + 1, r.getType());
+    }
+
     public void reposition(Type t) {
 	t = get(t).getType();
 	list.remove(t);
 	list.add(t);
     }
-    
 
     public void forceExport(Type t) {
 	forceExport.add(t);

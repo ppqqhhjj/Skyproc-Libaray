@@ -17,30 +17,23 @@ import skyproc.exceptions.BadRecord;
  */
 public class PERK extends MajorRecordDescription {
 
-    /**
-     * A script package containing scripts and their properties
-     */
-    public ScriptPackage scripts = new ScriptPackage();
-    SubList<Condition> CTDAs = new SubList<>(new Condition());
-    SubData DATA = new SubData(Type.DATA);
-    SubForm NNAM = new SubForm(Type.NNAM);
-    SubString ICON = new SubString(Type.ICON, true);
-    SubList<PRKEPackage> perkSections = new SubList<>(new PRKEPackage());
+    static final SubRecordsPrototype PERKproto = new SubRecordsPrototype(MajorRecordDescription.descProto){
+
+	@Override
+	protected void addRecords() {
+	    after(new ScriptPackage(), Type.EDID);
+	    add(new SubList<>(new Condition()));
+	    add(new SubData(Type.DATA));
+	    add(new SubForm(Type.NNAM));
+	    add(new SubString(Type.ICON, true));
+	    add(new SubList<>(new PRKEPackage()));
+	}
+    };
     private static Type[] type = {Type.PERK};
 
     PERK() {
 	super();
-	subRecords.remove(Type.FULL);
-	subRecords.remove(Type.DESC);
-
-	subRecords.add(scripts);
-//	subRecords.add(FULL);
-//	subRecords.add(description);
-	subRecords.add(CTDAs);
-	subRecords.add(DATA);
-	subRecords.add(NNAM);
-	subRecords.add(ICON);
-	subRecords.add(perkSections);
+	subRecords.prototype = PERKproto;
     }
 
     @Override
@@ -56,8 +49,8 @@ public class PERK extends MajorRecordDescription {
     @Override
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = super.allFormIDs();
-	out.addAll(perkSections.allFormIDs());
-	out.addAll(CTDAs.allFormIDs());
+//	out.addAll(perkSections.allFormIDs());
+//	out.addAll(CTDAs.allFormIDs());
 	return out;
     }
 
@@ -77,13 +70,15 @@ public class PERK extends MajorRecordDescription {
 
 		switch (getNextType(in)) {
 		    case DATA:
-			if (DATA.isValid()) {
-			    perkSections.parseData(perkSections.extractRecordData(in));
+			if (subRecords.get(Type.DATA).isValid()) {
+			    SubList prke = subRecords.getSubList(Type.PRKE);
+			    prke.parseData(prke.extractRecordData(in));
 			    break;
 			}
 		    case CTDA:
 			if (insidePRKE) {
-			    perkSections.parseData(perkSections.extractRecordData(in));
+			    SubList prke = subRecords.getSubList(Type.PRKE);
+			    prke.parseData(prke.extractRecordData(in));
 			    break;
 			}
 		    default:

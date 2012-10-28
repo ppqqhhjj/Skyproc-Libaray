@@ -30,10 +30,13 @@ public class MGEF extends MajorRecordDescription {
 	    add(new KeywordSet());
 	    add(new DATA());
 	    add(new SNDD());
-	    add(new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS));
+	    SubStringPointer dnam = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
+	    dnam.forceExport = true;
+	    add(dnam);
 	    forceExport(Type.DNAM);
 	    SubStringPointer desc = (SubStringPointer) get(Type.DESC);
 	    desc.file = SubStringPointer.Files.STRINGS;
+	    desc.forceExport = false;
 	    reposition(Type.DESC);
 	    add(new SubForm(Type.ESCE));
 	    add(new SubList<>(new Condition()));

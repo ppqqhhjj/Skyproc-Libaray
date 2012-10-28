@@ -14,23 +14,25 @@ import skyproc.exceptions.BadRecord;
  */
 public class IMGS extends MajorRecord {
 
+    static final SubRecordsPrototype IMGSproto = new SubRecordsPrototype(MajorRecord.majorProto){
+
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.ENAM));
+	    add(new HNAM());
+	    add(new CNAM());
+	    add(new TNAM());
+	    add(new DNAM());
+	}
+    };
     private final static Type[] type = {Type.IMGS};
-    private SubData ENAM = new SubData(Type.ENAM);
-    private HNAM HNAM = new HNAM();
-    private CNAM CNAM = new CNAM();
-    private TNAM TNAM = new TNAM();
-    private DNAM DNAM = new DNAM();
 
     /**
      * Creates a new IMGS record.
      */
     public IMGS() {
         super();
-        subRecords.add(ENAM);
-        subRecords.add(HNAM);
-        subRecords.add(CNAM);
-        subRecords.add(TNAM);
-        subRecords.add(DNAM);
+        subRecords.prototype = IMGSproto;
     }
 
     @Override
@@ -322,12 +324,28 @@ public class IMGS extends MajorRecord {
 
     }
 
+    HNAM getHNAM() {
+	return (HNAM) subRecords.get(Type.HNAM);
+    }
+    
+    CNAM getCNAM() {
+	return (CNAM) subRecords.get(Type.CNAM);
+    }
+    
+    TNAM getTNAM() {
+	return (TNAM) subRecords.get(Type.TNAM);
+    }
+    
+    DNAM getDNAM() {
+	return (DNAM) subRecords.get(Type.DNAM);
+    }
+    
     /**
      *
      * @return
      */
     public float getEyeAdaptSpeed() {
-        return HNAM.eyeAdaptSpeed;
+        return getHNAM().eyeAdaptSpeed;
     }
 
     /**
@@ -335,7 +353,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomRadius() {
-        return HNAM.bloomRadius;
+        return getHNAM().bloomRadius;
     }
 
     /**
@@ -343,7 +361,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomThreshold() {
-        return HNAM.bloomThreshold;
+        return getHNAM().bloomThreshold;
     }
 
     /**
@@ -351,7 +369,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomScale() {
-        return HNAM.bloomScale;
+        return getHNAM().bloomScale;
     }
 
     /**
@@ -359,7 +377,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getTargetLum1() {
-        return HNAM.targetLum1;
+        return getHNAM().targetLum1;
     }
 
     /**
@@ -367,7 +385,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getTargetLum2() {
-        return HNAM.targetLum2;
+        return getHNAM().targetLum2;
     }
 
     /**
@@ -375,7 +393,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSunlightScale() {
-        return HNAM.sunlightScale;
+        return getHNAM().sunlightScale;
     }
 
     /**
@@ -383,7 +401,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSkyScale() {
-        return HNAM.skyScale;
+        return getHNAM().skyScale;
     }
 
     /**
@@ -391,7 +409,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getEyeAdaptStrength() {
-        return HNAM.eyeAdaptStrength;
+        return getHNAM().eyeAdaptStrength;
     }
 
     /**
@@ -399,7 +417,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setEyeAdaptSpeed(float in) {
-        HNAM.eyeAdaptSpeed = in;
+        getHNAM().eyeAdaptSpeed = in;
     }
 
     /**
@@ -407,7 +425,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomRadius(float in) {
-        HNAM.bloomRadius = in;
+        getHNAM().bloomRadius = in;
     }
 
     /**
@@ -415,7 +433,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomThreshold(float in) {
-        HNAM.bloomThreshold = in;
+        getHNAM().bloomThreshold = in;
     }
 
     /**
@@ -423,7 +441,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomScale(float in) {
-        HNAM.bloomScale = in;
+        getHNAM().bloomScale = in;
     }
 
     /**
@@ -431,7 +449,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setTargetLum1(float in) {
-        HNAM.targetLum1 = in;
+        getHNAM().targetLum1 = in;
     }
 
     /**
@@ -439,7 +457,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setTargetLum2(float in) {
-        HNAM.targetLum2 = in;
+        getHNAM().targetLum2 = in;
     }
 
     /**
@@ -447,7 +465,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSunlightScale(float in) {
-        HNAM.sunlightScale = in;
+        getHNAM().sunlightScale = in;
     }
 
     /**
@@ -455,7 +473,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSkyScale(float in) {
-        HNAM.skyScale = in;
+        getHNAM().skyScale = in;
     }
 
     /**
@@ -463,7 +481,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setEyeAdaptStrength(float in) {
-        HNAM.eyeAdaptStrength = in;
+        getHNAM().eyeAdaptStrength = in;
     }
 
     /**
@@ -471,7 +489,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSaturation() {
-        return CNAM.saturation;
+        return getCNAM().saturation;
     }
 
     /**
@@ -479,7 +497,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBrightness() {
-        return CNAM.brightness;
+        return getCNAM().brightness;
     }
 
     /**
@@ -487,7 +505,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getContrast() {
-        return CNAM.contrast;
+        return getCNAM().contrast;
     }
 
     /**
@@ -495,7 +513,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getRed() {
-        return TNAM.red;
+        return getTNAM().red;
     }
 
     /**
@@ -503,7 +521,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBlue() {
-        return TNAM.blue;
+        return getTNAM().blue;
     }
 
     /**
@@ -511,7 +529,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getGreen() {
-        return TNAM.green;
+        return getTNAM().green;
     }
 
     /**
@@ -519,7 +537,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getAlpha() {
-        return TNAM.alpha;
+        return getTNAM().alpha;
     }
 
     /**
@@ -527,7 +545,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSaturation(float in) {
-        CNAM.saturation = in;
+        getCNAM().saturation = in;
     }
 
     /**
@@ -535,7 +553,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBrightness(float in) {
-        CNAM.brightness = in;
+        getCNAM().brightness = in;
     }
 
     /**
@@ -543,7 +561,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setContrast(float in) {
-        CNAM.contrast = in;
+        getCNAM().contrast = in;
     }
 
     /**
@@ -551,7 +569,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setRed(float in) {
-        TNAM.red = in;
+        getTNAM().red = in;
     }
 
     /**
@@ -559,7 +577,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBlue(float in) {
-        TNAM.blue = in;
+        getTNAM().blue = in;
     }
 
     /**
@@ -567,7 +585,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setGreen(float in) {
-        TNAM.green = in;
+        getTNAM().green = in;
     }
 
     /**
@@ -575,7 +593,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setAlpha(float in) {
-        TNAM.alpha = in;
+        getTNAM().alpha = in;
     }
 
     /**
@@ -583,7 +601,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setDOFstrength(float in) {
-        DNAM.DOFstrength = in;
+        getDNAM().DOFstrength = in;
     }
 
     /**
@@ -591,7 +609,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFstrength() {
-        return DNAM.DOFstrength;
+        return getDNAM().DOFstrength;
     }
 
     /**
@@ -599,7 +617,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setDOFdistance (float in) {
-        DNAM.DOFdistance = in;
+        getDNAM().DOFdistance = in;
     }
 
     /**
@@ -607,7 +625,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFdistance() {
-        return DNAM.DOFdistance;
+        return getDNAM().DOFdistance;
     }
 
     /**
@@ -615,7 +633,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setDOFrange (float in) {
-        DNAM.DOFrange = in;
+        getDNAM().DOFrange = in;
     }
 
     /**
@@ -623,6 +641,6 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFrange() {
-        return DNAM.DOFrange;
+        return getDNAM().DOFrange;
     }
 }

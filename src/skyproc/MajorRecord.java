@@ -29,7 +29,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    add(new SubString(Type.EDID, true));
 	}
     };
-    
+
     SubRecordsDerived subRecords = new SubRecordsDerived(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);

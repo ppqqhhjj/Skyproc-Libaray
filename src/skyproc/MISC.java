@@ -18,12 +18,12 @@ import skyproc.exceptions.BadRecord;
  * @author Justin Swanson
  */
 public class MISC extends MajorRecordNamed {
-
+    
     static final SubRecordsPrototype MISCproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new ScriptPackage());
+	    after(new ScriptPackage(), Type.EDID);
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
 	    add(new SubString(Type.MODL, true));
@@ -42,6 +42,7 @@ public class MISC extends MajorRecordNamed {
 
     MISC() {
 	super();
+	subRecords.prototype = MISCproto;
     }
 
     @Override

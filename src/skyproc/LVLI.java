@@ -10,13 +10,18 @@ package skyproc;
  */
 public class LVLI extends LeveledRecord {
 
-    SubForm LVLG = new SubForm(Type.LVLG);
+    static final SubRecordsPrototype LVLIproto = new SubRecordsPrototype(LeveledRecord.LeveledProto){
 
+	@Override
+	protected void addRecords() {
+	    before(new SubForm(Type.LVLG), Type.LVLO);
+	}
+    };
     static Type[] types = {Type.LVLI};
 
     LVLI () {
 	super();
-	init();
+	subRecords.prototype = LVLIproto;
     }
 
     /**
@@ -26,18 +31,9 @@ public class LVLI extends LeveledRecord {
      */
     public LVLI(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);
-        init();
+	subRecords.prototype = LVLIproto;
     }
-
-    final void init() {
-	subRecords.add(OBND);
-	subRecords.add(LVLD);
-	subRecords.add(LVLF);
-	subRecords.add(LVLG);
-	subRecords.add(entries);
-    }
-
-
+    
     @Override
     Type[] getTypes() {
 	return types;
@@ -53,7 +49,7 @@ public class LVLI extends LeveledRecord {
      * @param id
      */
     public void setGlobalForm (FormID id) {
-	LVLG.setForm(id);
+	subRecords.setSubForm(Type.LVLG, id);
     }
 
     /**
@@ -61,7 +57,7 @@ public class LVLI extends LeveledRecord {
      * @return
      */
     public FormID getGlobalForm () {
-	return LVLG.getForm();
+	return subRecords.getSubForm(Type.LVLG).getForm();
     }
 
 }

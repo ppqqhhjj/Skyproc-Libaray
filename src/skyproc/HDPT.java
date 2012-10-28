@@ -12,30 +12,26 @@ import java.util.ArrayList;
  */
 public class HDPT extends MajorRecordNamed {
 
-    SubString MODL = new SubString(Type.MODL, true);
-    SubData MODT = new SubData(Type.MODT);
-    SubData DATA = new SubData(Type.DATA);
-    SubInt PNAM = new SubInt(Type.PNAM);
-    SubList<SubForm> HNAMs = new SubList<>(new SubForm(Type.HNAM));
-    SubList<NAMs> NAMs = new SubList<>(new NAMs());
-    SubForm CNAM = new SubForm(Type.CNAM);
-    SubForm TNAM = new SubForm(Type.TNAM);
-    SubForm RNAM = new SubForm(Type.RNAM);
+    static final SubRecordsPrototype HDPTproto = new SubRecordsPrototype(MajorRecordNamed.namedProto){
 
+	@Override
+	protected void addRecords() {
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	    add(new SubData(Type.DATA));
+	    add(new SubInt(Type.PNAM));
+	    add(new SubList<>(new SubForm(Type.HNAM)));
+	    add(new SubList<>(new NAMs()));
+	    add(new SubForm(Type.CNAM));
+	    add(new SubForm(Type.TNAM));
+	    add(new SubForm(Type.RNAM));
+	}
+    };
     static Type[] types = { Type.HDPT };
 
     HDPT() {
 	super();
-
-	subRecords.add(MODL);
-	subRecords.add(MODT);
-	subRecords.add(DATA);
-	subRecords.add(PNAM);
-	subRecords.add(HNAMs);
-	subRecords.add(NAMs);
-	subRecords.add(CNAM);
-	subRecords.add(TNAM);
-	subRecords.add(RNAM);
+	subRecords.prototype = HDPTproto;
     }
 
     @Override
@@ -71,42 +67,42 @@ public class HDPT extends MajorRecordNamed {
 
     //GetSet
     public void setModel(String path) {
-	MODL.setString(path);
+	subRecords.setSubString(Type.MODL, path);
     }
 
     public String getModel () {
-	return MODL.print();
+	return subRecords.getSubString(Type.MODL).print();
     }
 
     public ArrayList<FormID> getHeadParts() {
-	return SubList.subFormToPublic(HNAMs);
+	return SubList.subFormToPublic(subRecords.getSubList(Type.HNAM));
     }
 
     public void addHeadPart(FormID id) {
-	HNAMs.add(new SubForm(Type.HNAM, id));
+	subRecords.getSubList(Type.HNAM).add(new SubForm(Type.HNAM, id));
     }
 
     public void removeHeadPart(FormID id) {
-	HNAMs.remove(new SubForm(Type.HNAM, id));
+	subRecords.getSubList(Type.HNAM).remove(new SubForm(Type.HNAM, id));
     }
 
     public void clearHeadParts() {
-	HNAMs.clear();
+	subRecords.getSubList(Type.HNAM).clear();
     }
 
     public void setBaseTexture(FormID txst) {
-	TNAM.setForm(txst);
+	subRecords.setSubForm(Type.TNAM, txst);
     }
 
     public FormID getBaseTexture() {
-	return TNAM.getForm();
+	return subRecords.getSubForm(Type.TNAM).getForm();
     }
 
     public void setResourceList(FormID id) {
-	RNAM.setForm(id);
+	subRecords.setSubForm(Type.RNAM, id);
     }
 
     public FormID getResourceList() {
-	return RNAM.getForm();
+	return subRecords.getSubForm(Type.RNAM).getForm();
     }
 }

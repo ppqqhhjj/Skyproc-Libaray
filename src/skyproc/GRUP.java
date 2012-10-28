@@ -173,7 +173,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
 	for (MajorRecord r : listRecords) {
-	    if (r.getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
+	    if (r.getEDID().equals("AbDamageStaminaRateVisible")) {
 		int wer = 23;
 	    }
 

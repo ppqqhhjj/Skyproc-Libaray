@@ -22,21 +22,18 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-    static GRUP_TYPE[] types = {GRUP_TYPE.GLOB};
+    static GRUP_TYPE[] types = {GRUP_TYPE.PERK};
 //    static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
      */
     public static void runTests() {
 	setSkyProcGlobal();
-
 	try {
-
 	    SPGlobal.testing = true;
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	    validate();
 	    gui.finished();
-
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
 	}

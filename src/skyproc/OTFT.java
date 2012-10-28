@@ -12,13 +12,18 @@ import java.util.ArrayList;
  */
 public class OTFT extends MajorRecord {
 
-    static Type[] types = { Type.OTFT };
+    static final SubRecordsPrototype OTFTproto = new SubRecordsPrototype(MajorRecord.majorProto){
 
-    SubFormArray INAM = new SubFormArray(Type.INAM, 0);
+	@Override
+	protected void addRecords() {
+	    add(new SubFormArray(Type.INAM, 0));
+	}
+    };
+    static Type[] types = { Type.OTFT };
 
     OTFT() {
 	super();
-	subRecords.add(INAM);
+	subRecords.prototype = OTFTproto;
     }
 
     public OTFT(Mod modToOriginateFrom, String uniqueEDID) {
@@ -37,18 +42,18 @@ public class OTFT extends MajorRecord {
     }
 
     public ArrayList<FormID> getInventoryList() {
-	return new ArrayList<>(INAM.IDs);
+	return subRecords.get(Type.INAM).allFormIDs();
     }
 
     public void addInventoryItem(FormID item) {
-	INAM.add(item);
+	subRecords.getSubFormArray(Type.INAM).add(item);
     }
 
     public void removeInventoryItem (FormID item) {
-	INAM.remove(item);
+	subRecords.getSubFormArray(Type.INAM).remove(item);
     }
 
     public void clearInventoryItems() {
-	INAM.clear();
+	subRecords.getSubFormArray(Type.INAM).clear();
     }
 }

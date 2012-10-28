@@ -68,7 +68,7 @@ public abstract class SubRecord extends Record {
     }
 
     ArrayList<FormID> allFormIDs() {
-	return new ArrayList<FormID>(0);
+	return new ArrayList<>(0);
     }
 
     void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {

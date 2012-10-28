@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -22,12 +20,18 @@ import skyproc.exceptions.BadRecord;
  */
 public class GMST extends MajorRecord {
 
+    static final SubRecordsPrototype GMSTproto = new SubRecordsPrototype(MajorRecord.majorProto){
+
+	@Override
+	protected void addRecords() {
+	    add(new DATA());
+	}
+    };
     static Type[] types = {Type.GMST};
-    DATA DATA = new DATA();
 
     GMST() {
 	super();
-	subRecords.add(DATA);
+	subRecords.prototype = GMSTproto;
     }
 
     /**
@@ -138,15 +142,19 @@ public class GMST extends MajorRecord {
 	Unknown;
     }
 
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
+    }
+    
     /**
      * Sets the data to a boolean value.  You must check and be aware that this GMST contains that type.
      * @param b
      */
     final public void setData(Boolean b) {
 	if (b) {
-	    DATA.DATA.setData(1, 4);
+	    getDATA().DATA.setData(1, 4);
 	} else {
-	    DATA.DATA.setData(0, 4);
+	    getDATA().DATA.setData(0, 4);
 	}
     }
 
@@ -155,7 +163,7 @@ public class GMST extends MajorRecord {
      * @param s
      */
     final public void setData(String s) {
-	DATA.DATAs.setText(s);
+	getDATA().DATAs.setText(s);
     }
 
     /**
@@ -163,7 +171,7 @@ public class GMST extends MajorRecord {
      * @param i
      */
     final public void setData(int i) {
-	DATA.DATA.setData(i, 4);
+	getDATA().DATA.setData(i, 4);
     }
 
     /**
@@ -173,7 +181,7 @@ public class GMST extends MajorRecord {
     final public void setData(float f) {
 	ByteBuffer out = ByteBuffer.allocate(4);
 	out.putInt(Integer.reverseBytes(Float.floatToIntBits(f)));
-	DATA.DATA.setData(out.array());
+	getDATA().DATA.setData(out.array());
     }
 
     /**
@@ -181,7 +189,7 @@ public class GMST extends MajorRecord {
      * @return Returns the value as a bool.  You must check and be aware that this GMST contains that type.
      */
     public boolean getBool() {
-	if (DATA.DATA.toInt() == 0) {
+	if (getDATA().DATA.toInt() == 0) {
 	    return false;
 	} else {
 	    return true;
@@ -193,7 +201,7 @@ public class GMST extends MajorRecord {
      * @return Returns the value as a string.  You must check and be aware that this GMST contains that type.
      */
     public String getString() {
-	return DATA.DATAs.print();
+	return getDATA().DATAs.print();
     }
 
     /**
@@ -201,7 +209,7 @@ public class GMST extends MajorRecord {
      * @return Returns the value as an int.  You must check and be aware that this GMST contains that type.
      */
     public int getInt() {
-	return DATA.DATA.toInt();
+	return getDATA().DATA.toInt();
     }
 
     /**
@@ -209,11 +217,29 @@ public class GMST extends MajorRecord {
      * @return Returns the value as a float.  You must check and be aware that this GMST contains that type.
      */
     public float getFloat() {
-	return Float.intBitsToFloat(DATA.DATA.toInt());
+	return Float.intBitsToFloat(getDATA().DATA.toInt());
     }
 
-    class DATA extends SubRecord {
+    @Override
+    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	updateDATA();
+	super.importSubRecords(in);
+    }
 
+    @Override
+    void export(LExporter out, Mod srcMod) throws IOException {
+	updateDATA();
+	super.export(out, srcMod);
+    }
+    
+    void updateDATA() {
+	DATA data = (DATA)subRecords.get(Type.DATA);
+	data.GMSTtype = getGMSTType();
+    }
+    
+    static class DATA extends SubRecord {
+
+	GMSTType GMSTtype;
 	SubData DATA = new SubData(Type.DATA);
 	SubStringPointer DATAs = new SubStringPointer(Type.DATA, SubStringPointer.Files.STRINGS);
 
@@ -229,7 +255,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
-	    switch (getGMSTType()) {
+	    switch (GMSTtype) {
 		case String:
 		    DATAs.export(out, srcMod);
 		    break;
@@ -240,7 +266,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    switch (getGMSTType()) {
+	    switch (GMSTtype) {
 		case String:
 		    DATAs.parseData(in);
 		    break;
@@ -251,7 +277,7 @@ public class GMST extends MajorRecord {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    switch (getGMSTType()) {
+	    switch (GMSTtype) {
 		case String:
 		    return DATAs.getContentLength(srcMod);
 		default:

@@ -15,10 +15,16 @@ import skyproc.exceptions.NotFound;
  */
 abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO> {
 
-    SubList<LVLO> entries = new SubList<>(Type.LLCT, 1, new LVLO());
-    SubData OBND = new SubData(Type.OBND, 12);
-    SubData LVLD = new SubData(Type.LVLD);
-    SubFlag LVLF = new SubFlag(Type.LVLF, 1);
+    static final SubRecordsPrototype LeveledProto = new SubRecordsPrototype(MajorRecord.majorProto){
+
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.OBND, 12));
+	    add(new SubData(Type.LVLD, 1));
+	    add(new SubFlag(Type.LVLF, 1));
+	    add(new SubList<>(Type.LLCT, 1, new LVLO()));
+	}
+    };
 
     /**
      * Creates a Leveled List with no entries and default settings. LVLN_Flags
@@ -38,8 +44,6 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
     public LeveledRecord(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	LVLD.initialize(1);
-	OBND.initialize(12);
 	set(LVLFlag.CalcAllLevelsEqualOrBelowPC, true);
     }
 
@@ -49,7 +53,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      */
     @Override
     public Iterator<LVLO> iterator() {
-	return entries.iterator();
+	return subRecords.getSubList(Type.LVLO).iterator();
     }
 
     /**
@@ -75,7 +79,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      *
      */
     public void clearEntries() {
-	entries.clear();
+	subRecords.getSubList(Type.LVLO).clear();
     }
 
     /**
@@ -83,7 +87,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return
      */
     public ArrayList<LVLO> getEntries() {
-	return entries.toPublic();
+	return subRecords.getSubList(Type.LVLO).toPublic();
     }
 
     /**
@@ -92,7 +96,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return
      */
     public ArrayList<LVLO> getFlattenedEntries() {
-	ArrayList<LVLO> out = new ArrayList<LVLO>();
+	ArrayList<LVLO> out = new ArrayList<>();
 	for (LVLO entry : getEntries()) {
 	    MajorRecord o = SPDatabase.getMajor(entry.getForm());
 	    if (o instanceof LeveledRecord) {
@@ -110,7 +114,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param entry LVLO to add to this LVLN
      */
     public void addEntry(LVLO entry) {
-	entries.add(entry);
+	subRecords.getSubList(Type.LVLO).add(entry);
     }
 
     /**
@@ -123,7 +127,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * that the FormID associated truly points to a correct record. You will
      * have to confirm the accuracy yourself for now.
      */
-    public void addEntry(FormID id, int level, int count) throws NotFound {
+    public void addEntry(FormID id, int level, int count) {
 	addEntry(new LVLO(id, level, count));
     }
 
@@ -132,7 +136,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return The number of entries contained in the LVLN.
      */
     public int numEntries() {
-	return entries.size();
+	return subRecords.getSubList(Type.LVLO).size();
     }
 
     /**
@@ -149,7 +153,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return The ith entry in the LVLN.
      */
     public LVLO getEntry(int i) {
-	return entries.get(i);
+	return (LVLO) subRecords.getSubList(Type.LVLO).get(i);
     }
 
     /**
@@ -158,7 +162,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param i The zero based index to remove.
      */
     public void removeEntry(int i) {
-	entries.remove(i);
+	subRecords.getSubList(Type.LVLO).remove(i);
     }
 
     /**
@@ -166,8 +170,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return The percent chance nothing will spawn from this LVLN. (0.0-1.0)
      */
     public Double getChanceNonePct() {
-	if (LVLD.isValid()) {
-	    return LVLD.toInt() / 100.0;
+	SubData lvld = subRecords.getSubData(Type.LVLD);
+	if (lvld.isValid()) {
+	    return lvld.toInt() / 100.0;
 	} else {
 	    return 0.0;
 	}
@@ -181,7 +186,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      */
     public void setChanceNone(final int in) throws BadParameter {
 	if (in >= 0 && in <= 100) {
-	    LVLD.setData(in);
+	    subRecords.setSubData(Type.LVLD, in);
 	} else {
 	    throw new BadParameter("Chance none set outside range 0-100: " + in);
 	}
@@ -192,7 +197,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return The chance that no actor will spawn from this LVLN.
      */
     public int getChanceNone() {
-	return LVLD.toInt();
+	return subRecords.getSubData(Type.LVLD).toInt();
     }
 
     /**
@@ -203,7 +208,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return True if given flag is true.
      */
     public boolean get(LVLFlag flag) {
-	return LVLF.is(flag.ordinal());
+	return subRecords.getSubFlag(Type.LVLF).is(flag.ordinal());
     }
 
     /**
@@ -214,6 +219,6 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param on Boolean to set flag to.
      */
     final public void set(LVLFlag flag, boolean on) {
-	LVLF.set(flag.ordinal(), on);
+	subRecords.setSubFlag(Type.LVLF, flag.ordinal(), on);
     }
 }
