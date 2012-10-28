@@ -26,7 +26,7 @@ public class INGR extends MagicItem {
 	    add(new ScriptPackage());
 	    reposition(Type.OBND);
 	    reposition(Type.FULL);
-	    reposition(Type.KYWD);
+	    reposition(Type.KWDA);
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new SubForm(Type.YNAM));

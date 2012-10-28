@@ -25,9 +25,10 @@ public class ENCH extends MagicItem {
 	protected void addRecords() {
 	    reposition(Type.OBND);
 	    reposition(Type.FULL);
+	    remove(Type.DESC);
 	    add(new ENIT());
 	    reposition(Type.EFID);
-	    reposition(Type.KYWD);
+	    reposition(Type.KWDA);
 	}
     };
     static Type[] types = {Type.ENCH};

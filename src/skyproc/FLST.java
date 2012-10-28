@@ -12,13 +12,18 @@ import java.util.ArrayList;
  */
 public class FLST extends MajorRecord {
 
-    private static Type[] types = { Type.FLST };
+    static final SubRecordsPrototype FLSTproto = new SubRecordsPrototype(MajorRecord.majorProto){
 
-    SubList<SubForm> LNAMs = new SubList<>(new SubForm(Type.LNAM));
+	@Override
+	protected void addRecords() {
+	    add(new SubList<>(new SubForm(Type.LNAM)));
+	}
+    };
+    private static Type[] types = { Type.FLST };
 
     FLST() {
 	super();
-	subRecords.add(LNAMs);
+	subRecords.prototype = FLSTproto;
     }
 
     /**
@@ -48,7 +53,7 @@ public class FLST extends MajorRecord {
      * @return List of all the FormIDs in the Form list.
      */
     public ArrayList<FormID> getFormIDEntries() {
-	return SubList.subFormToPublic(LNAMs);
+	return SubList.subFormToPublic(subRecords.getSubList(Type.LNAM));
     }
 
     /**
@@ -56,7 +61,7 @@ public class FLST extends MajorRecord {
      * @param entry FormID to add to the list.
      */
     public void addFormEntry(FormID entry) {
-	LNAMs.add(new SubForm(Type.LNAM, entry));
+	subRecords.getSubList(Type.LNAM).add(new SubForm(Type.LNAM, entry));
     }
 
     /**
@@ -64,7 +69,7 @@ public class FLST extends MajorRecord {
      * @param entry FormID to remove (if it exists).
      */
     public void removeFormEntry(FormID entry) {
-	LNAMs.remove(new SubForm(Type.LNAM, entry));
+	subRecords.getSubList(Type.LNAM).remove(new SubForm(Type.LNAM, entry));
     }
 
     /**
@@ -72,7 +77,7 @@ public class FLST extends MajorRecord {
      * @return
      */
     public int getSize() {
-	return LNAMs.size();
+	return subRecords.getSubList(Type.LNAM).size();
     }
 
     /**
@@ -81,6 +86,6 @@ public class FLST extends MajorRecord {
      * @param i
      */
     public void addFormEntryAtIndex(FormID entry, int i) {
-	LNAMs.addAtIndex(new SubForm(Type.LNAM, entry), i);
+	subRecords.getSubList(Type.LNAM).addAtIndex(new SubForm(Type.LNAM, entry), i);
     }
 }

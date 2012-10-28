@@ -16,15 +16,21 @@ import skyproc.exceptions.BadRecord;
  */
 public class GLOB extends MajorRecord {
 
-    SubData FNAM = new SubData(Type.FNAM);
-    SubFloat FLTV = new SubFloat(Type.FLTV);
+    static final SubRecordsPrototype GLOBproto = new SubRecordsPrototype(MajorRecord.majorProto) {
 
+	@Override
+	protected void addRecords() {
+	    SubData fnam = new SubData(Type.FNAM);
+	    fnam.data = new byte[1];
+	    add(fnam);
+	    add(new SubFloat(Type.FLTV));
+	}
+    };
     static Type[] types = { Type.GLOB };
 
     GLOB () {
 	super();
-	subRecords.add(FNAM);
-	subRecords.add(FLTV);
+	subRecords.prototype = GLOBproto;
     }
 
     /**
@@ -36,7 +42,6 @@ public class GLOB extends MajorRecord {
     public GLOB(Mod modToOriginateFrom, String edid, GLOBType type) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	FNAM.data = new byte[1];
 	setType(type);
     }
 
@@ -93,9 +98,10 @@ public class GLOB extends MajorRecord {
      * @return
      */
     public GLOBType getGLOBType () {
-	if ((int)FNAM.data[0] == GLOBType.Short.value) {
+	SubData fnam = subRecords.getSubData(Type.FNAM);
+	if ((int)fnam.data[0] == GLOBType.Short.value) {
 	    return GLOBType.Short;
-	} else if ((int)FNAM.data[0] == GLOBType.Long.value) {
+	} else if ((int)fnam.data[0] == GLOBType.Long.value) {
 	    return GLOBType.Long;
 	}
 	return GLOBType.Float;
@@ -106,7 +112,7 @@ public class GLOB extends MajorRecord {
      * @param type
      */
     final public void setType (GLOBType type) {
-	FNAM.data[0] = (byte) type.value;
+	subRecords.getSubData(Type.FNAM).data[0] = (byte) type.value;
     }
 
     @Override
@@ -127,7 +133,7 @@ public class GLOB extends MajorRecord {
      * @return
      */
     public float getValue () {
-	return FLTV.data;
+	return subRecords.getSubFloat(Type.FLTV).get();
     }
 
     /**
@@ -135,7 +141,7 @@ public class GLOB extends MajorRecord {
      * @param value
      */
     final public void setValue (Float value) {
-	FLTV.data = value;
+	subRecords.setSubFloat(Type.FLTV, value);
     }
 
     /**

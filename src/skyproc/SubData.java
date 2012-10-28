@@ -122,7 +122,7 @@ class SubData extends SubRecord {
 
     @Override
     SubRecord getNew(Type type_) {
-        return new SubData(type_);
+        return new SubData(type_, data);
     }
 
     @Override
