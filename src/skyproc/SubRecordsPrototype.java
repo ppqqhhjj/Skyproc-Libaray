@@ -33,12 +33,13 @@ public abstract class SubRecordsPrototype {
 	addRecords();
     }
 
-    public final void add(SubRecord r) {
+    public final SubRecord add(SubRecord r) {
 	for (Type t : r.getTypes()) {
 	    remove(t);
 	    map.put(t, r);
 	}
 	list.add(r.getType());
+	return r;
     }
 
     public void before(SubRecord r, Type b) {

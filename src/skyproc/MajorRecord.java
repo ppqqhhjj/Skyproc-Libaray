@@ -188,10 +188,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(revision, 4);
 	    out.write(version, 4);
 
-	    if (getEDID().equals("AVEnchanting")) {
-		int wer = 23;
-	    }
-
 	    subRecords.export(out, srcMod);
 	}
     }

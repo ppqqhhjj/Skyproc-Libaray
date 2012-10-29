@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord implements Iterable<String> {
 
-    static final SubRecordsPrototype TXSTproto = new SubRecordsPrototype() {
+    static final SubRecordsPrototype TXSTproto = new SubRecordsPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {

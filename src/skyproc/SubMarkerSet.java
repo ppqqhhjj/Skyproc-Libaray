@@ -26,6 +26,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 
     SubMarkerSet(T prototype) {
 	super(prototype.getTypes());
+	this.prototype = prototype;
     }
 
     SubMarkerSet(T prototype, Type... markers) {
@@ -82,8 +83,12 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    SubRecord getNew(Type type) {
-	throw new UnsupportedOperationException("Not supported.");
+    SubRecord getNew(Type t) {
+	SubMarkerSet out = new SubMarkerSet(prototype);
+	out.type = type;
+	out.markers = markers;
+	out.forceMarkers = forceMarkers;
+	return out;
     }
 
     @Override

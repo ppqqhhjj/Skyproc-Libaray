@@ -83,6 +83,10 @@ public class SubRecordsDerived extends SubRecords {
 		in.skip(get(nextType).getRecordLength(in));
 	    } else {
 		SubRecord record = get(nextType);
+		if (record == null) {
+ 		    int wer = 23;
+		    record = get(nextType);
+		}
 		record.parseData(record.extractRecordData(in));
 	    }
 	} else {

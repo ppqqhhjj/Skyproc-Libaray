@@ -30,14 +30,11 @@ public class MGEF extends MajorRecordDescription {
 	    add(new KeywordSet());
 	    add(new DATA());
 	    add(new SNDD());
-	    SubStringPointer dnam = new SubStringPointer(Type.DNAM, SubStringPointer.Files.DLSTRINGS);
+	    SubStringPointer dnam = new SubStringPointer(Type.DNAM, SubStringPointer.Files.STRINGS);
 	    dnam.forceExport = true;
 	    add(dnam);
 	    forceExport(Type.DNAM);
-	    SubStringPointer desc = (SubStringPointer) get(Type.DESC);
-	    desc.file = SubStringPointer.Files.STRINGS;
-	    desc.forceExport = false;
-	    reposition(Type.DESC);
+	    remove(Type.DESC);
 	    add(new SubForm(Type.ESCE));
 	    add(new SubList<>(new Condition()));
 	    add(new SubData(Type.OBND));
@@ -457,6 +454,26 @@ public class MGEF extends MajorRecordDescription {
 	OnHit
     }
 
+    
+    /**
+     *
+     * @return Description associated with the Major Record, or <NO TEXT> if
+     * empty.
+     */
+    @Override
+    public String getDescription() {
+	return subRecords.getSubString(Type.DNAM).print();
+    }
+
+    /**
+     *
+     * @param description String to set as the Major Record description.
+     */
+    @Override
+    public void setDescription(String description) {
+	subRecords.setSubString(Type.DNAM, description);
+    }
+    
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }

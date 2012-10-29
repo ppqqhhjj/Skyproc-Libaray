@@ -104,6 +104,10 @@ abstract class SubRecords implements Serializable {
 	getSubRGB(in).set(c, f);
     }
 
+    public SubMarkerSet getSubMarker(Type in) {
+	return (SubMarkerSet) get(in);
+    }
+
     public KeywordSet getKeywords() {
 	return (KeywordSet) get(Type.KWDA);
     }

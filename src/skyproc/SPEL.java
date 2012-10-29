@@ -12,10 +12,18 @@ import skyproc.exceptions.NotFound;
  */
 public class SPEL extends MagicItem {
 
+    static final SubRecordsPrototype SPELproto = new SubRecordsPrototype(MagicItem.magicItemProto){
+
+	@Override
+	protected void addRecords() {
+	    add(new SubForm(Type.MDOB));
+	    add(new SubForm(Type.ETYP));
+	    reposition(Type.DESC);
+	    add(new SPIT());
+	    reposition(Type.EFID);
+	}
+    };
     final static Type[] type = {Type.SPEL};
-    SubForm MDOB = new SubForm(Type.MDOB);
-    SubForm ETYP = new SubForm(Type.ETYP);
-    SPIT SPIT = new SPIT();
 
     @Override
     Type[] getTypes() {
@@ -29,13 +37,7 @@ public class SPEL extends MagicItem {
 
     SPEL() {
 	super();
-//	subRecords.add(OBND);
-//	subRecords.add(FULL);
-//	subRecords.add(MDOB);
-//	subRecords.add(ETYP);
-//	subRecords.add(description);
-//	subRecords.add(SPIT);
-//	subRecords.add(magicEffects);
+	subRecords.prototype = SPELproto;
     }
 
     /**
@@ -47,9 +49,11 @@ public class SPEL extends MagicItem {
     public SPEL(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
+	SubForm ETYP = subRecords.getSubForm(Type.ETYP);
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	ETYP.ID.standardize(modToOriginateFrom);
-	SPIT.valid = true;
+	
+	getSPIT().valid = true;
     }
 
     /**
@@ -147,7 +151,7 @@ public class SPEL extends MagicItem {
      * @param invModel
      */
     public void setInventoryModel(FormID invModel) {
-	MDOB.setForm(invModel);
+	subRecords.setSubForm(Type.MODB, invModel);
     }
 
     /**
@@ -155,7 +159,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public FormID getInventoryModel() {
-	return MDOB.getForm();
+	return subRecords.getSubForm(Type.MODB).getForm();
     }
 
     /**
@@ -163,7 +167,7 @@ public class SPEL extends MagicItem {
      * @param equipType
      */
     public void setEquipSlot(FormID equipType) {
-	ETYP.setForm(equipType);
+	subRecords.setSubForm(Type.ETYP, equipType);
     }
 
     /**
@@ -171,15 +175,19 @@ public class SPEL extends MagicItem {
      * @return
      */
     public FormID getEquipSlot() {
-	return ETYP.getForm();
+	return subRecords.getSubForm(Type.ETYP).getForm();
     }
 
+    final SPIT getSPIT() {
+	return (SPIT) subRecords.get(Type.SPIT);
+    }
+    
     /**
      *
      * @param baseCost
      */
     public void setBaseCost(int baseCost) {
-	SPIT.baseCost = baseCost;
+	getSPIT().baseCost = baseCost;
     }
 
     /**
@@ -187,7 +195,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public int getBaseCost() {
-	return SPIT.baseCost;
+	return getSPIT().baseCost;
     }
 
     /**
@@ -196,7 +204,7 @@ public class SPEL extends MagicItem {
      * @param on
      */
     public void set(SPELFlag flag, boolean on) {
-	SPIT.flags.set(flag.value, on);
+	getSPIT().flags.set(flag.value, on);
     }
 
     /**
@@ -205,7 +213,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public boolean get(SPELFlag flag) {
-	return SPIT.flags.get(flag.value);
+	return getSPIT().flags.get(flag.value);
     }
 
     /**
@@ -213,7 +221,7 @@ public class SPEL extends MagicItem {
      * @param type
      */
     public void setSpellType(SPELType type) {
-	SPIT.baseType = type.value;
+	getSPIT().baseType = type.value;
     }
 
     /**
@@ -221,7 +229,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public SPELType getSpellType() {
-	return SPELType.value(SPIT.baseType);
+	return SPELType.value(getSPIT().baseType);
     }
 
     /**
@@ -229,7 +237,7 @@ public class SPEL extends MagicItem {
      * @param chargeTime
      */
     public void setChargeTime (float chargeTime) {
-	SPIT.chargeTime = chargeTime;
+	getSPIT().chargeTime = chargeTime;
     }
 
     /**
@@ -237,7 +245,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public float getChargeTime () {
-	return SPIT.chargeTime;
+	return getSPIT().chargeTime;
     }
 
     /**
@@ -245,7 +253,7 @@ public class SPEL extends MagicItem {
      * @param type
      */
     public void setCastType (CastType type) {
-	SPIT.castType = type;
+	getSPIT().castType = type;
     }
 
     /**
@@ -253,7 +261,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public CastType getCastType () {
-	return SPIT.castType;
+	return getSPIT().castType;
     }
 
     /**
@@ -261,7 +269,7 @@ public class SPEL extends MagicItem {
      * @param type
      */
     public void setDeliveryType (DeliveryType type) {
-	SPIT.targetType = type;
+	getSPIT().targetType = type;
     }
 
     /**
@@ -269,7 +277,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public DeliveryType getDeliveryType () {
-	return SPIT.targetType;
+	return getSPIT().targetType;
     }
 
     /**
@@ -277,7 +285,7 @@ public class SPEL extends MagicItem {
      * @param duration
      */
     public void setCastDuration (float duration) {
-	SPIT.castDuration = duration;
+	getSPIT().castDuration = duration;
     }
 
     /**
@@ -285,7 +293,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public float getCastDuration () {
-	return SPIT.castDuration;
+	return getSPIT().castDuration;
     }
 
     /**
@@ -293,7 +301,7 @@ public class SPEL extends MagicItem {
      * @param range
      */
     public void setRange (float range) {
-	SPIT.range = range;
+	getSPIT().range = range;
     }
 
     /**
@@ -301,7 +309,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public float getRange () {
-	return SPIT.range;
+	return getSPIT().range;
     }
 
     /**
@@ -309,18 +317,15 @@ public class SPEL extends MagicItem {
      * @return The PERK ref associated with the SPEL.
      */
     public FormID getPerkRef() {
-	return SPIT.perkType;
+	return getSPIT().perkType;
     }
 
     /**
      *
      * @param perkRef FormID to set the SPELs PERK ref to.
-     * @throws NotFound This functionality to come. Skyproc does NOT confirm
-     * that the FormID associated truly points to a correct record. You will
-     * have to confirm the accuracy yourself for now.
      */
-    public void setPerkRef(FormID perkRef) throws NotFound {
-	SPIT.perkType = perkRef;
+    public void setPerkRef(FormID perkRef) {
+	getSPIT().perkType = perkRef;
     }
 
 }

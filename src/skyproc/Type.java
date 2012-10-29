@@ -606,6 +606,8 @@ public enum Type {
      *
      */
     SNMV,
+    SPMV,
+    PlaceHolder_HKX,
 
     /**
      *

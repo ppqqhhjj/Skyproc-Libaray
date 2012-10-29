@@ -47,9 +47,6 @@ public class AVIF extends MajorRecordDescription {
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType;
-	if (getEDID().equals("AVEnchanting")) {
-	    int wer = 23;
-	}
 	Boolean pastHeader = false;
 	while (!in.isDone()) {
 	    nextType = getNextType(in);
