@@ -52,6 +52,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
     GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
     LFileChannel input;
+    Map<ModListing, Integer> masterMap = new HashMap<>();
     Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
@@ -70,7 +71,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
 	this(info, true);
-	logSync("MOD", "Parsing header");
+	SPGlobal.logSync("MOD", "Parsing header");
 	tes.parseData(headerInfo);
     }
 
@@ -243,6 +244,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void addMaster(ModListing input) {
 	if (!getInfo().equals(input)) {
+	    masterMap.clear();
 	    tes.addMaster(input);
 	}
     }
@@ -346,20 +348,20 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public void print() {
 
-	newSyncLog("Mod Export/" + getName() + ".txt");
+	SPGlobal.newSyncLog("Mod Export/" + getName() + ".txt");
 
 	if (!getMastersStrings().isEmpty()) {
-	    logSync(getName(), "=======================================================================");
-	    logSync(getName(), "======================= Printing Mod Masters ==========================");
-	    logSync(getName(), "=======================================================================");
+	    SPGlobal.logSync(getName(), "=======================================================================");
+	    SPGlobal.logSync(getName(), "======================= Printing Mod Masters ==========================");
+	    SPGlobal.logSync(getName(), "=======================================================================");
 	    for (String s : getMastersStrings()) {
-		logSync(getName(), s);
+		SPGlobal.logSync(getName(), s);
 	    }
 	}
 	for (GRUP g : GRUPs.values()) {
 	    g.toString();
 	}
-	logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
+	SPGlobal.logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
     }
 
     @Override
@@ -368,12 +370,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void standardizeMasters() {
-	logSync("Standardizing", getName());
+	SPGlobal.logSync("Standardizing", getName());
 	for (GRUP g : GRUPs.values()) {
 	    g.standardizeMasters();
 	}
     }
-    
+
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> tmp = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -421,10 +423,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    }
 
 	    if (SPGlobal.logging()) {
-		logSync(getName(), "No strings file for " + file);
+		SPGlobal.logSync(getName(), "No strings file for " + file);
 	    }
 	} catch (IOException | DataFormatException ex) {
-	    logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
+	    SPGlobal.logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
 	}
     }
 
@@ -597,6 +599,23 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return false;
     }
 
+    int getMasterIndex(ModListing in) {
+	Integer out = masterMap.get(in);
+	if (out != null) {
+	    return out;
+	} else {
+	    ArrayList<ModListing> masters = getMasters();
+	    int i;
+	    for (i = 0; i < masters.size(); i++) {
+		if (masters.get(i).equals(in)) {
+		    return i;
+		}
+	    }
+	    masterMap.put(in, i);
+	    return i;
+	}
+    }
+
     int getTotalLength() {
 	return getContentLength() + tes.getTotalLength(this);
     }
@@ -682,13 +701,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	// Export Header
 	tes.setNumRecords(numRecords());
-	if (logging()) {
+	if (SPGlobal.logging()) {
 	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
 	    SPGlobal.sync(true);
-	    logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
-	    logSync(this.getName(), "Masters: ");
+	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
+	    SPGlobal.logSync(this.getName(), "Masters: ");
 	    for (String s : this.getMastersStrings()) {
-		logSync(this.getName(), "   " + s);
+		SPGlobal.logSync(this.getName(), "   " + s);
 	    }
 	}
 
@@ -1145,42 +1164,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public String getNameNoSuffix() {
 	return getName().substring(0, getName().indexOf(".es"));
-    }
-
-    void newSyncLog(String fileName) {
-	SPGlobal.newSyncLog(fileName);
-    }
-
-    boolean logging() {
-	return SPGlobal.logging();
-    }
-
-    final void logMain(String header, String... log) {
-	SPGlobal.logMain(header, log);
-    }
-
-    final void log(String header, String... log) {
-	SPGlobal.log(header, log);
-    }
-
-    void newLog(String fileName) {
-	SPGlobal.newLog(fileName);
-    }
-
-    final void logSync(String header, String... log) {
-	SPGlobal.logSync(header, log);
-    }
-
-    void logError(String header, String... log) {
-	SPGlobal.logError(header, log);
-    }
-
-    void logSpecial(Enum e, String header, String... log) {
-	SPGlobal.logSpecial(e, header, log);
-    }
-
-    void flush() {
-	SPGlobal.flush();
     }
 
     /**
