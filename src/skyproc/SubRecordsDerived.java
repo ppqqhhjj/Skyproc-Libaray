@@ -23,6 +23,7 @@ public class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
     protected Map<Type, Long> pos = new HashMap<>(0);
+    Mod srcMod;
 
     public SubRecordsDerived(SubRecordsPrototype proto) {
 	this.prototype = proto;
@@ -33,6 +34,7 @@ public class SubRecordsDerived extends SubRecords {
 	for (Type t : prototype.list) {
 	    if (shouldExport(t)) {
 		SubRecord instance = get(t);
+		instance.standardize(srcMod);
 		instance.export(out, srcMod);
 	    }
 	}
@@ -61,8 +63,10 @@ public class SubRecordsDerived extends SubRecords {
 	if (map.containsKey(in)) {
 	    return map.get(in);
 	} else if (prototype.contains(in)) {
-	    add(prototype.get(in).getNew(in));
-	    return map.get(in);
+	    SubRecord s = prototype.get(in).getNew(in);
+	    s.standardize(srcMod);
+	    add(s);
+	    return s;
 	} else {
 	    return null;
 	}
@@ -83,10 +87,6 @@ public class SubRecordsDerived extends SubRecords {
 		in.skip(get(nextType).getRecordLength(in));
 	    } else {
 		SubRecord record = get(nextType);
-		if (record == null) {
- 		    int wer = 23;
-		    record = get(nextType);
-		}
 		record.parseData(record.extractRecordData(in));
 	    }
 	} else {

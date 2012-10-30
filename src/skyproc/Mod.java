@@ -338,14 +338,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUP grup = GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0]));
-	if (!grup.contains(m.getForm())) {
-	    grup.addRecord(m);
-	}
-    }
-
-    final void addRecordSilent(MajorRecord m) {
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecordSilent(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
     }
 
     /**
@@ -380,7 +373,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    g.standardizeMasters();
 	}
     }
-
+    
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> tmp = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -686,7 +679,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		}
 	    }
 	}
-	standardizeMasters();
 
 	// Export Header
 	tes.setNumRecords(numRecords());

@@ -87,6 +87,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	    }
 	    T item = (T) prototype.getNew();
+	    item.subRecords.srcMod = srcMod;
 	    try {
 
 		item.parseData(item.extractRecordData(in));
@@ -232,9 +233,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param item Record to add to the GRUP.
      */
     public void addRecord(T item) {
-	// Get Masters
-	standardizeMaster(item);
-	addRecordSilent(item);
+	removeRecord(item);
+	mapRecords.put(item.getForm(), item);
+	listRecords.add(item);
     }
 
     /**
@@ -256,12 +257,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	for (FormID id : set) {
 	    id.standardize(srcMod);
 	}
-    }
-
-    final void addRecordSilent(T item) {
-	removeRecord(item);
-	mapRecords.put(item.getForm(), item);
-	listRecords.add(item);
     }
 
     void addRecord(Object item) {

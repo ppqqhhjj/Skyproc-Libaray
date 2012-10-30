@@ -546,7 +546,6 @@ public class SPImporter {
 	    SPProgressBarPlug.setBar(curBar + grup_targets.length);
 	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
 	    plugin.fetchStringPointers();
-	    plugin.standardizeMasters();
 	    SPProgressBarPlug.incrementBar();
 
 	    if (addtoDb) {

@@ -103,11 +103,7 @@ public class FormID implements Comparable, Serializable {
 	master = in.master;
     }
 
-    /**
-     *
-     * @param id An int array containing the last 6 digits of the FormID.
-     */
-    final public void set(byte[] id) {
+    final void set(byte[] id) {
 	setInternal(Ln.reverse(id));
     }
 

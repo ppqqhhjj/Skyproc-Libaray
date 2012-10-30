@@ -22,7 +22,7 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-//    static GRUP_TYPE[] types = {GRUP_TYPE.MGEF};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.FACT};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
@@ -58,6 +58,18 @@ public class SkyProcTester {
 	FormID.allIDs.clear();
 	SPImporter importer = new SPImporter();
 	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
+
+	SPProgressBarPlug.reset();
+	SPProgressBarPlug.setMax(types.length);
+
+	for (GRUP_TYPE g : types) {
+	    if (!test(g)) {
+		SPProgressBarPlug.setStatus("FAILED: " + g);
+		break;
+	    }
+	    SPProgressBarPlug.setStatus("Validating DONE");
+	}
+
 	boolean idFail = false;
 	for (FormID id : FormID.allIDs) {
 	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id.toString())) {
@@ -72,18 +84,6 @@ public class SkyProcTester {
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}
-
-	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(types.length);
-
-	for (GRUP_TYPE g : types) {
-	    if (!test(g)) {
-		SPProgressBarPlug.setStatus("FAILED: " + g);
-		break;
-	    }
-	    SPProgressBarPlug.setStatus("Validating DONE");
-	}
-
     }
 
     private static boolean test(GRUP_TYPE type) throws IOException, BadRecord, BadMod {

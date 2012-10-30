@@ -41,11 +41,12 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void originateFrom(Mod modToOriginateFrom, String edid) {
+	subRecords.srcMod = modToOriginateFrom;
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	Consistency.addEntry(getEDID(), ID);
 	Consistency.newIDs.add(ID);
-	modToOriginateFrom.addRecordSilent(this);
+	modToOriginateFrom.addRecord(this);
     }
 
     @Override
@@ -117,6 +118,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
+	ID.standardize(subRecords.srcMod);
 	revision = in.extract(4);
 	version = in.extract(4);
 
@@ -130,11 +132,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
-
-	if (getEDID().equals("ClothesMGRobesArchmage1Hooded")) {
-	    int wer = 23;
-	}
-
+	
 	importSubRecords(in);
 	subRecords.printSummary();
     }
@@ -187,7 +185,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
-
+	    
 	    subRecords.export(out, srcMod);
 	}
     }
