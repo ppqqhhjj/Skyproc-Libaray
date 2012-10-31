@@ -62,7 +62,7 @@ abstract class SubShell extends SubRecord {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
-	subRecords.fetchStringPointers(srcMod, r, streams);
+    void fetchStringPointers(Mod srcMod) {
+	subRecords.fetchStringPointers(srcMod);
     }
 }

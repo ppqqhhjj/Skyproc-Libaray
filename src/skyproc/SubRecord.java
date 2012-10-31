@@ -77,7 +77,7 @@ public abstract class SubRecord extends Record {
 	}
     }
     
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
+    void fetchStringPointers(Mod srcMod) {
     }
 
     @Override

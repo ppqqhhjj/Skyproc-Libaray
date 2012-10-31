@@ -520,7 +520,7 @@ public class SPImporter {
 	    }
 
 	    if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
-		importStrings(plugin);
+		importStringLocations(plugin);
 	    }
 
 	    ArrayList<Type> typeTargets = new ArrayList<>();
@@ -577,21 +577,21 @@ public class SPImporter {
 	}
     }
 
-    static void importStrings(Mod mod) {
+    static void importStringLocations(Mod mod) {
 	String header = "Importing Strings";
 	if (SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Importing Strings");
 	}
 	for (Files f : SubStringPointer.Files.values()) {
 	    try {
-		importStrings(mod, f);
+		importStringLocations(mod, f);
 	    } catch (Exception e) {
 		SPGlobal.logError(header, "Error Importing Strings " + f + ": " + e);
 	    }
 	}
     }
 
-    static void importStrings(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException, DataFormatException {
+    static void importStringLocations(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException, DataFormatException {
 
 	String strings = pathToStringFile(plugin, file);
 	File stringsFile = new File(SPGlobal.pathToData + strings);
@@ -627,7 +627,7 @@ public class SPImporter {
 
 	// Read entry pairs
 	for (int i = 0; i < numRecords; i++) {
-	    plugin.strings.get(file).put(in.extractInt(4),
+	    plugin.stringLocations.get(file).put(in.extractInt(4),
 		    in.extractInt(4) + recordsSize);
 	}
     }

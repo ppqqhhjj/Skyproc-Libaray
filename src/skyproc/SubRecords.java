@@ -197,9 +197,9 @@ abstract class SubRecords implements Serializable {
 	return map.keySet();
     }
 
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
+    void fetchStringPointers(Mod srcMod) {
 	for (SubRecord s : map.values()) {
-	    s.fetchStringPointers(srcMod, r, streams);
+	    s.fetchStringPointers(srcMod);
 	}
     }
 

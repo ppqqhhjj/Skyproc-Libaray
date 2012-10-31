@@ -71,12 +71,13 @@ class SubStringPointer extends SubRecord {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
+    void fetchStringPointers(Mod srcMod) {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
+	    Map<SubStringPointer.Files, LChannel> streams = srcMod.stringStreams;
 	    if (data.isValid() && streams.containsKey(file)) {
 		int index = Ln.arrayToInt(data.getData());
-		if (srcMod.strings.get(file).containsKey(index)) {
-		    int offset = srcMod.strings.get(file).get(index);
+		if (srcMod.stringLocations.get(file).containsKey(index)) {
+		    int offset = srcMod.stringLocations.get(file).get(index);
 		    LChannel stream = streams.get(file);
 
 		    stream.pos(offset);
@@ -99,7 +100,7 @@ class SubStringPointer extends SubRecord {
 		    }
 
 		    if (logging() && SPGlobal.debugStringPairing) {
-			logSync("", r.toString() + " " + file + " pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
+			logSync("", file + " pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
 		    }
 
 		} else {
@@ -112,7 +113,7 @@ class SubStringPointer extends SubRecord {
 			    }
 			}
 			if (!nullPtr) {
-			    logSync("", r.toString() + " " + file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
+			    logSync("", file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
 			}
 		    }
 		    data.setData(0, 1); // Invalidate data to stop export

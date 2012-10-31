@@ -34,10 +34,14 @@ public class SubRecordsDerived extends SubRecords {
 	for (Type t : prototype.list) {
 	    if (shouldExport(t)) {
 		SubRecord instance = get(t);
-		instance.standardize(srcMod);
+		prepForUsage(instance);
 		instance.export(out, srcMod);
 	    }
 	}
+    }
+
+    void prepForUsage(SubRecord s) {
+	s.standardize(srcMod);
     }
 
     @Override
@@ -64,7 +68,7 @@ public class SubRecordsDerived extends SubRecords {
 	    return map.get(in);
 	} else if (prototype.contains(in)) {
 	    SubRecord s = prototype.get(in).getNew(in);
-	    s.standardize(srcMod);
+	    prepForUsage(s);
 	    add(s);
 	    return s;
 	} else {

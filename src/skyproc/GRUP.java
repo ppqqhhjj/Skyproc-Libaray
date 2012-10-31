@@ -172,9 +172,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	return out;
     }
 
-    void fetchStringPointers(Mod srcMod, Map<Files, LChannel> streams) throws IOException {
+    void fetchStringPointers() throws IOException {
 	for (MajorRecord r : listRecords) {
-	    r.fetchStringPointers(srcMod, streams);
+	    r.fetchStringPointers();
 	}
     }
 

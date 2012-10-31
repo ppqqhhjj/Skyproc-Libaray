@@ -299,9 +299,9 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod, Record r, Map<SubStringPointer.Files, LChannel> streams) {
+    void fetchStringPointers(Mod srcMod) {
         for (SubRecord s : collection) {
-            s.fetchStringPointers(srcMod, r, streams);
+            s.fetchStringPointers(srcMod);
         }
     }
 

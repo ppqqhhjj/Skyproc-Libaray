@@ -53,7 +53,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
     LFileChannel input;
     Map<ModListing, Integer> masterMap = new HashMap<>();
-    Map<SubStringPointer.Files, Map<Integer, Integer>> strings = new EnumMap<>(SubStringPointer.Files.class);
+    Map<SubStringPointer.Files, Map<Integer, Integer>> stringLocations = new EnumMap<>(SubStringPointer.Files.class);
+    Map<SubStringPointer.Files, LChannel> stringStreams = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
     private ArrayList<String> outILStrings = new ArrayList<>();
@@ -98,9 +99,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	this.modInfo = info;
 	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
 	this.setFlag(Mod_Flags.STRING_TABLED, false);
-	strings.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
-	strings.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
-	strings.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
+	stringLocations.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
+	stringLocations.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
+	stringLocations.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
 	GRUPs.put(gameSettings.getContainedType(), gameSettings);
 	GRUPs.put(keywords.getContainedType(), keywords);
 	GRUPs.put(textures.getContainedType(), textures);
@@ -393,15 +394,17 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void fetchStringPointers() throws IOException {
-	Map<SubStringPointer.Files, LChannel> streams = null;
-	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
-	    streams = new EnumMap<>(SubStringPointer.Files.class);
-	    for (Files f : SubStringPointer.Files.values()) {
-		addStream(streams, f);
-	    }
-	}
+	openStringStreams();
 	for (GRUP g : GRUPs.values()) {
-	    g.fetchStringPointers(this, streams);
+	    g.fetchStringPointers();
+	}
+    }
+    
+    void openStringStreams() {
+	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
+	    for (Files f : SubStringPointer.Files.values()) {
+		addStream(stringStreams, f);
+	    }
 	}
     }
 

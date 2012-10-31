@@ -286,8 +286,8 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void fetchStringPointers(Mod srcMod, Record r, Map<Files, LChannel> streams) {
-	    DATAs.fetchStringPointers(srcMod, r, streams);
+	void fetchStringPointers(Mod srcMod) {
+	    DATAs.fetchStringPointers(srcMod);
 	}
     }
 
