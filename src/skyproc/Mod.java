@@ -701,6 +701,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		}
 	    }
 	}
+	for (FormID id : allForms) {
+	    id.standardize(srcMod);
+	}
 
 	// Export Header
 	tes.setNumRecords(numRecords());

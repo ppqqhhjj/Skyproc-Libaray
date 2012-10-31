@@ -34,7 +34,6 @@ public class SubRecordsDerived extends SubRecords {
 	for (Type t : prototype.list) {
 	    if (shouldExport(t)) {
 		SubRecord instance = get(t);
-		prepForUsage(instance);
 		instance.export(out, srcMod);
 	    }
 	}
