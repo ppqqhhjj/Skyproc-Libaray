@@ -35,7 +35,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
     byte[] version = {0x28, 0, 0, 0};
-    SubString EDID = subRecords.getSubString(Type.EDID);
 
     MajorRecord() {
     }
@@ -83,6 +82,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	} else if (isValid()) {
 	    out += getFormArrayStr(true);
 	}
+	SubString EDID = subRecords.getSubString(Type.EDID);
 	if (EDID.isValid()) {
 	    out += " | " + EDID.print();
 	}
@@ -129,6 +129,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
 
 	if (getNextType(in) == Type.EDID) {
+	    SubString EDID = subRecords.getSubString(Type.EDID);
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
@@ -155,7 +156,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String print() {
-	logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + EDID.print());
+	logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + getEDID());
 	return "";
     }
 
@@ -214,7 +215,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if (oldFormID != null) {
 	    setForm(oldFormID);
 	}
-	EDID.setString(edid);
+	subRecords.getSubString(Type.EDID).setString(edid);
     }
 
     static String edidFilter(String edid) {
@@ -226,7 +227,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The current EDID string.
      */
     final public String getEDID() {
-	return EDID.print();
+	return subRecords.getSubString(Type.EDID).print();
     }
 
     /**
