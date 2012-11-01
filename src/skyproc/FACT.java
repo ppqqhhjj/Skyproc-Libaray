@@ -23,7 +23,7 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubForm(Type.CRGR));
 	    add(new SubForm(Type.JOUT));
 	    add(new SubData(Type.CRVA));
-	    add(new SubList<>(new FACT.Rank()));
+	    add(new SubList<>(new Rank()));
 	    add(new SubForm(Type.VEND));
 	    add(new SubForm(Type.VENC));
 	    add(new SubData(Type.VENV));

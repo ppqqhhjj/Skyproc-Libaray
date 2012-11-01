@@ -6,9 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
@@ -26,7 +24,7 @@ import skyproc.exceptions.BadRecord;
 public class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
-    protected Map<Type, Long> pos = new HashMap<>(0);
+    protected Map<Type, RecordLocation> pos = new HashMap<>(0);
     Mod srcMod;
 
     public SubRecordsDerived(SubRecordsPrototype proto) {
@@ -67,9 +65,6 @@ public class SubRecordsDerived extends SubRecords {
     @Override
     public SubRecord get(Type in) {
 	SubRecord s = null;
-	if (in == Type.DATA) {
-	    int wer = 23;
-	}
 	if (map.containsKey(in)) {
 	    s = map.get(in);
 	} else if (prototype.contains(in)) {
@@ -88,11 +83,13 @@ public class SubRecordsDerived extends SubRecords {
 
     void loadFromPosition(SubRecord s) {
 	if (SPGlobal.streamMode) {
-	    Long position = pos.get(s.getType());
+	    RecordLocation position = pos.get(s.getType());
 	    if (position != null) {
-		srcMod.input.pos(position);
+		srcMod.input.pos(position.pos);
 		try {
-		    s.parseData(s.extractRecordData(srcMod.input));
+		    for (int i = 0; i < position.num; i++) {
+			s.parseData(s.extractRecordData(srcMod.input));
+		    }
 		} catch (DataFormatException | BadRecord | BadParameter ex) {
 		    Logger.getLogger(SubRecordsDerived.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -108,10 +105,12 @@ public class SubRecordsDerived extends SubRecords {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
 		if (!pos.containsKey(nextType)) {
 		    long position = in.pos();
+		    pos.put(nextType, new RecordLocation(position));
 		    if (SPGlobal.logging()) {
 			SPGlobal.logSync(nextType.toString(), nextType.toString() + " is at position: " + Ln.printHex(position));
 		    }
-		    pos.put(nextType, position);
+		} else {
+		    pos.get(nextType).num++;
 		}
 		in.skip(prototype.get(nextType).getRecordLength(in));
 	    } else {
@@ -151,5 +150,15 @@ public class SubRecordsDerived extends SubRecords {
 	    }
 	}
 	return length;
+    }
+
+    protected static class RecordLocation {
+
+	long pos;
+	int num = 1;
+
+	RecordLocation(long pos) {
+	    this.pos = pos;
+	}
     }
 }
