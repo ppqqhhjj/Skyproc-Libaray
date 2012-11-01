@@ -22,7 +22,7 @@ public class SkyProcTester {
 
     static ArrayList<String> badIDs;
 
-//    static GRUP_TYPE[] types = {GRUP_TYPE.FACT};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.TXST};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**

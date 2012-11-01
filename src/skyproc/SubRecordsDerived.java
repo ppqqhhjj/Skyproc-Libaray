@@ -6,7 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -23,6 +25,7 @@ public class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
     protected Map<Type, Long> pos = new HashMap<>(0);
+    protected Set<Type> fetched = new HashSet<>();
     Mod srcMod;
 
     public SubRecordsDerived(SubRecordsPrototype proto) {
@@ -37,10 +40,6 @@ public class SubRecordsDerived extends SubRecords {
 		instance.export(out, srcMod);
 	    }
 	}
-    }
-
-    void prepForUsage(SubRecord s) {
-	s.standardize(srcMod);
     }
 
     @Override
@@ -63,16 +62,18 @@ public class SubRecordsDerived extends SubRecords {
 
     @Override
     public SubRecord get(Type in) {
+	SubRecord s = null;
 	if (map.containsKey(in)) {
-	    return map.get(in);
+	    s = map.get(in);
+	    if (!fetched.contains(s.getType())) {
+		s.fetchStringPointers(srcMod);
+		fetched.add(s.getType());
+	    }
 	} else if (prototype.contains(in)) {
-	    SubRecord s = prototype.get(in).getNew(in);
-	    prepForUsage(s);
+	    s = prototype.get(in).getNew(in);
 	    add(s);
-	    return s;
-	} else {
-	    return null;
 	}
+	return s;
     }
 
     @Override
@@ -91,6 +92,7 @@ public class SubRecordsDerived extends SubRecords {
 	    } else {
 		SubRecord record = get(nextType);
 		record.parseData(record.extractRecordData(in));
+		record.standardize(srcMod);
 	    }
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");

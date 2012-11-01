@@ -250,6 +250,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
+    void closeStreams() {
+	input.close();
+	for(LChannel c : stringStreams.values()) {
+	    c.close();
+	}
+    }
+    
     /**
      * Makes a copy of the Major Record and loads it into the mod, giving a new
      * Major Record a FormID originating from the mod. This function also
@@ -454,7 +461,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListings of all the masters of the mod.
      */
     public ArrayList<ModListing> getMasters() {
-	ArrayList<ModListing> out = new ArrayList<ModListing>();
+	ArrayList<ModListing> out = new ArrayList<>();
 	for (ModListing m : tes.getMasters()) {
 	    out.add(m);
 	}

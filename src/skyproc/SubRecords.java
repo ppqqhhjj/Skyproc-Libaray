@@ -134,10 +134,10 @@ abstract class SubRecords implements Serializable {
 	    String header = "Summary: ";
 	    String data = "";
 	    int counter = 0;
-	    ArrayList<Type> printedTypes = new ArrayList<Type>();
+	    ArrayList<Type> printedTypes = new ArrayList<>();
 	    for (Type type : getTypes()) {
-		SubRecord s = get(type);
-		if (s.isValid() && !printedTypes.contains(type)) {
+		SubRecord s = map.get(type);
+		if (s != null && s.isValid() && !printedTypes.contains(type)) {
 		    data = data + type.toString() + " ";
 		    if (s instanceof SubList) {
 			data = data + "(" + ((SubList) s).size() + ") ";
