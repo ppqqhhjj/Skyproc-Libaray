@@ -143,7 +143,7 @@ public class GMST extends MajorRecord {
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }
-    
+
     /**
      * Sets the data to a boolean value.  You must check and be aware that this GMST contains that type.
      * @param b
@@ -220,8 +220,10 @@ public class GMST extends MajorRecord {
 
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	updateDATA();
+	SubRecord data = updateDATA();
 	super.importSubRecords(in);
+	subRecords.loadFromPosition(data);
+	data.fetchStringPointers(subRecords.srcMod);
     }
 
     @Override
@@ -229,12 +231,13 @@ public class GMST extends MajorRecord {
 	updateDATA();
 	super.export(out, srcMod);
     }
-    
-    void updateDATA() {
-	DATA data = (DATA)subRecords.get(Type.DATA);
+
+    SubRecord updateDATA() {
+	DATA data = (DATA)subRecords.getSilent(Type.DATA);
 	data.GMSTtype = getGMSTType();
+	return data;
     }
-    
+
     static class DATA extends SubRecord {
 
 	GMSTType GMSTtype;

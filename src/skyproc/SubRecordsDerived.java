@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -25,7 +27,6 @@ public class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
     protected Map<Type, Long> pos = new HashMap<>(0);
-    protected Set<Type> fetched = new HashSet<>();
     Mod srcMod;
 
     public SubRecordsDerived(SubRecordsPrototype proto) {
@@ -50,6 +51,9 @@ public class SubRecordsDerived extends SubRecords {
     public boolean shouldExport(Type t) {
 	if (map.containsKey(t)) {
 	    return shouldExport(map.get(t));
+	} else if (pos.containsKey(t)) {
+	    SubRecord s = get(t);
+	    return shouldExport(s);
 	} else {
 	    return shouldExport(prototype.get(t));
 	}
@@ -63,17 +67,38 @@ public class SubRecordsDerived extends SubRecords {
     @Override
     public SubRecord get(Type in) {
 	SubRecord s = null;
+	if (in == Type.DATA) {
+	    int wer = 23;
+	}
 	if (map.containsKey(in)) {
 	    s = map.get(in);
-	    if (!fetched.contains(s.getType())) {
-		s.fetchStringPointers(srcMod);
-		fetched.add(s.getType());
-	    }
 	} else if (prototype.contains(in)) {
-	    s = prototype.get(in).getNew(in);
-	    add(s);
+	    s = createFromPrototype(in);
+	    loadFromPosition(s);
+	    s.fetchStringPointers(srcMod);
 	}
 	return s;
+    }
+
+    SubRecord createFromPrototype(Type in) {
+	SubRecord s = prototype.get(in).getNew(in);
+	add(s);
+	return s;
+    }
+
+    void loadFromPosition(SubRecord s) {
+	if (SPGlobal.streamMode) {
+	    Long position = pos.get(s.getType());
+	    if (position != null) {
+		srcMod.input.pos(position);
+		try {
+		    s.parseData(s.extractRecordData(srcMod.input));
+		} catch (DataFormatException | BadRecord | BadParameter ex) {
+		    Logger.getLogger(SubRecordsDerived.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		pos.remove(s.getType());
+	    }
+	}
     }
 
     @Override
@@ -88,14 +113,23 @@ public class SubRecordsDerived extends SubRecords {
 		    }
 		    pos.put(nextType, position);
 		}
-		in.skip(get(nextType).getRecordLength(in));
+		in.skip(prototype.get(nextType).getRecordLength(in));
 	    } else {
-		SubRecord record = get(nextType);
+		SubRecord record = getSilent(nextType);
 		record.parseData(record.extractRecordData(in));
 		record.standardize(srcMod);
+		record.fetchStringPointers(srcMod);
 	    }
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
+	}
+    }
+
+    public SubRecord getSilent(Type nextType) {
+	if (map.containsKey(nextType)) {
+	    return map.get(nextType);
+	} else {
+	    return createFromPrototype(nextType);
 	}
     }
 
