@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -70,6 +71,7 @@ public class SubRecordsDerived extends SubRecords {
 	} else if (prototype.contains(in)) {
 	    s = createFromPrototype(in);
 	    loadFromPosition(s);
+//	    s.standardize(srcMod);
 	    s.fetchStringPointers(srcMod);
 	}
 	return s;
@@ -103,14 +105,15 @@ public class SubRecordsDerived extends SubRecords {
 	Type nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
-		if (!pos.containsKey(nextType)) {
+		Type standardType = prototype.get(nextType).getType();
+		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();
-		    pos.put(nextType, new RecordLocation(position));
+		    pos.put(standardType, new RecordLocation(position));
 		    if (SPGlobal.logging()) {
 			SPGlobal.logSync(nextType.toString(), nextType.toString() + " is at position: " + Ln.printHex(position));
 		    }
 		} else {
-		    pos.get(nextType).num++;
+		    pos.get(standardType).num++;
 		}
 		in.skip(prototype.get(nextType).getRecordLength(in));
 	    } else {
@@ -150,6 +153,18 @@ public class SubRecordsDerived extends SubRecords {
 	    }
 	}
 	return length;
+    }
+
+    @Override
+    public ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = new ArrayList<>();
+	for (Type t : prototype.list) {
+	    if (shouldExport(t)) {
+		SubRecord s = get(t);
+		out.addAll(s.allFormIDs());
+	    }
+	}
+	return out;
     }
 
     protected static class RecordLocation {
