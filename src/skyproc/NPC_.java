@@ -72,7 +72,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubRGB(Type.QNAM));
 	    add(new NAM9());
 	    add(new NAMA());
-	    add(new SubList<>(new TintPackage()));
+	    add(new SubList<>(new TintLayer()));
 	}
     };
     private final static Type[] type = {Type.NPC_};
@@ -429,49 +429,25 @@ public class NPC_ extends Actor implements Serializable {
     /**
      *
      */
-    public static class TintPackage extends SubRecord implements Serializable {
+    public static class TintLayer extends SubShell implements Serializable {
 
-	SubData TINI = new SubData(Type.TINI);
-	SubData TINC = new SubData(Type.TINC);
-	SubData TINV = new SubData(Type.TINV);
-	SubData TIAS = new SubData(Type.TIAS);
+	SubInt TINI = new SubInt(Type.TINI, 2);
+	SubRGBshort TINC = new SubRGBshort(Type.TINC);
+	SubFloat TINV = new SubFloat(Type.TINV);
+	SubInt TIAS = new SubInt(Type.TIAS, 2);
 	private static Type[] types = {Type.TINI, Type.TINC, Type.TINV, Type.TIAS};
 
-	TintPackage() {
+	TintLayer() {
 	    super(types);
-	}
-
-	TintPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    TINI.parseData(in);
-	}
-
-	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException {
-	    // Not calling super
-	    Type t = Type.valueOf(Ln.arrayToString(in.extractInts(4)));
-	    int size = Ln.arrayToInt(in.extractInts(2));
-	    switch (t) {
-		case TINI:
-		    TINI.setData(in.extract(size));
-		    break;
-		case TINC:
-		    TINC.setData(in.extract(size));
-		    break;
-		case TINV:
-		    TINV.setData(in.extract(size));
-		    break;
-		case TIAS:
-		    TIAS.setData(in.extract(size));
-		    break;
-		default:
-		    throw new BadRecord("TINI package does not know what to do with record of type: " + t);
-	    }
+	    subRecords.add(TINI);
+	    subRecords.add(TINC);
+	    subRecords.add(TINV);
+	    subRecords.add(TIAS);
 	}
 
 	@Override
 	SubRecord getNew(Type type_) {
-	    return new TintPackage();
+	    return new TintLayer();
 	}
 
 	@Override
@@ -479,34 +455,36 @@ public class NPC_ extends Actor implements Serializable {
 	    return 0;
 	}
 
-	@Override
-	int getContentLength(Mod srcMod) {
-	    if (isValid()) {
-		return TINI.getTotalLength(srcMod)
-			+ TINC.getTotalLength(srcMod)
-			+ TINV.getTotalLength(srcMod)
-			+ TIAS.getTotalLength(srcMod);
-	    } else {
-		return 0;
-	    }
+	public void setIndex(int in) {
+	    TINI.set(in);
 	}
 
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    if (isValid()) {
-		TINI.export(out, srcMod);
-		TINC.export(out, srcMod);
-		TINV.export(out, srcMod);
-		TIAS.export(out, srcMod);
-	    }
+	public int getIndex() {
+	    return TINI.get();
 	}
 
-	@Override
-	Boolean isValid() {
-	    return TINI.isValid()
-		    && TINC.isValid()
-		    && TINV.isValid()
-		    && TIAS.isValid();
+	public void setColor(RGBA color, short value) {
+	    TINC.set(color, value);
+	}
+
+	public short getColor(RGBA color) {
+	    return TINC.get(color);
+	}
+
+	public void setInterpolation(float value) {
+	    TINV.set(value);
+	}
+
+	public float getInterpolation() {
+	    return TINV.get();
+	}
+
+	public void setPreset (int value) {
+	    TIAS.set(value);
+	}
+
+	public int getPreset() {
+	    return TIAS.get();
 	}
     }
 
@@ -2618,7 +2596,7 @@ public class NPC_ extends Actor implements Serializable {
      *
      * @return
      */
-    public ArrayList<TintPackage> getTinting() {
+    public ArrayList<TintLayer> getTinting() {
 	return subRecords.getSubList(Type.TINI).collection;
     }
 
@@ -2627,7 +2605,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param tinting
      * @return
      */
-    public boolean addTinting(TintPackage tinting) {
+    public boolean addTinting(TintLayer tinting) {
 	return subRecords.getSubList(Type.TINI).add(tinting);
     }
 
@@ -2636,7 +2614,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param tinting
      * @return
      */
-    public boolean removeTinting(TintPackage tinting) {
+    public boolean removeTinting(TintLayer tinting) {
 	return subRecords.getSubList(Type.TINI).remove(tinting);
     }
 

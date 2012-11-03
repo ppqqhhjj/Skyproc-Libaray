@@ -6,9 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -16,20 +15,21 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubRGB extends SubRecord {
+public class SubRGBshort extends SubRecord {
 
-    float r;
-    float g;
-    float b;
+    short r;
+    short g;
+    short b;
+    short a;
 
-    SubRGB(Type type, float red, float green, float blue) {
+    SubRGBshort(Type type, short red, short green, short blue, short alpha) {
 	this(type);
 	r = red;
 	g = green;
 	b = blue;
     }
 
-    SubRGB(Type type) {
+    SubRGBshort(Type type) {
 	super(type);
     }
 
@@ -40,15 +40,16 @@ public class SubRGB extends SubRecord {
 
     @Override
     int getContentLength(Mod srcMod) {
-	return 12;
+	return 4;
     }
 
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
-	r = in.extractFloat();
-	g = in.extractFloat();
-	b = in.extractFloat();
+	r = (short) in.extractInt(1);
+	g = (short) in.extractInt(1);
+	b = (short) in.extractInt(1);
+	a = (short) in.extractInt(1);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());
 	}
@@ -56,51 +57,18 @@ public class SubRGB extends SubRecord {
 
     @Override
     public String print() {
-	if (isValid()) {
-	    return "R: " + r + " G: " + g + " B: " + b;
-	} else {
-	    return super.toString();
-	}
+	    return "R: " + r + " G: " + g + " B: " + b + " A: " + a;
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
 	if (isValid()) {
 	    super.export(out, srcMod);
-	    out.write(r);
-	    out.write(g);
-	    out.write(b);
+	    out.write(r, 1);
+	    out.write(g, 1);
+	    out.write(b, 1);
+	    out.write(a, 1);
 	}
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final SubRGB other = (SubRGB) obj;
-	if (Float.floatToIntBits(this.r) != Float.floatToIntBits(other.r)) {
-	    return false;
-	}
-	if (Float.floatToIntBits(this.g) != Float.floatToIntBits(other.g)) {
-	    return false;
-	}
-	if (Float.floatToIntBits(this.b) != Float.floatToIntBits(other.b)) {
-	    return false;
-	}
-	return true;
-    }
-
-    @Override
-    public int hashCode() {
-	int hash = 7;
-	hash = 19 * hash + Float.floatToIntBits(this.r);
-	hash = 19 * hash + Float.floatToIntBits(this.g);
-	hash = 19 * hash + Float.floatToIntBits(this.b);
-	return hash;
     }
 
     /**
@@ -108,7 +76,7 @@ public class SubRGB extends SubRecord {
      * @param color
      * @param val
      */
-    public void set (RGB color, float val) {
+    public void set (RGBA color, short val) {
 	switch (color) {
 	    case Red:
 		r = val;
@@ -119,6 +87,9 @@ public class SubRGB extends SubRecord {
 	    case Blue:
 		b = val;
 		break;
+	    case Alpha:
+		a = val;
+		break;
 	}
     }
 
@@ -127,7 +98,7 @@ public class SubRGB extends SubRecord {
      * @param color
      * @return
      */
-    public float get (RGB color) {
+    public short get (RGBA color) {
 	if (!isValid()) {
 	    return 0;
 	}
@@ -136,8 +107,10 @@ public class SubRGB extends SubRecord {
 		return r;
 	    case Green:
 		return g;
-	    default:
+	    case Blue:
 		return b;
+	    default:
+		return a;
 	}
     }
 }
