@@ -32,6 +32,13 @@ public class SubRecordsDerived extends SubRecords {
 	this.prototype = proto;
     }
 
+    public SubRecordsDerived(SubRecordsDerived rhs) {
+	super(rhs);
+	prototype = rhs.prototype;
+	srcMod = rhs.srcMod;
+	pos = new HashMap(rhs.pos);
+    }
+
     @Override
     protected void export(LExporter out, Mod srcMod) throws IOException {
 	for (Type t : prototype.list) {
@@ -71,7 +78,7 @@ public class SubRecordsDerived extends SubRecords {
 	} else if (prototype.contains(in)) {
 	    s = createFromPrototype(in);
 	    loadFromPosition(s);
-//	    s.standardize(srcMod);
+	    s.standardize(srcMod);
 	    s.fetchStringPointers(srcMod);
 	}
 	return s;

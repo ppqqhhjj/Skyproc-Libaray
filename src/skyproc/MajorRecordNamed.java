@@ -28,7 +28,7 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
      * @return
      */
     public String getName() {
-	return subRecords.getSubString(Type.FULL).print();
+	return subRecords.getSubStringPointer(Type.FULL).print();
     }
 
     /**
@@ -37,6 +37,6 @@ public abstract class MajorRecordNamed extends MajorRecord implements Serializab
      * @param in The string to set the in-game name to.
      */
     public void setName(String in) {
-	subRecords.setSubString(Type.FULL, in);
+	subRecords.setSubStringPointer(Type.FULL, in);
     }
 }

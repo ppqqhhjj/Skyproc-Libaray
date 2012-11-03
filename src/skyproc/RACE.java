@@ -40,6 +40,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.TINL));
 	    add(new SubData(Type.PNAM));
 	    add(new SubData(Type.UNAM));
+	    add(new SubForm(Type.ATKR));
 	    add(new SubList<>(new ATKDpackage()));
 	    SubData nam1 = new SubData(Type.NAM1);
 	    nam1.forceExport = true;
@@ -546,7 +547,8 @@ public class RACE extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	EXTRALARGE,}
+	EXTRALARGE,
+    }
 
     // Get / set
     DATA getDATA() {
@@ -1314,5 +1316,9 @@ public class RACE extends MajorRecordDescription {
      */
     public void clearEquipSlots() {
 	subRecords.getSubList(Type.QNAM).clear();
+    }
+    
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
     }
 }

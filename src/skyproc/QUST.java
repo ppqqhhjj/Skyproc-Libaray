@@ -10,42 +10,39 @@ package skyproc;
  */
 public class QUST extends MajorRecordNamed {
 
-    static Type[] types = { Type.QUST };
+    static final SubRecordsPrototype QUSTproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
 
-    /**
-     * Returns the scripts package of the QUST
-     */
-    public ScriptPackage scripts = new ScriptPackage();
-    SubData DNAM = new SubData(Type.DNAM);
-    SubData NEXT = new SubData(Type.NEXT);
-    SubData ANAM = new SubData(Type.ANAM);
+	@Override
+	protected void addRecords() {
+	    after(new ScriptPackage(), Type.EDID);
+	    reposition(Type.FULL);
+	    add(new SubData(Type.DNAM));
+	    add(new SubData(Type.NEXT));
+	    add(new SubData(Type.ANAM));
+	}
+    };
+    static Type[] types = { Type.QUST };
 
     QUST () {
 	super();
-	subRecords.remove(Type.FULL);
-
-	subRecords.add(scripts);
-//	subRecords.add(FULL);
-	subRecords.add(DNAM);
-	subRecords.add(NEXT);
-	subRecords.add(ANAM);
+	subRecords.prototype = QUSTproto;
     }
 
     QUST (Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	DNAM.setData(0x111,12);
-	NEXT.forceExport(true);
-	ANAM.initialize(4);
+	subRecords.getSubData(Type.DNAM).setData(0x111,12);
+	subRecords.getSubData(Type.NEXT).forceExport(true);
+	subRecords.getSubData(Type.ANAM).initialize(4);
     }
 
-    final void init() {
-    }
 
     @Override
     Type[] getTypes() {
 	return types;
     }
 
-    
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
 }

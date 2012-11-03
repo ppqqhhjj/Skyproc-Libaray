@@ -38,6 +38,10 @@ public class COBJ extends MajorRecord {
 	return new COBJ();
     }
 
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
+    
     /**
      *
      * @return

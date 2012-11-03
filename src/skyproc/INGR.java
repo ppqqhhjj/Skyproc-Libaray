@@ -153,6 +153,10 @@ public class INGR extends MagicItem {
     }
 
     // Get/set
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
+
     /**
      *
      * @param groundModel

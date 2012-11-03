@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  * @author Justin Swanson
  */
 public class MISC extends MajorRecordNamed {
-    
+
     static final SubRecordsPrototype MISCproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
@@ -118,6 +118,14 @@ public class MISC extends MajorRecordNamed {
 
     public float getWeight() {
 	return getDATA().weight;
+    }
+
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
+    
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
     }
 
     /**

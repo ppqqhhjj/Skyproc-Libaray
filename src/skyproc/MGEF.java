@@ -454,12 +454,16 @@ public class MGEF extends MajorRecordDescription {
 	OnHit
     }
 
-    
+
     /**
      *
      * @return Description associated with the Major Record, or <NO TEXT> if
      * empty.
      */
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
+    
     @Override
     public String getDescription() {
 	return subRecords.getSubString(Type.DNAM).print();
@@ -473,7 +477,7 @@ public class MGEF extends MajorRecordDescription {
     public void setDescription(String description) {
 	subRecords.setSubString(Type.DNAM, description);
     }
-    
+
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }
@@ -496,7 +500,7 @@ public class MGEF extends MajorRecordDescription {
 	return getDATA().flags.get(flag.value);
     }
 
-    public ScriptPackage getScripts() {
-	return (ScriptPackage) subRecords.get(Type.VMAD);
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
     }
 }

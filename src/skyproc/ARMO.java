@@ -111,6 +111,10 @@ public class ARMO extends MajorRecordDescription {
     }
 
     // Get/Set
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
+    
     /**
      *
      * @return Returns the list of ARMA records associated with the ARMO.
@@ -327,5 +331,9 @@ public class ARMO extends MajorRecordDescription {
      */
     public FormID getTemplate() {
 	return subRecords.getSubForm(Type.TNAM).getForm();
+    }
+
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
     }
 }

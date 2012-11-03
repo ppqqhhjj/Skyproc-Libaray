@@ -54,6 +54,10 @@ public class PERK extends MajorRecordDescription {
 	return out;
     }
 
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
+
     // Custom importSubRecords because Bethesda reused header titles in the same record.
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {

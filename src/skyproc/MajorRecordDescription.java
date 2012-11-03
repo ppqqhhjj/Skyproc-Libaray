@@ -33,7 +33,7 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * empty.
      */
     public String getDescription() {
-	return subRecords.getSubString(Type.DESC).print();
+	return subRecords.getSubStringPointer(Type.DESC).print();
     }
 
     /**
@@ -41,6 +41,6 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * @param description String to set as the Major Record description.
      */
     public void setDescription(String description) {
-	subRecords.setSubString(Type.DESC, description);
+	subRecords.setSubStringPointer(Type.DESC, description);
     }
 }

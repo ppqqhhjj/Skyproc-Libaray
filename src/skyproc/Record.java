@@ -18,6 +18,7 @@ import skyproc.exceptions.BadRecord;
 public abstract class Record implements Serializable {
 
     final static HashMap<String, Type> allTypes;
+
     static {
 	Type[] ta = Type.values();
 	allTypes = new HashMap<>(ta.length);
@@ -66,10 +67,6 @@ public abstract class Record implements Serializable {
 
     Record getNew() {
 	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    Record copyOf(Mod modToOriginateFrom) {
-	return (Record) Ln.deepCopy(this);
     }
 
     static Type matchType(String str) throws BadRecord {

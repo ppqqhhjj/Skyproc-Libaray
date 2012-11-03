@@ -403,11 +403,18 @@ public class WEAP extends MajorRecordDescription {
     }
 
     // Get /set
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
+
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
     
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }
-    
+
     /**
      *
      * @param value
@@ -595,7 +602,7 @@ public class WEAP extends MajorRecordDescription {
     DNAM getDNAM() {
 	return (DNAM) subRecords.get(Type.DNAM);
     }
-    
+
     /**
      *
      * @param in
@@ -743,7 +750,7 @@ public class WEAP extends MajorRecordDescription {
     CRDT getCRDT() {
 	return (CRDT) subRecords.get(Type.CRDT);
     }
-    
+
     /**
      *
      * @param critDmg

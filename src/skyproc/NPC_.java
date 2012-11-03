@@ -1495,7 +1495,7 @@ public class NPC_ extends Actor implements Serializable {
 		    this.set(NPCFlag.DoesntAffectStealthMeter, otherNPC.get(NPCFlag.DoesntAffectStealthMeter));
 		    break;
 		case USE_KEYWORDS:
-		    subRecords.add(otherNPC.getKeywords());
+		    subRecords.add(otherNPC.getKeywordSet());
 		    break;
 
 	    }
@@ -1520,6 +1520,10 @@ public class NPC_ extends Actor implements Serializable {
     // Get/Set methods
     ACBS getACBS() {
 	return (ACBS) subRecords.get(Type.ACBS);
+    }
+
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
     }
 
     /**
@@ -2798,7 +2802,7 @@ public class NPC_ extends Actor implements Serializable {
 	return subRecords.getSubString(Type.ATKE).print();
     }
 
-    public KeywordSet getKeywords() {
+    public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
 }

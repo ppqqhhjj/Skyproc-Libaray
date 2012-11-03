@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -22,6 +23,12 @@ abstract class SubRecords implements Serializable {
     protected Map<Type, SubRecord> map = new HashMap<>(0);
 
     public SubRecords() {
+    }
+
+    public SubRecords(SubRecords rhs) {
+	for (Type t : rhs.map.keySet()) {
+	    map.put(t, (SubRecord) Ln.deepCopy(rhs.map.get(t)));
+	}
     }
 
     public void add(SubRecord r) {
@@ -50,6 +57,14 @@ abstract class SubRecords implements Serializable {
 
     public void setSubString(Type in, String str) {
 	getSubString(in).setString(str);
+    }
+
+    public SubStringPointer getSubStringPointer(Type in) {
+	return (SubStringPointer) get(in);
+    }
+
+    public void setSubStringPointer(Type in, String s) {
+	getSubStringPointer(in).setText(s);
     }
 
     public SubForm getSubForm(Type in) {
@@ -118,6 +133,10 @@ abstract class SubRecords implements Serializable {
 
     public SubList getSubList(Type in) {
 	return (SubList) get(in);
+    }
+
+    public ScriptPackage getScripts() {
+	return (ScriptPackage)get(Type.VMAD);
     }
 
     boolean isValid() {

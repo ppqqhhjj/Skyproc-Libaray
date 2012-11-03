@@ -4,13 +4,14 @@
  */
 package skyproc;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  * @author Justin Swanson
  */
-public abstract class SubRecordsPrototype {
+public abstract class SubRecordsPrototype implements Serializable {
 
     protected ArrayList<Type> list = new ArrayList<>();
     protected Map<Type, SubRecord> map = new HashMap<>(0);

@@ -40,7 +40,7 @@ public class NiftyFunc {
     public static SPEL genScriptAttachingSpel(Mod originateFrom, ScriptRef script, String uniqueID) {
 	String name = "SP_" + uniqueID + "_" + script.name.data + "_attacher";
 	MGEF mgef = new MGEF(originateFrom, name + "_MGEF", name + "_MGEF");
-	mgef.getScripts().addScript(script);
+	mgef.getScriptPackage().addScript(script);
 	mgef.set(MGEF.SpellEffectFlag.HideInUI, true);
 	SPEL spel = new SPEL(originateFrom, name + "_SPEL");
 	spel.setSpellType(SPEL.SPELType.Ability);
@@ -144,7 +144,7 @@ public class NiftyFunc {
      */
     public static QUST makeScriptQuest(Mod originateFrom, ScriptRef script) {
 	QUST quest = new QUST(originateFrom, script.getName() + "_qust");
-	quest.scripts.addScript(script);
+	quest.getScriptPackage().addScript(script);
 	quest.setName(script.getName() + " Quest");
 	return quest;
     }

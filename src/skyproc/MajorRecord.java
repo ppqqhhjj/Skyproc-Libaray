@@ -89,13 +89,17 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return out + "]";
     }
 
-    @Override
     MajorRecord copyOf(Mod modToOriginateFrom) {
 	return copyOf(modToOriginateFrom, this.getEDID() + "_DUP");
     }
 
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
-	MajorRecord out = (MajorRecord) super.copyOf(modToOriginateFrom);
+	MajorRecord out = (MajorRecord) this.getNew();
+	out.ID = new FormID(ID);
+	out.majorFlags = new LFlags(majorFlags);
+	System.arraycopy(revision, 0, out.revision, 0, revision.length);
+	System.arraycopy(version, 0, out.version, 0, version.length);
+	out.subRecords = new SubRecordsDerived(subRecords);
 	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
 	Consistency.addEntry(out.getEDID(), out.getForm());
@@ -133,7 +137,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
-	
+
 	importSubRecords(in);
 	subRecords.printSummary();
     }
@@ -186,7 +190,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
-	    
+
 	    subRecords.export(out, srcMod);
 	}
     }
