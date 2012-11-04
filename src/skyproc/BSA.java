@@ -45,9 +45,6 @@ public class BSA {
     }
 
     BSA(String filePath, boolean load) throws FileNotFoundException, IOException, BadParameter {
-	if (filePath.toUpperCase().contains("BLAZE OF EVENTIDE.BSA")) {
-	    int wer = 23;
-	}
 	this.filePath = filePath;
 	in.openFile(filePath);
 	if (!in.extractString(0, 3).equals("BSA") || in.extractInt(1, 4) != 104) {
@@ -88,9 +85,6 @@ public class BSA {
     final void loadFolders() {
 	if (loaded) {
 	    return;
-	}
-	if (filePath.toUpperCase().contains("BLAZE OF EVENTIDE.BSA")) {
-	    int wer = 23;
 	}
 	loaded = true;
 	try {

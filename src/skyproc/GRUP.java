@@ -167,9 +167,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	for (T item : listRecords) {
-	    if (item.getEDID().equals("ServicesWhiterunEorlund")) {
-		int wer = 23;
-	    }
 	    out.addAll(item.allFormIDs());
 	}
 	return out;
