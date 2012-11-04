@@ -908,6 +908,7 @@ public enum Type {
     HDPT,
 
     LIGH,
+    BOD2,
 
     /**
      * NPC_: Marks DNAM position?

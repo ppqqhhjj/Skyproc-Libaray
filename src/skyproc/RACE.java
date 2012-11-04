@@ -26,6 +26,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubList<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
 	    add(new SubForm(Type.WNAM));
 	    add(new BodyTemplate());
+	    add(new SubData(Type.BOD2));
 	    add(new KeywordSet());
 	    add(new DATA());
 	    SubMarkerSet mfnam = new SubMarkerSet<>(new MFNAMdata(), Type.MNAM, Type.FNAM);
@@ -1317,7 +1318,7 @@ public class RACE extends MajorRecordDescription {
     public void clearEquipSlots() {
 	subRecords.getSubList(Type.QNAM).clear();
     }
-    
+
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
