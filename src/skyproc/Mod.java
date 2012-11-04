@@ -1250,7 +1250,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		add(new SubString(Type.CNAM, true));
 		add(new SubSortedList<>(new ModListing()));
 		add(new SubString(Type.SNAM, true));
-		add(new SubData(Type.INTV, defaultINTV));
+		add(new SubData(Type.INTV));
 		add(new SubData(Type.ONAM));
 		add(new SubData(Type.INCC));
 	    }

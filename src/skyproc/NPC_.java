@@ -44,6 +44,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubForm(Type.ECOR));
 	    add(new SubList<>(Type.PRKZ, 4, new SubFormInt(Type.PRKR)));
 	    add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	    add(new COED());
 	    add(new AIDT());
 	    add(new SubList<>(new SubForm(Type.PKID)));
 	    add(new KeywordSet());
@@ -857,6 +858,60 @@ public class NPC_ extends Actor implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 16;
 	}
+    }
+
+    static class COED extends SubRecord implements Serializable {
+
+	FormID f1 = new FormID();
+	FormID f2 = new FormID();
+	float f = 0;
+	boolean valid = false;
+
+	COED() {
+	    super(Type.COED);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    f1.export(out);
+	    f2.export(out);
+	    out.write(f);
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    f1.setInternal(in.extract(4));
+	    f2.setInternal(in.extract(4));
+	    f = in.extractFloat();
+	    valid = true;
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new COED();
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 12;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList(2);
+	    out.add(f1);
+	    out.add(f2);
+	    return out;
+	}
+
+
     }
 
     /**

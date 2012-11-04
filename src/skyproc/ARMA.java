@@ -24,7 +24,8 @@ public class ARMA extends MajorRecord {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.BODT));
+	    add(new BodyTemplate());
+	    add(new SubData(Type.BOD2));
 	    add(new SubForm(Type.RNAM));
 	    add(new DNAM());
 	    // Third Person

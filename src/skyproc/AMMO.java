@@ -27,6 +27,7 @@ public class AMMO extends MajorRecordDescription {
 	    reposition(Type.FULL);
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
+	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
 	    reposition(Type.DESC);

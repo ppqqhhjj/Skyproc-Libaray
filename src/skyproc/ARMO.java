@@ -34,6 +34,8 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubData(Type.MO4T));
 	    add(new SubData(Type.MO4S));
 	    add(new BodyTemplate());
+	    add(new SubData(Type.BOD2));
+	    add(new DestructionData());
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
 	    add(new SubForm(Type.ETYP));
@@ -114,7 +116,7 @@ public class ARMO extends MajorRecordDescription {
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
     /**
      *
      * @return Returns the list of ARMA records associated with the ARMO.

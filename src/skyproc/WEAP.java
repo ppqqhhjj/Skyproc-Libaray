@@ -40,6 +40,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubString(Type.NNAM, true));
 	    add(new SubForm(Type.INAM));
 	    add(new SubForm(Type.SNAM));
+	    add(new SubForm(Type.XNAM));
 	    add(new SubForm(Type.WNAM));
 	    add(new SubForm(Type.TNAM));
 	    add(new SubForm(Type.UNAM));
@@ -410,7 +411,7 @@ public class WEAP extends MajorRecordDescription {
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }
