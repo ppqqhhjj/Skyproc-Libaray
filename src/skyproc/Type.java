@@ -907,6 +907,8 @@ public enum Type {
 
     HDPT,
 
+    LIGH,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

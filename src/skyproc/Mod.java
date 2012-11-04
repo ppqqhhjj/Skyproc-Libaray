@@ -256,7 +256,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    c.close();
 	}
     }
-    
+
     /**
      * Makes a copy of the Major Record and loads it into the mod, giving a new
      * Major Record a FormID originating from the mod. This function also
@@ -406,7 +406,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    g.fetchStringPointers();
 	}
     }
-    
+
     void openStringStreams() {
 	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
 	    for (Files f : SubStringPointer.Files.values()) {
@@ -1241,6 +1241,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     // Internal Classes
     static class TES4 extends Record {
 
+	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubRecordsPrototype TES4proto = new SubRecordsPrototype() {
 
 	    @Override
@@ -1254,7 +1255,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		add(new SubData(Type.INCC));
 	    }
 	};
-	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
