@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-abstract class SubRecords implements Serializable {
+abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     protected Map<Type, SubRecord> map = new HashMap<>(0);
 

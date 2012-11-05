@@ -7,6 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -43,7 +44,7 @@ public class SubRecordsSolo extends SubRecords {
     public void forceExport(Type t) {
 	forceExport.add(t);
     }
-    
+
     @Override
     protected void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : list) {
@@ -99,5 +100,10 @@ public class SubRecordsSolo extends SubRecords {
 	    }
 	}
 	return length;
+    }
+
+    @Override
+    public Iterator<SubRecord> iterator() {
+	return list.iterator();
     }
 }

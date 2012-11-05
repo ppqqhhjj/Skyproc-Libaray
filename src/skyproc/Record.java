@@ -95,14 +95,17 @@ public abstract class Record implements Serializable {
     }
 
     LChannel extractRecordData(LChannel in) {
+	return extractData(in, getRecordLength(in));
+    }
+
+    LChannel extractData(LChannel in, int size) {
 	LChannel extracted;
-	int recordLength = getRecordLength(in);
 	if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
-	    extracted = new RecordShrinkArray(in, recordLength);
+	    extracted = new RecordShrinkArray(in, size);
 	} else {
-	    extracted = new LShrinkArray(in, recordLength);
+	    extracted = new LShrinkArray(in, size);
 	}
-	in.skip(recordLength);
+	in.skip(size);
 	return extracted;
     }
 

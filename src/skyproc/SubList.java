@@ -7,7 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -310,6 +309,11 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
         int hash = 7;
         hash = 89 * hash + Objects.hashCode(this.collection);
         return hash;
+    }
+
+    @Override
+    public int getRecordLength(LChannel in) {
+	return prototype.getRecordLength(in);
     }
 
     @Override

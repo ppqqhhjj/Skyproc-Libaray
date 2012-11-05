@@ -6,6 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -43,18 +46,10 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.UNAM));
 	    add(new SubForm(Type.ATKR));
 	    add(new SubList<>(new ATKDpackage()));
-	    SubData nam1 = new SubData(Type.NAM1);
-	    nam1.forceExport = true;
-	    add(nam1);
-	    SubMarkerSet egt = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
-	    egt.forceMarkers = true;
-	    add(egt);
+	    add(new NAM1());
 	    add(new SubForm(Type.GNAM));
 	    add(new SubData(Type.NAM2));
-	    SubData nam3 = new SubData(Type.NAM3);
-	    nam3.forceExport = true;
-	    add(nam3);
-	    add(new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM));
+	    add(new NAM3());
 	    add(new SubForm(Type.NAM4));
 	    add(new SubForm(Type.NAM5));
 	    add(new SubForm(Type.NAM7));
@@ -73,7 +68,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubForm(Type.FLMV));
 	    add(new SubForm(Type.SNMV));
 	    add(new SubForm(Type.SPMV));
-	    add(new SubList<>(new HeadData()));
+	    add(new SubList<>(new NAM0()));
 	    add(new SubForm(Type.NAM8));
 	    add(new SubForm(Type.RNAM));
 	}
@@ -98,42 +93,42 @@ public class RACE extends MajorRecordDescription {
 	return new RACE();
     }
 
-    @Override
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type nextType;
-	while (!in.isDone()) {
-	    nextType = getNextType(in);
-	    subRecords.importSubRecord(in);
-	    if (nextType == Type.NAM1) {
-		SubMarkerSet EGTrecords = subRecords.getSubMarker(Type.INDX);
-		for (int i = 0; i < 8; i++) {
-		    if (SPGlobal.streamMode) {
-			in.skip(EGTrecords.getRecordLength(in));
-		    } else {
-			EGTrecords.parseData(EGTrecords.extractRecordData(in));
-		    }
-		}
-	    } else if (nextType == Type.NAM3) {
-		SubMarkerSet EGTrecords = subRecords.getSubMarker(Type.INDX);
-		SubMarkerSet HKXrecords = subRecords.getSubMarker(Type.PlaceHolder_HKX);
-		for (int i = 0; i < 6; i++) {
-		    if (SPGlobal.streamMode) {
-			in.skip(EGTrecords.getRecordLength(in));
-		    } else {
-			HKXrecords.parseData(HKXrecords.extractRecordData(in));
-		    }
-		}
-	    } else if (nextType == Type.NAM0) {
-		SubMarkerSet EGTrecords = subRecords.getSubMarker(Type.INDX);
-		SubRecord headData = subRecords.get(Type.NAM0);
-		while (!in.isDone() && getNextType(in) != Type.WKMV) {
-		    if (SPGlobal.streamMode) {
-			in.skip(EGTrecords.getRecordLength(in));
-		    } else {
-			headData.parseData(headData.extractRecordData(in));
-		    }
-		}
-	    }
+    static class NAM1 extends SubShellBulkImport {
+
+	SubData NAM1 = new SubData(Type.NAM1);
+	SubMarkerSet EGT = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
+
+	public NAM1() {
+	    super(Type.NAM1, 9);
+	    NAM1.forceExport = true;
+	    subRecords.add(NAM1);
+
+	    EGT.forceMarkers = true;
+	    subRecords.add(EGT);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new NAM1();
+	}
+    }
+
+    static class NAM3 extends SubShellBulkImport {
+
+	SubData NAM3 = new SubData(Type.NAM3);
+	SubMarkerSet HKX = new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM);
+
+	public NAM3() {
+	    super(Type.NAM3, 7);
+	    NAM3.forceExport = true;
+	    subRecords.add(NAM3);
+
+	    subRecords.add(HKX);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new NAM3();
 	}
     }
 
@@ -178,7 +173,7 @@ public class RACE extends MajorRecordDescription {
 	SubData INDX = new SubData(Type.INDX);
 	SubString MODL = new SubString(Type.MODL, true);
 	SubData MODT = new SubData(Type.MODT);
-	private static Type[] types = {Type.INDX};
+	private static Type[] types = {Type.INDX, Type.MODL, Type.MODT};
 
 	public EGTmodel() {
 	    super(types);
@@ -197,7 +192,7 @@ public class RACE extends MajorRecordDescription {
 
 	SubString MODL = new SubString(Type.MODL, true);
 	SubData MODT = new SubData(Type.MODT);
-	private static Type[] types = {Type.PlaceHolder_HKX};
+	private static Type[] types = {Type.MODL, Type.MODT};
 
 	public HKXmodel() {
 	    super(types);
@@ -229,9 +224,13 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
-    static class HeadData extends SubShell {
+    static class NAM0 extends SubShellBulkUndetermined {
 
-	private static Type[] types = {Type.NAM0};
+	private static Type[] targets = { Type.MNAM, Type.FNAM, Type.INDX, Type.HEAD,
+		    Type.MPAI, Type.MPAV,
+		    Type.RPRM, Type.RPRF, Type.AHCM, Type.AHCF,
+		    Type.FTSM, Type.FTSF, Type.DFTM, Type.DFTF,
+		    Type.TINI, Type.TINT, Type.TINP, Type.TIND, Type.TINC, Type.TINV, Type.TIRS};
 	SubData NAM0 = new SubData(Type.NAM0);
 	SubData MNAM = new SubData(Type.MNAM);
 	SubData FNAM = new SubData(Type.FNAM);
@@ -246,11 +245,9 @@ public class RACE extends MajorRecordDescription {
 	SubList<SubForm> DFTM = new SubList<>(new SubForm(Type.DFTM));
 	SubList<SubForm> DFTF = new SubList<>(new SubForm(Type.DFTF));
 	SubList<TINIs> TINIs = new SubList<>(new TINIs());
-	SubForm NAM8 = new SubForm(Type.NAM8);
-	SubForm RNAM = new SubForm(Type.RNAM);
 
-	public HeadData() {
-	    super(types);
+	public NAM0() {
+	    super(Type.NAM0, targets);
 	    subRecords.add(NAM0);
 	    subRecords.add(MNAM);
 	    subRecords.add(FNAM);
@@ -265,13 +262,11 @@ public class RACE extends MajorRecordDescription {
 	    subRecords.add(DFTM);
 	    subRecords.add(DFTF);
 	    subRecords.add(TINIs);
-	    subRecords.add(NAM8);
-	    subRecords.add(RNAM);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
-	    return new HeadData();
+	    return new NAM0();
 	}
 
 	@Override
@@ -548,8 +543,7 @@ public class RACE extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	EXTRALARGE,
-    }
+	EXTRALARGE,}
 
     // Get / set
     DATA getDATA() {
@@ -1228,13 +1222,18 @@ public class RACE extends MajorRecordDescription {
 	subRecords.getSubList(Type.NAM0).clear();
     }
 
+    SubMarkerSet<EGTmodel> getEGT() {
+	NAM1 nam1 = (NAM1) subRecords.get(Type.NAM1);
+	return nam1.EGT;
+    }
+
     /**
      *
      * @param gender
      * @return
      */
     public String getLightingModels(Gender gender) {
-	SubMarkerSet<EGTmodel> EGTrecords = subRecords.getSubMarker(Type.INDX);
+	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
 	switch (gender) {
 	    case MALE:
 		return EGTrecords.set.get(Type.MNAM).MODL.string;
@@ -1249,7 +1248,7 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setLightingModels(Gender gender, String s) {
-	SubMarkerSet<EGTmodel> EGTrecords = subRecords.getSubMarker(Type.INDX);
+	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
 	switch (gender) {
 	    case MALE:
 		EGTrecords.set.get(Type.MNAM).MODL.setString(s);
@@ -1258,13 +1257,18 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    SubMarkerSet<HKXmodel> getHKX() {
+	NAM3 nam3 = (NAM3) subRecords.get(Type.NAM3);
+	return nam3.HKX;
+    }
+
     /**
      *
      * @param gender
      * @return
      */
     public String getPhysicsModels(Gender gender) {
-	SubMarkerSet<HKXmodel> HKXrecords = subRecords.getSubMarker(Type.PlaceHolder_HKX);
+	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
 	switch (gender) {
 	    case MALE:
 		return HKXrecords.set.get(Type.MNAM).MODL.string;
@@ -1279,7 +1283,7 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setPhysicsModels(Gender gender, String s) {
-	SubMarkerSet<HKXmodel> HKXrecords = subRecords.getSubMarker(Type.PlaceHolder_HKX);
+	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
 	switch (gender) {
 	    case MALE:
 		HKXrecords.set.get(Type.MNAM).MODL.setString(s);

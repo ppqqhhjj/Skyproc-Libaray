@@ -7,6 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -172,6 +173,35 @@ public class SubRecordsDerived extends SubRecords {
 	    }
 	}
 	return out;
+    }
+
+    @Override
+    public Iterator<SubRecord> iterator() {
+	return new DerivedIterator();
+    }
+
+    class DerivedIterator implements Iterator<SubRecord> {
+
+	Iterator<Type> list;
+	Iterator content;
+
+	DerivedIterator() {
+	    list = prototype.list.iterator();
+	}
+
+	@Override
+	public boolean hasNext() {
+	    return list.hasNext();
+	}
+
+	@Override
+	public SubRecord next() {
+	    return get(list.next());
+	}
+
+	@Override
+	public void remove() {
+	}
     }
 
     protected static class RecordLocation {
