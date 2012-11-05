@@ -30,4 +30,9 @@ public class RecordShrinkArray extends LShrinkArray {
     public long pos() {
 	return super.pos() + offset;
     }
+
+    @Override
+    public void pos(long in) {
+	super.pos(in - offset);
+    }
 }
