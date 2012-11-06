@@ -6,8 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
-import lev.LChannel;
 import lev.LExporter;
 
 /**
@@ -76,8 +74,16 @@ public abstract class SubRecord extends Record {
 	    id.standardize(srcMod);
 	}
     }
-    
+
+    void standardize(MajorRecord r) {
+	standardize(r.srcMod);
+    }
+
     void fetchStringPointers(Mod srcMod) {
+    }
+
+    void fetchStringPointers (MajorRecord r) {
+	standardize(r.srcMod);
     }
 
     @Override

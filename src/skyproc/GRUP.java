@@ -87,7 +87,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	    }
 	    T item = (T) prototype.getNew();
-	    item.subRecords.srcMod = srcMod;
+	    item.srcMod = srcMod;
+	    item.subRecords.major = item;
 	    try {
 
 		item.parseData(item.extractRecordData(in));

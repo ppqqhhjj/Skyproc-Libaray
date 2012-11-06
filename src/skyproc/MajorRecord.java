@@ -35,12 +35,14 @@ public abstract class MajorRecord extends Record implements Serializable {
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
     byte[] version = {0x28, 0, 0, 0};
+    Mod srcMod;
 
     MajorRecord() {
     }
 
     void originateFrom(Mod modToOriginateFrom, String edid) {
-	subRecords.srcMod = modToOriginateFrom;
+	srcMod = modToOriginateFrom;
+	subRecords.major = this;
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	Consistency.addEntry(getEDID(), ID);
@@ -122,7 +124,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
-	ID.standardize(subRecords.srcMod);
+	ID.standardize(srcMod);
 	revision = in.extract(4);
 	version = in.extract(4);
 
@@ -200,7 +202,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void fetchStringPointers() throws IOException {
-	subRecords.fetchStringPointers(subRecords.srcMod);
+	subRecords.fetchStringPointers(srcMod);
     }
 
     // Get/set methods

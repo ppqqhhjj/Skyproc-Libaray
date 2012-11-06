@@ -252,7 +252,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void closeStreams() {
 	input.close();
-	for(LChannel c : stringStreams.values()) {
+	for (LChannel c : stringStreams.values()) {
 	    c.close();
 	}
     }
@@ -1243,7 +1243,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubRecordsPrototype TES4proto = new SubRecordsPrototype() {
-
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
@@ -1255,7 +1254,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		add(new SubData(Type.INCC));
 	    }
 	};
-	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
+	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto){
+
+	    @Override
+	    void standardize(SubRecord record) {
+	    }
+	};
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
 	private int fluff2 = 0;
@@ -1429,6 +1433,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	void standardize(MajorRecord r) {
+	}
+
+	@Override
+	void fetchStringPointers(MajorRecord r) {
 	}
     }
 

@@ -223,7 +223,7 @@ public class GMST extends MajorRecord {
 	SubRecord data = updateDATA();
 	super.importSubRecords(in);
 	subRecords.loadFromPosition(data);
-	data.fetchStringPointers(subRecords.srcMod);
+	data.fetchStringPointers(srcMod);
     }
 
     @Override

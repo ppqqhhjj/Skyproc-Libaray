@@ -27,7 +27,7 @@ public class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
     protected Map<Type, RecordLocation> pos = new HashMap<>(0);
-    Mod srcMod;
+    MajorRecord major;
 
     public SubRecordsDerived(SubRecordsPrototype proto) {
 	this.prototype = proto;
@@ -36,7 +36,7 @@ public class SubRecordsDerived extends SubRecords {
     public SubRecordsDerived(SubRecordsDerived rhs) {
 	super(rhs);
 	prototype = rhs.prototype;
-	srcMod = rhs.srcMod;
+	major = rhs.major;
 	pos = new HashMap(rhs.pos);
     }
 
@@ -79,8 +79,7 @@ public class SubRecordsDerived extends SubRecords {
 	} else if (prototype.contains(in)) {
 	    s = createFromPrototype(in);
 	    loadFromPosition(s);
-	    s.standardize(srcMod);
-	    s.fetchStringPointers(srcMod);
+	    standardize(s);
 	}
 	return s;
     }
@@ -95,10 +94,16 @@ public class SubRecordsDerived extends SubRecords {
 	if (SPGlobal.streamMode) {
 	    RecordLocation position = pos.get(s.getType());
 	    if (position != null) {
-		srcMod.input.pos(position.pos);
+		major.srcMod.input.pos(position.pos);
+		if (SPGlobal.logging()) {
+		    if (!major.equals(SPGlobal.lastStreamed)) {
+			SPGlobal.logSync("Stream", "Streaming from " + major);
+			SPGlobal.lastStreamed = major;
+		    }
+		}
 		try {
 		    for (int i = 0; i < position.num; i++) {
-			s.parseData(s.extractRecordData(srcMod.input));
+			s.parseData(s.extractRecordData(major.srcMod.input));
 		    }
 		} catch (DataFormatException | BadRecord | BadParameter ex) {
 		    Logger.getLogger(SubRecordsDerived.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,12 +132,16 @@ public class SubRecordsDerived extends SubRecords {
 	    } else {
 		SubRecord record = getSilent(nextType);
 		record.parseData(record.extractRecordData(in));
-		record.standardize(srcMod);
-		record.fetchStringPointers(srcMod);
+		standardize(record);
 	    }
 	} else {
 	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
 	}
+    }
+
+    void standardize(SubRecord record) {
+	record.standardize(major);
+	record.fetchStringPointers(major);
     }
 
     public SubRecord getSilent(Type nextType) {
