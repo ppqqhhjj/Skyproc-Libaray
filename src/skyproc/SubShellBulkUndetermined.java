@@ -27,9 +27,11 @@ public abstract class SubShellBulkUndetermined extends SubShell {
     public int getRecordLength(LChannel in) {
 	int size = super.getRecordLength(in);
 	in.skip(size);
+	Type nextType;
 	while (!in.isDone()) {
 	    try {
-		if (!targets.contains(getNextType(in))) {
+		nextType = getNextType(in);
+		if (!targets.contains(nextType)) {
 		    break;
 		}
 	    } catch (BadRecord ex) {

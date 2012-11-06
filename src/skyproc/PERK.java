@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class PERK extends MajorRecordDescription {
 
-    static final SubRecordsPrototype PERKproto = new SubRecordsPrototype(MajorRecordDescription.descProto){
+    static final SubRecordsPrototype PERKproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -58,53 +58,18 @@ public class PERK extends MajorRecordDescription {
 	return subRecords.getScripts();
     }
 
-    // Custom importSubRecords because Bethesda reused header titles in the same record.
-    @Override
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type nextType;
-	Boolean insidePRKE = false;
-	while (!in.isDone()) {
-	    nextType = getNextType(in);
-	    if (nextType == Type.PRKE) {
-		insidePRKE = true;
-	    } else if (nextType == Type.PRKF) {
-		insidePRKE = false;
-	    }
-	    if (subRecords.contains(nextType)) {
+    static class PRKEPackage extends SubShellBulkUndetermined {
 
-		switch (getNextType(in)) {
-		    case DATA:
-			if (subRecords.get(Type.DATA).isValid()) {
-			    SubList prke = subRecords.getSubList(Type.PRKE);
-			    prke.parseData(prke.extractRecordData(in));
-			    break;
-			}
-		    case CTDA:
-			if (insidePRKE) {
-			    SubList prke = subRecords.getSubList(Type.PRKE);
-			    prke.parseData(prke.extractRecordData(in));
-			    break;
-			}
-		    default:
-			subRecords.importSubRecord(in);
-		}
-	    } else {
-		throw new BadRecord(getTypes()[0].toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
-	    }
-	}
-    }
-
-    //Contains everything between PRKE and PRKF.
-    static class PRKEPackage extends SubRecord {
-
-	private static Type[] types = {Type.PRKE, Type.PRKF, Type.PRKC, Type.CIS2, Type.CIS1, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
+	private static Type[] types = {Type.PRKF, Type.CTDA, Type.DATA, Type.PRKC, Type.CIS2, Type.CIS1, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
 	SubData PRKE = new SubData(Type.PRKE);
 	SubData PRKF = new SubData(Type.PRKF);
 	SubRecord subPackage;
 	PerkType perkType;
 
 	PRKEPackage() {
-	    super(types);
+	    super(Type.PRKE, types);
+	    subRecords.add(PRKE);
+	    subRecords.add(PRKF);
 	    PRKF.forceExport(true);
 	}
 
@@ -122,31 +87,23 @@ public class PERK extends MajorRecordDescription {
 
 	@Override
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    switch (getNextType(in)) {
-		case PRKE:
-		    PRKE.parseData(in);
-		    perkType = PerkType.values()[PRKE.getData()[0]];
-		    switch (perkType) {
-			case QUEST:
-			    subPackage = new SubFormData(Type.DATA);
-			    break;
-			case ABILITY:
-			    subPackage = new SubForm(Type.DATA);
-			    break;
-			case COMPLEX:
-			    subPackage = new PRKEComplexSubPackage();
-			    break;
-		    }
+	    PRKE.parseData(PRKE.extractRecordData(in));
+	    perkType = PerkType.values()[PRKE.getData()[0]];
+	    switch (perkType) {
+		case QUEST:
+		    subPackage = new SubFormData(Type.DATA);
 		    break;
-		case PRKF:
-		    PRKF.parseData(in);
+		case ABILITY:
+		    subPackage = new SubForm(Type.DATA);
 		    break;
-		case PRKC:
-		    int sdf = 0;
-		default:
-		    subPackage.parseData(in);
+		case COMPLEX:
+		    subPackage = new PRKEComplexSubPackage();
 		    break;
 	    }
+	    subRecords.remove(Type.PRKF);
+	    subRecords.add(subPackage);
+	    subRecords.add(PRKF);
+	    super.parseData(in);
 	}
 
 	@Override
