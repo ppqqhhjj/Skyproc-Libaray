@@ -140,10 +140,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    Consistency.addEntry(EDID.print(), ID);
 	}
 
-	if (getEDID().equals("IrilethVsDragons")) {
-	    int wer = 23;
-	}
-	
 	importSubRecords(in);
 	subRecords.printSummary();
     }

@@ -78,7 +78,12 @@ public class SubRecordsDerived extends SubRecords {
 	    s = map.get(in);
 	} else if (prototype.contains(in)) {
 	    s = createFromPrototype(in);
-	    loadFromPosition(s);
+	    try {
+		loadFromPosition(s);
+	    } catch (Exception ex) {
+		SPGlobal.logException(ex);
+		return s;
+	    }
 	    standardize(s);
 	}
 	return s;
@@ -90,7 +95,7 @@ public class SubRecordsDerived extends SubRecords {
 	return s;
     }
 
-    void loadFromPosition(SubRecord s) {
+    void loadFromPosition(SubRecord s) throws BadRecord, BadParameter, DataFormatException {
 	if (SPGlobal.streamMode) {
 	    RecordLocation position = pos.get(s.getType());
 	    if (position != null) {
@@ -101,12 +106,8 @@ public class SubRecordsDerived extends SubRecords {
 			SPGlobal.lastStreamed = major;
 		    }
 		}
-		try {
-		    for (int i = 0; i < position.num; i++) {
-			s.parseData(s.extractRecordData(major.srcMod.input));
-		    }
-		} catch (DataFormatException | BadRecord | BadParameter ex) {
-		    Logger.getLogger(SubRecordsDerived.class.getName()).log(Level.SEVERE, null, ex);
+		for (int i = 0; i < position.num; i++) {
+		    s.parseData(s.extractRecordData(major.srcMod.input));
 		}
 		pos.remove(s.getType());
 	    }

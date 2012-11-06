@@ -1216,6 +1216,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return true;
     }
 
+    public void remove(FormID id) {
+	for (GRUP g : GRUPs.values()) {
+	    if (g.contains(id)) {
+		g.removeRecord(id);
+	    }
+	}
+    }
+
     /**
      * A custom hash function that takes the mod header into account for better
      * hashing.

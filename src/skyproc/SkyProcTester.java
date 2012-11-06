@@ -20,10 +20,10 @@ import skyproc.gui.SPProgressBarPlug;
  */
 public class SkyProcTester {
 
-    static ArrayList<String> badIDs;
+    static ArrayList<FormID> badIDs;
 
-    static GRUP_TYPE[] types = {GRUP_TYPE.ENCH};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.ENCH};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
      */
@@ -46,18 +46,19 @@ public class SkyProcTester {
     private static void validate() throws Exception {
 
 	badIDs = new ArrayList<>();
-	badIDs.add("0010B115");  //EnchSilverSword
-	badIDs.add("0010A27F");  //TrapLightningRune
-	badIDs.add("0010A27E");  //TrapFrostRune
-	badIDs.add("00073328");  //TrapFireRune
-	badIDs.add("00018A45");  //RiverwoodZone
-	badIDs.add("0000001E");  //NoZoneZone
+	ModListing skyrim = new ModListing("Skyrim.esm");
+	badIDs.add(new FormID("010B115", skyrim));  //EnchSilverSword
+	badIDs.add(new FormID("10A27F", skyrim));  //TrapLightningRune
+	badIDs.add(new FormID("10A27E", skyrim));  //TrapFrostRune
+	badIDs.add(new FormID("073328", skyrim));  //TrapFireRune
+	badIDs.add(new FormID("018A45", skyrim));  //RiverwoodZone
+	badIDs.add(new FormID("00001E", skyrim));  //NoZoneZone
 
 	SubStringPointer.shortNull = false;
 
 	FormID.allIDs.clear();
 	SPImporter importer = new SPImporter();
-	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
+	importer.importMod(skyrim, SPGlobal.pathToData, types);
 
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
@@ -72,7 +73,7 @@ public class SkyProcTester {
 
 	boolean idFail = false;
 	for (FormID id : FormID.allIDs) {
-	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id.toString())) {
+	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id)) {
 		System.out.println("A bad id: " + id);
 		idFail = true;
 		break;
@@ -95,6 +96,9 @@ public class SkyProcTester {
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
+	for (FormID f : badIDs) {
+	    patch.remove(f);
+	}
 	patch.setAuthor("Leviathan1753");
 	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
 	if (type != GRUP_TYPE.ENCH) {

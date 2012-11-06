@@ -83,7 +83,7 @@ public abstract class SubRecord extends Record {
     }
 
     void fetchStringPointers (MajorRecord r) {
-	standardize(r.srcMod);
+	fetchStringPointers(r.srcMod);
     }
 
     @Override
