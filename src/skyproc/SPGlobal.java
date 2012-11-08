@@ -50,10 +50,12 @@ public class SPGlobal {
      * give the users of your program ability to adjust this setting.
      */
     public static Language language = Language.English;
+
     /**
      *
      */
     public static enum Language {
+
 	/**
 	 *
 	 */
@@ -86,15 +88,17 @@ public class SPGlobal {
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
     /**
-     * To be used when implementing the SUM interface.  Add this SUMpath to the beginning of any
-     * pathing to access files in your SkyProc patcher program.  This will allow SUM to add extra directory
-     *  pathing when it hooks onto your patcher program.
+     * To be used when implementing the SUM interface. Add this SUMpath to the
+     * beginning of any pathing to access files in your SkyProc patcher program.
+     * This will allow SUM to add extra directory pathing when it hooks onto
+     * your patcher program.
      */
     public static String SUMpath = "";
     static File skyProcDocuments;
 
     /**
      * Returns a File path to the SkyProc Documents folder.
+     *
      * @return
      * @throws FileNotFoundException
      * @throws IOException
@@ -102,7 +106,7 @@ public class SPGlobal {
     public static File getSkyProcDocuments() throws FileNotFoundException, IOException {
 	if (skyProcDocuments == null) {
 	    File myDocs = SPGlobal.getMyDocumentsSkyrimFolder();
-	    skyProcDocuments = new File (myDocs.getPath() + "\\SkyProc\\");
+	    skyProcDocuments = new File(myDocs.getPath() + "\\SkyProc\\");
 	    skyProcDocuments.mkdirs();
 	}
 	return skyProcDocuments;
@@ -183,6 +187,7 @@ public class SPGlobal {
 
     /**
      * Returns the My Documents Skyrim folder where the ini's are located.
+     *
      * @return
      * @throws FileNotFoundException
      * @throws IOException
@@ -193,6 +198,7 @@ public class SPGlobal {
 
     /**
      * Returns the Skyrim.ini file in the My Documents folder.
+     *
      * @return
      * @throws FileNotFoundException
      * @throws IOException
@@ -226,6 +232,7 @@ public class SPGlobal {
 
     /**
      * Returns the plugins.txt file that contains load order information.
+     *
      * @return
      * @throws FileNotFoundException
      * @throws IOException
@@ -244,14 +251,13 @@ public class SPGlobal {
 		dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
 			+ "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 	    } else {
-
 		SPGlobal.logSync(header, "APPDATA returned: ", dataFolder, "     Shaving off the \\Application Data.");
-		dataFolder = dataFolder.substring(0, dataFolder.indexOf("\\Application Data"));
+		dataFolder = dataFolder.substring(0, dataFolder.lastIndexOf("\\"));
 		SPGlobal.logSync(header, "path now reads: ", dataFolder, "     appending \\Local Settings\\Application Data");
 		dataFolder = dataFolder + "\\Local Settings\\Application Data";
 		SPGlobal.logSync(header, "path now reads: ", dataFolder);
 		dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
-		SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file found in: ", dataFolder);
+		SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file thought to be found in: ", dataFolder);
 	    }
 	} else {
 	    dataFolder = dataFolder.concat(SPGlobal.pluginsListPath);
@@ -260,6 +266,7 @@ public class SPGlobal {
 
 	File pluginListPath = new File(dataFolder);
 	if (!pluginListPath.exists()) {
+	    SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file location wrong. Locating manually.");
 	    dataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
 		    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 	}
@@ -365,6 +372,7 @@ public class SPGlobal {
 
     /**
      * Turns the LLogger async log on/off.
+     *
      * @param on
      */
     public static void loggingAsync(Boolean on) {
@@ -377,7 +385,7 @@ public class SPGlobal {
      *
      * @return Whether the LLogger's async log is on/off.
      */
-    public static boolean loggingAsync(){
+    public static boolean loggingAsync() {
 	if (log != null) {
 	    return SPGlobal.log.loggingAsync();
 	} else {
@@ -419,7 +427,9 @@ public class SPGlobal {
     }
 
     /**
-     * Logs to a specially created log that was previously created using newSpecialLog().
+     * Logs to a specially created log that was previously created using
+     * newSpecialLog().
+     *
      * @param e The enum you defined to symbolize the "key" to the special log.
      * @param header
      * @param print
@@ -432,6 +442,7 @@ public class SPGlobal {
 
     /**
      * Creates a new special log with any enum value as the key.
+     *
      * @param e Any enum you define to symbolize the "key" to the special log.
      * @param logName
      */
@@ -532,6 +543,7 @@ public class SPGlobal {
 
     /**
      * Returns the path to the debug folder.
+     *
      * @return
      */
     public static String pathToDebug() {
