@@ -58,7 +58,7 @@ public class PERK extends MajorRecordDescription {
 	return subRecords.getScripts();
     }
 
-    static class PRKEPackage extends SubShellBulkUndetermined {
+    static class PRKEPackage extends SubShellBulkType {
 
 	private static Type[] types = {Type.PRKF, Type.CTDA, Type.DATA, Type.PRKC, Type.CIS2, Type.CIS1, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
 	SubData PRKE = new SubData(Type.PRKE);

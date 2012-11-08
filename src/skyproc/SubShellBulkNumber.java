@@ -10,11 +10,11 @@ import lev.LChannel;
  *
  * @author Justin Swanson
  */
-public abstract class SubShellBulkImport extends SubShell {
+public abstract class SubShellBulkNumber extends SubShell {
 
     int numForced;
 
-    SubShellBulkImport(Type type_, int numForced) {
+    SubShellBulkNumber(Type type_, int numForced) {
 	super(type_);
 	this.numForced = numForced;
     }

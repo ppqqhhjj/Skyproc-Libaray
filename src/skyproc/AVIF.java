@@ -44,36 +44,10 @@ public class AVIF extends MajorRecordDescription {
 	return new AVIF();
     }
 
-    @Override
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type nextType;
-	Boolean pastHeader = false;
-	while (!in.isDone()) {
-	    nextType = getNextType(in);
-	    if (nextType == Type.PNAM) {
-		pastHeader = true;
-	    }
-	    if (subRecords.contains(nextType)) {
-		switch (getNextType(in)) {
-		    case CNAM:
-			if (pastHeader) {
-			    SubList perks = subRecords.getSubList(Type.PNAM);
-			    perks.parseData(perks.extractRecordData(in));
-			    break;
-			}
-		    default:
-			subRecords.importSubRecord(in);
-		}
-	    } else {
-		throw new BadRecord(getTypes()[0].toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
-	    }
-	}
-    }
-
     /**
      * A structure that represents a perk in a perktree
      */
-    public static class PerkReference extends SubShell {
+    public static class PerkReference extends SubShellBulkType {
 
 	SubForm PNAM = new SubForm(Type.PNAM);
 	SubInt FNAM = new SubInt(Type.FNAM);
@@ -84,11 +58,11 @@ public class AVIF extends MajorRecordDescription {
 	SubForm SNAM = new SubForm(Type.SNAM);
 	SubList<SubInt> CNAMs = new SubList<>(new SubInt(Type.CNAM));
 	SubInt INAM = new SubInt(Type.INAM);
-	static Type[] types = {Type.PNAM, Type.FNAM, Type.XNAM, Type.YNAM,
-	    Type.HNAM, Type.VNAM, Type.SNAM, Type.INAM};
+	static Type[] types = {Type.FNAM, Type.XNAM, Type.YNAM,
+	    Type.HNAM, Type.VNAM, Type.SNAM, Type.CNAM, Type.INAM};
 
 	PerkReference() {
-	    super(types);
+	    super(Type.PNAM, types);
 	    subRecords.add(PNAM);
 	    subRecords.forceExport(Type.PNAM);
 	    subRecords.add(FNAM);

@@ -14,11 +14,11 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public abstract class SubShellBulkUndetermined extends SubShell {
+public abstract class SubShellBulkType extends SubShell {
 
     Set<Type> targets;
 
-    SubShellBulkUndetermined(Type type_, Type... targets) {
+    SubShellBulkType(Type type_, Type... targets) {
 	super(type_);
 	this.targets = new HashSet<>(Arrays.asList(targets));
     }
