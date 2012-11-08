@@ -21,18 +21,24 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-
 //    static GRUP_TYPE[] types = {GRUP_TYPE.AVIF};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
      */
-    public static void runTests() {
+    public static void runTests(int test) {
 	setSkyProcGlobal();
 	try {
 	    SPGlobal.testing = true;
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
-	    validate();
+	    switch (test) {
+		case 1:
+		    validate();
+		    break;
+		case 2:
+		    importTest();
+		    break;
+	    }
 	    gui.finished();
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
@@ -114,6 +120,19 @@ public class SkyProcTester {
 	SPProgressBarPlug.pause(false);
 	SPProgressBarPlug.incrementBar();
 	return passed;
+    }
+
+    public static void importTest() {
+	try {
+	    SPImporter importer = new SPImporter();
+	    importer.importActiveMods();
+	    Mod patch = new Mod(new ModListing("Test.esp"));
+	    patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
+	    patch.addAsOverrides(SPGlobal.getDB());
+	    patch.allFormIDs();
+	} catch (Exception e) {
+	    SPGlobal.logException(e);
+	}
     }
 
     /**

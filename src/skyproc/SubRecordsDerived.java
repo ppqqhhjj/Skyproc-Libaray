@@ -187,13 +187,18 @@ public class SubRecordsDerived extends SubRecords {
 
     @Override
     public Iterator<SubRecord> iterator() {
-	return new DerivedIterator();
+	ArrayList<SubRecord> list = new ArrayList<>();
+	for (Type t : prototype.list) {
+	    if (shouldExport(t)) {
+		list.add(get(t));
+	    }
+	}
+	return list.iterator();
     }
 
     class DerivedIterator implements Iterator<SubRecord> {
 
 	Iterator<Type> list;
-	Iterator content;
 
 	DerivedIterator() {
 	    list = prototype.list.iterator();

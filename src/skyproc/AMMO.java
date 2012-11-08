@@ -33,6 +33,7 @@ public class AMMO extends MajorRecordDescription {
 	    reposition(Type.DESC);
 	    add(new KeywordSet());
 	    add(new DATA());
+	    add(new SubString(Type.ONAM, true));
 	}
     };
     static Type[] types = {Type.AMMO};

@@ -139,10 +139,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
 	}
-	
-	if (getEDID().equals("AVFireResist")) {
-	    int wer = 23;
-	}
 
 	importSubRecords(in);
 	subRecords.printSummary();
