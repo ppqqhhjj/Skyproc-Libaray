@@ -20,9 +20,9 @@ import skyproc.exceptions.BadRecord;
  */
 public class BodyTemplate extends SubRecord {
 
-    LFlags bodyParts;
-    LFlags flags;
-    int armorType;
+    LFlags bodyParts = new LFlags(4);
+    LFlags flags = new LFlags(4);;
+    int armorType = 0;
     boolean old = false;
 
     BodyTemplate() {

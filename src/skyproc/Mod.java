@@ -697,7 +697,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	// Add all mods that contained any of the FormIDs used.
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
-	for (ModListing m : SPGlobal.getDB().getImportedMods()) {
+	for (ModListing m : SPGlobal.getDB().getImportedModListings()) {
 	    Mod mod = SPGlobal.getDB().getMod(m);
 	    if (mod != null) { // If mod was bad and skipped
 		for (FormID ID : allForms) {

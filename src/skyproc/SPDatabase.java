@@ -102,8 +102,26 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @return All mod listings that appear on the load order.
      */
-    public ArrayList<ModListing> getImportedMods() {
-	return new ArrayList<>(activePlugins);
+    public ArrayList<ModListing> getImportedModListings() {
+	ArrayList<Mod> mods = new ArrayList<>(getImportedMods());
+	ArrayList<ModListing> out = new ArrayList<>(mods.size());
+	for (Mod m : mods) {
+	    out.add(m.getInfo());
+	}
+	return out;
+    }
+
+    public ArrayList<Mod> getImportedMods() {
+	ArrayList<Mod> out = new ArrayList<>(activePlugins.size());
+	for (ModListing m : activePlugins) {
+	    Mod mod = SPGlobal.getDB().getMod(m);
+	    if (mod != null) {
+		out.add(mod);
+	    } else {
+		SPGlobal.logError("Get Imported Mods", "Listing " + m + " returned a null Mod.");
+	    }
+	}
+	return out;
     }
 
     /**

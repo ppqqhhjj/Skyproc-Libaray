@@ -478,7 +478,7 @@ public class SUMGUI extends JFrame {
 
 		SPDatabase db = SPGlobal.getDB();
 		ArrayList<String> curImportedMods = new ArrayList<>();
-		for (ModListing m : db.getImportedMods()) {
+		for (ModListing m : db.getImportedModListings()) {
 		    curImportedMods.add(m.print().toUpperCase());
 		}
 		curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
