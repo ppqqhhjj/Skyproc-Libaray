@@ -456,34 +456,68 @@ public class NPC_ extends Actor implements Serializable {
 	    return 0;
 	}
 
+	/**
+	 *
+	 * @param in
+	 */
 	public void setIndex(int in) {
 	    TINI.set(in);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getIndex() {
 	    return TINI.get();
 	}
 
+	/**
+	 *
+	 * @param color
+	 * @param value
+	 */
 	public void setColor(RGBA color, short value) {
 	    TINC.set(color, value);
 	}
 
+	/**
+	 *
+	 * @param color
+	 * @return
+	 */
 	public short getColor(RGBA color) {
 	    return TINC.get(color);
 	}
 
+	/**
+	 *
+	 * @param value
+	 */
 	public void setInterpolation(float value) {
 	    TINV.set(value);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public float getInterpolation() {
 	    return TINV.get();
 	}
 
+	/**
+	 *
+	 * @param value
+	 */
 	public void setPreset (int value) {
 	    TIAS.set(value);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getPreset() {
 	    return TIAS.get();
 	}
@@ -1555,6 +1589,10 @@ public class NPC_ extends Actor implements Serializable {
 	return (ACBS) subRecords.get(Type.ACBS);
     }
 
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }
@@ -2835,6 +2873,10 @@ public class NPC_ extends Actor implements Serializable {
 	return subRecords.getSubString(Type.ATKE).print();
     }
 
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }

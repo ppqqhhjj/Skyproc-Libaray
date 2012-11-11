@@ -113,6 +113,10 @@ public class ARMO extends MajorRecordDescription {
     }
 
     // Get/Set
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
@@ -335,6 +339,10 @@ public class ARMO extends MajorRecordDescription {
 	return subRecords.getSubForm(Type.TNAM).getForm();
     }
 
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }

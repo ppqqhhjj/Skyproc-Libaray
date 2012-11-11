@@ -116,6 +116,10 @@ public class AMMO extends MajorRecordDescription {
     }
 
     //Get/Set
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }

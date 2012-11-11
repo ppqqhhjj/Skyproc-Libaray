@@ -23,6 +23,11 @@ public abstract class SubShellBulkType extends SubShell {
 	this.targets = new HashSet<>(Arrays.asList(targets));
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     @Override
     public int getRecordLength(LChannel in) {
 	int size = super.getRecordLength(in);

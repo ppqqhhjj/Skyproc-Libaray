@@ -92,10 +92,18 @@ public class MISC extends MajorRecordNamed {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModel() {
 	return subRecords.getSubString(Type.MODL).print();
     }
 
+    /**
+     *
+     * @param path
+     */
     public void setModel(String path) {
 	subRecords.getSubString(Type.MODL).setString(path);
     }
@@ -104,26 +112,50 @@ public class MISC extends MajorRecordNamed {
 	return (DATA) subRecords.get(Type.DATA);
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(int value) {
 	getDATA().value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
 	return getDATA().value;
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight(float weight) {
 	getDATA().weight = weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight() {
 	return getDATA().weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }
@@ -178,18 +210,34 @@ public class MISC extends MajorRecordNamed {
 	return subRecords.getSubForm(Type.ZNAM).getForm();
     }
 
+    /**
+     *
+     * @param path
+     */
     public void setInventoryImage(String path) {
 	subRecords.setSubString(Type.ICON, path);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getInventoryImage() {
 	return subRecords.getSubString(Type.ICON).print();
     }
 
+    /**
+     *
+     * @param path
+     */
     public void setMessageImage(String path) {
 	subRecords.setSubString(Type.MICO, path);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMessageImage() {
 	return subRecords.getSubString(Type.MICO).print();
     }

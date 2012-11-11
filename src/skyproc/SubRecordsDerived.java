@@ -23,7 +23,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubRecordsDerived extends SubRecords {
+class SubRecordsDerived extends SubRecords {
 
     protected SubRecordsPrototype prototype;
     protected Map<Type, RecordLocation> pos = new HashMap<>(0);

@@ -1216,6 +1216,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return true;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void remove(FormID id) {
 	for (GRUP g : GRUPs.values()) {
 	    if (g.contains(id)) {

@@ -404,10 +404,18 @@ public class WEAP extends MajorRecordDescription {
     }
 
     // Get /set
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }
 
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }

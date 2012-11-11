@@ -20,7 +20,7 @@ public class SPStringList extends SPList<String> {
 
     /**
      *
-     * @param titleLabel
+     * @param title
      * @param font
      * @param color
      */

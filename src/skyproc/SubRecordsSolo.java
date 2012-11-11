@@ -19,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubRecordsSolo extends SubRecords {
+class SubRecordsSolo extends SubRecords {
 
     Type[] types;
     protected ArrayList<SubRecord> list = new ArrayList<>();

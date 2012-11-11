@@ -12,7 +12,7 @@ import lev.LFileChannel;
  *
  * @author Justin Swanson
  */
-public class RecordFileChannel extends LFileChannel {
+class RecordFileChannel extends LFileChannel {
 
     long pos;
 
@@ -20,19 +20,19 @@ public class RecordFileChannel extends LFileChannel {
 	super(str);
 	pos = 0;
     }
-    
+
     public RecordFileChannel (LFileChannel fc, int allocation) {
 	super();
 	pos = fc.pos();
 	slice(fc, allocation);
     }
-    
+
     public RecordFileChannel (RecordFileChannel rfc, int allocation) {
 	super();
 	pos = rfc.pos;
 	slice(rfc, allocation);
     }
-    
+
     @Override
     public void openFile(String path) {
 	super.openFile(path);
@@ -73,12 +73,12 @@ public class RecordFileChannel extends LFileChannel {
 	pos += skip + read;
 	return out;
     }
-    
+
     @Override
     public int read() {
 	pos(pos);
 	int out = super.read();
 	pos++;
 	return out;
-    }   
+    }
 }

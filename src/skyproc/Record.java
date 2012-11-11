@@ -89,6 +89,11 @@ public abstract class Record implements Serializable {
 	}
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     public int getRecordLength(LChannel in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();

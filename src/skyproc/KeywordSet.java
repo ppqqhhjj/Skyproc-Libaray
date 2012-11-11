@@ -101,6 +101,9 @@ public class KeywordSet extends SubRecord {
 	}
     }
 
+    /**
+     *
+     */
     public void clearKeywordRefs () {
 	keywords.clear();
 	counter.setData(0, 4);

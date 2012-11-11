@@ -12,7 +12,7 @@ import lev.LShrinkArray;
  *
  * @author Justin Swanson
  */
-public class RecordShrinkArray extends LShrinkArray {
+class RecordShrinkArray extends LShrinkArray {
 
     int offset;
 

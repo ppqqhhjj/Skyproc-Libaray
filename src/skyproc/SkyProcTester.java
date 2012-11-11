@@ -25,6 +25,7 @@ public class SkyProcTester {
     static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
+     * @param test
      */
     public static void runTests(int test) {
 	setSkyProcGlobal();
@@ -122,6 +123,9 @@ public class SkyProcTester {
 	return passed;
     }
 
+    /**
+     *
+     */
     public static void importTest() {
 	try {
 	    SPImporter importer = new SPImporter();

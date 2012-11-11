@@ -38,10 +38,14 @@ public class COBJ extends MajorRecord {
 	return new COBJ();
     }
 
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
     /**
      *
      * @return
@@ -85,10 +89,17 @@ public class COBJ extends MajorRecord {
 	return subRecords.getSubList(Type.CNTO).remove(new SubFormInt(Type.CNTO, itemReference, 1));
     }
 
+    /**
+     *
+     */
     public void clearIngredients() {
 	subRecords.getSubList(Type.CNTO).clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<SubFormInt> getIngredients() {
 	return SubList.subFormIntToPublic(subRecords.getSubList(Type.CNTO));
     }

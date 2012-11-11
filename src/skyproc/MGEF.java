@@ -463,7 +463,7 @@ public class MGEF extends MajorRecordDescription {
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
     @Override
     public String getDescription() {
 	return subRecords.getSubString(Type.DNAM).print();
@@ -500,6 +500,10 @@ public class MGEF extends MajorRecordDescription {
 	return getDATA().flags.get(flag.value);
     }
 
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }

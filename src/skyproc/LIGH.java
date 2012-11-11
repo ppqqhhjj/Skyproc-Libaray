@@ -330,98 +330,194 @@ public class LIGH extends MajorRecordNamed {
         return getDATA().value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getBlue() {
         return getDATA().blue;
     }
 
+    /**
+     *
+     * @param blue
+     */
     public void setBlue(int blue) {
         this.getDATA().blue = blue;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFalloff() {
         return getDATA().falloff;
     }
 
+    /**
+     *
+     * @param falloff
+     */
     public void setFalloff(float falloff) {
         this.getDATA().falloff = falloff;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFov() {
         return getDATA().fov;
     }
 
+    /**
+     *
+     * @param fov
+     */
     public void setFov(float fov) {
         this.getDATA().fov = fov;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getGreen() {
         return getDATA().green;
     }
 
+    /**
+     *
+     * @param green
+     */
     public void setGreen(int green) {
         this.getDATA().green = green;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getIntensity() {
         return getDATA().intensity;
     }
 
+    /**
+     *
+     * @param intensity
+     */
     public void setIntensity(float intensity) {
         this.getDATA().intensity = intensity;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getMovement() {
         return getDATA().movement;
     }
 
+    /**
+     *
+     * @param movement
+     */
     public void setMovement(float movement) {
         this.getDATA().movement = movement;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getNearclip() {
         return getDATA().nearclip;
     }
 
+    /**
+     *
+     * @param nearclip
+     */
     public void setNearclip(float nearclip) {
         this.getDATA().nearclip = nearclip;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getPeriod() {
         return getDATA().period;
     }
 
+    /**
+     *
+     * @param period
+     */
     public void setPeriod(float period) {
         this.getDATA().period = period;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRadius() {
         return getDATA().radius;
     }
 
+    /**
+     *
+     * @param radius
+     */
     public void setRadius(int radius) {
         this.getDATA().radius = radius;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getRed() {
         return getDATA().red;
     }
 
+    /**
+     *
+     * @param red
+     */
     public void setRed(int red) {
         this.getDATA().red = red;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTime() {
         return getDATA().time;
     }
 
+    /**
+     *
+     * @param time
+     */
     public void setTime(int time) {
         this.getDATA().time = time;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight() {
         return getDATA().weight;
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight(float weight) {
         this.getDATA().weight = weight;
     }

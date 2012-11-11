@@ -39,6 +39,9 @@ public abstract class SPSettingPanel extends LPanel {
      * Reference to the panel in the center column
      */
     protected LScrollPane scroll;
+    /**
+     *
+     */
     protected LPanel settingsPanel;
     private ArrayList<Component> components = new ArrayList<>();
     /**

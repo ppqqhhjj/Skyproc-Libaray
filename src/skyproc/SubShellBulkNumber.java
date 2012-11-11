@@ -19,6 +19,11 @@ public abstract class SubShellBulkNumber extends SubShell {
 	this.numForced = numForced;
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     @Override
     public int getRecordLength(LChannel in) {
 	int size = 0;

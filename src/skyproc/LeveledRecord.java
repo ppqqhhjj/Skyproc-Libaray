@@ -123,9 +123,6 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param id The formID of the actor to put on the entry.
      * @param level Level to mark the entry at.
      * @param count Number of actors to spawn.
-     * @throws NotFound This functionality to come. Skyproc does NOT confirm
-     * that the FormID associated truly points to a correct record. You will
-     * have to confirm the accuracy yourself for now.
      */
     public void addEntry(FormID id, int level, int count) {
 	addEntry(new LVLO(id, level, count));

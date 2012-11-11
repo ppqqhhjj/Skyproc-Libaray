@@ -66,42 +66,81 @@ public class HDPT extends MajorRecordNamed {
     }
 
     //GetSet
+    /**
+     *
+     * @param path
+     */
     public void setModel(String path) {
 	subRecords.setSubString(Type.MODL, path);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getModel () {
 	return subRecords.getSubString(Type.MODL).print();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getHeadParts() {
 	return SubList.subFormToPublic(subRecords.getSubList(Type.HNAM));
     }
 
+    /**
+     *
+     * @param id
+     */
     public void addHeadPart(FormID id) {
 	subRecords.getSubList(Type.HNAM).add(new SubForm(Type.HNAM, id));
     }
 
+    /**
+     *
+     * @param id
+     */
     public void removeHeadPart(FormID id) {
 	subRecords.getSubList(Type.HNAM).remove(new SubForm(Type.HNAM, id));
     }
 
+    /**
+     *
+     */
     public void clearHeadParts() {
 	subRecords.getSubList(Type.HNAM).clear();
     }
 
+    /**
+     *
+     * @param txst
+     */
     public void setBaseTexture(FormID txst) {
 	subRecords.setSubForm(Type.TNAM, txst);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getBaseTexture() {
 	return subRecords.getSubForm(Type.TNAM).getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setResourceList(FormID id) {
 	subRecords.setSubForm(Type.RNAM, id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getResourceList() {
 	return subRecords.getSubForm(Type.RNAM).getForm();
     }

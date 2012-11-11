@@ -153,6 +153,10 @@ public class INGR extends MagicItem {
     }
 
     // Get/set
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }
@@ -225,10 +229,18 @@ public class INGR extends MagicItem {
 	return getDATA().weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
 	return getDATA().value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(int value) {
 	getDATA().value = value;
     }

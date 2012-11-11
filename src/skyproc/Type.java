@@ -387,8 +387,17 @@ public enum Type {
      * NPC_: Destruction data?
      */
     DSTD,
+    /**
+     *
+     */
     DMDT,
+    /**
+     *
+     */
     DMDL,
+    /**
+     *
+     */
     DMDS,
     /**
      * NPC_: Destruction data?
@@ -606,6 +615,9 @@ public enum Type {
      *
      */
     SNMV,
+    /**
+     *
+     */
     SPMV,
 
     /**
@@ -899,14 +911,32 @@ public enum Type {
      */
     BNAM,
 
+    /**
+     *
+     */
     MISC,
+    /**
+     *
+     */
     MODB,
 
+    /**
+     *
+     */
     OTFT,
 
+    /**
+     *
+     */
     HDPT,
 
+    /**
+     *
+     */
     LIGH,
+    /**
+     *
+     */
     BOD2,
 
     /**

@@ -54,6 +54,10 @@ public class PERK extends MajorRecordDescription {
 	return out;
     }
 
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }

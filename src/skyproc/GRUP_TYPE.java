@@ -27,6 +27,9 @@ public enum GRUP_TYPE {
      * Factions
      */
     FACT,
+    /**
+     *
+     */
     HDPT,
     /**
      * Races
@@ -52,6 +55,9 @@ public enum GRUP_TYPE {
      * Ingredients
      */
     INGR,
+    /**
+     *
+     */
     MISC,
     /**
      * Alchemy
@@ -109,6 +115,9 @@ public enum GRUP_TYPE {
      *
      */
     ECZN,
+    /**
+     *
+     */
     OTFT;
 
     static boolean unfinished (GRUP_TYPE g) {

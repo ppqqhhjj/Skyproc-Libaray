@@ -82,6 +82,12 @@ public class AltTextures extends SubRecord {
 	return out;
     }
 
+    /**
+     *
+     * @param alts
+     * @param rhsAlts
+     * @return
+     */
     public static boolean equal(ArrayList<AltTexture> alts, ArrayList<AltTexture> rhsAlts) {
 	if (alts.size() != rhsAlts.size()) {
 	    return false;
@@ -100,6 +106,9 @@ public class AltTextures extends SubRecord {
 	return true;
     }
 
+    /**
+     *
+     */
     public static class AltTexture implements Serializable {
 
 	String name;

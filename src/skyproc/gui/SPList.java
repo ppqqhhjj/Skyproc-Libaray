@@ -26,7 +26,7 @@ public class SPList<T extends Object> extends LList<T> {
 
     /**
      *
-     * @param titleLabel
+     * @param title
      * @param font
      * @param color
      */
@@ -75,7 +75,7 @@ public class SPList<T extends Object> extends LList<T> {
 
     /**
      *
-     * @param titleLabel
+     * @param title
      * @param a
      */
     public void addEnterButton(String title, ActionListener a) {
@@ -88,7 +88,7 @@ public class SPList<T extends Object> extends LList<T> {
 
     /**
      *
-     * @param titleLabel
+     * @param title
      * @param a
      */
     public void setRemoveButton(String title, ActionListener a) {

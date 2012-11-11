@@ -42,6 +42,10 @@ public class QUST extends MajorRecordNamed {
 	return types;
     }
 
+    /**
+     *
+     * @return
+     */
     public ScriptPackage getScriptPackage() {
 	return subRecords.getScripts();
     }

@@ -487,39 +487,138 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     */
     public static enum RACEFlags {
 
+	/**
+	 *
+	 */
 	Playable,
+	/**
+	 *
+	 */
 	FaceGenHead,
+	/**
+	 *
+	 */
 	Child,
+	/**
+	 *
+	 */
 	TiltFrontBack,
+	/**
+	 *
+	 */
 	TiltLeftRight,
+	/**
+	 *
+	 */
 	NoShadow,
+	/**
+	 *
+	 */
 	Swims,
+	/**
+	 *
+	 */
 	Flies,
+	/**
+	 *
+	 */
 	Walks,
+	/**
+	 *
+	 */
 	Immobile,
+	/**
+	 *
+	 */
 	NotPushable,
+	/**
+	 *
+	 */
 	NoCombatInWater,
+	/**
+	 *
+	 */
 	NoRotatingToHeadTrack,
+	/**
+	 *
+	 */
 	DontShowBloodSpray,
+	/**
+	 *
+	 */
 	DontShowBloodDecal,
+	/**
+	 *
+	 */
 	UsesHeadTrackAnims,
+	/**
+	 *
+	 */
 	SpellsAlignWithMagicNode,
+	/**
+	 *
+	 */
 	UseWorldRaycastsForFootIK,
+	/**
+	 *
+	 */
 	AllowRagdollCollision,
+	/**
+	 *
+	 */
 	RegenHPInCombat,
+	/**
+	 *
+	 */
 	CantOpenDoors,
+	/**
+	 *
+	 */
 	AllowPCDialogue,
+	/**
+	 *
+	 */
 	NoKnockdowns,
+	/**
+	 *
+	 */
 	AllowPickpocket,
+	/**
+	 *
+	 */
 	AlwaysUseProxyController,
+	/**
+	 *
+	 */
 	DontShowWeaponBlood,
+	/**
+	 *
+	 */
 	OverlayHeadPartList,
+	/**
+	 *
+	 */
 	OverrideHeadPartList,
+	/**
+	 *
+	 */
 	CanPickupItems,
+	/**
+	 *
+	 */
 	AllowMultipleMembraneShaders,
+	/**
+	 *
+	 */
 	CanDualWeild,
+	/**
+	 *
+	 */
 	AvoidsRoads;
     }
 
@@ -550,10 +649,20 @@ public class RACE extends MajorRecordDescription {
 	return (DATA) subRecords.get(Type.DATA);
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(RACEFlags flag, boolean on) {
 	getDATA().flags.set(flag.ordinal(), on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(RACEFlags flag) {
 	return getDATA().flags.get(flag.ordinal());
     }
@@ -1323,6 +1432,10 @@ public class RACE extends MajorRecordDescription {
 	subRecords.getSubList(Type.QNAM).clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
