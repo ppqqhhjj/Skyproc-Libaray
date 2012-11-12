@@ -20,7 +20,6 @@ import skyproc.exceptions.BadRecord;
 public class ENCH extends MagicItem {
 
     static final SubRecordsPrototype ENCHproto = new SubRecordsPrototype(MagicItem.magicItemProto) {
-
 	@Override
 	protected void addRecords() {
 	    reposition(Type.OBND);
@@ -59,6 +58,7 @@ public class ENCH extends MagicItem {
 	float chargeTime = 0;
 	FormID baseEnchantment = new FormID();
 	FormID wornRestrictions = new FormID();
+	boolean old = false;
 
 	ENIT() {
 	    super(Type.ENIT);
@@ -75,7 +75,9 @@ public class ENCH extends MagicItem {
 	    out.write(enchantType.value, 4);
 	    out.write(chargeTime);
 	    baseEnchantment.export(out);
-	    wornRestrictions.export(out);
+	    if (!old) {
+		wornRestrictions.export(out);
+	    }
 	}
 
 	@Override
@@ -89,7 +91,11 @@ public class ENCH extends MagicItem {
 	    enchantType = EnchantType.value(in.extractInt(4));
 	    chargeTime = in.extractFloat();
 	    baseEnchantment.setInternal(in.extract(4));
-	    wornRestrictions.setInternal(in.extract(4));
+	    if (!in.isDone()) {
+		wornRestrictions.setInternal(in.extract(4));
+	    } else {
+		old = true;
+	    }
 	}
 
 	@Override
@@ -99,7 +105,11 @@ public class ENCH extends MagicItem {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return 36;
+	    if (old) {
+		return 32;
+	    } else {
+		return 36;
+	    }
 	}
 
 	@Override

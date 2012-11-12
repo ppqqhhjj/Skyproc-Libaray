@@ -31,10 +31,6 @@ public class SkyProcTester {
 	setSkyProcGlobal();
 	badIDs = new ArrayList<>();
 	ModListing skyrim = new ModListing("Skyrim.esm");
-	badIDs.add(new FormID("010B115", skyrim));  //EnchSilverSword
-	badIDs.add(new FormID("10A27F", skyrim));  //TrapLightningRune
-	badIDs.add(new FormID("10A27E", skyrim));  //TrapFrostRune
-	badIDs.add(new FormID("073328", skyrim));  //TrapFireRune
 	badIDs.add(new FormID("018A45", skyrim));  //RiverwoodZone
 	badIDs.add(new FormID("00001E", skyrim));  //NoZoneZone
 	try {
