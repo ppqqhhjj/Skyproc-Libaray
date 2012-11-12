@@ -78,7 +78,7 @@ public class ECZN extends MajorRecord {
 
 	    owner.setInternal(in.extract(4));
 	    location.setInternal(in.extract(4));
-	    if (in.isDone()) {
+	    if (!in.isDone()) {
 		rank = in.extractInt(1);
 		minLevel = in.extractInt(1);
 		flags.set(in.extract(1));
