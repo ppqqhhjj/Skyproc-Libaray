@@ -343,7 +343,8 @@ public class WEAP extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	Staff
+	Staff,
+	Crossbow;
     }
 
     /**
