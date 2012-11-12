@@ -93,13 +93,13 @@ public class RACE extends MajorRecordDescription {
 	return new RACE();
     }
 
-    static class NAM1 extends SubShellBulkNumber {
+    static class NAM1 extends SubShellBulkType {
 
 	SubData NAM1 = new SubData(Type.NAM1);
 	SubMarkerSet EGT = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
 
 	public NAM1() {
-	    super(Type.NAM1, 9);
+	    super(Type.NAM1, Type.MNAM, Type.FNAM, Type.INDX, Type.MODL, Type.MODT);
 	    NAM1.forceExport = true;
 	    subRecords.add(NAM1);
 
@@ -113,13 +113,13 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
-    static class NAM3 extends SubShellBulkNumber {
+    static class NAM3 extends SubShellBulkType {
 
 	SubData NAM3 = new SubData(Type.NAM3);
 	SubMarkerSet HKX = new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM);
 
 	public NAM3() {
-	    super(Type.NAM3, 7);
+	    super(Type.NAM3, Type.MNAM, Type.FNAM, Type.MODL, Type.MODT);
 	    NAM3.forceExport = true;
 	    subRecords.add(NAM3);
 

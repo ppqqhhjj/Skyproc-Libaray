@@ -29,6 +29,7 @@ public class WEAP extends MajorRecordDescription {
 	    reposition(Type.FULL);
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
+	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.EITM));
 	    add(new SubData(Type.EAMT));
 	    add(new SubData(Type.MODS));

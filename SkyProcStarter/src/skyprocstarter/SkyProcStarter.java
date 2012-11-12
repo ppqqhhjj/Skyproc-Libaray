@@ -11,6 +11,7 @@ import skyproc.GRUP_TYPE;
 import skyproc.Mod;
 import skyproc.ModListing;
 import skyproc.SPGlobal;
+import skyproc.SkyProcSave;
 import skyproc.gui.SPMainMenuPanel;
 import skyproc.gui.SUM;
 import skyproc.gui.SUMGUI;
@@ -34,7 +35,7 @@ public class SkyProcStarter implements SUM {
     * customize the import to what you need.
     */
     GRUP_TYPE[] importRequests = new GRUP_TYPE[]{
-	GRUP_TYPE.COBJ
+	GRUP_TYPE.ALCH
     };
     public static String myPatchName = "My Patch";
     public static String authorName = "Me";
@@ -42,7 +43,7 @@ public class SkyProcStarter implements SUM {
     public static Color headerColor = new Color(66, 181, 184);  // Teal
     public static Color settingsColor = new Color(72, 179, 58);  // Green
     public static Font settingsFont = new Font("Serif", Font.BOLD, 15);
-    public static LSaveFile save = new YourSaveFile();
+    public static SkyProcSave save = new YourSaveFile();
 
     // Do not write the bulk of your program here
     // Instead, write your patch changes in the "runChangesToPatch" function
@@ -188,8 +189,5 @@ public class SkyProcStarter implements SUM {
 	merger.addAsOverrides(SPGlobal.getDB());
 
 	// Write your changes to the patch here.
-	for (COBJ c : merger.getConstructibleObjects()) {
-	    patch.makeCopy(c);
-	}
     }
 }

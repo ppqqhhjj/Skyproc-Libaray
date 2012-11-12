@@ -28,6 +28,7 @@ public class LIGH extends MajorRecordNamed {
 	    add(new SubData(Type.OBND));
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
+	    add(new AltTextures(Type.MODS));
 	    add(new DestructionData());
 	    reposition(Type.FULL);
 	    add(new SubString(Type.ICON, true));

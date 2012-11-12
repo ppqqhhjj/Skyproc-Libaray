@@ -140,6 +140,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    Consistency.addEntry(EDID.print(), ID);
 	}
 
+	if (getEDID().equals("_APB_Wren")) {
+ 	    int wer = 23;
+	}
+
 	importSubRecords(in);
 	subRecords.printSummary();
     }
@@ -149,7 +153,10 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
+	if (getEDID().equals("_APB_Wren")) {
+ 	    int wer = 23;
+	}
+	ArrayList<FormID> out = new ArrayList<>();
 	out.add(ID);
 	out.addAll(subRecords.allFormIDs());
 	return out;

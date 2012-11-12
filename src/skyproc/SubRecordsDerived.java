@@ -99,17 +99,22 @@ class SubRecordsDerived extends SubRecords {
 	if (SPGlobal.streamMode) {
 	    RecordLocation position = pos.get(s.getType());
 	    if (position != null) {
-		major.srcMod.input.pos(position.pos);
-		if (SPGlobal.logging()) {
-		    if (!major.equals(SPGlobal.lastStreamed)) {
-			SPGlobal.logSync("Stream", "Streaming from " + major);
-			SPGlobal.lastStreamed = major;
+		try {
+		    major.srcMod.input.pos(position.pos);
+		    if (SPGlobal.logging()) {
+			if (!major.equals(SPGlobal.lastStreamed)) {
+			    SPGlobal.logSync("Stream", "Streaming from " + major);
+			    SPGlobal.lastStreamed = major;
+			}
 		    }
+		    for (int i = 0; i < position.num; i++) {
+			s.parseData(s.extractRecordData(major.srcMod.input));
+		    }
+		    pos.remove(s.getType());
+		} catch (Exception e) {
+		    SPGlobal.logError("Stream Error", "Error streaming subrecord type " + s.getType() + " from " + major);
+		    throw e;
 		}
-		for (int i = 0; i < position.num; i++) {
-		    s.parseData(s.extractRecordData(major.srcMod.input));
-		}
-		pos.remove(s.getType());
 	    }
 	}
     }
@@ -120,6 +125,9 @@ class SubRecordsDerived extends SubRecords {
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
 		Type standardType = prototype.get(nextType).getType();
+		if (standardType == Type.ANAM) {
+		    int wer = 23;
+		}
 		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();
 		    pos.put(standardType, new RecordLocation(position));
@@ -177,6 +185,9 @@ class SubRecordsDerived extends SubRecords {
     public ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	for (Type t : prototype.list) {
+	    if (t == Type.ANAM) {
+		int wer = 23;
+	    }
 	    if (shouldExport(t)) {
 		SubRecord s = get(t);
 		out.addAll(s.allFormIDs());

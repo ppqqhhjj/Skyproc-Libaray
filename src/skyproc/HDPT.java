@@ -18,6 +18,7 @@ public class HDPT extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubString(Type.MODL, true));
 	    add(new SubData(Type.MODT));
+	    add(new AltTextures(Type.MODS));
 	    add(new SubData(Type.DATA));
 	    add(new SubInt(Type.PNAM));
 	    add(new SubList<>(new SubForm(Type.HNAM)));

@@ -29,6 +29,14 @@ public class SkyProcTester {
      */
     public static void runTests(int test) {
 	setSkyProcGlobal();
+	badIDs = new ArrayList<>();
+	ModListing skyrim = new ModListing("Skyrim.esm");
+	badIDs.add(new FormID("010B115", skyrim));  //EnchSilverSword
+	badIDs.add(new FormID("10A27F", skyrim));  //TrapLightningRune
+	badIDs.add(new FormID("10A27E", skyrim));  //TrapFrostRune
+	badIDs.add(new FormID("073328", skyrim));  //TrapFireRune
+	badIDs.add(new FormID("018A45", skyrim));  //RiverwoodZone
+	badIDs.add(new FormID("00001E", skyrim));  //NoZoneZone
 	try {
 	    SPGlobal.testing = true;
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
@@ -52,20 +60,11 @@ public class SkyProcTester {
 
     private static void validate() throws Exception {
 
-	badIDs = new ArrayList<>();
-	ModListing skyrim = new ModListing("Skyrim.esm");
-	badIDs.add(new FormID("010B115", skyrim));  //EnchSilverSword
-	badIDs.add(new FormID("10A27F", skyrim));  //TrapLightningRune
-	badIDs.add(new FormID("10A27E", skyrim));  //TrapFrostRune
-	badIDs.add(new FormID("073328", skyrim));  //TrapFireRune
-	badIDs.add(new FormID("018A45", skyrim));  //RiverwoodZone
-	badIDs.add(new FormID("00001E", skyrim));  //NoZoneZone
-
 	SubStringPointer.shortNull = false;
 
 	FormID.allIDs.clear();
 	SPImporter importer = new SPImporter();
-	importer.importMod(skyrim, SPGlobal.pathToData, types);
+	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
 
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
