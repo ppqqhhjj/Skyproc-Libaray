@@ -22,7 +22,6 @@ import skyproc.exceptions.BadRecord;
 public class ECZN extends MajorRecord {
 
     static final SubRecordsPrototype ECZNproto = new SubRecordsPrototype(MajorRecord.majorProto) {
-
 	@Override
 	protected void addRecords() {
 	    add(new DATA());
@@ -79,11 +78,12 @@ public class ECZN extends MajorRecord {
 
 	    owner.setInternal(in.extract(4));
 	    location.setInternal(in.extract(4));
-	    rank = in.extractInt(1);
-	    minLevel = in.extractInt(1);
-	    flags.set(in.extract(1));
-	    maxLevel = in.extractInt(1);
-
+	    if (in.isDone()) {
+		rank = in.extractInt(1);
+		minLevel = in.extractInt(1);
+		flags.set(in.extract(1));
+		maxLevel = in.extractInt(1);
+	    }
 	    if (logging()) {
 		logSync("", "DATA record: ");
 		logSync("", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
