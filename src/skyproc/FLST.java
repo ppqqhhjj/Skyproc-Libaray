@@ -36,8 +36,6 @@ public class FLST extends MajorRecord {
 	originateFrom(modToOriginateFrom, edid);
     }
 
-
-
     @Override
     Type[] getTypes() {
 	return types;

@@ -170,39 +170,10 @@ class SubRecordsDerived extends SubRecords {
     }
 
     @Override
-    public int length(Mod srcMod) {
-	int length = 0;
-	for (Type t : prototype.list) {
-	    SubRecord s = get(t);
-	    if (s != null && shouldExport(s)) {
-		length += s.getTotalLength(srcMod);
-	    }
-	}
-	return length;
-    }
-
-    @Override
-    public ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<>();
-	for (Type t : prototype.list) {
-	    if (t == Type.ANAM) {
-		int wer = 23;
-	    }
-	    if (shouldExport(t)) {
-		SubRecord s = get(t);
-		out.addAll(s.allFormIDs());
-	    }
-	}
-	return out;
-    }
-
-    @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> list = new ArrayList<>();
 	for (Type t : prototype.list) {
-	    if (shouldExport(t)) {
-		list.add(get(t));
-	    }
+	    list.add(get(t));
 	}
 	return list.iterator();
     }

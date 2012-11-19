@@ -327,7 +327,7 @@ public class RACE extends MajorRecordDescription {
 	SubString TINT = new SubString(Type.TINT, true);
 	SubData TINP = new SubData(Type.TINP);
 	SubForm TIND = new SubForm(Type.TIND);
-	SubList<TINCs> TINCs = new SubList<TINCs>(new TINCs());
+	SubList<TINCs> TINCs = new SubList<>(new TINCs());
 	private static Type[] types = {Type.TINI, Type.TINT, Type.TINP, Type.TIND, Type.TINC, Type.TINV, Type.TIRS};
 
 	public TINIs() {

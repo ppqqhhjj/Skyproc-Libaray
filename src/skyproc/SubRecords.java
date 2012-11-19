@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-abstract class SubRecords implements Serializable, Iterable<SubRecord>  {
+abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     protected Map<Type, SubRecord> map = new HashMap<>(0);
 
@@ -136,11 +136,11 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord>  {
     }
 
     public ScriptPackage getScripts() {
-	return (ScriptPackage)get(Type.VMAD);
+	return (ScriptPackage) get(Type.VMAD);
     }
 
     boolean isValid() {
-	for (SubRecord s : map.values()) {
+	for (SubRecord s : this) {
 	    if (!s.isValid()) {
 		return false;
 	    }
@@ -200,7 +200,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord>  {
 
     public int length(Mod srcMod) {
 	int length = 0;
-	for (SubRecord s : map.values()) {
+	for (SubRecord s : this) {
 	    if (shouldExport(s)) {
 		length += s.getTotalLength(srcMod);
 	    }
@@ -208,24 +208,22 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord>  {
 	return length;
     }
 
-    public ArrayList<SubRecord> getRecords() {
-	return new ArrayList(map.values());
-    }
-
     public Set<Type> getTypes() {
 	return map.keySet();
     }
 
     void fetchStringPointers(Mod srcMod) {
-	for (SubRecord s : map.values()) {
+	for (SubRecord s : this) {
 	    s.fetchStringPointers(srcMod);
 	}
     }
 
     public ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
-	for (SubRecord s : map.values()) {
-	    out.addAll(s.allFormIDs());
+	for (SubRecord s : this) {
+	    if (shouldExport(s)) {
+		out.addAll(s.allFormIDs());
+	    }
 	}
 	return out;
     }

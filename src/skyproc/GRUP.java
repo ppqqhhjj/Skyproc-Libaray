@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import skyproc.gui.SPProgressBarPlug;
