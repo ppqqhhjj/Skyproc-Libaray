@@ -57,7 +57,7 @@ public class ARMO extends MajorRecordDescription {
      */
     ARMO() {
 	super();
-	subRecords.prototype = ARMOprototype;
+	subRecords.setPrototype(ARMOprototype);
     }
 
     @Override

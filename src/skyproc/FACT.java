@@ -37,7 +37,7 @@ public class FACT extends MajorRecordNamed {
 
     FACT() {
 	super();
-	subRecords.prototype = FACTproto;
+	subRecords.setPrototype(FACTproto);
     }
 
     @Override

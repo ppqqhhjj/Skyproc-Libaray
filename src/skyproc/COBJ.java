@@ -25,7 +25,7 @@ public class COBJ extends MajorRecord {
 
     COBJ() {
 	super();
-	subRecords.prototype = COBJproto;
+	subRecords.setPrototype(COBJproto);
     }
 
     @Override

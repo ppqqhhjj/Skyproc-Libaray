@@ -30,7 +30,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     };
 
-    SubRecordsDerived subRecords = new SubRecordsDerived(majorProto);
+    SubRecords subRecords = new SubRecordsDerived(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
@@ -42,7 +42,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     void originateFrom(Mod modToOriginateFrom, String edid) {
 	srcMod = modToOriginateFrom;
-	subRecords.major = this;
+	subRecords.setMajor(this);
 	setEdidNoConsistency(edid);
 	ID = modToOriginateFrom.getNextID(getEDID());
 	Consistency.addEntry(getEDID(), ID);
@@ -101,7 +101,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.majorFlags = new LFlags(majorFlags);
 	System.arraycopy(revision, 0, out.revision, 0, revision.length);
 	System.arraycopy(version, 0, out.version, 0, version.length);
-	out.subRecords = new SubRecordsDerived(subRecords);
+	out.subRecords = new SubRecordsCopied(subRecords);
 	out.setEdidNoConsistency(edid);
 	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
 	Consistency.addEntry(out.getEDID(), out.getForm());

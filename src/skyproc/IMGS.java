@@ -32,7 +32,7 @@ public class IMGS extends MajorRecord {
      */
     public IMGS() {
         super();
-        subRecords.prototype = IMGSproto;
+        subRecords.setPrototype(IMGSproto);
     }
 
     @Override

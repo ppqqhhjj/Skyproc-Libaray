@@ -43,7 +43,7 @@ public class ALCH extends MagicItem {
 
     ALCH() {
 	super();
-	subRecords.prototype = ALCHproto;
+	subRecords.setPrototype(ALCHproto);
     }
 
     @Override

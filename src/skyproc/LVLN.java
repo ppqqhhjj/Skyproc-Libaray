@@ -27,7 +27,7 @@ public class LVLN extends LeveledRecord {
      */
     LVLN() {
         super();
-	subRecords.prototype = LVLNproto;
+	subRecords.setPrototype(LVLNproto);
     }
 
     /**
@@ -37,7 +37,7 @@ public class LVLN extends LeveledRecord {
      */
     public LVLN(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);
-	subRecords.prototype = LVLNproto;
+	subRecords.setPrototype(LVLNproto);
     }
 
     @Override

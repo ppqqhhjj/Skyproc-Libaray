@@ -42,7 +42,7 @@ public class INGR extends MagicItem {
 
     INGR() {
 	super();
-	subRecords.prototype = INGRproto;
+	subRecords.setPrototype(INGRproto);
     }
 
     @Override

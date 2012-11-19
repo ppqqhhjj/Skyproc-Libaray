@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -24,11 +23,12 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public SubRecords() {
     }
-
-    public SubRecords(SubRecords rhs) {
-	for (Type t : rhs.map.keySet()) {
-	    map.put(t, (SubRecord) Ln.deepCopy(rhs.map.get(t)));
-	}
+    
+    public void setMajor(MajorRecord in) {
+	
+    }
+    
+    public void setPrototype(SubRecordsPrototype proto) {
     }
 
     public void add(SubRecord r) {

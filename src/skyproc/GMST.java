@@ -29,7 +29,7 @@ public class GMST extends MajorRecord {
 
     GMST() {
 	super();
-	subRecords.prototype = GMSTproto;
+	subRecords.setPrototype(GMSTproto);
     }
 
     /**
@@ -222,7 +222,7 @@ public class GMST extends MajorRecord {
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	SubRecord data = updateDATA();
 	super.importSubRecords(in);
-	subRecords.loadFromPosition(data);
+	((SubRecordsDerived)subRecords).loadFromPosition(data);
 	data.fetchStringPointers(srcMod);
     }
 
@@ -233,7 +233,7 @@ public class GMST extends MajorRecord {
     }
 
     SubRecord updateDATA() {
-	DATA data = (DATA)subRecords.getSilent(Type.DATA);
+	DATA data = (DATA)((SubRecordsDerived)subRecords).getSilent(Type.DATA);
 	data.GMSTtype = getGMSTType();
 	return data;
     }

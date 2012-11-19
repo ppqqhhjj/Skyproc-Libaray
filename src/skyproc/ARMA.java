@@ -61,7 +61,7 @@ public class ARMA extends MajorRecord {
      */
     ARMA() {
 	super();
-	subRecords.prototype = ARMAprototype;
+	subRecords.setPrototype(ARMAprototype);
     }
 
     @Override

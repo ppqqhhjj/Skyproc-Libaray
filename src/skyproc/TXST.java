@@ -47,7 +47,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 
     TXST() {
 	super();
-	subRecords.prototype = TXSTproto;
+	subRecords.setPrototype(TXSTproto);
     }
 
     @Override

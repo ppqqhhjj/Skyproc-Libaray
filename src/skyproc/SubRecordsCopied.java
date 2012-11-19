@@ -17,6 +17,11 @@ public class SubRecordsCopied extends SubRecords {
 
     SubRecords orig;
 
+    SubRecordsCopied(SubRecords rhs) {
+	super();
+	orig = rhs;
+    }
+    
     @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> iter = new ArrayList<>();

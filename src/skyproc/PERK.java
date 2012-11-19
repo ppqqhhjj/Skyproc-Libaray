@@ -33,7 +33,7 @@ public class PERK extends MajorRecordDescription {
 
     PERK() {
 	super();
-	subRecords.prototype = PERKproto;
+	subRecords.setPrototype(PERKproto);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class OTFT extends MajorRecord {
 
     OTFT() {
 	super();
-	subRecords.prototype = OTFTproto;
+	subRecords.setPrototype(OTFTproto);
     }
 
     /**

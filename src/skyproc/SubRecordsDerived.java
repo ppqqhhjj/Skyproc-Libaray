@@ -4,14 +4,12 @@
  */
 package skyproc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
-import lev.LExporter;
 import lev.LFileChannel;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
@@ -31,11 +29,14 @@ class SubRecordsDerived extends SubRecords {
 	this.prototype = proto;
     }
 
-    public SubRecordsDerived(SubRecordsDerived rhs) {
-	super(rhs);
-	prototype = rhs.prototype;
-	major = rhs.major;
-	pos = new HashMap(rhs.pos);
+    @Override
+    public void setMajor(MajorRecord in) {
+	major = in;
+    }
+    
+    @Override
+    public void setPrototype(SubRecordsPrototype proto) {
+	prototype = proto;
     }
 
     @Override

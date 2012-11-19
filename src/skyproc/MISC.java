@@ -42,7 +42,7 @@ public class MISC extends MajorRecordNamed {
 
     MISC() {
 	super();
-	subRecords.prototype = MISCproto;
+	subRecords.setPrototype(MISCproto);
     }
 
     @Override

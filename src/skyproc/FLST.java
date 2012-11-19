@@ -23,7 +23,7 @@ public class FLST extends MajorRecord {
 
     FLST() {
 	super();
-	subRecords.prototype = FLSTproto;
+	subRecords.setPrototype(FLSTproto);
     }
 
     /**

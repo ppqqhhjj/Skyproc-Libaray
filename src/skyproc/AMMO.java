@@ -40,7 +40,7 @@ public class AMMO extends MajorRecordDescription {
 
     AMMO() {
 	super();
-	subRecords.prototype = AMMOprototype;
+	subRecords.setPrototype(AMMOprototype);
     }
 
     @Override

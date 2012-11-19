@@ -21,7 +21,7 @@ public class KYWD extends MajorRecord {
 
     KYWD () {
 	super();
-	subRecords.prototype = KYWDproto;
+	subRecords.setPrototype(KYWDproto);
     }
 
     /**

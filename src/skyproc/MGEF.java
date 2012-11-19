@@ -56,7 +56,7 @@ public class MGEF extends MajorRecordDescription {
 
     MGEF() {
 	super();
-	subRecords.prototype = MGEFproto;
+	subRecords.setPrototype(MGEFproto);
     }
 
     @Override

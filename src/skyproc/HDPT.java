@@ -32,7 +32,7 @@ public class HDPT extends MajorRecordNamed {
 
     HDPT() {
 	super();
-	subRecords.prototype = HDPTproto;
+	subRecords.setPrototype(HDPTproto);
     }
 
     @Override

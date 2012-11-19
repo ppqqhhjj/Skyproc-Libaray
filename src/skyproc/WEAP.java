@@ -58,7 +58,7 @@ public class WEAP extends MajorRecordDescription {
 
     WEAP() {
 	super();
-	subRecords.prototype = WEAPproto;
+	subRecords.setPrototype(WEAPproto);
     }
 
     @Override

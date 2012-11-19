@@ -37,7 +37,7 @@ public class SPEL extends MagicItem {
 
     SPEL() {
 	super();
-	subRecords.prototype = SPELproto;
+	subRecords.setPrototype(SPELproto);
     }
 
     /**

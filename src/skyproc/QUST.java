@@ -25,7 +25,7 @@ public class QUST extends MajorRecordNamed {
 
     QUST () {
 	super();
-	subRecords.prototype = QUSTproto;
+	subRecords.setPrototype(QUSTproto);
     }
 
     QUST (Mod modToOriginateFrom, String edid) {

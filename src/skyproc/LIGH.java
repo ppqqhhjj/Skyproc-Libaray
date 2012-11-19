@@ -42,7 +42,7 @@ public class LIGH extends MajorRecordNamed {
 
     LIGH() {
         super();
-        subRecords.prototype = LIGHproto;
+        subRecords.setPrototype(LIGHproto);
     }
 
     @Override

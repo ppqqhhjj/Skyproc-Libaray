@@ -87,7 +87,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    }
 	    T item = (T) prototype.getNew();
 	    item.srcMod = srcMod;
-	    item.subRecords.major = item;
+	    ((SubRecordsDerived)item.subRecords).major = item;
 	    try {
 
 		item.parseData(item.extractRecordData(in));

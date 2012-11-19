@@ -21,7 +21,7 @@ public class LVLI extends LeveledRecord {
 
     LVLI () {
 	super();
-	subRecords.prototype = LVLIproto;
+	subRecords.setPrototype(LVLIproto);
     }
 
     /**
@@ -31,7 +31,7 @@ public class LVLI extends LeveledRecord {
      */
     public LVLI(Mod modToOriginateFrom, String edid) {
         super(modToOriginateFrom, edid);
-	subRecords.prototype = LVLIproto;
+	subRecords.setPrototype(LVLIproto);
     }
     
     @Override

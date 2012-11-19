@@ -34,7 +34,7 @@ public class ECZN extends MajorRecord {
      */
     ECZN() {
 	super();
-	subRecords.prototype = ECZNproto;
+	subRecords.setPrototype(ECZNproto);
     }
 
     @Override

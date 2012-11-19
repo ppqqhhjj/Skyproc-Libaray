@@ -80,7 +80,7 @@ public class NPC_ extends Actor implements Serializable {
 
     NPC_() {
 	super();
-	subRecords.prototype = NPC_proto;
+	subRecords.setPrototype(NPC_proto);
     }
 
     @Override

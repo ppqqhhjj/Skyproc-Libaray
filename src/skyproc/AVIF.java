@@ -31,7 +31,7 @@ public class AVIF extends MajorRecordDescription {
 
     AVIF() {
 	super();
-	subRecords.prototype = AVIFproto;
+	subRecords.setPrototype(AVIFproto);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class GLOB extends MajorRecord {
 
     GLOB () {
 	super();
-	subRecords.prototype = GLOBproto;
+	subRecords.setPrototype(GLOBproto);
     }
 
     /**

@@ -80,7 +80,7 @@ public class RACE extends MajorRecordDescription {
      */
     RACE() {
 	super();
-	subRecords.prototype = RACEproto;
+	subRecords.setPrototype(RACEproto);
     }
 
     @Override

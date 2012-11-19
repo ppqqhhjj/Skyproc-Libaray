@@ -34,7 +34,7 @@ public class ENCH extends MagicItem {
 
     ENCH() {
 	super();
-	subRecords.prototype = ENCHproto;
+	subRecords.setPrototype(ENCHproto);
     }
 
     @Override
