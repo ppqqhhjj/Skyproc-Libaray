@@ -37,7 +37,13 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
     }
 
-    protected abstract void export(LExporter out, Mod srcMod) throws IOException;
+    protected void export(LExporter out, Mod srcMod) throws IOException {
+	for (SubRecord s : this) {
+	    if (shouldExport(s)) {
+		s.export(out, srcMod);
+	    }
+	}
+    }
 
     public boolean shouldExport(SubRecord s) {
 	return s.isValid();

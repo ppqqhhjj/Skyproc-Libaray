@@ -4,10 +4,9 @@
  */
 package skyproc;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-import lev.LExporter;
 import lev.Ln;
 
 /**
@@ -19,13 +18,12 @@ public class SubRecordsCopied extends SubRecords {
     SubRecords orig;
 
     @Override
-    protected void export(LExporter out, Mod srcMod) throws IOException {
-	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public Iterator<SubRecord> iterator() {
-	throw new UnsupportedOperationException("Not supported yet.");
+	ArrayList<SubRecord> iter = new ArrayList<>();
+	for (SubRecord s : orig) {
+	    iter.add(get(s.getType()));
+	}
+	return iter.iterator();
     }
 
     @Override

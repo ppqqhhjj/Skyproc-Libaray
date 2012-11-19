@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -38,16 +36,6 @@ class SubRecordsDerived extends SubRecords {
 	prototype = rhs.prototype;
 	major = rhs.major;
 	pos = new HashMap(rhs.pos);
-    }
-
-    @Override
-    protected void export(LExporter out, Mod srcMod) throws IOException {
-	for (Type t : prototype.list) {
-	    if (shouldExport(t)) {
-		SubRecord instance = get(t);
-		instance.export(out, srcMod);
-	    }
-	}
     }
 
     @Override

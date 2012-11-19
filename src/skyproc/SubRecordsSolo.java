@@ -46,27 +46,8 @@ class SubRecordsSolo extends SubRecords {
     }
 
     @Override
-    protected void export(LExporter out, Mod srcMod) throws IOException {
-	for (SubRecord s : list) {
-	    if (shouldExport(s)) {
-		s.export(out, srcMod);
-	    }
-	}
-    }
-
-    @Override
     public boolean shouldExport(SubRecord s) {
 	return forceExport.contains(s.getType()) || super.shouldExport(s);
-    }
-
-    @Override
-    public boolean contains(Type t) {
-	return map.containsKey(t);
-    }
-
-    @Override
-    public SubRecord get(Type in) {
-	return map.get(in);
     }
 
     @Override
@@ -89,17 +70,6 @@ class SubRecordsSolo extends SubRecords {
 		break;
 	    }
 	}
-    }
-
-    @Override
-    public int length(Mod srcMod) {
-	int length = 0;
-	for (SubRecord s : list) {
-	    if (shouldExport(s)) {
-		length += s.getTotalLength(srcMod);
-	    }
-	}
-	return length;
     }
 
     @Override
