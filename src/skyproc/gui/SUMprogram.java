@@ -71,6 +71,10 @@ public class SUMprogram implements SUM {
 	for (String s : args) {
 	    argsList.add(s.toUpperCase());
 	}
+	if (argsList.contains("-TESTCOPY")) {
+	    SkyProcTester.runTests(3);
+	    return false;
+	}
 	if (argsList.contains("-TESTIMPORT")) {
 	    SkyProcTester.runTests(2);
 	    return false;

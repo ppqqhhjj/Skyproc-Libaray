@@ -23,11 +23,11 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public SubRecords() {
     }
-    
+
     public void setMajor(MajorRecord in) {
-	
+
     }
-    
+
     public void setPrototype(SubRecordsPrototype proto) {
     }
 
@@ -219,7 +219,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     }
 
     void fetchStringPointers(Mod srcMod) {
-	for (SubRecord s : this) {
+	for (SubRecord s : map.values()) {
 	    s.fetchStringPointers(srcMod);
 	}
     }

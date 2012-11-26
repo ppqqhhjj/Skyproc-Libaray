@@ -378,7 +378,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void standardizeMasters() {
-	SPGlobal.logSync("Standardizing", getName());
+	SPGlobal.logSync("f", getName());
 	for (GRUP g : GRUPs.values()) {
 	    g.standardizeMasters();
 	}
@@ -1255,6 +1255,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubRecordsPrototype TES4proto = new SubRecordsPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
@@ -1266,7 +1267,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		add(new SubData(Type.INCC));
 	    }
 	};
-	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto){
+	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto) {
 
 	    @Override
 	    void standardize(SubRecord record) {

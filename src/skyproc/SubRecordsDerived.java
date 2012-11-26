@@ -33,7 +33,7 @@ class SubRecordsDerived extends SubRecords {
     public void setMajor(MajorRecord in) {
 	major = in;
     }
-    
+
     @Override
     public void setPrototype(SubRecordsPrototype proto) {
 	prototype = proto;
@@ -114,9 +114,6 @@ class SubRecordsDerived extends SubRecords {
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
 		Type standardType = prototype.get(nextType).getType();
-		if (standardType == Type.ANAM) {
-		    int wer = 23;
-		}
 		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();
 		    pos.put(standardType, new RecordLocation(position));
@@ -162,7 +159,9 @@ class SubRecordsDerived extends SubRecords {
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> list = new ArrayList<>();
 	for (Type t : prototype.list) {
-	    list.add(get(t));
+	    if (shouldExport(t)) {
+		list.add(get(t));
+	    }
 	}
 	return list.iterator();
     }

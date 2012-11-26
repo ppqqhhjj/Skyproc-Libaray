@@ -148,9 +148,6 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     ArrayList<FormID> allFormIDs() {
-	if (getEDID().equals("_APB_Wren")) {
- 	    int wer = 23;
-	}
 	ArrayList<FormID> out = new ArrayList<>();
 	out.add(ID);
 	out.addAll(subRecords.allFormIDs());

@@ -462,8 +462,12 @@ public class WEAP extends MajorRecordDescription {
      *
      * @param damage
      */
-    public void setDamage(int damage) {
-	getDATA().damage = Math.abs(damage) % 0xFFFF;  // can't be more than 2 bytes
+    public void setDamage(short damage) {
+	getDATA().damage = Math.abs(damage);  // can't be more than 2 bytes
+    }
+
+    public int getDamage() {
+	return getDATA().damage;
     }
 
     /**

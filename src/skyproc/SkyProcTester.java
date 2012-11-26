@@ -43,6 +43,9 @@ public class SkyProcTester {
 		case 2:
 		    importTest();
 		    break;
+		case 3:
+		    copyTest();
+		    break;
 	    }
 	    gui.finished();
 	} catch (Exception e) {
@@ -103,15 +106,42 @@ public class SkyProcTester {
 	}
 	patch.setAuthor("Leviathan1753");
 	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
-	if (type != GRUP_TYPE.ENCH) {
-	    passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
-	}
+	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
 	if (validF.isFile()) {
 	    passed = Ln.validateCompare(SPGlobal.pathToData + "Test.esp", validF.getPath(), 10) && passed;
 	} else {
 	    System.out.println("Didn't have a source file to validate bytes to.");
 	}
+
+	SPProgressBarPlug.pause(false);
+	SPProgressBarPlug.incrementBar();
+	return passed;
+    }
+    
+    private static boolean copyTest() throws IOException, BadRecord {
+	SPProgressBarPlug.pause(true);
+
+	boolean passed = true;
+	Mod merger = new Mod(new ModListing("tmpMerge.esp"));
+	merger.addAsOverrides(SPGlobal.getDB());
+	for (FormID f : badIDs) {
+	    merger.remove(f);
+	}
+	
+	Mod patch = new Mod(new ModListing("Test.esp"));
+	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
+	patch.setAuthor("Leviathan1753");
+	
+	for (GRUP g : merger) {
+	    for (Object o : g) {
+		MajorRecord m = (MajorRecord) o;
+		m.copyOf(patch);
+	    }
+	}
+	
+	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
+	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 
 	SPProgressBarPlug.pause(false);
 	SPProgressBarPlug.incrementBar();
