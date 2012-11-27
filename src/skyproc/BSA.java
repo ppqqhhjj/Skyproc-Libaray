@@ -384,6 +384,9 @@ public class BSA {
 		File bsaPath = new File(SPGlobal.pathToData + s);
 		if (bsaPath.exists()) {
 		    try {
+			if (SPGlobal.logging()) {
+			    SPGlobal.log(header, "Loading: " + bsaPath);
+			}
 			BSA bsa = new BSA(bsaPath, false);
 			resourceLoadOrder.add(bsa);
 		    } catch (BadParameter | FileNotFoundException ex) {
@@ -400,7 +403,10 @@ public class BSA {
     }
 
     static ArrayList<String> processINIline(String in) {
-	ArrayList<String> out = new ArrayList<String>();
+	if (SPGlobal.logging()) {
+	    SPGlobal.log(header, "Processing line: " + in);
+	}
+	ArrayList<String> out = new ArrayList<>();
 	int index = in.indexOf("=");
 	if (index != -1) {
 	    in = in.substring(index + 1);
