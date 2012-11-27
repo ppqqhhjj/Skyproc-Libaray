@@ -114,6 +114,18 @@ class ConditionOption implements Serializable {
 	in.skip(4);
     }
 
+    public Object getParam1 () {
+	return null;
+    }
+
+    public Object getParam2 () {
+	return null;
+    }
+
+    public Object getParam3 () {
+	return null;
+    }
+
     public static class Cond_FormID extends ConditionOption {
 
 	FormID p1;
@@ -147,6 +159,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_Axis extends ConditionOption {
@@ -173,6 +200,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Axis: " + axis);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return axis;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -211,6 +253,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Casting Source: " + source);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return source;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_CastingSource_FormID extends ConditionOption {
@@ -248,6 +305,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Casting Source: " + source + ", FormID: " + p2);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return source;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_FormID_Int extends ConditionOption {
@@ -284,6 +356,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Int: " + p2);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -324,6 +411,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID 1: " + p1 + ", FormID 2: " + p2);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_Gender extends ConditionOption {
@@ -351,6 +453,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Gender: " + g);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return g;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_CastingSource extends ConditionOption {
@@ -377,6 +494,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Casting Source: " + source);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return source;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -427,6 +559,21 @@ class ConditionOption implements Serializable {
 	public void parseParam3(LChannel in) {
 	    p3 = in.extractInt(4);
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return p3;
+	}
     }
 
     public static class Cond_Int_FormID extends ConditionOption {
@@ -464,6 +611,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int: " + p1 + ", FormID: " + p2);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_WardState extends ConditionOption {
@@ -491,6 +653,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Ward State: " + state);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return state;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_Int extends ConditionOption {
@@ -517,6 +694,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int: " + p1);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -554,6 +746,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return p2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -593,6 +800,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Axis: " + a);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return a;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_FormID_CrimeType extends ConditionOption {
@@ -629,6 +851,21 @@ class ConditionOption implements Serializable {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Crime Type: " + c);
 	    }
+	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return c;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 
@@ -667,6 +904,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  FormID: " + p1 + ", Float: " + f);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return f;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_Int_Int extends ConditionOption {
@@ -696,6 +948,21 @@ class ConditionOption implements Serializable {
 		SPGlobal.logSync(this.getClass().getSimpleName(), "  Int 1: " + i1 + ", Int 2: " + i2);
 	    }
 	}
+
+	@Override
+	public Object getParam1() {
+	    return i1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return i2;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
+	}
     }
 
     public static class Cond_String extends ConditionOption {
@@ -717,6 +984,21 @@ class ConditionOption implements Serializable {
 	@Override
 	public void parseParam1(LChannel in){
 	    p1 = in.extract(4);
+	}
+
+	@Override
+	public Object getParam1() {
+	    return p1;
+	}
+
+	@Override
+	public Object getParam2() {
+	    return null;
+	}
+
+	@Override
+	public Object getParam3() {
+	    return null;
 	}
     }
 }

@@ -48,6 +48,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with no parameters.
+     *
      * @param function
      */
     public Condition(P_NoParams function) {
@@ -57,6 +58,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a single FormID parameter.
+     *
      * @param function
      * @param id
      */
@@ -68,6 +70,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a single Axis parameter.
+     *
      * @param function
      * @param a
      */
@@ -79,6 +82,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with FormID and CastingSource parameters.
+     *
      * @param function
      * @param id
      * @param source
@@ -91,6 +95,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with FormID and Int parameters.
+     *
      * @param function
      * @param id
      * @param i
@@ -103,6 +108,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with two FormID parameters.
+     *
      * @param function
      * @param id1
      * @param id2
@@ -115,6 +121,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a CastingSource and FormID parameter.
+     *
      * @param function
      * @param source
      * @param id
@@ -127,6 +134,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a Gender parameter.
+     *
      * @param function
      * @param g
      */
@@ -138,6 +146,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a CastingSource parameter.
+     *
      * @param function
      * @param source
      */
@@ -149,6 +158,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with Int, FormID, Int parameters.
+     *
      * @param function
      * @param i1
      * @param id
@@ -162,6 +172,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with an Int and FormID parameter.
+     *
      * @param function
      * @param i1
      * @param id
@@ -174,6 +185,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a WardState parameter.
+     *
      * @param function
      * @param state
      */
@@ -185,6 +197,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with an Int parameter.
+     *
      * @param function
      * @param i
      */
@@ -221,6 +234,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a FormID and CrimeType parameter.
+     *
      * @param function
      * @param id
      * @param c
@@ -233,6 +247,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a FormID and Float parameter.
+     *
      * @param function
      * @param id
      * @param f
@@ -245,6 +260,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with two Int parameters.
+     *
      * @param function
      * @param i1
      * @param i2
@@ -257,6 +273,7 @@ public class Condition extends SubShell {
 
     /**
      * Condition ctor for functions with a string parameter.
+     *
      * @param function
      * @param s
      */
@@ -384,7 +401,7 @@ public class Condition extends SubShell {
      *
      * @param t
      */
-    public void setRunOnType (RunOnType t) {
+    public void setRunOnType(RunOnType t) {
 	cond.option.runType = t;
     }
 
@@ -392,7 +409,7 @@ public class Condition extends SubShell {
      *
      * @return
      */
-    public RunOnType getRunOnType () {
+    public RunOnType getRunOnType() {
 	return cond.option.runType;
     }
 
@@ -400,7 +417,7 @@ public class Condition extends SubShell {
      *
      * @param id
      */
-    public void setReference (FormID id) {
+    public void setReference(FormID id) {
 	cond.option.reference = id;
     }
 
@@ -408,7 +425,7 @@ public class Condition extends SubShell {
      *
      * @return
      */
-    public FormID getReference () {
+    public FormID getReference() {
 	return cond.option.reference;
     }
 
@@ -416,7 +433,7 @@ public class Condition extends SubShell {
      *
      * @return
      */
-    public Enum getFunction () {
+    public Enum getFunction() {
 	return cond.option.script;
     }
 
@@ -424,8 +441,32 @@ public class Condition extends SubShell {
      *
      * @return
      */
-    public int getFunctionIndex () {
+    public int getFunctionIndex() {
 	return cond.option.index;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Object getParam1 () {
+	return cond.option.getParam1();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Object getParam2 () {
+	return cond.option.getParam2();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Object getParam3 () {
+	return cond.option.getParam3();
     }
 
     /**
@@ -499,11 +540,97 @@ public class Condition extends SubShell {
     }
 
     /**
-     * Returns the Script Function associated with an function index (based on Bethesda standards)
+     *
+     */
+    public enum Params {
+
+	/**
+	 *
+	 */
+	First,
+	/**
+	 *
+	 */
+	Second,
+	/**
+	 *
+	 */
+	Third;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Enum getScript() {
+	return cond.option.script;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getScriptIndex() {
+	return cond.option.index;
+    }
+
+    /**
+     *
+     * @param p
+     * @return
+     */
+    public ParamType getReturnForParam(Param p) {
+	Enum script = this.getScript();
+	if (script.getClass() == P_Axis.class) {
+	    return P_Axis.getType(p);
+	} else if (script.getClass() == P_FormID_CastingSource.class) {
+	    return P_FormID_CastingSource.getType(p);
+	} else if (script.getClass() == P_FormID_Int.class) {
+	    return P_FormID_Int.getType(p);
+	} else if (script.getClass() == P_FormID_FormID.class) {
+	    return P_FormID_FormID.getType(p);
+	} else if (script.getClass() == P_CastingSource_FormID.class) {
+	    return P_CastingSource_FormID.getType(p);
+	} else if (script.getClass() == P_FormID.class) {
+	    return P_FormID.getType(p);
+	} else if (script.getClass() == P_Gender.class) {
+	    return P_Gender.getType(p);
+	} else if (script.getClass() == P_CastingSource.class) {
+	    return P_CastingSource.getType(p);
+	} else if (script.getClass() == P_Int_FormID_Int.class) {
+	    return P_Int_FormID_Int.getType(p);
+	} else if (script.getClass() == P_Int_FormID.class) {
+	    return P_Int_FormID.getType(p);
+	} else if (script.getClass() == P_WardState.class) {
+	    return P_WardState.getType(p);
+	} else if (script.getClass() == P_Int.class) {
+	    return P_Int.getType(p);
+	} else if (script.getClass() == P_FormID_String.class) {
+	    return P_FormID_String.getType(p);
+	} else if (script.getClass() == P_FormID_Axis.class) {
+	    return P_FormID_Axis.getType(p);
+	} else if (script.getClass() == P_FormID_CrimeType.class) {
+	    return P_FormID_CrimeType.getType(p);
+	} else if (script.getClass() == P_FormID_Float.class) {
+	    return P_FormID_Float.getType(p);
+	} else if (script.getClass() == P_Int_Int.class) {
+	    return P_Int_Int.getType(p);
+	} else if (script.getClass() == P_String.class) {
+	    return P_String.getType(p);
+	} else if (script.getClass() == P_NoParams.class) {
+	    return P_NoParams.getType(p);
+	}
+	return null;
+    }
+
+    /**
+     * Returns the Script Function associated with an function index (based on
+     * Bethesda standards)
+     *
      * @param index
      * @return
      */
-    static public Enum getScript(Integer index) {
+    public static Enum getScript(Integer index) {
 	if (scriptMap.isEmpty()) {
 	    for (P_Axis e : P_Axis.values()) {
 		scriptMap.put(e.index, e);
@@ -636,7 +763,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Axis;
@@ -670,7 +797,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -708,7 +835,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -786,7 +913,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -820,7 +947,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.CastingSource;
@@ -1350,7 +1477,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -1388,7 +1515,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Gender;
@@ -1442,7 +1569,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.CastingSource;
@@ -1476,7 +1603,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Int;
@@ -1538,7 +1665,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Int;
@@ -1572,7 +1699,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.WardState;
@@ -1674,7 +1801,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Int;
@@ -1720,7 +1847,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -1754,7 +1881,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -1788,7 +1915,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -1822,7 +1949,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.FormID;
@@ -1856,7 +1983,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.Int;
@@ -1894,7 +2021,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.String;
@@ -2708,7 +2835,7 @@ public class Condition extends SubShell {
 	 * @param p
 	 * @return
 	 */
-	public ParamType getType(Param p) {
+	public static ParamType getType(Param p) {
 	    switch (p) {
 		case One:
 		    return ParamType.NULL;

@@ -7,7 +7,10 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.*;
+import lev.LChannel;
+import lev.LExporter;
+import lev.LFlags;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
