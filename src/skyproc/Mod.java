@@ -257,6 +257,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
+    public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
+	if (query != null && query.getMaster() != null) {
+	    for (GRUP_TYPE g : grup_types) {
+		GRUP grup = GRUPs.get(g);
+		if (grup.mapRecords.containsKey(query)) {
+		    return (MajorRecord) grup.mapRecords.get(query);
+		}
+	    }
+	}
+	return null;
+    }
+
     /**
      * Makes a copy of the Major Record and loads it into the mod, giving a new
      * Major Record a FormID originating from the mod. This function also
@@ -276,7 +288,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param m Major Record to make a copy of and add to the mod.
      * @return The copied record.
      */
-    public MajorRecord makeCopy(MajorRecord m) {
+    MajorRecord makeCopy(MajorRecord m) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
 	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);

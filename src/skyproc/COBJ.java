@@ -23,6 +23,12 @@ public class COBJ extends MajorRecord {
     };
     private final static Type[] type = {Type.COBJ};
 
+    public COBJ (Mod srcMod, String edid) {
+	this();
+	originateFrom(srcMod, edid);
+	subRecords.getSubData(Type.NAM1).setData(1, 2);
+    }
+    
     COBJ() {
 	super();
 	subRecords.setPrototype(COBJproto);

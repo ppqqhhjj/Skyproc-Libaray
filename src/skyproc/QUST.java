@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import lev.LFlags;
+
 /**
  *
  * @author Justin Swanson
@@ -16,7 +18,7 @@ public class QUST extends MajorRecordNamed {
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
 	    reposition(Type.FULL);
-	    add(new SubData(Type.DNAM));
+	    add(new DNAM());
 	    add(new SubData(Type.NEXT));
 	    add(new SubData(Type.ANAM));
 	}
@@ -36,6 +38,30 @@ public class QUST extends MajorRecordNamed {
 	subRecords.getSubData(Type.ANAM).initialize(4);
     }
 
+    static class DNAM extends SubRecord {
+
+	LFlags flags1 = new LFlags(1);
+	LFlags flags2 = new LFlags(1);
+	int priority = 0;
+	byte unknown = 0;
+	int unknown2 = 0;
+	int questType = 0;
+	
+	DNAM () {
+	    super(Type.DNAM);
+	}
+	
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DNAM();
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 12;
+	}
+	
+    }
 
     @Override
     Type[] getTypes() {

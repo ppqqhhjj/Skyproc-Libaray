@@ -22,10 +22,10 @@ class ConditionBase extends SubRecord {
 
     Condition.Operator operator;
     LFlags flags = new LFlags(1);
-    byte[] fluff;
-    FormID comparisonValueForm;
-    float comparisonValueFloat;
-    byte[] padding;
+    byte[] fluff = new byte[3];
+    FormID comparisonValueForm = new FormID();
+    float comparisonValueFloat = 0;
+    byte[] padding = new byte[2];
     ConditionOption option;
 
     ConditionBase() {

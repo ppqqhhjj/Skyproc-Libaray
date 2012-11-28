@@ -263,12 +263,7 @@ public class SPDatabase implements Iterable<Mod> {
 	    Iterator<Mod> revOrder = database.reverseIter();
 	    while (revOrder.hasNext()) {
 		Mod next = revOrder.next();
-		for (GRUP_TYPE g : grup_types) {
-		    GRUP grup = next.GRUPs.get(g);
-		    if (grup.mapRecords.containsKey(query)) {
-			return (MajorRecord) grup.mapRecords.get(query);
-		    }
-		}
+		return next.getMajor(query, grup_types);
 	    }
 	}
 	return null;
