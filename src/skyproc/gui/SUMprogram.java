@@ -258,6 +258,11 @@ public class SUMprogram implements SUM {
 	}
     }
 
+    @Override
+    public ArrayList<ModListing> requiredMods() {
+	return new ArrayList<>(0);
+    }
+
     // Internal Classes
     class HookMenu extends SPSettingPanel {
 

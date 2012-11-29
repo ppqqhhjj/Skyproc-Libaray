@@ -6,6 +6,7 @@ package skyproc.gui;
 
 import java.awt.Color;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import lev.gui.LSaveFile;
 import skyproc.GRUP_TYPE;
@@ -128,6 +129,7 @@ public interface SUM {
      * @return Whether or not your program requires a patch.
      */
     public boolean needsPatching();
+    public ArrayList<ModListing> requiredMods();
     /**
      * Code to run before GUI displays.  This code runs AFTER your save is loaded.
      * @throws Exception

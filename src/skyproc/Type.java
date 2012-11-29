@@ -939,6 +939,32 @@ public enum Type {
      */
     BOD2,
 
+    FLTR,
+    QSDT,
+    SCHR,
+    SCTX,
+    ALID,
+    ALUA,
+    ALCO,
+    ALEQ,
+    ALFE,
+    ALFL,
+    ALFR,
+    ALRT,
+    ALST,
+    ALLS,
+    ALCA,
+    ALCL,
+    ALEA,
+    ALFA,
+    ALFD,
+    ALED,
+    ALDN,
+    ALFC,
+    ALFI,
+    ALPC,
+    ALSP,
+
     /**
      * NPC_: Marks DNAM position?
      * PERK: Perk flags

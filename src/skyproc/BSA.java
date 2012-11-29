@@ -197,6 +197,7 @@ public class BSA {
     /**
      * Returns a ShrinkArray containing the data of the file desired. <br>
      * Returns loose files if they exist, or the dominant BSA if they do not.
+     *
      * @param f
      * @return
      * @throws IOException
@@ -412,7 +413,10 @@ public class BSA {
 	    in = in.substring(index + 1);
 	    String[] split = in.split(",");
 	    for (String s : split) {
-		out.add(s.trim());
+		s = s.trim();
+		if (!s.isEmpty()) {
+		    out.add(s);
+		}
 	    }
 	}
 	return out;
@@ -612,6 +616,7 @@ public class BSA {
 
     /**
      * Returns BSA object associated with modlisting, or null if there is none.
+     *
      * @param m
      * @return
      */
@@ -640,6 +645,7 @@ public class BSA {
 
     /**
      * Returns BSA object associated with mod, or null if there is none.
+     *
      * @param m
      * @return
      */
