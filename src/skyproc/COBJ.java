@@ -18,7 +18,7 @@ public class COBJ extends MajorRecord {
 	    add(new SubList<>(new Condition()));
 	    add(new SubForm(Type.CNAM));
 	    add(new SubForm(Type.BNAM));
-	    add(new SubData(Type.NAM1));
+	    add(new SubInt(Type.NAM1, 2));
 	    add(new KeywordSet());
 	}
     };
@@ -148,7 +148,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public int getOutputQuantity() {
-	return subRecords.getSubData(Type.NAM1).toInt();
+	return subRecords.getSubInt(Type.NAM1).get();
     }
 
     /**
@@ -156,6 +156,6 @@ public class COBJ extends MajorRecord {
      * @param n
      */
     public void setOutputQuantity(int n) {
-	subRecords.setSubData(Type.NAM1, Ln.toByteArray(n, 2));
+	subRecords.setSubInt(Type.NAM1,n);
     }
 }

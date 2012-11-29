@@ -32,7 +32,7 @@ class SubInt extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubInt(type);
+	return new SubInt(type, length);
     }
 
     @Override
