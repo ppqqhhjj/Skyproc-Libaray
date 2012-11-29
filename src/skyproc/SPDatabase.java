@@ -263,7 +263,10 @@ public class SPDatabase implements Iterable<Mod> {
 	    Iterator<Mod> revOrder = database.reverseIter();
 	    while (revOrder.hasNext()) {
 		Mod next = revOrder.next();
-		return next.getMajor(query, grup_types);
+		MajorRecord ret = next.getMajor(query, grup_types);
+		if (ret != null) {
+		    return ret;
+		}
 	    }
 	}
 	return null;

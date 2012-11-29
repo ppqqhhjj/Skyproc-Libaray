@@ -1,6 +1,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import lev.Ln;
 
 /**
  *
@@ -155,6 +156,6 @@ public class COBJ extends MajorRecord {
      * @param n
      */
     public void setOutputQuantity(int n) {
-	subRecords.setSubData(Type.NAM1, n);
+	subRecords.setSubData(Type.NAM1, Ln.toByteArray(n, 2));
     }
 }

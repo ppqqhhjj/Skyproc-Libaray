@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JOptionPane;
 import lev.LFileChannel;
 import lev.Ln;
@@ -192,6 +194,7 @@ public class NiftyFunc {
 
     /**
      * Replaces all "naughty" characters with "" or "_"
+     *
      * @param origEDID
      * @return
      */
@@ -203,8 +206,9 @@ public class NiftyFunc {
     }
 
     /**
-     * Converts a string version to a unique number<br>
-     * Only supports XX.XX.XX.XX with numbers for X
+     * Converts a string version to a unique number<br> Only supports
+     * XX.XX.XX.XX with numbers for X
+     *
      * @param version
      * @return
      */
@@ -286,6 +290,8 @@ public class NiftyFunc {
 	    int length;
 	    long start = 0;
 	    String EDID = "";
+	    Set<Integer> formids = new HashSet<>();
+	    Set<Integer> dupIds = new HashSet<>();
 	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
 
 		inputStr = input.extractString(0, 4);
@@ -303,7 +309,14 @@ public class NiftyFunc {
 		} else if (inputStr.equals(majorRecordType)) {
 		    start = input.pos() - 4;
 		    length = input.extractInt(0, 4);
-		    input.skip(16);
+		    input.skip(4);
+		    int formID = input.extractInt(4);
+		    if (formids.contains(formID)) {
+			dupIds.add(formID);
+		    } else {
+			formids.add(formID);
+		    }
+		    input.skip(8);
 		    int edidLength = input.extractInt(4, 2);
 		    EDID = input.extractString(0, edidLength - 1);
 		    input.skip(length - 6 - EDID.length());
@@ -312,6 +325,14 @@ public class NiftyFunc {
 		    numErrors++;
 		    correct = false;
 		}
+	    }
+
+	    if (!dupIds.isEmpty()) {
+		SPGlobal.logError(recordLengths, "Duplicate FormIDs: ");
+		for (int id : dupIds) {
+		    SPGlobal.logError(recordLengths, Ln.printHex(id));
+		}
+		correct = false;
 	    }
 
 	    input.close();
