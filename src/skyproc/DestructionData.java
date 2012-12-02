@@ -11,8 +11,7 @@ package skyproc;
 public class DestructionData extends SubShell {
 
     SubData DEST = new SubData(Type.DEST);
-    SubData DSTD = new SubData(Type.DSTD);
-    SubData DSTF = new SubData(Type.DSTF);
+    SubList<DSTD> DSTDs = new SubList<>(new DSTD());
     SubData DMDL = new SubData(Type.DMDL);
     SubData DMDT = new SubData(Type.DMDT);
     SubData DMDS = new SubData(Type.DMDS);
@@ -23,11 +22,29 @@ public class DestructionData extends SubShell {
 	super(types);
 
 	subRecords.add(DEST);
-	subRecords.add(DSTD);
-	subRecords.add(DSTF);
+	subRecords.add(DSTDs);
 	subRecords.add(DMDL);
 	subRecords.add(DMDT);
 	subRecords.add(DMDS);
+    }
+
+    static class DSTD extends SubShell {
+
+	SubData DSTD = new SubData(Type.DSTD);
+	SubData DSTF = new SubData(Type.DSTF);
+
+	static Type[] types = { Type.DSTD, Type.DSTF };
+
+	DSTD() {
+	    super(types);
+	    subRecords.add(DSTD);
+	    subRecords.add(DSTF);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DSTD();
+	}
     }
 
     @Override

@@ -21,7 +21,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.COBJ};
+    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
 //    static GRUP_TYPE[] types = GRUP_TYPE.values();
 
     /**
@@ -118,7 +118,7 @@ public class SkyProcTester {
 	SPProgressBarPlug.incrementBar();
 	return passed;
     }
-    
+
     private static boolean copyTest() throws IOException, BadRecord {
 	SPProgressBarPlug.pause(true);
 
@@ -128,18 +128,18 @@ public class SkyProcTester {
 	for (FormID f : badIDs) {
 	    merger.remove(f);
 	}
-	
+
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.setAuthor("Leviathan1753");
-	
+
 	for (GRUP g : merger) {
 	    for (Object o : g) {
 		MajorRecord m = (MajorRecord) o;
 		m.copyOf(patch);
 	    }
 	}
-	
+
 	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
 	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 

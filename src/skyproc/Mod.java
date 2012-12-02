@@ -38,6 +38,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<MISC> miscObjects = new GRUP<>(this, new MISC());
     GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
     GRUP<COBJ> constructibleObjects = new GRUP<>(this, new COBJ());
+    GRUP<PROJ> projectiles = new GRUP<>(this, new PROJ());
     GRUP<WEAP> weapons = new GRUP<>(this, new WEAP());
     GRUP<AMMO> ammo = new GRUP<>(this, new AMMO());
     GRUP<NPC_> NPCs = new GRUP<>(this, new NPC_());
@@ -123,6 +124,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
 	GRUPs.put(alchemy.getContainedType(), alchemy);
 	GRUPs.put(constructibleObjects.getContainedType(), constructibleObjects);
+	GRUPs.put(projectiles.getContainedType(), projectiles);
 	GRUPs.put(weapons.getContainedType(), weapons);
 	ammo.dateStamp = new byte[]{(byte) 0x0E, (byte) 0x4D, (byte) 0x2B, 0};
 	GRUPs.put(ammo.getContainedType(), ammo);
@@ -1160,10 +1162,19 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing outfit records
+     * @return The GRUP containing head part records
      */
     public GRUP<HDPT> getHeadParts() {
 	return headParts;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing projectile records
+     */
+    public GRUP<PROJ> getProjectiles() {
+	return projectiles;
     }
 
     /**

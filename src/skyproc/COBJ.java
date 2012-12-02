@@ -27,9 +27,9 @@ public class COBJ extends MajorRecord {
     public COBJ (Mod srcMod, String edid) {
 	this();
 	originateFrom(srcMod, edid);
-	subRecords.getSubData(Type.NAM1).setData(1, 2);
+	subRecords.getSubInt(Type.NAM1).set(1);
     }
-    
+
     COBJ() {
 	super();
 	subRecords.setPrototype(COBJproto);
@@ -156,6 +156,6 @@ public class COBJ extends MajorRecord {
      * @param n
      */
     public void setOutputQuantity(int n) {
-	subRecords.setSubInt(Type.NAM1,n);
+	subRecords.setSubInt(Type.NAM1, n);
     }
 }

@@ -964,6 +964,7 @@ public enum Type {
     ALFI,
     ALPC,
     ALSP,
+    PROJ,
 
     /**
      * NPC_: Marks DNAM position?

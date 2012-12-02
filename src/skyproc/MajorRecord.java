@@ -306,6 +306,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public enum MajorFlags {
 
+	Playable(2),
 	/**
 	 *
 	 */

@@ -4,14 +4,12 @@
  */
 package skyproc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
-import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -22,7 +20,7 @@ import skyproc.exceptions.BadRecord;
 class SubRecordsSolo extends SubRecords {
 
     Type[] types;
-    protected ArrayList<SubRecord> list = new ArrayList<>();
+    protected ArrayList<SubRecord> list = new ArrayList<>(2);
     protected Set<Type> forceExport = new HashSet<>(0);
 
     public SubRecordsSolo(Type t) {
