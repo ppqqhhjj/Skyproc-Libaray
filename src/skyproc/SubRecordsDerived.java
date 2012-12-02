@@ -166,6 +166,11 @@ class SubRecordsDerived extends SubRecords {
 	return list.iterator();
     }
 
+    @Override
+    public ArrayList<Type> typeOrder() {
+	return prototype.list;
+    }
+
     class DerivedIterator implements Iterator<SubRecord> {
 
 	Iterator<Type> list;

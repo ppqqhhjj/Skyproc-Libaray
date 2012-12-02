@@ -74,4 +74,13 @@ class SubRecordsSolo extends SubRecords {
     public Iterator<SubRecord> iterator() {
 	return list.iterator();
     }
+
+    @Override
+    public ArrayList<Type> typeOrder() {
+	ArrayList<Type> out = new ArrayList<>(list.size());
+	for (SubRecord s : list) {
+	    out.add(s.getType());
+	}
+	return out;
+    }
 }

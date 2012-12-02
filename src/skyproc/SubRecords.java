@@ -25,7 +25,6 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     }
 
     public void setMajor(MajorRecord in) {
-
     }
 
     public void setPrototype(SubRecordsPrototype proto) {
@@ -44,6 +43,8 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	    }
 	}
     }
+
+    public abstract ArrayList<Type> typeOrder();
 
     public boolean shouldExport(SubRecord s) {
 	return s.isValid();

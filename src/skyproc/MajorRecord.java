@@ -191,7 +191,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
-
+	    
 	    subRecords.export(out, srcMod);
 	}
     }
