@@ -23,7 +23,7 @@ public class SkyProcTester {
     static ArrayList<FormID> badIDs;
 //    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
-    static boolean streaming = false;
+    static boolean streaming = true;
 
     /**
      * @param test

@@ -160,7 +160,7 @@ public class PROJ extends MajorRecordNamed {
 	}
     }
 
-    public enum ProjectileFlags {
+    public enum ProjectileFlag {
 
 	Explosion(1),
 	MuzzleFlash(3),
@@ -172,7 +172,7 @@ public class PROJ extends MajorRecordNamed {
 	DisableCombatAimCorrection(10);
 	int value;
 
-	ProjectileFlags(int val) {
+	ProjectileFlag(int val) {
 	    value = val;
 	}
     }
@@ -216,4 +216,56 @@ public class PROJ extends MajorRecordNamed {
     Record getNew() {
 	return new PROJ();
     }
+
+    //Get/Set
+    /**
+     *
+     * @param filename
+     */
+    public void setModel(String filename) {
+	subRecords.setSubString(Type.MODL, filename);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getModel() {
+	return subRecords.getSubString(Type.MODL).print();
+    }
+
+    /**
+     *
+     * @param filename
+     */
+    public void setEffectModel(String filename) {
+	subRecords.setSubString(Type.NAM1, filename);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getEffectModel() {
+	return subRecords.getSubString(Type.NAM1).print();
+    }
+
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
+    }
+
+    public void set(ProjectileFlag flag, boolean on) {
+	getDATA().flags.set(flag.value, on);
+    }
+
+    public boolean get(ProjectileFlag flag) {
+	return getDATA().flags.get(flag.value);
+    }
+
+    public void setType(ProjectileType t) {
+	LFlags flags = getDATA().projType;
+	flags.clear();
+	flags.set(t.ordinal(), true);
+    }
+
 }

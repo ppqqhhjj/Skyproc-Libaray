@@ -4,7 +4,13 @@
  */
 package skyproc;
 
+import java.io.IOException;
+import java.util.zip.DataFormatException;
+import lev.LChannel;
+import lev.LExporter;
 import lev.LFlags;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  *
@@ -43,24 +49,27 @@ public class QUST extends MajorRecordNamed {
     QUST (Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	subRecords.getSubData(Type.DNAM).setData(0x111,12);
+	DNAM dnam = (DNAM) subRecords.get(Type.DNAM);
+	dnam.flags1.set(0, true);
+	dnam.flags1.set(4, true);
+	dnam.flags2.set(0, true);
 	subRecords.getSubData(Type.NEXT).forceExport(true);
-	subRecords.getSubData(Type.ANAM).initialize(4);
+	subRecords.getSubInt(Type.ANAM).set(0);
     }
 
     static class DNAM extends SubRecord {
 
 	LFlags flags1 = new LFlags(1);
 	LFlags flags2 = new LFlags(1);
-	int priority = 0;
+	byte priority = 0;
 	byte unknown = 0;
 	int unknown2 = 0;
 	int questType = 0;
-	
+
 	DNAM () {
 	    super(Type.DNAM);
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new DNAM();
@@ -70,7 +79,29 @@ public class QUST extends MajorRecordNamed {
 	int getContentLength(Mod srcMod) {
 	    return 12;
 	}
-	
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(flags1.export());
+	    out.write(flags2.export());
+	    out.write(priority, 1);
+	    out.write(unknown, 1);
+	    out.write(unknown2);
+	    out.write(questType);
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in);
+	    flags1.set(in.extract(1));
+	    flags2.set(in.extract(1));
+	    priority = in.extract(1)[0];
+	    unknown = in.extract(1)[0];
+	    unknown2 = in.extractInt(4);
+	    questType = in.extractInt(4);
+	}
+
     }
 
     static class INDX extends SubShellBulkType {
@@ -82,13 +113,13 @@ public class QUST extends MajorRecordNamed {
 	SubList<SubForm> QNAMs = new SubList<>(new SubForm(Type.QNAM));
 	SubList<SubString> SCTXs = new SubList<>(new SubString(Type.SCTX, false));
 	SubList<Condition> CONDs = new SubList<>(new Condition());
-	
-	static Type[] types = { Type.QSDT , Type.CNAM, Type.SCHR, Type.QNAM, 
+
+	static Type[] types = { Type.QSDT , Type.CNAM, Type.SCHR, Type.QNAM,
 	    Type.SCTX, Type.CTDA, Type.CIS1, Type.CIS2 };
-	
+
 	INDX() {
 	    super(Type.INDX, types);
-	    
+
 	    subRecords.add(INDX);
 	    subRecords.add(QSDTs);
 	    subRecords.add(CNAM);
@@ -97,14 +128,14 @@ public class QUST extends MajorRecordNamed {
 	    subRecords.add(SCTXs);
 	    subRecords.add(CONDs);
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new INDX();
 	}
-	
+
     }
-    
+
     static class ALSTALLS extends SubShellBulkType {
 
 	SubList<SubString> ALID = new SubList<>(new SubString(Type.ALID, true));
@@ -137,18 +168,18 @@ public class QUST extends MajorRecordNamed {
 	KeywordSet keywords = new KeywordSet();
 	SubInt NAM0 = new SubInt(Type.NAM0);
 	SubInt QTGL = new SubInt(Type.QTGL);
-	
+
 	static Type[] types = { Type.ALID, Type.ALED, Type.ALUA, Type.ALCO, Type.ALEQ, Type.ALFE,
 	    Type.ALFL, Type.ALFR, Type.ALRT, Type.CTDA, Type.CIS1, Type.CIS2, Type.ALCA,
 	    Type.ALCL, Type.ALEA, Type.ALFA, Type.ALFD, Type.FNAM, Type.ALNA, Type.ALNT, Type.VTCK, Type.ALDN,
 	    Type.ALFC, Type.ALFI, Type.ALPC, Type.ALSP, Type.COCT, Type.CNTO, Type.ECOR,
 	    Type.KNAM, Type.KSIZ, Type.KWDA, Type.NAM0, Type.QTGL
 	};
-	
+
 	ALSTALLS(Type t) {
 	    super(t, types);
 	}
-	
+
 	void init() {
 	    subRecords.add(ALID);
 	    subRecords.add(ALED);
@@ -181,56 +212,56 @@ public class QUST extends MajorRecordNamed {
 	    subRecords.add(NAM0);
 	    subRecords.add(QTGL);
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new ALSTALLS(type);
 	}
-	
+
     }
-    
+
     static class ALST extends ALSTALLS {
-	
+
 	SubInt ALST = new SubInt(Type.ALST);
-	
+
 	ALST () {
 	    super(Type.ALST);
 	    init();
 	}
-	
+
 	@Override
 	void init() {
 	    subRecords.add(ALST);
 	    super.init();
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new ALST();
 	}
     }
-    
+
     static class ALLS extends ALSTALLS {
-	
+
 	SubInt ALLS = new SubInt(Type.ALLS);
-	
+
 	ALLS () {
 	    super(Type.ALLS);
 	    init();
 	}
-	
+
 	@Override
 	void init() {
 	    subRecords.add(ALLS);
 	    super.init();
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new ALLS();
 	}
     }
-    
+
     static class QOBJ extends SubShellBulkType {
 
 	SubInt QOBJ = new SubInt(Type.QOBJ, 2);
@@ -238,26 +269,26 @@ public class QUST extends MajorRecordNamed {
 	SubStringPointer NNAM = new SubStringPointer(Type.NNAM, SubStringPointer.Files.DLSTRINGS);
 	SubList<SubData> QSTAs = new SubList<>(new SubData(Type.QSTA));
 	SubList<Condition> CTDAs = new SubList<>(new Condition());
-	
+
 	static Type[] types = { Type.FNAM, Type.NNAM, Type.QSTA, Type.CTDA, Type.CIS1, Type.CIS2 };
-	
+
 	QOBJ () {
 	    super(Type.QOBJ, types);
-	    
+
 	    subRecords.add(QOBJ);
 	    subRecords.add(FNAM);
 	    subRecords.add(NNAM);
 	    subRecords.add(QSTAs);
 	    subRecords.add(CTDAs);
 	}
-	
+
 	@Override
 	SubRecord getNew(Type type) {
 	    return new QOBJ();
 	}
-	
+
     }
-    
+
     @Override
     Record getNew() {
 	return new QUST();
