@@ -21,8 +21,9 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static boolean streaming = false;
 
     /**
      * @param test
@@ -69,11 +70,13 @@ public class SkyProcTester {
 	SPProgressBarPlug.setMax(types.length);
 
 	for (GRUP_TYPE g : types) {
-	    if (!test(g)) {
-		SPProgressBarPlug.setStatus("FAILED: " + g);
-		break;
+	    if (!GRUP_TYPE.unfinished(g)) {
+		if (!test(g)) {
+		    SPProgressBarPlug.setStatus("FAILED: " + g);
+		    break;
+		}
+		SPProgressBarPlug.setStatus("Validating DONE");
 	    }
-	    SPProgressBarPlug.setStatus("Validating DONE");
 	}
 
 	boolean idFail = false;
@@ -178,6 +181,7 @@ public class SkyProcTester {
     private static void setSkyProcGlobal() {
 	SPGlobal.createGlobalLog();
 	LDebug.timeElapsed = true;
+	SPGlobal.streamMode = streaming;
 	SPGlobal.logging(true);
 	SPGlobal.setGlobalPatch(new Mod(new ModListing("Test", false)));
     }

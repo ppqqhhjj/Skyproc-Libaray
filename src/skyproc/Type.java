@@ -965,6 +965,12 @@ public enum Type {
     ALPC,
     ALSP,
     PROJ,
+    KNAM,
+    QTGL,
+    QSTA,
+    ALNA,
+    ALNT,
+    QOBJ,
 
     /**
      * NPC_: Marks DNAM position?

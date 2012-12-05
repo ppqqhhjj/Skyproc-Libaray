@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,6 +20,7 @@ import skyproc.exceptions.BadRecord;
 public class PROJ extends MajorRecordNamed {
 
     static final SubRecordsPrototype PROJprototype = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubData(Type.OBND));
@@ -27,9 +29,9 @@ public class PROJ extends MajorRecordNamed {
 	    add(new SubData(Type.MODT));
 	    add(new SubData(Type.MODS));
 	    add(new DestructionData());
+	    add(new DATA());
 	    add(new SubString(Type.NAM1, true));
 	    add(new SubData(Type.NAM2));
-	    add(new DATA());
 	    add(new SubData(Type.VNAM)); // SoundVolume
 	}
     };
@@ -43,7 +45,7 @@ public class PROJ extends MajorRecordNamed {
     static class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(2);
-	ProjectileType projType = ProjectileType.Missile;
+	LFlags projType = new LFlags(2);
 	float gravity = 0;
 	float speed = 0;
 	float range = 0;   //1
@@ -54,7 +56,7 @@ public class PROJ extends MajorRecordNamed {
 	float timer = 0;
 	FormID explosionType = new FormID();
 	FormID sound = new FormID();
-	float muzzleFlashDuration =0;  //3
+	float muzzleFlashDuration = 0;  //3
 	float fadeDuration = 0;
 	float impactForce = 0;
 	FormID explosionSound = new FormID();
@@ -72,36 +74,79 @@ public class PROJ extends MajorRecordNamed {
 	}
 
 	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<>();
+	    out.add(light);
+	    out.add(muzzleLight);
+	    out.add(explosionType);
+	    out.add(sound);
+	    out.add(explosionSound);
+	    out.add(disableSound);
+	    out.add(defaultWeaponSource);
+	    out.add(decalData);
+	    return out;
+	}
+
+	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
+	    out.write(flags.export(), 2);
+	    out.write(projType.export(), 2);
+	    out.write(gravity);
+	    out.write(speed);
+	    out.write(range);
+	    light.export(out);
+	    muzzleLight.export(out);
+	    out.write(tracerChance);
+	    out.write(proximity);
+	    out.write(timer);
+	    explosionType.export(out);
+	    sound.export(out);
+	    out.write(muzzleFlashDuration);
+	    out.write(fadeDuration);
+	    out.write(impactForce);
+	    explosionSound.export(out);
+	    disableSound.export(out);
+	    defaultWeaponSource.export(out);
+	    out.write(coneSpread);
+	    out.write(collisionRadius);
+	    out.write(lifetime);
+	    out.write(relaunchInterval);
+	    decalData.export(out);
+	    out.write(collisionLayer);
 	}
 
 	@Override
 	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in);
 	    flags.set(in.extract(2));
-	    projType = ProjectileType.get(in.extractInt(2));
+	    projType.set(in.extract(2));
 	    gravity = in.extractFloat();
 	    speed = in.extractFloat();
-	    range = in.extractFloat();
+	    range = in.extractFloat();   //16
 	    light.setInternal(in.extract(4));
 	    muzzleLight.setInternal(in.extract(4));
 	    tracerChance = in.extractFloat();
-	    proximity = in.extractFloat();
+	    proximity = in.extractFloat();  //32
 	    timer = in.extractFloat();
 	    explosionType.setInternal(in.extract(4));
 	    sound.setInternal(in.extract(4));
-	    muzzleFlashDuration = in.extractFloat();
+	    muzzleFlashDuration = in.extractFloat();  //48
 	    fadeDuration = in.extractFloat();
 	    impactForce = in.extractFloat();
 	    explosionSound.setInternal(in.extract(4));
-	    disableSound.setInternal(in.extract(4));
+	    disableSound.setInternal(in.extract(4));  //64
 	    defaultWeaponSource.setInternal(in.extract(4));
 	    coneSpread = in.extractFloat();
 	    collisionRadius = in.extractFloat();
-	    lifetime = in.extractFloat();
+	    lifetime = in.extractFloat(); // 80
 	    relaunchInterval = in.extractFloat();
-	    decalData.setInternal(in.extract(4));
+	    if (!in.isDone()) {
+		decalData.setInternal(in.extract(4));
+	    }
+	    if (!in.isDone()) {
+		collisionLayer = in.extract(4);  // 92
+	    }
 	}
 
 	@Override
@@ -125,14 +170,15 @@ public class PROJ extends MajorRecordNamed {
 	CritPinsLimbs(8),
 	PassThroughSmallTransparent(9),
 	DisableCombatAimCorrection(10);
-
 	int value;
-	ProjectileFlags (int val) {
+
+	ProjectileFlags(int val) {
 	    value = val;
 	}
     }
 
     public enum ProjectileType {
+
 	Missile, //1
 	Lobber, //2
 	Beam, //4

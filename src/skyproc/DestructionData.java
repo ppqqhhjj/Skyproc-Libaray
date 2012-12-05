@@ -52,4 +52,8 @@ public class DestructionData extends SubShell {
 	return new DestructionData();
     }
 
+    @Override
+    Boolean isValid() {
+	return true;
+    }
 }

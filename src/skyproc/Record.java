@@ -75,7 +75,7 @@ public abstract class Record implements Serializable {
 	    return out;
 	}
 	throw new BadRecord("Record " + str + " ("
-		+ Ln.printHex(Ln.toIntArray(str), true, false));
+		+ Ln.printHex(Ln.toIntArray(str), true, false) + ") Could not be found on the type list.");
     }
 
     static Type getNextType(LChannel in) throws BadRecord {
