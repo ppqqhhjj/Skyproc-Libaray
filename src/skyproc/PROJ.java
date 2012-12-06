@@ -262,10 +262,181 @@ public class PROJ extends MajorRecordNamed {
 	return getDATA().flags.get(flag.value);
     }
 
-    public void setType(ProjectileType t) {
+    public void setProjType(ProjectileType t) {
 	LFlags flags = getDATA().projType;
 	flags.clear();
 	flags.set(t.ordinal(), true);
     }
 
+    public ProjectileType getProjType() {
+	return ProjectileType.values()[getDATA().projType.getFirstTrue()];
+    }
+
+    public void setGravity(float gravity) {
+	getDATA().gravity = gravity;
+    }
+
+    public float getGravity() {
+	return getDATA().gravity;
+    }
+
+    public void setSpeed(float speed) {
+	getDATA().speed = speed;
+    }
+
+    public float getSpeed() {
+	return getDATA().speed;
+    }
+
+    public void setRange(float range) {
+	getDATA().range = range;
+    }
+
+    public float getRange() {
+	return getDATA().range;
+    }
+
+    public void setLight(FormID light) {
+	getDATA().light = light;
+    }
+
+    public FormID getLight() {
+	return getDATA().light;
+    }
+
+    public void setMuzzleLight(FormID light) {
+	getDATA().muzzleLight = light;
+    }
+
+    public FormID getMuzzleLight() {
+	return getDATA().muzzleLight;
+    }
+
+    public void setTracerChance(float chance) {
+	getDATA().tracerChance = chance;
+    }
+
+    public float getTracerChance() {
+	return getDATA().tracerChance;
+    }
+
+    public void setProximity(float proximity) {
+	getDATA().proximity = proximity;
+    }
+
+    public float getProximity() {
+	return getDATA().proximity;
+    }
+
+    public void setTimer(float timer) {
+	getDATA().timer = timer;
+    }
+
+    public float getTimer() {
+	return getDATA().timer;
+    }
+
+    public void setExplosionType(FormID explType) {
+	getDATA().explosionType = explType;
+    }
+
+    public FormID getExplosionType() {
+	return getDATA().explosionType;
+    }
+
+    public void setSound(FormID sound) {
+	getDATA().sound = sound;
+    }
+
+    public FormID getSound() {
+	return getDATA().sound;
+    }
+
+    public void setMuzzleFlashDuration(float duration) {
+	getDATA().muzzleFlashDuration = duration;
+    }
+
+    public float getMuzzleFlashDuration() {
+	return getDATA().muzzleFlashDuration;
+    }
+
+    public void setFadeDuration(float duration) {
+	getDATA().fadeDuration = duration;
+    }
+
+    public float getFadeDuration() {
+	return getDATA().fadeDuration;
+    }
+
+    public void setImpactForce(float force) {
+	getDATA().impactForce = force;
+    }
+
+    public float getImpactForce() {
+	return getDATA().impactForce;
+    }
+
+    public void setExplosionSound(FormID sound) {
+	getDATA().explosionSound = sound;
+    }
+
+    public FormID getExplosionSound() {
+	return getDATA().explosionSound;
+    }
+
+    public void setDisableSound(FormID sound) {
+	getDATA().disableSound = sound;
+    }
+
+    public FormID getDisableSound() {
+	return getDATA().disableSound;
+    }
+
+    public void setDefaultWeaponSource(FormID weaponSource) {
+	getDATA().defaultWeaponSource = weaponSource;
+    }
+
+    public FormID getDefaultWeaponSource() {
+	return getDATA().defaultWeaponSource;
+    }
+
+    public void setConeSpread(float spread) {
+	getDATA().coneSpread = spread;
+    }
+
+    public float getConeSpread() {
+	return getDATA().coneSpread;
+    }
+
+    public void setCollisionRadius(float radius) {
+	getDATA().collisionRadius = radius;
+    }
+
+    public float getCollisionRadius() {
+	return getDATA().collisionRadius;
+    }
+
+    public void setLifetime(float lifetime) {
+	getDATA().lifetime = lifetime;
+    }
+
+    public float getLifetime() {
+	return getDATA().lifetime;
+    }
+
+    public void setRelaunchInterval(float interval) {
+	getDATA().relaunchInterval = interval;
+    }
+
+    public float getRelaunchInterval() {
+	return getDATA().relaunchInterval;
+    }
+
+    public void setDecalData(FormID decal) {
+	getDATA().decalData = decal;
+    }
+
+    public FormID getDecalData() {
+	return getDATA().decalData;
+    }
 }
