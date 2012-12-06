@@ -190,7 +190,7 @@ public class BodyTemplate extends SubRecord {
      * @param on
      */
     public void set(GeneralFlags flag, boolean on) {
-	flags.set(flag.ordinal(), on);
+	flags.set(flag.value, on);
     }
 
     /**
@@ -199,7 +199,7 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public boolean get(GeneralFlags flag) {
-	return flags.get(flag.ordinal());
+	return flags.get(flag.value);
     }
 
     /**
