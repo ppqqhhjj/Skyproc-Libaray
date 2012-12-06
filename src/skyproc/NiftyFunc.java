@@ -136,6 +136,18 @@ public class NiftyFunc {
 	return null;
     }
 
+    public static boolean hasFirstPersonFlagsSelected(MajorRecord recordWithBodyTemplate) {
+	BodyTemplate bt = recordWithBodyTemplate.subRecords.getBodyTemplate();
+	if (bt != null) {
+	    for (BodyTemplate.FirstPersonFlags flag : BodyTemplate.FirstPersonFlags.values()) {
+		if (bt.get(flag)) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
     /**
      * Makes a new quest that starts immediately in-game, that has this script
      * attached to it.

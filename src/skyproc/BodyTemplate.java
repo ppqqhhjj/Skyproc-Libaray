@@ -21,8 +21,8 @@ import skyproc.exceptions.BadRecord;
 public class BodyTemplate extends SubRecord {
 
     LFlags bodyParts = new LFlags(4);
-    LFlags flags = new LFlags(4);;
-    int armorType = 0;
+    LFlags flags = new LFlags(4);
+    ArmorType armorType = ArmorType.CLOTHING;
     boolean old = false;
 
     BodyTemplate() {
@@ -35,7 +35,7 @@ public class BodyTemplate extends SubRecord {
 	out.write(bodyParts.export(), 4);
 	out.write(flags.export(), 4);
 	if (!old) {
-	    out.write(armorType);
+	    out.write(armorType.ordinal());
 	}
     }
 
@@ -45,7 +45,7 @@ public class BodyTemplate extends SubRecord {
 	bodyParts = new LFlags(in.extract(4));
 	flags = new LFlags(in.extract(4));
 	if (!in.isDone()) {
-	    armorType = in.extractInt(4);
+	    armorType = ArmorType.values()[in.extractInt(4)];
 	} else {
 	    old = true;
 	}
@@ -71,7 +71,7 @@ public class BodyTemplate extends SubRecord {
      *
      * @author Justin Swanson
      */
-    public enum BodyPart {
+    public enum FirstPersonFlags {
 
 	/**
 	 *
@@ -84,7 +84,7 @@ public class BodyTemplate extends SubRecord {
 	/**
 	 *
 	 */
-	CHEST,
+	BODY,
 	/**
 	 *
 	 */
@@ -124,31 +124,55 @@ public class BodyTemplate extends SubRecord {
 	/**
 	 *
 	 */
-	FOREHEAD,
+	CIRCLET,
 	/**
 	 *
 	 */
-	EARS_EYES
+	EARS,
+	BodyAddOn3,
+	BodyAddOn4,
+	BodyAddOn5,
+	BodyAddOn6,
+	BodyAddOn7,
+	BodyAddOn8,
+	DecapitateHead,
+	Decapitate,
+	BodyAddOn9,
+	BodyAddOn10,
+	BodyAddOn11,
+	BodyAddOn12,
+	BodyAddOn13,
+	BodyAddOn14,
+	BodyAddOn15,
+	BodyAddOn16,
+	BodyAddOn17,
+	FX01,
     }
 
     /**
      *
      */
-    public enum BodyTemplateFlag {
+    public enum GeneralFlags {
 
+	ModulatesVoice(0),
 	/**
 	 *
 	 */
-	PLAYABLE
+	NonPlayable(4);
+	int value;
+
+	GeneralFlags(int val) {
+	    value = val;
+	}
     }
 
     /**
      *
-     * @param part
+     * @param flag
      * @param on
      */
-    public void set(BodyPart part, Boolean on) {
-	bodyParts.set(part.ordinal(), on);
+    public void set(FirstPersonFlags flag, boolean on) {
+	bodyParts.set(flag.ordinal(), on);
     }
 
     /**
@@ -156,7 +180,7 @@ public class BodyTemplate extends SubRecord {
      * @param part
      * @return
      */
-    public boolean get(BodyPart part) {
+    public boolean get(FirstPersonFlags part) {
 	return bodyParts.get(part.ordinal());
     }
 
@@ -165,8 +189,8 @@ public class BodyTemplate extends SubRecord {
      * @param flag
      * @param on
      */
-    public void set(BodyTemplateFlag flag, Boolean on) {
-	flags.set(4, on);
+    public void set(GeneralFlags flag, boolean on) {
+	flags.set(flag.ordinal(), on);
     }
 
     /**
@@ -174,8 +198,8 @@ public class BodyTemplate extends SubRecord {
      * @param flag
      * @return
      */
-    public boolean get(BodyTemplateFlag flag) {
-	return flags.get(4);
+    public boolean get(GeneralFlags flag) {
+	return flags.get(flag.ordinal());
     }
 
     /**
@@ -183,8 +207,7 @@ public class BodyTemplate extends SubRecord {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	armorType = type.ordinal();
-	old = false;
+	armorType = type;
     }
 
     /**
@@ -192,10 +215,6 @@ public class BodyTemplate extends SubRecord {
      * @return
      */
     public ArmorType getArmorType() {
-	if (!old) {
-	    return ArmorType.values()[armorType];
-	} else {
-	    return ArmorType.CLOTHING;
-	}
+	return armorType;
     }
 }

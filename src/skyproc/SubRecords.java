@@ -146,6 +146,10 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return (ScriptPackage) get(Type.VMAD);
     }
 
+    public BodyTemplate getBodyTemplate() {
+	return (BodyTemplate) get(Type.BODT);
+    }
+
     boolean isValid() {
 	for (SubRecord s : this) {
 	    if (!s.isValid()) {
