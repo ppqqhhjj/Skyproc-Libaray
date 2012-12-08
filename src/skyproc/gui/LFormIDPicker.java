@@ -80,6 +80,11 @@ public class LFormIDPicker extends LUserSetting<FormID[]> {
 	setSize(300, 150);
     }
 
+    /**
+     * 
+     * @param arg0
+     * @param arg1
+     */
     @Override
     final public void setSize(int arg0, int arg1) {
 	super.setSize(arg0, arg1);

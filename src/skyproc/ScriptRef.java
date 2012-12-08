@@ -131,6 +131,11 @@ public class ScriptRef extends Record implements Iterable<String> {
 	return out;
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -146,6 +151,10 @@ public class ScriptRef extends Record implements Iterable<String> {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	int hash = 7;
@@ -153,6 +162,10 @@ public class ScriptRef extends Record implements Iterable<String> {
 	return hash;
     }
 
+    /**
+     * 
+     * @return Iterator over the Property names in the script.
+     */
     @Override
     public Iterator<String> iterator() {
 	return getProperties().iterator();

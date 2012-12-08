@@ -261,6 +261,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
+    /**
+     * 
+     * @param query FormID to look in the mod for.
+     * @param grup_types Types of GRUPs to look in.  (Optional - searches all if left blank)
+     * @return The Major Record with the query FormID, or null if not found.
+     */
     public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
 	if (query != null && query.getMaster() != null) {
 	    for (GRUP_TYPE g : grup_types) {
@@ -388,6 +394,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	SPGlobal.logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public String toString() {
 	return getName();

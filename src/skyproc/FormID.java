@@ -293,8 +293,16 @@ public class FormID implements Comparable, Serializable {
 	return hash;
     }
 
+    /**
+     * 
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Object o) {
+	if (o == null || getClass() != o.getClass()) {
+	    return 0;
+	}
 	FormID rhs = (FormID) o;
 	if (master.equals(rhs.master)) {
 	    return Ln.arrayToInt(form) - Ln.arrayToInt(rhs.form);

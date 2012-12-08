@@ -118,6 +118,11 @@ public class KeywordSet extends SubRecord {
 	return keywords.containedIn(set.keywords);
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -133,6 +138,10 @@ public class KeywordSet extends SubRecord {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	int hash = 5;

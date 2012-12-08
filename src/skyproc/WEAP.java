@@ -344,6 +344,9 @@ public class WEAP extends MajorRecordDescription {
 	 *
 	 */
 	Staff,
+	/**
+	 * 
+	 */
 	Crossbow;
     }
 
@@ -466,6 +469,10 @@ public class WEAP extends MajorRecordDescription {
 	getDATA().damage = Math.abs(damage);
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getDamage() {
 	return getDATA().damage;
     }

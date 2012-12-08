@@ -717,6 +717,11 @@ public class SUMGUI extends JFrame {
 	runThread(null);
     }
 
+    /**
+     * 
+     * @param comp
+     * @return
+     */
     @Override
     public Component add(Component comp) {
 	return backgroundPanel.add(comp);

@@ -50,6 +50,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	modToOriginateFrom.addRecord(this);
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -65,6 +70,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	int hash = 3;
@@ -306,6 +315,9 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public enum MajorFlags {
 
+	/**
+	 * 
+	 */
 	Playable(2),
 	/**
 	 *

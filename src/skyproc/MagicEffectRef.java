@@ -63,6 +63,11 @@ public class MagicEffectRef extends SubShell {
 	return EFID.isValid() && EFIT.isValid();
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -78,6 +83,10 @@ public class MagicEffectRef extends SubShell {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	int hash = 7;

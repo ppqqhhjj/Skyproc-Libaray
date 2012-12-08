@@ -136,6 +136,11 @@ public class NiftyFunc {
 	return null;
     }
 
+    /**
+     * 
+     * @param recordWithBodyTemplate
+     * @return True if it is a major record with a body template, and it has a First Person Flag set to true.
+     */
     public static boolean hasFirstPersonFlagsSelected(MajorRecord recordWithBodyTemplate) {
 	BodyTemplate bt = recordWithBodyTemplate.subRecords.getBodyTemplate();
 	if (bt != null) {

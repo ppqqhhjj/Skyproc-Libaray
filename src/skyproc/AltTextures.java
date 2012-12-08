@@ -203,6 +203,11 @@ public class AltTextures extends SubRecord {
 	    return index;
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 	    if (obj == null) {
@@ -221,6 +226,10 @@ public class AltTextures extends SubRecord {
 	    return true;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 	    int hash = 7;

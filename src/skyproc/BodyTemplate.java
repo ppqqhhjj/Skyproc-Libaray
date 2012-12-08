@@ -129,23 +129,77 @@ public class BodyTemplate extends SubRecord {
 	 *
 	 */
 	EARS,
+	/**
+	 * 
+	 */
 	BodyAddOn3,
+	/**
+	 * 
+	 */
 	BodyAddOn4,
+	/**
+	 * 
+	 */
 	BodyAddOn5,
+	/**
+	 * 
+	 */
 	BodyAddOn6,
+	/**
+	 * 
+	 */
 	BodyAddOn7,
+	/**
+	 * 
+	 */
 	BodyAddOn8,
+	/**
+	 * 
+	 */
 	DecapitateHead,
+	/**
+	 * 
+	 */
 	Decapitate,
+	/**
+	 * 
+	 */
 	BodyAddOn9,
+	/**
+	 * 
+	 */
 	BodyAddOn10,
+	/**
+	 * 
+	 */
 	BodyAddOn11,
+	/**
+	 * 
+	 */
 	BodyAddOn12,
+	/**
+	 * 
+	 */
 	BodyAddOn13,
+	/**
+	 * 
+	 */
 	BodyAddOn14,
+	/**
+	 * 
+	 */
 	BodyAddOn15,
+	/**
+	 * 
+	 */
 	BodyAddOn16,
+	/**
+	 * 
+	 */
 	BodyAddOn17,
+	/**
+	 * 
+	 */
 	FX01,
     }
 
@@ -154,6 +208,9 @@ public class BodyTemplate extends SubRecord {
      */
     public enum GeneralFlags {
 
+	/**
+	 * 
+	 */
 	ModulatesVoice(0),
 	/**
 	 *

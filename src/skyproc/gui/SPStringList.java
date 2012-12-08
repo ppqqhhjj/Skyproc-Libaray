@@ -42,6 +42,11 @@ public class SPStringList extends SPList<String> {
 	scroll.setLocation(scroll.getX(), adder.getBottom() + 10);
     }
 
+    /**
+     * 
+     * @param width
+     * @param height
+     */
     @Override
     public void setSize(int width, int height) {
 	super.setSize(width, height);

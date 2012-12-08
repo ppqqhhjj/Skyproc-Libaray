@@ -67,6 +67,9 @@ public enum GRUP_TYPE {
      * Craftable Object
      */
     COBJ,
+    /**
+     * Projectile
+     */
     PROJ,
     /**
      * Weapons

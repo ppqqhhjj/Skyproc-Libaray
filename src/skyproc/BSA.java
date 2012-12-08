@@ -672,6 +672,11 @@ public class BSA {
 	return hasBSA(m.getInfo());
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -687,6 +692,10 @@ public class BSA {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	int hash = 7;
@@ -702,6 +711,10 @@ public class BSA {
 	long dataOffset;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public String toString() {
 	return filePath;

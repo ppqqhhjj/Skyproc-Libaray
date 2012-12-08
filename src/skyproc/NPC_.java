@@ -191,6 +191,11 @@ public class NPC_ extends Actor implements Serializable {
 	    }
 	}
 
+	/**
+	 * 
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) {
@@ -206,6 +211,10 @@ public class NPC_ extends Actor implements Serializable {
 	    return (this.CSDT.equals(cs.CSDT) && this.soundPairs.equals(cs.soundPairs));
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 	    int hash = 7;
@@ -277,6 +286,11 @@ public class NPC_ extends Actor implements Serializable {
 	    CSDC = csdc;
 	}
 
+	/**
+	 * 
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) {
@@ -292,6 +306,10 @@ public class NPC_ extends Actor implements Serializable {
 	    return (this.CSDC.equals(cs.CSDC) && this.CSDI.equals(cs.CSDI));
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 	    int hash = 7;

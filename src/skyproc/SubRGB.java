@@ -6,9 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
-import lev.LShrinkArray;
 import lev.LChannel;
+import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -16,7 +15,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubRGB extends SubRecord {
+class SubRGB extends SubRecord {
 
     float r;
     float g;

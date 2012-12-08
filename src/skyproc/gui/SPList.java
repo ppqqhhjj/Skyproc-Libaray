@@ -50,6 +50,10 @@ public class SPList<T extends Object> extends LList<T> {
 
     }
 
+    /**
+     * 
+     * @param m
+     */
     @Override
     public void addMouseListener(MouseListener m) {
 	super.addMouseListener(m);
@@ -59,6 +63,11 @@ public class SPList<T extends Object> extends LList<T> {
 	}
     }
 
+    /**
+     * 
+     * @param width
+     * @param height
+     */
     @Override
     public void setSize(int width, int height) {
 	super.setSize(width, height);

@@ -15,7 +15,7 @@ import lev.Ln;
  *
  * @author Justin Swanson
  */
-public class SubRecordsCopied extends SubRecords {
+class SubRecordsCopied extends SubRecords {
 
     SubRecords orig;
 

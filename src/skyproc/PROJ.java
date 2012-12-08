@@ -160,15 +160,42 @@ public class PROJ extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public enum ProjectileFlag {
 
+	/**
+	 * 
+	 */
 	Explosion(1),
+	/**
+	 * 
+	 */
 	MuzzleFlash(3),
+	/**
+	 * 
+	 */
 	CanBeDisabled(5),
+	/**
+	 * 
+	 */
 	CanBePickedUp(6),
+	/**
+	 * 
+	 */
 	SuperSonic(7),
+	/**
+	 * 
+	 */
 	CritPinsLimbs(8),
+	/**
+	 * 
+	 */
 	PassThroughSmallTransparent(9),
+	/**
+	 * 
+	 */
 	DisableCombatAimCorrection(10);
 	int value;
 
@@ -177,14 +204,38 @@ public class PROJ extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public enum ProjectileType {
 
+	/**
+	 * 
+	 */
 	Missile, //1
+	/**
+	 * 
+	 */
 	Lobber, //2
+	/**
+	 * 
+	 */
 	Beam, //4
+	/**
+	 * 
+	 */
 	Flame, //8
+	/**
+	 * 
+	 */
 	Cone, //10
+	/**
+	 * 
+	 */
 	Barrier, //20
+	/**
+	 * 
+	 */
 	Arrow; //40
 
 	static ProjectileType get(int value) {
@@ -254,188 +305,374 @@ public class PROJ extends MajorRecordNamed {
 	return (DATA) subRecords.get(Type.DATA);
     }
 
+    /**
+     * 
+     * @param flag
+     * @param on
+     */
     public void set(ProjectileFlag flag, boolean on) {
 	getDATA().flags.set(flag.value, on);
     }
 
+    /**
+     * 
+     * @param flag
+     * @return
+     */
     public boolean get(ProjectileFlag flag) {
 	return getDATA().flags.get(flag.value);
     }
 
+    /**
+     * 
+     * @param t
+     */
     public void setProjType(ProjectileType t) {
 	LFlags flags = getDATA().projType;
 	flags.clear();
 	flags.set(t.ordinal(), true);
     }
 
+    /**
+     * 
+     * @return
+     */
     public ProjectileType getProjType() {
 	return ProjectileType.values()[getDATA().projType.getFirstTrue()];
     }
 
+    /**
+     * 
+     * @param gravity
+     */
     public void setGravity(float gravity) {
 	getDATA().gravity = gravity;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getGravity() {
 	return getDATA().gravity;
     }
 
+    /**
+     * 
+     * @param speed
+     */
     public void setSpeed(float speed) {
 	getDATA().speed = speed;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getSpeed() {
 	return getDATA().speed;
     }
 
+    /**
+     * 
+     * @param range
+     */
     public void setRange(float range) {
 	getDATA().range = range;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getRange() {
 	return getDATA().range;
     }
 
+    /**
+     * 
+     * @param light
+     */
     public void setLight(FormID light) {
 	getDATA().light = light;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getLight() {
 	return getDATA().light;
     }
 
+    /**
+     * 
+     * @param light
+     */
     public void setMuzzleLight(FormID light) {
 	getDATA().muzzleLight = light;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getMuzzleLight() {
 	return getDATA().muzzleLight;
     }
 
+    /**
+     * 
+     * @param chance
+     */
     public void setTracerChance(float chance) {
 	getDATA().tracerChance = chance;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getTracerChance() {
 	return getDATA().tracerChance;
     }
 
+    /**
+     * 
+     * @param proximity
+     */
     public void setProximity(float proximity) {
 	getDATA().proximity = proximity;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getProximity() {
 	return getDATA().proximity;
     }
 
+    /**
+     * 
+     * @param timer
+     */
     public void setTimer(float timer) {
 	getDATA().timer = timer;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getTimer() {
 	return getDATA().timer;
     }
 
+    /**
+     * 
+     * @param explType
+     */
     public void setExplosionType(FormID explType) {
 	getDATA().explosionType = explType;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getExplosionType() {
 	return getDATA().explosionType;
     }
 
+    /**
+     * 
+     * @param sound
+     */
     public void setSound(FormID sound) {
 	getDATA().sound = sound;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getSound() {
 	return getDATA().sound;
     }
 
+    /**
+     * 
+     * @param duration
+     */
     public void setMuzzleFlashDuration(float duration) {
 	getDATA().muzzleFlashDuration = duration;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getMuzzleFlashDuration() {
 	return getDATA().muzzleFlashDuration;
     }
 
+    /**
+     * 
+     * @param duration
+     */
     public void setFadeDuration(float duration) {
 	getDATA().fadeDuration = duration;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getFadeDuration() {
 	return getDATA().fadeDuration;
     }
 
+    /**
+     * 
+     * @param force
+     */
     public void setImpactForce(float force) {
 	getDATA().impactForce = force;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getImpactForce() {
 	return getDATA().impactForce;
     }
 
+    /**
+     * 
+     * @param sound
+     */
     public void setExplosionSound(FormID sound) {
 	getDATA().explosionSound = sound;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getExplosionSound() {
 	return getDATA().explosionSound;
     }
 
+    /**
+     * 
+     * @param sound
+     */
     public void setDisableSound(FormID sound) {
 	getDATA().disableSound = sound;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getDisableSound() {
 	return getDATA().disableSound;
     }
 
+    /**
+     * 
+     * @param weaponSource
+     */
     public void setDefaultWeaponSource(FormID weaponSource) {
 	getDATA().defaultWeaponSource = weaponSource;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getDefaultWeaponSource() {
 	return getDATA().defaultWeaponSource;
     }
 
+    /**
+     * 
+     * @param spread
+     */
     public void setConeSpread(float spread) {
 	getDATA().coneSpread = spread;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getConeSpread() {
 	return getDATA().coneSpread;
     }
 
+    /**
+     * 
+     * @param radius
+     */
     public void setCollisionRadius(float radius) {
 	getDATA().collisionRadius = radius;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getCollisionRadius() {
 	return getDATA().collisionRadius;
     }
 
+    /**
+     * 
+     * @param lifetime
+     */
     public void setLifetime(float lifetime) {
 	getDATA().lifetime = lifetime;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getLifetime() {
 	return getDATA().lifetime;
     }
 
+    /**
+     * 
+     * @param interval
+     */
     public void setRelaunchInterval(float interval) {
 	getDATA().relaunchInterval = interval;
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getRelaunchInterval() {
 	return getDATA().relaunchInterval;
     }
 
+    /**
+     * 
+     * @param decal
+     */
     public void setDecalData(FormID decal) {
 	getDATA().decalData = decal;
     }
 
+    /**
+     * 
+     * @return
+     */
     public FormID getDecalData() {
 	return getDATA().decalData;
     }
