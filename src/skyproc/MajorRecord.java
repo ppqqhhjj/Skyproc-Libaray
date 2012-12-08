@@ -51,7 +51,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param obj
      * @return
      */
@@ -71,7 +71,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -315,10 +315,6 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public enum MajorFlags {
 
-	/**
-	 * 
-	 */
-	Playable(2),
 	/**
 	 *
 	 */

@@ -108,11 +108,12 @@ public class AMMO extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	IgnoresWeaponResistance,
+	IgnoresWeaponResistance, // 0
+	NonPlayable, //1
 	/**
 	 *
 	 */
-	VanishesWhenNotInFlight;
+	VanishesWhenNotInFlight; //2
     }
 
     //Get/Set
@@ -198,7 +199,7 @@ public class AMMO extends MajorRecordDescription {
      * @param on
      */
     public void set(AMMOFlag flag, boolean on) {
-	getData().flags.set(flag.ordinal() + 1, on);
+	getData().flags.set(flag.ordinal(), on);
     }
 
     /**
@@ -207,7 +208,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public boolean get(AMMOFlag flag) {
-	return getData().flags.get(flag.ordinal() + 1);
+	return getData().flags.get(flag.ordinal());
     }
 
     /**
