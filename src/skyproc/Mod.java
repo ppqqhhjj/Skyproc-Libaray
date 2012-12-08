@@ -262,9 +262,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * 
+     *
      * @param query FormID to look in the mod for.
-     * @param grup_types Types of GRUPs to look in.  (Optional - searches all if left blank)
+     * @param grup_types Types of GRUPs to look in. (Optional - searches all if
+     * left blank)
      * @return The Major Record with the query FormID, or null if not found.
      */
     public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
@@ -395,7 +396,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -723,15 +724,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	// Add all mods that contained any of the FormIDs used.
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
-	for (ModListing m : SPGlobal.getDB().getImportedModListings()) {
-	    Mod mod = SPGlobal.getDB().getMod(m);
-	    if (mod != null) { // If mod was bad and skipped
-		for (FormID ID : allForms) {
-		    if (mod.contains(ID)) {
-			this.addMaster(mod.modInfo);
-			break;
-		    }
-		}
+	for (FormID ID : allForms) {
+	    if (!ID.isNull()) {
+		addMaster(ID.getMaster());
 	    }
 	}
 	for (FormID id : allForms) {

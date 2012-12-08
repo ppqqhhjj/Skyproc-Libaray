@@ -26,6 +26,7 @@ public class QUST extends MajorRecordNamed {
 	    reposition(Type.FULL);
 	    add(new DNAM());
 	    add(new SubString(Type.ENAM, false));
+	    add(new SubForm(Type.QTGL));
 	    add(new SubString(Type.FLTR, true));
 	    add(new SubList<>(new Condition()));
 	    add(new SubList<>(new SubString(Type.CIS2, true)));
