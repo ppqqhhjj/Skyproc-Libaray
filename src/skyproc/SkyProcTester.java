@@ -89,7 +89,6 @@ public class SkyProcTester {
 	}
 	if (idFail) {
 	    System.out.println("Some FormIDs were unstandardized!!");
-	    return;
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}

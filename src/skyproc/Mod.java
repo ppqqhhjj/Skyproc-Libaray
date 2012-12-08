@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import javax.swing.JOptionPane;
 import lev.*;
+import skyproc.SPGlobal.Language;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -53,6 +54,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
     GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
     LFileChannel input;
+    Language language = Language.English;
     Map<ModListing, Integer> masterMap = new HashMap<>();
     Map<SubStringPointer.Files, Map<Integer, Integer>> stringLocations = new EnumMap<>(SubStringPointer.Files.class);
     Map<SubStringPointer.Files, LChannel> stringStreams = new EnumMap<>(SubStringPointer.Files.class);
@@ -431,7 +433,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void addStream(Map<SubStringPointer.Files, LChannel> streams, SubStringPointer.Files file) {
 	try {
-	    String stringPath = SPImporter.pathToStringFile(this, file);
+	    String stringPath = SPImporter.getStringFilePath(this, language, file);
 	    File stringFile = new File(SPGlobal.pathToData + stringPath);
 	    if (stringFile.isFile()) {
 		streams.put(file, new LFileChannel(stringFile));
