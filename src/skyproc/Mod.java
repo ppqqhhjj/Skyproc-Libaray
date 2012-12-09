@@ -1297,12 +1297,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		add(new SubData(Type.INCC));
 	    }
 	};
-	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto) {
-
-	    @Override
-	    void standardize(SubRecord record) {
-	    }
-	};
+	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
 	private LFlags flags = new LFlags(4);
 	private int fluff1 = 0;
 	private int fluff2 = 0;

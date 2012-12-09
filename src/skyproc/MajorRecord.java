@@ -3,14 +3,12 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
 import lev.Ln;
-import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -30,7 +28,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     };
 
-    SubRecords subRecords = new SubRecordsDerived(majorProto);
+    SubRecords subRecords = new SubRecordsStream(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];

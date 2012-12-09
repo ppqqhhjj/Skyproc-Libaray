@@ -21,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.QUST};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.AMMO};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = true;
 
     /**
@@ -103,6 +103,16 @@ public class SkyProcTester {
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
+	// Test to see if stream has been prematurely imported
+	if (SPGlobal.logging() && type != GRUP_TYPE.NPC_) {
+	    GRUP g = patch.GRUPs.get(type);
+	    MajorRecord m = (MajorRecord) g.listRecords.get(0);
+	    if (m.subRecords.map.size() > 2) {
+		System.out.println("Premature streaming occured: " + m);
+		return false;
+	    }
+	}
+	// Remove known bad ids
 	for (FormID f : badIDs) {
 	    patch.remove(f);
 	}

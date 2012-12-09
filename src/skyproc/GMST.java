@@ -222,7 +222,7 @@ public class GMST extends MajorRecord {
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	SubRecord data = updateDATA();
 	super.importSubRecords(in);
-	((SubRecordsDerived)subRecords).loadFromPosition(data);
+	((SubRecordsStream)subRecords).loadFromPosition(data);
 	data.fetchStringPointers(srcMod);
     }
 
@@ -233,7 +233,7 @@ public class GMST extends MajorRecord {
     }
 
     SubRecord updateDATA() {
-	DATA data = (DATA)((SubRecordsDerived)subRecords).getSilent(Type.DATA);
+	DATA data = (DATA)((SubRecordsStream)subRecords).getSilent(Type.DATA);
 	data.GMSTtype = getGMSTType();
 	return data;
     }
