@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -20,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class MGEF extends MajorRecordDescription {
 
-    static final SubRecordsPrototype MGEFproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype MGEFproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -40,7 +41,7 @@ public class MGEF extends MajorRecordDescription {
 	    add(new SubData(Type.OBND));
 	}
     };
-    private static Type[] types = {Type.MGEF};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MGEF}));
 
     /**
      *
@@ -60,8 +61,8 @@ public class MGEF extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MGEF extends MajorRecordDescription {
 	return new MGEF();
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	LFlags flags = new LFlags(4);
 	float baseCost = 0;
@@ -280,7 +281,7 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
-    static class SNDD extends SubRecord {
+    static class SNDD extends SubRecordTyped {
 
 	ArrayList<Sound> sounds = new ArrayList<>();
 

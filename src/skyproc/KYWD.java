@@ -4,20 +4,23 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Keyword Records
  * @author Justin Swanson
  */
 public class KYWD extends MajorRecord {
 
-    static final SubRecordsPrototype KYWDproto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype KYWDproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
 	    add(new SubData(Type.CNAM));
 	}
     };
-    private final static Type[] type = {Type.KYWD};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.KYWD}));
 
     KYWD () {
 	super();
@@ -46,7 +49,7 @@ public class KYWD extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 

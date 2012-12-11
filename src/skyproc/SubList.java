@@ -26,42 +26,26 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     ArrayList<T> collection = new ArrayList<>();
     T prototype;
-    Type counterType = Type.NULL;
-    boolean allowDups = true;
-    private int counterLength = 4;
 
     SubList(T prototype_) {
-        super(prototype_.type);
-        prototype = prototype_;
-    }
-
-    SubList(Type counter, int counterLength, T prototype_) {
-        this(prototype_);
-        counterType = counter;
-        this.counterLength = counterLength;
-        type = new Type[prototype.type.length + 1];
-        System.arraycopy(prototype.type, 0, type, 0, prototype.type.length);
-        type[prototype_.type.length] = counterType;
+	super();
+	prototype = prototype_;
     }
 
     SubList(SubList rhs) {
-        super(rhs.prototype.type);
+	super();
 	prototype = (T) rhs.prototype;
-	counterType = rhs.counterType;
-	allowDups = rhs.allowDups;
-	counterLength = rhs.counterLength;
 	collection.addAll(rhs.collection);
-	type = rhs.type;
     }
 
     @Override
     int getHeaderLength() {
-        return 0;
+	return 0;
     }
 
     @Override
     Boolean isValid() {
-        return !collection.isEmpty();
+	return !collection.isEmpty();
     }
 
     /**
@@ -70,7 +54,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return True if an equal() record exists within the SubRecordList.
      */
     public boolean contains(T s) {
-        return collection.contains(s);
+	return collection.contains(s);
     }
 
     /**
@@ -79,7 +63,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return The ith item.
      */
     public T get(int i) {
-        return collection.get(i);
+	return collection.get(i);
     }
 
     /**
@@ -93,37 +77,25 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * already existed in the list, and duplicates were not allowed.
      */
     public boolean add(T item) {
-        if (allow(item)) {
-            collection.add(item);
-            return true;
-        } else {
-            return false;
-        }
+	if (allow(item)) {
+	    collection.add(item);
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     boolean allow(T item) {
-	return allowDups || !collection.contains(item);
+	return true;
     }
 
     public boolean addAtIndex(T item, int i) {
 	if (allow(item)) {
-            collection.add(i, item);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    void allowDuplicates(boolean on) {
-        allowDups = on;
-    }
-
-    /**
-     *
-     * @return True if the SubRecordList allows duplicate records.
-     */
-    public boolean allowsDuplicates() {
-        return allowDups;
+	    collection.add(i, item);
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     /**
@@ -132,12 +104,12 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return True if an item was removed.
      */
     public boolean remove(T item) {
-        if (collection.contains(item)) {
-            collection.remove(item);
-            return true;
-        } else {
-            return false;
-        }
+	if (collection.contains(item)) {
+	    collection.remove(item);
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     /**
@@ -146,7 +118,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @param i Index of the item to remove.
      */
     public void remove(int i) {
-        collection.remove(i);
+	collection.remove(i);
     }
 
     /**
@@ -154,11 +126,11 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return The number of items currently in the list.
      */
     public int size() {
-        return collection.size();
+	return collection.size();
     }
 
     public void clear() {
-        collection.clear();
+	collection.clear();
     }
 
     /**
@@ -166,7 +138,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return True if list is empty, and size == 0.
      */
     public boolean isEmpty() {
-        return collection.isEmpty();
+	return collection.isEmpty();
     }
 
     /**
@@ -176,7 +148,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @param in ArrayList of records to replace the current ones.
      */
     public void setRecordsTo(ArrayList<T> in) {
-        collection = in;
+	collection = in;
     }
 
     /**
@@ -185,98 +157,92 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @param in ArrayList of records to add in.
      */
     public void addRecordsTo(ArrayList<T> in) {
-        for (T t : collection) {
-            collection.add(t);
-        }
+	for (T t : collection) {
+	    collection.add(t);
+	}
     }
 
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-        Type t = getNextType(in);
-        if (counterType != t) {
-            if (t.equals(type[0])) {
-                T newRecord = (T) prototype.getNew(type[0]);
-                newRecord.parseData(in);
-                add(newRecord);
-            } else {
-                get(size() - 1).parseData(in);
-            }
-        }
+	parseData(in, getNextType(in));
+    }
+
+    void parseData(LChannel in, Type nextType) throws BadRecord, DataFormatException, BadParameter {
+	if (nextType.equals(getType())) {
+	    T newRecord = (T) prototype.getNew(getType());
+	    newRecord.parseData(in);
+	    add(newRecord);
+	} else {
+	    get(size() - 1).parseData(in);
+	}
     }
 
     @Override
     SubRecord getNew(Type type) {
-        return new SubList(this);
+	return new SubList(this);
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        int length = 0;
-        if (counterType != Type.NULL) {
-            length += counterLength + 6;
-        }
-        for (SubRecord r : collection) {
-            length += r.getTotalLength(srcMod);
-        }
-        return length;
+	int length = 0;
+	for (SubRecord r : collection) {
+	    length += r.getTotalLength(srcMod);
+	}
+	return length;
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-        if (isValid()) {
-            if (counterType != Type.NULL) {
-                SubData counter = new SubData(counterType, Ln.toByteArray(collection.size(), counterLength));
-                counter.export(out, srcMod);
-            }
-            Iterator<T> iter = iterator();
-            while (iter.hasNext()) {
-                iter.next().export(out, srcMod);
-            }
-        }
+	if (isValid()) {
+	    Iterator<T> iter = iterator();
+	    while (iter.hasNext()) {
+		iter.next().export(out, srcMod);
+	    }
+	}
     }
 
     static ArrayList<FormID> subFormToPublic(SubList<SubForm> in) {
-        ArrayList<FormID> out = new ArrayList<FormID>(in.size());
-        for (SubForm s : in) {
-            out.add(s.ID);
-        }
-        return out;
+	ArrayList<FormID> out = new ArrayList<>(in.size());
+	for (SubForm s : in) {
+	    out.add(s.ID);
+	}
+	return out;
     }
 
     static ArrayList<SubFormInt> subFormIntToPublic(SubList<SubFormInt> in) {
-        ArrayList<SubFormInt> out = new ArrayList<>(in.size());
-        for (SubFormInt s : in) {
-            out.add(s);
-        }
-        return out;
+	ArrayList<SubFormInt> out = new ArrayList<>(in.size());
+	for (SubFormInt s : in) {
+	    out.add(s);
+	}
+	return out;
     }
 
     static ArrayList<Integer> subIntToPublic(SubList<SubInt> in) {
-        ArrayList<Integer> out = new ArrayList<Integer>(in.size());
-        for (SubInt s : in) {
-            out.add(s.get());
-        }
-        return out;
+	ArrayList<Integer> out = new ArrayList<Integer>(in.size());
+	for (SubInt s : in) {
+	    out.add(s.get());
+	}
+	return out;
     }
 
     static ArrayList<String> subStringToPublic(SubList<SubString> in) {
-        ArrayList<String> out = new ArrayList<String>(in.size());
-        for (SubString s : in) {
-            out.add(s.string);
-        }
-        return out;
+	ArrayList<String> out = new ArrayList<String>(in.size());
+	for (SubString s : in) {
+	    out.add(s.string);
+	}
+	return out;
     }
 
     static ArrayList<byte[]> subDataToPublic(SubList<SubData> in) {
-        ArrayList<byte[]> out = new ArrayList<byte[]>(in.size());
-        for (SubData s : in) {
-            out.add(s.data);
-        }
-        return out;
+	ArrayList<byte[]> out = new ArrayList<byte[]>(in.size());
+	for (SubData s : in) {
+	    out.add(s.data);
+	}
+	return out;
     }
 
     ArrayList<T> toPublic() {
-        return collection;
+	return collection;
     }
 
     /**
@@ -285,30 +251,30 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return collection.listIterator();
+	return collection.listIterator();
     }
 
     @Override
-    ArrayList<FormID> allFormIDs () {
+    ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<FormID>();
 	for (T item : collection) {
-            out.addAll(item.allFormIDs());
-        }
-        return out;
+	    out.addAll(item.allFormIDs());
+	}
+	return out;
     }
 
     @Override
     void fetchStringPointers(Mod srcMod) {
-        for (SubRecord s : collection) {
-            s.fetchStringPointers(srcMod);
-        }
+	for (SubRecord s : collection) {
+	    s.fetchStringPointers(srcMod);
+	}
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.collection);
-        return hash;
+	int hash = 7;
+	hash = 89 * hash + Objects.hashCode(this.collection);
+	return hash;
     }
 
     @Override
@@ -318,16 +284,21 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null) {
-            return false;
-        }
-        if (!(o instanceof SubList)) {
-            return false;
-        }
-        SubList s = (SubList) o; // Convert the object to a Person
-        return (this.collection.equals(s.collection));
+	if (this == o) {
+	    return true;
+	}
+	if (o == null) {
+	    return false;
+	}
+	if (!(o instanceof SubList)) {
+	    return false;
+	}
+	SubList s = (SubList) o; // Convert the object to a Person
+	return (this.collection.equals(s.collection));
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return prototype.getTypes();
     }
 }

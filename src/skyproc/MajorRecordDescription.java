@@ -12,7 +12,7 @@ import skyproc.SubStringPointer.Files;
  */
 public abstract class MajorRecordDescription extends MajorRecordNamed {
 
-    static final SubRecordsPrototype descProto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+    static final SubPrototype descProto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {

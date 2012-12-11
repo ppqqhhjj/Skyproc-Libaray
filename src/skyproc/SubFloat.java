@@ -15,7 +15,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubFloat extends SubRecord {
+class SubFloat extends SubRecordTyped {
 
     float data;
 

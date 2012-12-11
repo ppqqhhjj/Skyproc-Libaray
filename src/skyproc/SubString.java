@@ -17,18 +17,13 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubString extends SubRecord {
+class SubString extends SubRecordTyped {
 
     String string;
     boolean nullterm;
 
     SubString(Type type_, boolean nullTerminated) {
         super(type_);
-        nullterm = nullTerminated;
-    }
-
-    SubString(Type[] types, boolean nullTerminated) {
-        super(types);
         nullterm = nullTerminated;
     }
 
@@ -46,7 +41,7 @@ class SubString extends SubRecord {
             string = Ln.arrayToString(in.extractInts(in.available()));
         }
         if (logging()) {
-            logSync(type.toString(), "Setting " + toString() + " to " + print());
+            logSync(getType().toString(), "Setting " + toString() + " to " + print());
         }
     }
 

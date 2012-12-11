@@ -21,36 +21,32 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class MagicEffectRef extends SubShell {
+public class MagicEffectRef extends SubShellBulkType {
 
-    private static Type[] types = {Type.EFID, Type.EFIT, Type.CTDA, Type.CIS1, Type.CIS2};
-    SubForm EFID = new SubForm(Type.EFID);
-    EFIT EFIT = new EFIT();
-    SubList<Condition> CTDAs = new SubList<>(new Condition());
+    static SubPrototype magicEffProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubForm(Type.EFID));
+	    add(new EFIT());
+	    add(new SubList<>(new Condition()));
+	}
+    };
 
     /**
      * @param magicEffectRef A formID to a MGEF record.
      */
     public MagicEffectRef(FormID magicEffectRef) {
-	super(types);
-	init();
-	EFID.setForm(magicEffectRef);
+	this();
+	subRecords.setSubForm(Type.EFID, magicEffectRef);
     }
 
     MagicEffectRef() {
-	super(types);
-	init();
+	super(magicEffProto, false);
     }
 
     MagicEffectRef(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord, IOException {
 	this();
 	parseData(in);
-    }
-
-    final void init() {
-	subRecords.add(EFID);
-	subRecords.add(EFIT);
-	subRecords.add(CTDAs);
     }
 
     @Override
@@ -60,11 +56,11 @@ public class MagicEffectRef extends SubShell {
 
     @Override
     Boolean isValid() {
-	return EFID.isValid() && EFIT.isValid();
+	return subRecords.isAnyValid();
     }
 
     /**
-     * 
+     *
      * @param obj
      * @return
      */
@@ -77,24 +73,24 @@ public class MagicEffectRef extends SubShell {
 	    return false;
 	}
 	final MagicEffectRef other = (MagicEffectRef) obj;
-	if (this.EFID != other.EFID && (this.EFID == null || !this.EFID.equals(other.EFID))) {
+	if (!this.getMagicRef().equals(other.getMagicRef())) {
 	    return false;
 	}
 	return true;
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
     public int hashCode() {
 	int hash = 7;
-	hash = 71 * hash + (this.EFID != null ? this.EFID.hashCode() : 0);
+	hash = 71 * hash + getMagicRef().hashCode();
 	return hash;
     }
 
-    static class EFIT extends SubRecord {
+    static class EFIT extends SubRecordTyped {
 
 	float magnitude = 0;
 	int AOE = 0;
@@ -142,7 +138,7 @@ public class MagicEffectRef extends SubShell {
      * @param magicRef
      */
     public void setMagicRef(FormID magicRef) {
-	EFID.setForm(magicRef);
+	subRecords.setSubForm(Type.EFID, magicRef);
     }
 
     /**
@@ -150,7 +146,11 @@ public class MagicEffectRef extends SubShell {
      * @return
      */
     public FormID getMagicRef() {
-	return EFID.getForm();
+	return subRecords.getSubForm(Type.EFID).getForm();
+    }
+
+    EFIT getEFIT() {
+	return (EFIT)subRecords.get(Type.EFIT);
     }
 
     /**
@@ -158,7 +158,7 @@ public class MagicEffectRef extends SubShell {
      * @param magnitude
      */
     public void setMagnitude(float magnitude) {
-	EFIT.magnitude = magnitude;
+	getEFIT().magnitude = magnitude;
     }
 
     /**
@@ -166,7 +166,7 @@ public class MagicEffectRef extends SubShell {
      * @return
      */
     public float getMagnitude() {
-	return EFIT.magnitude;
+	return getEFIT().magnitude;
     }
 
     /**
@@ -174,7 +174,7 @@ public class MagicEffectRef extends SubShell {
      * @param aoe
      */
     public void setAreaOfEffect(int aoe) {
-	EFIT.AOE = aoe;
+	getEFIT().AOE = aoe;
     }
 
     /**
@@ -182,7 +182,7 @@ public class MagicEffectRef extends SubShell {
      * @return
      */
     public int getAreaOfEffect() {
-	return EFIT.AOE;
+	return getEFIT().AOE;
     }
 
     /**
@@ -190,7 +190,7 @@ public class MagicEffectRef extends SubShell {
      * @param duration
      */
     public void setDuration(int duration) {
-	EFIT.duration = duration;
+	getEFIT().duration = duration;
     }
 
     /**
@@ -198,6 +198,6 @@ public class MagicEffectRef extends SubShell {
      * @return
      */
     public int getDuration() {
-	return EFIT.duration;
+	return getEFIT().duration;
     }
 }

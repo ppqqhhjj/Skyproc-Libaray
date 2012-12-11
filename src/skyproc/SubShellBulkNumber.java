@@ -14,8 +14,8 @@ public abstract class SubShellBulkNumber extends SubShell {
 
     int numForced;
 
-    SubShellBulkNumber(Type type_, int numForced) {
-	super(type_);
+    SubShellBulkNumber(SubPrototype proto, int numForced) {
+	super(proto);
 	this.numForced = numForced;
     }
 

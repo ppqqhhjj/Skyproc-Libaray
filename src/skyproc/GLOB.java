@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.Ln;
@@ -16,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class GLOB extends MajorRecord {
 
-    static final SubRecordsPrototype GLOBproto = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype GLOBproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
@@ -26,7 +28,7 @@ public class GLOB extends MajorRecord {
 	    add(new SubFloat(Type.FLTV));
 	}
     };
-    static Type[] types = { Type.GLOB };
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GLOB}));
 
     GLOB () {
 	super();
@@ -65,8 +67,8 @@ public class GLOB extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     /**

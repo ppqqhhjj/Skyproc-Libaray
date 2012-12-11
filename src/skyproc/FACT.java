@@ -4,14 +4,16 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  *
  * @author Justin Swanson
  */
 public class FACT extends MajorRecordNamed {
 
-    static final SubRecordsPrototype FACTproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
-
+    static final SubPrototype FACTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
 	    add(new SubList<>(new SubData(Type.XNAM)));
@@ -33,7 +35,7 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubString(Type.CIS2, true));
 	}
     };
-    static Type[] types = {Type.FACT};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FACT}));
 
     FACT() {
 	super();
@@ -41,8 +43,8 @@ public class FACT extends MajorRecordNamed {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override
@@ -52,30 +54,27 @@ public class FACT extends MajorRecordNamed {
 
     static class Rank extends SubShell {
 
-	SubInt RNAM = new SubInt(Type.RNAM);
-	SubStringPointer MNAM = new SubStringPointer(Type.MNAM, SubStringPointer.Files.STRINGS);
-	SubData FNAM = new SubData(Type.FNAM);
-
-	static Type[] types = {Type.RNAM, Type.MNAM, Type.FNAM};
+	static SubPrototype rankProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.RNAM));
+		add(new SubStringPointer(Type.MNAM, SubStringPointer.Files.STRINGS));
+		add(new SubData(Type.FNAM));
+	    }
+	};
 
 	Rank() {
-	    super(types);
-	    subRecords.add(RNAM);
-	    subRecords.add(MNAM);
-	    subRecords.add(FNAM);
+	    super(rankProto);
 	}
 
 	@Override
 	Boolean isValid() {
-	    return RNAM.isValid()
-		    || MNAM.isValid()
-		    || FNAM.isValid();
+	    return subRecords.isAnyValid();
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
-	    return new FACT.Rank();
+	    return new Rank();
 	}
-
     }
 }

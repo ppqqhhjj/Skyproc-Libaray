@@ -19,16 +19,17 @@ import skyproc.exceptions.BadRecord;
  */
 class SubRecordsSolo extends SubRecords {
 
-    Type[] types;
+    ArrayList<Type> types;
     protected ArrayList<SubRecord> list = new ArrayList<>(2);
     protected Set<Type> forceExport = new HashSet<>(0);
 
     public SubRecordsSolo(Type t) {
 	super();
-	types = new Type[]{t};
+	types = new ArrayList<>(1);
+	types.add(t);
     }
 
-    public SubRecordsSolo(Type[] t) {
+    public SubRecordsSolo(ArrayList<Type> t) {
 	super();
 	types = t;
     }
@@ -55,7 +56,7 @@ class SubRecordsSolo extends SubRecords {
 	    SubRecord record = get(nextType);
 	    record.parseData(record.extractRecordData(in));
 	} else {
-	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
+	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
 	}
     }
 
@@ -76,11 +77,7 @@ class SubRecordsSolo extends SubRecords {
     }
 
     @Override
-    public ArrayList<Type> typeOrder() {
-	ArrayList<Type> out = new ArrayList<>(list.size());
-	for (SubRecord s : list) {
-	    out.add(s.getType());
-	}
-	return out;
+    public ArrayList<Type> getTypes() {
+	return types;
     }
 }

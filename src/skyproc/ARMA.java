@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -20,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMA extends MajorRecord {
 
-    static final SubRecordsPrototype ARMAprototype = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype ARMAprototype = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
@@ -54,7 +55,7 @@ public class ARMA extends MajorRecord {
 	    add(new SubForm(Type.SNDD));
 	}
     };
-    private static final Type[] type = {Type.ARMA};
+    static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMA}));
 
     /**
      * Armature Major Record
@@ -65,7 +66,7 @@ public class ARMA extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -74,7 +75,7 @@ public class ARMA extends MajorRecord {
 	return new ARMA();
     }
 
-    static class DNAM extends SubRecord {
+    static class DNAM extends SubRecordTyped {
 
 	int malePriority;
 	int femalePriority;
@@ -403,9 +404,9 @@ public class ARMA extends MajorRecord {
     public float getWeaponAdjust() {
 	return getDNAM().weaponAdjust;
     }
-    
+
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -414,7 +415,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -423,7 +424,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -432,7 +433,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -441,7 +442,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @param type
      */
     public void setArmorType(ArmorType type) {
@@ -449,7 +450,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArmorType getArmorType () {

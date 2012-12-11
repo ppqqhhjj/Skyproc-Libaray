@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubInt extends SubRecord {
+class SubInt extends SubRecordTyped {
 
     private Integer data;
     int length = 4;

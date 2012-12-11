@@ -33,17 +33,19 @@ import skyproc.EmbeddedScripts.ParamType;
  */
 public class Condition extends SubShell {
 
+    static SubPrototype conditionProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+
+	    add(new ConditionBase());
+	    add(new SubString(Type.CIS1, true));
+	    add(new SubString(Type.CIS2, true));
+	}
+    };
     static Map<Integer, Enum> scriptMap = new HashMap<>();
-    static Type[] types = {Type.CTDA, Type.CIS1, Type.CIS2};
-    ConditionBase cond = new ConditionBase();
-    SubString CIS1 = new SubString(Type.CIS1, true);
-    SubString CIS2 = new SubString(Type.CIS2, true);
 
     Condition() {
-	super(types);
-	subRecords.add(cond);
-	subRecords.add(CIS1);
-	subRecords.add(CIS2);
+	super(conditionProto);
     }
 
     /**
@@ -64,7 +66,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID function, FormID id) {
 	this();
-	cond.option = new Cond_FormID(id);
+	getBase().option = new Cond_FormID(id);
 	init(function, function.index);
     }
 
@@ -76,7 +78,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Axis function, Axis a) {
 	this();
-	cond.option = new Cond_Axis(a);
+	getBase().option = new Cond_Axis(a);
 	init(function, function.index);
     }
 
@@ -89,7 +91,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_CastingSource function, FormID id, CastingSource source) {
 	this();
-	cond.option = new Cond_FormID_CastingSource(id, source);
+	getBase().option = new Cond_FormID_CastingSource(id, source);
 	init(function, function.index);
     }
 
@@ -102,7 +104,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_Int function, FormID id, int i) {
 	this();
-	cond.option = new Cond_FormID_Int(id, i);
+	getBase().option = new Cond_FormID_Int(id, i);
 	init(function, function.index);
     }
 
@@ -115,7 +117,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_FormID function, FormID id1, FormID id2) {
 	this();
-	cond.option = new Cond_FormID_FormID(id1, id2);
+	getBase().option = new Cond_FormID_FormID(id1, id2);
 	init(function, function.index);
     }
 
@@ -128,7 +130,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_CastingSource_FormID function, CastingSource source, FormID id) {
 	this();
-	cond.option = new Cond_CastingSource_FormID(source, id);
+	getBase().option = new Cond_CastingSource_FormID(source, id);
 	init(function, function.index);
     }
 
@@ -140,7 +142,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Gender function, Gender g) {
 	this();
-	cond.option = new Cond_Gender(g);
+	getBase().option = new Cond_Gender(g);
 	init(function, function.index);
     }
 
@@ -152,7 +154,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_CastingSource function, CastingSource source) {
 	this();
-	cond.option = new Cond_CastingSource(source);
+	getBase().option = new Cond_CastingSource(source);
 	init(function, function.index);
     }
 
@@ -166,7 +168,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Int_FormID_Int function, int i1, FormID id, int i2) {
 	this();
-	cond.option = new Cond_Int_FormID_Int(i1, id, i2);
+	getBase().option = new Cond_Int_FormID_Int(i1, id, i2);
 	init(function, function.index);
     }
 
@@ -179,7 +181,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Int_FormID function, int i1, FormID id) {
 	this();
-	cond.option = new Cond_Int_FormID(i1, id);
+	getBase().option = new Cond_Int_FormID(i1, id);
 	init(function, function.index);
     }
 
@@ -191,7 +193,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_WardState function, WardState state) {
 	this();
-	cond.option = new Cond_WardState(state);
+	getBase().option = new Cond_WardState(state);
 	init(function, function.index);
     }
 
@@ -203,7 +205,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Int function, int i) {
 	this();
-	cond.option = new Cond_Int(i);
+	getBase().option = new Cond_Int(i);
 	init(function, function.index);
     }
 
@@ -215,8 +217,8 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_String function, FormID id, String s) {
 	this();
-	cond.option = new Cond_FormID_String(id, s);
-	CIS2.setString(s);
+	getBase().option = new Cond_FormID_String(id, s);
+	subRecords.setSubString(Type.CIS2, s);
 	init(function, function.index);
     }
 
@@ -228,7 +230,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_Axis function, FormID id, Axis a) {
 	this();
-	cond.option = new Cond_FormID_Axis(id, a);
+	getBase().option = new Cond_FormID_Axis(id, a);
 	init(function, function.index);
     }
 
@@ -241,7 +243,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_CrimeType function, FormID id, CrimeType c) {
 	this();
-	cond.option = new Cond_FormID_CrimeType(id, c);
+	getBase().option = new Cond_FormID_CrimeType(id, c);
 	init(function, function.index);
     }
 
@@ -254,7 +256,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_FormID_Float function, FormID id, float f) {
 	this();
-	cond.option = new Cond_FormID_Float(id, f);
+	getBase().option = new Cond_FormID_Float(id, f);
 	init(function, function.index);
     }
 
@@ -267,7 +269,7 @@ public class Condition extends SubShell {
      */
     public Condition(P_Int_Int function, int i1, int i2) {
 	this();
-	cond.option = new Cond_Int_Int(i1, i2);
+	getBase().option = new Cond_Int_Int(i1, i2);
 	init(function, function.index);
     }
 
@@ -279,14 +281,14 @@ public class Condition extends SubShell {
      */
     public Condition(P_String function, String s) {
 	this();
-	cond.option = new Cond_String(s);
-	CIS1.setString(s);
+	getBase().option = new Cond_String(s);
+	subRecords.setSubString(Type.CIS1, s);
 	init(function, function.index);
     }
 
     final void init(Enum function, int index) {
-	cond.option.script = function;
-	cond.option.index = index;
+	getBase().option.script = function;
+	getBase().option.index = index;
     }
 
     @Override
@@ -296,7 +298,11 @@ public class Condition extends SubShell {
 
     @Override
     Boolean isValid() {
-	return cond.isValid();
+	return getBase().isValid();
+    }
+
+    final ConditionBase getBase() {
+	return (ConditionBase) subRecords.get(Type.CTDA);
     }
 
     /**
@@ -305,7 +311,7 @@ public class Condition extends SubShell {
      * @return
      */
     public boolean get(CondFlag flag) {
-	return cond.get(flag);
+	return getBase().get(flag);
     }
 
     /**
@@ -314,7 +320,7 @@ public class Condition extends SubShell {
      * @param on
      */
     public void set(CondFlag flag, boolean on) {
-	cond.set(flag, on);
+	getBase().set(flag, on);
     }
 
     /**
@@ -354,7 +360,7 @@ public class Condition extends SubShell {
      * @param id
      */
     public void setValue(FormID id) {
-	cond.comparisonValueForm = id;
+	getBase().comparisonValueForm = id;
     }
 
     /**
@@ -362,7 +368,7 @@ public class Condition extends SubShell {
      * @param f
      */
     public void setValue(float f) {
-	cond.comparisonValueFloat = f;
+	getBase().comparisonValueFloat = f;
     }
 
     /**
@@ -370,7 +376,7 @@ public class Condition extends SubShell {
      * @return
      */
     public FormID getValueGlobal() {
-	return cond.comparisonValueForm;
+	return getBase().comparisonValueForm;
     }
 
     /**
@@ -378,7 +384,7 @@ public class Condition extends SubShell {
      * @return
      */
     public float getValueFloat() {
-	return cond.comparisonValueFloat;
+	return getBase().comparisonValueFloat;
     }
 
     /**
@@ -386,7 +392,7 @@ public class Condition extends SubShell {
      * @param o
      */
     public void setOperator(Operator o) {
-	cond.operator = o;
+	getBase().operator = o;
     }
 
     /**
@@ -394,7 +400,7 @@ public class Condition extends SubShell {
      * @return
      */
     public Operator getOperator() {
-	return cond.operator;
+	return getBase().operator;
     }
 
     /**
@@ -402,7 +408,7 @@ public class Condition extends SubShell {
      * @param t
      */
     public void setRunOnType(RunOnType t) {
-	cond.option.runType = t;
+	getBase().option.runType = t;
     }
 
     /**
@@ -410,7 +416,7 @@ public class Condition extends SubShell {
      * @return
      */
     public RunOnType getRunOnType() {
-	return cond.option.runType;
+	return getBase().option.runType;
     }
 
     /**
@@ -418,7 +424,7 @@ public class Condition extends SubShell {
      * @param id
      */
     public void setReference(FormID id) {
-	cond.option.reference = id;
+	getBase().option.reference = id;
     }
 
     /**
@@ -426,7 +432,7 @@ public class Condition extends SubShell {
      * @return
      */
     public FormID getReference() {
-	return cond.option.reference;
+	return getBase().option.reference;
     }
 
     /**
@@ -434,7 +440,7 @@ public class Condition extends SubShell {
      * @return
      */
     public Enum getFunction() {
-	return cond.option.script;
+	return getBase().option.script;
     }
 
     /**
@@ -442,31 +448,31 @@ public class Condition extends SubShell {
      * @return
      */
     public int getFunctionIndex() {
-	return cond.option.index;
+	return getBase().option.index;
     }
 
     /**
      *
      * @return
      */
-    public Object getParam1 () {
-	return cond.option.getParam1();
+    public Object getParam1() {
+	return getBase().option.getParam1();
     }
 
     /**
      *
      * @return
      */
-    public Object getParam2 () {
-	return cond.option.getParam2();
+    public Object getParam2() {
+	return getBase().option.getParam2();
     }
 
     /**
      *
      * @return
      */
-    public Object getParam3 () {
-	return cond.option.getParam3();
+    public Object getParam3() {
+	return getBase().option.getParam3();
     }
 
     /**
@@ -563,7 +569,7 @@ public class Condition extends SubShell {
      * @return
      */
     public Enum getScript() {
-	return cond.option.script;
+	return getBase().option.script;
     }
 
     /**
@@ -571,7 +577,7 @@ public class Condition extends SubShell {
      * @return
      */
     public int getScriptIndex() {
-	return cond.option.index;
+	return getBase().option.index;
     }
 
     /**

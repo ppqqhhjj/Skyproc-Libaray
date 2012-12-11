@@ -7,8 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -23,10 +21,10 @@ import skyproc.exceptions.BadRecord;
  */
 public class RACE extends MajorRecordDescription {
 
-    static final SubRecordsPrototype RACEproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
-	    add(new SubList<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
+	    add(new SubListCounted<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
 	    add(new SubForm(Type.WNAM));
 	    add(new BodyTemplate());
 	    add(new SubData(Type.BOD2));
@@ -36,7 +34,6 @@ public class RACE extends MajorRecordDescription {
 	    mfnam.forceMarkers = true;
 	    add(mfnam);
 	    SubList mtnms = new SubList<>(new SubString(Type.MTNM, false));
-	    mtnms.allowDups = false;
 	    add(mtnms);
 	    add(new SubFormArray(Type.VTCK, 2));
 	    add(new SubFormArray(Type.DNAM, 2));
@@ -73,7 +70,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubForm(Type.RNAM));
 	}
     };
-    private final static Type[] type = {Type.RACE};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.RACE}));
 
     /**
      *
@@ -84,7 +81,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -95,16 +92,20 @@ public class RACE extends MajorRecordDescription {
 
     static class NAM1 extends SubShellBulkType {
 
-	SubData NAM1 = new SubData(Type.NAM1);
-	SubMarkerSet EGT = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
+	static SubPrototype NAM1proto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.NAM1));
+		forceExport(Type.NAM1);
+
+		SubMarkerSet EGT = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
+		EGT.forceMarkers = true;
+		add(EGT);
+	    }
+	};
 
 	public NAM1() {
-	    super(Type.NAM1, Type.MNAM, Type.FNAM, Type.INDX, Type.MODL, Type.MODT);
-	    NAM1.forceExport = true;
-	    subRecords.add(NAM1);
-
-	    EGT.forceMarkers = true;
-	    subRecords.add(EGT);
+	    super(NAM1proto, false);
 	}
 
 	@Override
@@ -115,15 +116,17 @@ public class RACE extends MajorRecordDescription {
 
     static class NAM3 extends SubShellBulkType {
 
-	SubData NAM3 = new SubData(Type.NAM3);
-	SubMarkerSet HKX = new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM);
+	static SubPrototype NAM3proto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.NAM3));
+		forceExport(Type.NAM3);
+		add(new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM));
+	    }
+	};
 
 	public NAM3() {
-	    super(Type.NAM3, Type.MNAM, Type.FNAM, Type.MODL, Type.MODT);
-	    NAM3.forceExport = true;
-	    subRecords.add(NAM3);
-
-	    subRecords.add(HKX);
+	    super(NAM3proto, false);
 	}
 
 	@Override
@@ -134,14 +137,16 @@ public class RACE extends MajorRecordDescription {
 
     static class MFNAMdata extends SubShell {
 
-	SubString ANAM = new SubString(Type.ANAM, true);
-	SubData MODT = new SubData(Type.MODT);
-	private static Type[] types = {Type.ANAM, Type.MODT};
+	static SubPrototype MFNAMproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubString(Type.ANAM, true));
+		add(new SubData(Type.MODT));
+	    }
+	};
 
 	public MFNAMdata() {
-	    super(types);
-	    subRecords.add(ANAM);
-	    subRecords.add(MODT);
+	    super(MFNAMproto);
 	}
 
 	@Override
@@ -152,14 +157,16 @@ public class RACE extends MajorRecordDescription {
 
     static class ATKDpackage extends SubShell {
 
-	SubData ATKD = new SubData(Type.ATKD);
-	SubString ATKE = new SubString(Type.ATKE, true);
-	private static Type[] types = {Type.ATKD, Type.ATKE};
+	static SubPrototype ATKDproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.ATKD));
+		add(new SubString(Type.ATKE, true));
+	    }
+	};
 
 	public ATKDpackage() {
-	    super(types);
-	    subRecords.add(ATKD);
-	    subRecords.add(ATKE);
+	    super(ATKDproto);
 	}
 
 	@Override
@@ -170,16 +177,17 @@ public class RACE extends MajorRecordDescription {
 
     static class EGTmodel extends SubShell {
 
-	SubData INDX = new SubData(Type.INDX);
-	SubString MODL = new SubString(Type.MODL, true);
-	SubData MODT = new SubData(Type.MODT);
-	private static Type[] types = {Type.INDX, Type.MODL, Type.MODT};
+	static SubPrototype EGTproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.INDX));
+		add(new SubString(Type.MODL, true));
+		add(new SubData(Type.MODT));
+	    }
+	};
 
 	public EGTmodel() {
-	    super(types);
-	    subRecords.add(INDX);
-	    subRecords.add(MODL);
-	    subRecords.add(MODT);
+	    super(EGTproto);
 	}
 
 	@Override
@@ -190,14 +198,16 @@ public class RACE extends MajorRecordDescription {
 
     static class HKXmodel extends SubShell {
 
-	SubString MODL = new SubString(Type.MODL, true);
-	SubData MODT = new SubData(Type.MODT);
-	private static Type[] types = {Type.MODL, Type.MODT};
+	static SubPrototype HKXmodel = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubString(Type.MODL, true));
+		add(new SubData(Type.MODT));
+	    }
+	};
 
 	public HKXmodel() {
-	    super(types);
-	    subRecords.add(MODL);
-	    subRecords.add(MODT);
+	    super(HKXmodel);
 	}
 
 	@Override
@@ -208,14 +218,16 @@ public class RACE extends MajorRecordDescription {
 
     static class MTYPpackage extends SubShell {
 
-	SubForm MTYP = new SubForm(Type.MTYP);
-	SubData SPED = new SubData(Type.SPED);
-	private static Type[] types = {Type.MTYP, Type.SPED};
+	static SubPrototype MTYPproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubForm(Type.MTYP));
+		add(new SubData(Type.SPED));
+	    }
+	};
 
 	public MTYPpackage() {
-	    super(types);
-	    subRecords.add(MTYP);
-	    subRecords.add(SPED);
+	    super(MTYPproto);
 	}
 
 	@Override
@@ -226,42 +238,28 @@ public class RACE extends MajorRecordDescription {
 
     static class NAM0 extends SubShellBulkType {
 
-	private static Type[] targets = { Type.MNAM, Type.FNAM, Type.INDX, Type.HEAD,
-		    Type.MPAI, Type.MPAV,
-		    Type.RPRM, Type.RPRF, Type.AHCM, Type.AHCF,
-		    Type.FTSM, Type.FTSF, Type.DFTM, Type.DFTF,
-		    Type.TINI, Type.TINT, Type.TINP, Type.TIND, Type.TINC, Type.TINV, Type.TIRS};
-	SubData NAM0 = new SubData(Type.NAM0);
-	SubData MNAM = new SubData(Type.MNAM);
-	SubData FNAM = new SubData(Type.FNAM);
-	SubList<HEADs> INDXs = new SubList<>(new HEADs());
-	SubList<MPAVs> MPAVs = new SubList<>(new MPAVs());
-	SubList<SubForm> RPRM = new SubList<>(new SubForm(Type.RPRM));
-	SubList<SubForm> RPRF = new SubList<>(new SubForm(Type.RPRF));
-	SubList<SubForm> AHCM = new SubList<>(new SubForm(Type.AHCM));
-	SubList<SubForm> AHCF = new SubList<>(new SubForm(Type.AHCF));
-	SubList<SubForm> FTSM = new SubList<>(new SubForm(Type.FTSM));
-	SubList<SubForm> FTSF = new SubList<>(new SubForm(Type.FTSF));
-	SubList<SubForm> DFTM = new SubList<>(new SubForm(Type.DFTM));
-	SubList<SubForm> DFTF = new SubList<>(new SubForm(Type.DFTF));
-	SubList<TINIs> TINIs = new SubList<>(new TINIs());
+	static SubPrototype NAM0proto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.NAM0));
+		add(new SubData(Type.MNAM));
+		add(new SubData(Type.FNAM));
+		add(new SubList<>(new HEADs()));
+		add(new SubList<>(new MPAVs()));
+		add(new SubList<>(new SubForm(Type.RPRM)));
+		add(new SubList<>(new SubForm(Type.RPRF)));
+		add(new SubList<>(new SubForm(Type.AHCM)));
+		add(new SubList<>(new SubForm(Type.AHCF)));
+		add(new SubList<>(new SubForm(Type.FTSM)));
+		add(new SubList<>(new SubForm(Type.FTSF)));
+		add(new SubList<>(new SubForm(Type.DFTM)));
+		add(new SubList<>(new SubForm(Type.DFTF)));
+		add(new SubList<>(new TINIs()));
+	    }
+	};
 
 	public NAM0() {
-	    super(Type.NAM0, targets);
-	    subRecords.add(NAM0);
-	    subRecords.add(MNAM);
-	    subRecords.add(FNAM);
-	    subRecords.add(INDXs);
-	    subRecords.add(MPAVs);
-	    subRecords.add(RPRM);
-	    subRecords.add(RPRF);
-	    subRecords.add(AHCM);
-	    subRecords.add(AHCF);
-	    subRecords.add(FTSM);
-	    subRecords.add(FTSF);
-	    subRecords.add(DFTM);
-	    subRecords.add(DFTF);
-	    subRecords.add(TINIs);
+	    super(NAM0proto, false);
 	}
 
 	@Override
@@ -277,14 +275,16 @@ public class RACE extends MajorRecordDescription {
 
     static class HEADs extends SubShell {
 
-	SubData INDX = new SubData(Type.INDX);
-	SubData HEAD = new SubData(Type.HEAD);
-	private static Type[] types = {Type.INDX, Type.HEAD};
+	static SubPrototype HEADproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.INDX));
+		add(new SubData(Type.HEAD));
+	    }
+	};
 
 	public HEADs() {
-	    super(types);
-	    subRecords.add(INDX);
-	    subRecords.add(HEAD);
+	    super(HEADproto);
 	}
 
 	@Override
@@ -300,14 +300,16 @@ public class RACE extends MajorRecordDescription {
 
     static class MPAVs extends SubShell {
 
-	SubData MPAI = new SubData(Type.MPAI);
-	SubData MPAV = new SubData(Type.MPAV);
-	private static Type[] types = {Type.MPAI, Type.MPAV};
+	static SubPrototype MPAVproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.MPAI));
+		add(new SubData(Type.MPAV));
+	    }
+	};
 
 	public MPAVs() {
-	    super(types);
-	    subRecords.add(MPAI);
-	    subRecords.add(MPAV);
+	    super(MPAVproto);
 	}
 
 	@Override
@@ -323,20 +325,19 @@ public class RACE extends MajorRecordDescription {
 
     static class TINIs extends SubShell {
 
-	SubData TINI = new SubData(Type.TINI);
-	SubString TINT = new SubString(Type.TINT, true);
-	SubData TINP = new SubData(Type.TINP);
-	SubForm TIND = new SubForm(Type.TIND);
-	SubList<TINCs> TINCs = new SubList<>(new TINCs());
-	private static Type[] types = {Type.TINI, Type.TINT, Type.TINP, Type.TIND, Type.TINC, Type.TINV, Type.TIRS};
+	static SubPrototype TINIproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.TINI));
+		add(new SubString(Type.TINT, true));
+		add(new SubData(Type.TINP));
+		add(new SubForm(Type.TIND));
+		add(new SubList<>(new TINCs()));
+	    }
+	};
 
 	public TINIs() {
-	    super(types);
-	    subRecords.add(TINI);
-	    subRecords.add(TINT);
-	    subRecords.add(TINP);
-	    subRecords.add(TIND);
-	    subRecords.add(TINCs);
+	    super(TINIproto);
 	}
 
 	@Override
@@ -352,16 +353,17 @@ public class RACE extends MajorRecordDescription {
 
     static class TINCs extends SubShell {
 
-	SubData TINC = new SubData(Type.TINC);
-	SubData TINV = new SubData(Type.TINV);
-	SubData TIRS = new SubData(Type.TIRS);
-	private static Type[] types = {Type.TINC, Type.TINV, Type.TIRS};
+	static SubPrototype TINCproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.TINC));
+		add(new SubData(Type.TINV));
+		add(new SubData(Type.TIRS));
+	    }
+	};
 
 	public TINCs() {
-	    super(types);
-	    subRecords.add(TINC);
-	    subRecords.add(TINV);
-	    subRecords.add(TIRS);
+	    super(TINCproto);
 	}
 
 	@Override
@@ -375,7 +377,7 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	byte[] fluff1 = new byte[16];
 	float maleHeight = 0;
@@ -720,20 +722,22 @@ public class RACE extends MajorRecordDescription {
      * @param model
      */
     public void setModel(Gender gender, String model) {
+	getMFData(gender).subRecords.setSubString(Type.ANAM, model);
+    }
+
+    MFNAMdata getMFData(Gender gender) {
 	SubMarkerSet<MFNAMdata> MFNAM = subRecords.getSubMarker(Type.ANAM);
 	switch (gender) {
 	    case MALE:
 		if (!MFNAM.set.containsKey(Type.MNAM)) {
 		    MFNAM.set.put(Type.MNAM, new MFNAMdata());
 		}
-		MFNAM.set.get(Type.MNAM).ANAM.setString(model);
-		break;
+		return MFNAM.set.get(Type.MNAM);
 	    default:
 		if (!MFNAM.set.containsKey(Type.FNAM)) {
 		    MFNAM.set.put(Type.FNAM, new MFNAMdata());
 		}
-		MFNAM.set.get(Type.FNAM).ANAM.setString(model);
-		break;
+		return MFNAM.set.get(Type.FNAM);
 	}
     }
 
@@ -743,20 +747,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getModel(Gender gender) {
-	SubMarkerSet<MFNAMdata> MFNAM = subRecords.getSubMarker(Type.ANAM);
-	switch (gender) {
-	    case MALE:
-		if (MFNAM.set.containsKey(Type.MNAM)) {
-		    return MFNAM.set.get(Type.MNAM).ANAM.string;
-		}
-		break;
-	    case FEMALE:
-		if (MFNAM.set.containsKey(Type.FNAM)) {
-		    return MFNAM.set.get(Type.FNAM).ANAM.string;
-		}
-		break;
-	}
-	return "";
+	return getMFData(gender).subRecords.getSubString(Type.ANAM).print();
     }
 
     /**
@@ -1333,7 +1324,17 @@ public class RACE extends MajorRecordDescription {
 
     SubMarkerSet<EGTmodel> getEGT() {
 	NAM1 nam1 = (NAM1) subRecords.get(Type.NAM1);
-	return nam1.EGT;
+	return nam1.subRecords.getSubMarker(Type.INDX);
+    }
+
+    EGTmodel getEGTmodel(Gender gender) {
+	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
+	switch (gender) {
+	    case MALE:
+		return EGTrecords.set.get(Type.MNAM);
+	    default:
+		return EGTrecords.set.get(Type.FNAM);
+	}
     }
 
     /**
@@ -1342,13 +1343,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getLightingModels(Gender gender) {
-	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
-	switch (gender) {
-	    case MALE:
-		return EGTrecords.set.get(Type.MNAM).MODL.string;
-	    default:
-		return EGTrecords.set.get(Type.FNAM).MODL.string;
-	}
+	return getEGTmodel(gender).subRecords.getSubString(Type.MODL).print();
     }
 
     /**
@@ -1357,18 +1352,22 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setLightingModels(Gender gender, String s) {
-	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
-	switch (gender) {
-	    case MALE:
-		EGTrecords.set.get(Type.MNAM).MODL.setString(s);
-	    default:
-		EGTrecords.set.get(Type.FNAM).MODL.setString(s);
-	}
+	getEGTmodel(gender).subRecords.setSubString(Type.MODL, s);
     }
 
     SubMarkerSet<HKXmodel> getHKX() {
 	NAM3 nam3 = (NAM3) subRecords.get(Type.NAM3);
-	return nam3.HKX;
+	return nam3.subRecords.getSubMarker(Type.MODL);
+    }
+
+    HKXmodel getHKXmodel(Gender gender) {
+	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
+	switch (gender) {
+	    case MALE:
+		return HKXrecords.set.get(Type.MNAM);
+	    default:
+		return HKXrecords.set.get(Type.FNAM);
+	}
     }
 
     /**
@@ -1377,13 +1376,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getPhysicsModels(Gender gender) {
-	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
-	switch (gender) {
-	    case MALE:
-		return HKXrecords.set.get(Type.MNAM).MODL.string;
-	    default:
-		return HKXrecords.set.get(Type.FNAM).MODL.string;
-	}
+	return getHKXmodel(gender).subRecords.getSubString(Type.MODL).print();
     }
 
     /**
@@ -1392,13 +1385,7 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setPhysicsModels(Gender gender, String s) {
-	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
-	switch (gender) {
-	    case MALE:
-		HKXrecords.set.get(Type.MNAM).MODL.setString(s);
-	    default:
-		HKXrecords.set.get(Type.FNAM).MODL.setString(s);
-	}
+	getHKXmodel(gender).subRecords.setSubString(Type.MODL, s);
     }
 
     /**
@@ -1439,9 +1426,9 @@ public class RACE extends MajorRecordDescription {
     public KeywordSet getKeywordSet() {
 	return subRecords.getKeywords();
     }
-    
+
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -1450,7 +1437,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -1459,7 +1446,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -1468,7 +1455,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -1477,7 +1464,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param type
      */
     public void setArmorType(ArmorType type) {
@@ -1485,10 +1472,10 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
-    public ArmorType getArmorType () {
+    public ArmorType getArmorType() {
 	return subRecords.getBodyTemplate().armorType;
     }
 }

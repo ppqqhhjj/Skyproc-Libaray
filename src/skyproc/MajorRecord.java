@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class MajorRecord extends Record implements Serializable {
 
-    static final SubRecordsPrototype majorProto = new SubRecordsPrototype() {
+    static final SubPrototype majorProto = new SubPrototype() {
 
 	@Override
 	protected void addRecords() {
@@ -85,7 +85,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String toString() {
-	String out = "[" + getTypes()[0].toString() + " | ";
+	String out = "[" + getType().toString() + " | ";
 	if (ID.isStandardized()) {
 	    out += getFormStr();
 	} else if (isValid()) {
@@ -145,6 +145,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    SubString EDID = subRecords.getSubString(Type.EDID);
 	    EDID.parseData(EDID.extractRecordData(in));
 	    Consistency.addEntry(EDID.print(), ID);
+	}
+
+	if (getEDID().equals("IrilethVsDragons")) {
+	    int wer = 23;
 	}
 
 	importSubRecords(in);
@@ -286,25 +290,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	ID.setInternal(in);
 	if (logging()) {
 	    logSync(toString(), "Setting FormID: " + ID.getArrayStr(true));
-	}
-    }
-
-    static class Null_Major extends MajorRecord {
-
-	private final static Type[] type = {Type.NULL};
-
-	@Override
-	Type[] getTypes() {
-	    return type;
-	}
-
-	public static Null_Major getNull() {
-	    return new Null_Major();
-	}
-
-	@Override
-	Record getNew() {
-	    return getNull();
 	}
     }
 

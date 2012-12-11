@@ -24,20 +24,12 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     static Type loadedMarker;
 
     SubMarkerSet(T prototype) {
-	super(prototype.getTypes());
+	super();
 	this.prototype = prototype;
     }
 
     SubMarkerSet(T prototype, Type... markers) {
-	super(prototype.getTypes());
-	type = new Type[prototype.type.length + markers.length];
-	int i = 0;
-	for (Type t : prototype.type) {
-	    type[i++] = t;
-	}
-	for (Type t : markers) {
-	    type[i++] = t;
-	}
+	super();
 	this.markers = new ArrayList<>(Arrays.asList(markers));
 	this.prototype = prototype;
     }
@@ -84,7 +76,6 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     @Override
     SubRecord getNew(Type t) {
 	SubMarkerSet out = new SubMarkerSet(prototype);
-	out.type = type;
 	out.markers = markers;
 	out.forceMarkers = forceMarkers;
 	return out;
@@ -122,6 +113,13 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	for (T s : set.values()) {
 	    out.addAll(s.allFormIDs());
 	}
+	return out;
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	ArrayList<Type> out = new ArrayList<>(prototype.getTypes());
+	out.addAll(markers);
 	return out;
     }
 }

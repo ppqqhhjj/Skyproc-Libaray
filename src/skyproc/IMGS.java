@@ -1,6 +1,8 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -14,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class IMGS extends MajorRecord {
 
-    static final SubRecordsPrototype IMGSproto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype IMGSproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
@@ -25,7 +27,7 @@ public class IMGS extends MajorRecord {
 	    add(new DNAM());
 	}
     };
-    private final static Type[] type = {Type.IMGS};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.IMGS}));
 
     /**
      * Creates a new IMGS record.
@@ -36,7 +38,7 @@ public class IMGS extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
         return type;
     }
 
@@ -45,7 +47,7 @@ public class IMGS extends MajorRecord {
         return new IMGS();
     }
 
-    static class HNAM extends SubRecord {
+    static class HNAM extends SubRecordTyped {
 
         private float eyeAdaptSpeed = 0;
         private float bloomRadius = 0;
@@ -130,7 +132,7 @@ public class IMGS extends MajorRecord {
 
     }
 
-    static class CNAM extends SubRecord {
+    static class CNAM extends SubRecordTyped {
 
         private float saturation = 0;
         private float brightness = 0;
@@ -194,7 +196,7 @@ public class IMGS extends MajorRecord {
 
     }
 
-    static class TNAM extends SubRecord {
+    static class TNAM extends SubRecordTyped {
 
         private float red = 0;
         private float green = 0;
@@ -262,7 +264,7 @@ public class IMGS extends MajorRecord {
 
     }
 
-    static class DNAM extends SubRecord {
+    static class DNAM extends SubRecordTyped {
 
         float DOFstrength = 0;
         float DOFdistance = 0;
@@ -327,19 +329,19 @@ public class IMGS extends MajorRecord {
     HNAM getHNAM() {
 	return (HNAM) subRecords.get(Type.HNAM);
     }
-    
+
     CNAM getCNAM() {
 	return (CNAM) subRecords.get(Type.CNAM);
     }
-    
+
     TNAM getTNAM() {
 	return (TNAM) subRecords.get(Type.TNAM);
     }
-    
+
     DNAM getDNAM() {
 	return (DNAM) subRecords.get(Type.DNAM);
     }
-    
+
     /**
      *
      * @return

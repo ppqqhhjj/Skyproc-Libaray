@@ -21,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class AltTextures extends SubRecord {
+public class AltTextures extends SubRecordTyped {
 
     ArrayList<AltTexture> altTextures = new ArrayList<>();
 
@@ -204,7 +204,7 @@ public class AltTextures extends SubRecord {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param obj
 	 * @return
 	 */
@@ -227,7 +227,7 @@ public class AltTextures extends SubRecord {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	@Override

@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubData extends SubRecord {
+class SubData extends SubRecordTyped {
 
     byte[] data;
     boolean forceExport = false;

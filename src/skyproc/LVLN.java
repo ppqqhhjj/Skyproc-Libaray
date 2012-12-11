@@ -1,5 +1,8 @@
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Leveled List.  A list of entries used for spawnpoints when choosing which actor to
  * spawn.  Each entry contains a FormID of an actor, a level, and a count to spawn.
@@ -7,7 +10,7 @@ package skyproc;
  */
 public class LVLN extends LeveledRecord {
 
-    static final SubRecordsPrototype LVLNproto = new SubRecordsPrototype(LeveledRecord.LeveledProto){
+    static final SubPrototype LVLNproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
 	protected void addRecords() {
@@ -16,7 +19,7 @@ public class LVLN extends LeveledRecord {
 	    add(new SubData(Type.MODT));
 	}
     };
-    private final static Type[] type = {Type.LVLN};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLN}));
     boolean circular = false;
 
     /**
@@ -41,7 +44,7 @@ public class LVLN extends LeveledRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
         return type;
     }
 
@@ -53,7 +56,7 @@ public class LVLN extends LeveledRecord {
     public String print() {
         super.print();
         logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag(Type.LVLF).print());
-        for (LVLO entry : getEntries()) {
+        for (LeveledEntry entry : getEntries()) {
             entry.toString();
         }
         return "";

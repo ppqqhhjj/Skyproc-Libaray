@@ -302,7 +302,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     MajorRecord makeCopy(MajorRecord m) {
 	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getType())).addRecord(m);
 	return m;
     }
 
@@ -329,7 +329,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    mergeMasters(mod);
 	}
 	m = m.copyOf(this, newEDID);
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getType())).addRecord(m);
 	return m;
     }
 
@@ -371,7 +371,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUPs.get(GRUP_TYPE.toRecord(m.getTypes()[0])).addRecord(m);
+	GRUPs.get(GRUP_TYPE.toRecord(m.getType())).addRecord(m);
     }
 
     /**
@@ -1284,13 +1284,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
     static class TES4 extends Record {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
-	static final SubRecordsPrototype TES4proto = new SubRecordsPrototype() {
+	static final SubPrototype TES4proto = new SubPrototype() {
 
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
 		add(new SubString(Type.CNAM, true));
-		add(new SubSortedList<>(new ModListing()));
+		add(new SubListSortedUnique<>(new ModListing()));
 		add(new SubString(Type.SNAM, true));
 		add(new SubData(Type.INTV));
 		add(new SubData(Type.ONAM));
@@ -1302,7 +1302,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	private int fluff1 = 0;
 	private int fluff2 = 0;
 	private int fluff3 = 0;
-	private final static Type[] type = {Type.TES4};
+	private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.TES4}));
 
 	TES4() {
 	}
@@ -1333,7 +1333,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	Type[] getTypes() {
+	ArrayList<Type> getTypes() {
 	    return type;
 	}
 
@@ -1355,8 +1355,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    subRecords.getSubList(Type.MAST).clear();
 	}
 
-	SubSortedList<ModListing> getMasters() {
-	    return (SubSortedList<ModListing>) subRecords.get(Type.MAST);
+	SubListSorted<ModListing> getMasters() {
+	    return (SubListSorted<ModListing>) subRecords.get(Type.MAST);
 	}
 
 	void setAuthor(String in) {
@@ -1370,9 +1370,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    int out = 0;
-	    out += subRecords.length(srcMod);
-	    return out;
+	    return subRecords.length(srcMod);
 	}
 
 	@Override
@@ -1403,7 +1401,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    static class HEDR extends SubRecord {
+    static class HEDR extends SubRecordTyped {
 
 	byte[] version;
 	int numRecords;

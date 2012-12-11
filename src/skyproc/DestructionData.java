@@ -10,35 +10,33 @@ package skyproc;
  */
 public class DestructionData extends SubShell {
 
-    SubData DEST = new SubData(Type.DEST);
-    SubList<DSTD> DSTDs = new SubList<>(new DSTD());
-    SubData DMDL = new SubData(Type.DMDL);
-    SubData DMDT = new SubData(Type.DMDT);
-    SubData DMDS = new SubData(Type.DMDS);
+    static SubPrototype destructionProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.DEST));
+	    add(new SubList<>(new DSTD()));
+	    add(new SubData(Type.DMDL));
+	    add(new SubData(Type.DMDT));
+	    add(new SubData(Type.DMDS));
+	}
+    };
 
-    static Type[] types = new Type[] { Type.DEST, Type.DSTD, Type.DMDL, Type.DMDT, Type.DMDS, Type.DSTF };
-
-    DestructionData () {
-	super(types);
-
-	subRecords.add(DEST);
-	subRecords.add(DSTDs);
-	subRecords.add(DMDL);
-	subRecords.add(DMDT);
-	subRecords.add(DMDS);
+    DestructionData() {
+	super(destructionProto);
     }
 
     static class DSTD extends SubShell {
 
-	SubData DSTD = new SubData(Type.DSTD);
-	SubData DSTF = new SubData(Type.DSTF);
-
-	static Type[] types = { Type.DSTD, Type.DSTF };
+	static SubPrototype dstdProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.DSTD));
+		add(new SubData(Type.DSTF));
+	    }
+	};
 
 	DSTD() {
-	    super(types);
-	    subRecords.add(DSTD);
-	    subRecords.add(DSTF);
+	    super(dstdProto);
 	}
 
 	@Override

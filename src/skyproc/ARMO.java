@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMO extends MajorRecordDescription {
 
-    static final SubRecordsPrototype ARMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype ARMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -50,7 +51,7 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubForm(Type.TNAM));
 	}
     };
-    private final static Type[] type = {Type.ARMO};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMO}));
 
     /**
      * Armor Major Record
@@ -61,7 +62,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -70,7 +71,7 @@ public class ARMO extends MajorRecordDescription {
 	return new ARMO();
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	int value;
 	float weight;
@@ -348,7 +349,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -357,7 +358,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -366,7 +367,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -375,7 +376,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -384,7 +385,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @param type
      */
     public void setArmorType(ArmorType type) {
@@ -392,7 +393,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArmorType getArmorType () {

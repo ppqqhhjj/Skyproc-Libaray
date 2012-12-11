@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -20,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class LIGH extends MajorRecordNamed {
 
-    static final SubRecordsPrototype LIGHproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+    static final SubPrototype LIGHproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
@@ -38,7 +39,7 @@ public class LIGH extends MajorRecordNamed {
 	    add(new SubForm(Type.SNAM));
 	}
     };
-    static Type[] types = {Type.LIGH};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LIGH}));
 
     LIGH() {
         super();
@@ -51,11 +52,11 @@ public class LIGH extends MajorRecordNamed {
     }
 
     @Override
-    Type[] getTypes() {
-        return types;
+    ArrayList<Type> getTypes() {
+        return type;
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
         int time = 0;
         int radius = 0;

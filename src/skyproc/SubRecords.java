@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-abstract class SubRecords implements Serializable, Iterable<SubRecord> {
+ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     protected Map<Type, SubRecord> map = new HashMap<>(0);
 
@@ -27,7 +27,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     public void setMajor(MajorRecord in) {
     }
 
-    public void setPrototype(SubRecordsPrototype proto) {
+    public void setPrototype(SubPrototype proto) {
     }
 
     public void add(SubRecord r) {
@@ -43,8 +43,6 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	    }
 	}
     }
-
-    public abstract ArrayList<Type> typeOrder();
 
     public boolean shouldExport(SubRecord s) {
 	return s.isValid();
@@ -126,6 +124,14 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	getSubRGB(in).set(c, f);
     }
 
+    public SubRGBshort getSubRGBshort(Type in) {
+	return (SubRGBshort) get(in);
+    }
+
+    public void setSubRGBshort(Type in, RGBA c, short val) {
+	getSubRGBshort(in).set(c, val);
+    }
+
     public SubMarkerSet getSubMarker(Type in) {
 	return (SubMarkerSet) get(in);
     }
@@ -159,6 +165,15 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return true;
     }
 
+    boolean isAnyValid() {
+	for (SubRecord s : this) {
+	    if (s.isValid()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     void printSummary() {
 	if (SPGlobal.logging() && SPGlobal.debugSubrecordSummary) {
 	    String header = "Summary: ";
@@ -172,7 +187,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 		    if (s instanceof SubList) {
 			data = data + "(" + ((SubList) s).size() + ") ";
 		    }
-		    printedTypes.addAll(Arrays.asList(s.getTypes()));
+		    printedTypes.addAll(s.getTypes());
 		    if (counter++ == 12) {
 			SPGlobal.logSync("Subrecords", header + data);
 			header = "-------- ";
@@ -199,7 +214,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	    SubRecord record = get(nextType);
 	    record.parseData(record.extractRecordData(in));
 	} else {
-	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
+	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
 	}
     }
 
@@ -219,9 +234,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return length;
     }
 
-    public Set<Type> getTypes() {
-	return map.keySet();
-    }
+    public abstract ArrayList<Type> getTypes();
 
     void fetchStringPointers(Mod srcMod) {
 	for (SubRecord s : map.values()) {

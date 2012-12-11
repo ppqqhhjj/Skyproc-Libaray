@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -12,8 +13,7 @@ import java.util.ArrayList;
  */
 public class HDPT extends MajorRecordNamed {
 
-    static final SubRecordsPrototype HDPTproto = new SubRecordsPrototype(MajorRecordNamed.namedProto){
-
+    static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
 	    add(new SubString(Type.MODL, true));
@@ -28,7 +28,7 @@ public class HDPT extends MajorRecordNamed {
 	    add(new SubForm(Type.RNAM));
 	}
     };
-    static Type[] types = { Type.HDPT };
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.HDPT}));
 
     HDPT() {
 	super();
@@ -36,8 +36,8 @@ public class HDPT extends MajorRecordNamed {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override
@@ -47,23 +47,22 @@ public class HDPT extends MajorRecordNamed {
 
     static class NAMs extends SubShell {
 
-	SubInt NAM0 = new SubInt(Type.NAM0);
-	SubString NAM1 = new SubString(Type.NAM1, true);
+	static SubPrototype namsProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.NAM0));
+		add(new SubString(Type.NAM1, true));
+	    }
+	};
 
-	public static Type[] types = { Type.NAM0, Type.NAM1 };
-
-	public NAMs () {
-	    super(types);
-
-	    subRecords.add(NAM0);
-	    subRecords.add(NAM1);
+	public NAMs() {
+	    super(namsProto);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
 	    return new NAMs();
 	}
-
     }
 
     //GetSet
@@ -79,7 +78,7 @@ public class HDPT extends MajorRecordNamed {
      *
      * @return
      */
-    public String getModel () {
+    public String getModel() {
 	return subRecords.getSubString(Type.MODL).print();
     }
 

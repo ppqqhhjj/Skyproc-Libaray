@@ -2,10 +2,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -17,8 +17,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class PERK extends MajorRecordDescription {
 
-    static final SubRecordsPrototype PERKproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
-
+    static final SubPrototype PERKproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
@@ -29,7 +28,7 @@ public class PERK extends MajorRecordDescription {
 	    add(new SubList<>(new PRKEPackage()));
 	}
     };
-    private static Type[] type = {Type.PERK};
+    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PERK}));
 
     PERK() {
 	super();
@@ -37,7 +36,7 @@ public class PERK extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -64,50 +63,41 @@ public class PERK extends MajorRecordDescription {
 
     static class PRKEPackage extends SubShellBulkType {
 
-	private static Type[] types = {Type.PRKF, Type.CTDA, Type.DATA, Type.PRKC, Type.CIS2, Type.CIS1, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
-	SubData PRKE = new SubData(Type.PRKE);
-	SubData PRKF = new SubData(Type.PRKF);
-	SubRecord subPackage;
-	PerkType perkType;
+	static SubPrototype PRKEproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.PRKE));
+		add(new PRKEComplexSubPackage()); // Placeholder
+		add(new SubData(Type.PRKF));
+		forceExport(Type.PRKF);
+	    }
+	};
 
 	PRKEPackage() {
-	    super(Type.PRKE, types);
-	    subRecords.add(PRKE);
-	    subRecords.add(PRKF);
-	    PRKF.forceExport(true);
+	    super(PRKEproto, false);
 	}
 
-	PRKEPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
+	@Override
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    SubData PRKE = subRecords.getSubData(Type.PRKE);
+	    PRKE.parseData(PRKE.extractRecordData(in));
+	    PerkType perkType = PerkType.values()[subRecords.getSubData(Type.PRKE).getData()[0]];
+	    switch (perkType) {
+		case QUEST:
+		    subRecords.remove(Type.DATA);
+		    subRecords.add(new SubFormData(Type.DATA));
+		    break;
+		case ABILITY:
+		    subRecords.remove(Type.DATA);
+		    subRecords.add(new SubForm(Type.DATA));
+		    break;
+	    }
+	    super.parseData(in);
 	}
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
-	    PRKE.export(out, srcMod);
-	    subPackage.export(out, srcMod);
-	    PRKF.export(out, srcMod);
-	}
-
-	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    PRKE.parseData(PRKE.extractRecordData(in));
-	    perkType = PerkType.values()[PRKE.getData()[0]];
-	    switch (perkType) {
-		case QUEST:
-		    subPackage = new SubFormData(Type.DATA);
-		    break;
-		case ABILITY:
-		    subPackage = new SubForm(Type.DATA);
-		    break;
-		case COMPLEX:
-		    subPackage = new PRKEComplexSubPackage();
-		    break;
-	    }
-	    subRecords.remove(Type.PRKF);
-	    subRecords.add(subPackage);
-	    subRecords.add(PRKF);
-	    super.parseData(in);
+	    super.export(out, srcMod);
 	}
 
 	@Override
@@ -117,45 +107,26 @@ public class PERK extends MajorRecordDescription {
 
 	@Override
 	Boolean isValid() {
-	    return PRKE.isValid() && subPackage.isValid();
-	}
-
-	@Override
-	int getHeaderLength() {
-	    return 0;
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    return PRKE.getTotalLength(srcMod) + PRKF.getTotalLength(srcMod)
-		    + subPackage.getTotalLength(srcMod);
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    return subPackage.allFormIDs();
+	    return subRecords.get(Type.PRKE).isValid() && subRecords.get(Type.DATA).isValid();
 	}
     }
 
-    //If PRKE package is type complex, this contains
-    //DATA, PRKC packages, and EPFT records
-    static class PRKEComplexSubPackage extends SubRecord {
+    static class PRKEComplexSubPackage extends SubShell {
 
-	private final static Type[] types = {Type.DATA, Type.PRKC, Type.CTDA, Type.CIS1, Type.CIS2, Type.EPFT, Type.EPFD, Type.EPF2, Type.EPF3};
-	SubData DATA = new SubData(Type.DATA);
-	SubList<PRKCpackage> PRKCs = new SubList<PRKCpackage>(new PRKCpackage());
-	SubData EPFT = new SubData(Type.EPFT);
-	SubRecord EPFD;
-	SubData EPF2 = new SubData(Type.EPF2);
-	SubData EPF3 = new SubData(Type.EPF3);
+	static SubPrototype PRKESubPackageProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.DATA));
+		add(new SubList<>(new PRKCpackage()));
+		add(new SubData(Type.EPFT));
+		add(new SubData(Type.EPF2));
+		add(new SubData(Type.EPF3));
+		add(new SubData(Type.EPFD));  // Placeholder
+	    }
+	};
 
 	PRKEComplexSubPackage() {
-	    super(types);
-	}
-
-	PRKEComplexSubPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
+	    super(PRKESubPackageProto);
 	}
 
 	@Override
@@ -164,155 +135,43 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    DATA.export(out, srcMod);
-	    PRKCs.export(out, srcMod);
-	    EPFT.export(out, srcMod);
-	    EPF2.export(out, srcMod);
-	    EPF3.export(out, srcMod);
-	    if (EPFD != null && EPFD.isValid()) {
-		EPFD.export(out, srcMod);
-	    }
-	}
-
-	@Override
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
-		case DATA:
-		    DATA.parseData(in);
-		    break;
 		case EPFT:
+		    SubData EPFT = subRecords.getSubData(Type.EPFT);
 		    EPFT.parseData(in);
 		    if (EPFT.toInt() >= 3 && EPFT.toInt() <= 5) {
-			EPFD = new SubForm(Type.EPFD);
-		    } else {
-			EPFD = new SubData(Type.EPFD);
+			subRecords.remove(Type.EPFD);
+			subRecords.add(new SubForm(Type.EPFD));
 		    }
-		    break;
-		case EPF2:
-		    EPF2.parseData(in);
-		    break;
-		case EPF3:
-		    EPF3.parseData(in);
-		    break;
-		case EPFD:
-		    if (EPFD != null) {
-			EPFD.parseData(in);
-		    } else {
-			throw new BadRecord("EPFD did not get initialized.");
-		    }
-		    break;
-		default:
-		    PRKCs.parseData(in);
-		    break;
+		    return;
 	    }
+	    super.parseData(in);
 	}
 
 	@Override
 	Boolean isValid() {
 	    return true;
 	}
-
-	@Override
-	int getHeaderLength() {
-	    return 0;
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    int out = 0;
-	    if (DATA.isValid()) {
-		out += DATA.getTotalLength(srcMod);
-	    }
-	    if (PRKCs.isValid()) {
-		out += PRKCs.getTotalLength(srcMod);
-	    }
-	    if (EPFT.isValid()) {
-		out += EPFT.getTotalLength(srcMod);
-	    }
-	    if (EPF2.isValid()) {
-		out += EPF2.getTotalLength(srcMod);
-	    }
-	    if (EPF3.isValid()) {
-		out += EPF3.getTotalLength(srcMod);
-	    }
-	    if (EPFD != null && EPFD.isValid()) {
-		out += EPFD.getTotalLength(srcMod);
-	    }
-	    return out;
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>();
-	    if (EPFD != null) {
-		out.addAll(EPFD.allFormIDs());
-	    }
-	    out.addAll(PRKCs.allFormIDs());
-	    return out;
-	}
     }
 
-    //A PRKC package contains a PRKC record and
-    //a number of CTDA packages
-    static class PRKCpackage extends SubRecord {
+    static class PRKCpackage extends SubShell {
 
-	private static Type[] types = {Type.PRKC, Type.CTDA, Type.CIS1, Type.CIS2};
-	SubData PRKC = new SubData(Type.PRKC);
-	SubList<Condition> CTDAs = new SubList<Condition>(new Condition());
+	static SubPrototype PRKCpackageProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubData(Type.PRKC));
+		add(new SubList<>(new Condition()));
+	    }
+	};
 
 	PRKCpackage() {
-	    super(types);
-	}
-
-	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    switch (getNextType(in)) {
-		case PRKC:
-		    PRKC.parseData(in);
-		    break;
-		default:
-		    CTDAs.parseData(in);
-		    break;
-	    }
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    PRKC.export(out, srcMod);
-	    CTDAs.export(out, srcMod);
-	}
-
-	@Override
-	int getSizeLength() {
-	    return 0;
-	}
-
-	@Override
-	int getHeaderLength() {
-	    return 0;
+	    super(PRKCpackageProto);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
 	    return new PRKCpackage();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return PRKC.isValid()
-		    && CTDAs.isValid();
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    return PRKC.getTotalLength(srcMod)
-		    + CTDAs.getTotalLength(srcMod);
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    return CTDAs.allFormIDs();
 	}
     }
 

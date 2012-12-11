@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -20,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class WEAP extends MajorRecordDescription {
 
-    static final SubRecordsPrototype WEAPproto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype WEAPproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -54,7 +55,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubForm(Type.CNAM));
 	}
     };
-    private final static Type[] type = {Type.WEAP};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.WEAP}));
 
     WEAP() {
 	super();
@@ -62,7 +63,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -71,7 +72,7 @@ public class WEAP extends MajorRecordDescription {
 	return new WEAP();
     }
 
-    static class DNAM extends SubRecord {
+    static class DNAM extends SubRecordTyped {
 
 	WeaponType wtype;
 	byte[] unknown1;
@@ -198,7 +199,7 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	int value = 0;
 	float weight = 0;
@@ -243,7 +244,7 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
-    static class CRDT extends SubRecord {
+    static class CRDT extends SubRecordTyped {
 
 	int critDmg;
 	byte[] unknown0;
@@ -345,7 +346,7 @@ public class WEAP extends MajorRecordDescription {
 	 */
 	Staff,
 	/**
-	 * 
+	 *
 	 */
 	Crossbow;
     }
@@ -470,7 +471,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int getDamage() {

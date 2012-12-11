@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class MagicItem extends MajorRecordDescription {
 
-    static final SubRecordsPrototype magicItemProto = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype magicItemProto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -44,7 +44,7 @@ abstract class MagicItem extends MajorRecordDescription {
 //	out.addAll(magicEffects.allFormIDs());
 //	return out;
 //    }
-    static class SPIT extends SubRecord {
+    static class SPIT extends SubRecordTyped {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);

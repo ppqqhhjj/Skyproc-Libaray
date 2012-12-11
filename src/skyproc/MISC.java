@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class MISC extends MajorRecordNamed {
 
-    static final SubRecordsPrototype MISCproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+    static final SubPrototype MISCproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
@@ -38,7 +39,7 @@ public class MISC extends MajorRecordNamed {
 	    add(new DestructionData());
 	}
     };
-    static Type[] types = new Type[]{Type.MISC};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MISC}));
 
     MISC() {
 	super();
@@ -46,8 +47,8 @@ public class MISC extends MajorRecordNamed {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class MISC extends MajorRecordNamed {
 	return new MISC();
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	int value = 0;
 	float weight = 0;

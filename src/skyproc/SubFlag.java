@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubFlag extends SubRecord {
+class SubFlag extends SubRecordTyped {
     LFlags flags;
 
     SubFlag(Type type_, int size) {

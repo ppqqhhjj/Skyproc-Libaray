@@ -21,9 +21,9 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.AMMO};
-    static GRUP_TYPE[] types = GRUP_TYPE.values();
-    static boolean streaming = true;
+    static GRUP_TYPE[] types = {GRUP_TYPE.RACE};
+//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static boolean streaming = false;
 
     /**
      * @param test
@@ -104,7 +104,7 @@ public class SkyProcTester {
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
 	patch.addAsOverrides(SPGlobal.getDB(), type);
 	// Test to see if stream has been prematurely imported
-	if (SPGlobal.logging() && type != GRUP_TYPE.NPC_) {
+	if (SPGlobal.streamMode && type != GRUP_TYPE.NPC_) {
 	    GRUP g = patch.GRUPs.get(type);
 	    MajorRecord m = (MajorRecord) g.listRecords.get(0);
 	    if (m.subRecords.map.size() > 2) {
@@ -117,7 +117,12 @@ public class SkyProcTester {
 	    patch.remove(f);
 	}
 	patch.setAuthor("Leviathan1753");
-	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
+	try {
+	    patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
+	} catch (BadRecord ex) {
+	    SPGlobal.logException(ex);
+	    System.out.println("Record Lengths were off.");
+	}
 	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
 	if (validF.isFile()) {

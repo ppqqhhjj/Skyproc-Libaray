@@ -5,6 +5,8 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import lev.LExporter;
 
 /**
@@ -14,7 +16,7 @@ import lev.LExporter;
 class StringNonNull extends Record {
 
     String data;
-    private static Type[] type = {Type.NULL};
+    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NULL}));
 
     StringNonNull() {
     }
@@ -57,7 +59,7 @@ class StringNonNull extends Record {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
         return type;
     }
 

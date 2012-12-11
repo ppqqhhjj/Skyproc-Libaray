@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Form List Record
@@ -12,14 +13,14 @@ import java.util.ArrayList;
  */
 public class FLST extends MajorRecord {
 
-    static final SubRecordsPrototype FLSTproto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype FLSTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
 	    add(new SubList<>(new SubForm(Type.LNAM)));
 	}
     };
-    private static Type[] types = { Type.FLST };
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FLST}));
 
     FLST() {
 	super();
@@ -37,8 +38,8 @@ public class FLST extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override

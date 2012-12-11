@@ -19,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubForm extends SubRecord {
+class SubForm extends SubRecordTyped {
 
     FormID ID = new FormID();
 
@@ -77,10 +77,6 @@ class SubForm extends SubRecord {
     }
 
     SubForm(Type type_) {
-	super(type_);
-    }
-
-    SubForm(Type[] type_) {
 	super(type_);
     }
 

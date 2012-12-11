@@ -2,6 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     Map<FormID, T> mapRecords = new HashMap<>();
     Mod srcMod;
     T prototype;
-    private final static Type[] type = {Type.GRUP};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GRUP}));
 
     GRUP(Mod srcMod_, T prototype) {
 	srcMod = srcMod_;
@@ -35,7 +36,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -45,7 +46,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * contains.
      */
     public GRUP_TYPE getContainedType() {
-	return GRUP_TYPE.toRecord(prototype.getTypes()[0]);
+	return GRUP_TYPE.toRecord(prototype.getType());
     }
 
     /**
@@ -217,8 +218,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     void handleBadRecord(MajorRecord r, String reason) {
 	if (logging()) {
 	    if (r.isValid()) {
-		logSync(toString(), "Caught a bad record: " + r.getFormStr() + ", reason: " + reason);
-		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r.getFormStr() + srcMod + ", reason: " + reason);
+		logSync(toString(), "Caught a bad record: " + r + ", reason: " + reason);
+		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r + " from " + srcMod + ", reason: " + reason);
 	    } else {
 		logSync(toString(), "Caught a bad record, reason:" + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);

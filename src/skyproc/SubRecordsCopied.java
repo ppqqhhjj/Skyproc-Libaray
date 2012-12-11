@@ -27,7 +27,7 @@ class SubRecordsCopied extends SubRecords {
     @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> iter = new ArrayList<>();
-	for (Type t : orig.typeOrder()) {
+	for (Type t : orig.getTypes()) {
 	    if (contains(t)) {
 		iter.add(get(t));
 	    }
@@ -57,7 +57,7 @@ class SubRecordsCopied extends SubRecords {
 
     public ArrayList<SubRecord> iteratorNoCopy() {
 	ArrayList<SubRecord> out = new ArrayList<>();
-	for (Type t : orig.typeOrder()) {
+	for (Type t : orig.getTypes()) {
 	    if (contains(t)) {
 		if (map.containsKey(t)) {
 		    out.add(map.get(t));
@@ -83,12 +83,8 @@ class SubRecordsCopied extends SubRecords {
     }
 
     @Override
-    public Set<Type> getTypes() {
+    public ArrayList<Type> getTypes() {
 	return orig.getTypes();
     }
 
-    @Override
-    public ArrayList<Type> typeOrder() {
-	return orig.typeOrder();
-    }
 }

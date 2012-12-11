@@ -13,14 +13,14 @@ import java.util.Iterator;
  */
 class SubRecordsDerived extends SubRecords {
 
-    protected SubRecordsPrototype prototype;
+    protected SubPrototype prototype;
 
-    public SubRecordsDerived(SubRecordsPrototype proto) {
+    public SubRecordsDerived(SubPrototype proto) {
 	this.prototype = proto;
     }
 
     @Override
-    public void setPrototype(SubRecordsPrototype proto) {
+    public void setPrototype(SubPrototype proto) {
 	prototype = proto;
     }
 
@@ -62,7 +62,7 @@ class SubRecordsDerived extends SubRecords {
     @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> list = new ArrayList<>();
-	for (Type t : prototype.list) {
+	for (Type t : prototype.listExport) {
 	    if (shouldExport(t)) {
 		list.add(get(t));
 	    }
@@ -71,8 +71,8 @@ class SubRecordsDerived extends SubRecords {
     }
 
     @Override
-    public ArrayList<Type> typeOrder() {
-	return prototype.list;
+    public ArrayList<Type> getTypes() {
+	return prototype.listExtensive;
     }
 
     class DerivedIterator implements Iterator<SubRecord> {
@@ -80,7 +80,7 @@ class SubRecordsDerived extends SubRecords {
 	Iterator<Type> list;
 
 	DerivedIterator() {
-	    list = prototype.list.iterator();
+	    list = prototype.listExport.iterator();
 	}
 
 	@Override

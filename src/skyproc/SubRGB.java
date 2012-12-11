@@ -15,7 +15,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubRGB extends SubRecord {
+class SubRGB extends SubRecordTyped {
 
     float r;
     float g;

@@ -4,20 +4,23 @@
  */
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  *
  * @author Justin Swanson
  */
 public class LVLI extends LeveledRecord {
 
-    static final SubRecordsPrototype LVLIproto = new SubRecordsPrototype(LeveledRecord.LeveledProto){
+    static final SubPrototype LVLIproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
 	protected void addRecords() {
 	    before(new SubForm(Type.LVLG), Type.LVLO);
 	}
     };
-    static Type[] types = {Type.LVLI};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLI}));
 
     LVLI () {
 	super();
@@ -33,10 +36,10 @@ public class LVLI extends LeveledRecord {
         super(modToOriginateFrom, edid);
 	subRecords.setPrototype(LVLIproto);
     }
-    
+
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override

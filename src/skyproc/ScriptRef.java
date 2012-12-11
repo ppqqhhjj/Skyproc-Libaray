@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -24,7 +25,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     StringNonNull name = new StringNonNull();
     int unknown = 0;
     ArrayList<ScriptProperty> properties = new ArrayList<>();
-    private final static Type[] type = {Type.VMAD};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.VMAD}));
 
     ScriptRef() {
     }
@@ -98,7 +99,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -132,7 +133,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     /**
-     * 
+     *
      * @param obj
      * @return
      */
@@ -152,7 +153,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -163,7 +164,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     /**
-     * 
+     *
      * @return Iterator over the Property names in the script.
      */
     @Override

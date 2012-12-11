@@ -13,16 +13,16 @@ import skyproc.exceptions.NotFound;
  *
  * @author Justin Swanson
  */
-abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO> {
+abstract public class LeveledRecord extends MajorRecord implements Iterable<LeveledEntry> {
 
-    static final SubRecordsPrototype LeveledProto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype LeveledProto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
 	    add(new SubData(Type.OBND, 12));
 	    add(new SubData(Type.LVLD, 1));
 	    add(new SubFlag(Type.LVLF, 1));
-	    add(new SubList<>(Type.LLCT, 1, new LVLO()));
+	    add(new SubListCounted<>(Type.LLCT, 1, new LeveledEntry()));
 	}
     };
 
@@ -52,7 +52,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @return An iterator that steps through each entry in the LVLN.
      */
     @Override
-    public Iterator<LVLO> iterator() {
+    public Iterator<LeveledEntry> iterator() {
 	return subRecords.getSubList(Type.LVLO).iterator();
     }
 
@@ -86,7 +86,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      *
      * @return
      */
-    public ArrayList<LVLO> getEntries() {
+    public ArrayList<LeveledEntry> getEntries() {
 	return subRecords.getSubList(Type.LVLO).toPublic();
     }
 
@@ -95,9 +95,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      *  replaced with their contents.
      * @return
      */
-    public ArrayList<LVLO> getFlattenedEntries() {
-	ArrayList<LVLO> out = new ArrayList<>();
-	for (LVLO entry : getEntries()) {
+    public ArrayList<LeveledEntry> getFlattenedEntries() {
+	ArrayList<LeveledEntry> out = new ArrayList<>();
+	for (LeveledEntry entry : getEntries()) {
 	    MajorRecord o = SPDatabase.getMajor(entry.getForm());
 	    if (o instanceof LeveledRecord) {
 		out.addAll(((LeveledRecord)o).getFlattenedEntries());
@@ -113,7 +113,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      *
      * @param entry LVLO to add to this LVLN
      */
-    public void addEntry(LVLO entry) {
+    public void addEntry(LeveledEntry entry) {
 	subRecords.getSubList(Type.LVLO).add(entry);
     }
 
@@ -125,7 +125,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param count Number of actors to spawn.
      */
     public void addEntry(FormID id, int level, int count) {
-	addEntry(new LVLO(id, level, count));
+	addEntry(new LeveledEntry(id, level, count));
     }
 
     /**
@@ -149,8 +149,8 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<LVLO
      * @param i The zero based index to query.
      * @return The ith entry in the LVLN.
      */
-    public LVLO getEntry(int i) {
-	return (LVLO) subRecords.getSubList(Type.LVLO).get(i);
+    public LeveledEntry getEntry(int i) {
+	return (LeveledEntry) subRecords.getSubList(Type.LVLO).get(i);
     }
 
     /**

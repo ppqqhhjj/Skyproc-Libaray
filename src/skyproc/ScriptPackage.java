@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ScriptPackage extends SubRecord implements Serializable {
+public class ScriptPackage extends SubRecordTyped implements Serializable {
 
     int version = 5;
     int unknown = 2;

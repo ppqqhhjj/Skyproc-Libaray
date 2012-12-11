@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubFormArray extends SubRecord implements Iterable<FormID> {
+class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 
     ArrayList<FormID> IDs;
 

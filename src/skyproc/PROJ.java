@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class PROJ extends MajorRecordNamed {
 
-    static final SubRecordsPrototype PROJprototype = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+    static final SubPrototype PROJprototype = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
@@ -35,14 +36,19 @@ public class PROJ extends MajorRecordNamed {
 	    add(new SubData(Type.VNAM)); // SoundVolume
 	}
     };
-    static Type[] types = {Type.PROJ};
+    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PROJ}));
 
     PROJ() {
 	super();
 	subRecords.setPrototype(PROJprototype);
     }
 
-    static class DATA extends SubRecord {
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    static class DATA extends SubRecordTyped {
 
 	LFlags flags = new LFlags(2);
 	LFlags projType = new LFlags(2);
@@ -161,40 +167,41 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public enum ProjectileFlag {
 
 	/**
-	 * 
+	 *
 	 */
 	Explosion(1),
+	AltTrigger(2),
 	/**
-	 * 
+	 *
 	 */
 	MuzzleFlash(3),
 	/**
-	 * 
+	 *
 	 */
 	CanBeDisabled(5),
 	/**
-	 * 
+	 *
 	 */
 	CanBePickedUp(6),
 	/**
-	 * 
+	 *
 	 */
 	SuperSonic(7),
 	/**
-	 * 
+	 *
 	 */
 	CritPinsLimbs(8),
 	/**
-	 * 
+	 *
 	 */
 	PassThroughSmallTransparent(9),
 	/**
-	 * 
+	 *
 	 */
 	DisableCombatAimCorrection(10);
 	int value;
@@ -205,36 +212,36 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public enum ProjectileType {
 
 	/**
-	 * 
+	 *
 	 */
 	Missile, //1
 	/**
-	 * 
+	 *
 	 */
 	Lobber, //2
 	/**
-	 * 
+	 *
 	 */
 	Beam, //4
 	/**
-	 * 
+	 *
 	 */
 	Flame, //8
 	/**
-	 * 
+	 *
 	 */
 	Cone, //10
 	/**
-	 * 
+	 *
 	 */
 	Barrier, //20
 	/**
-	 * 
+	 *
 	 */
 	Arrow; //40
 
@@ -256,11 +263,6 @@ public class PROJ extends MajorRecordNamed {
 		    return Arrow;
 	    }
 	}
-    }
-
-    @Override
-    Type[] getTypes() {
-	return types;
     }
 
     @Override
@@ -306,7 +308,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @param on
      */
@@ -315,7 +317,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param flag
      * @return
      */
@@ -324,7 +326,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param t
      */
     public void setProjType(ProjectileType t) {
@@ -334,7 +336,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ProjectileType getProjType() {
@@ -342,7 +344,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param gravity
      */
     public void setGravity(float gravity) {
@@ -350,7 +352,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getGravity() {
@@ -358,7 +360,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param speed
      */
     public void setSpeed(float speed) {
@@ -366,7 +368,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getSpeed() {
@@ -374,7 +376,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param range
      */
     public void setRange(float range) {
@@ -382,7 +384,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getRange() {
@@ -390,7 +392,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param light
      */
     public void setLight(FormID light) {
@@ -398,7 +400,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getLight() {
@@ -406,7 +408,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param light
      */
     public void setMuzzleLight(FormID light) {
@@ -414,7 +416,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getMuzzleLight() {
@@ -422,7 +424,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param chance
      */
     public void setTracerChance(float chance) {
@@ -430,7 +432,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getTracerChance() {
@@ -438,7 +440,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param proximity
      */
     public void setProximity(float proximity) {
@@ -446,7 +448,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getProximity() {
@@ -454,7 +456,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param timer
      */
     public void setTimer(float timer) {
@@ -462,7 +464,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getTimer() {
@@ -470,7 +472,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param explType
      */
     public void setExplosionType(FormID explType) {
@@ -478,7 +480,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getExplosionType() {
@@ -486,7 +488,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param sound
      */
     public void setSound(FormID sound) {
@@ -494,7 +496,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getSound() {
@@ -502,7 +504,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param duration
      */
     public void setMuzzleFlashDuration(float duration) {
@@ -510,7 +512,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getMuzzleFlashDuration() {
@@ -518,7 +520,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param duration
      */
     public void setFadeDuration(float duration) {
@@ -526,7 +528,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getFadeDuration() {
@@ -534,7 +536,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param force
      */
     public void setImpactForce(float force) {
@@ -542,7 +544,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getImpactForce() {
@@ -550,7 +552,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param sound
      */
     public void setExplosionSound(FormID sound) {
@@ -558,7 +560,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getExplosionSound() {
@@ -566,7 +568,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param sound
      */
     public void setDisableSound(FormID sound) {
@@ -574,7 +576,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getDisableSound() {
@@ -582,7 +584,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param weaponSource
      */
     public void setDefaultWeaponSource(FormID weaponSource) {
@@ -590,7 +592,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getDefaultWeaponSource() {
@@ -598,7 +600,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param spread
      */
     public void setConeSpread(float spread) {
@@ -606,7 +608,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getConeSpread() {
@@ -614,7 +616,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param radius
      */
     public void setCollisionRadius(float radius) {
@@ -622,7 +624,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getCollisionRadius() {
@@ -630,7 +632,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param lifetime
      */
     public void setLifetime(float lifetime) {
@@ -638,7 +640,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getLifetime() {
@@ -646,7 +648,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param interval
      */
     public void setRelaunchInterval(float interval) {
@@ -654,7 +656,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public float getRelaunchInterval() {
@@ -662,7 +664,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param decal
      */
     public void setDecalData(FormID decal) {
@@ -670,7 +672,7 @@ public class PROJ extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public FormID getDecalData() {

@@ -3,7 +3,7 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.exceptions.BadParameter;
@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class NPC_ extends Actor implements Serializable {
 
-    static final SubRecordsPrototype NPC_proto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
+    static final SubPrototype NPC_proto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
@@ -27,9 +27,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubForm(Type.VTCK));
 	    add(new SubForm(Type.TPLT));
 	    add(new SubForm(Type.RNAM));
-	    SubList spells = new SubList<>(Type.SPCT, 4, new SubForm(Type.SPLO));
-	    spells.allowDuplicates(false);
-	    add(spells);
+	    add(new SubListCounted<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
 	    add(new SubData(Type.DEST));
 	    add(new SubData(Type.DSTD));
 	    add(new SubData(Type.DSTF));
@@ -42,8 +40,8 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubForm(Type.GWOR));
 	    add(new SubForm(Type.OCOR));
 	    add(new SubForm(Type.ECOR));
-	    add(new SubList<>(Type.PRKZ, 4, new SubFormInt(Type.PRKR)));
-	    add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	    add(new SubListCounted<>(Type.PRKZ, 4, new SubFormInt(Type.PRKR)));
+	    add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
 	    add(new COED());
 	    add(new AIDT());
 	    add(new SubList<>(new SubForm(Type.PKID)));
@@ -76,7 +74,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubList<>(new TintLayer()));
 	}
     };
-    private final static Type[] type = {Type.NPC_};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NPC_}));
 
     NPC_() {
 	super();
@@ -84,7 +82,7 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -96,11 +94,15 @@ public class NPC_ extends Actor implements Serializable {
     /**
      * Sound package containing sounds to play for different actions
      */
-    public static class SoundPackage extends SubRecord implements Serializable {
+    public static class SoundPackage extends SubShell implements Serializable {
 
-	SubInt CSDT = new SubInt(Type.CSDT);
-	ArrayList<SoundPair> soundPairs = new ArrayList<>();
-	private static Type[] types = {Type.CSDT, Type.CSDI, Type.CSDC};
+	static SubPrototype soundPackageProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.CSDT));
+		add(new SubList<>(new SoundPair()));
+	    }
+	};
 
 	SoundPackage(SoundLocation location) {
 	    this();
@@ -108,7 +110,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	SoundPackage() {
-	    super(types);
+	    super(soundPackageProto);
 	}
 
 	SoundPackage(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -117,110 +119,8 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
-	    boolean valid = CSDT.isValid();
-	    if (valid) {
-		for (SoundPair s : soundPairs) {
-		    valid = valid && s.CSDC.isValid();
-		}
-	    }
-	    return valid;
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(soundPairs.size());
-	    for (SoundPair pairs : soundPairs) {
-		out.add(pairs.CSDI.ID);
-	    }
-	    return out;
-	}
-
-	@Override
 	SubRecord getNew(Type type_) {
 	    return new SoundPackage();
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    if (isValid()) {
-		int length = CSDT.getContentLength(srcMod);
-		for (SoundPair pair : soundPairs) {
-		    length += pair.CSDI.getTotalLength(srcMod) + pair.CSDC.getTotalLength(srcMod);
-		}
-		return length;
-	    } else {
-		return 0;
-	    }
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    CSDT.export(out, srcMod);
-	    for (SoundPair pair : soundPairs) {
-		pair.CSDI.export(out, srcMod);
-		pair.CSDC.export(out, srcMod);
-	    }
-	}
-
-	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    // Not calling super
-	    Type t = Type.valueOf(Ln.arrayToString(in.extractInts(4)));
-	    int size = Ln.arrayToInt(in.extractInts(2));
-	    switch (t) {
-		case CSDT:
-		    CSDT.set(in.extractInt(size));
-		    break;
-		case CSDI:
-		    if (size == 4) {
-			SubForm CSDI = new SubForm(Type.CSDI);
-			CSDI.setForm(in.extract(size));
-			soundPairs.add(new SoundPair(CSDI));
-		    } else {
-			throw new BadRecord("CSDI data length was not 4, as expected to be a formID");
-		    }
-		    break;
-		case CSDC:
-		    SubInt CSDC = new SubInt(Type.CSDC, 1);
-		    CSDC.set(in.extractInt(size));
-		    soundPairs.get(soundPairs.size() - 1).setChance(CSDC);
-		    break;
-		default:
-		    throw new BadRecord("CSDT package does not know what to do with record of type: " + t);
-	    }
-	}
-
-	/**
-	 * 
-	 * @param o
-	 * @return
-	 */
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) {
-		return true;
-	    }
-	    if (o == null) {
-		return false;
-	    }
-	    if (!(o instanceof SoundPackage)) {
-		return false;
-	    }
-	    SoundPackage cs = (SoundPackage) o; // Convert the object to a Person
-	    return (this.CSDT.equals(cs.CSDT) && this.soundPairs.equals(cs.soundPairs));
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	@Override
-	public int hashCode() {
-	    int hash = 7;
-	    hash = 97 * hash + Objects.hashCode(this.CSDT);
-	    hash = 97 * hash + Objects.hashCode(this.soundPairs);
-	    return hash;
 	}
 
 	/**
@@ -228,7 +128,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param loc
 	 */
 	public final void setLocation(SoundLocation loc) {
-	    CSDT.set(loc.ordinal());
+	    subRecords.setSubInt(Type.CSDT, loc.ordinal());
 	}
 
 	/**
@@ -236,8 +136,9 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public SoundLocation getLocation() {
-	    if (CSDT.get() < SoundLocation.values().length) {
-		return SoundLocation.values()[CSDT.get()];
+	    SubInt csdt = subRecords.getSubInt(Type.CSDT);
+	    if (csdt.get() < SoundLocation.values().length) {
+		return SoundLocation.values()[csdt.get()];
 	    } else {
 		return SoundLocation.Idle;
 	    }
@@ -248,7 +149,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public ArrayList<SoundPair> getSoundPairs() {
-	    return soundPairs;
+	    return new ArrayList<>(subRecords.getSubList(Type.CSDI).toPublic());
 	}
 
 	/**
@@ -256,17 +157,26 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param pair
 	 */
 	public void addSoundPair(SoundPair pair) {
-	    soundPairs.add(pair);
+	    subRecords.getSubList(Type.CSDI).add(pair);
 	}
     }
 
     /**
      * Pair containing sound to play and chance to play it
      */
-    public static class SoundPair implements Serializable {
+    public static class SoundPair extends SubShell {
 
-	SubForm CSDI;
-	SubInt CSDC = new SubInt(Type.CSDC);
+	static SubPrototype soundPairProto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubForm(Type.CSDI));
+		add(new SubInt(Type.CSDC, 1));
+	    }
+	};
+
+	SoundPair() {
+	    super(soundPairProto);
+	}
 
 	/**
 	 *
@@ -274,48 +184,9 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param chance
 	 */
 	public SoundPair(FormID sound, int chance) {
+	    this();
 	    setChance(chance);
 	    setSound(sound);
-	}
-
-	SoundPair(SubForm csdi) {
-	    CSDI = csdi;
-	}
-
-	void setChance(SubInt csdc) {
-	    CSDC = csdc;
-	}
-
-	/**
-	 * 
-	 * @param o
-	 * @return
-	 */
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) {
-		return true;
-	    }
-	    if (o == null) {
-		return false;
-	    }
-	    if (!(o instanceof SoundPair)) {
-		return false;
-	    }
-	    SoundPair cs = (SoundPair) o; // Convert the object to a Person
-	    return (this.CSDC.equals(cs.CSDC) && this.CSDI.equals(cs.CSDI));
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	@Override
-	public int hashCode() {
-	    int hash = 7;
-	    hash = 89 * hash + Objects.hashCode(this.CSDI);
-	    hash = 89 * hash + Objects.hashCode(this.CSDC);
-	    return hash;
 	}
 
 	/**
@@ -329,7 +200,7 @@ public class NPC_ extends Actor implements Serializable {
 		chance = 100;
 	    }
 
-	    CSDC.set(chance);
+	    subRecords.setSubInt(Type.CSDC, chance);
 	}
 
 	/**
@@ -337,7 +208,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getChance() {
-	    return CSDC.get();
+	    return subRecords.getSubInt(Type.CSDC).get();
 	}
 
 	/**
@@ -345,7 +216,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param sound
 	 */
 	public final void setSound(FormID sound) {
-	    CSDI.setForm(sound);
+	    subRecords.setSubForm(Type.CSDI, sound);
 	}
 
 	/**
@@ -353,11 +224,16 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public FormID getSound() {
-	    return CSDI.getForm();
+	    return subRecords.getSubForm(Type.CSDI).getForm();
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new SoundPair();
 	}
     }
 
-    static class DNAM extends SubRecord implements Serializable {
+    static class DNAM extends SubRecordTyped implements Serializable {
 
 	byte[] skills = new byte[36];
 	int health = 1;
@@ -450,18 +326,18 @@ public class NPC_ extends Actor implements Serializable {
      */
     public static class TintLayer extends SubShell implements Serializable {
 
-	SubInt TINI = new SubInt(Type.TINI, 2);
-	SubRGBshort TINC = new SubRGBshort(Type.TINC);
-	SubFloat TINV = new SubFloat(Type.TINV);
-	SubInt TIAS = new SubInt(Type.TIAS, 2);
-	private static Type[] types = {Type.TINI, Type.TINC, Type.TINV, Type.TIAS};
+	static SubPrototype tintPrototype = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.TINI, 2));
+		add(new SubRGBshort(Type.TINC));
+		add(new SubFloat(Type.TINV));
+		add(new SubInt(Type.TIAS, 2));
+	    }
+	};
 
 	TintLayer() {
-	    super(types);
-	    subRecords.add(TINI);
-	    subRecords.add(TINC);
-	    subRecords.add(TINV);
-	    subRecords.add(TIAS);
+	    super(tintPrototype);
 	}
 
 	@Override
@@ -469,17 +345,12 @@ public class NPC_ extends Actor implements Serializable {
 	    return new TintLayer();
 	}
 
-	@Override
-	int getHeaderLength() {
-	    return 0;
-	}
-
 	/**
 	 *
 	 * @param in
 	 */
 	public void setIndex(int in) {
-	    TINI.set(in);
+	    subRecords.setSubInt(Type.TINI, in);
 	}
 
 	/**
@@ -487,7 +358,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getIndex() {
-	    return TINI.get();
+	    return subRecords.getSubInt(Type.TINI).get();
 	}
 
 	/**
@@ -496,7 +367,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param value
 	 */
 	public void setColor(RGBA color, short value) {
-	    TINC.set(color, value);
+	    subRecords.setSubRGBshort(Type.TINC, color, value);
 	}
 
 	/**
@@ -505,7 +376,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public short getColor(RGBA color) {
-	    return TINC.get(color);
+	    return subRecords.getSubRGBshort(Type.TINC).get(color);
 	}
 
 	/**
@@ -513,7 +384,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param value
 	 */
 	public void setInterpolation(float value) {
-	    TINV.set(value);
+	    subRecords.setSubFloat(Type.TINV, value);
 	}
 
 	/**
@@ -521,15 +392,15 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public float getInterpolation() {
-	    return TINV.get();
+	    return subRecords.getSubFloat(Type.TINV).get();
 	}
 
 	/**
 	 *
 	 * @param value
 	 */
-	public void setPreset (int value) {
-	    TIAS.set(value);
+	public void setPreset(int value) {
+	    subRecords.setSubInt(Type.TIAS, value);
 	}
 
 	/**
@@ -537,11 +408,11 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getPreset() {
-	    return TIAS.get();
+	    return subRecords.getSubInt(Type.TIAS).get();
 	}
     }
 
-    static class ACBS extends SubRecord implements Serializable {
+    static class ACBS extends SubRecordTyped implements Serializable {
 
 	LFlags ACBSflags = new LFlags(4);
 	int magickaOffset = 0;
@@ -618,7 +489,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class AIDT extends SubRecord implements Serializable {
+    static class AIDT extends SubRecordTyped implements Serializable {
 
 	Aggression aggression = Aggression.Unaggressive;
 	Confidence confidence = Confidence.Cowardly;
@@ -695,7 +566,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class ATKD extends SubRecord implements Serializable {
+    static class ATKD extends SubRecordTyped implements Serializable {
 
 	float damageMult;
 	float attackChance;
@@ -773,7 +644,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class NAM9 extends SubRecord implements Serializable {
+    static class NAM9 extends SubRecordTyped implements Serializable {
 
 	float noseLong = 0;
 	float noseUp = 0;
@@ -865,7 +736,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class NAMA extends SubRecord implements Serializable {
+    static class NAMA extends SubRecordTyped implements Serializable {
 
 	int nose;
 	int unknown;
@@ -912,7 +783,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class COED extends SubRecord implements Serializable {
+    static class COED extends SubRecordTyped implements Serializable {
 
 	FormID f1 = new FormID();
 	FormID f2 = new FormID();
@@ -962,8 +833,6 @@ public class NPC_ extends Actor implements Serializable {
 	    out.add(f2);
 	    return out;
 	}
-
-
     }
 
     /**

@@ -5,6 +5,8 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -18,8 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class QUST extends MajorRecordNamed {
 
-    static final SubRecordsPrototype QUSTproto = new SubRecordsPrototype(MajorRecordNamed.namedProto) {
-
+    static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
@@ -40,14 +41,14 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new ALLS()));
 	}
     };
-    static Type[] types = { Type.QUST };
+    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.QUST}));
 
-    QUST () {
+    QUST() {
 	super();
 	subRecords.setPrototype(QUSTproto);
     }
 
-    QUST (Mod modToOriginateFrom, String edid) {
+    QUST(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
 	DNAM dnam = (DNAM) subRecords.get(Type.DNAM);
@@ -58,7 +59,7 @@ public class QUST extends MajorRecordNamed {
 	subRecords.getSubInt(Type.ANAM).set(0);
     }
 
-    static class DNAM extends SubRecord {
+    static class DNAM extends SubRecordTyped {
 
 	LFlags flags1 = new LFlags(1);
 	LFlags flags2 = new LFlags(1);
@@ -67,7 +68,7 @@ public class QUST extends MajorRecordNamed {
 	int unknown2 = 0;
 	int questType = 0;
 
-	DNAM () {
+	DNAM() {
 	    super(Type.DNAM);
 	}
 
@@ -102,138 +103,88 @@ public class QUST extends MajorRecordNamed {
 	    unknown2 = in.extractInt(4);
 	    questType = in.extractInt(4);
 	}
-
     }
 
     static class INDX extends SubShellBulkType {
 
-	SubInt INDX = new SubInt(Type.INDX);
-	SubList<SubFlag> QSDTs = new SubList<>(new SubFlag(Type.QSDT, 1));
-	SubString CNAM = new SubString(Type.CNAM, true);
-	SubList<SubData> SCHRs = new SubList<>(new SubData(Type.SCHR));
-	SubList<SubForm> QNAMs = new SubList<>(new SubForm(Type.QNAM));
-	SubList<SubString> SCTXs = new SubList<>(new SubString(Type.SCTX, false));
-	SubList<Condition> CONDs = new SubList<>(new Condition());
-
-	static Type[] types = { Type.QSDT , Type.CNAM, Type.SCHR, Type.QNAM,
-	    Type.SCTX, Type.CTDA, Type.CIS1, Type.CIS2 };
+	static SubPrototype INDXproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.INDX));
+		add(new SubList<>(new SubFlag(Type.QSDT, 1)));
+		add(new SubString(Type.CNAM, true));
+		add(new SubList<>(new SubData(Type.SCHR)));
+		add(new SubList<>(new SubForm(Type.QNAM)));
+		add(new SubList<>(new SubString(Type.SCTX, false)));
+		add(new SubList<>(new Condition()));
+	    }
+	};
 
 	INDX() {
-	    super(Type.INDX, types);
-
-	    subRecords.add(INDX);
-	    subRecords.add(QSDTs);
-	    subRecords.add(CNAM);
-	    subRecords.add(SCHRs);
-	    subRecords.add(QNAMs);
-	    subRecords.add(SCTXs);
-	    subRecords.add(CONDs);
+	    super(INDXproto, false);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
 	    return new INDX();
 	}
-
     }
 
-    static class ALSTALLS extends SubShellBulkType {
+    static abstract class ALSTALLS extends SubShellBulkType {
 
-	SubList<SubString> ALID = new SubList<>(new SubString(Type.ALID, true));
-	SubData ALED = new SubData(Type.ALED);
-	SubForm ALUA = new SubForm(Type.ALUA);
-	SubForm ALCO = new SubForm(Type.ALCO);
-	SubList<SubForm> ALEQs = new SubList<>(new SubForm(Type.ALEQ));
-	SubString ALFE = new SubString(Type.ALFE, false);
-	SubForm ALFL = new SubForm(Type.ALFL);
-	SubForm ALFR = new SubForm(Type.ALFR);
-	SubForm ALRT = new SubForm(Type.ALRT);
-	SubList<Condition> CONDs = new SubList<>(new Condition());
-	SubInt ALCA = new SubInt(Type.ALCA);
-	SubInt ALCL = new SubInt(Type.ALCL);
-	SubInt ALEA = new SubInt(Type.ALEA);
-	SubInt ALFA = new SubInt(Type.ALFA);
-	SubInt ALFD = new SubInt(Type.ALFD);
-	SubFlag FNAM = new SubFlag(Type.FNAM, 4);
-	SubInt ALNA = new SubInt(Type.ALNA);
-	SubInt ALNT = new SubInt(Type.ALNT);
-	SubForm VTCK = new SubForm(Type.VTCK);
-	SubForm ALDN = new SubForm(Type.ALDN);
-	SubList<SubForm> ALFCs = new SubList<>(new SubForm(Type.ALFC));
-	SubList<SubInt> ALFI = new SubList<>(new SubInt(Type.ALFI));
-	SubList<SubForm> ALPCs = new SubList<>(new SubForm(Type.ALPC));
-	SubList<SubForm> ALSPs = new SubList<>(new SubForm(Type.ALSP));
-	SubList<SubFormInt> CNTOs = new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO));
-	SubForm ECOR = new SubForm(Type.ECOR);
-	SubForm KNAM = new SubForm(Type.KNAM);
-	KeywordSet keywords = new KeywordSet();
-	SubInt NAM0 = new SubInt(Type.NAM0);
-	SubInt QTGL = new SubInt(Type.QTGL);
-
-	static Type[] types = { Type.ALID, Type.ALED, Type.ALUA, Type.ALCO, Type.ALEQ, Type.ALFE,
-	    Type.ALFL, Type.ALFR, Type.ALRT, Type.CTDA, Type.CIS1, Type.CIS2, Type.ALCA,
-	    Type.ALCL, Type.ALEA, Type.ALFA, Type.ALFD, Type.FNAM, Type.ALNA, Type.ALNT, Type.VTCK, Type.ALDN,
-	    Type.ALFC, Type.ALFI, Type.ALPC, Type.ALSP, Type.COCT, Type.CNTO, Type.ECOR,
-	    Type.KNAM, Type.KSIZ, Type.KWDA, Type.NAM0, Type.QTGL
+	static SubPrototype ALSTALLSproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubList<>(new SubString(Type.ALID, true)));
+		add(new SubData(Type.ALED));
+		add(new SubForm(Type.ALUA));
+		add(new SubForm(Type.ALCO));
+		add(new SubList<>(new SubForm(Type.ALEQ)));
+		add(new SubString(Type.ALFE, false));
+		add(new SubForm(Type.ALFL));
+		add(new SubForm(Type.ALFR));
+		add(new SubForm(Type.ALRT));
+		add(new SubList<>(new Condition()));
+		add(new SubInt(Type.ALCA));
+		add(new SubInt(Type.ALCL));
+		add(new SubInt(Type.ALEA));
+		add(new SubInt(Type.ALFA));
+		add(new SubInt(Type.ALFD));
+		add(new SubFlag(Type.FNAM, 4));
+		add(new SubInt(Type.ALNA));
+		add(new SubInt(Type.ALNT));
+		add(new SubForm(Type.VTCK));
+		add(new SubForm(Type.ALDN));
+		add(new SubList<>(new SubForm(Type.ALFC)));
+		add(new SubList<>(new SubInt(Type.ALFI)));
+		add(new SubList<>(new SubForm(Type.ALPC)));
+		add(new SubList<>(new SubForm(Type.ALSP)));
+		add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+		add(new SubForm(Type.ECOR));
+		add(new SubForm(Type.KNAM));
+		add(new KeywordSet());
+		add(new SubInt(Type.NAM0));
+		add(new SubInt(Type.QTGL));
+	    }
 	};
 
-	ALSTALLS(Type t) {
-	    super(t, types);
+	ALSTALLS(SubPrototype proto) {
+	    super(proto, false);
 	}
-
-	void init() {
-	    subRecords.add(ALID);
-	    subRecords.add(ALED);
-	    subRecords.add(ALUA);
-	    subRecords.add(ALCO);
-	    subRecords.add(ALEQs);
-	    subRecords.add(ALFE);
-	    subRecords.add(ALFL);
-	    subRecords.add(ALFR);
-	    subRecords.add(ALRT);
-	    subRecords.add(CONDs);
-	    subRecords.add(ALCA);
-	    subRecords.add(ALCL);
-	    subRecords.add(ALEA);
-	    subRecords.add(ALFA);
-	    subRecords.add(ALFD);
-	    subRecords.add(FNAM);
-	    subRecords.add(ALNA);
-	    subRecords.add(ALNT);
-	    subRecords.add(VTCK);
-	    subRecords.add(ALDN);
-	    subRecords.add(ALFCs);
-	    subRecords.add(ALFI);
-	    subRecords.add(ALPCs);
-	    subRecords.add(ALSPs);
-	    subRecords.add(CNTOs);
-	    subRecords.add(ECOR);
-	    subRecords.add(KNAM);
-	    subRecords.add(keywords);
-	    subRecords.add(NAM0);
-	    subRecords.add(QTGL);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new ALSTALLS(type);
-	}
-
     }
 
     static class ALST extends ALSTALLS {
 
-	SubInt ALST = new SubInt(Type.ALST);
+	static SubPrototype ALSTproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.ALST));
+		mergeIn(ALSTALLSproto);
+	    }
+	};
 
-	ALST () {
-	    super(Type.ALST);
-	    init();
-	}
-
-	@Override
-	void init() {
-	    subRecords.add(ALST);
-	    super.init();
+	ALST() {
+	    super(ALSTproto);
 	}
 
 	@Override
@@ -244,17 +195,16 @@ public class QUST extends MajorRecordNamed {
 
     static class ALLS extends ALSTALLS {
 
-	SubInt ALLS = new SubInt(Type.ALLS);
+	static SubPrototype ALLSproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.ALLS));
+		mergeIn(ALSTALLSproto);
+	    }
+	};
 
-	ALLS () {
-	    super(Type.ALLS);
-	    init();
-	}
-
-	@Override
-	void init() {
-	    subRecords.add(ALLS);
-	    super.init();
+	ALLS() {
+	    super(ALLSproto);
 	}
 
 	@Override
@@ -265,29 +215,25 @@ public class QUST extends MajorRecordNamed {
 
     static class QOBJ extends SubShellBulkType {
 
-	SubInt QOBJ = new SubInt(Type.QOBJ, 2);
-	SubData FNAM = new SubData(Type.FNAM);
-	SubStringPointer NNAM = new SubStringPointer(Type.NNAM, SubStringPointer.Files.DLSTRINGS);
-	SubList<SubData> QSTAs = new SubList<>(new SubData(Type.QSTA));
-	SubList<Condition> CTDAs = new SubList<>(new Condition());
+	static SubPrototype QOBJproto = new SubPrototype() {
+	    @Override
+	    protected void addRecords() {
+		add(new SubInt(Type.QOBJ, 2));
+		add(new SubData(Type.FNAM));
+		add(new SubStringPointer(Type.NNAM, SubStringPointer.Files.DLSTRINGS));
+		add(new SubList<>(new SubData(Type.QSTA)));
+		add(new SubList<>(new Condition()));
+	    }
+	};
 
-	static Type[] types = { Type.FNAM, Type.NNAM, Type.QSTA, Type.CTDA, Type.CIS1, Type.CIS2 };
-
-	QOBJ () {
-	    super(Type.QOBJ, types);
-
-	    subRecords.add(QOBJ);
-	    subRecords.add(FNAM);
-	    subRecords.add(NNAM);
-	    subRecords.add(QSTAs);
-	    subRecords.add(CTDAs);
+	QOBJ() {
+	    super(QOBJproto, false);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
 	    return new QOBJ();
 	}
-
     }
 
     @Override
@@ -296,8 +242,8 @@ public class QUST extends MajorRecordNamed {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     /**

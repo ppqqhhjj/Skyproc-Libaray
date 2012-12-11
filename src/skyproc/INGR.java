@@ -5,6 +5,8 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,7 +21,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class INGR extends MagicItem {
 
-    static final SubRecordsPrototype INGRproto = new SubRecordsPrototype(MagicItem.magicItemProto) {
+    static final SubPrototype INGRproto = new SubPrototype(MagicItem.magicItemProto) {
 
 	@Override
 	protected void addRecords() {
@@ -38,7 +40,7 @@ public class INGR extends MagicItem {
 	    add(new SubForm(Type.ETYP));
 	}
     };
-    static Type[] types = {Type.INGR};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.INGR}));
 
     INGR() {
 	super();
@@ -46,8 +48,8 @@ public class INGR extends MagicItem {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class INGR extends MagicItem {
 	return new INGR();
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	int value = 0;
 	float weight = 0;
@@ -92,7 +94,7 @@ public class INGR extends MagicItem {
 	}
     }
 
-    static class ENIT extends SubRecord {
+    static class ENIT extends SubRecordTyped {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);

@@ -23,7 +23,7 @@ class ScriptProperty extends Record implements Serializable {
     StringNonNull name = new StringNonNull();
     int unknown = 1;
     ScriptData data;
-    private final static Type[] types = {Type.VMAD};
+    final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.VMAD}));
 
     ScriptProperty() {
     }
@@ -195,8 +195,8 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override

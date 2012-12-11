@@ -16,11 +16,15 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class LVLO extends SubShell {
+public class LeveledEntry extends SubShell {
 
-    LVLOin entry = new LVLOin();
-    COED COED = new COED();
-    static Type[] types = {Type.LVLO, Type.COED};
+    static SubPrototype LVLOproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new LVLOin());
+	    add(new COED());
+	}
+    };
 
     /**
      *
@@ -28,30 +32,28 @@ public class LVLO extends SubShell {
      * @param level
      * @param count
      */
-    public LVLO(FormID id, int level, int count) {
+    public LeveledEntry(FormID id, int level, int count) {
 	this();
 	setForm(id);
 	setLevel(level);
 	setCount(count);
     }
 
-    LVLO() {
-	super(types);
-	subRecords.add(entry);
-	subRecords.add(COED);
+    LeveledEntry() {
+	super(LVLOproto);
     }
 
     @Override
     Boolean isValid() {
-	return entry.isValid();
+	return subRecords.isAnyValid();
     }
 
     @Override
     SubRecord getNew(Type type) {
-	return new LVLO();
+	return new LeveledEntry();
     }
 
-    class LVLOin extends SubRecord {
+    static class LVLOin extends SubRecordTyped {
 
 	int level = 1;
 	FormID entry = new FormID();
@@ -95,7 +97,7 @@ public class LVLO extends SubShell {
 	}
     }
 
-    class COED extends SubRecord {
+    static class COED extends SubRecordTyped {
 
 	FormID owner = new FormID();
 	int reqRank;
@@ -113,7 +115,7 @@ public class LVLO extends SubShell {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(owner);
 	    return out;
 	}
@@ -148,12 +150,16 @@ public class LVLO extends SubShell {
 	}
     }
 
+    LVLOin getEntry() {
+	return (LVLOin) subRecords.get(Type.LVLO);
+    }
+
     /**
      *
      * @return The level this entry is marked on the LVLN.
      */
     public int getLevel() {
-	return entry.level;
+	return getEntry().level;
     }
 
     /**
@@ -161,7 +167,7 @@ public class LVLO extends SubShell {
      * @param in The level to mark the entry as on the LVLN.
      */
     final public void setLevel(int in) {
-	entry.level = in;
+	getEntry().level = in;
     }
 
     /**
@@ -169,7 +175,7 @@ public class LVLO extends SubShell {
      * @param in The number to set the spawn count to.
      */
     final public void setCount(int in) {
-	entry.count = in;
+	getEntry().count = in;
     }
 
     /**
@@ -177,7 +183,7 @@ public class LVLO extends SubShell {
      * @return The spawn counter.
      */
     public int getCount() {
-	return entry.count;
+	return getEntry().count;
     }
 
     /**
@@ -185,7 +191,7 @@ public class LVLO extends SubShell {
      * @param id
      */
     final public void setForm(FormID id) {
-	entry.entry = id;
+	getEntry().entry = id;
     }
 
     /**
@@ -193,6 +199,6 @@ public class LVLO extends SubShell {
      * @return
      */
     public FormID getForm() {
-	return entry.entry;
+	return getEntry().entry;
     }
 }

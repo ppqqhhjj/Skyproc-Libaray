@@ -14,7 +14,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubStringPointer extends SubRecord {
+class SubStringPointer extends SubRecordTyped {
 
     SubData data;
     SubString text;

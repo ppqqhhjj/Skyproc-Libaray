@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -19,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class AMMO extends MajorRecordDescription {
 
-    static final SubRecordsPrototype AMMOprototype = new SubRecordsPrototype(MajorRecordDescription.descProto) {
+    static final SubPrototype AMMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
@@ -36,7 +37,7 @@ public class AMMO extends MajorRecordDescription {
 	    add(new SubString(Type.ONAM, true));
 	}
     };
-    static Type[] types = {Type.AMMO};
+    static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AMMO}));
 
     AMMO() {
 	super();
@@ -49,11 +50,11 @@ public class AMMO extends MajorRecordDescription {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	FormID projectile = new FormID();
 	LFlags flags = new LFlags(4);

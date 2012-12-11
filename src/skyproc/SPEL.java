@@ -4,7 +4,8 @@
  */
 package skyproc;
 
-import skyproc.exceptions.NotFound;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Spell Records
@@ -12,7 +13,7 @@ import skyproc.exceptions.NotFound;
  */
 public class SPEL extends MagicItem {
 
-    static final SubRecordsPrototype SPELproto = new SubRecordsPrototype(MagicItem.magicItemProto){
+    static final SubPrototype SPELproto = new SubPrototype(MagicItem.magicItemProto){
 
 	@Override
 	protected void addRecords() {
@@ -23,10 +24,10 @@ public class SPEL extends MagicItem {
 	    reposition(Type.EFID);
 	}
     };
-    final static Type[] type = {Type.SPEL};
+    final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.SPEL}));
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -52,7 +53,7 @@ public class SPEL extends MagicItem {
 	SubForm ETYP = subRecords.getSubForm(Type.ETYP);
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	ETYP.ID.standardize(modToOriginateFrom);
-	
+
 	getSPIT().valid = true;
     }
 
@@ -181,7 +182,7 @@ public class SPEL extends MagicItem {
     final SPIT getSPIT() {
 	return (SPIT) subRecords.get(Type.SPIT);
     }
-    
+
     /**
      *
      * @param baseCost

@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class ConditionBase extends SubRecord {
+class ConditionBase extends SubRecordTyped {
 
     Condition.Operator operator;
     LFlags flags = new LFlags(1);
@@ -105,7 +105,7 @@ class ConditionBase extends SubRecord {
 
     @Override
     SubRecord getNew(Type type) {
-	return new Condition();
+	return new ConditionBase();
     }
 
     @Override

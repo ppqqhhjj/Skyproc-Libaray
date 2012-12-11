@@ -6,6 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -18,14 +20,14 @@ import skyproc.exceptions.BadRecord;
  */
 public class GMST extends MajorRecord {
 
-    static final SubRecordsPrototype GMSTproto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype GMSTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
 	    add(new DATA());
 	}
     };
-    static Type[] types = {Type.GMST};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GMST}));
 
     GMST() {
 	super();
@@ -86,8 +88,8 @@ public class GMST extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     /**
@@ -238,7 +240,7 @@ public class GMST extends MajorRecord {
 	return data;
     }
 
-    static class DATA extends SubRecord {
+    static class DATA extends SubRecordTyped {
 
 	GMSTType GMSTtype;
 	SubData DATA = new SubData(Type.DATA);

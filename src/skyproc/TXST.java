@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord implements Iterable<String> {
 
-    static final SubRecordsPrototype TXSTproto = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype TXSTproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
@@ -31,7 +32,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	}
     };
     static int NUM_MAPS = 8;
-    private final static Type[] type = {Type.TXST};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.TXST}));
 
     /**
      * Constructor to create a blank new TXST record.
@@ -51,7 +52,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 

@@ -4,7 +4,7 @@
  */
 package skyproc;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import lev.LChannel;
@@ -16,11 +16,11 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class SubShellBulkType extends SubShell {
 
-    Set<Type> targets;
+    boolean includeFirst;
 
-    SubShellBulkType(Type type_, Type... targets) {
-	super(type_);
-	this.targets = new HashSet<>(Arrays.asList(targets));
+    SubShellBulkType(SubPrototype proto, boolean includeFirst) {
+	super(proto);
+	this.includeFirst = includeFirst;
     }
 
     /**
@@ -30,13 +30,15 @@ public abstract class SubShellBulkType extends SubShell {
      */
     @Override
     public int getRecordLength(LChannel in) {
+	Type first = getType();
 	int size = super.getRecordLength(in);
 	in.skip(size);
 	Type nextType;
+	Set<Type> targets = new HashSet<>(getTypes());
 	while (!in.isDone()) {
 	    try {
 		nextType = getNextType(in);
-		if (!targets.contains(nextType)) {
+		if (!targets.contains(nextType) || (!includeFirst && nextType == first)) {
 		    break;
 		}
 	    } catch (BadRecord ex) {
@@ -50,4 +52,13 @@ public abstract class SubShellBulkType extends SubShell {
 	in.pos(in.pos() - size);
 	return size;
     }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	ArrayList<Type> out = new ArrayList<>(1);
+	out.add(subRecords.getTypes().get(0));
+	return out;
+    }
+
+
 }

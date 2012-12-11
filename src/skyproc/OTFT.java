@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -12,14 +13,14 @@ import java.util.ArrayList;
  */
 public class OTFT extends MajorRecord {
 
-    static final SubRecordsPrototype OTFTproto = new SubRecordsPrototype(MajorRecord.majorProto){
+    static final SubPrototype OTFTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
 	    add(new SubFormArray(Type.INAM, 0));
 	}
     };
-    static Type[] types = { Type.OTFT };
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.OTFT}));
 
     OTFT() {
 	super();
@@ -37,8 +38,8 @@ public class OTFT extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
-	return types;
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override

@@ -7,6 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,13 +22,13 @@ import skyproc.exceptions.BadRecord;
  */
 public class ECZN extends MajorRecord {
 
-    static final SubRecordsPrototype ECZNproto = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype ECZNproto = new SubPrototype(MajorRecord.majorProto) {
 	@Override
 	protected void addRecords() {
 	    add(new DATA());
 	}
     };
-    private final static Type[] type = {Type.ECZN};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ECZN}));
 
     /**
      * Creates a new ECZN record.
@@ -38,7 +39,7 @@ public class ECZN extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 
@@ -47,7 +48,7 @@ public class ECZN extends MajorRecord {
 	return new ECZN();
     }
 
-    static class DATA extends SubRecord implements Serializable {
+    static class DATA extends SubRecordTyped implements Serializable {
 
 	private FormID owner = new FormID();
 	private FormID location = new FormID();

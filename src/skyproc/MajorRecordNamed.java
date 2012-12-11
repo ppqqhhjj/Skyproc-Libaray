@@ -10,7 +10,7 @@ import skyproc.SubStringPointer.Files;
  */
 public abstract class MajorRecordNamed extends MajorRecord implements Serializable {
 
-    static final SubRecordsPrototype namedProto = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype namedProto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {

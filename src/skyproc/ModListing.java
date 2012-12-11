@@ -2,6 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.DataFormatException;
@@ -18,14 +19,14 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ModListing extends SubRecord implements Comparable {
+public class ModListing extends SubRecordTyped implements Comparable {
 
-    private static Type[] types = {Type.MAST, Type.DATA};
-    SubString mast = new SubString(Type.MAST, true);
-    SubData data = new SubData(Type.DATA);
-    boolean master = false;
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MAST, Type.DATA}));
     static ModListing skyrim = new ModListing("Skyrim.esm");
     static ModListing update = new ModListing("Update.esm");
+
+    SubString mast = new SubString(Type.MAST, true);
+    boolean master = false;
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
 	this();
@@ -55,9 +56,7 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     ModListing() {
-	super(types);
-	data.initialize(8);
-	data.forceExport(true);
+	super(type);
     }
 
     final void setString(String in) {
@@ -96,7 +95,8 @@ public class ModListing extends SubRecord implements Comparable {
 	String tmp = mast.string;
 	mast.string = print();
 	mast.export(out, srcMod);
-	mast.string = tmp;
+	SubData data = new SubData(Type.DATA);
+	data.initialize(8);
 	data.export(out, srcMod);
     }
 
@@ -116,7 +116,7 @@ public class ModListing extends SubRecord implements Comparable {
 
     @Override
     int getContentLength(Mod srcMod) {
-	return mast.getContentLength(srcMod) + data.getTotalLength(srcMod) + 4;  // For .esp
+	return mast.getContentLength(srcMod) + 14 + 4;  // 14 for DATA, 4 for .esp
     }
 
     @Override

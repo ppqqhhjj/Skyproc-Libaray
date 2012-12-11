@@ -1,7 +1,7 @@
 package skyproc;
 
 import java.util.ArrayList;
-import lev.Ln;
+import java.util.Arrays;
 
 /**
  *
@@ -9,11 +9,11 @@ import lev.Ln;
  */
 public class COBJ extends MajorRecord {
 
-    static final SubRecordsPrototype COBJproto = new SubRecordsPrototype(MajorRecord.majorProto) {
+    static final SubPrototype COBJproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubList<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	    add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
 	    add(new SubData(Type.COED));
 	    add(new SubList<>(new Condition()));
 	    add(new SubForm(Type.CNAM));
@@ -22,13 +22,13 @@ public class COBJ extends MajorRecord {
 	    add(new KeywordSet());
 	}
     };
-    private final static Type[] type = {Type.COBJ};
+    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.COBJ}));
 
     /**
      * Creates a new COBJ record with CK default settings.
      * @param srcMod The mod to have the new COBJ originate from.
      * @param edid A unique EDID
-     */ 
+     */
     public COBJ (Mod srcMod, String edid) {
 	this();
 	originateFrom(srcMod, edid);
@@ -41,7 +41,7 @@ public class COBJ extends MajorRecord {
     }
 
     @Override
-    Type[] getTypes() {
+    ArrayList<Type> getTypes() {
 	return type;
     }
 

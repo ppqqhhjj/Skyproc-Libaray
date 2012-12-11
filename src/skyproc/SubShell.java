@@ -18,16 +18,11 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class SubShell extends SubRecord {
 
-    SubRecordsSolo subRecords;
+    SubRecordsDerived subRecords;
 
-    SubShell(Type type_) {
-	super(type_);
-	subRecords = new SubRecordsSolo(type_);
-    }
-
-    SubShell(Type[] type_) {
-	super(type_);
-	subRecords = new SubRecordsSolo(type_);
+    SubShell(SubPrototype proto) {
+	super();
+	subRecords = new SubRecordsDerived(proto);
     }
 
     @Override
@@ -63,5 +58,10 @@ abstract class SubShell extends SubRecord {
     @Override
     void fetchStringPointers(Mod srcMod) {
 	subRecords.fetchStringPointers(srcMod);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return subRecords.getTypes();
     }
 }

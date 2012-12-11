@@ -9,7 +9,7 @@ import lev.LFileChannel;
 import lev.Ln;
 import skyproc.MajorRecord;
 import skyproc.SubRecordsDerived;
-import skyproc.SubRecordsPrototype;
+import skyproc.SubPrototype;
 import skyproc.Type;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -27,7 +27,7 @@ class SubRecordsStream extends SubRecordsDerived {
     protected Map<Type, RecordLocation> pos = new HashMap<>(0);
     MajorRecord major;
 
-    SubRecordsStream(SubRecordsPrototype proto) {
+    SubRecordsStream(SubPrototype proto) {
 	super(proto);
     }
 
@@ -35,7 +35,7 @@ class SubRecordsStream extends SubRecordsDerived {
     public void setMajor(MajorRecord in) {
 	major = in;
     }
-    
+
     @Override
     public boolean shouldExport(Type t) {
 	if (map.containsKey(t)) {
@@ -47,7 +47,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	    return shouldExport(prototype.get(t));
 	}
     }
-    
+
     @Override
     public SubRecord get(Type in) {
 	SubRecord s = null;
@@ -73,15 +73,18 @@ class SubRecordsStream extends SubRecordsDerived {
 	    pos.remove(in);
 	}
     }
-    
+
     void standardize(SubRecord record) {
 	record.standardize(major);
 	record.fetchStringPointers(major);
     }
-    
+
     @Override
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
+	if (nextType == Type.NAM1) {
+	    int wer = 23;
+	}
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
 		Type standardType = prototype.get(nextType).getType();
@@ -101,7 +104,7 @@ class SubRecordsStream extends SubRecordsDerived {
 		standardize(record);
 	    }
 	} else {
-	    throw new BadRecord("Doesn't know what to do with a " + nextType.toString() + " record.");
+	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
 	}
     }
 
@@ -112,7 +115,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	    return createFromPrototype(nextType);
 	}
     }
-    
+
     void loadFromPosition(SubRecord s) throws BadRecord, BadParameter, DataFormatException {
 	if (SPGlobal.streamMode) {
 	    RecordLocation position = pos.get(s.getType());

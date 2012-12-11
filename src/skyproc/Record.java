@@ -3,8 +3,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.exceptions.BadParameter;
@@ -59,10 +59,10 @@ public abstract class Record implements Serializable {
      */
     public abstract String print();
 
-    abstract Type[] getTypes();
+    abstract ArrayList<Type> getTypes();
 
     Type getType() {
-	return getTypes()[0];
+	return getTypes().get(0);
     }
 
     Record getNew() {
@@ -84,7 +84,7 @@ public abstract class Record implements Serializable {
 
     void export(LExporter out, Mod srcMod) throws IOException {
 	if (isValid()) {
-	    out.write(getTypes()[0].toString());
+	    out.write(getType().toString());
 	    out.write(getContentLength(srcMod));
 	}
     }
@@ -145,7 +145,7 @@ public abstract class Record implements Serializable {
     }
 
     void logSync(String header, String... log) {
-	SPGlobal.logSync(getTypes()[0].toString(), log);
+	SPGlobal.logSync(getType().toString(), log);
     }
 
     void logError(String header, String... log) {

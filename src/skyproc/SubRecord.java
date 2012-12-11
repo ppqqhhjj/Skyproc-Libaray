@@ -16,26 +16,14 @@ import lev.LExporter;
  */
 public abstract class SubRecord extends Record {
 
-    Type[] type;
-
-    SubRecord(Type[] type_) {
-	// Don't call explicity aside from special subrecord constructors
-	type = type_;
-    }
-
-    SubRecord(Type type_) {
-	type = new Type[1];
-	type[0] = type_;
-    }
-
     @Override
     public String print() {
-	return "No " + type[0].toString();
+	return "No " + getType().toString();
     }
 
     @Override
     public String toString() {
-	return type[0].toString();
+	return getType().toString();
     }
 
     @Override
@@ -49,13 +37,8 @@ public abstract class SubRecord extends Record {
     }
 
     @Override
-    Type[] getTypes() {
-	return type;
-    }
-
-    @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	out.write(getTypes()[0].toString());
+	out.write(getType().toString());
 	out.write(getContentLength(srcMod), 2);
     }
 
@@ -88,7 +71,7 @@ public abstract class SubRecord extends Record {
 
     @Override
     void logSync(String header, String... log) {
-	if (SPGlobal.debugSubrecordAll || SPGlobal.debugSubrecordsAllowed.contains(getTypes()[0])) {
+	if (SPGlobal.debugSubrecordAll || SPGlobal.debugSubrecordsAllowed.contains(getType())) {
 	    super.logSync(header, log);
 	}
     }

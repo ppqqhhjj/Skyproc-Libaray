@@ -12,28 +12,22 @@ import java.util.TreeSet;
  *
  * @author Justin Swanson
  */
-class SubSortedList<T extends SubRecord> extends SubList<T> {
+class SubListSorted<T extends SubRecord> extends SubList<T> {
 
     TreeSet<T> sorter = new TreeSet<>();
 
-    SubSortedList(T prototype_) {
+    SubListSorted(T prototype_) {
         super(prototype_);
-        this.allowDups = false;
     }
 
-    SubSortedList(Type counter, int counterLength, T prototype_) {
-        super(counter, counterLength, prototype_);
-        this.allowDups = false;
-    }
-
-    SubSortedList(SubSortedList rhs) {
+    SubListSorted(SubListSorted rhs) {
 	super(rhs);
 	sorter.addAll(rhs.sorter);
     }
 
     @Override
     SubRecord getNew(Type type) {
-	return new SubSortedList(this);
+	return new SubListSorted(this);
     }
 
     @Override
@@ -45,11 +39,6 @@ class SubSortedList<T extends SubRecord> extends SubList<T> {
     public boolean add(T item) {
         sorter.add(item);
         return super.add(item);
-    }
-
-    @Override
-    void allowDuplicates(boolean on) {
-        throw new java.lang.UnsupportedOperationException("Sorted List cannot contain dups.");
     }
 
     @Override
