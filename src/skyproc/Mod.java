@@ -531,12 +531,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Mod rhs, GRUP_TYPE... grup_types) {
-	if (grup_types.length == 0) {
-	    grup_types = GRUP_TYPE.values();
-	}
-	ArrayList<GRUP_TYPE> grups = new ArrayList<GRUP_TYPE>();
-	grups.addAll(Arrays.asList(grup_types));
 	if (!this.equals(rhs)) {
+	    if (grup_types.length == 0) {
+		grup_types = GRUP_TYPE.values();
+	    }
+	    ArrayList<GRUP_TYPE> grups = new ArrayList<>();
+	    grups.addAll(Arrays.asList(grup_types));
 	    mergeMasters(rhs);
 	    for (GRUP_TYPE t : GRUPs.keySet()) {
 		if (grups.contains(t)) {
@@ -706,7 +706,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void export(File outPath, Mod srcMod) throws IOException, BadRecord {
-
+	
 	LExporter out = new LExporter(outPath);
 
 	// Progress Bar Setup

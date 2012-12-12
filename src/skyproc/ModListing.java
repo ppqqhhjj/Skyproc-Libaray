@@ -3,12 +3,10 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
+import lev.LChannel;
 import lev.LExporter;
 import lev.LShrinkArray;
-import lev.LChannel;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -92,12 +90,12 @@ public class ModListing extends SubRecordTyped implements Comparable {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	String tmp = mast.string;
-	mast.string = print();
+	mast.string = print(); // Put the suffix in the record
 	mast.export(out, srcMod);
 	SubData data = new SubData(Type.DATA);
 	data.initialize(8);
 	data.export(out, srcMod);
+	setString(print()); // Take suffix back out of record
     }
 
     @Override

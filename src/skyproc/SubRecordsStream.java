@@ -82,9 +82,6 @@ class SubRecordsStream extends SubRecordsDerived {
     @Override
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	Type nextType = Record.getNextType(in);
-	if (nextType == Type.NAM1) {
-	    int wer = 23;
-	}
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
 		Type standardType = prototype.get(nextType).getType();

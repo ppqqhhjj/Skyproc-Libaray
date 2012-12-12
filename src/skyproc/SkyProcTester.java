@@ -21,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.RACE};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.KYWD};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
     /**
@@ -98,7 +98,7 @@ public class SkyProcTester {
 	System.out.println("Testing " + type);
 	SPProgressBarPlug.setStatus("Validating " + type);
 	SPProgressBarPlug.pause(true);
-
+	
 	boolean passed = true;
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);

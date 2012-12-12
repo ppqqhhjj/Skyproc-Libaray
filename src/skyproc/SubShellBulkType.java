@@ -34,7 +34,7 @@ public abstract class SubShellBulkType extends SubShell {
 	int size = super.getRecordLength(in);
 	in.skip(size);
 	Type nextType;
-	Set<Type> targets = new HashSet<>(getTypes());
+	Set<Type> targets = new HashSet<>(subRecords.getTypes());
 	while (!in.isDone()) {
 	    try {
 		nextType = getNextType(in);
