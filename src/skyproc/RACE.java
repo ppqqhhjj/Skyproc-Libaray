@@ -21,6 +21,114 @@ import skyproc.exceptions.BadRecord;
  */
 public class RACE extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.RACE}));
+    static final SubPrototype EGTproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.INDX));
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	}
+    };
+    static final SubPrototype NAM1proto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.NAM1));
+	    forceExport(Type.NAM1);
+
+	    SubMarkerSet EGT = new SubMarkerSet(new SubShell(EGTproto), Type.MNAM, Type.FNAM);
+	    EGT.forceMarkers = true;
+	    add(EGT);
+	}
+    };
+    static final SubPrototype HKXproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubString(Type.MODL, true));
+	    add(new SubData(Type.MODT));
+	}
+    };
+    static final SubPrototype NAM3proto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.NAM3));
+	    forceExport(Type.NAM3);
+	    add(new SubMarkerSet(new SubShell(HKXproto), Type.MNAM, Type.FNAM));
+	}
+    };
+    static final SubPrototype MFNAMproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubString(Type.ANAM, true));
+	    add(new SubData(Type.MODT));
+	}
+    };
+    static final SubPrototype ATKDproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.ATKD));
+	    add(new SubString(Type.ATKE, true));
+	}
+    };
+    static final SubPrototype MTYPproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubForm(Type.MTYP));
+	    add(new SubData(Type.SPED));
+	}
+    };
+    static final SubPrototype HEADproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.INDX));
+	    add(new SubData(Type.HEAD));
+	}
+    };
+    static final SubPrototype MPAVproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.MPAI));
+	    add(new SubData(Type.MPAV));
+	}
+    };
+    static final SubPrototype TINCproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.TINC));
+	    add(new SubData(Type.TINV));
+	    add(new SubData(Type.TIRS));
+	}
+    };
+    static final SubPrototype TINIproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.TINI));
+	    add(new SubString(Type.TINT, true));
+	    add(new SubData(Type.TINP));
+	    add(new SubForm(Type.TIND));
+	    add(new SubList<>(new SubShell(TINCproto)));
+	}
+    };
+    static final SubPrototype NAM0proto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.NAM0));
+	    add(new SubData(Type.MNAM));
+	    add(new SubData(Type.FNAM));
+	    add(new SubList<>(new SubShell(HEADproto)));
+	    add(new SubList<>(new SubShell(MPAVproto)));
+	    add(new SubList<>(new SubForm(Type.RPRM)));
+	    add(new SubList<>(new SubForm(Type.RPRF)));
+	    add(new SubList<>(new SubForm(Type.AHCM)));
+	    add(new SubList<>(new SubForm(Type.AHCF)));
+	    add(new SubList<>(new SubForm(Type.FTSM)));
+	    add(new SubList<>(new SubForm(Type.FTSF)));
+	    add(new SubList<>(new SubForm(Type.DFTM)));
+	    add(new SubList<>(new SubForm(Type.DFTF)));
+	    add(new SubList<>(new SubShell(TINIproto)));
+	}
+    };
     static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
@@ -30,11 +138,10 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.BOD2));
 	    add(new KeywordSet());
 	    add(new DATA());
-	    SubMarkerSet mfnam = new SubMarkerSet<>(new MFNAMdata(), Type.MNAM, Type.FNAM);
+	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(MFNAMproto), Type.MNAM, Type.FNAM);
 	    mfnam.forceMarkers = true;
 	    add(mfnam);
-	    SubList mtnms = new SubList<>(new SubString(Type.MTNM, false));
-	    add(mtnms);
+	    add(new SubList<>(new SubString(Type.MTNM, false)));
 	    add(new SubFormArray(Type.VTCK, 2));
 	    add(new SubFormArray(Type.DNAM, 2));
 	    add(new SubFormArray(Type.HCLF, 2));
@@ -42,18 +149,18 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.PNAM));
 	    add(new SubData(Type.UNAM));
 	    add(new SubForm(Type.ATKR));
-	    add(new SubList<>(new ATKDpackage()));
-	    add(new NAM1());
+	    add(new SubList<>(new SubShell(ATKDproto)));
+	    add(new SubShellBulkType(NAM1proto, false));
 	    add(new SubForm(Type.GNAM));
 	    add(new SubData(Type.NAM2));
-	    add(new NAM3());
+	    add(new SubShellBulkType(NAM3proto, false));
 	    add(new SubForm(Type.NAM4));
 	    add(new SubForm(Type.NAM5));
 	    add(new SubForm(Type.NAM7));
 	    add(new SubForm(Type.ONAM));
 	    add(new SubForm(Type.LNAM));
 	    add(new SubList<>(new SubString(Type.NAME, true)));
-	    add(new SubList<>(new MTYPpackage()));
+	    add(new SubList<>(new SubShell(MTYPproto)));
 	    add(new SubData(Type.VNAM));
 	    add(new SubList<>(new SubForm(Type.QNAM)));
 	    add(new SubForm(Type.UNES));
@@ -65,319 +172,13 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubForm(Type.FLMV));
 	    add(new SubForm(Type.SNMV));
 	    add(new SubForm(Type.SPMV));
-	    add(new SubList<>(new NAM0()));
+	    add(new SubList<>(new SubShellBulkType(NAM0proto, false)));
 	    add(new SubForm(Type.NAM8));
 	    add(new SubForm(Type.RNAM));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.RACE}));
 
-    /**
-     *
-     */
-    RACE() {
-	super();
-	subRecords.setPrototype(RACEproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new RACE();
-    }
-
-    static class NAM1 extends SubShellBulkType {
-
-	static SubPrototype NAM1proto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.NAM1));
-		forceExport(Type.NAM1);
-
-		SubMarkerSet EGT = new SubMarkerSet(new EGTmodel(), Type.MNAM, Type.FNAM);
-		EGT.forceMarkers = true;
-		add(EGT);
-	    }
-	};
-
-	public NAM1() {
-	    super(NAM1proto, false);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new NAM1();
-	}
-    }
-
-    static class NAM3 extends SubShellBulkType {
-
-	static SubPrototype NAM3proto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.NAM3));
-		forceExport(Type.NAM3);
-		add(new SubMarkerSet(new HKXmodel(), Type.MNAM, Type.FNAM));
-	    }
-	};
-
-	public NAM3() {
-	    super(NAM3proto, false);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new NAM3();
-	}
-    }
-
-    static class MFNAMdata extends SubShell {
-
-	static SubPrototype MFNAMproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubString(Type.ANAM, true));
-		add(new SubData(Type.MODT));
-	    }
-	};
-
-	public MFNAMdata() {
-	    super(MFNAMproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new MFNAMdata();
-	}
-    }
-
-    static class ATKDpackage extends SubShell {
-
-	static SubPrototype ATKDproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.ATKD));
-		add(new SubString(Type.ATKE, true));
-	    }
-	};
-
-	public ATKDpackage() {
-	    super(ATKDproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new ATKDpackage();
-	}
-    }
-
-    static class EGTmodel extends SubShell {
-
-	static SubPrototype EGTproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.INDX));
-		add(new SubString(Type.MODL, true));
-		add(new SubData(Type.MODT));
-	    }
-	};
-
-	public EGTmodel() {
-	    super(EGTproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new EGTmodel();
-	}
-    }
-
-    static class HKXmodel extends SubShell {
-
-	static SubPrototype HKXmodel = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubString(Type.MODL, true));
-		add(new SubData(Type.MODT));
-	    }
-	};
-
-	public HKXmodel() {
-	    super(HKXmodel);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new HKXmodel();
-	}
-    }
-
-    static class MTYPpackage extends SubShell {
-
-	static SubPrototype MTYPproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubForm(Type.MTYP));
-		add(new SubData(Type.SPED));
-	    }
-	};
-
-	public MTYPpackage() {
-	    super(MTYPproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new MTYPpackage();
-	}
-    }
-
-    static class NAM0 extends SubShellBulkType {
-
-	static SubPrototype NAM0proto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.NAM0));
-		add(new SubData(Type.MNAM));
-		add(new SubData(Type.FNAM));
-		add(new SubList<>(new HEADs()));
-		add(new SubList<>(new MPAVs()));
-		add(new SubList<>(new SubForm(Type.RPRM)));
-		add(new SubList<>(new SubForm(Type.RPRF)));
-		add(new SubList<>(new SubForm(Type.AHCM)));
-		add(new SubList<>(new SubForm(Type.AHCF)));
-		add(new SubList<>(new SubForm(Type.FTSM)));
-		add(new SubList<>(new SubForm(Type.FTSF)));
-		add(new SubList<>(new SubForm(Type.DFTM)));
-		add(new SubList<>(new SubForm(Type.DFTF)));
-		add(new SubList<>(new TINIs()));
-	    }
-	};
-
-	public NAM0() {
-	    super(NAM0proto, false);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new NAM0();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-    }
-
-    static class HEADs extends SubShell {
-
-	static SubPrototype HEADproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.INDX));
-		add(new SubData(Type.HEAD));
-	    }
-	};
-
-	public HEADs() {
-	    super(HEADproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new HEADs();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-    }
-
-    static class MPAVs extends SubShell {
-
-	static SubPrototype MPAVproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.MPAI));
-		add(new SubData(Type.MPAV));
-	    }
-	};
-
-	public MPAVs() {
-	    super(MPAVproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new MPAVs();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-    }
-
-    static class TINIs extends SubShell {
-
-	static SubPrototype TINIproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.TINI));
-		add(new SubString(Type.TINT, true));
-		add(new SubData(Type.TINP));
-		add(new SubForm(Type.TIND));
-		add(new SubList<>(new TINCs()));
-	    }
-	};
-
-	public TINIs() {
-	    super(TINIproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new TINIs();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-    }
-
-    static class TINCs extends SubShell {
-
-	static SubPrototype TINCproto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.TINC));
-		add(new SubData(Type.TINV));
-		add(new SubData(Type.TIRS));
-	    }
-	};
-
-	public TINCs() {
-	    super(TINCproto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new TINCs();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-    }
-
-    static class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecordTyped {
 
 	byte[] fluff1 = new byte[16];
 	float maleHeight = 0;
@@ -489,6 +290,7 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    // Enums
     /**
      *
      */
@@ -644,7 +446,27 @@ public class RACE extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	EXTRALARGE,}
+	EXTRALARGE;
+    }
+
+    // Common Functions
+    /**
+     *
+     */
+    RACE() {
+	super();
+	subRecords.setPrototype(RACEproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new RACE();
+    }
 
     // Get / set
     DATA getDATA() {
@@ -725,19 +547,13 @@ public class RACE extends MajorRecordDescription {
 	getMFData(gender).subRecords.setSubString(Type.ANAM, model);
     }
 
-    MFNAMdata getMFData(Gender gender) {
-	SubMarkerSet<MFNAMdata> MFNAM = subRecords.getSubMarker(Type.ANAM);
+    SubShell getMFData(Gender gender) {
+	SubMarkerSet<SubShell> MFNAM = subRecords.getSubMarker(Type.ANAM);
 	switch (gender) {
 	    case MALE:
-		if (!MFNAM.set.containsKey(Type.MNAM)) {
-		    MFNAM.set.put(Type.MNAM, new MFNAMdata());
-		}
-		return MFNAM.set.get(Type.MNAM);
+		return MFNAM.get(Type.MNAM);
 	    default:
-		if (!MFNAM.set.containsKey(Type.FNAM)) {
-		    MFNAM.set.put(Type.FNAM, new MFNAMdata());
-		}
-		return MFNAM.set.get(Type.FNAM);
+		return MFNAM.get(Type.FNAM);
 	}
     }
 
@@ -1322,18 +1138,16 @@ public class RACE extends MajorRecordDescription {
 	subRecords.getSubList(Type.NAM0).clear();
     }
 
-    SubMarkerSet<EGTmodel> getEGT() {
-	NAM1 nam1 = (NAM1) subRecords.get(Type.NAM1);
-	return nam1.subRecords.getSubMarker(Type.INDX);
+    SubMarkerSet<SubShell> getEGT() {
+	return subRecords.getSubShell(Type.NAM1).subRecords.getSubMarker(Type.INDX);
     }
 
-    EGTmodel getEGTmodel(Gender gender) {
-	SubMarkerSet<EGTmodel> EGTrecords = getEGT();
+    SubShell getEGTmodel(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return EGTrecords.set.get(Type.MNAM);
+		return getEGT().set.get(Type.MNAM);
 	    default:
-		return EGTrecords.set.get(Type.FNAM);
+		return getEGT().set.get(Type.FNAM);
 	}
     }
 
@@ -1355,18 +1169,16 @@ public class RACE extends MajorRecordDescription {
 	getEGTmodel(gender).subRecords.setSubString(Type.MODL, s);
     }
 
-    SubMarkerSet<HKXmodel> getHKX() {
-	NAM3 nam3 = (NAM3) subRecords.get(Type.NAM3);
-	return nam3.subRecords.getSubMarker(Type.MODL);
+    SubMarkerSet<SubShell> getHKX() {
+	return subRecords.getSubShell(Type.NAM3).subRecords.getSubMarker(Type.MODL);
     }
 
-    HKXmodel getHKXmodel(Gender gender) {
-	SubMarkerSet<HKXmodel> HKXrecords = getHKX();
+    SubShell getHKXmodel(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return HKXrecords.set.get(Type.MNAM);
+		return getHKX().set.get(Type.MNAM);
 	    default:
-		return HKXrecords.set.get(Type.FNAM);
+		return getHKX().set.get(Type.FNAM);
 	}
     }
 

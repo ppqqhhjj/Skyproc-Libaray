@@ -20,6 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class MagicItem extends MajorRecordDescription {
 
+    // Static prototypes and definitions
     static final SubPrototype magicItemProto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
@@ -33,17 +34,6 @@ abstract class MagicItem extends MajorRecordDescription {
 	    add(new KeywordSet());
 	}
     };
-
-    MagicItem() {
-	super();
-    }
-
-//    @Override
-//    ArrayList<FormID> allFormIDs() {
-//	ArrayList<FormID> out = super.allFormIDs();
-//	out.addAll(magicEffects.allFormIDs());
-//	return out;
-//    }
     static class SPIT extends SubRecordTyped {
 
 	int baseCost = 0;
@@ -136,6 +126,12 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
     }
 
+    // Common Functions
+    MagicItem() {
+	super();
+    }
+
+    // Get/Set
     public ArrayList<MagicEffectRef> getMagicEffects() {
 	return subRecords.getSubList(Type.EFID).toPublic();
     }

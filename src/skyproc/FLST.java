@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class FLST extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FLST}));
     static final SubPrototype FLSTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
@@ -20,8 +22,8 @@ public class FLST extends MajorRecord {
 	    add(new SubList<>(new SubForm(Type.LNAM)));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FLST}));
 
+    // Common Functions
     FLST() {
 	super();
 	subRecords.setPrototype(FLSTproto);
@@ -46,7 +48,8 @@ public class FLST extends MajorRecord {
     Record getNew() {
 	return new FLST();
     }
-
+    
+    // Get/Set
     /**
      *
      * @return List of all the FormIDs in the Form list.

@@ -156,6 +156,10 @@ import skyproc.exceptions.BadRecord;
 	return (BodyTemplate) get(Type.BODT);
     }
 
+    public SubShell getSubShell(Type t) {
+	return (SubShell) get(t);
+    }
+
     boolean isValid() {
 	for (SubRecord s : this) {
 	    if (!s.isValid()) {

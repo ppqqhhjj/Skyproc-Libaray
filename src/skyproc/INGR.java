@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class INGR extends MagicItem {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.INGR}));
     static final SubPrototype INGRproto = new SubPrototype(MagicItem.magicItemProto) {
 
 	@Override
@@ -40,22 +42,6 @@ public class INGR extends MagicItem {
 	    add(new SubForm(Type.ETYP));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.INGR}));
-
-    INGR() {
-	super();
-	subRecords.setPrototype(INGRproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new INGR();
-    }
 
     static class DATA extends SubRecordTyped {
 
@@ -131,6 +117,7 @@ public class INGR extends MagicItem {
 	}
     }
 
+    // Enums
     /**
      *
      */
@@ -153,6 +140,22 @@ public class INGR extends MagicItem {
 	INGRFlag(int value) {
 	    this.value = value;
 	}
+    }
+    
+    // Common Functions
+    INGR() {
+	super();
+	subRecords.setPrototype(INGRproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new INGR();
     }
 
     // Get/set

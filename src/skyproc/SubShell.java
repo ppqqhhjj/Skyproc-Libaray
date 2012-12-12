@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-abstract class SubShell extends SubRecord {
+class SubShell extends SubRecord {
 
     SubRecordsDerived subRecords;
 
@@ -63,5 +63,10 @@ abstract class SubShell extends SubRecord {
     @Override
     ArrayList<Type> getTypes() {
 	return subRecords.getTypes();
+    }
+
+    @Override
+    SubRecord getNew(Type type) {
+	return new SubShell(subRecords.prototype);
     }
 }

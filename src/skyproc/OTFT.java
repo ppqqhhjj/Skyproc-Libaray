@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class OTFT extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.OTFT}));
     static final SubPrototype OTFTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
@@ -20,8 +22,8 @@ public class OTFT extends MajorRecord {
 	    add(new SubFormArray(Type.INAM, 0));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.OTFT}));
 
+    // Common Functions
     OTFT() {
 	super();
 	subRecords.setPrototype(OTFTproto);
@@ -47,6 +49,7 @@ public class OTFT extends MajorRecord {
 	return new OTFT();
     }
 
+    // Get/Set
     /**
      *
      * @return

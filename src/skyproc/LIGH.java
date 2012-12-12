@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class LIGH extends MajorRecordNamed {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LIGH}));
     static final SubPrototype LIGHproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
@@ -39,23 +41,6 @@ public class LIGH extends MajorRecordNamed {
 	    add(new SubForm(Type.SNAM));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LIGH}));
-
-    LIGH() {
-        super();
-        subRecords.setPrototype(LIGHproto);
-    }
-
-    @Override
-    Record getNew() {
-        return new LIGH();
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-        return type;
-    }
-
     static class DATA extends SubRecordTyped {
 
         int time = 0;
@@ -214,6 +199,7 @@ public class LIGH extends MajorRecordNamed {
 
     }
 
+    // Enums
     /**
      *
      */
@@ -275,6 +261,22 @@ public class LIGH extends MajorRecordNamed {
          *
          */
         PortalStrict;
+    }
+    
+    // Common Functions
+    LIGH() {
+        super();
+        subRecords.setPrototype(LIGHproto);
+    }
+
+    @Override
+    Record getNew() {
+        return new LIGH();
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+        return type;
     }
 
     //Get/Set

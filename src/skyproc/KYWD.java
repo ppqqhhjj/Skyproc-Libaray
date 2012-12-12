@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class KYWD extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.KYWD}));
     static final SubPrototype KYWDproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
@@ -20,8 +22,8 @@ public class KYWD extends MajorRecord {
 	    add(new SubData(Type.CNAM));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.KYWD}));
 
+    // Common Functions
     KYWD () {
 	super();
 	subRecords.setPrototype(KYWDproto);

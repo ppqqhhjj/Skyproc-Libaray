@@ -20,6 +20,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class ENCH extends MagicItem {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ENCH}));
     static final SubPrototype ENCHproto = new SubPrototype(MagicItem.magicItemProto) {
 	@Override
 	protected void addRecords() {
@@ -31,24 +33,7 @@ public class ENCH extends MagicItem {
 	    reposition(Type.KWDA);
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ENCH}));
-
-    ENCH() {
-	super();
-	subRecords.setPrototype(ENCHproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new ENCH();
-    }
-
-    static class ENIT extends SubRecordTyped {
+    static final class ENIT extends SubRecordTyped {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);
@@ -121,7 +106,8 @@ public class ENCH extends MagicItem {
 	    return out;
 	}
     }
-
+    
+    // Enums
     /**
      *
      */
@@ -171,6 +157,23 @@ public class ENCH extends MagicItem {
 	}
     }
 
+    // Common Functions
+    ENCH() {
+	super();
+	subRecords.setPrototype(ENCHproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new ENCH();
+    }
+    
+    // Get/Set
     ENIT getENIT() {
 	return (ENIT) subRecords.get(Type.ENIT);
     }

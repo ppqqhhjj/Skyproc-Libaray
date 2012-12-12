@@ -14,6 +14,8 @@ import java.util.Iterator;
  */
 public class TXST extends MajorRecord implements Iterable<String> {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.TXST}));
     static final SubPrototype TXSTproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
@@ -32,8 +34,8 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	}
     };
     static int NUM_MAPS = 8;
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.TXST}));
 
+    // Common Functions
     /**
      * Constructor to create a blank new TXST record.
      *
@@ -61,6 +63,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	return new TXST();
     }
 
+    // Get/Set
     /**
      * Sets the TX00 - TX07 records in order.
      *

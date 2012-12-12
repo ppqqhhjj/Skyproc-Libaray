@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class SPEL extends MagicItem {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.SPEL}));
     static final SubPrototype SPELproto = new SubPrototype(MagicItem.magicItemProto){
 
 	@Override
@@ -24,39 +26,8 @@ public class SPEL extends MagicItem {
 	    reposition(Type.EFID);
 	}
     };
-    final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.SPEL}));
 
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new SPEL();
-    }
-
-    SPEL() {
-	super();
-	subRecords.setPrototype(SPELproto);
-    }
-
-    /**
-     * Creates a new empty SPEL record that originates from the mod designated.<br>
-     * Make sure the EDID you assign is unique.
-     * @param modToOriginateFrom
-     * @param edid
-     */
-    public SPEL(Mod modToOriginateFrom, String edid) {
-	this();
-	originateFrom(modToOriginateFrom, edid);
-	SubForm ETYP = subRecords.getSubForm(Type.ETYP);
-	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
-	ETYP.ID.standardize(modToOriginateFrom);
-
-	getSPIT().valid = true;
-    }
-
+    // Enums
     /**
      *
      */
@@ -144,6 +115,38 @@ public class SPEL extends MagicItem {
 	    }
 	    return UNKNOWN;
 	}
+    }
+
+    // Common Functions
+    SPEL() {
+	super();
+	subRecords.setPrototype(SPELproto);
+    }
+
+    /**
+     * Creates a new empty SPEL record that originates from the mod designated.<br>
+     * Make sure the EDID you assign is unique.
+     * @param modToOriginateFrom
+     * @param edid
+     */
+    public SPEL(Mod modToOriginateFrom, String edid) {
+	this();
+	originateFrom(modToOriginateFrom, edid);
+	SubForm ETYP = subRecords.getSubForm(Type.ETYP);
+	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
+	ETYP.ID.standardize(modToOriginateFrom);
+
+	getSPIT().valid = true;
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new SPEL();
     }
 
     // Get Set functions

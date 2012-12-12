@@ -13,7 +13,18 @@ import java.util.Arrays;
  */
 public class HDPT extends MajorRecordNamed {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.HDPT}));
+    static final SubPrototype NAMSproto = new SubPrototype() {
+
+	@Override
+	protected void addRecords() {
+	    add(new SubInt(Type.NAM0));
+	    add(new SubString(Type.NAM1, true));
+	}
+    };
     static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubString(Type.MODL, true));
@@ -22,14 +33,14 @@ public class HDPT extends MajorRecordNamed {
 	    add(new SubData(Type.DATA));
 	    add(new SubInt(Type.PNAM));
 	    add(new SubList<>(new SubForm(Type.HNAM)));
-	    add(new SubList<>(new NAMs()));
+	    add(new SubList<>(new SubShell(NAMSproto)));
 	    add(new SubForm(Type.CNAM));
 	    add(new SubForm(Type.TNAM));
 	    add(new SubForm(Type.RNAM));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.HDPT}));
 
+    // Common Functions
     HDPT() {
 	super();
 	subRecords.setPrototype(HDPTproto);
@@ -45,27 +56,7 @@ public class HDPT extends MajorRecordNamed {
 	return new HDPT();
     }
 
-    static class NAMs extends SubShell {
-
-	static SubPrototype namsProto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubInt(Type.NAM0));
-		add(new SubString(Type.NAM1, true));
-	    }
-	};
-
-	public NAMs() {
-	    super(namsProto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new NAMs();
-	}
-    }
-
-    //GetSet
+    // Get/Set
     /**
      *
      * @param path

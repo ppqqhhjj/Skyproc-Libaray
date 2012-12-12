@@ -16,6 +16,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class NPC_ extends Actor implements Serializable {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NPC_}));
     static final SubPrototype NPC_proto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
@@ -74,22 +76,6 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubList<>(new TintLayer()));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NPC_}));
-
-    NPC_() {
-	super();
-	subRecords.setPrototype(NPC_proto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new NPC_();
-    }
 
     /**
      * Sound package containing sounds to play for different actions
@@ -232,95 +218,7 @@ public class NPC_ extends Actor implements Serializable {
 	    return new SoundPair();
 	}
     }
-
-    static class DNAM extends SubRecordTyped implements Serializable {
-
-	byte[] skills = new byte[36];
-	int health = 1;
-	int magicka = 1;
-	int stamina = 1;
-	byte[] fluff1 = new byte[2];
-	float farAwayDistance = 0;
-	int gearedUpWeapons = 1;
-	byte[] fluff2 = new byte[3];
-
-	DNAM() {
-	    super(Type.DNAM);
-	}
-
-	DNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new DNAM();
-	}
-
-	@Override
-	Boolean isValid() {
-	    return true;
-	}
-
-	@Override
-	int getContentLength(Mod srcMod) {
-	    return 52;
-	}
-
-	int getSkillBase(Skill in) {
-	    return skills[in.ordinal()];
-	}
-
-	int getSkillMod(Skill in) {
-	    return skills[in.ordinal() + 18];
-	}
-
-	void setSkillBase(Skill in, int to) {
-	    skills[in.ordinal()] = (byte) to;
-	}
-
-	void setSkillMod(Skill in, int to) {
-	    skills[in.ordinal() + 18] = (byte) to;
-	}
-
-	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
-	    skills = in.extract(36);
-	    health = in.extractInt(2);
-	    magicka = in.extractInt(2);
-	    stamina = in.extractInt(2);
-	    fluff1 = in.extract(2);
-	    farAwayDistance = in.extractFloat();
-	    gearedUpWeapons = in.extractInt(1);
-	    fluff2 = in.extract(3);
-	    if (logging()) {
-		logSync("", "DNAM record: ");
-		String temp;
-		for (Skill s : Skill.values()) {
-		    temp = " BASE:" + getSkillBase(s) + ", MOD:" + getSkillMod(s);
-		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
-		}
-		logSync("", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
-		logSync("", "  " + "Far Away Distance: " + farAwayDistance + ", Geared Up weapons: " + gearedUpWeapons);
-	    }
-	}
-
-	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
-	    out.write(skills, 36);
-	    out.write(health, 2);
-	    out.write(magicka, 2);
-	    out.write(stamina, 2);
-	    out.write(fluff1, 2);
-	    out.write(farAwayDistance);
-	    out.write(gearedUpWeapons, 1);
-	    out.write(fluff2, 3);
-	}
-    }
-
+    
     /**
      *
      */
@@ -409,6 +307,94 @@ public class NPC_ extends Actor implements Serializable {
 	 */
 	public int getPreset() {
 	    return subRecords.getSubInt(Type.TIAS).get();
+	}
+    }
+    
+    static class DNAM extends SubRecordTyped implements Serializable {
+
+	byte[] skills = new byte[36];
+	int health = 1;
+	int magicka = 1;
+	int stamina = 1;
+	byte[] fluff1 = new byte[2];
+	float farAwayDistance = 0;
+	int gearedUpWeapons = 1;
+	byte[] fluff2 = new byte[3];
+
+	DNAM() {
+	    super(Type.DNAM);
+	}
+
+	DNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DNAM();
+	}
+
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 52;
+	}
+
+	int getSkillBase(Skill in) {
+	    return skills[in.ordinal()];
+	}
+
+	int getSkillMod(Skill in) {
+	    return skills[in.ordinal() + 18];
+	}
+
+	void setSkillBase(Skill in, int to) {
+	    skills[in.ordinal()] = (byte) to;
+	}
+
+	void setSkillMod(Skill in, int to) {
+	    skills[in.ordinal() + 18] = (byte) to;
+	}
+
+	@Override
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    skills = in.extract(36);
+	    health = in.extractInt(2);
+	    magicka = in.extractInt(2);
+	    stamina = in.extractInt(2);
+	    fluff1 = in.extract(2);
+	    farAwayDistance = in.extractFloat();
+	    gearedUpWeapons = in.extractInt(1);
+	    fluff2 = in.extract(3);
+	    if (logging()) {
+		logSync("", "DNAM record: ");
+		String temp;
+		for (Skill s : Skill.values()) {
+		    temp = " BASE:" + getSkillBase(s) + ", MOD:" + getSkillMod(s);
+		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
+		}
+		logSync("", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
+		logSync("", "  " + "Far Away Distance: " + farAwayDistance + ", Geared Up weapons: " + gearedUpWeapons);
+	    }
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(skills, 36);
+	    out.write(health, 2);
+	    out.write(magicka, 2);
+	    out.write(stamina, 2);
+	    out.write(fluff1, 2);
+	    out.write(farAwayDistance);
+	    out.write(gearedUpWeapons, 1);
+	    out.write(fluff2, 3);
 	}
     }
 
@@ -834,7 +820,8 @@ public class NPC_ extends Actor implements Serializable {
 	    return out;
 	}
     }
-
+    
+    // Enums 
     /**
      * Enum representing the various stats of the NPC
      */
@@ -1261,7 +1248,7 @@ public class NPC_ extends Actor implements Serializable {
 	 */
 	EyesForwardBack;
     }
-
+    
     // Special functions
     /**
      * Takes in another NPC, and assumes all the information associated with the
@@ -1469,6 +1456,22 @@ public class NPC_ extends Actor implements Serializable {
      */
     public LVLN isTemplatedToLList(NPC_.TemplateFlag... templateFlagsToCheck) {
 	return NiftyFunc.isTemplatedToLList(getForm(), templateFlagsToCheck, 0);
+    }
+    
+    // Common Functions
+    NPC_() {
+	super();
+	subRecords.setPrototype(NPC_proto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new NPC_();
     }
 
     // Get/Set methods

@@ -17,7 +17,18 @@ import skyproc.exceptions.BadRecord;
  */
 public class PERK extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PERK}));
+    static final SubPrototype PRKCpackageProto = new SubPrototype() {
+
+	@Override
+	protected void addRecords() {
+	    add(new SubData(Type.PRKC));
+	    add(new SubList<>(new Condition()));
+	}
+    };
     static final SubPrototype PERKproto = new SubPrototype(MajorRecordDescription.descProto) {
+
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
@@ -28,42 +39,11 @@ public class PERK extends MajorRecordDescription {
 	    add(new SubList<>(new PRKEPackage()));
 	}
     };
-    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PERK}));
-
-    PERK() {
-	super();
-	subRecords.setPrototype(PERKproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new PERK();
-    }
-
-    @Override
-    ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = super.allFormIDs();
-//	out.addAll(perkSections.allFormIDs());
-//	out.addAll(CTDAs.allFormIDs());
-	return out;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ScriptPackage getScriptPackage() {
-	return subRecords.getScripts();
-    }
 
     static class PRKEPackage extends SubShellBulkType {
 
-	static SubPrototype PRKEproto = new SubPrototype() {
+	static final SubPrototype PRKEproto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new SubData(Type.PRKE));
@@ -96,11 +76,6 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
-	}
-
-	@Override
 	SubRecord getNew(Type type) {
 	    return new PRKEPackage();
 	}
@@ -113,11 +88,12 @@ public class PERK extends MajorRecordDescription {
 
     static class PRKEComplexSubPackage extends SubShell {
 
-	static SubPrototype PRKESubPackageProto = new SubPrototype() {
+	static final SubPrototype PRKESubPackageProto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new SubData(Type.DATA));
-		add(new SubList<>(new PRKCpackage()));
+		add(new SubList<>(new SubShell(PRKCpackageProto)));
 		add(new SubData(Type.EPFT));
 		add(new SubData(Type.EPF2));
 		add(new SubData(Type.EPF3));
@@ -155,28 +131,34 @@ public class PERK extends MajorRecordDescription {
 	}
     }
 
-    static class PRKCpackage extends SubShell {
-
-	static SubPrototype PRKCpackageProto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.PRKC));
-		add(new SubList<>(new Condition()));
-	    }
-	};
-
-	PRKCpackage() {
-	    super(PRKCpackageProto);
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new PRKCpackage();
-	}
-    }
-
+    // Enums
     enum PerkType {
 
 	QUEST, ABILITY, COMPLEX;
+    }
+
+    // Common Functions
+    PERK() {
+	super();
+	subRecords.setPrototype(PERKproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new PERK();
+    }
+
+    // Get/Set
+    /**
+     *
+     * @return
+     */
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
     }
 }

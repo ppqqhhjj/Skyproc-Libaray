@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class ARMA extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMA}));
     static final SubPrototype ARMAprototype = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
@@ -55,27 +57,7 @@ public class ARMA extends MajorRecord {
 	    add(new SubForm(Type.SNDD));
 	}
     };
-    static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMA}));
-
-    /**
-     * Armature Major Record
-     */
-    ARMA() {
-	super();
-	subRecords.setPrototype(ARMAprototype);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new ARMA();
-    }
-
-    static class DNAM extends SubRecordTyped {
+    static final class DNAM extends SubRecordTyped {
 
 	int malePriority;
 	int femalePriority;
@@ -127,6 +109,25 @@ public class ARMA extends MajorRecord {
 	int getContentLength(Mod srcMod) {
 	    return 12;
 	}
+    }
+
+    // Common Functions
+    /**
+     * Armature Major Record
+     */
+    ARMA() {
+	super();
+	subRecords.setPrototype(ARMAprototype);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new ARMA();
     }
 
     // Get/set

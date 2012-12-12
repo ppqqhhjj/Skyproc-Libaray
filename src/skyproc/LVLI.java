@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class LVLI extends LeveledRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLI}));
     static final SubPrototype LVLIproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
@@ -20,8 +22,8 @@ public class LVLI extends LeveledRecord {
 	    before(new SubForm(Type.LVLG), Type.LVLO);
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLI}));
 
+    // Common Functions
     LVLI () {
 	super();
 	subRecords.setPrototype(LVLIproto);
@@ -47,6 +49,7 @@ public class LVLI extends LeveledRecord {
 	return new LVLI();
     }
 
+    // Get/Set
     /**
      *
      * @param id

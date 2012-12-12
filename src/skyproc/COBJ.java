@@ -9,6 +9,8 @@ import java.util.Arrays;
  */
 public class COBJ extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.COBJ}));
     static final SubPrototype COBJproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
@@ -22,8 +24,8 @@ public class COBJ extends MajorRecord {
 	    add(new KeywordSet());
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.COBJ}));
 
+    // Common Functions
     /**
      * Creates a new COBJ record with CK default settings.
      * @param srcMod The mod to have the new COBJ originate from.
@@ -50,6 +52,7 @@ public class COBJ extends MajorRecord {
 	return new COBJ();
     }
 
+    // Get/Set
     /**
      *
      * @return

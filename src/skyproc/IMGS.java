@@ -12,11 +12,14 @@ import skyproc.exceptions.BadRecord;
 
 /**
  * Image Space major record. Used for various lighting settings.
+ *
  * @author Plutoman101
  */
 public class IMGS extends MajorRecord {
 
-    static final SubPrototype IMGSproto = new SubPrototype(MajorRecord.majorProto){
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.IMGS}));
+    static final SubPrototype IMGSproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
@@ -27,305 +30,302 @@ public class IMGS extends MajorRecord {
 	    add(new DNAM());
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.IMGS}));
 
+    static final class HNAM extends SubRecordTyped {
+
+	private float eyeAdaptSpeed = 0;
+	private float bloomRadius = 0;
+	private float bloomThreshold = 0;
+	private float bloomScale = 0;
+	private float targetLum1 = 0;
+	private float targetLum2 = 0;
+	private float sunlightScale = 0;
+	private float skyScale = 0;
+	private float eyeAdaptStrength = 0;
+	private boolean valid = true;
+
+	HNAM() {
+	    super(Type.HNAM);
+	    valid = false;
+	}
+
+	HNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new HNAM();
+	}
+
+	@Override
+	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+
+	    eyeAdaptSpeed = in.extractFloat();
+	    bloomRadius = in.extractFloat();
+	    bloomThreshold = in.extractFloat();
+	    bloomScale = in.extractFloat();
+	    targetLum1 = in.extractFloat();
+	    targetLum2 = in.extractFloat();
+	    sunlightScale = in.extractFloat();
+	    skyScale = in.extractFloat();
+	    eyeAdaptStrength = in.extractFloat();
+
+	    if (logging()) {
+		logSync("", "HNAM record: ");
+		logSync("", "  " + "Eye Adapt Speed: " + eyeAdaptSpeed + ", Bloom Radius: " + bloomRadius);
+		logSync("", "  " + "Bloom Threshold: " + bloomThreshold + ", Bloom Scale: " + bloomScale + ", Target Lum #1: " + targetLum1);
+		logSync("", "  " + "Target Lum #2: " + targetLum2 + ", Sunlight Scale: " + sunlightScale);
+		logSync("", "  " + "Sky Scale: " + skyScale + ", Eye Adapt Strength: " + eyeAdaptStrength);
+	    }
+
+	    valid = true;
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(eyeAdaptSpeed);
+		out.write(bloomRadius);
+		out.write(bloomThreshold);
+		out.write(bloomScale);
+		out.write(targetLum1);
+		out.write(targetLum2);
+		out.write(sunlightScale);
+		out.write(skyScale);
+		out.write(eyeAdaptStrength);
+	    }
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (isValid()) {
+		return 36;
+	    } else {
+		return 0;
+	    }
+	}
+    }
+
+    static final class CNAM extends SubRecordTyped {
+
+	private float saturation = 0;
+	private float brightness = 0;
+	private float contrast = 0;
+	private boolean valid = true;
+
+	public CNAM() {
+	    super(Type.CNAM);
+	    valid = false;
+	}
+
+	public CNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new CNAM();
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+
+	    saturation = in.extractFloat();
+	    brightness = in.extractFloat();
+	    contrast = in.extractFloat();
+
+	    if (logging()) {
+		logSync("", "CNAM record: ");
+		logSync("", "  " + "Saturation: " + saturation + ", Brightness: " + brightness + ", Contrast: " + contrast);
+	    }
+
+	    valid = true;
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(saturation);
+		out.write(brightness);
+		out.write(contrast);
+	    }
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (isValid()) {
+		return 12;
+	    } else {
+		return 0;
+	    }
+	}
+    }
+
+    static final class TNAM extends SubRecordTyped {
+
+	private float red = 0;
+	private float green = 0;
+	private float blue = 0;
+	private float alpha = 0;
+	private boolean valid = true;
+
+	public TNAM() {
+	    super(Type.TNAM);
+	    valid = false;
+	}
+
+	public TNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+	    this();
+	    parseData(in);
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new TNAM();
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+
+	    alpha = in.extractFloat();
+	    red = in.extractFloat();
+	    green = in.extractFloat();
+	    blue = in.extractFloat();
+
+	    if (logging()) {
+		logSync("", "TNAM record: RWX Format");
+		logSync("", "  " + "Red: " + red + ", Green: " + green);
+		logSync("", "  " + "Blue: " + blue + ", Alpha: " + alpha);
+	    }
+
+	    valid = true;
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(alpha);
+		out.write(red);
+		out.write(green);
+		out.write(blue);
+	    }
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (isValid()) {
+		return 16;
+	    } else {
+		return 0;
+	    }
+	}
+    }
+
+    static final class DNAM extends SubRecordTyped {
+
+	float DOFstrength = 0;
+	float DOFdistance = 0;
+	float DOFrange = 0;
+	byte[] unknown;
+	boolean valid = false;
+
+	public DNAM() {
+	    super(Type.DNAM);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    if (isValid()) {
+		out.write(DOFstrength);
+		out.write(DOFdistance);
+		out.write(DOFrange);
+		if (unknown != null) {
+		    out.write(unknown, 4);
+		}
+	    }
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    DOFstrength = in.extractFloat();
+	    DOFdistance = in.extractFloat();
+	    DOFrange = in.extractFloat();
+	    if (in.available() >= 4) {
+		unknown = in.extract(4);
+	    }
+	    valid = true;
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new DNAM();
+	}
+
+	@Override
+	Boolean isValid() {
+	    return valid;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (isValid()) {
+		if (unknown != null) {
+		    return 16;
+		} else {
+		    return 12;
+		}
+	    } else {
+		return 0;
+	    }
+	}
+    }
+
+    // Common Functions
     /**
      * Creates a new IMGS record.
      */
     public IMGS() {
-        super();
-        subRecords.setPrototype(IMGSproto);
+	super();
+	subRecords.setPrototype(IMGSproto);
     }
 
     @Override
     ArrayList<Type> getTypes() {
-        return type;
+	return type;
     }
 
     @Override
     Record getNew() {
-        return new IMGS();
+	return new IMGS();
     }
 
-    static class HNAM extends SubRecordTyped {
-
-        private float eyeAdaptSpeed = 0;
-        private float bloomRadius = 0;
-        private float bloomThreshold = 0;
-        private float bloomScale = 0;
-        private float targetLum1 = 0;
-        private float targetLum2 = 0;
-        private float sunlightScale = 0;
-        private float skyScale = 0;
-        private float eyeAdaptStrength = 0;
-        private boolean valid = true;
-
-        HNAM() {
-            super(Type.HNAM);
-            valid = false;
-        }
-
-        HNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            return new HNAM();
-        }
-
-        @Override
-        final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-
-            eyeAdaptSpeed = in.extractFloat();
-            bloomRadius = in.extractFloat();
-            bloomThreshold = in.extractFloat();
-            bloomScale = in.extractFloat();
-            targetLum1 = in.extractFloat();
-            targetLum2 = in.extractFloat();
-            sunlightScale = in.extractFloat();
-            skyScale = in.extractFloat();
-            eyeAdaptStrength = in.extractFloat();
-
-            if (logging()) {
-                logSync("", "HNAM record: ");
-                logSync("", "  " + "Eye Adapt Speed: " + eyeAdaptSpeed + ", Bloom Radius: " + bloomRadius);
-                logSync("", "  " + "Bloom Threshold: " + bloomThreshold + ", Bloom Scale: " + bloomScale + ", Target Lum #1: " + targetLum1);
-                logSync("", "  " + "Target Lum #2: " + targetLum2 + ", Sunlight Scale: " + sunlightScale);
-                logSync("", "  " + "Sky Scale: " + skyScale + ", Eye Adapt Strength: " + eyeAdaptStrength);
-            }
-
-            valid = true;
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                out.write(eyeAdaptSpeed);
-                out.write(bloomRadius);
-                out.write(bloomThreshold);
-                out.write(bloomScale);
-                out.write(targetLum1);
-                out.write(targetLum2);
-                out.write(sunlightScale);
-                out.write(skyScale);
-                out.write(eyeAdaptStrength);
-            }
-        }
-
-        @Override
-        Boolean isValid() {
-            return valid;
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            if (isValid()) {
-                return 36;
-            } else {
-                return 0;
-            }
-        }
-
-    }
-
-    static class CNAM extends SubRecordTyped {
-
-        private float saturation = 0;
-        private float brightness = 0;
-        private float contrast = 0;
-        private boolean valid = true;
-
-        public CNAM() {
-            super(Type.CNAM);
-            valid = false;
-        }
-
-        public CNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            return new CNAM();
-        }
-
-        @Override
-        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-
-            saturation = in.extractFloat();
-            brightness = in.extractFloat();
-            contrast = in.extractFloat();
-
-            if (logging()) {
-                logSync("", "CNAM record: ");
-                logSync("", "  " + "Saturation: " + saturation + ", Brightness: " + brightness + ", Contrast: " + contrast);
-            }
-
-            valid = true;
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                out.write(saturation);
-                out.write(brightness);
-                out.write(contrast);
-            }
-        }
-
-        @Override
-        Boolean isValid() {
-            return valid;
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            if (isValid()) {
-                return 12;
-            } else {
-                return 0;
-            }
-        }
-
-    }
-
-    static class TNAM extends SubRecordTyped {
-
-        private float red = 0;
-        private float green = 0;
-        private float blue = 0;
-        private float alpha = 0;
-        private boolean valid = true;
-
-        public TNAM() {
-            super(Type.TNAM);
-            valid = false;
-        }
-
-        public TNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-            this();
-            parseData(in);
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            return new TNAM();
-        }
-
-        @Override
-        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-
-            alpha = in.extractFloat();
-            red = in.extractFloat();
-            green = in.extractFloat();
-            blue = in.extractFloat();
-
-            if (logging()) {
-                logSync("", "TNAM record: RWX Format");
-                logSync("", "  " + "Red: " + red + ", Green: " + green);
-                logSync("", "  " + "Blue: " + blue + ", Alpha: " + alpha);
-            }
-
-            valid = true;
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                out.write(alpha);
-                out.write(red);
-                out.write(green);
-                out.write(blue);
-            }
-        }
-
-        @Override
-        Boolean isValid() {
-            return valid;
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            if (isValid()) {
-                return 16;
-            } else {
-                return 0;
-            }
-        }
-
-    }
-
-    static class DNAM extends SubRecordTyped {
-
-        float DOFstrength = 0;
-        float DOFdistance = 0;
-        float DOFrange = 0;
-        byte[] unknown;
-        boolean valid = false;
-
-        public DNAM() {
-            super(Type.DNAM);
-        }
-
-        @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
-            if (isValid()) {
-                out.write(DOFstrength);
-                out.write(DOFdistance);
-                out.write(DOFrange);
-                if (unknown != null) {
-                    out.write(unknown, 4);
-                }
-            }
-        }
-
-        @Override
-        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
-            DOFstrength = in.extractFloat();
-            DOFdistance = in.extractFloat();
-            DOFrange = in.extractFloat();
-            if (in.available() >= 4) {
-                unknown = in.extract(4);
-            }
-            valid = true;
-        }
-
-        @Override
-        SubRecord getNew(Type type) {
-            return new DNAM();
-        }
-
-        @Override
-        Boolean isValid() {
-            return valid;
-        }
-
-        @Override
-        int getContentLength(Mod srcMod) {
-            if (isValid()) {
-                if (unknown != null) {
-                    return 16;
-                } else {
-                    return 12;
-                }
-            } else {
-                return 0;
-            }
-        }
-
-    }
-
+    // Get/Set
     HNAM getHNAM() {
 	return (HNAM) subRecords.get(Type.HNAM);
     }
@@ -347,7 +347,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getEyeAdaptSpeed() {
-        return getHNAM().eyeAdaptSpeed;
+	return getHNAM().eyeAdaptSpeed;
     }
 
     /**
@@ -355,7 +355,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomRadius() {
-        return getHNAM().bloomRadius;
+	return getHNAM().bloomRadius;
     }
 
     /**
@@ -363,7 +363,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomThreshold() {
-        return getHNAM().bloomThreshold;
+	return getHNAM().bloomThreshold;
     }
 
     /**
@@ -371,7 +371,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBloomScale() {
-        return getHNAM().bloomScale;
+	return getHNAM().bloomScale;
     }
 
     /**
@@ -379,7 +379,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getTargetLum1() {
-        return getHNAM().targetLum1;
+	return getHNAM().targetLum1;
     }
 
     /**
@@ -387,7 +387,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getTargetLum2() {
-        return getHNAM().targetLum2;
+	return getHNAM().targetLum2;
     }
 
     /**
@@ -395,7 +395,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSunlightScale() {
-        return getHNAM().sunlightScale;
+	return getHNAM().sunlightScale;
     }
 
     /**
@@ -403,7 +403,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSkyScale() {
-        return getHNAM().skyScale;
+	return getHNAM().skyScale;
     }
 
     /**
@@ -411,7 +411,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getEyeAdaptStrength() {
-        return getHNAM().eyeAdaptStrength;
+	return getHNAM().eyeAdaptStrength;
     }
 
     /**
@@ -419,7 +419,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setEyeAdaptSpeed(float in) {
-        getHNAM().eyeAdaptSpeed = in;
+	getHNAM().eyeAdaptSpeed = in;
     }
 
     /**
@@ -427,7 +427,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomRadius(float in) {
-        getHNAM().bloomRadius = in;
+	getHNAM().bloomRadius = in;
     }
 
     /**
@@ -435,7 +435,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomThreshold(float in) {
-        getHNAM().bloomThreshold = in;
+	getHNAM().bloomThreshold = in;
     }
 
     /**
@@ -443,7 +443,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBloomScale(float in) {
-        getHNAM().bloomScale = in;
+	getHNAM().bloomScale = in;
     }
 
     /**
@@ -451,7 +451,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setTargetLum1(float in) {
-        getHNAM().targetLum1 = in;
+	getHNAM().targetLum1 = in;
     }
 
     /**
@@ -459,7 +459,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setTargetLum2(float in) {
-        getHNAM().targetLum2 = in;
+	getHNAM().targetLum2 = in;
     }
 
     /**
@@ -467,7 +467,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSunlightScale(float in) {
-        getHNAM().sunlightScale = in;
+	getHNAM().sunlightScale = in;
     }
 
     /**
@@ -475,7 +475,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSkyScale(float in) {
-        getHNAM().skyScale = in;
+	getHNAM().skyScale = in;
     }
 
     /**
@@ -483,7 +483,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setEyeAdaptStrength(float in) {
-        getHNAM().eyeAdaptStrength = in;
+	getHNAM().eyeAdaptStrength = in;
     }
 
     /**
@@ -491,7 +491,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getSaturation() {
-        return getCNAM().saturation;
+	return getCNAM().saturation;
     }
 
     /**
@@ -499,7 +499,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBrightness() {
-        return getCNAM().brightness;
+	return getCNAM().brightness;
     }
 
     /**
@@ -507,7 +507,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getContrast() {
-        return getCNAM().contrast;
+	return getCNAM().contrast;
     }
 
     /**
@@ -515,7 +515,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getRed() {
-        return getTNAM().red;
+	return getTNAM().red;
     }
 
     /**
@@ -523,7 +523,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getBlue() {
-        return getTNAM().blue;
+	return getTNAM().blue;
     }
 
     /**
@@ -531,7 +531,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getGreen() {
-        return getTNAM().green;
+	return getTNAM().green;
     }
 
     /**
@@ -539,7 +539,7 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getAlpha() {
-        return getTNAM().alpha;
+	return getTNAM().alpha;
     }
 
     /**
@@ -547,7 +547,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setSaturation(float in) {
-        getCNAM().saturation = in;
+	getCNAM().saturation = in;
     }
 
     /**
@@ -555,7 +555,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBrightness(float in) {
-        getCNAM().brightness = in;
+	getCNAM().brightness = in;
     }
 
     /**
@@ -563,7 +563,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setContrast(float in) {
-        getCNAM().contrast = in;
+	getCNAM().contrast = in;
     }
 
     /**
@@ -571,7 +571,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setRed(float in) {
-        getTNAM().red = in;
+	getTNAM().red = in;
     }
 
     /**
@@ -579,7 +579,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setBlue(float in) {
-        getTNAM().blue = in;
+	getTNAM().blue = in;
     }
 
     /**
@@ -587,7 +587,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setGreen(float in) {
-        getTNAM().green = in;
+	getTNAM().green = in;
     }
 
     /**
@@ -595,7 +595,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setAlpha(float in) {
-        getTNAM().alpha = in;
+	getTNAM().alpha = in;
     }
 
     /**
@@ -603,7 +603,7 @@ public class IMGS extends MajorRecord {
      * @param in
      */
     public void setDOFstrength(float in) {
-        getDNAM().DOFstrength = in;
+	getDNAM().DOFstrength = in;
     }
 
     /**
@@ -611,15 +611,15 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFstrength() {
-        return getDNAM().DOFstrength;
+	return getDNAM().DOFstrength;
     }
 
     /**
      *
      * @param in
      */
-    public void setDOFdistance (float in) {
-        getDNAM().DOFdistance = in;
+    public void setDOFdistance(float in) {
+	getDNAM().DOFdistance = in;
     }
 
     /**
@@ -627,15 +627,15 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFdistance() {
-        return getDNAM().DOFdistance;
+	return getDNAM().DOFdistance;
     }
 
     /**
      *
      * @param in
      */
-    public void setDOFrange (float in) {
-        getDNAM().DOFrange = in;
+    public void setDOFrange(float in) {
+	getDNAM().DOFrange = in;
     }
 
     /**
@@ -643,6 +643,6 @@ public class IMGS extends MajorRecord {
      * @return
      */
     public float getDOFrange() {
-        return getDNAM().DOFrange;
+	return getDNAM().DOFrange;
     }
 }

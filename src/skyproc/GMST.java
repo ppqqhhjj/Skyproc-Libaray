@@ -20,227 +20,17 @@ import skyproc.exceptions.BadRecord;
  */
 public class GMST extends MajorRecord {
 
-    static final SubPrototype GMSTproto = new SubPrototype(MajorRecord.majorProto){
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GMST}));
+    static final SubPrototype GMSTproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
 	    add(new DATA());
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GMST}));
 
-    GMST() {
-	super();
-	subRecords.setPrototype(GMSTproto);
-    }
-
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param setting
-     * @param b
-     */
-    public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
-	this();
-	originateFrom(modToOriginateFrom, setting.toString());
-	setData(b);
-    }
-
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param setting
-     * @param s
-     */
-    public GMST(Mod modToOriginateFrom, StringSetting setting, String s) {
-	this();
-	originateFrom(modToOriginateFrom, setting.toString());
-	setData(s);
-    }
-
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param setting
-     * @param i
-     */
-    public GMST(Mod modToOriginateFrom, IntSetting setting, int i) {
-	this();
-	originateFrom(modToOriginateFrom, setting.toString());
-	setData(i);
-    }
-
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param setting
-     * @param f
-     */
-    public GMST(Mod modToOriginateFrom, FloatSetting setting, float f) {
-	this();
-	originateFrom(modToOriginateFrom, setting.toString());
-	setData(f);
-    }
-
-    @Override
-    Record getNew() {
-	return new GMST();
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    /**
-     *
-     * @return The type of data this GMST contains.
-     */
-    public GMSTType getGMSTType() {
-	if (getEDID().length() == 0) {
-	    return GMSTType.Unknown;
-	}
-	switch (getEDID().charAt(0)) {
-	    case 'b':
-		return GMSTType.Bool;
-	    case 'i':
-		return GMSTType.Int;
-	    case 'f':
-		return GMSTType.Float;
-	    case 's':
-	    case 'S':
-		return GMSTType.String;
-	    default:
-		return GMSTType.Unknown;
-	}
-    }
-
-    /**
-     * Enum representing the different data types a GMST can hold.
-     */
-    public enum GMSTType {
-
-	/**
-	 *
-	 */
-	Bool,
-	/**
-	 *
-	 */
-	Int,
-	/**
-	 *
-	 */
-	Float,
-	/**
-	 *
-	 */
-	String,
-	/**
-	 *
-	 */
-	Unknown;
-    }
-
-    DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
-    }
-
-    /**
-     * Sets the data to a boolean value.  You must check and be aware that this GMST contains that type.
-     * @param b
-     */
-    final public void setData(Boolean b) {
-	if (b) {
-	    getDATA().DATA.setData(1, 4);
-	} else {
-	    getDATA().DATA.setData(0, 4);
-	}
-    }
-
-    /**
-     * Sets the data to a string value.  You must check and be aware that this GMST contains that type.
-     * @param s
-     */
-    final public void setData(String s) {
-	getDATA().DATAs.setText(s);
-    }
-
-    /**
-     * Sets the data to a int value.  You must check and be aware that this GMST contains that type.
-     * @param i
-     */
-    final public void setData(int i) {
-	getDATA().DATA.setData(i, 4);
-    }
-
-    /**
-     * Sets the data to a float value.  You must check and be aware that this GMST contains that type.
-     * @param f
-     */
-    final public void setData(float f) {
-	ByteBuffer out = ByteBuffer.allocate(4);
-	out.putInt(Integer.reverseBytes(Float.floatToIntBits(f)));
-	getDATA().DATA.setData(out.array());
-    }
-
-    /**
-     *
-     * @return Returns the value as a bool.  You must check and be aware that this GMST contains that type.
-     */
-    public boolean getBool() {
-	if (getDATA().DATA.toInt() == 0) {
-	    return false;
-	} else {
-	    return true;
-	}
-    }
-
-    /**
-     *
-     * @return Returns the value as a string.  You must check and be aware that this GMST contains that type.
-     */
-    public String getString() {
-	return getDATA().DATAs.print();
-    }
-
-    /**
-     *
-     * @return Returns the value as an int.  You must check and be aware that this GMST contains that type.
-     */
-    public int getInt() {
-	return getDATA().DATA.toInt();
-    }
-
-    /**
-     *
-     * @return Returns the value as a float.  You must check and be aware that this GMST contains that type.
-     */
-    public float getFloat() {
-	return Float.intBitsToFloat(getDATA().DATA.toInt());
-    }
-
-    @Override
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	SubRecord data = updateDATA();
-	super.importSubRecords(in);
-	((SubRecordsStream)subRecords).loadFromPosition(data);
-	data.fetchStringPointers(srcMod);
-    }
-
-    @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	updateDATA();
-	super.export(out, srcMod);
-    }
-
-    SubRecord updateDATA() {
-	DATA data = (DATA)((SubRecordsStream)subRecords).getSilent(Type.DATA);
-	data.GMSTtype = getGMSTType();
-	return data;
-    }
-
-    static class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecordTyped {
 
 	GMSTType GMSTtype;
 	SubData DATA = new SubData(Type.DATA);
@@ -292,6 +82,34 @@ public class GMST extends MajorRecord {
 	void fetchStringPointers(Mod srcMod) {
 	    DATAs.fetchStringPointers(srcMod);
 	}
+    }
+
+    // Enums
+    /**
+     * Enum representing the different data types a GMST can hold.
+     */
+    public enum GMSTType {
+
+	/**
+	 *
+	 */
+	Bool,
+	/**
+	 *
+	 */
+	Int,
+	/**
+	 *
+	 */
+	Float,
+	/**
+	 *
+	 */
+	String,
+	/**
+	 *
+	 */
+	Unknown;
     }
 
     /**
@@ -9737,24 +9555,23 @@ public class GMST extends MajorRecord {
 	 *
 	 */
 	iXPRewardSpeechChallengeVeryHard,
-
-        /**
+	/**
 	 *
 	 */
 	iHoursToRespawnCell,
-        /**
+	/**
 	 *
 	 */
 	iHoursToRespawnCellCleared,
-        /**
+	/**
 	 *
 	 */
 	iDaysToRespawnVendor,
-        /**
+	/**
 	 *
 	 */
 	iHoursToClearCorpses,
-        /**
+	/**
 	 *
 	 */
 	iMaxAttachedArrows;
@@ -12358,8 +12175,206 @@ public class GMST extends MajorRecord {
 	 */
 	sYour;
     }
+
 //    public enum USetting {
 //	uVideoDeviceIdentifierPart,
 //	uiMuteMusicPauseTime;
 //    }
+    // Common Functions
+    GMST() {
+	super();
+	subRecords.setPrototype(GMSTproto);
+    }
+
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param setting
+     * @param b
+     */
+    public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
+	setData(b);
+    }
+
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param setting
+     * @param s
+     */
+    public GMST(Mod modToOriginateFrom, StringSetting setting, String s) {
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
+	setData(s);
+    }
+
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param setting
+     * @param i
+     */
+    public GMST(Mod modToOriginateFrom, IntSetting setting, int i) {
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
+	setData(i);
+    }
+
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param setting
+     * @param f
+     */
+    public GMST(Mod modToOriginateFrom, FloatSetting setting, float f) {
+	this();
+	originateFrom(modToOriginateFrom, setting.toString());
+	setData(f);
+    }
+
+    @Override
+    Record getNew() {
+	return new GMST();
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	SubRecord data = updateDATA();
+	super.importSubRecords(in);
+	((SubRecordsStream) subRecords).loadFromPosition(data);
+	data.fetchStringPointers(srcMod);
+    }
+
+    @Override
+    void export(LExporter out, Mod srcMod) throws IOException {
+	updateDATA();
+	super.export(out, srcMod);
+    }
+
+    // Get/set
+    /**
+     *
+     * @return The type of data this GMST contains.
+     */
+    public GMSTType getGMSTType() {
+	if (getEDID().length() == 0) {
+	    return GMSTType.Unknown;
+	}
+	switch (getEDID().charAt(0)) {
+	    case 'b':
+		return GMSTType.Bool;
+	    case 'i':
+		return GMSTType.Int;
+	    case 'f':
+		return GMSTType.Float;
+	    case 's':
+	    case 'S':
+		return GMSTType.String;
+	    default:
+		return GMSTType.Unknown;
+	}
+    }
+
+    DATA getDATA() {
+	return (DATA) subRecords.get(Type.DATA);
+    }
+
+    /**
+     * Sets the data to a boolean value. You must check and be aware that this
+     * GMST contains that type.
+     *
+     * @param b
+     */
+    final public void setData(Boolean b) {
+	if (b) {
+	    getDATA().DATA.setData(1, 4);
+	} else {
+	    getDATA().DATA.setData(0, 4);
+	}
+    }
+
+    /**
+     * Sets the data to a string value. You must check and be aware that this
+     * GMST contains that type.
+     *
+     * @param s
+     */
+    final public void setData(String s) {
+	getDATA().DATAs.setText(s);
+    }
+
+    /**
+     * Sets the data to a int value. You must check and be aware that this GMST
+     * contains that type.
+     *
+     * @param i
+     */
+    final public void setData(int i) {
+	getDATA().DATA.setData(i, 4);
+    }
+
+    /**
+     * Sets the data to a float value. You must check and be aware that this
+     * GMST contains that type.
+     *
+     * @param f
+     */
+    final public void setData(float f) {
+	ByteBuffer out = ByteBuffer.allocate(4);
+	out.putInt(Integer.reverseBytes(Float.floatToIntBits(f)));
+	getDATA().DATA.setData(out.array());
+    }
+
+    /**
+     *
+     * @return Returns the value as a bool. You must check and be aware that
+     * this GMST contains that type.
+     */
+    public boolean getBool() {
+	if (getDATA().DATA.toInt() == 0) {
+	    return false;
+	} else {
+	    return true;
+	}
+    }
+
+    /**
+     *
+     * @return Returns the value as a string. You must check and be aware that
+     * this GMST contains that type.
+     */
+    public String getString() {
+	return getDATA().DATAs.print();
+    }
+
+    /**
+     *
+     * @return Returns the value as an int. You must check and be aware that
+     * this GMST contains that type.
+     */
+    public int getInt() {
+	return getDATA().DATA.toInt();
+    }
+
+    /**
+     *
+     * @return Returns the value as a float. You must check and be aware that
+     * this GMST contains that type.
+     */
+    public float getFloat() {
+	return Float.intBitsToFloat(getDATA().DATA.toInt());
+    }
+
+    SubRecord updateDATA() {
+	DATA data = (DATA) ((SubRecordsStream) subRecords).getSilent(Type.DATA);
+	data.GMSTtype = getGMSTType();
+	return data;
+    }
 }

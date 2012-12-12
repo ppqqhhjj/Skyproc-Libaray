@@ -22,33 +22,15 @@ import skyproc.exceptions.BadRecord;
  */
 public class ECZN extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ECZN}));
     static final SubPrototype ECZNproto = new SubPrototype(MajorRecord.majorProto) {
 	@Override
 	protected void addRecords() {
 	    add(new DATA());
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ECZN}));
-
-    /**
-     * Creates a new ECZN record.
-     */
-    ECZN() {
-	super();
-	subRecords.setPrototype(ECZNproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new ECZN();
-    }
-
-    static class DATA extends SubRecordTyped implements Serializable {
+    static final class DATA extends SubRecordTyped implements Serializable {
 
 	private FormID owner = new FormID();
 	private FormID location = new FormID();
@@ -131,6 +113,7 @@ public class ECZN extends MajorRecord {
 	}
     }
 
+    // Enums
     /**
      *
      */
@@ -154,7 +137,27 @@ public class ECZN extends MajorRecord {
 	    this.value = value;
 	}
     }
+    
+    // Common Functions
+    /**
+     * Creates a new ECZN record.
+     */
+    ECZN() {
+	super();
+	subRecords.setPrototype(ECZNproto);
+    }
 
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new ECZN();
+    }
+    
+    // Get/set
     DATA getDATA() {
 	return (DATA) subRecords.get(Type.DATA);
     }

@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class WEAP extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.WEAP}));
     static final SubPrototype WEAPproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
@@ -55,24 +57,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubForm(Type.CNAM));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.WEAP}));
-
-    WEAP() {
-	super();
-	subRecords.setPrototype(WEAPproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new WEAP();
-    }
-
-    static class DNAM extends SubRecordTyped {
+    static final class DNAM extends SubRecordTyped {
 
 	WeaponType wtype;
 	byte[] unknown1;
@@ -199,7 +184,7 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
-    static class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecordTyped {
 
 	int value = 0;
 	float weight = 0;
@@ -244,7 +229,7 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
-    static class CRDT extends SubRecordTyped {
+    static final class CRDT extends SubRecordTyped {
 
 	int critDmg;
 	byte[] unknown0;
@@ -304,6 +289,7 @@ public class WEAP extends MajorRecordDescription {
 	}
     }
 
+    // Enums
     /**
      * An enum to represent to Weapon Type options
      */
@@ -407,6 +393,22 @@ public class WEAP extends MajorRecordDescription {
 	    this.value = value;
 	    this.flagSet = flagSet;
 	}
+    }
+
+    // Common Functions
+    WEAP() {
+	super();
+	subRecords.setPrototype(WEAPproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new WEAP();
     }
 
     // Get /set

@@ -14,7 +14,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public abstract class SubShellBulkType extends SubShell {
+class SubShellBulkType extends SubShell {
 
     boolean includeFirst;
 
@@ -60,5 +60,9 @@ public abstract class SubShellBulkType extends SubShell {
 	return out;
     }
 
+    @Override
+    SubRecord getNew(Type type) {
+	return new SubShellBulkType(subRecords.prototype, includeFirst);
+    }
 
 }

@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 public class LVLN extends LeveledRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLN}));
     static final SubPrototype LVLNproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
@@ -19,9 +21,8 @@ public class LVLN extends LeveledRecord {
 	    add(new SubData(Type.MODT));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLN}));
-    boolean circular = false;
 
+    // Get/Set
     /**
      * Creates a Leveled List with no entries and default settings.
      * LVLN_Flags set to 0x01=All levels
@@ -68,7 +69,6 @@ public class LVLN extends LeveledRecord {
     }
 
     // Get/set
-
     /**
      *
      * @return Model path associated with the LVLN.

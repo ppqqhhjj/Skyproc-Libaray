@@ -6,10 +6,6 @@ package skyproc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.zip.DataFormatException;
-import lev.LChannel;
-import skyproc.exceptions.BadParameter;
-import skyproc.exceptions.BadRecord;
 
 /**
  * Actor value records and perk trees.
@@ -18,7 +14,26 @@ import skyproc.exceptions.BadRecord;
  */
 public class AVIF extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AVIF}));
+    static final SubPrototype perkRefProto = new SubPrototype() {
+
+	@Override
+	protected void addRecords() {
+	    add(new SubForm(Type.PNAM));
+	    forceExport(Type.PNAM);
+	    add(new SubInt(Type.FNAM));
+	    add(new SubInt(Type.XNAM));
+	    add(new SubInt(Type.YNAM));
+	    add(new SubFloat(Type.HNAM));
+	    add(new SubFloat(Type.VNAM));
+	    add(new SubForm(Type.SNAM));
+	    add(new SubList<>(new SubInt(Type.CNAM)));
+	    add(new SubInt(Type.INAM));
+	}
+    };
     static final SubPrototype AVIFproto = new SubPrototype(MajorRecordDescription.descProto) {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubString(Type.ANAM, true));
@@ -27,43 +42,10 @@ public class AVIF extends MajorRecordDescription {
 	    add(new SubList<>(new PerkReference()));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AVIF}));
-
-    AVIF() {
-	super();
-	subRecords.setPrototype(AVIFproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new AVIF();
-    }
-
     /**
      * A structure that represents a perk in a perktree
      */
-    public static class PerkReference extends SubShellBulkType {
-
-	static SubPrototype perkRefProto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubForm(Type.PNAM));
-		forceExport(Type.PNAM);
-		add(new SubInt(Type.FNAM));
-		add(new SubInt(Type.XNAM));
-		add(new SubInt(Type.YNAM));
-		add(new SubFloat(Type.HNAM));
-		add(new SubFloat(Type.VNAM));
-		add(new SubForm(Type.SNAM));
-		add(new SubList<>(new SubInt(Type.CNAM)));
-		add(new SubInt(Type.INAM));
-	    }
-	};
+    public static final class PerkReference extends SubShellBulkType {
 
 	PerkReference() {
 	    super(perkRefProto, false);
@@ -233,6 +215,23 @@ public class AVIF extends MajorRecordDescription {
 	}
     }
 
+    // Common Functions
+    AVIF() {
+	super();
+	subRecords.setPrototype(AVIFproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new AVIF();
+    }
+
+    // Get/Set
     /**
      *
      * @param abbr

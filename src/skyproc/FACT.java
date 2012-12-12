@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 public class FACT extends MajorRecordNamed {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FACT}));
     static final SubPrototype FACTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
@@ -35,24 +37,7 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubString(Type.CIS2, true));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FACT}));
-
-    FACT() {
-	super();
-	subRecords.setPrototype(FACTproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new FACT();
-    }
-
-    static class Rank extends SubShell {
+    static final class Rank extends SubShell {
 
 	static SubPrototype rankProto = new SubPrototype() {
 	    @Override
@@ -77,4 +62,21 @@ public class FACT extends MajorRecordNamed {
 	    return new Rank();
 	}
     }
+
+    // Common Functions
+    FACT() {
+	super();
+	subRecords.setPrototype(FACTproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new FACT();
+    }
+
 }

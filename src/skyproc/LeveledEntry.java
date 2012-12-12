@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class LeveledEntry extends SubShell {
 
-    static SubPrototype LVLOproto = new SubPrototype() {
+    static final SubPrototype LVLOproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
 	    add(new LVLOin());

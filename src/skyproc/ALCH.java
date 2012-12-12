@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class ALCH extends MagicItem {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ALCH}));
     static final SubPrototype ALCHproto = new SubPrototype(MagicItem.magicItemProto) {
 
 	@Override
@@ -40,24 +42,7 @@ public class ALCH extends MagicItem {
 	    reposition(Type.EFID);
 	}
     };
-    static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ALCH}));
-
-    ALCH() {
-	super();
-	subRecords.setPrototype(ALCHproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new ALCH();
-    }
-
-    static class ENIT extends SubRecordTyped {
+    static final class ENIT extends SubRecordTyped {
 
 	int value;
 	LFlags flags = new LFlags(4);
@@ -107,7 +92,8 @@ public class ALCH extends MagicItem {
 	    return 20;
 	}
     }
-
+    
+    // Enums
     /**
      *
      */
@@ -134,6 +120,22 @@ public class ALCH extends MagicItem {
 	ALCHFlag(int in) {
 	    value = in;
 	}
+    }
+    
+    // Common Functions
+    ALCH() {
+	super();
+	subRecords.setPrototype(ALCHproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new ALCH();
     }
 
     // Get / set

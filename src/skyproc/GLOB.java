@@ -18,6 +18,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class GLOB extends MajorRecord {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GLOB}));
     static final SubPrototype GLOBproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
@@ -28,8 +30,33 @@ public class GLOB extends MajorRecord {
 	    add(new SubFloat(Type.FLTV));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GLOB}));
 
+    // Enums
+    /**
+     *
+     */
+    public enum GLOBType {
+	/**
+	 *
+	 */
+	Short (0x73),
+	/**
+	 *
+	 */
+	Long (0x6C),
+	/**
+	 *
+	 */
+	Float (0x66);
+
+	int value;
+
+	GLOBType (int value) {
+	    this.value = value;
+	}
+    }
+    
+    // Get/Set
     GLOB () {
 	super();
 	subRecords.setPrototype(GLOBproto);
@@ -71,30 +98,7 @@ public class GLOB extends MajorRecord {
 	return type;
     }
 
-    /**
-     *
-     */
-    public enum GLOBType {
-	/**
-	 *
-	 */
-	Short (0x73),
-	/**
-	 *
-	 */
-	Long (0x6C),
-	/**
-	 *
-	 */
-	Float (0x66);
-
-	int value;
-
-	GLOBType (int value) {
-	    this.value = value;
-	}
-    }
-
+    // Get/Set
     /**
      *
      * @return

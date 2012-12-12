@@ -20,6 +20,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class PROJ extends MajorRecordNamed {
 
+    // Static prototypes and definitions
+    static final  ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PROJ}));
     static final SubPrototype PROJprototype = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
@@ -36,18 +38,6 @@ public class PROJ extends MajorRecordNamed {
 	    add(new SubData(Type.VNAM)); // SoundVolume
 	}
     };
-    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PROJ}));
-
-    PROJ() {
-	super();
-	subRecords.setPrototype(PROJprototype);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
     static class DATA extends SubRecordTyped {
 
 	LFlags flags = new LFlags(2);
@@ -165,6 +155,8 @@ public class PROJ extends MajorRecordNamed {
 	    return 92;
 	}
     }
+    
+    // Enums
 
     /**
      *
@@ -263,6 +255,17 @@ public class PROJ extends MajorRecordNamed {
 		    return Arrow;
 	    }
 	}
+    }
+    
+    // Common Functions
+    PROJ() {
+	super();
+	subRecords.setPrototype(PROJprototype);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     @Override

@@ -20,6 +20,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class AMMO extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AMMO}));
     static final SubPrototype AMMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
@@ -37,24 +39,7 @@ public class AMMO extends MajorRecordDescription {
 	    add(new SubString(Type.ONAM, true));
 	}
     };
-    static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AMMO}));
-
-    AMMO() {
-	super();
-	subRecords.setPrototype(AMMOprototype);
-    }
-
-    @Override
-    Record getNew() {
-	return new AMMO();
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    static class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecordTyped {
 
 	FormID projectile = new FormID();
 	LFlags flags = new LFlags(4);
@@ -101,6 +86,7 @@ public class AMMO extends MajorRecordDescription {
 	}
     }
 
+    // Enums
     /**
      *
      */
@@ -115,6 +101,22 @@ public class AMMO extends MajorRecordDescription {
 	 *
 	 */
 	VanishesWhenNotInFlight; //2
+    }
+    
+    // Common Functions
+    AMMO() {
+	super();
+	subRecords.setPrototype(AMMOprototype);
+    }
+
+    @Override
+    Record getNew() {
+	return new AMMO();
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
     }
 
     //Get/Set

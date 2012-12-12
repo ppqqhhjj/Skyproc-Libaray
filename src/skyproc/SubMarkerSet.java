@@ -102,6 +102,14 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	set.clear();
     }
 
+    public T get(Type marker) {
+	if (!set.containsKey(marker)) {
+	    T newItem = (T) prototype.getNew();
+	    set.put(marker, newItem);
+	}
+	return set.get(marker);
+    }
+
     @Override
     Boolean isValid() {
 	return true;

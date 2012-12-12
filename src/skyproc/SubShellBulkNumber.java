@@ -10,7 +10,7 @@ import lev.LChannel;
  *
  * @author Justin Swanson
  */
-public abstract class SubShellBulkNumber extends SubShell {
+abstract class SubShellBulkNumber extends SubShell {
 
     int numForced;
 

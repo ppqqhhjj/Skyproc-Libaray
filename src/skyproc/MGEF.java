@@ -21,6 +21,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class MGEF extends MajorRecordDescription {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MGEF}));
     static final SubPrototype MGEFproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
@@ -41,34 +43,6 @@ public class MGEF extends MajorRecordDescription {
 	    add(new SubData(Type.OBND));
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MGEF}));
-
-    /**
-     *
-     * @param modToOriginateFrom
-     * @param edid EDID to give the new record. Make sure it is unique.
-     * @param name
-     */
-    public MGEF(Mod modToOriginateFrom, String edid, String name) {
-	this();
-	originateFrom(modToOriginateFrom, edid);
-	this.setName(name);
-    }
-
-    MGEF() {
-	super();
-	subRecords.setPrototype(MGEFproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new MGEF();
-    }
 
     static class DATA extends SubRecordTyped {
 
@@ -283,7 +257,7 @@ public class MGEF extends MajorRecordDescription {
 
     static class SNDD extends SubRecordTyped {
 
-	ArrayList<Sound> sounds = new ArrayList<>();
+	ArrayList<SNDD.Sound> sounds = new ArrayList<>();
 
 	SNDD() {
 	    super(Type.SNDD);
@@ -292,7 +266,7 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    for (Sound s : sounds) {
+	    for (SNDD.Sound s : sounds) {
 		out.write(s.sound.ordinal());
 		s.soundID.export(out);
 	    }
@@ -302,7 +276,7 @@ public class MGEF extends MajorRecordDescription {
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    while (!in.isDone()) {
-		Sound sound = new Sound();
+		SNDD.Sound sound = new SNDD.Sound();
 		sound.sound = SoundData.values()[in.extractInt(4)];
 		sound.soundID.setInternal(in.extract(4));
 		sounds.add(sound);
@@ -327,7 +301,7 @@ public class MGEF extends MajorRecordDescription {
 	@Override
 	ArrayList<FormID> allFormIDs() {
 	    ArrayList<FormID> out = new ArrayList<FormID>();
-	    for (Sound s : sounds) {
+	    for (SNDD.Sound s : sounds) {
 		out.add(s.soundID);
 	    }
 	    return out;
@@ -340,6 +314,7 @@ public class MGEF extends MajorRecordDescription {
 	}
     }
 
+    // Enums
     /**
      *
      */
@@ -454,8 +429,37 @@ public class MGEF extends MajorRecordDescription {
 	 */
 	OnHit
     }
+    
+    
+    // Common Functions
+    /**
+     *
+     * @param modToOriginateFrom
+     * @param edid EDID to give the new record. Make sure it is unique.
+     * @param name
+     */
+    public MGEF(Mod modToOriginateFrom, String edid, String name) {
+	this();
+	originateFrom(modToOriginateFrom, edid);
+	this.setName(name);
+    }
 
+    MGEF() {
+	super();
+	subRecords.setPrototype(MGEFproto);
+    }
 
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new MGEF();
+    }
+    
+    // Get/Set
     /**
      *
      * @return Description associated with the Major Record, or <NO TEXT> if

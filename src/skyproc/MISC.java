@@ -20,6 +20,8 @@ import skyproc.exceptions.BadRecord;
  */
 public class MISC extends MajorRecordNamed {
 
+    // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MISC}));
     static final SubPrototype MISCproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
@@ -39,23 +41,6 @@ public class MISC extends MajorRecordNamed {
 	    add(new DestructionData());
 	}
     };
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MISC}));
-
-    MISC() {
-	super();
-	subRecords.setPrototype(MISCproto);
-    }
-
-    @Override
-    ArrayList<Type> getTypes() {
-	return type;
-    }
-
-    @Override
-    Record getNew() {
-	return new MISC();
-    }
-
     static class DATA extends SubRecordTyped {
 
 	int value = 0;
@@ -93,6 +78,23 @@ public class MISC extends MajorRecordNamed {
 	}
     }
 
+    // Common Functions
+    MISC() {
+	super();
+	subRecords.setPrototype(MISCproto);
+    }
+
+    @Override
+    ArrayList<Type> getTypes() {
+	return type;
+    }
+
+    @Override
+    Record getNew() {
+	return new MISC();
+    }
+    
+    // Get/Set
     /**
      *
      * @return
