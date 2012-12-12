@@ -1,11 +1,9 @@
 package skyproc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
-import lev.LExporter;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -19,16 +17,7 @@ public class PERK extends MajorRecordDescription {
 
     // Static prototypes and definitions
     static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PERK}));
-    static final SubPrototype PRKCpackageProto = new SubPrototype() {
-
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.PRKC));
-	    add(new SubList<>(new Condition()));
-	}
-    };
     static final SubPrototype PERKproto = new SubPrototype(MajorRecordDescription.descProto) {
-
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
@@ -36,25 +25,38 @@ public class PERK extends MajorRecordDescription {
 	    add(new SubData(Type.DATA));
 	    add(new SubForm(Type.NNAM));
 	    add(new SubString(Type.ICON, true));
-	    add(new SubList<>(new PRKEPackage()));
+	    add(new SubList<>(new PRKEPackage(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubData(Type.PRKE));
+		    add(new PRKEComplexSubPackage(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubData(Type.DATA));
+			    add(new SubList<>(new SubShell(new SubPrototype() {
+				@Override
+				protected void addRecords() {
+				    add(new SubData(Type.PRKC));
+				    add(new SubList<>(new Condition()));
+				}
+			    })));
+			    add(new SubData(Type.EPFT));
+			    add(new SubData(Type.EPF2));
+			    add(new SubData(Type.EPF3));
+			    add(new SubData(Type.EPFD));
+			}
+		    }));
+		    add(new SubData(Type.PRKF));
+		    forceExport(Type.PRKF);
+		}
+	    })));
 	}
     };
 
     static class PRKEPackage extends SubShellBulkType {
 
-	static final SubPrototype PRKEproto = new SubPrototype() {
-
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.PRKE));
-		add(new PRKEComplexSubPackage()); // Placeholder
-		add(new SubData(Type.PRKF));
-		forceExport(Type.PRKF);
-	    }
-	};
-
-	PRKEPackage() {
-	    super(PRKEproto, false);
+	PRKEPackage(SubPrototype proto) {
+	    super(proto, false);
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public class PERK extends MajorRecordDescription {
 
 	@Override
 	SubRecord getNew(Type type) {
-	    return new PRKEPackage();
+	    return new PRKEPackage(getPrototype());
 	}
 
 	@Override
@@ -88,26 +90,13 @@ public class PERK extends MajorRecordDescription {
 
     static class PRKEComplexSubPackage extends SubShell {
 
-	static final SubPrototype PRKESubPackageProto = new SubPrototype() {
-
-	    @Override
-	    protected void addRecords() {
-		add(new SubData(Type.DATA));
-		add(new SubList<>(new SubShell(PRKCpackageProto)));
-		add(new SubData(Type.EPFT));
-		add(new SubData(Type.EPF2));
-		add(new SubData(Type.EPF3));
-		add(new SubData(Type.EPFD));  // Placeholder
-	    }
-	};
-
-	PRKEComplexSubPackage() {
-	    super(PRKESubPackageProto);
+	PRKEComplexSubPackage(SubPrototype proto) {
+	    super(proto);
 	}
 
 	@Override
 	SubRecord getNew(Type type) {
-	    return new PRKEComplexSubPackage();
+	    return new PRKEComplexSubPackage(getPrototype());
 	}
 
 	@Override

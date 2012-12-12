@@ -23,112 +23,6 @@ public class RACE extends MajorRecordDescription {
 
     // Static prototypes and definitions
     static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.RACE}));
-    static final SubPrototype EGTproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.INDX));
-	    add(new SubString(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	}
-    };
-    static final SubPrototype NAM1proto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.NAM1));
-	    forceExport(Type.NAM1);
-
-	    SubMarkerSet EGT = new SubMarkerSet(new SubShell(EGTproto), Type.MNAM, Type.FNAM);
-	    EGT.forceMarkers = true;
-	    add(EGT);
-	}
-    };
-    static final SubPrototype HKXproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubString(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	}
-    };
-    static final SubPrototype NAM3proto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.NAM3));
-	    forceExport(Type.NAM3);
-	    add(new SubMarkerSet(new SubShell(HKXproto), Type.MNAM, Type.FNAM));
-	}
-    };
-    static final SubPrototype MFNAMproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubString(Type.ANAM, true));
-	    add(new SubData(Type.MODT));
-	}
-    };
-    static final SubPrototype ATKDproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.ATKD));
-	    add(new SubString(Type.ATKE, true));
-	}
-    };
-    static final SubPrototype MTYPproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubForm(Type.MTYP));
-	    add(new SubData(Type.SPED));
-	}
-    };
-    static final SubPrototype HEADproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.INDX));
-	    add(new SubData(Type.HEAD));
-	}
-    };
-    static final SubPrototype MPAVproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.MPAI));
-	    add(new SubData(Type.MPAV));
-	}
-    };
-    static final SubPrototype TINCproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.TINC));
-	    add(new SubData(Type.TINV));
-	    add(new SubData(Type.TIRS));
-	}
-    };
-    static final SubPrototype TINIproto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.TINI));
-	    add(new SubString(Type.TINT, true));
-	    add(new SubData(Type.TINP));
-	    add(new SubForm(Type.TIND));
-	    add(new SubList<>(new SubShell(TINCproto)));
-	}
-    };
-    static final SubPrototype NAM0proto = new SubPrototype() {
-	@Override
-	protected void addRecords() {
-	    add(new SubData(Type.NAM0));
-	    add(new SubData(Type.MNAM));
-	    add(new SubData(Type.FNAM));
-	    add(new SubList<>(new SubShell(HEADproto)));
-	    add(new SubList<>(new SubShell(MPAVproto)));
-	    add(new SubList<>(new SubForm(Type.RPRM)));
-	    add(new SubList<>(new SubForm(Type.RPRF)));
-	    add(new SubList<>(new SubForm(Type.AHCM)));
-	    add(new SubList<>(new SubForm(Type.AHCF)));
-	    add(new SubList<>(new SubForm(Type.FTSM)));
-	    add(new SubList<>(new SubForm(Type.FTSF)));
-	    add(new SubList<>(new SubForm(Type.DFTM)));
-	    add(new SubList<>(new SubForm(Type.DFTF)));
-	    add(new SubList<>(new SubShell(TINIproto)));
-	}
-    };
     static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
@@ -138,7 +32,13 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.BOD2));
 	    add(new KeywordSet());
 	    add(new DATA());
-	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(MFNAMproto), Type.MNAM, Type.FNAM);
+	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubString(Type.ANAM, true));
+		    add(new SubData(Type.MODT));
+		}
+	    }), Type.MNAM, Type.FNAM);
 	    mfnam.forceMarkers = true;
 	    add(mfnam);
 	    add(new SubList<>(new SubString(Type.MTNM, false)));
@@ -149,18 +49,60 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.PNAM));
 	    add(new SubData(Type.UNAM));
 	    add(new SubForm(Type.ATKR));
-	    add(new SubList<>(new SubShell(ATKDproto)));
-	    add(new SubShellBulkType(NAM1proto, false));
+	    add(new SubList<>(new SubShell(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubData(Type.ATKD));
+		    add(new SubString(Type.ATKE, true));
+		}
+	    })));
+	    add(new SubShellBulkType(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubData(Type.NAM1));
+		    forceExport(Type.NAM1);
+
+		    SubMarkerSet EGT = new SubMarkerSet(new SubShell(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubData(Type.INDX));
+			    add(new SubString(Type.MODL, true));
+			    add(new SubData(Type.MODT));
+			}
+		    }), Type.MNAM, Type.FNAM);
+		    EGT.forceMarkers = true;
+		    add(EGT);
+		}
+	    }, false));
 	    add(new SubForm(Type.GNAM));
 	    add(new SubData(Type.NAM2));
-	    add(new SubShellBulkType(NAM3proto, false));
+	    add(new SubShellBulkType(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubData(Type.NAM3));
+		    forceExport(Type.NAM3);
+		    add(new SubMarkerSet(new SubShell(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubString(Type.MODL, true));
+			    add(new SubData(Type.MODT));
+			}
+		    }), Type.MNAM, Type.FNAM));
+		}
+	    }, false));
 	    add(new SubForm(Type.NAM4));
 	    add(new SubForm(Type.NAM5));
 	    add(new SubForm(Type.NAM7));
 	    add(new SubForm(Type.ONAM));
 	    add(new SubForm(Type.LNAM));
 	    add(new SubList<>(new SubString(Type.NAME, true)));
-	    add(new SubList<>(new SubShell(MTYPproto)));
+	    add(new SubList<>(new SubShell(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubForm(Type.MTYP));
+		    add(new SubData(Type.SPED));
+		}
+	    })));
 	    add(new SubData(Type.VNAM));
 	    add(new SubList<>(new SubForm(Type.QNAM)));
 	    add(new SubForm(Type.UNES));
@@ -172,7 +114,53 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubForm(Type.FLMV));
 	    add(new SubForm(Type.SNMV));
 	    add(new SubForm(Type.SPMV));
-	    add(new SubList<>(new SubShellBulkType(NAM0proto, false)));
+	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubData(Type.NAM0));
+		    add(new SubData(Type.MNAM));
+		    add(new SubData(Type.FNAM));
+		    add(new SubList<>(new SubShell(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubData(Type.INDX));
+			    add(new SubData(Type.HEAD));
+			}
+		    })));
+		    add(new SubList<>(new SubShell(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubData(Type.MPAI));
+			    add(new SubData(Type.MPAV));
+			}
+		    })));
+		    add(new SubList<>(new SubForm(Type.RPRM)));
+		    add(new SubList<>(new SubForm(Type.RPRF)));
+		    add(new SubList<>(new SubForm(Type.AHCM)));
+		    add(new SubList<>(new SubForm(Type.AHCF)));
+		    add(new SubList<>(new SubForm(Type.FTSM)));
+		    add(new SubList<>(new SubForm(Type.FTSF)));
+		    add(new SubList<>(new SubForm(Type.DFTM)));
+		    add(new SubList<>(new SubForm(Type.DFTF)));
+		    add(new SubList<>(new SubShell(new SubPrototype() {
+			@Override
+			protected void addRecords() {
+			    add(new SubData(Type.TINI));
+			    add(new SubString(Type.TINT, true));
+			    add(new SubData(Type.TINP));
+			    add(new SubForm(Type.TIND));
+			    add(new SubList<>(new SubShell(new SubPrototype() {
+				@Override
+				protected void addRecords() {
+				    add(new SubData(Type.TINC));
+				    add(new SubData(Type.TINV));
+				    add(new SubData(Type.TIRS));
+				}
+			    })));
+			}
+		    })));
+		}
+	    }, false)));
 	    add(new SubForm(Type.NAM8));
 	    add(new SubForm(Type.RNAM));
 	}

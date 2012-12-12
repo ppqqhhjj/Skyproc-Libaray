@@ -15,16 +15,7 @@ public class HDPT extends MajorRecordNamed {
 
     // Static prototypes and definitions
     static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.HDPT}));
-    static final SubPrototype NAMSproto = new SubPrototype() {
-
-	@Override
-	protected void addRecords() {
-	    add(new SubInt(Type.NAM0));
-	    add(new SubString(Type.NAM1, true));
-	}
-    };
     static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubString(Type.MODL, true));
@@ -33,7 +24,13 @@ public class HDPT extends MajorRecordNamed {
 	    add(new SubData(Type.DATA));
 	    add(new SubInt(Type.PNAM));
 	    add(new SubList<>(new SubForm(Type.HNAM)));
-	    add(new SubList<>(new SubShell(NAMSproto)));
+	    add(new SubList<>(new SubShell(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubInt(Type.NAM0));
+		    add(new SubString(Type.NAM1, true));
+		}
+	    })));
 	    add(new SubForm(Type.CNAM));
 	    add(new SubForm(Type.TNAM));
 	    add(new SubForm(Type.RNAM));

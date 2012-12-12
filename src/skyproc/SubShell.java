@@ -55,6 +55,10 @@ class SubShell extends SubRecord {
 	subRecords.importSubRecords(in);
     }
 
+    SubPrototype getPrototype() {
+	return subRecords.prototype;
+    }
+
     @Override
     void fetchStringPointers(Mod srcMod) {
 	subRecords.fetchStringPointers(srcMod);

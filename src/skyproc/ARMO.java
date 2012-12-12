@@ -21,6 +21,7 @@ import skyproc.exceptions.BadRecord;
 public class ARMO extends MajorRecordDescription {
 
     // Static prototypes and definitions
+    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMO}));
     static final SubPrototype ARMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
@@ -52,7 +53,6 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubForm(Type.TNAM));
 	}
     };
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMO}));
 
     /**
      * Armor Major Record

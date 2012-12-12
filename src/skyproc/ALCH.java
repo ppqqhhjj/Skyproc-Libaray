@@ -44,7 +44,7 @@ public class ALCH extends MagicItem {
     };
     static final class ENIT extends SubRecordTyped {
 
-	int value;
+	int value = 0;
 	LFlags flags = new LFlags(4);
 	FormID addiction = new FormID();
 	byte[] addictionChance = new byte[4];
@@ -76,7 +76,7 @@ public class ALCH extends MagicItem {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    ArrayList<FormID> out = new ArrayList<>(2);
 	    out.add(addiction);
 	    out.add(useSound);
 	    return out;
@@ -92,7 +92,7 @@ public class ALCH extends MagicItem {
 	    return 20;
 	}
     }
-    
+
     // Enums
     /**
      *
@@ -121,7 +121,7 @@ public class ALCH extends MagicItem {
 	    value = in;
 	}
     }
-    
+
     // Common Functions
     ALCH() {
 	super();

@@ -27,7 +27,14 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubForm(Type.CRGR));
 	    add(new SubForm(Type.JOUT));
 	    add(new SubData(Type.CRVA));
-	    add(new SubList<>(new Rank()));
+	    add(new SubList<>(new SubShell(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubInt(Type.RNAM));
+		    add(new SubStringPointer(Type.MNAM, SubStringPointer.Files.STRINGS));
+		    add(new SubData(Type.FNAM));
+		}
+	    })));
 	    add(new SubForm(Type.VEND));
 	    add(new SubForm(Type.VENC));
 	    add(new SubData(Type.VENV));
@@ -37,31 +44,6 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubString(Type.CIS2, true));
 	}
     };
-    static final class Rank extends SubShell {
-
-	static SubPrototype rankProto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubInt(Type.RNAM));
-		add(new SubStringPointer(Type.MNAM, SubStringPointer.Files.STRINGS));
-		add(new SubData(Type.FNAM));
-	    }
-	};
-
-	Rank() {
-	    super(rankProto);
-	}
-
-	@Override
-	Boolean isValid() {
-	    return subRecords.isAnyValid();
-	}
-
-	@Override
-	SubRecord getNew(Type type) {
-	    return new Rank();
-	}
-    }
 
     // Common Functions
     FACT() {
@@ -78,5 +60,4 @@ public class FACT extends MajorRecordNamed {
     Record getNew() {
 	return new FACT();
     }
-
 }
