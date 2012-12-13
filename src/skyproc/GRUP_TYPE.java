@@ -126,6 +126,8 @@ public enum GRUP_TYPE {
 
     static boolean unfinished (GRUP_TYPE g) {
 	switch (g) {
+	    case QUST:
+		return true;
 	    default:
 		return false;
 	}

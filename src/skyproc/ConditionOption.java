@@ -21,6 +21,7 @@ class ConditionOption implements Serializable {
     Enum script;
     RunOnType runType = RunOnType.Subject;
     FormID reference = new FormID();
+    byte[] p3placeholder;
 
     public static ConditionOption getOption(int index) {
 	Enum script = Condition.getScript(index);
@@ -103,7 +104,7 @@ class ConditionOption implements Serializable {
     }
 
     public void exportParam3(LExporter out) throws IOException {
-	out.write(-1);
+	out.write(p3placeholder);
     }
 
     public void parseParam1(LChannel in) {
@@ -111,7 +112,7 @@ class ConditionOption implements Serializable {
     }
 
     public void parseParam3(LChannel in) {
-	in.skip(4);
+	p3placeholder = in.extract(4);
     }
 
     public Object getParam1 () {

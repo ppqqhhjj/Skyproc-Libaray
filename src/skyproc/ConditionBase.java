@@ -36,8 +36,10 @@ class ConditionBase extends SubRecordTyped {
     void export(LExporter out, Mod srcMod) throws IOException {
 	super.export(out, srcMod);
 	//Flags and Operator
-	LFlags tmp = new LFlags(Ln.toByteArray(operator.ordinal(), 1));
-	for (int i = 3; i < 8; i++) {
+	int operatorInt = operator.ordinal();
+	operatorInt *= 32;
+	LFlags tmp = new LFlags(Ln.toByteArray(operatorInt, 1));
+	for (int i = 0; i < 5; i++) {
 	    tmp.set(i, flags.get(i));
 	}
 	out.write(tmp.export(), 1);
@@ -65,7 +67,7 @@ class ConditionBase extends SubRecordTyped {
 	flags.set(in.extract(1));
 	int operatorInt = flags.export()[0];
 	operatorInt = operatorInt & 0xE0; // Mask unrelated bits
-	operatorInt = operatorInt / 32; // Shift bits left 5
+	operatorInt /= 32; // Shift bits left 5
 	operator = Condition.Operator.values()[operatorInt];
 	fluff = in.extract(3);
 

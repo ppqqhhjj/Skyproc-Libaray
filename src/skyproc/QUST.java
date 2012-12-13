@@ -25,8 +25,8 @@ public class QUST extends MajorRecordNamed {
     static SubPrototype ALSTALLSproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubList<>(new SubString(Type.ALID, true)));
-	    add(new SubData(Type.ALED));
+	    add(new SubString(Type.ALID, true));
+	    add(new SubFlag(Type.FNAM, 4));
 	    add(new SubForm(Type.ALUA));
 	    add(new SubForm(Type.ALCO));
 	    add(new SubList<>(new SubForm(Type.ALEQ)));
@@ -34,16 +34,17 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubForm(Type.ALFL));
 	    add(new SubForm(Type.ALFR));
 	    add(new SubForm(Type.ALRT));
-	    add(new SubFlag(Type.FNAM, 4));
+	    add(new SubInt(Type.ALFD));
 	    add(new SubList<>(new Condition()));
 	    add(new SubInt(Type.ALCA));
 	    add(new SubInt(Type.ALCL));
 	    add(new SubInt(Type.ALEA));
 	    add(new SubInt(Type.ALFA));
-	    add(new SubInt(Type.ALFD));
 	    add(new SubInt(Type.ALNA));
 	    add(new SubInt(Type.ALNT));
 	    add(new SubForm(Type.VTCK));
+	    forceExport(Type.VTCK);
+	    add(new SubData(Type.ALED));
 	    add(new SubForm(Type.ALDN));
 	    add(new SubList<>(new SubForm(Type.ALFC)));
 	    add(new SubList<>(new SubInt(Type.ALFI)));
@@ -68,7 +69,6 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubForm(Type.QTGL));
 	    add(new SubString(Type.FLTR, true));
 	    add(new SubList<>(new Condition()));
-	    add(new SubList<>(new SubString(Type.CIS2, true)));
 	    add(new SubData(Type.NEXT));
 	    forceExport(Type.NEXT);
 	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
@@ -103,17 +103,17 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubInt(Type.ALST));
-		    mergeIn(ALSTALLSproto);
-		}
-	    }, true)));
-	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
-		@Override
-		protected void addRecords() {
 		    add(new SubInt(Type.ALLS));
 		    mergeIn(ALSTALLSproto);
 		}
-	    }, true)));
+	    }, false)));
+	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new SubInt(Type.ALST));
+		    mergeIn(ALSTALLSproto);
+		}
+	    }, false)));
 	}
     };
 

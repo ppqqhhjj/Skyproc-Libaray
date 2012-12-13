@@ -33,6 +33,7 @@ abstract class SubPrototype implements Serializable {
 	for (Type t : in.listExport) {
 	    add(in.get(t));
 	}
+	forceExport.addAll(in.forceExport);
     }
 
     public final SubRecord add(SubRecord r) {
