@@ -23,7 +23,7 @@ public abstract class SubRecord extends Record {
 
     @Override
     public String toString() {
-	return getType().toString();
+	return getType().toString() + "[" + getClass().getSimpleName() + "]";
     }
 
     @Override

@@ -21,9 +21,9 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.RACE};
-    static GRUP_TYPE[] types = GRUP_TYPE.values();
-    static boolean streaming = true;
+    static GRUP_TYPE[] types = {GRUP_TYPE.QUST};
+//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static boolean streaming = false;
 
     /**
      * @param test

@@ -30,12 +30,9 @@ abstract class SubPrototype implements Serializable {
     }
 
     public void mergeIn(SubPrototype in) {
-	listExport.addAll(in.listExport);
-	for (Type t : in.map.keySet()) {
-	    SubRecord s = in.map.get(t);
-	    map.put(t, s.getNew(s.getType()));
+	for (Type t : in.listExport) {
+	    add(in.get(t));
 	}
-	forceExport.addAll(in.forceExport);
     }
 
     public final SubRecord add(SubRecord r) {

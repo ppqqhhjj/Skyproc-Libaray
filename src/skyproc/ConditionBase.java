@@ -63,11 +63,10 @@ class ConditionBase extends SubRecordTyped {
 	super.parseData(in);
 	//Flags and Operator
 	flags.set(in.extract(1));
-	LFlags tmp = new LFlags(flags.export());
-	for (int i = 3; i < 8; i++) {
-	    tmp.set(i, false);
-	}
-	operator = Condition.Operator.values()[Ln.arrayToInt(tmp.export())];
+	int operatorInt = flags.export()[0];
+	operatorInt = operatorInt & 0xE0; // Mask unrelated bits
+	operatorInt = operatorInt / 32; // Shift bits left 5
+	operator = Condition.Operator.values()[operatorInt];
 	fluff = in.extract(3);
 
 	//Value

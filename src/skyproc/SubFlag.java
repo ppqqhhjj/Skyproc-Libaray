@@ -34,6 +34,9 @@ class SubFlag extends SubRecordTyped {
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in);
 	flags.set(in.getAllBytes());
+	if (logging()) {
+	    logSync(toString(), "Setting " + toString() + " to : " + print());
+	}
     }
 
     void set(int bit, boolean on) {
