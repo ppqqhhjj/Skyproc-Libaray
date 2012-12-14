@@ -429,8 +429,7 @@ public class MGEF extends MajorRecordDescription {
 	 */
 	OnHit
     }
-    
-    
+
     // Common Functions
     /**
      *
@@ -458,7 +457,7 @@ public class MGEF extends MajorRecordDescription {
     Record getNew() {
 	return new MGEF();
     }
-    
+
     // Get/Set
     /**
      *
