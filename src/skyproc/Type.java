@@ -1069,6 +1069,7 @@ public enum Type {
     QOBJ,
     ICO2,
     MIC2,
+    BMCT,
 
     /**
      * NPC_: Marks DNAM position?

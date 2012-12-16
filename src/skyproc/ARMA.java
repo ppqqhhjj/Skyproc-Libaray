@@ -28,7 +28,6 @@ public class ARMA extends MajorRecord {
 	@Override
 	protected void addRecords() {
 	    add(new BodyTemplate());
-	    add(new SubData(Type.BOD2));
 	    add(new SubForm(Type.RNAM));
 	    add(new DNAM());
 	    // Third Person
@@ -447,7 +446,7 @@ public class ARMA extends MajorRecord {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	subRecords.getBodyTemplate().armorType = type;
+	subRecords.getBodyTemplate().setArmorType(type);
     }
 
     /**
@@ -455,6 +454,6 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public ArmorType getArmorType () {
-	return subRecords.getBodyTemplate().armorType;
+	return subRecords.getBodyTemplate().getArmorType();
     }
 }

@@ -42,6 +42,7 @@ public class ARMO extends MajorRecordDescription {
 	    add(new DestructionData());
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
+	    add(new SubString(Type.BMCT));
 	    add(new SubForm(Type.ETYP));
 	    add(new SubForm(Type.BIDS));
 	    add(new SubForm(Type.BAMT));
@@ -391,7 +392,7 @@ public class ARMO extends MajorRecordDescription {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	subRecords.getBodyTemplate().armorType = type;
+	subRecords.getBodyTemplate().setArmorType(type);
     }
 
     /**
@@ -399,6 +400,6 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public ArmorType getArmorType () {
-	return subRecords.getBodyTemplate().armorType;
+	return subRecords.getBodyTemplate().getArmorType();
     }
 }

@@ -18,52 +18,67 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class BodyTemplate extends SubRecordTyped {
+public class BodyTemplate extends SubShell {
 
-    LFlags bodyParts = new LFlags(4);
-    LFlags flags = new LFlags(4);
-    ArmorType armorType = ArmorType.CLOTHING;
-    boolean old = false;
+    static SubPrototype BODTproto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new BodyTemplateMain());
+	    add(new SubData(Type.BOD2));
+	}
+    };
+
+    static class BodyTemplateMain extends SubRecordTyped {
+
+	LFlags bodyParts = new LFlags(4);
+	LFlags flags = new LFlags(4);
+	ArmorType armorType = ArmorType.CLOTHING;
+	boolean old = false;
+
+	BodyTemplateMain() {
+	    super(Type.BODT);
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(bodyParts.export(), 4);
+	    out.write(flags.export(), 4);
+	    if (!old) {
+		out.write(armorType.ordinal());
+	    }
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in);
+	    bodyParts = new LFlags(in.extract(4));
+	    flags = new LFlags(in.extract(4));
+	    if (!in.isDone()) {
+		armorType = ArmorType.values()[in.extractInt(4)];
+	    } else {
+		old = true;
+	    }
+	}
+
+	@Override
+	SubRecord getNew(Type type) {
+	    return new BodyTemplateMain();
+	}
+
+	@Override
+	Boolean isValid() {
+	    return true;
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return old ? 8 : 12;
+	}
+    }
 
     BodyTemplate() {
-	super(Type.BODT);
-    }
-
-    @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
-	out.write(bodyParts.export(), 4);
-	out.write(flags.export(), 4);
-	if (!old) {
-	    out.write(armorType.ordinal());
-	}
-    }
-
-    @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
-	bodyParts = new LFlags(in.extract(4));
-	flags = new LFlags(in.extract(4));
-	if (!in.isDone()) {
-	    armorType = ArmorType.values()[in.extractInt(4)];
-	} else {
-	    old = true;
-	}
-    }
-
-    @Override
-    SubRecord getNew(Type type) {
-	return new BodyTemplate();
-    }
-
-    @Override
-    Boolean isValid() {
-	return true;
-    }
-
-    @Override
-    int getContentLength(Mod srcMod) {
-	return old ? 8 : 12;
+	super(BODTproto);
     }
 
     /**
@@ -200,8 +215,7 @@ public class BodyTemplate extends SubRecordTyped {
 	/**
 	 *
 	 */
-	FX01,
-    }
+	FX01,}
 
     /**
      *
@@ -223,13 +237,22 @@ public class BodyTemplate extends SubRecordTyped {
 	}
     }
 
+    BodyTemplateMain getMain() {
+	return (BodyTemplateMain) subRecords.get(Type.BODT);
+    }
+
+    @Override
+    SubRecord getNew(Type type) {
+	return new BodyTemplate();
+    }
+
     /**
      *
      * @param flag
      * @param on
      */
     public void set(FirstPersonFlags flag, boolean on) {
-	bodyParts.set(flag.ordinal(), on);
+	getMain().bodyParts.set(flag.ordinal(), on);
     }
 
     /**
@@ -238,7 +261,7 @@ public class BodyTemplate extends SubRecordTyped {
      * @return
      */
     public boolean get(FirstPersonFlags part) {
-	return bodyParts.get(part.ordinal());
+	return getMain().bodyParts.get(part.ordinal());
     }
 
     /**
@@ -247,7 +270,7 @@ public class BodyTemplate extends SubRecordTyped {
      * @param on
      */
     public void set(GeneralFlags flag, boolean on) {
-	flags.set(flag.value, on);
+	getMain().flags.set(flag.value, on);
     }
 
     /**
@@ -256,7 +279,7 @@ public class BodyTemplate extends SubRecordTyped {
      * @return
      */
     public boolean get(GeneralFlags flag) {
-	return flags.get(flag.value);
+	return getMain().flags.get(flag.value);
     }
 
     /**
@@ -264,7 +287,7 @@ public class BodyTemplate extends SubRecordTyped {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	armorType = type;
+	getMain().armorType = type;
     }
 
     /**
@@ -272,6 +295,6 @@ public class BodyTemplate extends SubRecordTyped {
      * @return
      */
     public ArmorType getArmorType() {
-	return armorType;
+	return getMain().armorType;
     }
 }

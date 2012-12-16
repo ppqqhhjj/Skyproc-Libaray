@@ -75,6 +75,11 @@ class SubRecordsDerived extends SubRecords {
 	return prototype.listExtensive;
     }
 
+    @Override
+    public ArrayList<Type> getTopLevelTypes() {
+	return prototype.listExport;
+    }
+
     class DerivedIterator implements Iterator<SubRecord> {
 
 	Iterator<Type> list;

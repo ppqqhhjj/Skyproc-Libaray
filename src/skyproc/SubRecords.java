@@ -236,6 +236,8 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public abstract ArrayList<Type> getTypes();
 
+    public abstract ArrayList<Type> getTopLevelTypes();
+
     void fetchStringPointers(Mod srcMod) {
 	for (SubRecord s : map.values()) {
 	    s.fetchStringPointers(srcMod);

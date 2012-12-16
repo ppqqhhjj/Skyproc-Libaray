@@ -29,7 +29,6 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubListCounted<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
 	    add(new SubForm(Type.WNAM));
 	    add(new BodyTemplate());
-	    add(new SubData(Type.BOD2));
 	    add(new KeywordSet());
 	    add(new DATA());
 	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(new SubPrototype() {
@@ -1268,7 +1267,7 @@ public class RACE extends MajorRecordDescription {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	subRecords.getBodyTemplate().armorType = type;
+	subRecords.getBodyTemplate().setArmorType(type);
     }
 
     /**
@@ -1276,6 +1275,6 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArmorType getArmorType() {
-	return subRecords.getBodyTemplate().armorType;
+	return subRecords.getBodyTemplate().getArmorType();
     }
 }
