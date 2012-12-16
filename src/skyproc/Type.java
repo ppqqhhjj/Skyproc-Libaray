@@ -940,133 +940,135 @@ public enum Type {
     BOD2,
 
     /**
-     * 
+     *
      */
     FLTR,
     /**
-     * 
+     *
      */
     QSDT,
     /**
-     * 
+     *
      */
     SCHR,
     /**
-     * 
+     *
      */
     SCTX,
     /**
-     * 
+     *
      */
     ALID,
     /**
-     * 
+     *
      */
     ALUA,
     /**
-     * 
+     *
      */
     ALCO,
     /**
-     * 
+     *
      */
     ALEQ,
     /**
-     * 
+     *
      */
     ALFE,
     /**
-     * 
+     *
      */
     ALFL,
     /**
-     * 
+     *
      */
     ALFR,
     /**
-     * 
+     *
      */
     ALRT,
     /**
-     * 
+     *
      */
     ALST,
     /**
-     * 
+     *
      */
     ALLS,
     /**
-     * 
+     *
      */
     ALCA,
     /**
-     * 
+     *
      */
     ALCL,
     /**
-     * 
+     *
      */
     ALEA,
     /**
-     * 
+     *
      */
     ALFA,
     /**
-     * 
+     *
      */
     ALFD,
     /**
-     * 
+     *
      */
     ALED,
     /**
-     * 
+     *
      */
     ALDN,
     /**
-     * 
+     *
      */
     ALFC,
     /**
-     * 
+     *
      */
     ALFI,
     /**
-     * 
+     *
      */
     ALPC,
     /**
-     * 
+     *
      */
     ALSP,
     /**
-     * 
+     *
      */
     PROJ,
     /**
-     * 
+     *
      */
     KNAM,
     /**
-     * 
+     *
      */
     QTGL,
     /**
-     * 
+     *
      */
     QSTA,
     /**
-     * 
+     *
      */
     ALNA,
     /**
-     * 
+     *
      */
     ALNT,
     /**
-     * 
+     *
      */
     QOBJ,
+    ICO2,
+    MIC2,
 
     /**
      * NPC_: Marks DNAM position?

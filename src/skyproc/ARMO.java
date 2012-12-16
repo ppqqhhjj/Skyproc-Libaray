@@ -33,11 +33,12 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubString(Type.MOD2, true));
 	    add(new SubData(Type.MO2T));
 	    add(new SubData(Type.MO2S));
+	    add(new SubString(Type.ICON, true));
 	    add(new SubString(Type.MOD4, true));
 	    add(new SubData(Type.MO4T));
 	    add(new SubData(Type.MO4S));
+	    add(new SubString(Type.ICO2, true));
 	    add(new BodyTemplate());
-	    add(new SubData(Type.BOD2));
 	    add(new DestructionData());
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
