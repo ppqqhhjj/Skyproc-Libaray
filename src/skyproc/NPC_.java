@@ -51,9 +51,8 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubForm(Type.CNAM));
 	    reposition(Type.FULL);
 	    add(new SubString(Type.SHRT, true));
-	    SubData data = new SubData(Type.DATA);
-	    data.forceExport = true;
-	    add(data);
+	    add(new SubData(Type.DATA));
+	    forceExport(Type.DATA);
 	    add(new DNAM());
 	    add(new SubList<>(new SubForm(Type.PNAM)));
 	    add(new SubForm(Type.HCLF));
@@ -218,7 +217,7 @@ public class NPC_ extends Actor implements Serializable {
 	    return new SoundPair();
 	}
     }
-    
+
     /**
      *
      */
@@ -309,7 +308,7 @@ public class NPC_ extends Actor implements Serializable {
 	    return subRecords.getSubInt(Type.TIAS).get();
 	}
     }
-    
+
     static class DNAM extends SubRecordTyped implements Serializable {
 
 	byte[] skills = new byte[36];
@@ -820,8 +819,8 @@ public class NPC_ extends Actor implements Serializable {
 	    return out;
 	}
     }
-    
-    // Enums 
+
+    // Enums
     /**
      * Enum representing the various stats of the NPC
      */
@@ -1248,7 +1247,7 @@ public class NPC_ extends Actor implements Serializable {
 	 */
 	EyesForwardBack;
     }
-    
+
     // Special functions
     /**
      * Takes in another NPC, and assumes all the information associated with the
@@ -1457,7 +1456,7 @@ public class NPC_ extends Actor implements Serializable {
     public LVLN isTemplatedToLList(NPC_.TemplateFlag... templateFlagsToCheck) {
 	return NiftyFunc.isTemplatedToLList(getForm(), templateFlagsToCheck, 0);
     }
-    
+
     // Common Functions
     NPC_() {
 	super();

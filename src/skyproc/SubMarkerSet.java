@@ -40,7 +40,6 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	    if (set.containsKey(t)) {
 		if (set.get(t).isValid()) {
 		    SubData marker = new SubData(t);
-		    marker.forceExport(true);
 		    marker.export(out, srcMod);
 		    set.get(t).export(out, srcMod);
 		    continue;
@@ -48,7 +47,6 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	    }
 	    if (forceMarkers) {
 		SubData marker = new SubData(t);
-		marker.forceExport(true);
 		marker.export(out, srcMod);
 	    }
 	}

@@ -21,7 +21,6 @@ import skyproc.exceptions.BadRecord;
 class SubData extends SubRecordTyped {
 
     byte[] data;
-    boolean forceExport = false;
 
     SubData(Type type_) {
 	super(type_);
@@ -44,10 +43,6 @@ class SubData extends SubRecordTyped {
 	this(type_, Ln.toByteArray(in));
     }
 
-    void forceExport(boolean on) {
-	forceExport = on;
-    }
-
     void initialize(int size) {
 	data = new byte[size];
     }
@@ -67,7 +62,7 @@ class SubData extends SubRecordTyped {
 
     @Override
     Boolean isValid() {
-	return (forceExport || data != null);
+	return data != null;
     }
 
     void setData(byte[] data_) {
@@ -105,7 +100,7 @@ class SubData extends SubRecordTyped {
 
     @Override
     int getContentLength(Mod srcMod) {
-	if (isValid() && data != null) {
+	if (isValid()) {
 	    return data.length;
 	} else {
 	    return 0;
@@ -114,13 +109,11 @@ class SubData extends SubRecordTyped {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	if (isValid()) {
-	    if (data == null) {
-		data = new byte[0];
-	    }
-	    super.export(out, srcMod);
-	    out.write(data, 0);
+	if (data == null) {
+	    data = new byte[0];
 	}
+	super.export(out, srcMod);
+	out.write(data, 0);
     }
 
     @Override

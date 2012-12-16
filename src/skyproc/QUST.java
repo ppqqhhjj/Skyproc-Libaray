@@ -499,7 +499,6 @@ public class QUST extends MajorRecordNamed {
 	dnam.flags1.set(0, true);
 	dnam.flags1.set(4, true);
 	dnam.flags2.set(0, true);
-	subRecords.getSubData(Type.NEXT).forceExport(true);
 	subRecords.getSubInt(Type.ANAM).set(0);
     }
 
