@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
- abstract class SubRecords implements Serializable, Iterable<SubRecord> {
+abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     protected Map<Type, SubRecord> map = new HashMap<>(0);
 
@@ -38,9 +38,7 @@ import skyproc.exceptions.BadRecord;
 
     protected void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : this) {
-	    if (shouldExport(s)) {
-		s.export(out, srcMod);
-	    }
+	    s.export(out, srcMod);
 	}
     }
 
@@ -231,9 +229,7 @@ import skyproc.exceptions.BadRecord;
     public int length(Mod srcMod) {
 	int length = 0;
 	for (SubRecord s : this) {
-	    if (shouldExport(s)) {
-		length += s.getTotalLength(srcMod);
-	    }
+	    length += s.getTotalLength(srcMod);
 	}
 	return length;
     }
@@ -249,9 +245,7 @@ import skyproc.exceptions.BadRecord;
     public ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	for (SubRecord s : this) {
-	    if (shouldExport(s)) {
-		out.addAll(s.allFormIDs());
-	    }
+	    out.addAll(s.allFormIDs());
 	}
 	return out;
     }

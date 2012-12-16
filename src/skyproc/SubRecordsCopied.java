@@ -38,9 +38,7 @@ class SubRecordsCopied extends SubRecords {
     @Override
     protected void export(LExporter out, Mod srcMod) throws IOException {
 	for (SubRecord s : iteratorNoCopy()) {
-	    if (shouldExport(s)) {
-		s.export(out, srcMod);
-	    }
+	    s.export(out, srcMod);
 	}
     }
 
@@ -48,9 +46,7 @@ class SubRecordsCopied extends SubRecords {
     public int length(Mod srcMod) {
 	int length = 0;
 	for (SubRecord s : iteratorNoCopy()) {
-	    if (shouldExport(s)) {
-		length += s.getTotalLength(srcMod);
-	    }
+	    length += s.getTotalLength(srcMod);
 	}
 	return length;
     }
@@ -59,10 +55,14 @@ class SubRecordsCopied extends SubRecords {
 	ArrayList<SubRecord> out = new ArrayList<>();
 	for (Type t : orig.getTypes()) {
 	    if (contains(t)) {
+		SubRecord s;
 		if (map.containsKey(t)) {
-		    out.add(map.get(t));
+		    s = map.get(t);
 		} else {
-		    out.add(orig.get(t));
+		    s = orig.get(t);
+		}
+		if (shouldExport(s)) {
+		    out.add(s);
 		}
 	    }
 	}
@@ -86,5 +86,4 @@ class SubRecordsCopied extends SubRecords {
     public ArrayList<Type> getTypes() {
 	return orig.getTypes();
     }
-
 }
