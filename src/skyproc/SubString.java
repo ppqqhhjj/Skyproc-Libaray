@@ -66,20 +66,14 @@ class SubString extends SubRecordTyped {
 
     @Override
     int getContentLength(Mod srcMod) {
-	if (isValid()) {
-	    return string.length() + 1;
-	} else {
-	    return 0;
-	}
+	return string.length() + 1;
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	if (isValid()) {
-	    super.export(out, srcMod);
-	    out.write(string);
-		out.write(0, 1);
-	}
+	super.export(out, srcMod);
+	out.write(string);
+	out.write(0, 1);
     }
 
     @Override
