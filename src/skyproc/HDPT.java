@@ -18,7 +18,7 @@ public class HDPT extends MajorRecordNamed {
     static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
 	    add(new SubData(Type.DATA));
@@ -28,7 +28,7 @@ public class HDPT extends MajorRecordNamed {
 		@Override
 		protected void addRecords() {
 		    add(new SubInt(Type.NAM0));
-		    add(new SubString(Type.NAM1, true));
+		    add(SubString.getNew(Type.NAM1, true));
 		}
 	    })));
 	    add(new SubForm(Type.CNAM));

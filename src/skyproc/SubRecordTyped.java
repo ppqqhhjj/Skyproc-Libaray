@@ -15,8 +15,7 @@ public abstract class SubRecordTyped extends SubRecord {
     ArrayList<Type> types;
 
     SubRecordTyped(Type t) {
-	types = new ArrayList<>(1);
-	types.add(t);
+	types = Record.getTypeList(t);
     }
 
     SubRecordTyped(ArrayList<Type> t) {

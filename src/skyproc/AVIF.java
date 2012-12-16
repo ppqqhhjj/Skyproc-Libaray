@@ -19,7 +19,7 @@ public class AVIF extends MajorRecordDescription {
     static final SubPrototype AVIFproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
-	    add(new SubString(Type.ANAM, true));
+	    add(SubString.getNew(Type.ANAM, true));
 	    add(new SubData(Type.CNAM));
 	    add(new SubData(Type.AVSK));
 	    add(new SubList<>(new PerkReference(new SubPrototype() {

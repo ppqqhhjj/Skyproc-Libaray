@@ -30,7 +30,7 @@ public class WEAP extends MajorRecordDescription {
 	    after(new ScriptPackage(), Type.EDID);
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.EITM));
@@ -41,7 +41,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubForm(Type.BAMT));
 	    add(new KeywordSet());
 	    reposition(Type.DESC);
-	    add(new SubString(Type.NNAM, true));
+	    add(SubString.getNew(Type.NNAM, true));
 	    add(new SubForm(Type.INAM));
 	    add(new SubForm(Type.SNAM));
 	    add(new SubForm(Type.XNAM));

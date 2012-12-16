@@ -24,7 +24,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubString(Type.EDID, true));
+	    add(SubString.getNew(Type.EDID, true));
 	}
     };
 

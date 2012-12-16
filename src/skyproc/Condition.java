@@ -38,8 +38,8 @@ public class Condition extends SubShell {
 	protected void addRecords() {
 
 	    add(new ConditionBase());
-	    add(new SubString(Type.CIS1, true));
-	    add(new SubString(Type.CIS2, true));
+	    add(SubString.getNew(Type.CIS1, true));
+	    add(SubString.getNew(Type.CIS2, true));
 	}
     };
     static Map<Integer, Enum> scriptMap = new HashMap<>();

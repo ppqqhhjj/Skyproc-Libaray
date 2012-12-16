@@ -30,14 +30,14 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
 	    add(new SubForm(Type.EITM));
-	    add(new SubString(Type.MOD2, true));
+	    add(SubString.getNew(Type.MOD2, true));
 	    add(new SubData(Type.MO2T));
 	    add(new SubData(Type.MO2S));
-	    add(new SubString(Type.ICON, true));
-	    add(new SubString(Type.MOD4, true));
+	    add(SubString.getNew(Type.ICON, true));
+	    add(SubString.getNew(Type.MOD4, true));
 	    add(new SubData(Type.MO4T));
 	    add(new SubData(Type.MO4S));
-	    add(new SubString(Type.ICO2, true));
+	    add(SubString.getNew(Type.ICO2, true));
 	    add(new BodyTemplate());
 	    add(new DestructionData());
 	    add(new SubForm(Type.YNAM));

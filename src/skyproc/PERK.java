@@ -24,7 +24,7 @@ public class PERK extends MajorRecordDescription {
 	    add(new SubList<>(new Condition()));
 	    add(new SubData(Type.DATA));
 	    add(new SubForm(Type.NNAM));
-	    add(new SubString(Type.ICON, true));
+	    add(SubString.getNew(Type.ICON, true));
 	    add(new SubList<>(new PRKEPackage(new SubPrototype() {
 		@Override
 		protected void addRecords() {

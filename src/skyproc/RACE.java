@@ -35,13 +35,13 @@ public class RACE extends MajorRecordDescription {
 	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubString(Type.ANAM, true));
+		    add(SubString.getNew(Type.ANAM, true));
 		    add(new SubData(Type.MODT));
 		}
 	    }), Type.MNAM, Type.FNAM);
 	    mfnam.forceMarkers = true;
 	    add(mfnam);
-	    add(new SubList<>(new SubString(Type.MTNM, false)));
+	    add(new SubList<>(SubString.getNew(Type.MTNM, false)));
 	    add(new SubFormArray(Type.VTCK, 2));
 	    add(new SubFormArray(Type.DNAM, 2));
 	    add(new SubFormArray(Type.HCLF, 2));
@@ -53,7 +53,7 @@ public class RACE extends MajorRecordDescription {
 		@Override
 		protected void addRecords() {
 		    add(new SubData(Type.ATKD));
-		    add(new SubString(Type.ATKE, true));
+		    add(SubString.getNew(Type.ATKE, true));
 		}
 	    })));
 	    add(new SubShellBulkType(new SubPrototype() {
@@ -66,7 +66,7 @@ public class RACE extends MajorRecordDescription {
 			@Override
 			protected void addRecords() {
 			    add(new SubData(Type.INDX));
-			    add(new SubString(Type.MODL, true));
+			    add(SubString.getNew(Type.MODL, true));
 			    add(new SubData(Type.MODT));
 			}
 		    }), Type.MNAM, Type.FNAM);
@@ -84,7 +84,7 @@ public class RACE extends MajorRecordDescription {
 		    add(new SubMarkerSet(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(new SubString(Type.MODL, true));
+			    add(SubString.getNew(Type.MODL, true));
 			    add(new SubData(Type.MODT));
 			}
 		    }), Type.MNAM, Type.FNAM));
@@ -95,7 +95,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubForm(Type.NAM7));
 	    add(new SubForm(Type.ONAM));
 	    add(new SubForm(Type.LNAM));
-	    add(new SubList<>(new SubString(Type.NAME, true)));
+	    add(new SubList<>(SubString.getNew(Type.NAME, true)));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
@@ -106,7 +106,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData(Type.VNAM));
 	    add(new SubList<>(new SubForm(Type.QNAM)));
 	    add(new SubForm(Type.UNES));
-	    add(new SubList<>(new SubString(Type.PHTN, true)));
+	    add(new SubList<>(SubString.getNew(Type.PHTN, true)));
 	    add(new SubList<>(new SubData(Type.PHWT)));
 	    add(new SubForm(Type.WKMV));
 	    add(new SubForm(Type.RNMV));
@@ -146,7 +146,7 @@ public class RACE extends MajorRecordDescription {
 			@Override
 			protected void addRecords() {
 			    add(new SubData(Type.TINI));
-			    add(new SubString(Type.TINT, true));
+			    add(SubString.getNew(Type.TINT, true));
 			    add(new SubData(Type.TINP));
 			    add(new SubForm(Type.TIND));
 			    add(new SubList<>(new SubShell(new SubPrototype() {

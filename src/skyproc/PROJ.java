@@ -28,12 +28,12 @@ public class PROJ extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new SubData(Type.MODS));
 	    add(new DestructionData());
 	    add(new DATA());
-	    add(new SubString(Type.NAM1, true));
+	    add(SubString.getNew(Type.NAM1, true));
 	    add(new SubData(Type.NAM2));
 	    add(new SubData(Type.VNAM)); // SoundVolume
 	}

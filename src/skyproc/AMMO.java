@@ -28,7 +28,7 @@ public class AMMO extends MajorRecordDescription {
 	protected void addRecords() {
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.YNAM));
@@ -36,7 +36,7 @@ public class AMMO extends MajorRecordDescription {
 	    reposition(Type.DESC);
 	    add(new KeywordSet());
 	    add(new DATA());
-	    add(new SubString(Type.ONAM, true));
+	    add(SubString.getNew(Type.ONAM, true));
 	}
     };
     static final class DATA extends SubRecordTyped {

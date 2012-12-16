@@ -41,7 +41,7 @@ public class FACT extends MajorRecordNamed {
 	    add(new SubData(Type.PLVD));
 	    add(new SubInt(Type.CITC));
 	    add(new SubData(Type.CTDA));
-	    add(new SubString(Type.CIS2, true));
+	    add(SubString.getNew(Type.CIS2, true));
 	}
     };
 

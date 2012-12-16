@@ -26,12 +26,12 @@ public class QUST extends MajorRecordNamed {
     static SubPrototype ALSTALLSproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubString(Type.ALID, true));
+	    add(SubString.getNew(Type.ALID, true));
 	    add(new SubFlag(Type.FNAM, 4));
 	    add(new SubForm(Type.ALUA));
 	    add(new SubForm(Type.ALCO));
 	    add(new SubList<>(new SubForm(Type.ALEQ)));
-	    add(new SubString(Type.ALFE, false));
+	    add(SubString.getNew(Type.ALFE, false));
 	    add(new SubForm(Type.ALFL));
 	    add(new SubForm(Type.ALFR));
 	    add(new SubForm(Type.ALRT));
@@ -79,10 +79,10 @@ public class QUST extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubFlag(Type.QSDT, 1));
 	    add(new SubForm(Type.NAM0));
-	    add(new SubString(Type.CNAM, true));
+	    add(SubString.getNew(Type.CNAM, true));
 	    add(new SubData(Type.SCHR));
 	    add(new SubForm(Type.QNAM));
-	    add(new SubString(Type.SCTX, false));
+	    add(SubString.getNew(Type.SCTX, false));
 	    add(new SubList<>(new Condition()));
 	}
     };
@@ -115,9 +115,9 @@ public class QUST extends MajorRecordNamed {
 	    after(new ScriptPackage(), Type.EDID);
 	    reposition(Type.FULL);
 	    add(new DNAM());
-	    add(new SubString(Type.ENAM, false));
+	    add(SubString.getNew(Type.ENAM, false));
 	    add(new SubForm(Type.QTGL));
-	    add(new SubString(Type.FLTR, true));
+	    add(SubString.getNew(Type.FLTR, true));
 	    add(new SubList<>(new Condition()));
 	    add(new SubData(Type.NEXT));
 	    forceExport(Type.NEXT);

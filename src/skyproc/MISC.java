@@ -29,15 +29,15 @@ public class MISC extends MajorRecordNamed {
 	    after(new ScriptPackage(), Type.EDID);
 	    add(new SubData(Type.OBND));
 	    reposition(Type.FULL);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
-	    add(new SubString(Type.ICON, true));
+	    add(SubString.getNew(Type.ICON, true));
 	    add(new SubForm(Type.YNAM));
 	    add(new SubForm(Type.ZNAM));
 	    add(new KeywordSet());
 	    add(new DATA());
-	    add(new SubString(Type.MICO, true));
+	    add(SubString.getNew(Type.MICO, true));
 	    add(new DestructionData());
 	}
     };

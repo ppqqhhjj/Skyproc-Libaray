@@ -25,7 +25,7 @@ class SubStringPointer extends SubRecordTyped {
     SubStringPointer(Type type, SubStringPointer.Files file) {
 	super(type);
 	data = new SubData(type, new byte[1]);
-	text = new SubString(type, true);
+	text = SubString.getNew(type, true);
 	this.file = file;
     }
 

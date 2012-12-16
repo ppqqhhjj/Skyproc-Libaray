@@ -17,7 +17,7 @@ public class LVLN extends LeveledRecord {
 	@Override
 	protected void addRecords() {
 	    remove(Type.FULL);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	}
     };

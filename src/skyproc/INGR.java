@@ -29,7 +29,7 @@ public class INGR extends MagicItem {
 	protected void addRecords() {
 	    after(new ScriptPackage(), Type.EDID);
 	    remove(Type.DESC);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.YNAM));
@@ -37,8 +37,8 @@ public class INGR extends MagicItem {
 	    add(new DATA());
 	    add(new ENIT());
 	    reposition(Type.EFID);
-	    add(new SubString(Type.ICON, true));
-	    add(new SubString(Type.MICO, true));
+	    add(SubString.getNew(Type.ICON, true));
+	    add(SubString.getNew(Type.MICO, true));
 	    add(new SubForm(Type.ETYP));
 	}
     };

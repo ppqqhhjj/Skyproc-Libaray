@@ -23,7 +23,7 @@ public class ModListing extends SubRecordTyped implements Comparable {
     static ModListing skyrim = new ModListing("Skyrim.esm");
     static ModListing update = new ModListing("Update.esm");
 
-    SubString mast = new SubString(Type.MAST, true);
+    SubString mast = SubString.getNew(Type.MAST, true);
     boolean master = false;
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {

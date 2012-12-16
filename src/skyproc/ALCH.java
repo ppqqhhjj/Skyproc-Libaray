@@ -28,7 +28,7 @@ public class ALCH extends MagicItem {
 	@Override
 	protected void addRecords() {
 	    remove(Type.DESC);
-	    add(new SubString(Type.MODL, true));
+	    add(SubString.getNew(Type.MODL, true));
 	    add(new SubData(Type.MODT));
 	    add(new AltTextures(Type.MODS));
 	    add(new SubForm(Type.YNAM));
@@ -36,8 +36,8 @@ public class ALCH extends MagicItem {
 	    add(new SubData(Type.MODS));
 	    add(new SubFloat(Type.DATA));
 	    add(new ENIT());
-	    add(new SubString(Type.ICON, true));
-	    add(new SubString(Type.MICO, true));
+	    add(SubString.getNew(Type.ICON, true));
+	    add(SubString.getNew(Type.MICO, true));
 	    add(new SubForm(Type.ETYP));
 	    reposition(Type.EFID);
 	}

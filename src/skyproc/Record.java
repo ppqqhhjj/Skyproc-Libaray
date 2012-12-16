@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.zip.DataFormatException;
 import lev.*;
@@ -18,12 +19,15 @@ import skyproc.exceptions.BadRecord;
 public abstract class Record implements Serializable {
 
     final static HashMap<String, Type> allTypes;
+    final static HashMap<Type, ArrayList<Type>> typeLists;
 
     static {
 	Type[] ta = Type.values();
 	allTypes = new HashMap<>(ta.length);
+	typeLists = new HashMap<>(ta.length);
 	for (Type t : ta) {
 	    allTypes.put(t.toString(), t);
+	    typeLists.put(t, new ArrayList<>(Arrays.asList(new Type[]{t})));
 	}
     }
 
@@ -60,6 +64,10 @@ public abstract class Record implements Serializable {
     public abstract String print();
 
     abstract ArrayList<Type> getTypes();
+
+    static ArrayList<Type> getTypeList(Type t) {
+	return typeLists.get(t);
+    }
 
     Type getType() {
 	return getTypes().get(0);

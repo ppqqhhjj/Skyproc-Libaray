@@ -37,7 +37,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new SubForm(Type.ANAM));
 	    add(new SubForm(Type.ATKR));
 	    add(new ATKD());
-	    add(new SubString(Type.ATKE, true));
+	    add(SubString.getNew(Type.ATKE, true));
 	    add(new SubForm(Type.SPOR));
 	    add(new SubForm(Type.GWOR));
 	    add(new SubForm(Type.OCOR));
@@ -50,7 +50,7 @@ public class NPC_ extends Actor implements Serializable {
 	    add(new KeywordSet());
 	    add(new SubForm(Type.CNAM));
 	    reposition(Type.FULL);
-	    add(new SubString(Type.SHRT, true));
+	    add(SubString.getNew(Type.SHRT, true));
 	    add(new SubData(Type.DATA));
 	    forceExport(Type.DATA);
 	    add(new DNAM());

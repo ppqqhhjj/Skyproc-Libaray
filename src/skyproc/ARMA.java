@@ -33,20 +33,20 @@ public class ARMA extends MajorRecord {
 	    add(new DNAM());
 	    // Third Person
 	    // Male
-	    add(new SubString(Type.MOD2, true));
+	    add(SubString.getNew(Type.MOD2, true));
 	    add(new SubList<>(new SubData(Type.MO2T)));
 	    add(new AltTextures(Type.MO2S));
 	    // Female
-	    add(new SubString(Type.MOD3, true));
+	    add(SubString.getNew(Type.MOD3, true));
 	    add(new SubList<>(new SubData(Type.MO3T)));
 	    add(new AltTextures(Type.MO3S));
 	    // First person
 	    // Male
-	    add(new SubString(Type.MOD4, true));
+	    add(SubString.getNew(Type.MOD4, true));
 	    add(new SubList<>(new SubData(Type.MO4T)));
 	    add(new AltTextures(Type.MO4S));
 	    // Female
-	    add(new SubString(Type.MOD5, true));
+	    add(SubString.getNew(Type.MOD5, true));
 	    add(new SubList<>(new SubData(Type.MO5T)));
 	    add(new AltTextures(Type.MO5S));
 	    add(new SubForm(Type.NAM0));

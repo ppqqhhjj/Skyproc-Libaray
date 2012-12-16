@@ -1289,9 +1289,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
-		add(new SubString(Type.CNAM, true));
+		add(SubString.getNew(Type.CNAM, true));
 		add(new SubListSortedUnique<>(new ModListing()));
-		add(new SubString(Type.SNAM, true));
+		add(SubString.getNew(Type.SNAM, true));
 		add(new SubData(Type.INTV));
 		add(new SubData(Type.ONAM));
 		add(new SubData(Type.INCC));

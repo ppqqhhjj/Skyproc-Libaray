@@ -21,14 +21,14 @@ public class TXST extends MajorRecord implements Iterable<String> {
 	@Override
 	protected void addRecords() {
 	    add(new SubData(Type.OBND));
-	    add(new SubString(Type.TX00, true));
-	    add(new SubString(Type.TX01, true));
-	    add(new SubString(Type.TX02, true));
-	    add(new SubString(Type.TX03, true));
-	    add(new SubString(Type.TX04, true));
-	    add(new SubString(Type.TX05, true));
-	    add(new SubString(Type.TX06, true));
-	    add(new SubString(Type.TX07, true));
+	    add(SubString.getNew(Type.TX00, true));
+	    add(SubString.getNew(Type.TX01, true));
+	    add(SubString.getNew(Type.TX02, true));
+	    add(SubString.getNew(Type.TX03, true));
+	    add(SubString.getNew(Type.TX04, true));
+	    add(SubString.getNew(Type.TX05, true));
+	    add(SubString.getNew(Type.TX06, true));
+	    add(SubString.getNew(Type.TX07, true));
 	    add(new SubData(Type.DODT));
 	    add(new SubFlag(Type.DNAM, 2));
 	}
