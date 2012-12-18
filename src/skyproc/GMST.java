@@ -32,7 +32,7 @@ public class GMST extends MajorRecord {
 
     static final class DATA extends SubRecordTyped {
 
-	GMSTType GMSTtype;
+	private GMSTType GMSTtype;
 	SubData DATA = new SubData(Type.DATA);
 	SubStringPointer DATAs = new SubStringPointer(Type.DATA, SubStringPointer.Files.STRINGS);
 
@@ -12246,7 +12246,8 @@ public class GMST extends MajorRecord {
 
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	SubRecord data = updateDATA();
+	SubRecord data = ((SubRecordsStream) subRecords).getSilent(Type.DATA);
+	updateDATAtype();
 	super.importSubRecords(in);
 	((SubRecordsStream) subRecords).loadFromPosition(data);
 	data.fetchStringPointers(srcMod);
@@ -12254,8 +12255,14 @@ public class GMST extends MajorRecord {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	updateDATA();
+	updateDATAtype();
 	super.export(out, srcMod);
+    }
+
+    @Override
+    int getContentLength(Mod srcMod) {
+	updateDATAtype();
+	return super.getContentLength(srcMod);
     }
 
     // Get/set
@@ -12372,8 +12379,8 @@ public class GMST extends MajorRecord {
 	return Float.intBitsToFloat(getDATA().DATA.toInt());
     }
 
-    SubRecord updateDATA() {
-	DATA data = (DATA) ((SubRecordsStream) subRecords).getSilent(Type.DATA);
+    SubRecord updateDATAtype() {
+	DATA data = getDATA();
 	data.GMSTtype = getGMSTType();
 	return data;
     }
