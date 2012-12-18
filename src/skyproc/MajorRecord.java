@@ -224,7 +224,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      *
      * @param edid The string to have the EDID set to.
      */
-    public void setEDID(String edid) {
+    final public void setEDID(String edid) {
 	setEdidNoConsistency(edid);
 	Consistency.addEntry(edid, this.getForm());
     }
