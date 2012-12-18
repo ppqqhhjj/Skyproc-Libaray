@@ -12195,6 +12195,7 @@ public class GMST extends MajorRecord {
     public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
 	this();
 	originateFrom(modToOriginateFrom, setting.toString());
+	updateDATAtype();
 	setData(b);
     }
 
@@ -12235,6 +12236,12 @@ public class GMST extends MajorRecord {
     }
 
     @Override
+    public void setEDID(String edid) {
+	super.setEDID(edid);
+	updateDATAtype();
+    }
+
+    @Override
     Record getNew() {
 	return new GMST();
     }
@@ -12246,7 +12253,7 @@ public class GMST extends MajorRecord {
 
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	SubRecord data = updateDATA();
+	SubRecord data = updateDATAtype();
 	super.importSubRecords(in);
 	((SubRecordsStream) subRecords).loadFromPosition(data);
 	data.fetchStringPointers(srcMod);
@@ -12254,7 +12261,7 @@ public class GMST extends MajorRecord {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	updateDATA();
+	updateDATAtype();
 	super.export(out, srcMod);
     }
 
@@ -12372,7 +12379,7 @@ public class GMST extends MajorRecord {
 	return Float.intBitsToFloat(getDATA().DATA.toInt());
     }
 
-    SubRecord updateDATA() {
+    final SubRecord updateDATAtype() {
 	DATA data = (DATA) ((SubRecordsStream) subRecords).getSilent(Type.DATA);
 	data.GMSTtype = getGMSTType();
 	return data;
