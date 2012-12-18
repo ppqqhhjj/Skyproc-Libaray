@@ -32,6 +32,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      */
     LeveledRecord() {
 	super();
+	subRecords.setPrototype(LeveledProto);
     }
 
     /**
