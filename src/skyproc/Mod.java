@@ -318,9 +318,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
      *
      * @param m Major Record to make a copy of and add to the mod.
      * @param newEDID EDID to assign to the new record. Make sure it's unique.
-     * @return The copied record.
+     * @return The copied record, or null if either parameter is null.
      */
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
+	if (m == null || newEDID == null) {
+	    return null;
+	}
 	if (!m.getFormMaster().equals(SPGlobal.getGlobalPatch().getInfo())) {
 	    Mod mod = SPGlobal.getDB().modLookup.get(m.getFormMaster());
 	    if (mod == null) {
@@ -706,7 +709,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void export(File outPath, Mod srcMod) throws IOException, BadRecord {
-	
+
 	LExporter out = new LExporter(outPath);
 
 	// Progress Bar Setup
