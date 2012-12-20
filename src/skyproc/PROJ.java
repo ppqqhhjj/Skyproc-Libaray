@@ -36,7 +36,7 @@ public class PROJ extends MajorRecordNamed {
 	    add(new SubData("VNAM")); // SoundVolume
 	}
     };
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(2);
 	LFlags projType = new LFlags(2);
@@ -64,7 +64,7 @@ public class PROJ extends MajorRecordNamed {
 	byte[] collisionLayer = new byte[4];
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -151,6 +151,11 @@ public class PROJ extends MajorRecordNamed {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 92;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

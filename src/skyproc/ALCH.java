@@ -40,7 +40,7 @@ public class ALCH extends MagicItem {
 	    reposition("EFID");
 	}
     };
-    static final class ENIT extends SubRecordTyped {
+    static final class ENIT extends SubRecord {
 
 	int value = 0;
 	LFlags flags = new LFlags(4);
@@ -49,7 +49,7 @@ public class ALCH extends MagicItem {
 	FormID useSound = new FormID();
 
 	ENIT() {
-	    super("ENIT");
+	    super();
 	}
 
 	@Override
@@ -88,6 +88,11 @@ public class ALCH extends MagicItem {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 20;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ENIT");
 	}
     }
 

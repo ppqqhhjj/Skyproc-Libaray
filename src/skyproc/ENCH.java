@@ -31,7 +31,7 @@ public class ENCH extends MagicItem {
 	    reposition("KWDA");
 	}
     };
-    static final class ENIT extends SubRecordTyped {
+    static final class ENIT extends SubRecord {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);
@@ -45,7 +45,7 @@ public class ENCH extends MagicItem {
 	boolean old = false;
 
 	ENIT() {
-	    super("ENIT");
+	    super();
 	}
 
 	@Override
@@ -102,6 +102,11 @@ public class ENCH extends MagicItem {
 	    out.add(baseEnchantment);
 	    out.add(wornRestrictions);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ENIT");
 	}
     }
 

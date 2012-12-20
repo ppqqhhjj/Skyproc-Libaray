@@ -28,14 +28,14 @@ public class GMST extends MajorRecord {
 	}
     };
 
-    static final class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecord {
 
 	private GMSTType GMSTtype;
 	SubData DATA = new SubData("DATA");
 	SubStringPointer DATAs = new SubStringPointer("DATA", SubStringPointer.Files.STRINGS);
 
 	DATA() {
-	    super("DATA");
+	    super();
 	    DATAs.forceExport = true;
 	}
 
@@ -79,6 +79,11 @@ public class GMST extends MajorRecord {
 	@Override
 	void fetchStringPointers(Mod srcMod) {
 	    DATAs.fetchStringPointers(srcMod);
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

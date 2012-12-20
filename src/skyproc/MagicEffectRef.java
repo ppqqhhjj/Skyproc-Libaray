@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -87,14 +88,14 @@ public class MagicEffectRef extends SubShellBulkType {
 	return hash;
     }
 
-    static class EFIT extends SubRecordTyped {
+    static class EFIT extends SubRecord {
 
 	float magnitude = 0;
 	int AOE = 0;
 	int duration = 0;
 
 	EFIT() {
-	    super("EFIT");
+	    super();
 	}
 
 	@Override
@@ -126,6 +127,11 @@ public class MagicEffectRef extends SubShellBulkType {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("EFIT");
 	}
     }
 

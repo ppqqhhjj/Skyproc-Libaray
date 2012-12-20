@@ -53,14 +53,14 @@ public class LeveledEntry extends SubShell {
 	return new LeveledEntry();
     }
 
-    static class LVLOin extends SubRecordTyped {
+    static class LVLOin extends SubRecord {
 
 	int level = 1;
 	FormID entry = new FormID();
 	int count = 1;
 
 	LVLOin() {
-	    super("LVLO");
+	    super();
 	}
 
 	@Override
@@ -95,9 +95,14 @@ public class LeveledEntry extends SubShell {
 	    entry.setInternal(in.extract(4));
 	    count = in.extractInt(4);
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("LVLO");
+	}
     }
 
-    static class COED extends SubRecordTyped {
+    static class COED extends SubRecord {
 
 	FormID owner = new FormID();
 	int reqRank;
@@ -105,7 +110,7 @@ public class LeveledEntry extends SubShell {
 	boolean valid = false;
 
 	COED() {
-	    super("COED");
+	    super();
 	}
 
 	@Override
@@ -147,6 +152,11 @@ public class LeveledEntry extends SubShell {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("COED");
 	}
     }
 

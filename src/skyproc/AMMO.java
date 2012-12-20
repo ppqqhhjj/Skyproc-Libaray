@@ -37,7 +37,7 @@ public class AMMO extends MajorRecordDescription {
 	    add(SubString.getNew("ONAM", true));
 	}
     };
-    static final class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecord {
 
 	FormID projectile = new FormID();
 	LFlags flags = new LFlags(4);
@@ -45,7 +45,7 @@ public class AMMO extends MajorRecordDescription {
 	int value = 0;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -81,6 +81,11 @@ public class AMMO extends MajorRecordDescription {
 	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(projectile);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

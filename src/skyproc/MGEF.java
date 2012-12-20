@@ -42,7 +42,7 @@ public class MGEF extends MajorRecordDescription {
 	}
     };
 
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(4);
 	float baseCost = 0;
@@ -84,7 +84,7 @@ public class MGEF extends MajorRecordDescription {
 	float scriptAIDataDelayTime = 0;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -251,14 +251,19 @@ public class MGEF extends MajorRecordDescription {
 	    out.add(perkID);
 	    return out;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
+	}
     }
 
-    static class SNDD extends SubRecordTyped {
+    static class SNDD extends SubRecord {
 
-	ArrayList<SNDD.Sound> sounds = new ArrayList<>();
+	ArrayList<Sound> sounds = new ArrayList<>();
 
 	SNDD() {
-	    super("SNDD");
+	    super();
 	}
 
 	@Override
@@ -303,6 +308,11 @@ public class MGEF extends MajorRecordDescription {
 		out.add(s.soundID);
 	    }
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("SNDD");
 	}
 
 	class Sound {

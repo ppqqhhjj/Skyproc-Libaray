@@ -29,7 +29,7 @@ public class IMGS extends MajorRecord {
 	}
     };
 
-    static final class HNAM extends SubRecordTyped {
+    static final class HNAM extends SubRecord {
 
 	private float eyeAdaptSpeed = 0;
 	private float bloomRadius = 0;
@@ -43,7 +43,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	HNAM() {
-	    super("HNAM");
+	    super();
 	    valid = false;
 	}
 
@@ -111,9 +111,14 @@ public class IMGS extends MajorRecord {
 		return 0;
 	    }
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("HNAM");
+	}
     }
 
-    static final class CNAM extends SubRecordTyped {
+    static final class CNAM extends SubRecord {
 
 	private float saturation = 0;
 	private float brightness = 0;
@@ -121,7 +126,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	public CNAM() {
-	    super("CNAM");
+	    super();
 	    valid = false;
 	}
 
@@ -174,9 +179,14 @@ public class IMGS extends MajorRecord {
 		return 0;
 	    }
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("CNAM");
+	}
     }
 
-    static final class TNAM extends SubRecordTyped {
+    static final class TNAM extends SubRecord {
 
 	private float red = 0;
 	private float green = 0;
@@ -185,7 +195,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	public TNAM() {
-	    super("TNAM");
+	    super();
 	    valid = false;
 	}
 
@@ -241,9 +251,14 @@ public class IMGS extends MajorRecord {
 		return 0;
 	    }
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("TNAM");
+	}
     }
 
-    static final class DNAM extends SubRecordTyped {
+    static final class DNAM extends SubRecord {
 
 	float DOFstrength = 0;
 	float DOFdistance = 0;
@@ -252,7 +267,7 @@ public class IMGS extends MajorRecord {
 	boolean valid = false;
 
 	public DNAM() {
-	    super("DNAM");
+	    super();
 	}
 
 	@Override
@@ -301,6 +316,11 @@ public class IMGS extends MajorRecord {
 	    } else {
 		return 0;
 	    }
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DNAM");
 	}
     }
 

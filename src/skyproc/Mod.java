@@ -1403,7 +1403,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    static class HEDR extends SubRecordTyped {
+    static class HEDR extends SubRecord {
 
 	byte[] version;
 	int numRecords;
@@ -1411,7 +1411,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	static int firstAvailableID = 3426;  // first available ID on empty CS plugins
 
 	HEDR() {
-	    super("HEDR");
+	    super();
 	    clear();
 	}
 
@@ -1479,6 +1479,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	@Override
 	void fetchStringPointers(MajorRecord r) {
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("HEDR");
 	}
     }
 

@@ -181,7 +181,7 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
-    static class DNAM extends SubRecordTyped {
+    static class DNAM extends SubRecord {
 
 	LFlags flags1 = new LFlags(1);
 	LFlags flags2 = new LFlags(1);
@@ -191,7 +191,7 @@ public class QUST extends MajorRecordNamed {
 	int questType = 0;
 
 	DNAM() {
-	    super("DNAM");
+	    super();
 	}
 
 	@Override
@@ -225,15 +225,20 @@ public class QUST extends MajorRecordNamed {
 	    unknown2 = in.extractInt(4);
 	    questType = in.extractInt(4);
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DNAM");
+	}
     }
 
-    static class INDX extends SubRecordTyped {
+    static class INDX extends SubRecord {
 
 	int index = 0;
 	LFlags flags = new LFlags(1);
 
 	INDX() {
-	    super("INDX");
+	    super();
 	}
 
 	@Override
@@ -258,6 +263,11 @@ public class QUST extends MajorRecordNamed {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 4;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("INDX");
 	}
     }
 
@@ -382,13 +392,13 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
-    static class QuestTargetData extends SubRecordTyped {
+    static class QuestTargetData extends SubRecord {
 
 	int targetAlias = 0;
 	LFlags flags = new LFlags(4);
 
 	QuestTargetData() {
-	    super("QSDT");
+	    super();
 	}
 
 	@Override
@@ -413,6 +423,11 @@ public class QUST extends MajorRecordNamed {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 8;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("QSDT");
 	}
     }
 

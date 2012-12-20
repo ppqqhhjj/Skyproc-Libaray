@@ -164,7 +164,7 @@ public class RACE extends MajorRecordDescription {
 	}
     };
 
-    static final class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecord {
 
 	byte[] fluff1 = new byte[16];
 	float maleHeight = 0;
@@ -196,7 +196,7 @@ public class RACE extends MajorRecordDescription {
 	byte[] fluff6 = new byte[4];
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -273,6 +273,11 @@ public class RACE extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 128;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

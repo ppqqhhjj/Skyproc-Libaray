@@ -72,13 +72,13 @@ public class ARMO extends MajorRecordDescription {
 	return new ARMO();
     }
 
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
 	int value;
 	float weight;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -111,6 +111,11 @@ public class ARMO extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 8;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

@@ -28,7 +28,7 @@ public class ECZN extends MajorRecord {
 	    add(new DATA());
 	}
     };
-    static final class DATA extends SubRecordTyped implements Serializable {
+    static final class DATA extends SubRecord implements Serializable {
 
 	private FormID owner = new FormID();
 	private FormID location = new FormID();
@@ -39,7 +39,7 @@ public class ECZN extends MajorRecord {
 	private boolean valid = true;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	    valid = false;
 	}
 
@@ -108,6 +108,11 @@ public class ECZN extends MajorRecord {
 	    out.add(owner);
 	    out.add(location);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

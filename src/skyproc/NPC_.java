@@ -482,7 +482,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
     }
 
-    static class AIDT extends SubRecordTyped implements Serializable {
+    static class AIDT extends SubRecord implements Serializable {
 
 	Aggression aggression = Aggression.Unaggressive;
 	Confidence confidence = Confidence.Cowardly;
@@ -497,7 +497,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	int aggroAttack = 0;
 
 	AIDT() {
-	    super("AIDT");
+	    super();
 	}
 
 	AIDT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -556,6 +556,11 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 20;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("AIDT");
 	}
     }
 
@@ -642,7 +647,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
     }
 
-    static class NAM9 extends SubRecordTyped implements Serializable {
+    static class NAM9 extends SubRecord implements Serializable {
 
 	float noseLong = 0;
 	float noseUp = 0;
@@ -666,7 +671,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	boolean valid = false;
 
 	NAM9() {
-	    super("NAM9");
+	    super();
 	}
 
 	@Override
@@ -732,9 +737,14 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 76;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("NAM9");
+	}
     }
 
-    static class NAMA extends SubRecordTyped implements Serializable {
+    static class NAMA extends SubRecord implements Serializable {
 
 	int nose;
 	int unknown;
@@ -743,7 +753,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	boolean valid = false;
 
 	NAMA() {
-	    super("NAMA");
+	    super();
 	}
 
 	@Override
@@ -779,9 +789,14 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 16;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("NAMA");
+	}
     }
 
-    static class COED extends SubRecordTyped implements Serializable {
+    static class COED extends SubRecord implements Serializable {
 
 	FormID f1 = new FormID();
 	FormID f2 = new FormID();
@@ -789,7 +804,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	boolean valid = false;
 
 	COED() {
-	    super("COED");
+	    super();
 	}
 
 	@Override
@@ -830,6 +845,11 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    out.add(f1);
 	    out.add(f2);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("COED");
 	}
     }
 

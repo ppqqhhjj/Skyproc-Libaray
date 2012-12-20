@@ -34,7 +34,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	    add(new KeywordSet());
 	}
     };
-    static class SPIT extends SubRecordTyped {
+    static class SPIT extends SubRecord {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);
@@ -48,7 +48,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	FormID perkType = new FormID();
 
 	SPIT() {
-	    super("SPIT");
+	    super();
 	    valid = false;
 	}
 
@@ -123,6 +123,11 @@ abstract class MagicItem extends MajorRecordDescription {
 	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(perkType);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("SPIT");
 	}
     }
 

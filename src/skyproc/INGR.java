@@ -41,13 +41,13 @@ public class INGR extends MagicItem {
 	}
     };
 
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
 	int value = 0;
 	float weight = 0;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -76,15 +76,20 @@ public class INGR extends MagicItem {
 	int getContentLength(Mod srcMod) {
 	    return 8;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
+	}
     }
 
-    static class ENIT extends SubRecordTyped {
+    static class ENIT extends SubRecord {
 
 	int baseCost = 0;
 	LFlags flags = new LFlags(4);
 
 	ENIT() {
-	    super("ENIT");
+	    super();
 	}
 
 	@Override
@@ -112,6 +117,11 @@ public class INGR extends MagicItem {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 8;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ENIT");
 	}
     }
 

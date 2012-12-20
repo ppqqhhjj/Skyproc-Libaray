@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class ConditionBase extends SubRecordTyped {
+class ConditionBase extends SubRecord {
 
     Condition.Operator operator;
     LFlags flags = new LFlags(1);
@@ -29,7 +29,7 @@ class ConditionBase extends SubRecordTyped {
     ConditionOption option;
 
     ConditionBase() {
-	super("CTDA");
+	super();
     }
 
     @Override
@@ -125,5 +125,10 @@ class ConditionBase extends SubRecordTyped {
 
     public void set(Condition.CondFlag flag, boolean on) {
 	flags.set(flag.value, on);
+    }
+
+    @Override
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("CTDA");
     }
 }

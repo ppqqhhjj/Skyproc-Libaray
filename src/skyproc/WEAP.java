@@ -56,7 +56,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubForm("CNAM"));
 	}
     };
-    static final class DNAM extends SubRecordTyped {
+    static final class DNAM extends SubRecord {
 
 	WeaponType wtype;
 	byte[] unknown1;
@@ -81,7 +81,7 @@ public class WEAP extends MajorRecordDescription {
 	float stagger;
 
 	public DNAM() {
-	    super("DNAM");
+	    super();
 	}
 
 	@Override
@@ -181,16 +181,21 @@ public class WEAP extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return 100;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DNAM");
+	}
     }
 
-    static final class DATA extends SubRecordTyped {
+    static final class DATA extends SubRecord {
 
 	int value = 0;
 	float weight = 0;
 	int damage = 0;
 
 	public DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -226,9 +231,14 @@ public class WEAP extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return 10;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
+	}
     }
 
-    static final class CRDT extends SubRecordTyped {
+    static final class CRDT extends SubRecord {
 
 	int critDmg;
 	byte[] unknown0;
@@ -238,7 +248,7 @@ public class WEAP extends MajorRecordDescription {
 	FormID critEffect = new FormID();
 
 	public CRDT() {
-	    super("CRDT");
+	    super();
 	}
 
 	@Override
@@ -285,6 +295,11 @@ public class WEAP extends MajorRecordDescription {
 	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(critEffect);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("CRDT");
 	}
     }
 

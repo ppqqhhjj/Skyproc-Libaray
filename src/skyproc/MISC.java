@@ -39,13 +39,13 @@ public class MISC extends MajorRecordNamed {
 	    add(new DestructionData());
 	}
     };
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
 	int value = 0;
 	float weight = 0;
 
 	DATA() {
-	    super("DATA");
+	    super();
 	}
 
 	@Override
@@ -73,6 +73,11 @@ public class MISC extends MajorRecordNamed {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 8;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
 	}
     }
 

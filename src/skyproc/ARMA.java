@@ -54,7 +54,7 @@ public class ARMA extends MajorRecord {
 	    add(new SubForm("SNDD"));
 	}
     };
-    static final class DNAM extends SubRecordTyped {
+    static final class DNAM extends SubRecord {
 
 	int malePriority;
 	int femalePriority;
@@ -64,7 +64,7 @@ public class ARMA extends MajorRecord {
 	float weaponAdjust;
 
 	DNAM() {
-	    super("DNAM");
+	    super();
 	}
 
 	@Override
@@ -105,6 +105,11 @@ public class ARMA extends MajorRecord {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 12;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DNAM");
 	}
     }
 

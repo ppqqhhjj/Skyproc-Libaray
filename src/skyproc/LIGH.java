@@ -39,7 +39,7 @@ public class LIGH extends MajorRecordNamed {
 	    add(new SubForm("SNAM"));
 	}
     };
-    static class DATA extends SubRecordTyped {
+    static class DATA extends SubRecord {
 
         int time = 0;
         int radius = 0;
@@ -58,7 +58,7 @@ public class LIGH extends MajorRecordNamed {
         float weight = 0;
 
         DATA() {
-            super("DATA");
+            super();
         }
 
         @Override
@@ -195,6 +195,10 @@ public class LIGH extends MajorRecordNamed {
             return hash;
         }
 
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DATA");
+	}
     }
 
     // Enums

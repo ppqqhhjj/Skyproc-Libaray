@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -28,7 +29,7 @@ public class BodyTemplate extends SubShell {
 	}
     };
 
-    static class BodyTemplateMain extends SubRecordTyped {
+    static class BodyTemplateMain extends SubRecord {
 
 	LFlags bodyParts = new LFlags(4);
 	LFlags flags = new LFlags(4);
@@ -36,7 +37,7 @@ public class BodyTemplate extends SubShell {
 	boolean old = false;
 
 	BodyTemplateMain() {
-	    super("BODT");
+	    super();
 	}
 
 	@Override
@@ -74,6 +75,11 @@ public class BodyTemplate extends SubShell {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return old ? 8 : 12;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("BODT");
 	}
     }
 
