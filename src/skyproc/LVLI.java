@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -14,12 +13,11 @@ import java.util.Arrays;
 public class LVLI extends LeveledRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLI}));
     static final SubPrototype LVLIproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
 	protected void addRecords() {
-	    before(new SubForm(Type.LVLG), Type.LVLO);
+	    before(new SubForm("LVLG"), "LVLO");
 	}
     };
 
@@ -40,8 +38,8 @@ public class LVLI extends LeveledRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("LVLI");
     }
 
     @Override
@@ -55,7 +53,7 @@ public class LVLI extends LeveledRecord {
      * @param id
      */
     public void setGlobalForm (FormID id) {
-	subRecords.setSubForm(Type.LVLG, id);
+	subRecords.setSubForm("LVLG", id);
     }
 
     /**
@@ -63,7 +61,7 @@ public class LVLI extends LeveledRecord {
      * @return
      */
     public FormID getGlobalForm () {
-	return subRecords.getSubForm(Type.LVLG).getForm();
+	return subRecords.getSubForm("LVLG").getForm();
     }
 
 }

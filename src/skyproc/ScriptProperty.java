@@ -23,7 +23,6 @@ class ScriptProperty extends Record implements Serializable {
     StringNonNull name = new StringNonNull();
     int unknown = 1;
     ScriptData data;
-    final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.VMAD}));
 
     ScriptProperty() {
     }
@@ -63,28 +62,28 @@ class ScriptProperty extends Record implements Serializable {
     public ScriptProperty(String name, Integer... in) {
 	this(name);
 	IntegerArrayData tmp = new IntegerArrayData();
-	tmp.data = new ArrayList<Integer>(Arrays.asList(in));
+	tmp.data = new ArrayList<>(Arrays.asList(in));
 	data = tmp;
     }
 
     public ScriptProperty(String name, String... in) {
 	this(name);
 	StringArrayData tmp = new StringArrayData();
-	tmp.data = new ArrayList<String>(Arrays.asList(in));
+	tmp.data = new ArrayList<>(Arrays.asList(in));
 	data = tmp;
     }
 
     public ScriptProperty(String name, Float... in) {
 	this(name);
 	FloatArrayData tmp = new FloatArrayData();
-	tmp.data = new ArrayList<Float>(Arrays.asList(in));
+	tmp.data = new ArrayList<>(Arrays.asList(in));
 	data = tmp;
     }
 
     public ScriptProperty(String name, Boolean... in) {
 	this(name);
 	BoolArrayData tmp = new BoolArrayData();
-	tmp.data = new ArrayList<Boolean>(Arrays.asList(in));
+	tmp.data = new ArrayList<>(Arrays.asList(in));
 	data = tmp;
     }
 
@@ -195,8 +194,8 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("VMAD");
     }
 
     @Override
@@ -467,7 +466,7 @@ class ScriptProperty extends Record implements Serializable {
 	@Override
 	public void parseData(LChannel in){
 	    int size = in.extractInt(4);
-	    data = new ArrayList<Integer>(size);
+	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		data.add(in.extractInt(4));
 	    }
@@ -508,7 +507,7 @@ class ScriptProperty extends Record implements Serializable {
 	@Override
 	public void parseData(LChannel in){
 	    int size = in.extractInt(4);
-	    data = new ArrayList<String>(size);
+	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		int stringSize = in.extractInt(2);
 		data.add(in.extractString(stringSize));
@@ -598,7 +597,7 @@ class ScriptProperty extends Record implements Serializable {
 	@Override
 	public void parseData(LChannel in){
 	    int size = in.extractInt(4);
-	    data = new ArrayList<Boolean>(size);
+	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		data.add(in.extractBool(1));
 	    }
@@ -643,7 +642,7 @@ class ScriptProperty extends Record implements Serializable {
 	@Override
 	public void parseData(LChannel in){
 	    int size = in.extractInt(4);
-	    data = new ArrayList<Float>(size);
+	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		data.add(in.extractFloat());
 	    }

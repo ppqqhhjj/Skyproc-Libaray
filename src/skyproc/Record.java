@@ -18,18 +18,7 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class Record implements Serializable {
 
-    final static HashMap<String, Type> allTypes;
-    final static HashMap<Type, ArrayList<Type>> typeLists;
-
-    static {
-	Type[] ta = Type.values();
-	allTypes = new HashMap<>(ta.length);
-	typeLists = new HashMap<>(ta.length);
-	for (Type t : ta) {
-	    allTypes.put(t.toString(), t);
-	    typeLists.put(t, new ArrayList<>(Arrays.asList(new Type[]{t})));
-	}
-    }
+    final static HashMap<String, ArrayList<String>> typeLists = new HashMap<>();
 
     Record() {
     }
@@ -63,13 +52,18 @@ public abstract class Record implements Serializable {
      */
     public abstract String print();
 
-    abstract ArrayList<Type> getTypes();
+    abstract ArrayList<String> getTypes();
 
-    static ArrayList<Type> getTypeList(Type t) {
-	return typeLists.get(t);
+    static ArrayList<String> getTypeList(String t) {
+	ArrayList<String> out = typeLists.get(t);
+	if (out == null) {
+	    out = new ArrayList<>(Arrays.asList(new String[]{t}));
+	    typeLists.put(t, out);
+	}
+	return out;
     }
 
-    Type getType() {
+    String getType() {
 	return getTypes().get(0);
     }
 
@@ -77,17 +71,8 @@ public abstract class Record implements Serializable {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    static Type matchType(String str) throws BadRecord {
-	Type out = allTypes.get(str);
-	if (out != null) {
-	    return out;
-	}
-	throw new BadRecord("Record " + str + " ("
-		+ Ln.printHex(Ln.toIntArray(str), true, false) + ") Could not be found on the type list.");
-    }
-
-    static Type getNextType(LChannel in) throws BadRecord {
-	return (matchType(Ln.arrayToString(in.getInts(0, 4))));
+    static String getNextType(LChannel in) throws BadRecord {
+	return (Ln.arrayToString(in.getInts(0, 4)));
     }
 
     void export(LExporter out, Mod srcMod) throws IOException {

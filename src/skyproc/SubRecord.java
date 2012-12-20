@@ -42,7 +42,7 @@ public abstract class SubRecord extends Record {
 	out.write(getContentLength(srcMod), 2);
     }
 
-    abstract SubRecord getNew(Type type);
+    abstract SubRecord getNew(String type);
 
     boolean confirmLink() {
 	return true;
@@ -70,14 +70,7 @@ public abstract class SubRecord extends Record {
     }
 
     @Override
-    void logSync(String header, String... log) {
-	if (SPGlobal.debugSubrecordAll || SPGlobal.debugSubrecordsAllowed.contains(getType())) {
-	    super.logSync(header, log);
-	}
-    }
-
-    @Override
     Record getNew() {
-	return getNew(Type.NULL);
+	return getNew("NULL");
     }
 }

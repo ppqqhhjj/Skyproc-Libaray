@@ -1,7 +1,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -10,17 +9,16 @@ import java.util.Arrays;
 public class COBJ extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.COBJ}));
     static final SubPrototype COBJproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
-	    add(new SubData(Type.COED));
+	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
+	    add(new SubData("COED"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubForm(Type.CNAM));
-	    add(new SubForm(Type.BNAM));
-	    add(new SubInt(Type.NAM1, 2));
+	    add(new SubForm("CNAM"));
+	    add(new SubForm("BNAM"));
+	    add(new SubInt("NAM1", 2));
 	    add(new KeywordSet());
 	}
     };
@@ -34,7 +32,7 @@ public class COBJ extends MajorRecord {
     public COBJ (Mod srcMod, String edid) {
 	this();
 	originateFrom(srcMod, edid);
-	subRecords.getSubInt(Type.NAM1).set(1);
+	subRecords.getSubInt("NAM1").set(1);
     }
 
     COBJ() {
@@ -43,8 +41,8 @@ public class COBJ extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("COBJ");
     }
 
     @Override
@@ -66,7 +64,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public ArrayList<Condition> getConditions() {
-	return subRecords.getSubList(Type.CTDA).toPublic();
+	return subRecords.getSubList("CTDA").toPublic();
     }
 
     /**
@@ -74,7 +72,7 @@ public class COBJ extends MajorRecord {
      * @param c
      */
     public void addCondition(Condition c) {
-	subRecords.getSubList(Type.CTDA).add(c);
+	subRecords.getSubList("CTDA").add(c);
     }
 
     /**
@@ -82,7 +80,7 @@ public class COBJ extends MajorRecord {
      * @param c
      */
     public void removeCondition(Condition c) {
-	subRecords.getSubList(Type.CTDA).remove(c);
+	subRecords.getSubList("CTDA").remove(c);
     }
 
     /**
@@ -92,7 +90,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public boolean addIngredient(FormID itemReference, int count) {
-	return subRecords.getSubList(Type.CNTO).add(new SubFormInt(Type.CNTO, itemReference, count));
+	return subRecords.getSubList("CNTO").add(new SubFormInt("CNTO", itemReference, count));
     }
 
     /**
@@ -101,14 +99,14 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public boolean removeIngredient(FormID itemReference) {
-	return subRecords.getSubList(Type.CNTO).remove(new SubFormInt(Type.CNTO, itemReference, 1));
+	return subRecords.getSubList("CNTO").remove(new SubFormInt("CNTO", itemReference, 1));
     }
 
     /**
      *
      */
     public void clearIngredients() {
-	subRecords.getSubList(Type.CNTO).clear();
+	subRecords.getSubList("CNTO").clear();
     }
 
     /**
@@ -116,7 +114,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public ArrayList<SubFormInt> getIngredients() {
-	return SubList.subFormIntToPublic(subRecords.getSubList(Type.CNTO));
+	return SubList.subFormIntToPublic(subRecords.getSubList("CNTO"));
     }
 
     /**
@@ -124,7 +122,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public FormID getResultFormID() {
-	return subRecords.getSubForm(Type.CNAM).getForm();
+	return subRecords.getSubForm("CNAM").getForm();
     }
 
     /**
@@ -132,7 +130,7 @@ public class COBJ extends MajorRecord {
      * @param form
      */
     public void setResultFormID(FormID form) {
-	subRecords.setSubForm(Type.CNAM, form);
+	subRecords.setSubForm("CNAM", form);
     }
 
     /**
@@ -140,7 +138,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public FormID getBenchKeywordFormID() {
-	return subRecords.getSubForm(Type.BNAM).getForm();
+	return subRecords.getSubForm("BNAM").getForm();
     }
 
     /**
@@ -148,7 +146,7 @@ public class COBJ extends MajorRecord {
      * @param form
      */
     public void setBenchKeywordFormID(FormID form) {
-	subRecords.setSubForm(Type.BNAM, form);
+	subRecords.setSubForm("BNAM", form);
     }
 
     /**
@@ -156,7 +154,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public int getOutputQuantity() {
-	return subRecords.getSubInt(Type.NAM1).get();
+	return subRecords.getSubInt("NAM1").get();
     }
 
     /**
@@ -164,6 +162,6 @@ public class COBJ extends MajorRecord {
      * @param n
      */
     public void setOutputQuantity(int n) {
-	subRecords.setSubInt(Type.NAM1, n);
+	subRecords.setSubInt("NAM1", n);
     }
 }

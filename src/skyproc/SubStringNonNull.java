@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class SubStringNonNull extends SubString {
 
-    SubStringNonNull(Type t) {
+    SubStringNonNull(String t) {
 	super(t);
     }
 
@@ -44,7 +44,7 @@ public class SubStringNonNull extends SubString {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new SubStringNonNull(type_);
     }
 }

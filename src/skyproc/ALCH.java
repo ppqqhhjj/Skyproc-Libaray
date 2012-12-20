@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -22,24 +21,23 @@ import skyproc.exceptions.BadRecord;
 public class ALCH extends MagicItem {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ALCH}));
     static final SubPrototype ALCHproto = new SubPrototype(MagicItem.magicItemProto) {
 
 	@Override
 	protected void addRecords() {
-	    remove(Type.DESC);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(new SubForm(Type.YNAM));
-	    add(new SubForm(Type.ZNAM));
-	    add(new SubData(Type.MODS));
-	    add(new SubFloat(Type.DATA));
+	    remove("DESC");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(new SubForm("YNAM"));
+	    add(new SubForm("ZNAM"));
+	    add(new SubData("MODS"));
+	    add(new SubFloat("DATA"));
 	    add(new ENIT());
-	    add(SubString.getNew(Type.ICON, true));
-	    add(SubString.getNew(Type.MICO, true));
-	    add(new SubForm(Type.ETYP));
-	    reposition(Type.EFID);
+	    add(SubString.getNew("ICON", true));
+	    add(SubString.getNew("MICO", true));
+	    add(new SubForm("ETYP"));
+	    reposition("EFID");
 	}
     };
     static final class ENIT extends SubRecordTyped {
@@ -51,7 +49,7 @@ public class ALCH extends MagicItem {
 	FormID useSound = new FormID();
 
 	ENIT() {
-	    super(Type.ENIT);
+	    super("ENIT");
 	}
 
 	@Override
@@ -83,7 +81,7 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new ENIT();
 	}
 
@@ -129,8 +127,8 @@ public class ALCH extends MagicItem {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("ALCH");
     }
 
     @Override
@@ -144,7 +142,7 @@ public class ALCH extends MagicItem {
      * @param groundModel
      */
     public void setModel(String groundModel) {
-	subRecords.setSubString(Type.MODL, groundModel);
+	subRecords.setSubString("MODL", groundModel);
     }
 
     /**
@@ -152,7 +150,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -160,7 +158,7 @@ public class ALCH extends MagicItem {
      * @param pickupSound
      */
     public void setPickupSound(FormID pickupSound) {
-	subRecords.setSubForm(Type.YNAM, pickupSound);
+	subRecords.setSubForm("YNAM", pickupSound);
     }
 
     /**
@@ -168,7 +166,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public FormID getPickupSound() {
-	return subRecords.getSubForm(Type.YNAM).getForm();
+	return subRecords.getSubForm("YNAM").getForm();
     }
 
     /**
@@ -176,7 +174,7 @@ public class ALCH extends MagicItem {
      * @param dropSound
      */
     public void setDropSound(FormID dropSound) {
-	subRecords.setSubForm(Type.ZNAM, dropSound);
+	subRecords.setSubForm("ZNAM", dropSound);
     }
 
     /**
@@ -184,11 +182,11 @@ public class ALCH extends MagicItem {
      * @return
      */
     public FormID getDropSound() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     ENIT getEnit() {
-	return (ENIT) subRecords.get(Type.ENIT);
+	return (ENIT) subRecords.get("ENIT");
     }
 
     /**
@@ -262,7 +260,7 @@ public class ALCH extends MagicItem {
      * @param weight
      */
     public void setWeight(float weight) {
-	subRecords.setSubFloat(Type.DATA, weight);
+	subRecords.setSubFloat("DATA", weight);
     }
 
     /**
@@ -270,7 +268,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public float getWeight() {
-	return subRecords.getSubFloat(Type.DATA).get();
+	return subRecords.getSubFloat("DATA").get();
     }
 
     /**
@@ -278,7 +276,7 @@ public class ALCH extends MagicItem {
      * @param filename
      */
     public void setInventoryIcon(String filename) {
-	subRecords.setSubString(Type.ICON, filename);
+	subRecords.setSubString("ICON", filename);
     }
 
     /**
@@ -286,7 +284,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public String getInventoryIcon() {
-	return subRecords.getSubString(Type.ICON).print();
+	return subRecords.getSubString("ICON").print();
     }
 
     /**
@@ -294,7 +292,7 @@ public class ALCH extends MagicItem {
      * @param filename
      */
     public void setMessageIcon(String filename) {
-	subRecords.setSubString(Type.MICO, filename);
+	subRecords.setSubString("MICO", filename);
     }
 
     /**
@@ -302,7 +300,7 @@ public class ALCH extends MagicItem {
      * @return
      */
     public String getMessageIcon() {
-	return subRecords.getSubString(Type.MICO).print();
+	return subRecords.getSubString("MICO").print();
     }
 
     /**
@@ -310,7 +308,7 @@ public class ALCH extends MagicItem {
      * @param equipType
      */
     public void setEquipType(FormID equipType) {
-	subRecords.setSubForm(Type.ETYP, equipType);
+	subRecords.setSubForm("ETYP", equipType);
     }
 
     /**
@@ -318,6 +316,6 @@ public class ALCH extends MagicItem {
      * @return
      */
     public FormID getEquipType() {
-	return subRecords.getSubForm(Type.ETYP).getForm();
+	return subRecords.getSubForm("ETYP").getForm();
     }
 }

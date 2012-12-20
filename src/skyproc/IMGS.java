@@ -2,7 +2,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -18,12 +17,11 @@ import skyproc.exceptions.BadRecord;
 public class IMGS extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.IMGS}));
     static final SubPrototype IMGSproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.ENAM));
+	    add(new SubData("ENAM"));
 	    add(new HNAM());
 	    add(new CNAM());
 	    add(new TNAM());
@@ -45,7 +43,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	HNAM() {
-	    super(Type.HNAM);
+	    super("HNAM");
 	    valid = false;
 	}
 
@@ -55,7 +53,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new HNAM();
 	}
 
@@ -123,7 +121,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	public CNAM() {
-	    super(Type.CNAM);
+	    super("CNAM");
 	    valid = false;
 	}
 
@@ -133,7 +131,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new CNAM();
 	}
 
@@ -187,7 +185,7 @@ public class IMGS extends MajorRecord {
 	private boolean valid = true;
 
 	public TNAM() {
-	    super(Type.TNAM);
+	    super("TNAM");
 	    valid = false;
 	}
 
@@ -197,7 +195,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new TNAM();
 	}
 
@@ -254,7 +252,7 @@ public class IMGS extends MajorRecord {
 	boolean valid = false;
 
 	public DNAM() {
-	    super(Type.DNAM);
+	    super("DNAM");
 	}
 
 	@Override
@@ -283,7 +281,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DNAM();
 	}
 
@@ -316,8 +314,8 @@ public class IMGS extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("IMGS");
     }
 
     @Override
@@ -327,19 +325,19 @@ public class IMGS extends MajorRecord {
 
     // Get/Set
     HNAM getHNAM() {
-	return (HNAM) subRecords.get(Type.HNAM);
+	return (HNAM) subRecords.get("HNAM");
     }
 
     CNAM getCNAM() {
-	return (CNAM) subRecords.get(Type.CNAM);
+	return (CNAM) subRecords.get("CNAM");
     }
 
     TNAM getTNAM() {
-	return (TNAM) subRecords.get(Type.TNAM);
+	return (TNAM) subRecords.get("TNAM");
     }
 
     DNAM getDNAM() {
-	return (DNAM) subRecords.get(Type.DNAM);
+	return (DNAM) subRecords.get("DNAM");
     }
 
     /**

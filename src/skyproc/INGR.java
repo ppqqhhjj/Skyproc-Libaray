@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -22,24 +21,23 @@ import skyproc.exceptions.BadRecord;
 public class INGR extends MagicItem {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.INGR}));
     static final SubPrototype INGRproto = new SubPrototype(MagicItem.magicItemProto) {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    remove(Type.DESC);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(new SubForm(Type.YNAM));
-	    add(new SubForm(Type.ZNAM));
+	    after(new ScriptPackage(), "EDID");
+	    remove("DESC");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(new SubForm("YNAM"));
+	    add(new SubForm("ZNAM"));
 	    add(new DATA());
 	    add(new ENIT());
-	    reposition(Type.EFID);
-	    add(SubString.getNew(Type.ICON, true));
-	    add(SubString.getNew(Type.MICO, true));
-	    add(new SubForm(Type.ETYP));
+	    reposition("EFID");
+	    add(SubString.getNew("ICON", true));
+	    add(SubString.getNew("MICO", true));
+	    add(new SubForm("ETYP"));
 	}
     };
 
@@ -49,7 +47,7 @@ public class INGR extends MagicItem {
 	float weight = 0;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -86,7 +84,7 @@ public class INGR extends MagicItem {
 	LFlags flags = new LFlags(4);
 
 	ENIT() {
-	    super(Type.ENIT);
+	    super("ENIT");
 	}
 
 	@Override
@@ -107,7 +105,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new ENIT();
 	}
 
@@ -141,7 +139,7 @@ public class INGR extends MagicItem {
 	    this.value = value;
 	}
     }
-    
+
     // Common Functions
     INGR() {
 	super();
@@ -149,8 +147,8 @@ public class INGR extends MagicItem {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("INGR");
     }
 
     @Override
@@ -172,7 +170,7 @@ public class INGR extends MagicItem {
      * @param groundModel
      */
     public void setModel(String groundModel) {
-	subRecords.setSubString(Type.MODL, groundModel);
+	subRecords.setSubString("MODL", groundModel);
     }
 
     /**
@@ -180,7 +178,7 @@ public class INGR extends MagicItem {
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -188,7 +186,7 @@ public class INGR extends MagicItem {
      * @param pickupSound
      */
     public void setPickupSound(FormID pickupSound) {
-	subRecords.setSubForm(Type.YNAM, pickupSound);
+	subRecords.setSubForm("YNAM", pickupSound);
     }
 
     /**
@@ -196,7 +194,7 @@ public class INGR extends MagicItem {
      * @return
      */
     public FormID getPickupSound() {
-	return subRecords.getSubForm(Type.YNAM).getForm();
+	return subRecords.getSubForm("YNAM").getForm();
     }
 
     /**
@@ -204,7 +202,7 @@ public class INGR extends MagicItem {
      * @param dropSound
      */
     public void setDropSound(FormID dropSound) {
-	subRecords.setSubForm(Type.ZNAM, dropSound);
+	subRecords.setSubForm("ZNAM", dropSound);
     }
 
     /**
@@ -212,11 +210,11 @@ public class INGR extends MagicItem {
      * @return
      */
     public FormID getDropSound() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**
@@ -252,7 +250,7 @@ public class INGR extends MagicItem {
     }
 
     ENIT getENIT() {
-	return (ENIT) subRecords.get(Type.ENIT);
+	return (ENIT) subRecords.get("ENIT");
     }
 
     /**
@@ -294,7 +292,7 @@ public class INGR extends MagicItem {
      * @param filename
      */
     public void setInventoryIcon(String filename) {
-	subRecords.setSubString(Type.ICON, filename);
+	subRecords.setSubString("ICON", filename);
     }
 
     /**
@@ -302,7 +300,7 @@ public class INGR extends MagicItem {
      * @return
      */
     public String getInventoryIcon() {
-	return subRecords.getSubString(Type.ICON).print();
+	return subRecords.getSubString("ICON").print();
     }
 
     /**
@@ -310,7 +308,7 @@ public class INGR extends MagicItem {
      * @param filename
      */
     public void setMessageIcon(String filename) {
-	subRecords.setSubString(Type.MICO, filename);
+	subRecords.setSubString("MICO", filename);
     }
 
     /**
@@ -318,7 +316,7 @@ public class INGR extends MagicItem {
      * @return
      */
     public String getMessageIcon() {
-	return subRecords.getSubString(Type.MICO).print();
+	return subRecords.getSubString("MICO").print();
     }
 
     /**
@@ -326,7 +324,7 @@ public class INGR extends MagicItem {
      * @param equipType
      */
     public void setEquipType(FormID equipType) {
-	subRecords.setSubForm(Type.ETYP, equipType);
+	subRecords.setSubForm("ETYP", equipType);
     }
 
     /**
@@ -334,6 +332,6 @@ public class INGR extends MagicItem {
      * @return
      */
     public FormID getEquipType() {
-	return subRecords.getSubForm(Type.ETYP).getForm();
+	return subRecords.getSubForm("ETYP").getForm();
     }
 }

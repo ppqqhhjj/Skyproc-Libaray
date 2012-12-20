@@ -93,7 +93,7 @@ public class NIF {
 	if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Num Block Types: " + numBlockTypes);
 	}
-	blockTypes = new ArrayList<String>(numBlockTypes);
+	blockTypes = new ArrayList<>(numBlockTypes);
 	for (int i = 0; i < numBlockTypes; i++) {
 	    String blockType = in.extractString(in.extractInt(4));
 	    blockTypes.add(blockType);
@@ -107,7 +107,7 @@ public class NIF {
 	if (SPGlobal.debugNIFimport && SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Block Type list: ");
 	}
-	nodes = new ArrayList<Node>(numBlocks);
+	nodes = new ArrayList<>(numBlocks);
 	for (int i = 0; i < numBlocks; i++) {
 	    int type = in.extractInt(2);
 	    Node n = new Node(NodeType.SPvalueOf(blockTypes.get(type)));
@@ -136,7 +136,7 @@ public class NIF {
 	}
 	int numStrings = in.extractInt(4);
 	in.skip(4); // max Length string
-	ArrayList<String> strings = new ArrayList<String>(numStrings);
+	ArrayList<String> strings = new ArrayList<>(numStrings);
 	for (int i = 0; i < numStrings; i++) {
 	    strings.add(in.extractString(in.extractInt(4)));
 	}
@@ -335,13 +335,13 @@ public class NIF {
      * @return List of NiTriShape node sets.
      */
     public ArrayList<ArrayList<Node>> getNiTriShapePackages() {
-	ArrayList<ArrayList<Node>> out = new ArrayList<ArrayList<Node>>();
-	ArrayList<Node> NiTriShapePackage = new ArrayList<Node>();
+	ArrayList<ArrayList<Node>> out = new ArrayList<>();
+	ArrayList<Node> NiTriShapePackage = new ArrayList<>();
 	boolean on = false;
 	String title = "";
 	for (Node n : nodes) {
 	    if (n.type == NodeType.NITRISHAPE) {
-		NiTriShapePackage = new ArrayList<Node>();
+		NiTriShapePackage = new ArrayList<>();
 		out.add(NiTriShapePackage);
 		title = n.title;
 		NiTriShapePackage.add(n);

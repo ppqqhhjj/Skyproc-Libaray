@@ -7,7 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -23,7 +22,6 @@ import skyproc.exceptions.BadRecord;
 public class ECZN extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ECZN}));
     static final SubPrototype ECZNproto = new SubPrototype(MajorRecord.majorProto) {
 	@Override
 	protected void addRecords() {
@@ -41,7 +39,7 @@ public class ECZN extends MajorRecord {
 	private boolean valid = true;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	    valid = false;
 	}
 
@@ -51,7 +49,7 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -106,7 +104,7 @@ public class ECZN extends MajorRecord {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    ArrayList<FormID> out = new ArrayList<>(2);
 	    out.add(owner);
 	    out.add(location);
 	    return out;
@@ -137,7 +135,7 @@ public class ECZN extends MajorRecord {
 	    this.value = value;
 	}
     }
-    
+
     // Common Functions
     /**
      * Creates a new ECZN record.
@@ -148,18 +146,18 @@ public class ECZN extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("ECZN");
     }
 
     @Override
     Record getNew() {
 	return new ECZN();
     }
-    
+
     // Get/set
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

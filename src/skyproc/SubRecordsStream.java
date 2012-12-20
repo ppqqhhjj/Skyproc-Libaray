@@ -7,10 +7,6 @@ import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LFileChannel;
 import lev.Ln;
-import skyproc.MajorRecord;
-import skyproc.SubRecordsDerived;
-import skyproc.SubPrototype;
-import skyproc.Type;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -24,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 class SubRecordsStream extends SubRecordsDerived {
 
-    protected Map<Type, RecordLocation> pos = new HashMap<>(0);
+    protected Map<String, RecordLocation> pos = new HashMap<>(0);
     MajorRecord major;
 
     SubRecordsStream(SubPrototype proto) {
@@ -37,7 +33,7 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
-    public boolean shouldExport(Type t) {
+    public boolean shouldExport(String t) {
 	if (map.containsKey(t)) {
 	    return shouldExport(map.get(t));
 	} else if (pos.containsKey(t)) {
@@ -49,7 +45,7 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
-    public SubRecord get(Type in) {
+    public SubRecord get(String in) {
 	SubRecord s = null;
 	if (map.containsKey(in)) {
 	    s = map.get(in);
@@ -67,7 +63,7 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
-    public void remove(Type in) {
+    public void remove(String in) {
 	super.remove(in);
 	if (pos.containsKey(in)) {
 	    pos.remove(in);
@@ -81,10 +77,10 @@ class SubRecordsStream extends SubRecordsDerived {
 
     @Override
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type nextType = Record.getNextType(in);
+	String nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
-		Type standardType = prototype.get(nextType).getType();
+		String standardType = prototype.get(nextType).getType();
 		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();
 		    pos.put(standardType, new RecordLocation(position));
@@ -105,7 +101,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	}
     }
 
-    public SubRecord getSilent(Type nextType) {
+    public SubRecord getSilent(String nextType) {
 	if (map.containsKey(nextType)) {
 	    return map.get(nextType);
 	} else {

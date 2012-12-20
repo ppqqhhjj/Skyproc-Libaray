@@ -18,11 +18,11 @@ public class SubFormInt extends SubFormData {
 
     int num;
 
-    SubFormInt(Type in) {
+    SubFormInt(String in) {
 	super(in);
     }
 
-    SubFormInt(Type type, FormID id, int number) {
+    SubFormInt(String type, FormID id, int number) {
 	super(type);
 	ID = id;
 	num = number;
@@ -46,7 +46,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new SubFormInt(type_);
     }
 

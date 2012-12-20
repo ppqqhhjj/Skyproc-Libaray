@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -14,34 +13,33 @@ import java.util.Arrays;
 public class FACT extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FACT}));
     static final SubPrototype FACTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    add(new SubList<>(new SubData(Type.XNAM)));
-	    add(new SubData(Type.DATA));
-	    add(new SubForm(Type.JAIL));
-	    add(new SubForm(Type.WAIT));
-	    add(new SubForm(Type.STOL));
-	    add(new SubForm(Type.PLCN));
-	    add(new SubForm(Type.CRGR));
-	    add(new SubForm(Type.JOUT));
-	    add(new SubData(Type.CRVA));
+	    add(new SubList<>(new SubData("XNAM")));
+	    add(new SubData("DATA"));
+	    add(new SubForm("JAIL"));
+	    add(new SubForm("WAIT"));
+	    add(new SubForm("STOL"));
+	    add(new SubForm("PLCN"));
+	    add(new SubForm("CRGR"));
+	    add(new SubForm("JOUT"));
+	    add(new SubData("CRVA"));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubInt(Type.RNAM));
-		    add(new SubStringPointer(Type.MNAM, SubStringPointer.Files.STRINGS));
-		    add(new SubData(Type.FNAM));
+		    add(new SubInt("RNAM"));
+		    add(new SubStringPointer("MNAM", SubStringPointer.Files.STRINGS));
+		    add(new SubData("FNAM"));
 		}
 	    })));
-	    add(new SubForm(Type.VEND));
-	    add(new SubForm(Type.VENC));
-	    add(new SubData(Type.VENV));
-	    add(new SubData(Type.PLVD));
-	    add(new SubInt(Type.CITC));
-	    add(new SubData(Type.CTDA));
-	    add(SubString.getNew(Type.CIS2, true));
+	    add(new SubForm("VEND"));
+	    add(new SubForm("VENC"));
+	    add(new SubData("VENV"));
+	    add(new SubData("PLVD"));
+	    add(new SubInt("CITC"));
+	    add(new SubData("CTDA"));
+	    add(SubString.getNew("CIS2", true));
 	}
     };
 
@@ -52,8 +50,8 @@ public class FACT extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("FACT");
     }
 
     @Override

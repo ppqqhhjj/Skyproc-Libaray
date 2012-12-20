@@ -65,12 +65,12 @@ class SubShell extends SubRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
+    ArrayList<String> getTypes() {
 	return subRecords.getTypes();
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubShell(subRecords.prototype);
     }
 }

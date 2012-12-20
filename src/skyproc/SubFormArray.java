@@ -22,7 +22,7 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 
     ArrayList<FormID> IDs;
 
-    public SubFormArray(Type type_, int size) {
+    public SubFormArray(String type_, int size) {
 	super(type_);
 	IDs = new ArrayList<>(size);
 	for (int i = 0; i < size; i++) {
@@ -31,7 +31,7 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubFormArray(type, 0);
     }
 

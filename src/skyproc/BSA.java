@@ -673,7 +673,7 @@ public class BSA {
     }
 
     /**
-     * 
+     *
      * @param obj
      * @return
      */
@@ -693,7 +693,7 @@ public class BSA {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -703,7 +703,7 @@ public class BSA {
 	return hash;
     }
 
-    class BSAFileRef {
+    static class BSAFileRef {
 
 	int size;
 	long nameOffset;
@@ -712,7 +712,7 @@ public class BSA {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override

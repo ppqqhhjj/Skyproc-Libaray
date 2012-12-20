@@ -313,7 +313,7 @@ public class SPDatabase implements Iterable<Mod> {
      */
     public Iterator<Mod> reverseIter() {
 	Iterator<Mod> iter = iterator();
-	ArrayList<Mod> outList = new ArrayList<Mod>(modLookup.size());
+	ArrayList<Mod> outList = new ArrayList<>(modLookup.size());
 	while (iter.hasNext()) {
 	    outList.add(0, iter.next());
 	}

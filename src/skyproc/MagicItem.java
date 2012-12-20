@@ -25,11 +25,11 @@ abstract class MagicItem extends MajorRecordDescription {
 
 	@Override
 	protected void addRecords() {
-	    SubData OBND = new SubData(Type.OBND);
+	    SubData OBND = new SubData("OBND");
 	    OBND.initialize(12);
 	    add(OBND);
-	    reposition(Type.FULL);
-	    reposition(Type.DESC);
+	    reposition("FULL");
+	    reposition("DESC");
 	    add(new SubList<>(new MagicEffectRef()));
 	    add(new KeywordSet());
 	}
@@ -48,7 +48,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	FormID perkType = new FormID();
 
 	SPIT() {
-	    super(Type.SPIT);
+	    super("SPIT");
 	    valid = false;
 	}
 
@@ -58,7 +58,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new SPIT();
 	}
 
@@ -120,7 +120,7 @@ abstract class MagicItem extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(perkType);
 	    return out;
 	}
@@ -133,22 +133,22 @@ abstract class MagicItem extends MajorRecordDescription {
 
     // Get/Set
     public ArrayList<MagicEffectRef> getMagicEffects() {
-	return subRecords.getSubList(Type.EFID).toPublic();
+	return subRecords.getSubList("EFID").toPublic();
     }
 
     public void removeMagicEffect(MagicEffectRef magicEffect) {
-	subRecords.getSubList(Type.EFID).remove(magicEffect);
+	subRecords.getSubList("EFID").remove(magicEffect);
     }
 
     public void addMagicEffect(MagicEffectRef magicEffect) {
-	subRecords.getSubList(Type.EFID).add(magicEffect);
+	subRecords.getSubList("EFID").add(magicEffect);
     }
 
     public void addMagicEffect(MGEF magicEffect) {
-	subRecords.getSubList(Type.EFID).add(new MagicEffectRef(magicEffect.getForm()));
+	subRecords.getSubList("EFID").add(new MagicEffectRef(magicEffect.getForm()));
     }
 
     public void clearMagicEffects() {
-	subRecords.getSubList(Type.EFID).clear();
+	subRecords.getSubList("EFID").clear();
     }
 }

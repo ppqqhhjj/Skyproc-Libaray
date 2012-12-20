@@ -25,7 +25,7 @@ public class AltTextures extends SubRecordTyped {
 
     ArrayList<AltTexture> altTextures = new ArrayList<>();
 
-    AltTextures(Type t) {
+    AltTextures(String t) {
 	super(t);
     }
 
@@ -56,7 +56,7 @@ public class AltTextures extends SubRecordTyped {
 
     @Override
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>(altTextures.size());
+	ArrayList<FormID> out = new ArrayList<>(altTextures.size());
 	for (AltTexture t : altTextures) {
 	    out.add(t.texture);
 	}
@@ -64,7 +64,7 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new AltTextures(type);
     }
 

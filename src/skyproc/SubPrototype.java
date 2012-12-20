@@ -13,10 +13,10 @@ import java.util.*;
  */
 abstract class SubPrototype implements Serializable {
 
-    protected ArrayList<Type> listExport = new ArrayList<>();
-    protected Map<Type, SubRecord> map = new HashMap<>(0);
-    protected ArrayList<Type> listExtensive = new ArrayList<>();
-    protected Set<Type> forceExport = new HashSet<>(0);
+    protected ArrayList<String> listExport = new ArrayList<>();
+    protected Map<String, SubRecord> map = new HashMap<>(0);
+    protected ArrayList<String> listExtensive = new ArrayList<>();
+    protected Set<String> forceExport = new HashSet<>(0);
 
     public SubPrototype() {
 	addRecords();
@@ -30,14 +30,14 @@ abstract class SubPrototype implements Serializable {
     }
 
     public void mergeIn(SubPrototype in) {
-	for (Type t : in.listExport) {
+	for (String t : in.listExport) {
 	    add(in.get(t));
 	}
 	forceExport.addAll(in.forceExport);
     }
 
     public final SubRecord add(SubRecord r) {
-	for (Type t : r.getTypes()) {
+	for (String t : r.getTypes()) {
 	    remove(t);
 	    map.put(t, r);
 	    listExtensive.add(t);
@@ -46,52 +46,52 @@ abstract class SubPrototype implements Serializable {
 	return r;
     }
 
-    public void before(SubRecord r, Type b) {
+    public void before(SubRecord r, String type) {
 	add(r);
 	listExport.remove(r.getType());
-	listExport.add(listExport.indexOf(b), r.getType());
+	listExport.add(listExport.indexOf(type), r.getType());
     }
 
-    public void after(SubRecord r, Type b) {
+    public void after(SubRecord r, String type) {
 	add(r);
 	listExport.remove(r.getType());
-	listExport.add(listExport.indexOf(b) + 1, r.getType());
+	listExport.add(listExport.indexOf(type) + 1, r.getType());
     }
 
-    public void reposition(Type t) {
-	t = get(t).getType();
-	listExport.remove(t);
-	listExport.add(t);
+    public void reposition(String type) {
+	type = get(type).getType();
+	listExport.remove(type);
+	listExport.add(type);
     }
 
-    public void forceExport(Type t) {
-	forceExport.add(t);
+    public void forceExport(String type) {
+	forceExport.add(type);
     }
 
-    public void remove(Type in) {
-	if (map.containsKey(in)) {
+    public void remove(String type) {
+	if (map.containsKey(type)) {
 	    for (int i = 0; i < listExport.size(); i++) {
-		if (listExport.get(i).equals(in)) {
+		if (listExport.get(i).equals(type)) {
 		    listExport.remove(i);
 		    break;
 		}
 	    }
 	    for (int i = 0; i < listExtensive.size(); i++) {
-		if (listExtensive.get(i).equals(in)) {
+		if (listExtensive.get(i).equals(type)) {
 		    listExtensive.remove(i);
 		    break;
 		}
 	    }
-	    map.remove(in);
-	    forceExport.remove(in);
+	    map.remove(type);
+	    forceExport.remove(type);
 	}
     }
 
-    public boolean contains(Type t) {
-	return map.containsKey(t);
+    public boolean contains(String type) {
+	return map.containsKey(type);
     }
 
-    public SubRecord get(Type t) {
-	return map.get(t);
+    public SubRecord get(String type) {
+	return map.get(type);
     }
 }

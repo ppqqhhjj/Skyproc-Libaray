@@ -21,19 +21,19 @@ class SubRGB extends SubRecordTyped {
     float g;
     float b;
 
-    SubRGB(Type type, float red, float green, float blue) {
+    SubRGB(String type, float red, float green, float blue) {
 	this(type);
 	r = red;
 	g = green;
 	b = blue;
     }
 
-    SubRGB(Type type) {
+    SubRGB(String type) {
 	super(type);
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubRGB(type);
     }
 

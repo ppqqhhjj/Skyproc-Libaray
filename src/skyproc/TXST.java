@@ -15,22 +15,21 @@ import java.util.Iterator;
 public class TXST extends MajorRecord implements Iterable<String> {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.TXST}));
     static final SubPrototype TXSTproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.OBND));
-	    add(SubString.getNew(Type.TX00, true));
-	    add(SubString.getNew(Type.TX01, true));
-	    add(SubString.getNew(Type.TX02, true));
-	    add(SubString.getNew(Type.TX03, true));
-	    add(SubString.getNew(Type.TX04, true));
-	    add(SubString.getNew(Type.TX05, true));
-	    add(SubString.getNew(Type.TX06, true));
-	    add(SubString.getNew(Type.TX07, true));
-	    add(new SubData(Type.DODT));
-	    add(new SubFlag(Type.DNAM, 2));
+	    add(new SubData("OBND"));
+	    add(SubString.getNew("TX00", true));
+	    add(SubString.getNew("TX01", true));
+	    add(SubString.getNew("TX02", true));
+	    add(SubString.getNew("TX03", true));
+	    add(SubString.getNew("TX04", true));
+	    add(SubString.getNew("TX05", true));
+	    add(SubString.getNew("TX06", true));
+	    add(SubString.getNew("TX07", true));
+	    add(new SubData("DODT"));
+	    add(new SubFlag("DNAM", 2));
 	}
     };
     static int NUM_MAPS = 8;
@@ -45,7 +44,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
     public TXST(Mod srcMod, String edid) {
 	this();
 	originateFrom(srcMod, edid);
-	subRecords.getSubData(Type.OBND).setData(new byte[12]);
+	subRecords.getSubData("OBND").setData(new byte[12]);
     }
 
     TXST() {
@@ -54,8 +53,8 @@ public class TXST extends MajorRecord implements Iterable<String> {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("TXST");
     }
 
     @Override
@@ -80,21 +79,21 @@ public class TXST extends MajorRecord implements Iterable<String> {
     SubString getNthMapInternal(int i) {
 	switch (i) {
 	    case 0:
-		return subRecords.getSubString(Type.TX00);
+		return subRecords.getSubString("TX00");
 	    case 1:
-		return subRecords.getSubString(Type.TX01);
+		return subRecords.getSubString("TX01");
 	    case 2:
-		return subRecords.getSubString(Type.TX02);
+		return subRecords.getSubString("TX02");
 	    case 3:
-		return subRecords.getSubString(Type.TX03);
+		return subRecords.getSubString("TX03");
 	    case 4:
-		return subRecords.getSubString(Type.TX04);
+		return subRecords.getSubString("TX04");
 	    case 5:
-		return subRecords.getSubString(Type.TX05);
+		return subRecords.getSubString("TX05");
 	    case 6:
-		return subRecords.getSubString(Type.TX06);
+		return subRecords.getSubString("TX06");
 	    case 7:
-		return subRecords.getSubString(Type.TX07);
+		return subRecords.getSubString("TX07");
 	    default:
 		return null;
 	}
@@ -232,7 +231,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @return True if flag is on.
      */
     public boolean get(TXSTflag flag) {
-	return subRecords.getSubFlag(Type.DNAM).is(flag.ordinal());
+	return subRecords.getSubFlag("DNAM").is(flag.ordinal());
     }
 
     /**
@@ -241,7 +240,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @param to Boolean to set the flag to
      */
     public void set(TXSTflag flag, boolean to) {
-	subRecords.setSubFlag(Type.DNAM, flag.ordinal(), to);
+	subRecords.setSubFlag("DNAM", flag.ordinal(), to);
     }
 
     /**

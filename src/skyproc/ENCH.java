@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,16 +20,15 @@ import skyproc.exceptions.BadRecord;
 public class ENCH extends MagicItem {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ENCH}));
     static final SubPrototype ENCHproto = new SubPrototype(MagicItem.magicItemProto) {
 	@Override
 	protected void addRecords() {
-	    reposition(Type.OBND);
-	    reposition(Type.FULL);
-	    remove(Type.DESC);
+	    reposition("OBND");
+	    reposition("FULL");
+	    remove("DESC");
 	    add(new ENIT());
-	    reposition(Type.EFID);
-	    reposition(Type.KWDA);
+	    reposition("EFID");
+	    reposition("KWDA");
 	}
     };
     static final class ENIT extends SubRecordTyped {
@@ -47,7 +45,7 @@ public class ENCH extends MagicItem {
 	boolean old = false;
 
 	ENIT() {
-	    super(Type.ENIT);
+	    super("ENIT");
 	}
 
 	@Override
@@ -85,7 +83,7 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new ENIT();
 	}
 
@@ -100,13 +98,13 @@ public class ENCH extends MagicItem {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(2);
+	    ArrayList<FormID> out = new ArrayList<>(2);
 	    out.add(baseEnchantment);
 	    out.add(wornRestrictions);
 	    return out;
 	}
     }
-    
+
     // Enums
     /**
      *
@@ -164,18 +162,18 @@ public class ENCH extends MagicItem {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("ENCH");
     }
 
     @Override
     Record getNew() {
 	return new ENCH();
     }
-    
+
     // Get/Set
     ENIT getENIT() {
-	return (ENIT) subRecords.get(Type.ENIT);
+	return (ENIT) subRecords.get("ENIT");
     }
 
     /**

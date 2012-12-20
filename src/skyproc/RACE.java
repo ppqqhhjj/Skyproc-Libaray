@@ -22,146 +22,145 @@ import skyproc.exceptions.BadRecord;
 public class RACE extends MajorRecordDescription {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.RACE}));
     static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
-	    add(new SubListCounted<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
-	    add(new SubForm(Type.WNAM));
+	    add(new SubListCounted<>("SPCT", 4, new SubForm("SPLO")));
+	    add(new SubForm("WNAM"));
 	    add(new BodyTemplate());
 	    add(new KeywordSet());
 	    add(new DATA());
 	    SubMarkerSet mfnam = new SubMarkerSet<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(SubString.getNew(Type.ANAM, true));
-		    add(new SubData(Type.MODT));
+		    add(SubString.getNew("ANAM", true));
+		    add(new SubData("MODT"));
 		}
-	    }), Type.MNAM, Type.FNAM);
+	    }), "MNAM", "FNAM");
 	    mfnam.forceMarkers = true;
 	    add(mfnam);
-	    add(new SubList<>(SubString.getNew(Type.MTNM, false)));
-	    add(new SubFormArray(Type.VTCK, 2));
-	    add(new SubFormArray(Type.DNAM, 2));
-	    add(new SubFormArray(Type.HCLF, 2));
-	    add(new SubData(Type.TINL));
-	    add(new SubData(Type.PNAM));
-	    add(new SubData(Type.UNAM));
-	    add(new SubForm(Type.ATKR));
+	    add(new SubList<>(SubString.getNew("MTNM", false)));
+	    add(new SubFormArray("VTCK", 2));
+	    add(new SubFormArray("DNAM", 2));
+	    add(new SubFormArray("HCLF", 2));
+	    add(new SubData("TINL"));
+	    add(new SubData("PNAM"));
+	    add(new SubData("UNAM"));
+	    add(new SubForm("ATKR"));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubData(Type.ATKD));
-		    add(SubString.getNew(Type.ATKE, true));
+		    add(new SubData("ATKD"));
+		    add(SubString.getNew("ATKE", true));
 		}
 	    })));
 	    add(new SubShellBulkType(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubData(Type.NAM1));
-		    forceExport(Type.NAM1);
+		    add(new SubData("NAM1"));
+		    forceExport("NAM1");
 
 		    SubMarkerSet EGT = new SubMarkerSet(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(new SubData(Type.INDX));
-			    add(SubString.getNew(Type.MODL, true));
-			    add(new SubData(Type.MODT));
+			    add(new SubData("INDX"));
+			    add(SubString.getNew("MODL", true));
+			    add(new SubData("MODT"));
 			}
-		    }), Type.MNAM, Type.FNAM);
+		    }), "MNAM", "FNAM");
 		    EGT.forceMarkers = true;
 		    add(EGT);
 		}
 	    }, false));
-	    add(new SubForm(Type.GNAM));
-	    add(new SubData(Type.NAM2));
+	    add(new SubForm("GNAM"));
+	    add(new SubData("NAM2"));
 	    add(new SubShellBulkType(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubData(Type.NAM3));
-		    forceExport(Type.NAM3);
+		    add(new SubData("NAM3"));
+		    forceExport("NAM3");
 		    add(new SubMarkerSet(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(SubString.getNew(Type.MODL, true));
-			    add(new SubData(Type.MODT));
+			    add(SubString.getNew("MODL", true));
+			    add(new SubData("MODT"));
 			}
-		    }), Type.MNAM, Type.FNAM));
+		    }), "MNAM", "FNAM"));
 		}
 	    }, false));
-	    add(new SubForm(Type.NAM4));
-	    add(new SubForm(Type.NAM5));
-	    add(new SubForm(Type.NAM7));
-	    add(new SubForm(Type.ONAM));
-	    add(new SubForm(Type.LNAM));
-	    add(new SubList<>(SubString.getNew(Type.NAME, true)));
+	    add(new SubForm("NAM4"));
+	    add(new SubForm("NAM5"));
+	    add(new SubForm("NAM7"));
+	    add(new SubForm("ONAM"));
+	    add(new SubForm("LNAM"));
+	    add(new SubList<>(SubString.getNew("NAME", true)));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubForm(Type.MTYP));
-		    add(new SubData(Type.SPED));
+		    add(new SubForm("MTYP"));
+		    add(new SubData("SPED"));
 		}
 	    })));
-	    add(new SubData(Type.VNAM));
-	    add(new SubList<>(new SubForm(Type.QNAM)));
-	    add(new SubForm(Type.UNES));
-	    add(new SubList<>(SubString.getNew(Type.PHTN, true)));
-	    add(new SubList<>(new SubData(Type.PHWT)));
-	    add(new SubForm(Type.WKMV));
-	    add(new SubForm(Type.RNMV));
-	    add(new SubForm(Type.SWMV));
-	    add(new SubForm(Type.FLMV));
-	    add(new SubForm(Type.SNMV));
-	    add(new SubForm(Type.SPMV));
+	    add(new SubData("VNAM"));
+	    add(new SubList<>(new SubForm("QNAM")));
+	    add(new SubForm("UNES"));
+	    add(new SubList<>(SubString.getNew("PHTN", true)));
+	    add(new SubList<>(new SubData("PHWT")));
+	    add(new SubForm("WKMV"));
+	    add(new SubForm("RNMV"));
+	    add(new SubForm("SWMV"));
+	    add(new SubForm("FLMV"));
+	    add(new SubForm("SNMV"));
+	    add(new SubForm("SPMV"));
 	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubData(Type.NAM0));
-		    add(new SubData(Type.MNAM));
-		    add(new SubData(Type.FNAM));
+		    add(new SubData("NAM0"));
+		    add(new SubData("MNAM"));
+		    add(new SubData("FNAM"));
 		    add(new SubList<>(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(new SubData(Type.INDX));
-			    add(new SubData(Type.HEAD));
+			    add(new SubData("INDX"));
+			    add(new SubData("HEAD"));
 			}
 		    })));
 		    add(new SubList<>(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(new SubData(Type.MPAI));
-			    add(new SubData(Type.MPAV));
+			    add(new SubData("MPAI"));
+			    add(new SubData("MPAV"));
 			}
 		    })));
-		    add(new SubList<>(new SubForm(Type.RPRM)));
-		    add(new SubList<>(new SubForm(Type.RPRF)));
-		    add(new SubList<>(new SubForm(Type.AHCM)));
-		    add(new SubList<>(new SubForm(Type.AHCF)));
-		    add(new SubList<>(new SubForm(Type.FTSM)));
-		    add(new SubList<>(new SubForm(Type.FTSF)));
-		    add(new SubList<>(new SubForm(Type.DFTM)));
-		    add(new SubList<>(new SubForm(Type.DFTF)));
+		    add(new SubList<>(new SubForm("RPRM")));
+		    add(new SubList<>(new SubForm("RPRF")));
+		    add(new SubList<>(new SubForm("AHCM")));
+		    add(new SubList<>(new SubForm("AHCF")));
+		    add(new SubList<>(new SubForm("FTSM")));
+		    add(new SubList<>(new SubForm("FTSF")));
+		    add(new SubList<>(new SubForm("DFTM")));
+		    add(new SubList<>(new SubForm("DFTF")));
 		    add(new SubList<>(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(new SubData(Type.TINI));
-			    add(SubString.getNew(Type.TINT, true));
-			    add(new SubData(Type.TINP));
-			    add(new SubForm(Type.TIND));
+			    add(new SubData("TINI"));
+			    add(SubString.getNew("TINT", true));
+			    add(new SubData("TINP"));
+			    add(new SubForm("TIND"));
 			    add(new SubList<>(new SubShell(new SubPrototype() {
 				@Override
 				protected void addRecords() {
-				    add(new SubData(Type.TINC));
-				    add(new SubData(Type.TINV));
-				    add(new SubData(Type.TIRS));
+				    add(new SubData("TINC"));
+				    add(new SubData("TINV"));
+				    add(new SubData("TIRS"));
 				}
 			    })));
 			}
 		    })));
 		}
 	    }, false)));
-	    add(new SubForm(Type.NAM8));
-	    add(new SubForm(Type.RNAM));
+	    add(new SubForm("NAM8"));
+	    add(new SubForm("RNAM"));
 	}
     };
 
@@ -197,7 +196,7 @@ public class RACE extends MajorRecordDescription {
 	byte[] fluff6 = new byte[4];
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -267,7 +266,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -446,8 +445,8 @@ public class RACE extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("RACE");
     }
 
     @Override
@@ -457,7 +456,7 @@ public class RACE extends MajorRecordDescription {
 
     // Get / set
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**
@@ -483,7 +482,7 @@ public class RACE extends MajorRecordDescription {
      * @return FormID of the ARMO record that is worn.
      */
     public FormID getWornArmor() {
-	return subRecords.getSubForm(Type.WNAM).getForm();
+	return subRecords.getSubForm("WNAM").getForm();
     }
 
     /**
@@ -491,7 +490,7 @@ public class RACE extends MajorRecordDescription {
      * @param id FormID to set the worn ARMO record to.
      */
     public void setWornArmor(FormID id) {
-	subRecords.setSubForm(Type.WNAM, id);
+	subRecords.setSubForm("WNAM", id);
     }
 
     /**
@@ -499,7 +498,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArrayList<FormID> getSpells() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.SPLO));
+	return SubList.subFormToPublic(subRecords.getSubList("SPLO"));
     }
 
     /**
@@ -507,7 +506,7 @@ public class RACE extends MajorRecordDescription {
      * @param spell
      */
     public void addSpell(FormID spell) {
-	subRecords.getSubList(Type.SPLO).add(new SubForm(Type.SPLO, spell));
+	subRecords.getSubList("SPLO").add(new SubForm("SPLO", spell));
     }
 
     /**
@@ -515,14 +514,14 @@ public class RACE extends MajorRecordDescription {
      * @param spell
      */
     public void removeSpell(FormID spell) {
-	subRecords.getSubList(Type.SPLO).remove(new SubForm(Type.SPLO, spell));
+	subRecords.getSubList("SPLO").remove(new SubForm("SPLO", spell));
     }
 
     /**
      *
      */
     public void clearSpells() {
-	subRecords.getSubList(Type.SPLO).clear();
+	subRecords.getSubList("SPLO").clear();
     }
 
     /**
@@ -531,16 +530,16 @@ public class RACE extends MajorRecordDescription {
      * @param model
      */
     public void setModel(Gender gender, String model) {
-	getMFData(gender).subRecords.setSubString(Type.ANAM, model);
+	getMFData(gender).subRecords.setSubString("ANAM", model);
     }
 
     SubShell getMFData(Gender gender) {
-	SubMarkerSet<SubShell> MFNAM = subRecords.getSubMarker(Type.ANAM);
+	SubMarkerSet<SubShell> MFNAM = subRecords.getSubMarker("ANAM");
 	switch (gender) {
 	    case MALE:
-		return MFNAM.get(Type.MNAM);
+		return MFNAM.get("MNAM");
 	    default:
-		return MFNAM.get(Type.FNAM);
+		return MFNAM.get("FNAM");
 	}
     }
 
@@ -550,7 +549,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getModel(Gender gender) {
-	return getMFData(gender).subRecords.getSubString(Type.ANAM).print();
+	return getMFData(gender).subRecords.getSubString("ANAM").print();
     }
 
     /**
@@ -559,7 +558,7 @@ public class RACE extends MajorRecordDescription {
      * @param voice
      */
     public void setVoiceType(Gender gender, FormID voice) {
-	SubFormArray VTCK = (SubFormArray) subRecords.get(Type.VTCK);
+	SubFormArray VTCK = (SubFormArray) subRecords.get("VTCK");
 	switch (gender) {
 	    case MALE:
 		VTCK.IDs.set(0, voice);
@@ -576,7 +575,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getVoiceType(Gender gender) {
-	SubFormArray VTCK = (SubFormArray) subRecords.get(Type.VTCK);
+	SubFormArray VTCK = (SubFormArray) subRecords.get("VTCK");
 	switch (gender) {
 	    case MALE:
 		return VTCK.IDs.get(0);
@@ -591,7 +590,7 @@ public class RACE extends MajorRecordDescription {
      * @param color
      */
     public void setHairColor(Gender gender, FormID color) {
-	SubFormArray HCLF = (SubFormArray) subRecords.get(Type.HCLF);
+	SubFormArray HCLF = (SubFormArray) subRecords.get("HCLF");
 	switch (gender) {
 	    case MALE:
 		HCLF.IDs.set(0, color);
@@ -608,7 +607,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getHairColor(Gender gender) {
-	SubFormArray HCLF = (SubFormArray) subRecords.get(Type.HCLF);
+	SubFormArray HCLF = (SubFormArray) subRecords.get("HCLF");
 	switch (gender) {
 	    case MALE:
 		return HCLF.IDs.get(0);
@@ -623,7 +622,7 @@ public class RACE extends MajorRecordDescription {
      * @param part
      */
     public void setDecapHeadPart(Gender gender, FormID part) {
-	SubFormArray DNAM = (SubFormArray) subRecords.get(Type.DNAM);
+	SubFormArray DNAM = (SubFormArray) subRecords.get("DNAM");
 	switch (gender) {
 	    case MALE:
 		DNAM.IDs.set(0, part);
@@ -640,7 +639,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getDecapHeadPart(Gender gender) {
-	SubFormArray DNAM = (SubFormArray) subRecords.get(Type.DNAM);
+	SubFormArray DNAM = (SubFormArray) subRecords.get("DNAM");
 	switch (gender) {
 	    case MALE:
 		return DNAM.IDs.get(0);
@@ -1019,7 +1018,7 @@ public class RACE extends MajorRecordDescription {
      *
      */
     public void clearAttackData() {
-	subRecords.getSubList(Type.ATKD).clear();
+	subRecords.getSubList("ATKD").clear();
     }
 
     /**
@@ -1027,7 +1026,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getMaterialType() {
-	return subRecords.getSubForm(Type.NAM4).getForm();
+	return subRecords.getSubForm("NAM4").getForm();
     }
 
     /**
@@ -1035,7 +1034,7 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setMaterialType(FormID id) {
-	subRecords.setSubForm(Type.NAM4, id);
+	subRecords.setSubForm("NAM4", id);
     }
 
     /**
@@ -1043,7 +1042,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getImpactDataSet() {
-	return subRecords.getSubForm(Type.NAM5).getForm();
+	return subRecords.getSubForm("NAM5").getForm();
     }
 
     /**
@@ -1051,7 +1050,7 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setImpactDataSet(FormID id) {
-	subRecords.setSubForm(Type.NAM5, id);
+	subRecords.setSubForm("NAM5", id);
     }
 
     /**
@@ -1059,7 +1058,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getDecapitationFX() {
-	return subRecords.getSubForm(Type.NAM7).getForm();
+	return subRecords.getSubForm("NAM7").getForm();
     }
 
     /**
@@ -1067,7 +1066,7 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setDecapitationFX(FormID id) {
-	subRecords.setSubForm(Type.NAM7, id);
+	subRecords.setSubForm("NAM7", id);
     }
 
     /**
@@ -1075,7 +1074,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getOpenLootSound() {
-	return subRecords.getSubForm(Type.ONAM).getForm();
+	return subRecords.getSubForm("ONAM").getForm();
     }
 
     /**
@@ -1083,7 +1082,7 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setOpenLootSound(FormID id) {
-	subRecords.setSubForm(Type.ONAM, id);
+	subRecords.setSubForm("ONAM", id);
     }
 
     /**
@@ -1091,7 +1090,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getCloseLootSound() {
-	return subRecords.getSubForm(Type.LNAM).getForm();
+	return subRecords.getSubForm("LNAM").getForm();
     }
 
     /**
@@ -1099,7 +1098,7 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setCloseLootSound(FormID id) {
-	subRecords.setSubForm(Type.LNAM, id);
+	subRecords.setSubForm("LNAM", id);
     }
 
     /**
@@ -1107,7 +1106,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public FormID getUnarmedEquipSlot() {
-	return subRecords.getSubForm(Type.UNES).getForm();
+	return subRecords.getSubForm("UNES").getForm();
     }
 
     /**
@@ -1115,26 +1114,26 @@ public class RACE extends MajorRecordDescription {
      * @param id
      */
     public void setUnarmedEquipSlot(FormID id) {
-	subRecords.setSubForm(Type.UNES, id);
+	subRecords.setSubForm("UNES", id);
     }
 
     /**
      *
      */
     public void clearTinting() {
-	subRecords.getSubList(Type.NAM0).clear();
+	subRecords.getSubList("NAM0").clear();
     }
 
     SubMarkerSet<SubShell> getEGT() {
-	return subRecords.getSubShell(Type.NAM1).subRecords.getSubMarker(Type.INDX);
+	return subRecords.getSubShell("NAM1").subRecords.getSubMarker("INDX");
     }
 
     SubShell getEGTmodel(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return getEGT().set.get(Type.MNAM);
+		return getEGT().set.get("MNAM");
 	    default:
-		return getEGT().set.get(Type.FNAM);
+		return getEGT().set.get("FNAM");
 	}
     }
 
@@ -1144,7 +1143,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getLightingModels(Gender gender) {
-	return getEGTmodel(gender).subRecords.getSubString(Type.MODL).print();
+	return getEGTmodel(gender).subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -1153,19 +1152,19 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setLightingModels(Gender gender, String s) {
-	getEGTmodel(gender).subRecords.setSubString(Type.MODL, s);
+	getEGTmodel(gender).subRecords.setSubString("MODL", s);
     }
 
     SubMarkerSet<SubShell> getHKX() {
-	return subRecords.getSubShell(Type.NAM3).subRecords.getSubMarker(Type.MODL);
+	return subRecords.getSubShell("NAM3").subRecords.getSubMarker("MODL");
     }
 
     SubShell getHKXmodel(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return getHKX().set.get(Type.MNAM);
+		return getHKX().set.get("MNAM");
 	    default:
-		return getHKX().set.get(Type.FNAM);
+		return getHKX().set.get("FNAM");
 	}
     }
 
@@ -1175,7 +1174,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public String getPhysicsModels(Gender gender) {
-	return getHKXmodel(gender).subRecords.getSubString(Type.MODL).print();
+	return getHKXmodel(gender).subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -1184,7 +1183,7 @@ public class RACE extends MajorRecordDescription {
      * @param s
      */
     public void setPhysicsModels(Gender gender, String s) {
-	getHKXmodel(gender).subRecords.setSubString(Type.MODL, s);
+	getHKXmodel(gender).subRecords.setSubString("MODL", s);
     }
 
     /**
@@ -1192,7 +1191,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArrayList<FormID> getEquipSlots() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.QNAM));
+	return SubList.subFormToPublic(subRecords.getSubList("QNAM"));
     }
 
     /**
@@ -1200,7 +1199,7 @@ public class RACE extends MajorRecordDescription {
      * @param in
      */
     public void addEquipSlot(FormID in) {
-	subRecords.getSubList(Type.QNAM).add(new SubForm(Type.QNAM, in));
+	subRecords.getSubList("QNAM").add(new SubForm("QNAM", in));
     }
 
     /**
@@ -1208,14 +1207,14 @@ public class RACE extends MajorRecordDescription {
      * @param in
      */
     public void removeEquipSlot(FormID in) {
-	subRecords.getSubList(Type.QNAM).remove(new SubForm(Type.QNAM, in));
+	subRecords.getSubList("QNAM").remove(new SubForm("QNAM", in));
     }
 
     /**
      *
      */
     public void clearEquipSlots() {
-	subRecords.getSubList(Type.QNAM).clear();
+	subRecords.getSubList("QNAM").clear();
     }
 
     /**

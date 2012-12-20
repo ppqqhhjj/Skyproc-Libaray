@@ -6,12 +6,10 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
 import lev.LFlags;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -22,67 +20,66 @@ import skyproc.exceptions.BadRecord;
 public class QUST extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.QUST}));
     static SubPrototype ALSTALLSproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(SubString.getNew(Type.ALID, true));
-	    add(new SubFlag(Type.FNAM, 4));
-	    add(new SubForm(Type.ALUA));
-	    add(new SubForm(Type.ALCO));
-	    add(new SubList<>(new SubForm(Type.ALEQ)));
-	    add(SubString.getNew(Type.ALFE, false));
-	    add(new SubForm(Type.ALFL));
-	    add(new SubForm(Type.ALFR));
-	    add(new SubForm(Type.ALRT));
-	    add(new SubInt(Type.ALFD));
+	    add(SubString.getNew("ALID", true));
+	    add(new SubFlag("FNAM", 4));
+	    add(new SubForm("ALUA"));
+	    add(new SubForm("ALCO"));
+	    add(new SubList<>(new SubForm("ALEQ")));
+	    add(SubString.getNew("ALFE", false));
+	    add(new SubForm("ALFL"));
+	    add(new SubForm("ALFR"));
+	    add(new SubForm("ALRT"));
+	    add(new SubInt("ALFD"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubInt(Type.ALCA));
-	    add(new SubInt(Type.ALCL));
-	    add(new SubInt(Type.ALEA));
-	    add(new SubInt(Type.ALFA));
-	    add(new SubInt(Type.ALNA));
-	    add(new SubInt(Type.ALNT));
-	    add(new SubForm(Type.VTCK));
-	    forceExport(Type.VTCK);
-	    add(new SubData(Type.ALED));
-	    add(new SubForm(Type.ALDN));
-	    add(new SubList<>(new SubForm(Type.ALFC)));
-	    add(new SubList<>(new SubInt(Type.ALFI)));
-	    add(new SubList<>(new SubForm(Type.ALPC)));
-	    add(new SubList<>(new SubForm(Type.ALSP)));
-	    add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
-	    add(new SubForm(Type.SPOR));
-	    add(new SubForm(Type.ECOR));
-	    add(new SubForm(Type.KNAM));
+	    add(new SubInt("ALCA"));
+	    add(new SubInt("ALCL"));
+	    add(new SubInt("ALEA"));
+	    add(new SubInt("ALFA"));
+	    add(new SubInt("ALNA"));
+	    add(new SubInt("ALNT"));
+	    add(new SubForm("VTCK"));
+	    forceExport("VTCK");
+	    add(new SubData("ALED"));
+	    add(new SubForm("ALDN"));
+	    add(new SubList<>(new SubForm("ALFC")));
+	    add(new SubList<>(new SubInt("ALFI")));
+	    add(new SubList<>(new SubForm("ALPC")));
+	    add(new SubList<>(new SubForm("ALSP")));
+	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
+	    add(new SubForm("SPOR"));
+	    add(new SubForm("ECOR"));
+	    add(new SubForm("KNAM"));
 	    add(new KeywordSet());
-	    add(new SubInt(Type.NAM0));
-	    add(new SubInt(Type.QTGL));
+	    add(new SubInt("NAM0"));
+	    add(new SubInt("QTGL"));
 	}
     };
     static final SubPrototype aliasLocationProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubInt(Type.ALLS));
+	    add(new SubInt("ALLS"));
 	    mergeIn(ALSTALLSproto);
 	}
     };
     static final SubPrototype aliasReferenceProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubInt(Type.ALST));
+	    add(new SubInt("ALST"));
 	    mergeIn(ALSTALLSproto);
 	}
     };
     static final SubPrototype questLogEntryProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubFlag(Type.QSDT, 1));
-	    add(new SubForm(Type.NAM0));
-	    add(SubString.getNew(Type.CNAM, true));
-	    add(new SubData(Type.SCHR));
-	    add(new SubForm(Type.QNAM));
-	    add(SubString.getNew(Type.SCTX, false));
+	    add(new SubFlag("QSDT", 1));
+	    add(new SubForm("NAM0"));
+	    add(SubString.getNew("CNAM", true));
+	    add(new SubData("SCHR"));
+	    add(new SubForm("QNAM"));
+	    add(SubString.getNew("SCTX", false));
 	    add(new SubList<>(new Condition()));
 	}
     };
@@ -103,26 +100,26 @@ public class QUST extends MajorRecordNamed {
     static final SubPrototype questObjectiveProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubInt(Type.QOBJ, 2));
-	    add(new SubData(Type.FNAM));
-	    add(new SubStringPointer(Type.NNAM, SubStringPointer.Files.DLSTRINGS));
+	    add(new SubInt("QOBJ", 2));
+	    add(new SubData("FNAM"));
+	    add(new SubStringPointer("NNAM", SubStringPointer.Files.DLSTRINGS));
 	    add(new SubList<>(new QuestTarget()));
 	}
     };
     static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    reposition(Type.FULL);
+	    after(new ScriptPackage(), "EDID");
+	    reposition("FULL");
 	    add(new DNAM());
-	    add(SubString.getNew(Type.ENAM, false));
-	    add(new SubForm(Type.QTGL));
-	    add(SubString.getNew(Type.FLTR, true));
+	    add(SubString.getNew("ENAM", false));
+	    add(new SubForm("QTGL"));
+	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
-	    add(new SubData(Type.NEXT));
-	    forceExport(Type.NEXT);
+	    add(new SubData("NEXT"));
+	    forceExport("NEXT");
 	    add(new SubList<>(new QuestStage()));
-	    add(new SubInt(Type.ANAM));
+	    add(new SubInt("ANAM"));
 	    add(new SubList<>(new QuestObjective()));
 	    add(new SubList<>(new AliasLocation()));
 	    add(new SubList<>(new AliasReference()));
@@ -136,11 +133,11 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	public void setName(String name) {
-	    subRecords.setSubStringPointer(Type.ALID, name);
+	    subRecords.setSubStringPointer("ALID", name);
 	}
 
 	public String getName () {
-	    return subRecords.getSubString(Type.ALID).print();
+	    return subRecords.getSubString("ALID").print();
 	}
     }
 
@@ -156,11 +153,11 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	public void setLocation(int loc) {
-	    subRecords.setSubInt(Type.ALLS, loc);
+	    subRecords.setSubInt("ALLS", loc);
 	}
 
 	public int getLocation() {
-	    return subRecords.getSubInt(Type.ALLS).get();
+	    return subRecords.getSubInt("ALLS").get();
 	}
     }
 
@@ -176,11 +173,11 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	public void setReference(int ref) {
-	    subRecords.setSubInt(Type.ALST, ref);
+	    subRecords.setSubInt("ALST", ref);
 	}
 
 	public int getReference() {
-	    return subRecords.getSubInt(Type.ALST).get();
+	    return subRecords.getSubInt("ALST").get();
 	}
     }
 
@@ -194,11 +191,11 @@ public class QUST extends MajorRecordNamed {
 	int questType = 0;
 
 	DNAM() {
-	    super(Type.DNAM);
+	    super("DNAM");
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DNAM();
 	}
 
@@ -236,7 +233,7 @@ public class QUST extends MajorRecordNamed {
 	LFlags flags = new LFlags(1);
 
 	INDX() {
-	    super(Type.INDX);
+	    super("INDX");
 	}
 
 	@Override
@@ -254,7 +251,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new INDX();
 	}
 
@@ -271,7 +268,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	INDX getINDX() {
-	    return (INDX) subRecords.get(Type.INDX);
+	    return (INDX) subRecords.get("INDX");
 	}
 
 	public int getJournalIndex() {
@@ -291,11 +288,11 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	public ArrayList<QuestLogEntry> getLogEntries() {
-	    return subRecords.getSubList(Type.QSDT).toPublic();
+	    return subRecords.getSubList("QSDT").toPublic();
 	}
 
 	public void addLogEntry(QuestLogEntry entry) {
-	    subRecords.getSubList(Type.QSDT).add(entry);
+	    subRecords.getSubList("QSDT").add(entry);
 	}
     }
 
@@ -306,16 +303,16 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new QuestLogEntry();
 	}
 
 	public void set(QuestLogFlags flag, boolean on) {
-	    subRecords.setSubFlag(Type.QSDT, flag.ordinal(), on);
+	    subRecords.setSubFlag("QSDT", flag.ordinal(), on);
 	}
 
 	public boolean get(QuestLogFlags flag) {
-	    return subRecords.getSubFlag(Type.QSDT).is(flag.ordinal());
+	    return subRecords.getSubFlag("QSDT").is(flag.ordinal());
 	}
 
 	/**
@@ -323,7 +320,7 @@ public class QUST extends MajorRecordNamed {
 	 * @return
 	 */
 	public ArrayList<Condition> getConditions() {
-	    return subRecords.getSubList(Type.CTDA).toPublic();
+	    return subRecords.getSubList("CTDA").toPublic();
 	}
 
 	/**
@@ -331,7 +328,7 @@ public class QUST extends MajorRecordNamed {
 	 * @param c
 	 */
 	public void addCondition(Condition c) {
-	    subRecords.getSubList(Type.CTDA).add(c);
+	    subRecords.getSubList("CTDA").add(c);
 	}
 
 	/**
@@ -339,7 +336,7 @@ public class QUST extends MajorRecordNamed {
 	 * @param c
 	 */
 	public void removeCondition(Condition c) {
-	    subRecords.getSubList(Type.CTDA).remove(c);
+	    subRecords.getSubList("CTDA").remove(c);
 	}
     }
 
@@ -356,32 +353,32 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new QuestObjective();
 	}
 
 	public final void setIndex(int index) {
-	    subRecords.setSubInt(Type.QOBJ, index);
+	    subRecords.setSubInt("QOBJ", index);
 	}
 
 	public int getIndex() {
-	    return subRecords.getSubInt(Type.QOBJ).get();
+	    return subRecords.getSubInt("QOBJ").get();
 	}
 
 	public final void setName(String in) {
-	    subRecords.setSubStringPointer(Type.NNAM, in);
+	    subRecords.setSubStringPointer("NNAM", in);
 	}
 
 	public String getName() {
-	    return subRecords.getSubStringPointer(Type.NNAM).print();
+	    return subRecords.getSubStringPointer("NNAM").print();
 	}
 
 	public ArrayList<QuestTarget> getTargets() {
-	    return subRecords.getSubList(Type.QSTA).toPublic();
+	    return subRecords.getSubList("QSTA").toPublic();
 	}
 
 	public void addTarget(QuestTarget target) {
-	    subRecords.getSubList(Type.QSTA).add(target);
+	    subRecords.getSubList("QSTA").add(target);
 	}
     }
 
@@ -391,7 +388,7 @@ public class QUST extends MajorRecordNamed {
 	LFlags flags = new LFlags(4);
 
 	QuestTargetData() {
-	    super(Type.QSDT);
+	    super("QSDT");
 	}
 
 	@Override
@@ -409,7 +406,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new QuestTargetData();
 	}
 
@@ -431,12 +428,12 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new QuestTarget();
 	}
 
 	QuestTargetData getData() {
-	    return (QuestTargetData) subRecords.get(Type.QSDT);
+	    return (QuestTargetData) subRecords.get("QSDT");
 	}
 
 	public final void setTargetAlias(int aliasID) {
@@ -453,7 +450,7 @@ public class QUST extends MajorRecordNamed {
 	 * @return
 	 */
 	public ArrayList<Condition> getConditions() {
-	    return subRecords.getSubList(Type.CTDA).toPublic();
+	    return subRecords.getSubList("CTDA").toPublic();
 	}
 
 	/**
@@ -461,7 +458,7 @@ public class QUST extends MajorRecordNamed {
 	 * @param c
 	 */
 	public void addCondition(Condition c) {
-	    subRecords.getSubList(Type.CTDA).add(c);
+	    subRecords.getSubList("CTDA").add(c);
 	}
 
 	/**
@@ -469,7 +466,7 @@ public class QUST extends MajorRecordNamed {
 	 * @param c
 	 */
 	public void removeCondition(Condition c) {
-	    subRecords.getSubList(Type.CTDA).remove(c);
+	    subRecords.getSubList("CTDA").remove(c);
 	}
     }
 
@@ -495,11 +492,11 @@ public class QUST extends MajorRecordNamed {
     QUST(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	DNAM dnam = (DNAM) subRecords.get(Type.DNAM);
+	DNAM dnam = (DNAM) subRecords.get("DNAM");
 	dnam.flags1.set(0, true);
 	dnam.flags1.set(4, true);
 	dnam.flags2.set(0, true);
-	subRecords.getSubInt(Type.ANAM).set(0);
+	subRecords.getSubInt("ANAM").set(0);
     }
 
     @Override
@@ -508,8 +505,8 @@ public class QUST extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("QUST");
     }
 
     /**
@@ -525,7 +522,7 @@ public class QUST extends MajorRecordNamed {
      * @return
      */
     public ArrayList<Condition> getConditions() {
-	return subRecords.getSubList(Type.CTDA).toPublic();
+	return subRecords.getSubList("CTDA").toPublic();
     }
 
     /**
@@ -533,7 +530,7 @@ public class QUST extends MajorRecordNamed {
      * @param c
      */
     public void addCondition(Condition c) {
-	subRecords.getSubList(Type.CTDA).add(c);
+	subRecords.getSubList("CTDA").add(c);
     }
 
     /**
@@ -541,22 +538,22 @@ public class QUST extends MajorRecordNamed {
      * @param c
      */
     public void removeCondition(Condition c) {
-	subRecords.getSubList(Type.CTDA).remove(c);
+	subRecords.getSubList("CTDA").remove(c);
     }
 
     public ArrayList<QuestStage> getQuestStages() {
-	return subRecords.getSubList(Type.INDX).toPublic();
+	return subRecords.getSubList("INDX").toPublic();
     }
 
     public void addQuestStage(QuestStage stage) {
-	subRecords.getSubList(Type.INDX).add(stage);
+	subRecords.getSubList("INDX").add(stage);
     }
 
     public ArrayList<AliasReference> getReferenceAliases() {
-	return subRecords.getSubList(Type.ALST).toPublic();
+	return subRecords.getSubList("ALST").toPublic();
     }
 
     public ArrayList<AliasLocation> getLocationAliases() {
-	return subRecords.getSubList(Type.ALLS).toPublic();
+	return subRecords.getSubList("ALLS").toPublic();
     }
 }

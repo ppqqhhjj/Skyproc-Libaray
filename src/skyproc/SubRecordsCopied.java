@@ -27,7 +27,7 @@ class SubRecordsCopied extends SubRecords {
     @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> iter = new ArrayList<>();
-	for (Type t : orig.getTopLevelTypes()) {
+	for (String t : orig.getTopLevelTypes()) {
 	    if (contains(t)) {
 		iter.add(get(t));
 	    }
@@ -53,7 +53,7 @@ class SubRecordsCopied extends SubRecords {
 
     public ArrayList<SubRecord> iteratorNoCopy() {
 	ArrayList<SubRecord> out = new ArrayList<>();
-	for (Type t : orig.getTopLevelTypes()) {
+	for (String t : orig.getTopLevelTypes()) {
 	    if (contains(t)) {
 		SubRecord s;
 		if (map.containsKey(t)) {
@@ -70,12 +70,12 @@ class SubRecordsCopied extends SubRecords {
     }
 
     @Override
-    public boolean contains(Type t) {
+    public boolean contains(String t) {
 	return orig.contains(t) || map.containsKey(t);
     }
 
     @Override
-    public SubRecord get(Type in) {
+    public SubRecord get(String in) {
 	if (!map.containsKey(in)) {
 	    map.put(in, (SubRecord) Ln.deepCopy(orig.get(in)));
 	}
@@ -83,12 +83,12 @@ class SubRecordsCopied extends SubRecords {
     }
 
     @Override
-    public ArrayList<Type> getTypes() {
+    public ArrayList<String> getTypes() {
 	return orig.getTypes();
     }
 
     @Override
-    public ArrayList<Type> getTopLevelTypes() {
+    public ArrayList<String> getTopLevelTypes() {
 	return orig.getTopLevelTypes();
     }
 }

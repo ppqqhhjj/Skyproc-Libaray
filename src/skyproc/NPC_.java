@@ -3,7 +3,6 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.exceptions.BadParameter;
@@ -14,62 +13,61 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class NPC_ extends Actor implements Serializable {
+public class NPC_ extends MajorRecordNamed implements Serializable {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NPC_}));
     static final SubPrototype NPC_proto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    add(new SubData(Type.OBND));
+	    after(new ScriptPackage(), "EDID");
+	    add(new SubData("OBND"));
 	    add(new ACBS());
-	    add(new SubList<>(new SubFormInt(Type.SNAM)));
-	    add(new SubForm(Type.INAM));
-	    add(new SubForm(Type.VTCK));
-	    add(new SubForm(Type.TPLT));
-	    add(new SubForm(Type.RNAM));
-	    add(new SubListCounted<>(Type.SPCT, 4, new SubForm(Type.SPLO)));
-	    add(new SubData(Type.DEST));
-	    add(new SubData(Type.DSTD));
-	    add(new SubData(Type.DSTF));
-	    add(new SubForm(Type.WNAM));
-	    add(new SubForm(Type.ANAM));
-	    add(new SubForm(Type.ATKR));
+	    add(new SubList<>(new SubFormInt("SNAM")));
+	    add(new SubForm("INAM"));
+	    add(new SubForm("VTCK"));
+	    add(new SubForm("TPLT"));
+	    add(new SubForm("RNAM"));
+	    add(new SubListCounted<>("SPCT", 4, new SubForm("SPLO")));
+	    add(new SubData("DEST"));
+	    add(new SubData("DSTD"));
+	    add(new SubData("DSTF"));
+	    add(new SubForm("WNAM"));
+	    add(new SubForm("ANAM"));
+	    add(new SubForm("ATKR"));
 	    add(new ATKD());
-	    add(SubString.getNew(Type.ATKE, true));
-	    add(new SubForm(Type.SPOR));
-	    add(new SubForm(Type.GWOR));
-	    add(new SubForm(Type.OCOR));
-	    add(new SubForm(Type.ECOR));
-	    add(new SubListCounted<>(Type.PRKZ, 4, new SubFormInt(Type.PRKR)));
-	    add(new SubListCounted<>(Type.COCT, 4, new SubFormInt(Type.CNTO)));
+	    add(SubString.getNew("ATKE", true));
+	    add(new SubForm("SPOR"));
+	    add(new SubForm("GWOR"));
+	    add(new SubForm("OCOR"));
+	    add(new SubForm("ECOR"));
+	    add(new SubListCounted<>("PRKZ", 4, new SubFormInt("PRKR")));
+	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
 	    add(new COED());
 	    add(new AIDT());
-	    add(new SubList<>(new SubForm(Type.PKID)));
+	    add(new SubList<>(new SubForm("PKID")));
 	    add(new KeywordSet());
-	    add(new SubForm(Type.CNAM));
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.SHRT, true));
-	    add(new SubData(Type.DATA));
-	    forceExport(Type.DATA);
+	    add(new SubForm("CNAM"));
+	    reposition("FULL");
+	    add(SubString.getNew("SHRT", true));
+	    add(new SubData("DATA"));
+	    forceExport("DATA");
 	    add(new DNAM());
-	    add(new SubList<>(new SubForm(Type.PNAM)));
-	    add(new SubForm(Type.HCLF));
-	    add(new SubForm(Type.ZNAM));
-	    add(new SubForm(Type.GNAM));
-	    add(new SubData(Type.NAM5));
-	    add(new SubFloat(Type.NAM6));
-	    add(new SubFloat(Type.NAM7));
-	    add(new SubInt(Type.NAM8));
-	    add(new SubForm(Type.CSCR));
+	    add(new SubList<>(new SubForm("PNAM")));
+	    add(new SubForm("HCLF"));
+	    add(new SubForm("ZNAM"));
+	    add(new SubForm("GNAM"));
+	    add(new SubData("NAM5"));
+	    add(new SubFloat("NAM6"));
+	    add(new SubFloat("NAM7"));
+	    add(new SubInt("NAM8"));
+	    add(new SubForm("CSCR"));
 	    add(new SubList<>(new SoundPackage()));
-	    add(new SubForm(Type.DOFT));
-	    add(new SubForm(Type.SOFT));
-	    add(new SubForm(Type.DPLT));
-	    add(new SubForm(Type.CRIF));
-	    add(new SubForm(Type.FTST));
-	    add(new SubRGB(Type.QNAM));
+	    add(new SubForm("DOFT"));
+	    add(new SubForm("SOFT"));
+	    add(new SubForm("DPLT"));
+	    add(new SubForm("CRIF"));
+	    add(new SubForm("FTST"));
+	    add(new SubRGB("QNAM"));
 	    add(new NAM9());
 	    add(new NAMA());
 	    add(new SubList<>(new TintLayer()));
@@ -84,7 +82,7 @@ public class NPC_ extends Actor implements Serializable {
 	static SubPrototype soundPackageProto = new SubPrototype() {
 	    @Override
 	    protected void addRecords() {
-		add(new SubInt(Type.CSDT));
+		add(new SubInt("CSDT"));
 		add(new SubList<>(new SoundPair()));
 	    }
 	};
@@ -104,7 +102,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type_) {
+	SubRecord getNew(String type_) {
 	    return new SoundPackage();
 	}
 
@@ -113,7 +111,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param loc
 	 */
 	public final void setLocation(SoundLocation loc) {
-	    subRecords.setSubInt(Type.CSDT, loc.ordinal());
+	    subRecords.setSubInt("CSDT", loc.ordinal());
 	}
 
 	/**
@@ -121,7 +119,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public SoundLocation getLocation() {
-	    SubInt csdt = subRecords.getSubInt(Type.CSDT);
+	    SubInt csdt = subRecords.getSubInt("CSDT");
 	    if (csdt.get() < SoundLocation.values().length) {
 		return SoundLocation.values()[csdt.get()];
 	    } else {
@@ -134,7 +132,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public ArrayList<SoundPair> getSoundPairs() {
-	    return new ArrayList<>(subRecords.getSubList(Type.CSDI).toPublic());
+	    return new ArrayList<>(subRecords.getSubList("CSDI").toPublic());
 	}
 
 	/**
@@ -142,7 +140,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param pair
 	 */
 	public void addSoundPair(SoundPair pair) {
-	    subRecords.getSubList(Type.CSDI).add(pair);
+	    subRecords.getSubList("CSDI").add(pair);
 	}
     }
 
@@ -154,8 +152,8 @@ public class NPC_ extends Actor implements Serializable {
 	static SubPrototype soundPairProto = new SubPrototype() {
 	    @Override
 	    protected void addRecords() {
-		add(new SubForm(Type.CSDI));
-		add(new SubInt(Type.CSDC, 1));
+		add(new SubForm("CSDI"));
+		add(new SubInt("CSDC", 1));
 	    }
 	};
 
@@ -185,7 +183,7 @@ public class NPC_ extends Actor implements Serializable {
 		chance = 100;
 	    }
 
-	    subRecords.setSubInt(Type.CSDC, chance);
+	    subRecords.setSubInt("CSDC", chance);
 	}
 
 	/**
@@ -193,7 +191,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getChance() {
-	    return subRecords.getSubInt(Type.CSDC).get();
+	    return subRecords.getSubInt("CSDC").get();
 	}
 
 	/**
@@ -201,7 +199,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param sound
 	 */
 	public final void setSound(FormID sound) {
-	    subRecords.setSubForm(Type.CSDI, sound);
+	    subRecords.setSubForm("CSDI", sound);
 	}
 
 	/**
@@ -209,11 +207,11 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public FormID getSound() {
-	    return subRecords.getSubForm(Type.CSDI).getForm();
+	    return subRecords.getSubForm("CSDI").getForm();
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new SoundPair();
 	}
     }
@@ -226,10 +224,10 @@ public class NPC_ extends Actor implements Serializable {
 	static SubPrototype tintPrototype = new SubPrototype() {
 	    @Override
 	    protected void addRecords() {
-		add(new SubInt(Type.TINI, 2));
-		add(new SubRGBshort(Type.TINC));
-		add(new SubFloat(Type.TINV));
-		add(new SubInt(Type.TIAS, 2));
+		add(new SubInt("TINI", 2));
+		add(new SubRGBshort("TINC"));
+		add(new SubFloat("TINV"));
+		add(new SubInt("TIAS", 2));
 	    }
 	};
 
@@ -238,7 +236,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type_) {
+	SubRecord getNew(String type_) {
 	    return new TintLayer();
 	}
 
@@ -247,7 +245,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param in
 	 */
 	public void setIndex(int in) {
-	    subRecords.setSubInt(Type.TINI, in);
+	    subRecords.setSubInt("TINI", in);
 	}
 
 	/**
@@ -255,7 +253,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getIndex() {
-	    return subRecords.getSubInt(Type.TINI).get();
+	    return subRecords.getSubInt("TINI").get();
 	}
 
 	/**
@@ -264,7 +262,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param value
 	 */
 	public void setColor(RGBA color, short value) {
-	    subRecords.setSubRGBshort(Type.TINC, color, value);
+	    subRecords.setSubRGBshort("TINC", color, value);
 	}
 
 	/**
@@ -273,7 +271,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public short getColor(RGBA color) {
-	    return subRecords.getSubRGBshort(Type.TINC).get(color);
+	    return subRecords.getSubRGBshort("TINC").get(color);
 	}
 
 	/**
@@ -281,7 +279,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param value
 	 */
 	public void setInterpolation(float value) {
-	    subRecords.setSubFloat(Type.TINV, value);
+	    subRecords.setSubFloat("TINV", value);
 	}
 
 	/**
@@ -289,7 +287,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public float getInterpolation() {
-	    return subRecords.getSubFloat(Type.TINV).get();
+	    return subRecords.getSubFloat("TINV").get();
 	}
 
 	/**
@@ -297,7 +295,7 @@ public class NPC_ extends Actor implements Serializable {
 	 * @param value
 	 */
 	public void setPreset(int value) {
-	    subRecords.setSubInt(Type.TIAS, value);
+	    subRecords.setSubInt("TIAS", value);
 	}
 
 	/**
@@ -305,11 +303,11 @@ public class NPC_ extends Actor implements Serializable {
 	 * @return
 	 */
 	public int getPreset() {
-	    return subRecords.getSubInt(Type.TIAS).get();
+	    return subRecords.getSubInt("TIAS").get();
 	}
     }
 
-    static class DNAM extends SubRecordTyped implements Serializable {
+    static class DNAM extends SubRecord implements Serializable {
 
 	byte[] skills = new byte[36];
 	int health = 1;
@@ -321,7 +319,7 @@ public class NPC_ extends Actor implements Serializable {
 	byte[] fluff2 = new byte[3];
 
 	DNAM() {
-	    super(Type.DNAM);
+	    super();
 	}
 
 	DNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -330,7 +328,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DNAM();
 	}
 
@@ -395,9 +393,14 @@ public class NPC_ extends Actor implements Serializable {
 	    out.write(gearedUpWeapons, 1);
 	    out.write(fluff2, 3);
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("DNAM");
+	}
     }
 
-    static class ACBS extends SubRecordTyped implements Serializable {
+    static class ACBS extends SubRecord implements Serializable {
 
 	LFlags ACBSflags = new LFlags(4);
 	int magickaOffset = 0;
@@ -412,7 +415,7 @@ public class NPC_ extends Actor implements Serializable {
 	int bleedout = 0;
 
 	ACBS() {
-	    super(Type.ACBS);
+	    super();
 	}
 
 	ACBS(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -421,7 +424,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new ACBS();
 	}
 
@@ -472,6 +475,11 @@ public class NPC_ extends Actor implements Serializable {
 	int getContentLength(Mod srcMod) {
 	    return 24;
 	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ACBS");
+	}
     }
 
     static class AIDT extends SubRecordTyped implements Serializable {
@@ -489,7 +497,7 @@ public class NPC_ extends Actor implements Serializable {
 	int aggroAttack = 0;
 
 	AIDT() {
-	    super(Type.AIDT);
+	    super("AIDT");
 	}
 
 	AIDT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -498,7 +506,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new AIDT();
 	}
 
@@ -551,7 +559,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
     }
 
-    static class ATKD extends SubRecordTyped implements Serializable {
+    static class ATKD extends SubRecord implements Serializable {
 
 	float damageMult;
 	float attackChance;
@@ -567,7 +575,7 @@ public class NPC_ extends Actor implements Serializable {
 	boolean valid = false;
 
 	ATKD() {
-	    super(Type.ATKD);
+	    super();
 	}
 
 	@Override
@@ -611,7 +619,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new ATKD();
 	}
 
@@ -626,6 +634,11 @@ public class NPC_ extends Actor implements Serializable {
 	    out.add(attackSpell);
 	    out.add(attackType);
 	    return out;
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ATKD");
 	}
     }
 
@@ -653,7 +666,7 @@ public class NPC_ extends Actor implements Serializable {
 	boolean valid = false;
 
 	NAM9() {
-	    super(Type.NAM9);
+	    super("NAM9");
 	}
 
 	@Override
@@ -711,7 +724,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new NAM9();
 	}
 
@@ -730,7 +743,7 @@ public class NPC_ extends Actor implements Serializable {
 	boolean valid = false;
 
 	NAMA() {
-	    super(Type.NAMA);
+	    super("NAMA");
 	}
 
 	@Override
@@ -753,7 +766,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new NAMA();
 	}
 
@@ -776,7 +789,7 @@ public class NPC_ extends Actor implements Serializable {
 	boolean valid = false;
 
 	COED() {
-	    super(Type.COED);
+	    super("COED");
 	}
 
 	@Override
@@ -797,7 +810,7 @@ public class NPC_ extends Actor implements Serializable {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new COED();
 	}
 
@@ -1348,7 +1361,7 @@ public class NPC_ extends Actor implements Serializable {
 		    //Sound Tab
 		    this.setSoundVolume(otherNPC.getSoundVolume());
 		    this.setAudioTemplate(otherNPC.getAudioTemplate());
-		    subRecords.add(otherNPC.subRecords.getSubList(Type.CSDT));
+		    subRecords.add(otherNPC.subRecords.getSubList("CSDT"));
 		    break;
 		case USE_STATS:
 		    getACBS().level = otherNPC.getACBS().level;
@@ -1464,8 +1477,8 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("NPC_");
     }
 
     @Override
@@ -1475,7 +1488,7 @@ public class NPC_ extends Actor implements Serializable {
 
     // Get/Set methods
     ACBS getACBS() {
-	return (ACBS) subRecords.get(Type.ACBS);
+	return (ACBS) subRecords.get("ACBS");
     }
 
     /**
@@ -1512,7 +1525,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return The group of factions assigned to the NPC.
      */
     public ArrayList<SubFormInt> getFactions() {
-	return SubList.subFormIntToPublic(subRecords.getSubList(Type.SNAM));
+	return SubList.subFormIntToPublic(subRecords.getSubList("SNAM"));
     }
 
     /**
@@ -1522,7 +1535,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if faction was added.
      */
     public boolean addFaction(FormID factionRef, int rank) {
-	return subRecords.getSubList(Type.SNAM).add(new SubFormInt(Type.SNAM, factionRef, rank));
+	return subRecords.getSubList("SNAM").add(new SubFormInt("SNAM", factionRef, rank));
     }
 
     /**
@@ -1531,14 +1544,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if faction was removed.
      */
     public boolean removeFaction(FormID factionRef) {
-	return subRecords.getSubList(Type.SNAM).remove(new SubFormInt(Type.SNAM, factionRef, 0));
+	return subRecords.getSubList("SNAM").remove(new SubFormInt("SNAM", factionRef, 0));
     }
 
     /**
      *
      */
     public void clearFactions() {
-	subRecords.getSubList(Type.SNAM).clear();
+	subRecords.getSubList("SNAM").clear();
     }
 
     /**
@@ -1546,7 +1559,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<SubFormInt> getPerks() {
-	return SubList.subFormIntToPublic(subRecords.getSubList(Type.PRKR));
+	return SubList.subFormIntToPublic(subRecords.getSubList("PRKR"));
     }
 
     /**
@@ -1555,7 +1568,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param rank
      */
     public void addPerk(FormID perkRef, int rank) {
-	subRecords.getSubList(Type.PRKR).add(new SubFormInt(Type.PRKR, perkRef, rank));
+	subRecords.getSubList("PRKR").add(new SubFormInt("PRKR", perkRef, rank));
     }
 
     /**
@@ -1564,18 +1577,18 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean removePerk(FormID perkRef) {
-	return subRecords.getSubList(Type.PRKR).remove(new SubFormInt(Type.PRKR, perkRef, 0));
+	return subRecords.getSubList("PRKR").remove(new SubFormInt("PRKR", perkRef, 0));
     }
 
     /**
      *
      */
     public void clearPerks() {
-	subRecords.getSubList(Type.PRKR).clear();
+	subRecords.getSubList("PRKR").clear();
     }
 
     AIDT getAIDT() {
-	return (AIDT) subRecords.get(Type.AIDT);
+	return (AIDT) subRecords.get("AIDT");
     }
 
     /**
@@ -1608,7 +1621,7 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     DNAM getDNAM() {
-	return (DNAM) subRecords.get(Type.DNAM);
+	return (DNAM) subRecords.get("DNAM");
     }
 
     /**
@@ -1795,7 +1808,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param deathItemRef
      */
     public void setDeathItem(FormID deathItemRef) {
-	subRecords.setSubForm(Type.INAM, deathItemRef);
+	subRecords.setSubForm("INAM", deathItemRef);
     }
 
     /**
@@ -1804,7 +1817,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getDeathItem() {
-	return subRecords.getSubForm(Type.INAM).getForm();
+	return subRecords.getSubForm("INAM").getForm();
     }
 
     /**
@@ -1813,7 +1826,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param voiceTypeRef
      */
     public void setVoiceType(FormID voiceTypeRef) {
-	subRecords.setSubForm(Type.VTCK, voiceTypeRef);
+	subRecords.setSubForm("VTCK", voiceTypeRef);
     }
 
     /**
@@ -1822,7 +1835,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getVoiceType() {
-	return subRecords.getSubForm(Type.VTCK).getForm();
+	return subRecords.getSubForm("VTCK").getForm();
     }
 
     /**
@@ -1830,7 +1843,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param templateRef
      */
     public void setTemplate(FormID templateRef) {
-	subRecords.setSubForm(Type.TPLT, templateRef);
+	subRecords.setSubForm("TPLT", templateRef);
     }
 
     /**
@@ -1838,7 +1851,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getTemplate() {
-	return subRecords.getSubForm(Type.TPLT).getForm();
+	return subRecords.getSubForm("TPLT").getForm();
     }
 
     /**
@@ -1854,7 +1867,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param raceRef
      */
     public void setRace(FormID raceRef) {
-	subRecords.setSubForm(Type.RNAM, raceRef);
+	subRecords.setSubForm("RNAM", raceRef);
     }
 
     /**
@@ -1862,7 +1875,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getRace() {
-	return subRecords.getSubForm(Type.RNAM).getForm();
+	return subRecords.getSubForm("RNAM").getForm();
     }
 
     /**
@@ -1870,7 +1883,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<FormID> getSpells() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.SPLO));
+	return SubList.subFormToPublic(subRecords.getSubList("SPLO"));
     }
 
     /**
@@ -1879,7 +1892,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if spell was added.
      */
     public boolean addSpell(FormID spellReference) {
-	return subRecords.getSubList(Type.SPLO).add(new SubForm(Type.SPLO, spellReference));
+	return subRecords.getSubList("SPLO").add(new SubForm("SPLO", spellReference));
     }
 
     /**
@@ -1890,14 +1903,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if spell was removed.
      */
     public boolean removeSpell(FormID spellReference) {
-	return subRecords.getSubList(Type.SPLO).remove(new SubForm(Type.SPLO, spellReference));
+	return subRecords.getSubList("SPLO").remove(new SubForm("SPLO", spellReference));
     }
 
     /**
      *
      */
     public void clearSpells() {
-	subRecords.getSubList(Type.SPLO).clear();
+	subRecords.getSubList("SPLO").clear();
     }
 
     /**
@@ -1907,7 +1920,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean addItem(FormID itemReference, int count) {
-	return subRecords.getSubList(Type.CNTO).add(new SubFormInt(Type.CNTO, itemReference, count));
+	return subRecords.getSubList("CNTO").add(new SubFormInt("CNTO", itemReference, count));
     }
 
     /**
@@ -1916,14 +1929,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean removeItem(FormID itemReference) {
-	return subRecords.getSubList(Type.CNTO).remove(new SubFormInt(Type.CNTO, itemReference, 1));
+	return subRecords.getSubList("CNTO").remove(new SubFormInt("CNTO", itemReference, 1));
     }
 
     /**
      *
      */
     public void clearItems() {
-	subRecords.getSubList(Type.CNTO).clear();
+	subRecords.getSubList("CNTO").clear();
     }
 
     /**
@@ -1931,7 +1944,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<SubFormInt> getItems() {
-	return SubList.subFormIntToPublic(subRecords.getSubList(Type.CNTO));
+	return SubList.subFormIntToPublic(subRecords.getSubList("CNTO"));
     }
 
     /**
@@ -1941,7 +1954,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if AI package was added.
      */
     public boolean addAIPackage(FormID aiPackageReference) {
-	return subRecords.getSubList(Type.PKID).add(new SubForm(Type.PKID, aiPackageReference));
+	return subRecords.getSubList("PKID").add(new SubForm("PKID", aiPackageReference));
     }
 
     /**
@@ -1950,7 +1963,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return True if AI package was removed.
      */
     public boolean removeAIPackage(FormID aiPackageReference) {
-	return subRecords.getSubList(Type.PKID).remove(new SubForm(Type.PKID, aiPackageReference));
+	return subRecords.getSubList("PKID").remove(new SubForm("PKID", aiPackageReference));
     }
 
     /**
@@ -1958,14 +1971,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return SubRecordList of AI packages.
      */
     public ArrayList<FormID> getAIPackages() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.PKID));
+	return SubList.subFormToPublic(subRecords.getSubList("PKID"));
     }
 
     /**
      *
      */
     public void clearAIPackages() {
-	subRecords.getSubList(Type.PKID).clear();
+	subRecords.getSubList("PKID").clear();
     }
 
     /**
@@ -1973,7 +1986,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param classReference
      */
     public void setNPCClass(FormID classReference) {
-	subRecords.setSubForm(Type.CNAM, classReference);
+	subRecords.setSubForm("CNAM", classReference);
     }
 
     /**
@@ -1981,7 +1994,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getNPCClass() {
-	return subRecords.getSubForm(Type.CNAM).getForm();
+	return subRecords.getSubForm("CNAM").getForm();
     }
 
     /**
@@ -1989,7 +2002,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param hairColorRef
      */
     public void setHairColor(FormID hairColorRef) {
-	subRecords.setSubForm(Type.HCLF, hairColorRef);
+	subRecords.setSubForm("HCLF", hairColorRef);
     }
 
     /**
@@ -1997,7 +2010,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getHairColor() {
-	return subRecords.getSubForm(Type.HCLF).getForm();
+	return subRecords.getSubForm("HCLF").getForm();
     }
 
     /**
@@ -2005,7 +2018,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param wornArmorRef
      */
     public void setSkin(FormID wornArmorRef) {
-	subRecords.setSubForm(Type.WNAM, wornArmorRef);
+	subRecords.setSubForm("WNAM", wornArmorRef);
     }
 
     /**
@@ -2013,7 +2026,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getSkin() {
-	return subRecords.getSubForm(Type.WNAM).getForm();
+	return subRecords.getSubForm("WNAM").getForm();
     }
 
     /**
@@ -2021,7 +2034,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param attackRaceRef
      */
     public void setAttackDataRace(FormID attackRaceRef) {
-	subRecords.setSubForm(Type.ATKR, attackRaceRef);
+	subRecords.setSubForm("ATKR", attackRaceRef);
     }
 
     /**
@@ -2029,7 +2042,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getAttackDataRace() {
-	return subRecords.getSubForm(Type.ATKR).getForm();
+	return subRecords.getSubForm("ATKR").getForm();
     }
 
     /**
@@ -2037,7 +2050,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param defaultOutfitRef
      */
     public void setDefaultOutfit(FormID defaultOutfitRef) {
-	subRecords.setSubForm(Type.DOFT, defaultOutfitRef);
+	subRecords.setSubForm("DOFT", defaultOutfitRef);
     }
 
     /**
@@ -2045,7 +2058,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getDefaultOutfit() {
-	return subRecords.getSubForm(Type.DOFT).getForm();
+	return subRecords.getSubForm("DOFT").getForm();
     }
 
     /**
@@ -2053,7 +2066,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param sleepingOutfitRef
      */
     public void setSleepingOutfit(FormID sleepingOutfitRef) {
-	subRecords.setSubForm(Type.SOFT, sleepingOutfitRef);
+	subRecords.setSubForm("SOFT", sleepingOutfitRef);
     }
 
     /**
@@ -2061,7 +2074,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getSleepingOutfit() {
-	return subRecords.getSubForm(Type.SOFT).getForm();
+	return subRecords.getSubForm("SOFT").getForm();
     }
 
     /**
@@ -2069,7 +2082,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param combatRef
      */
     public void setCombatStyle(FormID combatRef) {
-	subRecords.setSubForm(Type.ZNAM, combatRef);
+	subRecords.setSubForm("ZNAM", combatRef);
     }
 
     /**
@@ -2077,7 +2090,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getCombatStyle() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     /**
@@ -2085,7 +2098,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param crimeFactionRef
      */
     public void setCrimeFaction(FormID crimeFactionRef) {
-	subRecords.setSubForm(Type.CRIF, crimeFactionRef);
+	subRecords.setSubForm("CRIF", crimeFactionRef);
     }
 
     /**
@@ -2093,7 +2106,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getCrimeFaction() {
-	return subRecords.getSubForm(Type.CRIF).getForm();
+	return subRecords.getSubForm("CRIF").getForm();
     }
 
     /**
@@ -2101,7 +2114,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param headPartsRef
      */
     public void setFeatureSet(FormID headPartsRef) {
-	subRecords.setSubForm(Type.FTST, headPartsRef);
+	subRecords.setSubForm("FTST", headPartsRef);
     }
 
     /**
@@ -2109,7 +2122,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getFeatureSet() {
-	return subRecords.getSubForm(Type.FTST).getForm();
+	return subRecords.getSubForm("FTST").getForm();
     }
 
     /**
@@ -2117,7 +2130,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param audioTemplateRef
      */
     public void setAudioTemplate(FormID audioTemplateRef) {
-	subRecords.setSubForm(Type.CSCR, audioTemplateRef);
+	subRecords.setSubForm("CSCR", audioTemplateRef);
     }
 
     /**
@@ -2125,7 +2138,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getAudioTemplate() {
-	return subRecords.getSubForm(Type.CSCR).getForm();
+	return subRecords.getSubForm("CSCR").getForm();
     }
 
     /**
@@ -2133,7 +2146,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param list
      */
     public void setDefaultPackageList(FormID list) {
-	subRecords.setSubForm(Type.DPLT, list);
+	subRecords.setSubForm("DPLT", list);
     }
 
     /**
@@ -2141,7 +2154,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getDefaultPackageList() {
-	return subRecords.getSubForm(Type.DPLT).getForm();
+	return subRecords.getSubForm("DPLT").getForm();
     }
 
     /**
@@ -2149,7 +2162,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param height
      */
     public void setHeight(float height) {
-	subRecords.setSubFloat(Type.NAM6, height);
+	subRecords.setSubFloat("NAM6", height);
     }
 
     /**
@@ -2157,7 +2170,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public float getHeight() {
-	return subRecords.getSubFloat(Type.NAM6).get();
+	return subRecords.getSubFloat("NAM6").get();
     }
 
     /**
@@ -2165,7 +2178,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param weight
      */
     public void setWeight(float weight) {
-	subRecords.setSubFloat(Type.NAM7, weight);
+	subRecords.setSubFloat("NAM7", weight);
     }
 
     /**
@@ -2173,7 +2186,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public float getWeight() {
-	return subRecords.getSubFloat(Type.NAM7).get();
+	return subRecords.getSubFloat("NAM7").get();
     }
 
     /**
@@ -2181,7 +2194,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param id
      */
     public void setFarAwayModelSkin(FormID id) {
-	subRecords.setSubForm(Type.ANAM, id);
+	subRecords.setSubForm("ANAM", id);
     }
 
     /**
@@ -2189,7 +2202,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getFarAwayModelSkin() {
-	return subRecords.getSubForm(Type.ANAM).getForm();
+	return subRecords.getSubForm("ANAM").getForm();
     }
 
     /**
@@ -2341,7 +2354,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param id
      */
     public void setGiftFilter(FormID id) {
-	subRecords.setSubForm(Type.GNAM, id);
+	subRecords.setSubForm("GNAM", id);
     }
 
     /**
@@ -2349,7 +2362,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getGiftFilter() {
-	return subRecords.getSubForm(Type.ACBS).getForm();
+	return subRecords.getSubForm("ACBS").getForm();
     }
 
     /**
@@ -2373,7 +2386,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param list
      */
     public void setSpectatorOverride(FormID list) {
-	subRecords.setSubForm(Type.SPOR, list);
+	subRecords.setSubForm("SPOR", list);
     }
 
     /**
@@ -2381,7 +2394,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getSpectatorOverride() {
-	return subRecords.getSubForm(Type.SPOR).getForm();
+	return subRecords.getSubForm("SPOR").getForm();
     }
 
     /**
@@ -2389,7 +2402,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param list
      */
     public void setObserveDeadOverride(FormID list) {
-	subRecords.setSubForm(Type.OCOR, list);
+	subRecords.setSubForm("OCOR", list);
     }
 
     /**
@@ -2397,7 +2410,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getObserveDeadOverride() {
-	return subRecords.getSubForm(Type.OCOR).getForm();
+	return subRecords.getSubForm("OCOR").getForm();
     }
 
     /**
@@ -2405,7 +2418,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param list
      */
     public void setGuardWornOverride(FormID list) {
-	subRecords.setSubForm(Type.GWOR, list);
+	subRecords.setSubForm("GWOR", list);
     }
 
     /**
@@ -2413,7 +2426,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getGuardWornOverride() {
-	return subRecords.getSubForm(Type.GWOR).getForm();
+	return subRecords.getSubForm("GWOR").getForm();
     }
 
     /**
@@ -2421,7 +2434,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param list
      */
     public void setCombatOverride(FormID list) {
-	subRecords.setSubForm(Type.ECOR, list);
+	subRecords.setSubForm("ECOR", list);
     }
 
     /**
@@ -2429,7 +2442,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public FormID getCombatOverride() {
-	return subRecords.getSubForm(Type.ECOR).getForm();
+	return subRecords.getSubForm("ECOR").getForm();
     }
 
     /**
@@ -2437,7 +2450,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param alias
      */
     public void setShortName(String alias) {
-	subRecords.setSubString(Type.SHRT, alias);
+	subRecords.setSubString("SHRT", alias);
     }
 
     /**
@@ -2445,7 +2458,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public String getShortName() {
-	return subRecords.getSubString(Type.SHRT).print();
+	return subRecords.getSubString("SHRT").print();
     }
 
     /**
@@ -2453,7 +2466,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param vol
      */
     public void setSoundVolume(SoundVolume vol) {
-	subRecords.setSubInt(Type.NAM8, vol.ordinal());
+	subRecords.setSubInt("NAM8", vol.ordinal());
     }
 
     /**
@@ -2461,11 +2474,11 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public SoundVolume getSoundVolume() {
-	return SoundVolume.values()[subRecords.getSubInt(Type.NAM8).get()];
+	return SoundVolume.values()[subRecords.getSubInt("NAM8").get()];
     }
 
     NAM9 getNAM9() {
-	return (NAM9) subRecords.get(Type.NAM9);
+	return (NAM9) subRecords.get("NAM9");
     }
 
     /**
@@ -2579,7 +2592,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<TintLayer> getTinting() {
-	return subRecords.getSubList(Type.TINI).collection;
+	return subRecords.getSubList("TINI").collection;
     }
 
     /**
@@ -2588,7 +2601,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean addTinting(TintLayer tinting) {
-	return subRecords.getSubList(Type.TINI).add(tinting);
+	return subRecords.getSubList("TINI").add(tinting);
     }
 
     /**
@@ -2597,14 +2610,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean removeTinting(TintLayer tinting) {
-	return subRecords.getSubList(Type.TINI).remove(tinting);
+	return subRecords.getSubList("TINI").remove(tinting);
     }
 
     /**
      *
      */
     public void clearTinting() {
-	subRecords.getSubList(Type.TINI).clear();
+	subRecords.getSubList("TINI").clear();
     }
 
     /**
@@ -2612,7 +2625,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<SoundPackage> getSounds() {
-	return subRecords.getSubList(Type.CSDT).collection;
+	return subRecords.getSubList("CSDT").collection;
     }
 
     /**
@@ -2621,7 +2634,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean addSoundPackage(SoundPackage sounds) {
-	return subRecords.getSubList(Type.CSDT).add(sounds);
+	return subRecords.getSubList("CSDT").add(sounds);
     }
 
     /**
@@ -2630,14 +2643,14 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public boolean removeSoundPackage(SoundPackage sounds) {
-	return subRecords.getSubList(Type.CSDT).remove(sounds);
+	return subRecords.getSubList("CSDT").remove(sounds);
     }
 
     /**
      *
      */
     public void clearSoundPackages() {
-	subRecords.getSubList(Type.CSDT).clear();
+	subRecords.getSubList("CSDT").clear();
     }
 
     /**
@@ -2646,7 +2659,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public float getFaceTint(RGB color) {
-	return subRecords.getSubRGB(Type.QNAM).get(color);
+	return subRecords.getSubRGB("QNAM").get(color);
     }
 
     /**
@@ -2655,11 +2668,11 @@ public class NPC_ extends Actor implements Serializable {
      * @param value
      */
     public void setFaceTint(RGB color, float value) {
-	subRecords.setSubRGB(Type.QNAM, color, value);
+	subRecords.setSubRGB("QNAM", color, value);
     }
 
     NAMA getNAMA() {
-	return (NAMA) subRecords.get(Type.NAMA);
+	return (NAMA) subRecords.get("NAMA");
     }
 
     /**
@@ -2720,7 +2733,7 @@ public class NPC_ extends Actor implements Serializable {
      * @return
      */
     public ArrayList<FormID> getHeadParts() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.PNAM));
+	return SubList.subFormToPublic(subRecords.getSubList("PNAM"));
     }
 
     /**
@@ -2728,7 +2741,7 @@ public class NPC_ extends Actor implements Serializable {
      * @param pnam
      */
     public void addHeadPart(FormID pnam) {
-	subRecords.getSubList(Type.PNAM).add(new SubForm(Type.PNAM, pnam));
+	subRecords.getSubList("PNAM").add(new SubForm("PNAM", pnam));
     }
 
     /**
@@ -2736,18 +2749,18 @@ public class NPC_ extends Actor implements Serializable {
      * @param pnam
      */
     public void removeHeadPart(FormID pnam) {
-	subRecords.getSubList(Type.PNAM).remove(new SubForm(Type.PNAM, pnam));
+	subRecords.getSubList("PNAM").remove(new SubForm("PNAM", pnam));
     }
 
     /**
      *
      */
     public void clearHeadParts() {
-	subRecords.getSubList(Type.PNAM).clear();
+	subRecords.getSubList("PNAM").clear();
     }
 
     ATKD getATKD() {
-	return (ATKD) subRecords.get(Type.ATKD);
+	return (ATKD) subRecords.get("ATKD");
     }
 
     void setATKD(ATKD rhs) {
@@ -2755,11 +2768,11 @@ public class NPC_ extends Actor implements Serializable {
     }
 
     void setATKE(String in) {
-	subRecords.setSubString(Type.ATKE, in);
+	subRecords.setSubString("ATKE", in);
     }
 
     String getATKE() {
-	return subRecords.getSubString(Type.ATKE).print();
+	return subRecords.getSubString("ATKE").print();
     }
 
     /**

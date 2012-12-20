@@ -583,16 +583,6 @@ public class SPGlobal {
      * imported.<br> Prints to the sync log<br>
      */
     public static boolean debugSubrecordSummary = true;
-    /**
-     * Print messages from all subrecord sources. Turn this off and add allowed
-     * subrecords to print only selected ones.<br> Prints to the sync log<br>
-     */
-    public static boolean debugSubrecordAll = true;
-    /**
-     * Print messages from specific subrecord sources. Only matters if
-     * debugSubrecordAll is OFF.<br> Prints to the sync log<br>
-     */
-    public static Set<Type> debugSubrecordsAllowed = new HashSet<Type>();
     // Exporting
     /**
      * Print short export messages to confirm with records are exporting.<br>

@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,38 +20,37 @@ import skyproc.exceptions.BadRecord;
 public class ARMO extends MajorRecordDescription {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.ARMO}));
     static final SubPrototype ARMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
-	    add(new SubData(Type.OBND));
-	    reposition(Type.FULL);
-	    add(new SubForm(Type.EITM));
-	    add(SubString.getNew(Type.MOD2, true));
-	    add(new SubData(Type.MO2T));
-	    add(new SubData(Type.MO2S));
-	    add(SubString.getNew(Type.ICON, true));
-	    add(SubString.getNew(Type.MOD4, true));
-	    add(new SubData(Type.MO4T));
-	    add(new SubData(Type.MO4S));
-	    add(SubString.getNew(Type.ICO2, true));
+	    add(new SubData("OBND"));
+	    reposition("FULL");
+	    add(new SubForm("EITM"));
+	    add(SubString.getNew("MOD2", true));
+	    add(new SubData("MO2T"));
+	    add(new SubData("MO2S"));
+	    add(SubString.getNew("ICON", true));
+	    add(SubString.getNew("MOD4", true));
+	    add(new SubData("MO4T"));
+	    add(new SubData("MO4S"));
+	    add(SubString.getNew("ICO2", true));
 	    add(new BodyTemplate());
 	    add(new DestructionData());
-	    add(new SubForm(Type.YNAM));
-	    add(new SubForm(Type.ZNAM));
-	    add(new SubString(Type.BMCT));
-	    add(new SubForm(Type.ETYP));
-	    add(new SubForm(Type.BIDS));
-	    add(new SubForm(Type.BAMT));
-	    add(new SubForm(Type.RNAM));
+	    add(new SubForm("YNAM"));
+	    add(new SubForm("ZNAM"));
+	    add(new SubString("BMCT"));
+	    add(new SubForm("ETYP"));
+	    add(new SubForm("BIDS"));
+	    add(new SubForm("BAMT"));
+	    add(new SubForm("RNAM"));
 	    add(new KeywordSet());
-	    reposition(Type.DESC);
-	    add(new SubList<>(new SubForm(Type.MODL)));
+	    reposition("DESC");
+	    add(new SubList<>(new SubForm("MODL")));
 	    add(new DATA());
-	    add(new SubData(Type.DNAM));
-	    add(new SubForm(Type.TNAM));
+	    add(new SubData("DNAM"));
+	    add(new SubForm("TNAM"));
 	}
     };
 
@@ -65,8 +63,8 @@ public class ARMO extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("ARMO");
     }
 
     @Override
@@ -80,7 +78,7 @@ public class ARMO extends MajorRecordDescription {
 	float weight;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -101,7 +99,7 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -130,7 +128,7 @@ public class ARMO extends MajorRecordDescription {
      * @return Returns the list of ARMA records associated with the ARMO.
      */
     public ArrayList<FormID> getArmatures() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.MODL));
+	return SubList.subFormToPublic(subRecords.getSubList("MODL"));
     }
 
     /**
@@ -138,7 +136,7 @@ public class ARMO extends MajorRecordDescription {
      * @param id Adds an ARMA record to the MODL list.
      */
     public void addArmature(FormID id) {
-	subRecords.getSubList(Type.MODL).add(new SubForm(Type.MODL, id));
+	subRecords.getSubList("MODL").add(new SubForm("MODL", id));
     }
 
     /**
@@ -146,7 +144,7 @@ public class ARMO extends MajorRecordDescription {
      * @param id Removes an ARMA record from the MODL list if it exists.
      */
     public void removeArmature(FormID id) {
-	subRecords.getSubList(Type.MODL).remove(new SubForm(Type.MODL, id));
+	subRecords.getSubList("MODL").remove(new SubForm("MODL", id));
     }
 
     /**
@@ -154,7 +152,7 @@ public class ARMO extends MajorRecordDescription {
      * @param id
      */
     public void setEnchantment(FormID id) {
-	subRecords.setSubForm(Type.EITM, id);
+	subRecords.setSubForm("EITM", id);
     }
 
     /**
@@ -162,7 +160,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getEnchantment() {
-	return subRecords.getSubForm(Type.EITM).getForm();
+	return subRecords.getSubForm("EITM").getForm();
     }
 
     /**
@@ -173,10 +171,10 @@ public class ARMO extends MajorRecordDescription {
     public void setModel(String path, Perspective perspective) {
 	switch (perspective) {
 	    case THIRD_PERSON:
-		subRecords.setSubString(Type.MOD2, path);
+		subRecords.setSubString("MOD2", path);
 		break;
 	    case FIRST_PERSON:
-		subRecords.setSubString(Type.MOD4, path);
+		subRecords.setSubString("MOD4", path);
 		break;
 	}
     }
@@ -189,9 +187,9 @@ public class ARMO extends MajorRecordDescription {
     public String getModel(Perspective perspective) {
 	switch (perspective) {
 	    case THIRD_PERSON:
-		return subRecords.getSubString(Type.MOD2).print();
+		return subRecords.getSubString("MOD2").print();
 	    default:
-		return subRecords.getSubString(Type.MOD4).print();
+		return subRecords.getSubString("MOD4").print();
 	}
     }
 
@@ -200,7 +198,7 @@ public class ARMO extends MajorRecordDescription {
      * @param sound
      */
     public void setPickupSound(FormID sound) {
-	subRecords.setSubForm(Type.YNAM, sound);
+	subRecords.setSubForm("YNAM", sound);
     }
 
     /**
@@ -208,7 +206,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getPickupSound() {
-	return subRecords.getSubForm(Type.YNAM).getForm();
+	return subRecords.getSubForm("YNAM").getForm();
     }
 
     /**
@@ -216,7 +214,7 @@ public class ARMO extends MajorRecordDescription {
      * @param sound
      */
     public void setDropSound(FormID sound) {
-	subRecords.setSubForm(Type.ZNAM, sound);
+	subRecords.setSubForm("ZNAM", sound);
     }
 
     /**
@@ -224,7 +222,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getDropSound() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     /**
@@ -232,7 +230,7 @@ public class ARMO extends MajorRecordDescription {
      * @param slot
      */
     public void setEquipSlot(FormID slot) {
-	subRecords.setSubForm(Type.ETYP, slot);
+	subRecords.setSubForm("ETYP", slot);
     }
 
     /**
@@ -240,7 +238,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getEquipSet() {
-	return subRecords.getSubForm(Type.ETYP).getForm();
+	return subRecords.getSubForm("ETYP").getForm();
     }
 
     /**
@@ -248,7 +246,7 @@ public class ARMO extends MajorRecordDescription {
      * @param set
      */
     public void setBashImpactData(FormID set) {
-	subRecords.setSubForm(Type.BIDS, set);
+	subRecords.setSubForm("BIDS", set);
     }
 
     /**
@@ -256,7 +254,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getBashImpactData() {
-	return subRecords.getSubForm(Type.BIDS).getForm();
+	return subRecords.getSubForm("BIDS").getForm();
     }
 
     /**
@@ -264,7 +262,7 @@ public class ARMO extends MajorRecordDescription {
      * @param race
      */
     public void setRace(FormID race) {
-	subRecords.setSubForm(Type.RNAM, race);
+	subRecords.setSubForm("RNAM", race);
     }
 
     /**
@@ -272,11 +270,11 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getRace() {
-	return subRecords.getSubForm(Type.RNAM).getForm();
+	return subRecords.getSubForm("RNAM").getForm();
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**
@@ -316,7 +314,7 @@ public class ARMO extends MajorRecordDescription {
      * @param rating
      */
     public void setArmorRating(int rating) {
-	subRecords.setSubData(Type.DNAM, rating * 100);
+	subRecords.setSubData("DNAM", rating * 100);
     }
 
     /**
@@ -324,7 +322,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public int getArmorRating() {
-	return subRecords.getSubData(Type.DNAM).toInt() / 100;
+	return subRecords.getSubData("DNAM").toInt() / 100;
     }
 
     /**
@@ -332,7 +330,7 @@ public class ARMO extends MajorRecordDescription {
      * @param template
      */
     public void setTemplate(FormID template) {
-	subRecords.setSubForm(Type.TNAM, template);
+	subRecords.setSubForm("TNAM", template);
     }
 
     /**
@@ -340,7 +338,7 @@ public class ARMO extends MajorRecordDescription {
      * @return
      */
     public FormID getTemplate() {
-	return subRecords.getSubForm(Type.TNAM).getForm();
+	return subRecords.getSubForm("TNAM").getForm();
     }
 
     /**

@@ -29,7 +29,7 @@ class ConditionBase extends SubRecordTyped {
     ConditionOption option;
 
     ConditionBase() {
-	super(Type.CTDA);
+	super("CTDA");
     }
 
     @Override
@@ -105,7 +105,7 @@ class ConditionBase extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new ConditionBase();
     }
 

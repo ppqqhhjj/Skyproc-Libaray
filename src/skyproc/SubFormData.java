@@ -22,17 +22,17 @@ class SubFormData extends SubForm {
 
     byte[] data;
 
-    SubFormData(Type type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
+    SubFormData(String type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
         this(type);
         parseData(in);
     }
 
-    SubFormData(Type type, FormID id, byte[] data) {
+    SubFormData(String type, FormID id, byte[] data) {
         super(type, id);
         this.data = data;
     }
 
-    SubFormData(Type in) {
+    SubFormData(String in) {
         super(in);
     }
 
@@ -48,7 +48,7 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
         return new SubFormData(type_);
     }
 

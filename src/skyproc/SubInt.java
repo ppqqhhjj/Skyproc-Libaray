@@ -21,17 +21,17 @@ class SubInt extends SubRecordTyped {
     private Integer data;
     int length = 4;
 
-    SubInt(Type type) {
+    SubInt(String type) {
 	super(type);
     }
 
-    SubInt(Type type, int length) {
+    SubInt(String type, int length) {
 	this(type);
 	this.length = length;
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubInt(type, length);
     }
 

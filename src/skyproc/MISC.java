@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,23 +20,22 @@ import skyproc.exceptions.BadRecord;
 public class MISC extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MISC}));
     static final SubPrototype MISCproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    add(new SubData(Type.OBND));
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(SubString.getNew(Type.ICON, true));
-	    add(new SubForm(Type.YNAM));
-	    add(new SubForm(Type.ZNAM));
+	    after(new ScriptPackage(), "EDID");
+	    add(new SubData("OBND"));
+	    reposition("FULL");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(SubString.getNew("ICON", true));
+	    add(new SubForm("YNAM"));
+	    add(new SubForm("ZNAM"));
 	    add(new KeywordSet());
 	    add(new DATA());
-	    add(SubString.getNew(Type.MICO, true));
+	    add(SubString.getNew("MICO", true));
 	    add(new DestructionData());
 	}
     };
@@ -47,7 +45,7 @@ public class MISC extends MajorRecordNamed {
 	float weight = 0;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -68,7 +66,7 @@ public class MISC extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new MISC.DATA();
 	}
 
@@ -85,22 +83,22 @@ public class MISC extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("MISC");
     }
 
     @Override
     Record getNew() {
 	return new MISC();
     }
-    
+
     // Get/Set
     /**
      *
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -108,11 +106,11 @@ public class MISC extends MajorRecordNamed {
      * @param path
      */
     public void setModel(String path) {
-	subRecords.getSubString(Type.MODL).setString(path);
+	subRecords.getSubString("MODL").setString(path);
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**
@@ -167,7 +165,7 @@ public class MISC extends MajorRecordNamed {
      * @return List of the AltTextures applied.
      */
     public ArrayList<AltTexture> getAltTextures() {
-	return ((AltTextures) subRecords.get(Type.MODS)).altTextures;
+	return ((AltTextures) subRecords.get("MODS")).altTextures;
     }
 
     /**
@@ -186,7 +184,7 @@ public class MISC extends MajorRecordNamed {
      * @param sound
      */
     public void setPickupSound(FormID sound) {
-	subRecords.setSubForm(Type.YNAM, sound);
+	subRecords.setSubForm("YNAM", sound);
     }
 
     /**
@@ -194,7 +192,7 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public FormID getPickupSound() {
-	return subRecords.getSubForm(Type.YNAM).getForm();
+	return subRecords.getSubForm("YNAM").getForm();
     }
 
     /**
@@ -202,7 +200,7 @@ public class MISC extends MajorRecordNamed {
      * @param sound
      */
     public void setDropSound(FormID sound) {
-	subRecords.setSubForm(Type.ZNAM, sound);
+	subRecords.setSubForm("ZNAM", sound);
     }
 
     /**
@@ -210,7 +208,7 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public FormID getDropSound() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     /**
@@ -218,7 +216,7 @@ public class MISC extends MajorRecordNamed {
      * @param path
      */
     public void setInventoryImage(String path) {
-	subRecords.setSubString(Type.ICON, path);
+	subRecords.setSubString("ICON", path);
     }
 
     /**
@@ -226,7 +224,7 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public String getInventoryImage() {
-	return subRecords.getSubString(Type.ICON).print();
+	return subRecords.getSubString("ICON").print();
     }
 
     /**
@@ -234,7 +232,7 @@ public class MISC extends MajorRecordNamed {
      * @param path
      */
     public void setMessageImage(String path) {
-	subRecords.setSubString(Type.MICO, path);
+	subRecords.setSubString("MICO", path);
     }
 
     /**
@@ -242,6 +240,6 @@ public class MISC extends MajorRecordNamed {
      * @return
      */
     public String getMessageImage() {
-	return subRecords.getSubString(Type.MICO).print();
+	return subRecords.getSubString("MICO").print();
     }
 }

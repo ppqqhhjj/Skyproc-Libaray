@@ -18,18 +18,18 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ScriptPackage extends SubRecordTyped implements Serializable {
+public class ScriptPackage extends SubRecord implements Serializable {
 
     int version = 5;
     int unknown = 2;
     ArrayList<ScriptRef> scripts = new ArrayList<>();
 
     ScriptPackage() {
-	super(Type.VMAD);
+	super();
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new ScriptPackage();
     }
 
@@ -165,5 +165,10 @@ public class ScriptPackage extends SubRecordTyped implements Serializable {
      */
     public void removeScript(ScriptRef script) {
 	scripts.remove(script);
+    }
+
+    @Override
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("VMAD");
     }
 }

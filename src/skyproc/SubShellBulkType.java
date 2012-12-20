@@ -30,15 +30,15 @@ class SubShellBulkType extends SubShell {
      */
     @Override
     public int getRecordLength(LChannel in) {
-	Type first = getType();
+	String first = getType();
 	int size = super.getRecordLength(in);
 	in.skip(size);
-	Type nextType;
-	Set<Type> targets = new HashSet<>(subRecords.getTypes());
+	String nextType;
+	Set<String> targets = new HashSet<>(subRecords.getTypes());
 	while (!in.isDone()) {
 	    try {
 		nextType = getNextType(in);
-		if (!targets.contains(nextType) || (!includeFirst && nextType == first)) {
+		if (!targets.contains(nextType) || (!includeFirst && nextType.equals(first))) {
 		    break;
 		}
 	    } catch (BadRecord ex) {
@@ -54,14 +54,14 @@ class SubShellBulkType extends SubShell {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	ArrayList<Type> out = new ArrayList<>(1);
+    ArrayList<String> getTypes() {
+	ArrayList<String> out = new ArrayList<>(1);
 	out.add(subRecords.getTypes().get(0));
 	return out;
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubShellBulkType(subRecords.prototype, includeFirst);
     }
 

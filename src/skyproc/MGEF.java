@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -22,25 +21,24 @@ import skyproc.exceptions.BadRecord;
 public class MGEF extends MajorRecordDescription {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MGEF}));
     static final SubPrototype MGEFproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
-	    reposition(Type.FULL);
-	    add(new SubForm(Type.MDOB));
+	    reposition("FULL");
+	    add(new SubForm("MDOB"));
 	    add(new KeywordSet());
 	    add(new DATA());
 	    add(new SNDD());
-	    SubStringPointer dnam = new SubStringPointer(Type.DNAM, SubStringPointer.Files.STRINGS);
+	    SubStringPointer dnam = new SubStringPointer("DNAM", SubStringPointer.Files.STRINGS);
 	    dnam.forceExport = true;
 	    add(dnam);
-	    forceExport(Type.DNAM);
-	    remove(Type.DESC);
-	    add(new SubForm(Type.ESCE));
+	    forceExport("DNAM");
+	    remove("DESC");
+	    add(new SubForm("ESCE"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubData(Type.OBND));
+	    add(new SubData("OBND"));
 	}
     };
 
@@ -86,7 +84,7 @@ public class MGEF extends MajorRecordDescription {
 	float scriptAIDataDelayTime = 0;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -220,7 +218,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -236,7 +234,7 @@ public class MGEF extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(14);
+	    ArrayList<FormID> out = new ArrayList<>(14);
 	    out.add(relatedID);
 	    out.add(lightID);
 	    out.add(hitShader);
@@ -260,7 +258,7 @@ public class MGEF extends MajorRecordDescription {
 	ArrayList<SNDD.Sound> sounds = new ArrayList<>();
 
 	SNDD() {
-	    super(Type.SNDD);
+	    super("SNDD");
 	}
 
 	@Override
@@ -284,7 +282,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new SNDD();
 	}
 
@@ -300,7 +298,7 @@ public class MGEF extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>();
+	    ArrayList<FormID> out = new ArrayList<>();
 	    for (SNDD.Sound s : sounds) {
 		out.add(s.soundID);
 	    }
@@ -449,8 +447,8 @@ public class MGEF extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("MGEF");
     }
 
     @Override
@@ -470,7 +468,7 @@ public class MGEF extends MajorRecordDescription {
 
     @Override
     public String getDescription() {
-	return subRecords.getSubString(Type.DNAM).print();
+	return subRecords.getSubString("DNAM").print();
     }
 
     /**
@@ -479,11 +477,11 @@ public class MGEF extends MajorRecordDescription {
      */
     @Override
     public void setDescription(String description) {
-	subRecords.setSubString(Type.DNAM, description);
+	subRecords.setSubString("DNAM", description);
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

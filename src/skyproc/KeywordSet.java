@@ -17,18 +17,18 @@ import skyproc.exceptions.BadRecord;
  * A set of keywords associated with a major record.
  * @author Justin Swanson
  */
-public class KeywordSet extends SubRecordTyped {
+public class KeywordSet extends SubRecord {
 
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.KSIZ, Type.KWDA}));
-    SubData counter = new SubData(Type.KSIZ, 0);
-    SubFormArray keywords = new SubFormArray(Type.KWDA, 0);
+    private final static ArrayList<String> type = new ArrayList<>(Arrays.asList(new String[]{"KSIZ", "KWDA"}));
+    SubData counter = new SubData("KSIZ", 0);
+    SubFormArray keywords = new SubFormArray("KWDA", 0);
 
     KeywordSet() {
-	super(type);
+	super();
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new KeywordSet();
     }
 
@@ -60,11 +60,11 @@ public class KeywordSet extends SubRecordTyped {
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
-	    case KSIZ:
+	    case "KSIZ":
 		counter.parseData(in);
-		keywords = new SubFormArray(Type.KWDA, counter.toInt());
+		keywords = new SubFormArray("KWDA", counter.toInt());
 		break;
-	    case KWDA:
+	    case "KWDA":
 		keywords.parseData(in);
 		break;
 	}
@@ -148,6 +148,11 @@ public class KeywordSet extends SubRecordTyped {
 	int hash = 5;
 	hash = 89 * hash + (this.keywords != null ? this.keywords.hashCode() : 0);
 	return hash;
+    }
+
+    @Override
+    ArrayList<String> getTypes() {
+	return type;
     }
 
 }

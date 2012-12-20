@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -14,12 +13,11 @@ import java.util.Arrays;
 public class OTFT extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.OTFT}));
     static final SubPrototype OTFTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
-	    add(new SubFormArray(Type.INAM, 0));
+	    add(new SubFormArray("INAM", 0));
 	}
     };
 
@@ -40,8 +38,8 @@ public class OTFT extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("OTFT");
     }
 
     @Override
@@ -55,7 +53,7 @@ public class OTFT extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getInventoryList() {
-	return subRecords.get(Type.INAM).allFormIDs();
+	return subRecords.get("INAM").allFormIDs();
     }
 
     /**
@@ -63,7 +61,7 @@ public class OTFT extends MajorRecord {
      * @param item
      */
     public void addInventoryItem(FormID item) {
-	subRecords.getSubFormArray(Type.INAM).add(item);
+	subRecords.getSubFormArray("INAM").add(item);
     }
 
     /**
@@ -71,13 +69,13 @@ public class OTFT extends MajorRecord {
      * @param item
      */
     public void removeInventoryItem (FormID item) {
-	subRecords.getSubFormArray(Type.INAM).remove(item);
+	subRecords.getSubFormArray("INAM").remove(item);
     }
 
     /**
      *
      */
     public void clearInventoryItems() {
-	subRecords.getSubFormArray(Type.INAM).clear();
+	subRecords.getSubFormArray("INAM").clear();
     }
 }

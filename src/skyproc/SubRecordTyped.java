@@ -12,18 +12,18 @@ import java.util.ArrayList;
  */
 public abstract class SubRecordTyped extends SubRecord {
 
-    ArrayList<Type> types;
+    ArrayList<String> types;
 
-    SubRecordTyped(Type t) {
+    SubRecordTyped(String t) {
 	types = Record.getTypeList(t);
     }
 
-    SubRecordTyped(ArrayList<Type> t) {
+    SubRecordTyped(ArrayList<String> t) {
 	types = t;
     }
 
     @Override
-    ArrayList<Type> getTypes() {
+    ArrayList<String> getTypes() {
 	return types;
     }
 

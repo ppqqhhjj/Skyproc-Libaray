@@ -162,7 +162,7 @@ public class SPImporter {
     static public ArrayList<ModListing> getModList() {
 	SPGlobal.newSyncLog("Get All Present Mod List.txt");
 	File directory = new File(SPGlobal.pathToData);
-	ArrayList<String> out = new ArrayList<String>();
+	ArrayList<String> out = new ArrayList<>();
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();
 	    for (File f : files) {
@@ -182,8 +182,8 @@ public class SPImporter {
     static ArrayList<ModListing> sortModListings(ArrayList<String> lines) {
 	SPGlobal.sync(true);
 	//Read it in
-	ArrayList<String> esms = new ArrayList<String>();
-	ArrayList<String> esps = new ArrayList<String>();
+	ArrayList<String> esms = new ArrayList<>();
+	ArrayList<String> esps = new ArrayList<>();
 
 	for (String line : lines) {
 	    if (line.contains(".esm")) {
@@ -195,7 +195,7 @@ public class SPImporter {
 
 	SPGlobal.flush();
 
-	ArrayList<ModListing> listing = new ArrayList<ModListing>();
+	ArrayList<ModListing> listing = new ArrayList<>();
 	for (String m : esms) {
 	    listing.add(new ModListing(m));
 	}
@@ -428,7 +428,7 @@ public class SPImporter {
 	String header = "Import Mods";
 	String debugPath = "Mod Import/";
 
-	Set<Mod> outSet = new TreeSet<Mod>();
+	Set<Mod> outSet = new TreeSet<>();
 
 	curMod = 1;
 	maxMod = mods.size();
@@ -524,15 +524,15 @@ public class SPImporter {
 		importStringLocations(plugin);
 	    }
 
-	    ArrayList<Type> typeTargets = new ArrayList<>();
+	    ArrayList<String> typeTargets = new ArrayList<>();
 	    for (GRUP_TYPE g : grup_targets) {
 		if (!GRUP_TYPE.unfinished(g)) {
-		    typeTargets.add(Type.toRecord(g));
+		    typeTargets.add(g.toString());
 		}
 	    }
 
-	    Type result;
-	    while (!Type.NULL.equals((result = scanToRecordStart(input, typeTargets)))) {
+	    String result;
+	    while (!"NULL".equals((result = scanToRecordStart(input, typeTargets)))) {
 		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input));
@@ -648,15 +648,15 @@ public class SPImporter {
 	return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + l + "." + file;
     }
 
-    static Type scanToRecordStart(LFileChannel in, ArrayList<Type> target) throws java.io.IOException {
-	Type type;
+    static String scanToRecordStart(LFileChannel in, ArrayList<String> target) throws java.io.IOException {
+	String type;
 	int size;
 
 	while (in.available() >= 12) {
 	    size = Ln.arrayToInt(in.extractInts(4, 4));
 	    try {
-		type = Type.valueOf(Ln.arrayToString(in.extractInts(0, 4)));
-		for (Type t : target) {
+		type = Ln.arrayToString(in.extractInts(0, 4));
+		for (String t : target) {
 		    if (t.equals(type)) {
 			in.skip(-12); // Go to start of GRUP
 			return type;
@@ -669,7 +669,7 @@ public class SPImporter {
 	    in.skip(size - 12);  // -12 for parts already read in
 	}
 
-	return Type.NULL;
+	return "NULL";
     }
 
     static RecordShrinkArray extractGRUPData(LFileChannel in) throws IOException {

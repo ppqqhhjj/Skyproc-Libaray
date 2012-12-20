@@ -13,11 +13,11 @@ public class DestructionData extends SubShell {
     static SubPrototype destructionProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.DEST));
+	    add(new SubData("DEST"));
 	    add(new SubList<>(new DSTD()));
-	    add(new SubData(Type.DMDL));
-	    add(new SubData(Type.DMDT));
-	    add(new SubData(Type.DMDS));
+	    add(new SubData("DMDL"));
+	    add(new SubData("DMDT"));
+	    add(new SubData("DMDS"));
 	}
     };
 
@@ -30,8 +30,8 @@ public class DestructionData extends SubShell {
 	static SubPrototype dstdProto = new SubPrototype() {
 	    @Override
 	    protected void addRecords() {
-		add(new SubData(Type.DSTD));
-		add(new SubData(Type.DSTF));
+		add(new SubData("DSTD"));
+		add(new SubData("DSTF"));
 	    }
 	};
 
@@ -40,13 +40,13 @@ public class DestructionData extends SubShell {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DSTD();
 	}
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new DestructionData();
     }
 

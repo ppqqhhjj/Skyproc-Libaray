@@ -76,16 +76,16 @@ class SubForm extends SubRecordTyped {
 	return ID;
     }
 
-    SubForm(Type type_) {
+    SubForm(String type_) {
 	super(type_);
     }
 
-    SubForm(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
+    SubForm(LShrinkArray in, String type_) throws BadRecord, DataFormatException, BadParameter {
 	this(type_);
 	parseData(in);
     }
 
-    SubForm(Type type, FormID form) {
+    SubForm(String type, FormID form) {
 	this(type);
 	setForm(form);
     }
@@ -140,7 +140,7 @@ class SubForm extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new SubForm(type_);
     }
 
@@ -179,7 +179,7 @@ class SubForm extends SubRecordTyped {
 
     @Override
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>(1);
+	ArrayList<FormID> out = new ArrayList<>(1);
 	out.add(ID);
 	return out;
     }

@@ -17,13 +17,13 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ModListing extends SubRecordTyped implements Comparable {
+public class ModListing extends SubRecord implements Comparable {
 
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.MAST, Type.DATA}));
+    private final static ArrayList<String> type = new ArrayList<>(Arrays.asList(new String[]{"MAST", "DATA"}));
     static ModListing skyrim = new ModListing("Skyrim.esm");
     static ModListing update = new ModListing("Update.esm");
 
-    SubString mast = SubString.getNew(Type.MAST, true);
+    SubString mast = SubString.getNew("MAST", true);
     boolean master = false;
 
     ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
@@ -54,7 +54,7 @@ public class ModListing extends SubRecordTyped implements Comparable {
     }
 
     ModListing() {
-	super(type);
+	super();
     }
 
     final void setString(String in) {
@@ -92,7 +92,7 @@ public class ModListing extends SubRecordTyped implements Comparable {
     void export(LExporter out, Mod srcMod) throws IOException {
 	mast.string = print(); // Put the suffix in the record
 	mast.export(out, srcMod);
-	SubData data = new SubData(Type.DATA);
+	SubData data = new SubData("DATA");
 	data.initialize(8);
 	data.export(out, srcMod);
 	setString(print()); // Take suffix back out of record
@@ -101,14 +101,14 @@ public class ModListing extends SubRecordTyped implements Comparable {
     @Override
     final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
-	    case MAST:
+	    case "MAST":
 		mast.parseData(in);
 		setString(mast.string);
 	}
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new ModListing();
     }
 
@@ -235,5 +235,10 @@ public class ModListing extends SubRecordTyped implements Comparable {
 		}
 	    }
 	}
+    }
+
+    @Override
+    ArrayList<String> getTypes() {
+	return type;
     }
 }

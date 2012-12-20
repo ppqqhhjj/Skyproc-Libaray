@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Form List Record
@@ -14,12 +13,11 @@ import java.util.Arrays;
 public class FLST extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.FLST}));
     static final SubPrototype FLSTproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
-	    add(new SubList<>(new SubForm(Type.LNAM)));
+	    add(new SubList<>(new SubForm("LNAM")));
 	}
     };
 
@@ -40,22 +38,22 @@ public class FLST extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("FLST");
     }
 
     @Override
     Record getNew() {
 	return new FLST();
     }
-    
+
     // Get/Set
     /**
      *
      * @return List of all the FormIDs in the Form list.
      */
     public ArrayList<FormID> getFormIDEntries() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.LNAM));
+	return SubList.subFormToPublic(subRecords.getSubList("LNAM"));
     }
 
     /**
@@ -63,7 +61,7 @@ public class FLST extends MajorRecord {
      * @param entry FormID to add to the list.
      */
     public void addFormEntry(FormID entry) {
-	subRecords.getSubList(Type.LNAM).add(new SubForm(Type.LNAM, entry));
+	subRecords.getSubList("LNAM").add(new SubForm("LNAM", entry));
     }
 
     /**
@@ -71,7 +69,7 @@ public class FLST extends MajorRecord {
      * @param entry FormID to remove (if it exists).
      */
     public void removeFormEntry(FormID entry) {
-	subRecords.getSubList(Type.LNAM).remove(new SubForm(Type.LNAM, entry));
+	subRecords.getSubList("LNAM").remove(new SubForm("LNAM", entry));
     }
 
     /**
@@ -79,7 +77,7 @@ public class FLST extends MajorRecord {
      * @return
      */
     public int getSize() {
-	return subRecords.getSubList(Type.LNAM).size();
+	return subRecords.getSubList("LNAM").size();
     }
 
     /**
@@ -88,6 +86,6 @@ public class FLST extends MajorRecord {
      * @param i
      */
     public void addFormEntryAtIndex(FormID entry, int i) {
-	subRecords.getSubList(Type.LNAM).addAtIndex(new SubForm(Type.LNAM, entry), i);
+	subRecords.getSubList("LNAM").addAtIndex(new SubForm("LNAM", entry), i);
     }
 }

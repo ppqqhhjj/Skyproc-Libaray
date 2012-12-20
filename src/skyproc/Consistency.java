@@ -22,9 +22,9 @@ import skyproc.gui.SPProgressBarPlug;
 class Consistency {
 
     static String header = "Consistency";
-    static Map<String, FormID> edidToForm = new HashMap<String, FormID>();
-    static Set<FormID> IDs = new HashSet<FormID>();
-    static Set<FormID> newIDs = new HashSet<FormID>();
+    static Map<String, FormID> edidToForm = new HashMap<>();
+    static Set<FormID> IDs = new HashSet<>();
+    static Set<FormID> newIDs = new HashSet<>();
     static File consistencyFile;
     static boolean imported = false;
     static boolean cleaned = false;
@@ -91,7 +91,7 @@ class Consistency {
 	    boolean syncing = SPGlobal.sync();
 	    SPGlobal.sync(true);
 	    consistencyPatch = importer.importMod(patch.modInfo, SPGlobal.pathToData, false, GRUP_TYPE.values());
-	    edidToForm = new HashMap<String, FormID>(consistencyPatch.numRecords());
+	    edidToForm = new HashMap<>(consistencyPatch.numRecords());
 	    SPGlobal.sync(syncing);
 	    mergetIntoKnownEDIDs(consistencyPatch);
 

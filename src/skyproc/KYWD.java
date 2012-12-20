@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Keyword Records
@@ -14,12 +13,11 @@ import java.util.Arrays;
 public class KYWD extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.KYWD}));
     static final SubPrototype KYWDproto = new SubPrototype(MajorRecord.majorProto){
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.CNAM));
+	    add(new SubData("CNAM"));
 	}
     };
 
@@ -37,7 +35,7 @@ public class KYWD extends MajorRecord {
      */
     public KYWD (Mod modToOriginateFrom, String edid, int color) {
 	this(modToOriginateFrom, edid);
-	subRecords.setSubData(Type.CNAM, color);
+	subRecords.setSubData("CNAM", color);
     }
 
     /**
@@ -51,8 +49,8 @@ public class KYWD extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("KYWD");
     }
 
     @Override

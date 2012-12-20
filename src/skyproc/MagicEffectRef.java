@@ -5,9 +5,6 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -26,7 +23,7 @@ public class MagicEffectRef extends SubShellBulkType {
     static SubPrototype magicEffProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new SubForm(Type.EFID));
+	    add(new SubForm("EFID"));
 	    add(new EFIT());
 	    add(new SubList<>(new Condition()));
 	}
@@ -37,7 +34,7 @@ public class MagicEffectRef extends SubShellBulkType {
      */
     public MagicEffectRef(FormID magicEffectRef) {
 	this();
-	subRecords.setSubForm(Type.EFID, magicEffectRef);
+	subRecords.setSubForm("EFID", magicEffectRef);
     }
 
     MagicEffectRef() {
@@ -50,7 +47,7 @@ public class MagicEffectRef extends SubShellBulkType {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new MagicEffectRef();
     }
 
@@ -97,7 +94,7 @@ public class MagicEffectRef extends SubShellBulkType {
 	int duration = 0;
 
 	EFIT() {
-	    super(Type.EFIT);
+	    super("EFIT");
 	}
 
 	@Override
@@ -117,7 +114,7 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new EFIT();
 	}
 
@@ -138,7 +135,7 @@ public class MagicEffectRef extends SubShellBulkType {
      * @param magicRef
      */
     public void setMagicRef(FormID magicRef) {
-	subRecords.setSubForm(Type.EFID, magicRef);
+	subRecords.setSubForm("EFID", magicRef);
     }
 
     /**
@@ -146,11 +143,11 @@ public class MagicEffectRef extends SubShellBulkType {
      * @return
      */
     public FormID getMagicRef() {
-	return subRecords.getSubForm(Type.EFID).getForm();
+	return subRecords.getSubForm("EFID").getForm();
     }
 
     EFIT getEFIT() {
-	return (EFIT)subRecords.get(Type.EFIT);
+	return (EFIT)subRecords.get("EFIT");
     }
 
     /**

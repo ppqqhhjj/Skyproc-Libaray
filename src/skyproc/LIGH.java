@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -22,23 +21,22 @@ import skyproc.exceptions.BadRecord;
 public class LIGH extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LIGH}));
     static final SubPrototype LIGHproto = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    add(new SubData(Type.OBND));
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
+	    after(new ScriptPackage(), "EDID");
+	    add(new SubData("OBND"));
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
 	    add(new DestructionData());
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.ICON, true));
-	    add(SubString.getNew(Type.MICO, true));
+	    reposition("FULL");
+	    add(SubString.getNew("ICON", true));
+	    add(SubString.getNew("MICO", true));
 	    add(new DATA());
-	    add(new SubFloat(Type.FNAM));
-	    add(new SubForm(Type.SNAM));
+	    add(new SubFloat("FNAM"));
+	    add(new SubForm("SNAM"));
 	}
     };
     static class DATA extends SubRecordTyped {
@@ -60,7 +58,7 @@ public class LIGH extends MajorRecordNamed {
         float weight = 0;
 
         DATA() {
-            super(Type.DATA);
+            super("DATA");
         }
 
         @Override
@@ -104,7 +102,7 @@ public class LIGH extends MajorRecordNamed {
         }
 
         @Override
-        SubRecord getNew(Type type) {
+        SubRecord getNew(String type) {
             return new DATA();
         }
 
@@ -262,7 +260,7 @@ public class LIGH extends MajorRecordNamed {
          */
         PortalStrict;
     }
-    
+
     // Common Functions
     LIGH() {
         super();
@@ -275,8 +273,8 @@ public class LIGH extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-        return type;
+    ArrayList<String> getTypes() {
+        return Record.getTypeList("LIGH");
     }
 
     //Get/Set
@@ -285,7 +283,7 @@ public class LIGH extends MajorRecordNamed {
      * @param path
      */
     public void setModel(String path) {
-        subRecords.setSubString(Type.MODL, path);
+        subRecords.setSubString("MODL", path);
     }
 
     /**
@@ -293,11 +291,11 @@ public class LIGH extends MajorRecordNamed {
      * @return
      */
     public String getModel() {
-        return subRecords.getSubString(Type.MODL).print();
+        return subRecords.getSubString("MODL").print();
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

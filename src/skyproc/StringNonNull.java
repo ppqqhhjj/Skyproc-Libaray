@@ -16,7 +16,6 @@ import lev.LExporter;
 class StringNonNull extends Record {
 
     String data;
-    private static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.NULL}));
 
     StringNonNull() {
     }
@@ -59,8 +58,8 @@ class StringNonNull extends Record {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-        return type;
+    ArrayList<String> getTypes() {
+        return Record.getTypeList("NULL");
     }
 
     @Override

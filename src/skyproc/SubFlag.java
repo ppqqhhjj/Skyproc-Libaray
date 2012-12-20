@@ -15,7 +15,7 @@ import skyproc.exceptions.BadRecord;
 class SubFlag extends SubRecordTyped {
     LFlags flags;
 
-    SubFlag(Type type_, int size) {
+    SubFlag(String type_, int size) {
 	super(type_);
 	flags = new LFlags(size);
     }
@@ -49,7 +49,7 @@ class SubFlag extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubFlag(type, flags.length());
     }
 

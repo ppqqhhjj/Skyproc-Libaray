@@ -19,20 +19,20 @@ import skyproc.exceptions.BadRecord;
  */
 class SubString extends SubRecordTyped {
 
-    static SubString getNew(Type t, boolean nullterminated) {
+    static SubString getNew(String type, boolean nullterminated) {
 	if (nullterminated) {
-	    return new SubString(t);
+	    return new SubString(type);
 	} else {
-	    return new SubStringNonNull(t);
+	    return new SubStringNonNull(type);
 	}
     }
     String string;
 
-    SubString(Type type_) {
+    SubString(String type_) {
 	super(type_);
     }
 
-    SubString(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
+    SubString(LShrinkArray in, String type_) throws BadRecord, DataFormatException, BadParameter {
 	this(type_);
 	parseData(in);
     }
@@ -77,7 +77,7 @@ class SubString extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new SubString(type_);
     }
 

@@ -45,7 +45,7 @@ public class SubListSortedUnique<T extends SubRecord> extends SubListSorted<T> {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubListSortedUnique(this);
     }
 }

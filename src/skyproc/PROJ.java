@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,21 +20,20 @@ import skyproc.exceptions.BadRecord;
 public class PROJ extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final  ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.PROJ}));
     static final SubPrototype PROJprototype = new SubPrototype(MajorRecordNamed.namedProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.OBND));
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new SubData(Type.MODS));
+	    add(new SubData("OBND"));
+	    reposition("FULL");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new SubData("MODS"));
 	    add(new DestructionData());
 	    add(new DATA());
-	    add(SubString.getNew(Type.NAM1, true));
-	    add(new SubData(Type.NAM2));
-	    add(new SubData(Type.VNAM)); // SoundVolume
+	    add(SubString.getNew("NAM1", true));
+	    add(new SubData("NAM2"));
+	    add(new SubData("VNAM")); // SoundVolume
 	}
     };
     static class DATA extends SubRecordTyped {
@@ -66,7 +64,7 @@ public class PROJ extends MajorRecordNamed {
 	byte[] collisionLayer = new byte[4];
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -146,7 +144,7 @@ public class PROJ extends MajorRecordNamed {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -155,7 +153,7 @@ public class PROJ extends MajorRecordNamed {
 	    return 92;
 	}
     }
-    
+
     // Enums
 
     /**
@@ -256,7 +254,7 @@ public class PROJ extends MajorRecordNamed {
 	    }
 	}
     }
-    
+
     // Common Functions
     PROJ() {
 	super();
@@ -264,8 +262,8 @@ public class PROJ extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("PROJ");
     }
 
     @Override
@@ -279,7 +277,7 @@ public class PROJ extends MajorRecordNamed {
      * @param filename
      */
     public void setModel(String filename) {
-	subRecords.setSubString(Type.MODL, filename);
+	subRecords.setSubString("MODL", filename);
     }
 
     /**
@@ -287,7 +285,7 @@ public class PROJ extends MajorRecordNamed {
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -295,7 +293,7 @@ public class PROJ extends MajorRecordNamed {
      * @param filename
      */
     public void setEffectModel(String filename) {
-	subRecords.setSubString(Type.NAM1, filename);
+	subRecords.setSubString("NAM1", filename);
     }
 
     /**
@@ -303,11 +301,11 @@ public class PROJ extends MajorRecordNamed {
      * @return
      */
     public String getEffectModel() {
-	return subRecords.getSubString(Type.NAM1).print();
+	return subRecords.getSubString("NAM1").print();
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

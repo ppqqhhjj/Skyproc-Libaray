@@ -19,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  */
 abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
-    protected Map<Type, SubRecord> map = new HashMap<>(0);
+    protected Map<String, SubRecord> map = new HashMap<>(0);
 
     public SubRecords() {
     }
@@ -31,7 +31,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     }
 
     public void add(SubRecord r) {
-	for (Type t : r.getTypes()) {
+	for (String t : r.getTypes()) {
 	    map.put(t, r);
 	}
     }
@@ -46,115 +46,115 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return s.isValid();
     }
 
-    public boolean contains(Type t) {
+    public boolean contains(String t) {
 	return map.containsKey(t);
     }
 
-    public SubRecord get(Type in) {
+    public SubRecord get(String in) {
 	return map.get(in);
     }
 
-    public SubString getSubString(Type in) {
+    public SubString getSubString(String in) {
 	return (SubString) get(in);
     }
 
-    public void setSubString(Type in, String str) {
+    public void setSubString(String in, String str) {
 	getSubString(in).setString(str);
     }
 
-    public SubStringPointer getSubStringPointer(Type in) {
+    public SubStringPointer getSubStringPointer(String in) {
 	return (SubStringPointer) get(in);
     }
 
-    public void setSubStringPointer(Type in, String s) {
+    public void setSubStringPointer(String in, String s) {
 	getSubStringPointer(in).setText(s);
     }
 
-    public SubForm getSubForm(Type in) {
+    public SubForm getSubForm(String in) {
 	return (SubForm) get(in);
     }
 
-    public void setSubForm(Type in, FormID id) {
+    public void setSubForm(String in, FormID id) {
 	getSubForm(in).setForm(id);
     }
 
-    public SubFloat getSubFloat(Type in) {
+    public SubFloat getSubFloat(String in) {
 	return (SubFloat) get(in);
     }
 
-    public void setSubFloat(Type in, float f) {
+    public void setSubFloat(String in, float f) {
 	getSubFloat(in).set(f);
     }
 
-    public SubData getSubData(Type in) {
+    public SubData getSubData(String in) {
 	return (SubData) get(in);
     }
 
-    public void setSubData(Type in, byte[] b) {
+    public void setSubData(String in, byte[] b) {
 	getSubData(in).setData(b);
     }
 
-    public void setSubData(Type in, int i) {
+    public void setSubData(String in, int i) {
 	getSubData(in).setData(i);
     }
 
-    public SubFlag getSubFlag(Type in) {
+    public SubFlag getSubFlag(String in) {
 	return (SubFlag) get(in);
     }
 
-    public void setSubFlag(Type in, int i, boolean b) {
+    public void setSubFlag(String in, int i, boolean b) {
 	getSubFlag(in).set(i, b);
     }
 
-    public SubInt getSubInt(Type in) {
+    public SubInt getSubInt(String in) {
 	return (SubInt) get(in);
     }
 
-    public void setSubInt(Type in, int i) {
+    public void setSubInt(String in, int i) {
 	getSubInt(in).set(i);
     }
 
-    public SubRGB getSubRGB(Type in) {
+    public SubRGB getSubRGB(String in) {
 	return (SubRGB) get(in);
     }
 
-    public void setSubRGB(Type in, RGB c, float f) {
+    public void setSubRGB(String in, RGB c, float f) {
 	getSubRGB(in).set(c, f);
     }
 
-    public SubRGBshort getSubRGBshort(Type in) {
+    public SubRGBshort getSubRGBshort(String in) {
 	return (SubRGBshort) get(in);
     }
 
-    public void setSubRGBshort(Type in, RGBA c, short val) {
+    public void setSubRGBshort(String in, RGBA c, short val) {
 	getSubRGBshort(in).set(c, val);
     }
 
-    public SubMarkerSet getSubMarker(Type in) {
+    public SubMarkerSet getSubMarker(String in) {
 	return (SubMarkerSet) get(in);
     }
 
     public KeywordSet getKeywords() {
-	return (KeywordSet) get(Type.KWDA);
+	return (KeywordSet) get("KWDA");
     }
 
-    public SubFormArray getSubFormArray(Type in) {
+    public SubFormArray getSubFormArray(String in) {
 	return (SubFormArray) get(in);
     }
 
-    public SubList getSubList(Type in) {
+    public SubList getSubList(String in) {
 	return (SubList) get(in);
     }
 
     public ScriptPackage getScripts() {
-	return (ScriptPackage) get(Type.VMAD);
+	return (ScriptPackage) get("VMAD");
     }
 
     public BodyTemplate getBodyTemplate() {
-	return (BodyTemplate) get(Type.BODT);
+	return (BodyTemplate) get("BODT");
     }
 
-    public SubShell getSubShell(Type t) {
+    public SubShell getSubShell(String t) {
 	return (SubShell) get(t);
     }
 
@@ -181,11 +181,11 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	    String header = "Summary: ";
 	    String data = "";
 	    int counter = 0;
-	    ArrayList<Type> printedTypes = new ArrayList<>();
-	    for (Type type : getTypes()) {
+	    ArrayList<String> printedTypes = new ArrayList<>();
+	    for (String type : getTypes()) {
 		SubRecord s = map.get(type);
 		if (s != null && s.isValid() && !printedTypes.contains(type)) {
-		    data = data + type.toString() + " ";
+		    data = data + type + " ";
 		    if (s instanceof SubList) {
 			data = data + "(" + ((SubList) s).size() + ") ";
 		    }
@@ -211,16 +211,16 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     }
 
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type nextType = Record.getNextType(in);
-	if (contains(nextType)) {
-	    SubRecord record = get(nextType);
+	String nextType = Record.getNextType(in);
+	SubRecord record = get(nextType);
+	if (record != null) {
 	    record.parseData(record.extractRecordData(in));
 	} else {
-	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType.toString() + " record.");
+	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType + " record.");
 	}
     }
 
-    public void remove(Type in) {
+    public void remove(String in) {
 	if (map.containsKey(in)) {
 	    map.remove(in);
 	}
@@ -234,9 +234,9 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return length;
     }
 
-    public abstract ArrayList<Type> getTypes();
+    public abstract ArrayList<String> getTypes();
 
-    public abstract ArrayList<Type> getTopLevelTypes();
+    public abstract ArrayList<String> getTopLevelTypes();
 
     void fetchStringPointers(Mod srcMod) {
 	for (SubRecord s : map.values()) {

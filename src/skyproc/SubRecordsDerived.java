@@ -29,7 +29,7 @@ class SubRecordsDerived extends SubRecords {
 	return prototype.forceExport.contains(s.getType()) || super.shouldExport(s);
     }
 
-    public boolean shouldExport(Type t) {
+    public boolean shouldExport(String t) {
 	if (map.containsKey(t)) {
 	    return shouldExport(map.get(t));
 	} else {
@@ -38,12 +38,12 @@ class SubRecordsDerived extends SubRecords {
     }
 
     @Override
-    public boolean contains(Type t) {
+    public boolean contains(String t) {
 	return prototype.contains(t);
     }
 
     @Override
-    public SubRecord get(Type in) {
+    public SubRecord get(String in) {
 	SubRecord s = null;
 	if (map.containsKey(in)) {
 	    s = map.get(in);
@@ -53,7 +53,7 @@ class SubRecordsDerived extends SubRecords {
 	return s;
     }
 
-    SubRecord createFromPrototype(Type in) {
+    SubRecord createFromPrototype(String in) {
 	SubRecord s = prototype.get(in).getNew(in);
 	add(s);
 	return s;
@@ -62,7 +62,7 @@ class SubRecordsDerived extends SubRecords {
     @Override
     public Iterator<SubRecord> iterator() {
 	ArrayList<SubRecord> list = new ArrayList<>();
-	for (Type t : prototype.listExport) {
+	for (String t : prototype.listExport) {
 	    if (shouldExport(t)) {
 		list.add(get(t));
 	    }
@@ -71,18 +71,18 @@ class SubRecordsDerived extends SubRecords {
     }
 
     @Override
-    public ArrayList<Type> getTypes() {
+    public ArrayList<String> getTypes() {
 	return prototype.listExtensive;
     }
 
     @Override
-    public ArrayList<Type> getTopLevelTypes() {
+    public ArrayList<String> getTopLevelTypes() {
 	return prototype.listExport;
     }
 
     class DerivedIterator implements Iterator<SubRecord> {
 
-	Iterator<Type> list;
+	Iterator<String> list;
 
 	DerivedIterator() {
 	    list = prototype.listExport.iterator();

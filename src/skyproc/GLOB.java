@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.Ln;
@@ -19,15 +18,14 @@ import skyproc.exceptions.BadRecord;
 public class GLOB extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GLOB}));
     static final SubPrototype GLOBproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    SubData fnam = new SubData(Type.FNAM);
+	    SubData fnam = new SubData("FNAM");
 	    fnam.data = new byte[1];
 	    add(fnam);
-	    add(new SubFloat(Type.FLTV));
+	    add(new SubFloat("FLTV"));
 	}
     };
 
@@ -55,7 +53,7 @@ public class GLOB extends MajorRecord {
 	    this.value = value;
 	}
     }
-    
+
     // Get/Set
     GLOB () {
 	super();
@@ -94,8 +92,8 @@ public class GLOB extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("GLOB");
     }
 
     // Get/Set
@@ -104,7 +102,7 @@ public class GLOB extends MajorRecord {
      * @return
      */
     public GLOBType getGLOBType () {
-	SubData fnam = subRecords.getSubData(Type.FNAM);
+	SubData fnam = subRecords.getSubData("FNAM");
 	if ((int)fnam.data[0] == GLOBType.Short.value) {
 	    return GLOBType.Short;
 	} else if ((int)fnam.data[0] == GLOBType.Long.value) {
@@ -118,7 +116,7 @@ public class GLOB extends MajorRecord {
      * @param type
      */
     final public void setType (GLOBType type) {
-	subRecords.getSubData(Type.FNAM).data[0] = (byte) type.value;
+	subRecords.getSubData("FNAM").data[0] = (byte) type.value;
     }
 
     @Override
@@ -139,7 +137,7 @@ public class GLOB extends MajorRecord {
      * @return
      */
     public float getValue () {
-	return subRecords.getSubFloat(Type.FLTV).get();
+	return subRecords.getSubFloat("FLTV").get();
     }
 
     /**
@@ -147,7 +145,7 @@ public class GLOB extends MajorRecord {
      * @param value
      */
     final public void setValue (Float value) {
-	subRecords.setSubFloat(Type.FLTV, value);
+	subRecords.setSubFloat("FLTV", value);
     }
 
     /**

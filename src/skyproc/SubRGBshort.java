@@ -22,19 +22,19 @@ public class SubRGBshort extends SubRecordTyped {
     short b;
     short a;
 
-    SubRGBshort(Type type, short red, short green, short blue, short alpha) {
+    SubRGBshort(String type, short red, short green, short blue, short alpha) {
 	this(type);
 	r = red;
 	g = green;
 	b = blue;
     }
 
-    SubRGBshort(Type type) {
+    SubRGBshort(String type) {
 	super(type);
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubRGBshort(type);
     }
 

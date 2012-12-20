@@ -1073,7 +1073,7 @@ public enum ActorValue {
 
 	String[] values = new String[256];
 
-	ArrayList<String> outStrings = new ArrayList<String>();
+	ArrayList<String> outStrings = new ArrayList<>();
 	while (in.ready()) {
 	    String line = in.readLine();
 	    log.write("Read Line: " + line);

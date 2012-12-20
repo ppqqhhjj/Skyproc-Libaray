@@ -7,7 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,7 +20,6 @@ import skyproc.exceptions.BadRecord;
 public class GMST extends MajorRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.GMST}));
     static final SubPrototype GMSTproto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
@@ -33,16 +31,16 @@ public class GMST extends MajorRecord {
     static final class DATA extends SubRecordTyped {
 
 	private GMSTType GMSTtype;
-	SubData DATA = new SubData(Type.DATA);
-	SubStringPointer DATAs = new SubStringPointer(Type.DATA, SubStringPointer.Files.STRINGS);
+	SubData DATA = new SubData("DATA");
+	SubStringPointer DATAs = new SubStringPointer("DATA", SubStringPointer.Files.STRINGS);
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	    DATAs.forceExport = true;
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -12240,13 +12238,13 @@ public class GMST extends MajorRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("GMST");
     }
 
     @Override
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	SubRecord data = ((SubRecordsStream) subRecords).getSilent(Type.DATA);
+	SubRecord data = ((SubRecordsStream) subRecords).getSilent("DATA");
 	updateDATAtype();
 	super.importSubRecords(in);
 	((SubRecordsStream) subRecords).loadFromPosition(data);
@@ -12290,7 +12288,7 @@ public class GMST extends MajorRecord {
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

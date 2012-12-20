@@ -49,7 +49,7 @@ public class LeveledEntry extends SubShell {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new LeveledEntry();
     }
 
@@ -60,11 +60,11 @@ public class LeveledEntry extends SubShell {
 	int count = 1;
 
 	LVLOin() {
-	    super(Type.LVLO);
+	    super("LVLO");
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new LVLOin();
 	}
 
@@ -75,7 +75,7 @@ public class LeveledEntry extends SubShell {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(entry);
 	    return out;
 	}
@@ -105,11 +105,11 @@ public class LeveledEntry extends SubShell {
 	boolean valid = false;
 
 	COED() {
-	    super(Type.COED);
+	    super("COED");
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new COED();
 	}
 
@@ -151,7 +151,7 @@ public class LeveledEntry extends SubShell {
     }
 
     LVLOin getEntry() {
-	return (LVLOin) subRecords.get(Type.LVLO);
+	return (LVLOin) subRecords.get("LVLO");
     }
 
     /**

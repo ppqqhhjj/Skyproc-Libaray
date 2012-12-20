@@ -22,16 +22,16 @@ class SubData extends SubRecordTyped {
 
     byte[] data;
 
-    SubData(Type type_) {
+    SubData(String type_) {
 	super(type_);
     }
 
-    SubData(LShrinkArray in, Type type_) throws BadRecord, DataFormatException, BadParameter {
+    SubData(LShrinkArray in, String type_) throws BadRecord, DataFormatException, BadParameter {
 	this(type_);
 	parseData(in);
     }
 
-    SubData(Type type_, byte[] in) {
+    SubData(String type_, byte[] in) {
 	this(type_);
 	if (in != null) {
 	    data = new byte[in.length];
@@ -39,7 +39,7 @@ class SubData extends SubRecordTyped {
 	}
     }
 
-    SubData(Type type_, int in) {
+    SubData(String type_, int in) {
 	this(type_, Ln.toByteArray(in));
     }
 
@@ -117,7 +117,7 @@ class SubData extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type_) {
+    SubRecord getNew(String type_) {
 	return new SubData(type_, data);
     }
 

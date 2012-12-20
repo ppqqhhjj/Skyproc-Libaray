@@ -19,12 +19,12 @@ class SubFloat extends SubRecordTyped {
 
     float data;
 
-    SubFloat(Type type) {
+    SubFloat(String type) {
 	super(type);
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubFloat(type);
     }
 

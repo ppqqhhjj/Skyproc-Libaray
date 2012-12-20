@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -21,22 +20,21 @@ import skyproc.exceptions.BadRecord;
 public class AMMO extends MajorRecordDescription {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.AMMO}));
     static final SubPrototype AMMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData(Type.OBND));
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(new SubForm(Type.YNAM));
-	    add(new SubForm(Type.ZNAM));
-	    reposition(Type.DESC);
+	    add(new SubData("OBND"));
+	    reposition("FULL");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(new SubForm("YNAM"));
+	    add(new SubForm("ZNAM"));
+	    reposition("DESC");
 	    add(new KeywordSet());
 	    add(new DATA());
-	    add(SubString.getNew(Type.ONAM, true));
+	    add(SubString.getNew("ONAM", true));
 	}
     };
     static final class DATA extends SubRecordTyped {
@@ -47,7 +45,7 @@ public class AMMO extends MajorRecordDescription {
 	int value = 0;
 
 	DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -69,7 +67,7 @@ public class AMMO extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -80,7 +78,7 @@ public class AMMO extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(projectile);
 	    return out;
 	}
@@ -102,7 +100,7 @@ public class AMMO extends MajorRecordDescription {
 	 */
 	VanishesWhenNotInFlight; //2
     }
-    
+
     // Common Functions
     AMMO() {
 	super();
@@ -115,8 +113,8 @@ public class AMMO extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("AMMO");
     }
 
     //Get/Set
@@ -133,7 +131,7 @@ public class AMMO extends MajorRecordDescription {
      * @param path
      */
     public void setModel(String path) {
-	subRecords.setSubString(Type.MODL, path);
+	subRecords.setSubString("MODL", path);
     }
 
     /**
@@ -141,7 +139,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -149,7 +147,7 @@ public class AMMO extends MajorRecordDescription {
      * @param sound
      */
     public void setPickupSound(FormID sound) {
-	subRecords.setSubForm(Type.YNAM, sound);
+	subRecords.setSubForm("YNAM", sound);
     }
 
     /**
@@ -157,7 +155,7 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public FormID getPickupSound() {
-	return subRecords.getSubForm(Type.YNAM).getForm();
+	return subRecords.getSubForm("YNAM").getForm();
     }
 
     /**
@@ -165,7 +163,7 @@ public class AMMO extends MajorRecordDescription {
      * @param sound
      */
     public void setDropSound(FormID sound) {
-	subRecords.setSubForm(Type.ZNAM, sound);
+	subRecords.setSubForm("ZNAM", sound);
     }
 
     /**
@@ -173,11 +171,11 @@ public class AMMO extends MajorRecordDescription {
      * @return
      */
     public FormID getDropSound() {
-	return subRecords.getSubForm(Type.ZNAM).getForm();
+	return subRecords.getSubForm("ZNAM").getForm();
     }
 
     DATA getData() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**

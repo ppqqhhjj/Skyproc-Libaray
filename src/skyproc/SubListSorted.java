@@ -26,7 +26,7 @@ class SubListSorted<T extends SubRecord> extends SubList<T> {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubListSorted(this);
     }
 

@@ -16,9 +16,9 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
 
 	@Override
 	protected void addRecords() {
-	    SubStringPointer description = new SubStringPointer(Type.DESC, Files.DLSTRINGS);
+	    SubStringPointer description = new SubStringPointer("DESC", Files.DLSTRINGS);
 	    description.forceExport = true;
-	    forceExport(Type.DESC);
+	    forceExport("DESC");
 	    add(description);
 	}
     };
@@ -33,7 +33,7 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * empty.
      */
     public String getDescription() {
-	return subRecords.getSubStringPointer(Type.DESC).print();
+	return subRecords.getSubStringPointer("DESC").print();
     }
 
     /**
@@ -41,6 +41,6 @@ public abstract class MajorRecordDescription extends MajorRecordNamed {
      * @param description String to set as the Major Record description.
      */
     public void setDescription(String description) {
-	subRecords.setSubStringPointer(Type.DESC, description);
+	subRecords.setSubStringPointer("DESC", description);
     }
 }

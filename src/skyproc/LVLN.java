@@ -1,7 +1,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Leveled List.  A list of entries used for spawnpoints when choosing which actor to
@@ -11,14 +10,13 @@ import java.util.Arrays;
 public class LVLN extends LeveledRecord {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.LVLN}));
     static final SubPrototype LVLNproto = new SubPrototype(LeveledRecord.LeveledProto){
 
 	@Override
 	protected void addRecords() {
-	    remove(Type.FULL);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
+	    remove("FULL");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
 	}
     };
 
@@ -45,8 +43,8 @@ public class LVLN extends LeveledRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-        return type;
+    ArrayList<String> getTypes() {
+        return Record.getTypeList("LVLN");
     }
 
     /**
@@ -56,7 +54,7 @@ public class LVLN extends LeveledRecord {
     @Override
     public String print() {
         super.print();
-        logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag(Type.LVLF).print());
+        logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag("LVLF").print());
         for (LeveledEntry entry : getEntries()) {
             entry.toString();
         }
@@ -74,7 +72,7 @@ public class LVLN extends LeveledRecord {
      * @return Model path associated with the LVLN.
      */
     public String getModelPath() {
-        return subRecords.getSubString(Type.MODL).print();
+        return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -82,6 +80,6 @@ public class LVLN extends LeveledRecord {
      * @param in String to set the LVLN model path to.
      */
     public void setModelPath(String in) {
-        subRecords.setSubString(Type.MODL, in);
+        subRecords.setSubString("MODL", in);
     }
 }

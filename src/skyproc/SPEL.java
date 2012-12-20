@@ -14,16 +14,15 @@ import java.util.Arrays;
 public class SPEL extends MagicItem {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.SPEL}));
     static final SubPrototype SPELproto = new SubPrototype(MagicItem.magicItemProto){
 
 	@Override
 	protected void addRecords() {
-	    add(new SubForm(Type.MDOB));
-	    add(new SubForm(Type.ETYP));
-	    reposition(Type.DESC);
+	    add(new SubForm("MDOB"));
+	    add(new SubForm("ETYP"));
+	    reposition("DESC");
 	    add(new SPIT());
-	    reposition(Type.EFID);
+	    reposition("EFID");
 	}
     };
 
@@ -132,7 +131,7 @@ public class SPEL extends MagicItem {
     public SPEL(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
-	SubForm ETYP = subRecords.getSubForm(Type.ETYP);
+	SubForm ETYP = subRecords.getSubForm("ETYP");
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
 	ETYP.ID.standardize(modToOriginateFrom);
 
@@ -140,8 +139,8 @@ public class SPEL extends MagicItem {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("SPEL");
     }
 
     @Override
@@ -155,7 +154,7 @@ public class SPEL extends MagicItem {
      * @param invModel
      */
     public void setInventoryModel(FormID invModel) {
-	subRecords.setSubForm(Type.MODB, invModel);
+	subRecords.setSubForm("MODB", invModel);
     }
 
     /**
@@ -163,7 +162,7 @@ public class SPEL extends MagicItem {
      * @return
      */
     public FormID getInventoryModel() {
-	return subRecords.getSubForm(Type.MODB).getForm();
+	return subRecords.getSubForm("MODB").getForm();
     }
 
     /**
@@ -171,7 +170,7 @@ public class SPEL extends MagicItem {
      * @param equipType
      */
     public void setEquipSlot(FormID equipType) {
-	subRecords.setSubForm(Type.ETYP, equipType);
+	subRecords.setSubForm("ETYP", equipType);
     }
 
     /**
@@ -179,11 +178,11 @@ public class SPEL extends MagicItem {
      * @return
      */
     public FormID getEquipSlot() {
-	return subRecords.getSubForm(Type.ETYP).getForm();
+	return subRecords.getSubForm("ETYP").getForm();
     }
 
     final SPIT getSPIT() {
-	return (SPIT) subRecords.get(Type.SPIT);
+	return (SPIT) subRecords.get("SPIT");
     }
 
     /**

@@ -22,39 +22,38 @@ import skyproc.exceptions.BadRecord;
 public class WEAP extends MajorRecordDescription {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.WEAP}));
     static final SubPrototype WEAPproto = new SubPrototype(MajorRecordDescription.descProto) {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), Type.EDID);
-	    add(new SubData(Type.OBND));
-	    reposition(Type.FULL);
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(new SubForm(Type.EITM));
-	    add(new SubData(Type.EAMT));
-	    add(new SubData(Type.MODS));
-	    add(new SubForm(Type.ETYP));
-	    add(new SubForm(Type.BIDS));
-	    add(new SubForm(Type.BAMT));
+	    after(new ScriptPackage(), "EDID");
+	    add(new SubData("OBND"));
+	    reposition("FULL");
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(new SubForm("EITM"));
+	    add(new SubData("EAMT"));
+	    add(new SubData("MODS"));
+	    add(new SubForm("ETYP"));
+	    add(new SubForm("BIDS"));
+	    add(new SubForm("BAMT"));
 	    add(new KeywordSet());
-	    reposition(Type.DESC);
-	    add(SubString.getNew(Type.NNAM, true));
-	    add(new SubForm(Type.INAM));
-	    add(new SubForm(Type.SNAM));
-	    add(new SubForm(Type.XNAM));
-	    add(new SubForm(Type.WNAM));
-	    add(new SubForm(Type.TNAM));
-	    add(new SubForm(Type.UNAM));
-	    add(new SubForm(Type.NAM9));
-	    add(new SubForm(Type.NAM8));
+	    reposition("DESC");
+	    add(SubString.getNew("NNAM", true));
+	    add(new SubForm("INAM"));
+	    add(new SubForm("SNAM"));
+	    add(new SubForm("XNAM"));
+	    add(new SubForm("WNAM"));
+	    add(new SubForm("TNAM"));
+	    add(new SubForm("UNAM"));
+	    add(new SubForm("NAM9"));
+	    add(new SubForm("NAM8"));
 	    add(new DATA());
 	    add(new DNAM());
 	    add(new CRDT());
-	    add(new SubData(Type.VNAM));
-	    add(new SubForm(Type.CNAM));
+	    add(new SubData("VNAM"));
+	    add(new SubForm("CNAM"));
 	}
     };
     static final class DNAM extends SubRecordTyped {
@@ -82,7 +81,7 @@ public class WEAP extends MajorRecordDescription {
 	float stagger;
 
 	public DNAM() {
-	    super(Type.DNAM);
+	    super("DNAM");
 	}
 
 	@Override
@@ -169,7 +168,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DNAM();
 	}
 
@@ -191,7 +190,7 @@ public class WEAP extends MajorRecordDescription {
 	int damage = 0;
 
 	public DATA() {
-	    super(Type.DATA);
+	    super("DATA");
 	}
 
 	@Override
@@ -214,7 +213,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
@@ -239,7 +238,7 @@ public class WEAP extends MajorRecordDescription {
 	FormID critEffect = new FormID();
 
 	public CRDT() {
-	    super(Type.CRDT);
+	    super("CRDT");
 	}
 
 	@Override
@@ -267,7 +266,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new CRDT();
 	}
 
@@ -283,7 +282,7 @@ public class WEAP extends MajorRecordDescription {
 
 	@Override
 	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<FormID>(1);
+	    ArrayList<FormID> out = new ArrayList<>(1);
 	    out.add(critEffect);
 	    return out;
 	}
@@ -402,8 +401,8 @@ public class WEAP extends MajorRecordDescription {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("WEAP");
     }
 
     @Override
@@ -429,7 +428,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     DATA getDATA() {
-	return (DATA) subRecords.get(Type.DATA);
+	return (DATA) subRecords.get("DATA");
     }
 
     /**
@@ -485,7 +484,7 @@ public class WEAP extends MajorRecordDescription {
      * @param amount
      */
     public void setEnchantmentCharge(int amount) {
-	subRecords.getSubData(Type.EAMT).setDataAbs(amount, 2, 2);
+	subRecords.getSubData("EAMT").setDataAbs(amount, 2, 2);
     }
 
     /**
@@ -493,7 +492,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getEnchantmentCharge() {
-	return subRecords.getSubData(Type.EAMT).toInt();
+	return subRecords.getSubData("EAMT").toInt();
     }
 
     /**
@@ -501,7 +500,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setEnchantment(FormID id) {
-	subRecords.setSubForm(Type.EITM, id);
+	subRecords.setSubForm("EITM", id);
     }
 
     /**
@@ -509,7 +508,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getEnchantment() {
-	return subRecords.getSubForm(Type.EITM).getForm();
+	return subRecords.getSubForm("EITM").getForm();
     }
 
     /**
@@ -517,7 +516,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setEquipmentSlot(FormID id) {
-	subRecords.setSubForm(Type.ETYP, id);
+	subRecords.setSubForm("ETYP", id);
     }
 
     /**
@@ -525,7 +524,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getEquipmentSlot() {
-	return subRecords.getSubForm(Type.ETYP).getForm();
+	return subRecords.getSubForm("ETYP").getForm();
     }
 
     /**
@@ -533,7 +532,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setImpactSet(FormID id) {
-	subRecords.setSubForm(Type.INAM, id);
+	subRecords.setSubForm("INAM", id);
     }
 
     /**
@@ -541,7 +540,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getImpactSet() {
-	return subRecords.getSubForm(Type.INAM).getForm();
+	return subRecords.getSubForm("INAM").getForm();
     }
 
     /**
@@ -549,7 +548,7 @@ public class WEAP extends MajorRecordDescription {
      * @param filename
      */
     public void setModelFilename(String filename) {
-	subRecords.setSubString(Type.MODL, filename);
+	subRecords.setSubString("MODL", filename);
     }
 
     /**
@@ -557,7 +556,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public String getModelFilename() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -565,7 +564,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setSheathSound(FormID id) {
-	subRecords.setSubForm(Type.NAM8, id);
+	subRecords.setSubForm("NAM8", id);
     }
 
     /**
@@ -573,7 +572,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getSheathSound() {
-	return subRecords.getSubForm(Type.NAM8).getForm();
+	return subRecords.getSubForm("NAM8").getForm();
     }
 
     /**
@@ -581,7 +580,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setDrawSound(FormID id) {
-	subRecords.setSubForm(Type.NAM9, id);
+	subRecords.setSubForm("NAM9", id);
     }
 
     /**
@@ -589,7 +588,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getDrawSound() {
-	return subRecords.getSubForm(Type.NAM9).getForm();
+	return subRecords.getSubForm("NAM9").getForm();
     }
 
     /**
@@ -597,7 +596,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setSwingSound(FormID id) {
-	subRecords.setSubForm(Type.TNAM, id);
+	subRecords.setSubForm("TNAM", id);
     }
 
     /**
@@ -605,7 +604,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getSwingSound() {
-	return subRecords.getSubForm(Type.TNAM).getForm();
+	return subRecords.getSubForm("TNAM").getForm();
     }
 
     /**
@@ -613,7 +612,7 @@ public class WEAP extends MajorRecordDescription {
      * @param id
      */
     public void setBoundWeaponSound(FormID id) {
-	subRecords.setSubForm(Type.UNAM, id);
+	subRecords.setSubForm("UNAM", id);
     }
 
     /**
@@ -621,11 +620,11 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getBoundWeaponSound() {
-	return subRecords.getSubForm(Type.UNAM).getForm();
+	return subRecords.getSubForm("UNAM").getForm();
     }
 
     DNAM getDNAM() {
-	return (DNAM) subRecords.get(Type.DNAM);
+	return (DNAM) subRecords.get("DNAM");
     }
 
     /**
@@ -773,7 +772,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     CRDT getCRDT() {
-	return (CRDT) subRecords.get(Type.CRDT);
+	return (CRDT) subRecords.get("CRDT");
     }
 
     /**
@@ -871,7 +870,7 @@ public class WEAP extends MajorRecordDescription {
      * @param weap
      */
     public void setTemplate(FormID weap) {
-	subRecords.setSubForm(Type.CNAM, weap);
+	subRecords.setSubForm("CNAM", weap);
     }
 
     /**
@@ -879,6 +878,6 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public FormID getTemplate() {
-	return subRecords.getSubForm(Type.CNAM).getForm();
+	return subRecords.getSubForm("CNAM").getForm();
     }
 }

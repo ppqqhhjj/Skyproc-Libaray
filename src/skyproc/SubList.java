@@ -167,7 +167,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	parseData(in, getNextType(in));
     }
 
-    void parseData(LChannel in, Type nextType) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (nextType.equals(getType())) {
 	    T newRecord = (T) prototype.getNew(getType());
 	    newRecord.parseData(in);
@@ -178,7 +178,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new SubList(this);
     }
 
@@ -218,7 +218,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     static ArrayList<Integer> subIntToPublic(SubList<SubInt> in) {
-	ArrayList<Integer> out = new ArrayList<Integer>(in.size());
+	ArrayList<Integer> out = new ArrayList<>(in.size());
 	for (SubInt s : in) {
 	    out.add(s.get());
 	}
@@ -226,7 +226,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     static ArrayList<String> subStringToPublic(SubList<SubString> in) {
-	ArrayList<String> out = new ArrayList<String>(in.size());
+	ArrayList<String> out = new ArrayList<>(in.size());
 	for (SubString s : in) {
 	    out.add(s.string);
 	}
@@ -234,7 +234,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     static ArrayList<byte[]> subDataToPublic(SubList<SubData> in) {
-	ArrayList<byte[]> out = new ArrayList<byte[]>(in.size());
+	ArrayList<byte[]> out = new ArrayList<>(in.size());
 	for (SubData s : in) {
 	    out.add(s.data);
 	}
@@ -256,7 +256,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     @Override
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<FormID>();
+	ArrayList<FormID> out = new ArrayList<>();
 	for (T item : collection) {
 	    out.addAll(item.allFormIDs());
 	}
@@ -298,7 +298,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
+    ArrayList<String> getTypes() {
 	return prototype.getTypes();
     }
 }

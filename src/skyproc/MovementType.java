@@ -54,16 +54,17 @@ public enum MovementType {
     }
 
     static MovementType translate (String type) throws BadParameter {
-	if (type.equals("WALK")) {
-	    return Walk;
-	} else if (type.equals("RUN1")) {
-	    return Run;
-	} else if (type.equals("SNEK")) {
-	    return Sneak;
-	} else if (type.equals("SWIM")) {
-	    return Swim;
-	} else if (type.equals("BLDO")) {
-	    return Sprint;
+	switch (type) {
+	    case "WALK":
+		return Walk;
+	    case "RUN1":
+		return Run;
+	    case "SNEK":
+		return Sneak;
+	    case "SWIM":
+		return Swim;
+	    case "BLDO":
+		return Sprint;
 	}
 
 	throw new BadParameter ("Movement type " + type + " unrecognized.");

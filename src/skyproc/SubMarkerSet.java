@@ -7,7 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -17,18 +17,18 @@ import skyproc.exceptions.BadRecord;
 
 class SubMarkerSet<T extends SubRecord> extends SubRecord {
 
-    Map<Type, T> set = new EnumMap<>(Type.class);
-    ArrayList<Type> markers;
+    Map<String, T> set = new HashMap<>(2);
+    ArrayList<String> markers;
     T prototype;
     boolean forceMarkers = false;
-    static Type loadedMarker;
+    static String loadedMarker;
 
     SubMarkerSet(T prototype) {
 	super();
 	this.prototype = prototype;
     }
 
-    SubMarkerSet(T prototype, Type... markers) {
+    SubMarkerSet(T prototype, String... markers) {
 	super();
 	this.markers = new ArrayList<>(Arrays.asList(markers));
 	this.prototype = prototype;
@@ -36,7 +36,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	for (Type t : markers) {
+	for (String t : markers) {
 	    if (set.containsKey(t)) {
 		if (set.get(t).isValid()) {
 		    SubData marker = new SubData(t);
@@ -54,7 +54,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	Type next = Record.getNextType(in);
+	String next = Record.getNextType(in);
 	if (markers.contains(next)) {
 	    logSync("", "Loaded Marker " + next);
 	    loadedMarker = next;
@@ -72,7 +72,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    SubRecord getNew(Type t) {
+    SubRecord getNew(String t) {
 	SubMarkerSet out = new SubMarkerSet(prototype);
 	out.markers = markers;
 	out.forceMarkers = forceMarkers;
@@ -82,7 +82,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     @Override
     int getContentLength(Mod srcMod) {
 	int out = 0;
-	for (Type t : markers) {
+	for (String t : markers) {
 	    if (set.containsKey(t)) {
 		if (set.get(t).isValid()) {
 		    out += 6 + set.get(t).getTotalLength(srcMod);
@@ -100,7 +100,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	set.clear();
     }
 
-    public T get(Type marker) {
+    public T get(String marker) {
 	if (!set.containsKey(marker)) {
 	    T newItem = (T) prototype.getNew();
 	    set.put(marker, newItem);
@@ -123,8 +123,8 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	ArrayList<Type> out = new ArrayList<>(prototype.getTypes());
+    ArrayList<String> getTypes() {
+	ArrayList<String> out = new ArrayList<>(prototype.getTypes());
 	out.addAll(markers);
 	return out;
     }

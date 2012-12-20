@@ -24,7 +24,7 @@ public class BodyTemplate extends SubShell {
 	@Override
 	protected void addRecords() {
 	    add(new BodyTemplateMain());
-	    add(new SubData(Type.BOD2));
+	    add(new SubData("BOD2"));
 	}
     };
 
@@ -36,7 +36,7 @@ public class BodyTemplate extends SubShell {
 	boolean old = false;
 
 	BodyTemplateMain() {
-	    super(Type.BODT);
+	    super("BODT");
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class BodyTemplate extends SubShell {
 	}
 
 	@Override
-	SubRecord getNew(Type type) {
+	SubRecord getNew(String type) {
 	    return new BodyTemplateMain();
 	}
 
@@ -238,11 +238,11 @@ public class BodyTemplate extends SubShell {
     }
 
     BodyTemplateMain getMain() {
-	return (BodyTemplateMain) subRecords.get(Type.BODT);
+	return (BodyTemplateMain) subRecords.get("BODT");
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new BodyTemplate();
     }
 

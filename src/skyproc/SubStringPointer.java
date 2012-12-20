@@ -22,7 +22,7 @@ class SubStringPointer extends SubRecordTyped {
     boolean forceExport = false;
     static boolean shortNull = true;
 
-    SubStringPointer(Type type, SubStringPointer.Files file) {
+    SubStringPointer(String type, SubStringPointer.Files file) {
 	super(type);
 	data = new SubData(type, new byte[1]);
 	text = SubString.getNew(type, true);
@@ -30,7 +30,7 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	SubStringPointer out = new SubStringPointer(type, file);
 	out.forceExport = forceExport;
 	return out;

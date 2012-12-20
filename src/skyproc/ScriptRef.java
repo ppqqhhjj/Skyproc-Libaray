@@ -25,7 +25,6 @@ public class ScriptRef extends Record implements Iterable<String> {
     StringNonNull name = new StringNonNull();
     int unknown = 0;
     ArrayList<ScriptProperty> properties = new ArrayList<>();
-    private final static ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.VMAD}));
 
     ScriptRef() {
     }
@@ -99,8 +98,8 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("VMAD");
     }
 
     @Override
@@ -197,7 +196,7 @@ public class ScriptRef extends Record implements Iterable<String> {
      * @return A copy of all the property names in the script.
      */
     public ArrayList<String> getProperties() {
-	ArrayList<String> out = new ArrayList<String>(properties.size());
+	ArrayList<String> out = new ArrayList<>(properties.size());
 	for (ScriptProperty p : properties) {
 	    out.add(p.name.data);
 	}

@@ -38,8 +38,8 @@ public class Condition extends SubShell {
 	protected void addRecords() {
 
 	    add(new ConditionBase());
-	    add(SubString.getNew(Type.CIS1, true));
-	    add(SubString.getNew(Type.CIS2, true));
+	    add(SubString.getNew("CIS1", true));
+	    add(SubString.getNew("CIS2", true));
 	}
     };
     static Map<Integer, Enum> scriptMap = new HashMap<>();
@@ -218,7 +218,7 @@ public class Condition extends SubShell {
     public Condition(P_FormID_String function, FormID id, String s) {
 	this();
 	getBase().option = new Cond_FormID_String(id, s);
-	subRecords.setSubString(Type.CIS2, s);
+	subRecords.setSubString("CIS2", s);
 	init(function, function.index);
     }
 
@@ -282,7 +282,7 @@ public class Condition extends SubShell {
     public Condition(P_String function, String s) {
 	this();
 	getBase().option = new Cond_String(s);
-	subRecords.setSubString(Type.CIS1, s);
+	subRecords.setSubString("CIS1", s);
 	init(function, function.index);
     }
 
@@ -292,7 +292,7 @@ public class Condition extends SubShell {
     }
 
     @Override
-    SubRecord getNew(Type type) {
+    SubRecord getNew(String type) {
 	return new Condition();
     }
 
@@ -302,7 +302,7 @@ public class Condition extends SubShell {
     }
 
     final ConditionBase getBase() {
-	return (ConditionBase) subRecords.get(Type.CTDA);
+	return (ConditionBase) subRecords.get("CTDA");
     }
 
     /**

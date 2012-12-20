@@ -5,7 +5,6 @@
 package skyproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -14,26 +13,25 @@ import java.util.Arrays;
 public class HDPT extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static final ArrayList<Type> type = new ArrayList<>(Arrays.asList(new Type[]{Type.HDPT}));
     static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    add(SubString.getNew(Type.MODL, true));
-	    add(new SubData(Type.MODT));
-	    add(new AltTextures(Type.MODS));
-	    add(new SubData(Type.DATA));
-	    add(new SubInt(Type.PNAM));
-	    add(new SubList<>(new SubForm(Type.HNAM)));
+	    add(SubString.getNew("MODL", true));
+	    add(new SubData("MODT"));
+	    add(new AltTextures("MODS"));
+	    add(new SubData("DATA"));
+	    add(new SubInt("PNAM"));
+	    add(new SubList<>(new SubForm("HNAM")));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 		@Override
 		protected void addRecords() {
-		    add(new SubInt(Type.NAM0));
-		    add(SubString.getNew(Type.NAM1, true));
+		    add(new SubInt("NAM0"));
+		    add(SubString.getNew("NAM1", true));
 		}
 	    })));
-	    add(new SubForm(Type.CNAM));
-	    add(new SubForm(Type.TNAM));
-	    add(new SubForm(Type.RNAM));
+	    add(new SubForm("CNAM"));
+	    add(new SubForm("TNAM"));
+	    add(new SubForm("RNAM"));
 	}
     };
 
@@ -44,8 +42,8 @@ public class HDPT extends MajorRecordNamed {
     }
 
     @Override
-    ArrayList<Type> getTypes() {
-	return type;
+    ArrayList<String> getTypes() {
+	return Record.getTypeList("HDPT");
     }
 
     @Override
@@ -59,7 +57,7 @@ public class HDPT extends MajorRecordNamed {
      * @param path
      */
     public void setModel(String path) {
-	subRecords.setSubString(Type.MODL, path);
+	subRecords.setSubString("MODL", path);
     }
 
     /**
@@ -67,7 +65,7 @@ public class HDPT extends MajorRecordNamed {
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString(Type.MODL).print();
+	return subRecords.getSubString("MODL").print();
     }
 
     /**
@@ -75,7 +73,7 @@ public class HDPT extends MajorRecordNamed {
      * @return
      */
     public ArrayList<FormID> getHeadParts() {
-	return SubList.subFormToPublic(subRecords.getSubList(Type.HNAM));
+	return SubList.subFormToPublic(subRecords.getSubList("HNAM"));
     }
 
     /**
@@ -83,7 +81,7 @@ public class HDPT extends MajorRecordNamed {
      * @param id
      */
     public void addHeadPart(FormID id) {
-	subRecords.getSubList(Type.HNAM).add(new SubForm(Type.HNAM, id));
+	subRecords.getSubList("HNAM").add(new SubForm("HNAM", id));
     }
 
     /**
@@ -91,14 +89,14 @@ public class HDPT extends MajorRecordNamed {
      * @param id
      */
     public void removeHeadPart(FormID id) {
-	subRecords.getSubList(Type.HNAM).remove(new SubForm(Type.HNAM, id));
+	subRecords.getSubList("HNAM").remove(new SubForm("HNAM", id));
     }
 
     /**
      *
      */
     public void clearHeadParts() {
-	subRecords.getSubList(Type.HNAM).clear();
+	subRecords.getSubList("HNAM").clear();
     }
 
     /**
@@ -106,7 +104,7 @@ public class HDPT extends MajorRecordNamed {
      * @param txst
      */
     public void setBaseTexture(FormID txst) {
-	subRecords.setSubForm(Type.TNAM, txst);
+	subRecords.setSubForm("TNAM", txst);
     }
 
     /**
@@ -114,7 +112,7 @@ public class HDPT extends MajorRecordNamed {
      * @return
      */
     public FormID getBaseTexture() {
-	return subRecords.getSubForm(Type.TNAM).getForm();
+	return subRecords.getSubForm("TNAM").getForm();
     }
 
     /**
@@ -122,7 +120,7 @@ public class HDPT extends MajorRecordNamed {
      * @param id
      */
     public void setResourceList(FormID id) {
-	subRecords.setSubForm(Type.RNAM, id);
+	subRecords.setSubForm("RNAM", id);
     }
 
     /**
@@ -130,6 +128,6 @@ public class HDPT extends MajorRecordNamed {
      * @return
      */
     public FormID getResourceList() {
-	return subRecords.getSubForm(Type.RNAM).getForm();
+	return subRecords.getSubForm("RNAM").getForm();
     }
 }
