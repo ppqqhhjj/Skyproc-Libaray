@@ -420,7 +420,7 @@ public class SPGlobal {
      *
      * @param e Exception to print.
      */
-    public static void logException(Exception e) {
+    public static void logException(Throwable e) {
 	if (log != null) {
 	    SPGlobal.log.logException(e);
 	}

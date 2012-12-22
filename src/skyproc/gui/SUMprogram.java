@@ -138,19 +138,15 @@ public class SUMprogram implements SUM {
     }
 
     void initLinkGUIs() {
-//	SwingUtilities.invokeLater(new Runnable() {
-//
-//	    @Override
-//	    public void run() {
-//
-//		SwingUtilities.invokeLater(new Runnable() {
-//
-//		    @Override
-//		    public void run() {
 	ArrayList<PatcherLink> linkTmp = new ArrayList<>(links);
+	PatcherLink last = null;
 	for (PatcherLink link : linkTmp) {
 	    try {
 		link.setup();
+		if (last != null) {
+		    link.setLocation(link.getX(), last.getY() + last.getHeight() + 15);
+		}
+		last = link;
 		hookMenu.hookMenu.add(link);
 		hookMenu.revalidate();
 	    } catch (Exception ex) {
@@ -158,10 +154,6 @@ public class SUMprogram implements SUM {
 		links.remove(link);
 	    }
 	}
-//		    }
-//		});
-//	    }
-//	});
     }
 
     void getHooks() {
@@ -169,18 +161,26 @@ public class SUMprogram implements SUM {
 
 	for (File jar : jars) {
 	    try {
+		System.out.println("Loading jar " + jar);
 		ArrayList<Class> classes = Ln.loadClasses(jar, true);
+		System.out.println("Loaded jar " + jar);
 		for (Class c : classes) {
-		    Object tester = c.newInstance();
-		    if (tester instanceof SUM) {
-			links.add(new PatcherLink((SUM) c.newInstance(), jar));
+		    try {
+			Object tester = c.newInstance();
+			if (tester instanceof SUM) {
+			    System.out.println("==== Added jar " + jar);
+			    links.add(new PatcherLink((SUM) c.newInstance(), jar));
+			    break;
+			}
+		    } catch (Throwable ex) {
+			SPGlobal.logException(ex);
 		    }
 		}
-	    } catch (Exception ex) {
+		System.out.println("Finished jar " + jar);
+	    } catch (Throwable ex) {
 		SPGlobal.logException(ex);
 	    }
 	}
-
     }
 
     ArrayList<File> findJars(File dir) {
@@ -211,27 +211,16 @@ public class SUMprogram implements SUM {
      */
     @Override
     public boolean needsPatching() {
-	for (PatcherLink link : links) {
-	    if (link.hook.needsPatching()) {
-		return true;
-	    }
-	}
-	return false;
+	return true;
     }
 
     /**
      * Runs all hooks onExit() function
+     *
      * @param patchWasGenerated
      */
     @Override
     public void onExit(boolean patchWasGenerated) {
-	for (PatcherLink l : links) {
-	    try {
-		l.hook.onExit(patchWasGenerated);
-	    } catch (Exception e) {
-		SPGlobal.logException(e);
-	    }
-	}
     }
 
     /**
@@ -239,27 +228,10 @@ public class SUMprogram implements SUM {
      */
     @Override
     public void onStart() {
-	for (PatcherLink l : links) {
-	    try {
-		if (l.hook.hasSave()) {
-		    l.hook.getSave().init();
-		}
-	    } catch (Exception e) {
-		SPGlobal.logException(e);
-	    }
-	}
-
-	for (PatcherLink l : links) {
-	    try {
-		l.hook.onStart();
-	    } catch (Exception e) {
-		SPGlobal.logException(e);
-	    }
-	}
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -343,7 +315,6 @@ public class SUMprogram implements SUM {
 
 	final void setup() {
 	    setupGUI();
-	    setupHook();
 	}
 
 	final void setupGUI() {
@@ -355,7 +326,8 @@ public class SUMprogram implements SUM {
 	    cbox.setOpaque(false);
 	    cbox.setVisible(true);
 
-	    int desiredWidth = SUMGUI.middleDimensions.width - 50;
+	    int desiredMargin = 25;
+	    int desiredWidth = SUMGUI.middleDimensions.width - desiredMargin * 2;
 	    int width = cbox.getWidth() + 10;
 
 	    if (hook.hasLogo()) {
@@ -378,19 +350,14 @@ public class SUMprogram implements SUM {
 	    }
 
 	    width += using.getWidth();
-	    cbox.setLocation(SUMGUI.middleDimensions.width / 2 - width / 2, using.getHeight() / 2 - cbox.getHeight() / 2);
+	    cbox.setLocation(desiredMargin, using.getHeight() / 2 - cbox.getHeight() / 2);
 	    add(cbox);
 	    using.setLocation(cbox.getX() + cbox.getWidth() + 10, 0);
-	    using.addMouseListener(new MouseListener() {
+	    addMouseListener(new MouseListener() {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-		    mmenu.setVisible(false);
-		    if (menu == null) {
-			initMenu();
-		    } else {
-			menu.setVisible(true);
-		    }
+		    cbox.setSelected(!cbox.isSelected());
 		}
 
 		@Override
@@ -410,12 +377,6 @@ public class SUMprogram implements SUM {
 		}
 	    });
 	    setSize(SUMGUI.middleDimensions.width, using.getHeight());
-	}
-
-	final void setupHook() {
-	    if (hook.hasSave()) {
-		hook.getSave().init();
-	    }
 	}
 
 	final void initMenu() {
