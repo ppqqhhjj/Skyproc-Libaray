@@ -23,7 +23,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     TES4 tes = new TES4();
     ModListing modInfo;
-    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
+    Map<GRUP_TYPE, GRUP> GRUPs = new HashMap<>();
     GRUP<GMST> gameSettings = new GRUP<>(this, new GMST());
     GRUP<KYWD> keywords = new GRUP<>(this, new KYWD());
     GRUP<TXST> textures = new GRUP<>(this, new TXST());
@@ -726,12 +726,34 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	SPProgressBarPlug.setMax(fullGRUPS, "Exporting " + srcMod);
 
 	// Add all mods that contained any of the FormIDs used.
+	Set<ModListing> addedMods = new HashSet<>();
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
 	for (FormID ID : allForms) {
 	    if (!ID.isNull()) {
-		addMaster(ID.getMaster());
+		ModListing master = ID.getMaster();
+		if (!addedMods.contains(master)) {
+		    addMaster(master);
+		    addedMods.add(master);
+		}
 	    }
 	}
+
+	// Go through each record, and add all mods that reference that record
+	// Just to symbolize that they "had part" in the patch
+	// And help encourage repatching when mods are removed.
+	for (GRUP<MajorRecord> g : srcMod) {
+	    for (MajorRecord major : g) {
+		FormID id = major.getForm();
+		for (Mod mod : SPGlobal.getDB().getImportedMods()) {
+		    if (mod.contains(id) && !addedMods.contains(mod.getInfo()) && !mod.equals(SPGlobal.getGlobalPatch())) {
+			addMaster(mod.getInfo());
+			addedMods.add(mod.getInfo());
+		    }
+		}
+	    }
+	}
+
+	// Standardize all formIDs for good measure
 	for (FormID id : allForms) {
 	    id.standardize(srcMod);
 	}
@@ -1288,7 +1310,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubPrototype TES4proto = new SubPrototype() {
-
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
