@@ -52,10 +52,7 @@ public class SkyProcTester {
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
 	}
-	try {
-	    LDebug.wrapUp();
-	} catch (IOException ex) {
-	}
+	LDebug.wrapUp();
     }
 
     private static void validate() throws Exception {

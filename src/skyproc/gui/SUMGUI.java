@@ -75,6 +75,7 @@ public class SUMGUI extends JFrame {
     static ProcessingThread parserRunnable;
     static boolean imported = false;
     static boolean exitRequested = false;
+    static boolean cancelled = false;
     /**
      * Progress bar frame that pops up at the end when creating the patch.
      */
@@ -237,6 +238,7 @@ public class SUMGUI extends JFrame {
 		    if (SPGlobal.logging()) {
 			SPGlobal.logMain(header, "Closing program early because user cancelled.");
 		    }
+		    cancelled = true;
 		    exitProgram(false);
 		}
 	    });
@@ -263,7 +265,7 @@ public class SUMGUI extends JFrame {
 
 		@Override
 		public void windowClosing(WindowEvent arg0) {
-		    if (progress.closeOp == JFrame.DISPOSE_ON_CLOSE) {
+		    if (progress.getDefaultCloseOperation() == JFrame.DISPOSE_ON_CLOSE) {
 			if (SPGlobal.logging()) {
 			    SPGlobal.logMain(header, "Closing program early because progress bar was forced to close by user.");
 			}
@@ -552,18 +554,21 @@ public class SUMGUI extends JFrame {
 
     static void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
-	exitRequested = true;
-	if (!imported && !needsImporting()) {
-	    SPProgressBarPlug.done();
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMain(header, "Closing program early because it does not need importing.");
-	    }
-	    exitProgram(false);
+	if (cancelled) {
 	} else {
-	    progress.setExitOnClose();
-	    progress.open();
+	    exitRequested = true;
+	    if (!imported && !needsImporting()) {
+		SPProgressBarPlug.done();
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain(header, "Closing program early because it does not need importing.");
+		}
+		exitProgram(false);
+	    } else {
+		progress.setExitOnClose();
+		progress.open();
+	    }
+	    runThread();
 	}
-	runThread();
     }
 
     /**
@@ -601,8 +606,23 @@ public class SUMGUI extends JFrame {
 	if (hook.hasSave()) {
 	    hook.getSave().saveToFile();
 	}
-	LDebug.wrapUpAndExit();
+
+	if (cancelled) {
+	    LDebug.wrapUpAndExit();
+	} else {
+	    LDebug.wrapUp();
+	    // Close main window
+	    WindowEvent wev = new WindowEvent(singleton, WindowEvent.WINDOW_CLOSING);
+	    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+
+	    // Close Progress
+	    progress.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    wev = new WindowEvent(progress, WindowEvent.WINDOW_CLOSING);
+	    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+	}
     }
+
+
 
     static class ProcessingThread implements Runnable {
 
@@ -718,7 +738,7 @@ public class SUMGUI extends JFrame {
     }
 
     /**
-     * 
+     *
      * @param comp
      * @return
      */

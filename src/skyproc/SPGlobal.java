@@ -506,7 +506,6 @@ public class SPGlobal {
 	    createGlobalLog();
 	}
 	OutputStream outToDebug = new OutputStream() {
-
 	    @Override
 	    public void write(final int b) throws IOException {
 		if (b != 116) {
@@ -535,10 +534,7 @@ public class SPGlobal {
      * Closes all logs.
      */
     public static void closeDebug() {
-	try {
-	    LDebug.wrapUp();
-	} catch (IOException ex) {
-	}
+	LDebug.wrapUp();
     }
 
     /**
