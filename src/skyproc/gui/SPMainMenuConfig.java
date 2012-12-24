@@ -35,15 +35,15 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	super(title_.getText());
 	boolean saveField = saveFile != null && setting != null;
 
+	button = new LButton(buttonText);
+
 	help = SUMGUI.helpPanel;
 	if (saveField) {
 	    save = saveFile;
 	    saveTie = setting;
 	    linkTo(saveTie, save, help, true);
+	    button.addActionListener(new UpdateHelpActionHandler());
 	}
-
-	button = new LButton(buttonText);
-	button.addActionListener(new UpdateHelpActionHandler());
 
 	Font font = title_.getFont().deriveFont(Font.PLAIN, size);
 
@@ -71,5 +71,4 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 	    setSize(titleLabel.getWidth() + button.getWidth() + spacing, titleLabel.getHeight());
 	}
     }
-
 }

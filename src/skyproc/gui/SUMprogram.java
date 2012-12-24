@@ -42,7 +42,8 @@ public class SUMprogram implements SUM {
     OptionsMenu optionsMenu;
     LScrollPane hookMenuScroll;
     LSaveFile saveFile = new SUMsave();
-    Color blue = new Color(85, 50, 181);
+    Color teal = new Color(75, 164, 134);
+    Color green = new Color(35, 119, 16);
     Font settingFont = new Font("Serif", Font.BOLD, 14);
 
     /**
@@ -122,6 +123,7 @@ public class SUMprogram implements SUM {
 	SPGlobal.debugNIFimport = false;
 	LDebug.timeElapsed = true;
 	LDebug.timeStamp = true;
+	SPGlobal.newSpecialLog(SUMlogs.JarHook, "Jar Hooking.txt");
     }
 
     void openGUI() {
@@ -163,7 +165,6 @@ public class SUMprogram implements SUM {
 	    try {
 		System.out.println("Loading jar " + jar);
 		ArrayList<Class> classes = Ln.loadClasses(jar, true);
-		System.out.println("Loaded jar " + jar);
 		for (Class c : classes) {
 		    try {
 			Object tester = c.newInstance();
@@ -173,12 +174,11 @@ public class SUMprogram implements SUM {
 			    break;
 			}
 		    } catch (Throwable ex) {
-			SPGlobal.logException(ex);
+			SPGlobal.logSpecial(SUMlogs.JarHook, "Loading class", "Skipped " + c + ": " + ex.getMessage());
 		    }
 		}
-		System.out.println("Finished jar " + jar);
 	    } catch (Throwable ex) {
-		SPGlobal.logException(ex);
+		SPGlobal.logSpecial(SUMlogs.JarHook, "Loading jar", "Skipped jar " + jar + ": " + ex.getMessage());
 	    }
 	}
     }
@@ -245,7 +245,7 @@ public class SUMprogram implements SUM {
 	JPanel hookMenu;
 
 	HookMenu(SPMainMenuPanel parent_) {
-	    super(parent_, "Patcher List", blue);
+	    super(parent_, "Patcher List", Color.white);
 	    initialize();
 	}
 
@@ -274,7 +274,7 @@ public class SUMprogram implements SUM {
 	LCheckBox mergePatches;
 
 	OptionsMenu(SPMainMenuPanel parent_) {
-	    super(parent_, "SUM Options", blue);
+	    super(parent_, "SUM Options", Color.white);
 	}
 
 	@Override
@@ -345,6 +345,7 @@ public class SUMprogram implements SUM {
 	    }
 	    if (logo == null) {
 		title = new LLabel(hook.getName(), new Font("Serif", Font.BOLD, 14), hook.getHeaderColor());
+		title.addShadow();
 		using = title;
 		add(title);
 	    }
@@ -354,7 +355,6 @@ public class SUMprogram implements SUM {
 	    add(cbox);
 	    using.setLocation(cbox.getX() + cbox.getWidth() + 10, 0);
 	    addMouseListener(new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 		    cbox.setSelected(!cbox.isSelected());
@@ -385,7 +385,6 @@ public class SUMprogram implements SUM {
 	    try {
 		close = new LImagePane(SUMprogram.class.getResource("BackToSUMdark.png"));
 		close.addMouseListener(new MouseListener() {
-
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 			menu.setVisible(false);
@@ -449,6 +448,11 @@ public class SUMprogram implements SUM {
 
 	MERGE_PATCH,
 	IMPORT_AT_START;
+    }
+
+    enum SUMlogs {
+
+	JarHook;
     }
 
     // SUM methods

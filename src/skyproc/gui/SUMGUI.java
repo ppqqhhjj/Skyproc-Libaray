@@ -622,8 +622,6 @@ public class SUMGUI extends JFrame {
 	}
     }
 
-
-
     static class ProcessingThread implements Runnable {
 
 	public Set<Runnable> afterImporting = new HashSet<>();
