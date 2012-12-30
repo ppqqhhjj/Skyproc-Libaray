@@ -107,7 +107,11 @@ public class SPMainMenuPanel extends JPanel {
      * @return The main menu GUI component
      */
     public SPMainMenuConfig addMenu(SPSettingPanel panel, boolean checkBoxPresent, LSaveFile save, Enum setting) {
-	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header, checkBoxPresent, color, new Point(xPlacement, yPlacement), save, setting);
+	return addMenu(panel, color, checkBoxPresent, save, setting);
+    }
+
+    public SPMainMenuConfig addMenu(SPSettingPanel panel, Color c, boolean checkBoxPresent, LSaveFile save, Enum setting) {
+	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header, checkBoxPresent, c, new Point(xPlacement, yPlacement), save, setting);
 	yPlacement += spacing;
 	menuConfig.addActionListener(panel.getOpenHandler());
 	menuPanel.add(menuConfig);
@@ -197,7 +201,7 @@ public class SPMainMenuPanel extends JPanel {
      */
     public void setMainFont(Font font, int helpSize, int headerSize, int menuSize) {
 	SUMGUI.helpPanel.setHeaderFont(font.deriveFont(Font.PLAIN, helpSize));
-	SPSettingPanel.font = font.deriveFont(Font.PLAIN, headerSize);
+	SUMGUI.SUMmainFont = font.deriveFont(Font.PLAIN, headerSize);
 	SPMainMenuConfig.size = menuSize;
     }
 

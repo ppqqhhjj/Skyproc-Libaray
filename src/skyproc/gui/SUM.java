@@ -129,9 +129,10 @@ public interface SUM {
      * @return Whether or not your program requires a patch.
      */
     public boolean needsPatching();
+    public String description();
     /**
-     * 
-     * @return A list of ModListings of mods required to be present in order to 
+     *
+     * @return A list of ModListings of mods required to be present in order to
      * patch.  Program will stop and display error if any are missing.
      */
     public ArrayList<ModListing> requiredMods();

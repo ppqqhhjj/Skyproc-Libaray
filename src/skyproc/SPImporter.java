@@ -2,10 +2,7 @@ package skyproc;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LShrinkArray;
@@ -116,7 +113,11 @@ public class SPImporter {
 		    line = line.trim();
 		    if (!line.equals("")) {
 			pluginName = new File(SPGlobal.pathToData + line);
-			if (!SPGlobal.modsToSkip.contains(new ModListing(line))
+			ModListing nextMod = new ModListing(line);
+			if (SPGlobal.noModsAfter && nextMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
+			    SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
+			    break;
+			} else if (!SPGlobal.modsToSkip.contains(nextMod)
 				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
 			    if (pluginName.isFile()) {
 				if (!Ln.containsIgnoreCase(lines, line)) {
@@ -410,6 +411,11 @@ public class SPImporter {
      * manipulated.
      */
     public Set<Mod> importMods(ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
+
+	if (grup_targets.length == 0) {
+	    SPGlobal.logMain(header, "Skipping import because requests were empty.");
+	    return new HashSet<>(0);
+	}
 
 	SPGlobal.sync(true);
 	if (SPGlobal.logging()) {

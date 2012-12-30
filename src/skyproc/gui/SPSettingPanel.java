@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import lev.gui.*;
+import lev.gui.resources.LFonts;
 
 /**
  *
@@ -49,7 +50,6 @@ public abstract class SPSettingPanel extends LPanel {
      * created and added.
      */
     protected boolean initialized = false;
-    static Font font = new Font("Serif", Font.BOLD, 25);
 
     /**
      *
@@ -60,11 +60,11 @@ public abstract class SPSettingPanel extends LPanel {
     public SPSettingPanel(SPMainMenuPanel parent_, String title, Color headerColor) {
 	super(SUMGUI.fullDimensions);
 	parent = parent_;
-	header = new LLabel(title, font, headerColor);
+	header = new LLabel(title, SUMGUI.SUMmainFont, headerColor);
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -90,7 +90,7 @@ public abstract class SPSettingPanel extends LPanel {
 	add(scroll);
 
 	header.addShadow();
-	header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 15);
+	header.setLocation(settingsPanel.getWidth() / 2 - header.getWidth() / 2, 20);
 	settingsPanel.setPreferredSize(scroll.getSize());
 
 	last = new Point(settingsPanel.getWidth(), 65);

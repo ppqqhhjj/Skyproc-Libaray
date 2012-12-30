@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Point;
 import lev.gui.LButton;
 import lev.gui.LCheckBoxConfig;
+import lev.gui.LComponent;
 import lev.gui.LLabel;
 import lev.gui.LSaveFile;
 
@@ -47,28 +48,30 @@ public class SPMainMenuConfig extends LCheckBoxConfig {
 
 	Font font = title_.getFont().deriveFont(Font.PLAIN, size);
 
+	LComponent using;
 	if (checkbox) {
 	    cbox = new LSpecialCheckBox(title, font, color, this);
 	    cbox.setOffset(5);
 	    cbox.tie(setting, save, help, false);
 	    cbox.setFocusable(false);
-	    button.setLocation(new Point(cbox.getWidth() + spacing, 0));
+	    using = cbox;
+	    add(cbox);
 	} else {
 	    titleLabel = new LLabel(title, font, color);
-	    button.setLocation(new Point(titleLabel.getWidth() + spacing, 0));
+	    using = titleLabel;
+	    add(titleLabel);
 	}
 
-	button.setLocation(button.getX(), button.getY() + 4);
-
+	button.setLocation(using.getWidth() + spacing, using.getHeight() / 2 - button.getHeight() / 2);
 	add(button);
-	if (checkbox) {
-	    add(cbox);
-	    setLocation(location.x - button.getWidth() - cbox.getWidth() - spacing, location.y);
-	    setSize(cbox.getWidth() + button.getWidth() + spacing, cbox.getHeight());
-	} else {
-	    add(titleLabel);
-	    setLocation(location.x - button.getWidth() - titleLabel.getWidth() - spacing, location.y);
-	    setSize(titleLabel.getWidth() + button.getWidth() + spacing, titleLabel.getHeight());
+
+	setLocation(location.x - button.getWidth() - using.getWidth() - spacing, location.y);
+	setSize(using.getWidth() + button.getWidth() + spacing, using.getHeight());
+
+	if (button.getY() < 0) {
+	    button.setLocation(button.getX(), 0);
+	    setSize(getWidth(), button.getHeight());
+	    using.setLocation(using.getX(), button.getHeight() / 2 - using.getHeight() / 2);
 	}
     }
 }

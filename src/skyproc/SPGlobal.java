@@ -2,8 +2,6 @@ package skyproc;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import lev.Ln;
 import lev.debug.LDebug;
 
@@ -22,6 +20,7 @@ public class SPGlobal {
     static SPDatabase globalDatabase = new SPDatabase();
     static boolean testing = false;
     static boolean streamMode = true;
+    public static boolean noModsAfter = false;
     static MajorRecord lastStreamed;
     /*
      * Customizable Strings

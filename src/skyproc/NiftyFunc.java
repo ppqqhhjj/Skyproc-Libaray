@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JOptionPane;
@@ -137,9 +139,10 @@ public class NiftyFunc {
     }
 
     /**
-     * 
+     *
      * @param recordWithBodyTemplate
-     * @return True if it is a major record with a body template, and it has a First Person Flag set to true.
+     * @return True if it is a major record with a body template, and it has a
+     * First Person Flag set to true.
      */
     public static boolean hasFirstPersonFlagsSelected(MajorRecord recordWithBodyTemplate) {
 	BodyTemplate bt = recordWithBodyTemplate.subRecords.getBodyTemplate();
@@ -393,5 +396,34 @@ public class NiftyFunc {
 	    return true;
 	}
 	return correct;
+    }
+
+    static public boolean startProcess(File directory, String... args) {
+	try {
+	    ProcessBuilder proc = new ProcessBuilder(args);
+	    if (directory != null) {
+		proc.directory(directory);
+	    }
+	    Process start = proc.start();
+	    InputStream shellIn = start.getInputStream();
+	    int exitStatus = start.waitFor();
+	    String response = Ln.convertStreamToStr(shellIn);
+	    if (exitStatus != 0) {
+		String tmp = "";
+		for (String arg : args) {
+		    tmp += " " + arg;
+		}
+		SPGlobal.logError("StartProcess", "Process with args " + tmp + " Failed to run: " + response);
+		return false;
+	    }
+	} catch (IOException | InterruptedException ex) {
+	    SPGlobal.logException(ex);
+	    return false;
+	}
+	return true;
+    }
+
+    static public boolean startProcess(String... args) {
+	return startProcess(null, args);
     }
 }

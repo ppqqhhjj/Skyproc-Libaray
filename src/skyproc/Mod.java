@@ -23,7 +23,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     TES4 tes = new TES4();
     ModListing modInfo;
-    Map<GRUP_TYPE, GRUP> GRUPs = new HashMap<>();
+    Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
     GRUP<GMST> gameSettings = new GRUP<>(this, new GMST());
     GRUP<KYWD> keywords = new GRUP<>(this, new KYWD());
     GRUP<TXST> textures = new GRUP<>(this, new TXST());
@@ -52,6 +52,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<AVIF> actorValues = new GRUP<>(this, new AVIF());
     GRUP<ARMA> armatures = new GRUP<>(this, new ARMA());
     GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
+    GRUP<LGTM> lightingTemplates = new GRUP<>(this, new LGTM());
     GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
     LFileChannel input;
     Language language = Language.English;
@@ -143,6 +144,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(armatures.getContainedType(), armatures);
 	GRUPs.put(encounterZones.getContainedType(), encounterZones);
 	outfits.dateStamp = new byte[]{(byte) 0x17, (byte) 0x4E, (byte) 0x23, 0};
+	GRUPs.put(lightingTemplates.getContainedType(), lightingTemplates);
 	GRUPs.put(outfits.getContainedType(), outfits);
     }
 
@@ -710,6 +712,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void export(File outPath, Mod srcMod) throws IOException, BadRecord {
 
+	SPGlobal.logMain("Mod Export", "Exporting " + this);
+
 	LExporter out = new LExporter(outPath);
 
 	// Progress Bar Setup
@@ -1207,6 +1211,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<PROJ> getProjectiles() {
 	return projectiles;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing lighting template records
+     */
+    public GRUP<LGTM> getLightingTemplates() {
+	return lightingTemplates;
     }
 
     /**
