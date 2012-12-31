@@ -1274,6 +1274,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	if (obj == null) {
 	    return false;
 	}
+	if (obj instanceof ModListing) {
+	    return getInfo().equals(obj);
+	}
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}

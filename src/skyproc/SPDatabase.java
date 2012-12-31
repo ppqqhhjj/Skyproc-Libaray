@@ -17,6 +17,7 @@ import lev.Ln;
 public class SPDatabase implements Iterable<Mod> {
 
     static ArrayList<ModListing> activePlugins = new ArrayList<>();
+    static public final String dateDelim = "<--DATE-->";
     ArrayList<ModListing> addedPlugins = new ArrayList<>();
     Map<ModListing, Mod> modLookup = new TreeMap<>();
 
@@ -138,7 +139,8 @@ public class SPDatabase implements Iterable<Mod> {
 	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));
 	for (ModListing m : SPImporter.getActiveModList()) {
-	    writer.write(m.toString() + "\n");
+	    File modFile = new File(SPGlobal.pathToData + m.toString());
+	    writer.write(m.toString() + dateDelim + modFile.lastModified() + "\n");
 	}
 	writer.close();
 

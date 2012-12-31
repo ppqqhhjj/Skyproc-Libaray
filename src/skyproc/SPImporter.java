@@ -120,9 +120,11 @@ public class SPImporter {
 			} else if (!SPGlobal.modsToSkip.contains(nextMod)
 				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
 			    if (pluginName.isFile()) {
-				if (!Ln.containsIgnoreCase(lines, line)) {
+				if (Ln.indexOfIgnoreCase(lines, line) == -1) {
 				    SPGlobal.logSync(header, "Adding mod: " + line);
 				    lines.add(line);
+				} else if (SPGlobal.logging()) {
+				    SPGlobal.logSync(header, "Mod was already added: ", line);
 				}
 			    } else if (SPGlobal.logging()) {
 				SPGlobal.logSync(header, "Mod didn't exist: ", line);

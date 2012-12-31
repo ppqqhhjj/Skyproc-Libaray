@@ -143,6 +143,9 @@ public class ModListing extends SubRecord implements Comparable {
 	if (obj == null) {
 	    return false;
 	}
+	if (obj instanceof Mod) {
+	    obj = ((Mod) obj).getInfo();
+	}
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}

@@ -15,15 +15,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.zip.CRC32;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -440,6 +437,8 @@ public class SUMGUI extends JFrame {
 	    setPatchNeeded(true);
 	}
 
+	SPGlobal.setStreamMode(!arguments.contains("-NOSTREAM"));
+
 	if (SPGlobal.logging()) {
 	    SPGlobal.logMain("Run Location", "Program running from: " + (new File(".").getAbsolutePath()));
 	    for (String arg : arguments) {
@@ -541,23 +540,48 @@ public class SUMGUI extends JFrame {
 	try {
 	    File f = new File(pathToLastModlist);
 	    if (!f.isFile()) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain("Needs Importing", "Needs importing because last Modlist doesn't exist.");
+		}
 		return true;
 	    }
 
+	    // See if imported mods and last mod list are the same
 	    ArrayList<String> oldList = Ln.loadFileToStrings(f, true);
+	    for (int i = 0; i < oldList.size(); i++) {
+		String oldString = oldList.get(i);
+		if (oldString.contains(SPDatabase.dateDelim)) {
+		    oldList.set(i, oldString.substring(0, oldString.indexOf(SPDatabase.dateDelim)));
+		}
+	    }
 	    ArrayList<ModListing> curList = new ArrayList<>(SPImporter.getActiveModList());
 	    curList.remove(hook.getListing());
 	    ArrayList<ModListing> curListTmp = new ArrayList<>(curList);
 
 	    if (curList.size() != oldList.size()) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain("Needs Importing", "Needs importing because last Modlist isn't the same size as current.");
+		}
 		return true;
 	    }
 
 	    for (int i = 0; i < curList.size(); i++) {
 		ModListing m = curListTmp.get(i);
 		if (!oldList.get(i).equals(m.print().toUpperCase())) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.logMain("Needs Importing", "Needs importing because " + oldList.get(i) + " doesn't match " + m.print() + " at index " + i);
+		    }
 		    return true;
 		}
+	    }
+
+	    // Check dates
+	    ArrayList<String> changedMods = getChangedMods(true);
+	    if (changedMods.size() > 0) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.logMain("Needs Importing", "Needs importing because " + changedMods.get(0) + " had its date changed.");
+		}
+		return true;
 	    }
 
 	    //Don't need a patch, check for custom hook coding
@@ -626,7 +650,6 @@ public class SUMGUI extends JFrame {
 			for (int j = 0; j < oldMasterList.size(); j++) {
 			    if (oldMasterList.get(j).equalsIgnoreCase(curName)) {
 				oldMasterList.remove(curName);
-				curImportedMods.remove(curName);
 				break;
 			    } else if (curImportedModsTmp.contains(oldMasterList.get(j))) {
 				//Matching mods out of order, need to patch
@@ -647,20 +670,18 @@ public class SUMGUI extends JFrame {
 		    return true;
 		}
 
-		//Remove mods that were imported last time
-		ArrayList<String> oldModList = Ln.loadFileToStrings(pathToLastModlist, true);
-		for (String s : oldModList) {
-		    curImportedMods.remove(s);
-		}
 
-		//Check new mods for any records patcher is interested in.  If found, need patch.
+		//Check mods that were imported last time for date modified changes, and remove them if they weren't changed.
+		curImportedMods.removeAll(getChangedMods(false));
+
+		//Check new mods for any records patcher is interested in.  If interesting records found, need patch.
 		for (String curString : curImportedMods) {
 		    Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
 		    ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
 		    for (GRUP_TYPE g : hook.importRequests()) {
 			if (contained.contains(g)) {
 			    if (SPGlobal.logging()) {
-				SPGlobal.logMain(header, "Patch needed because a new mod had records patch might be interested in.");
+				SPGlobal.logMain(header, "Patch needed because " + curMaster + " had records patch might be interested in.");
 			    }
 			    return true;
 			}
@@ -683,6 +704,42 @@ public class SUMGUI extends JFrame {
 	return SUMGUI.hook.needsPatching();
     }
 
+    static ArrayList<String> getChangedMods(boolean changed) throws IOException {
+	//Compile old modlist and dates
+	ArrayList<String> oldModListRaw = Ln.loadFileToStrings(pathToLastModlist, true);
+	ArrayList<String> oldModList = new ArrayList<>(oldModListRaw.size());
+	ArrayList<Long> oldModListDate = new ArrayList<>(oldModListRaw.size());
+	ArrayList<String> out = new ArrayList<>();
+	for (String modAndCRC : oldModListRaw) {
+	    String[] split = modAndCRC.split(SPDatabase.dateDelim);
+	    oldModList.add(split[0]);
+	    if (split.length > 1) {
+		oldModListDate.add(Long.valueOf(split[1]));
+	    }
+	}
+
+	// If no dates
+	if (oldModList.size() != oldModListDate.size()) {
+	    if (changed) {
+		return oldModList;
+	    } else {
+		return new ArrayList<>(0);
+	    }
+	}
+
+	ArrayList<String> oldModListTmp = new ArrayList<>(oldModList);
+	for (int i = 0; i < oldModListTmp.size(); i++) {
+	    String modName = oldModListTmp.get(i);
+	    File modFile = new File(SPGlobal.pathToData + modName);
+	    boolean changedF = modFile.lastModified() != oldModListDate.get(i);
+	    if ((changed && changedF)
+		    || (!changed && !changedF)) {
+		out.add(modName);
+	    }
+	}
+	return out;
+    }
+
     static void closingGUIwindow() {
 	SPGlobal.log(header, "Window Closing.");
 	if (justSettings) {
@@ -694,7 +751,7 @@ public class SUMGUI extends JFrame {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMain(header, "Closing program early because it does not need importing.");
 	    }
-	    exitProgram(false, false);
+	    exitProgram(false, true);
 	} else {
 	    progress.setExitOnClose();
 	    progress.open();
