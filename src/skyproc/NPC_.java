@@ -48,7 +48,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    add(new KeywordSet());
 	    add(new SubForm("CNAM"));
 	    reposition("FULL");
-	    add(SubString.getNew("SHRT", true));
+	    add(new SubStringPointer("SHRT", SubStringPointer.Files.STRINGS));
 	    add(new SubData("DATA"));
 	    forceExport("DATA");
 	    add(new DNAM());
