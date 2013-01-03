@@ -86,13 +86,6 @@ public class SPGlobal {
      * automatically.
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
-    /**
-     * To be used when implementing the SUM interface. Add this SUMpath to the
-     * beginning of any pathing to access files in your SkyProc patcher program.
-     * This will allow SUM to add extra directory pathing when it hooks onto
-     * your patcher program.
-     */
-    public static String SUMpath = "";
     static File skyProcDocuments;
 
     /**
@@ -156,8 +149,12 @@ public class SPGlobal {
      *
      * @param keyword
      */
-    public static void addModToSkip(String keyword) {
-	modsToSkipStr.add(keyword);
+    public static void addModToSkip(String s) {
+	if (s.contains(".ESP") || s.contains(".ESM")) {
+	    addModToSkip(new ModListing(s));
+	} else {
+	    modsToSkipStr.add(s);
+	}
     }
 
     /**
@@ -522,6 +519,7 @@ public class SPGlobal {
 	    createGlobalLog();
 	}
 	OutputStream outToDebug = new OutputStream() {
+
 	    @Override
 	    public void write(final int b) throws IOException {
 		if (b != 116) {

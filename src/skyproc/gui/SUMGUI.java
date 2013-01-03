@@ -11,16 +11,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.zip.CRC32;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -31,6 +29,7 @@ import lev.gui.*;
 import lev.gui.resources.LFonts;
 import lev.gui.resources.LImages;
 import skyproc.*;
+import skyproc.SPGlobal.Language;
 
 /**
  * The standard GUI setup used in SUM. This can be used to create GUIs that
@@ -121,6 +120,7 @@ public class SUMGUI extends JFrame {
 	SUMGUI.helpPanel.setHeaderFont(SUMmainFont.deriveFont(Font.PLAIN, 25));
 	SUMGUI.helpPanel.setXOffsets(23, 35);
 	addWindowListener(new WindowListener() {
+
 	    @Override
 	    public void windowClosed(WindowEvent arg0) {
 	    }
@@ -172,6 +172,7 @@ public class SUMGUI extends JFrame {
 	    startPatch = new LButton("Patch");
 	    startPatch.setLocation(backgroundPanel.getWidth() - startPatch.getWidth() - 5, 5);
 	    startPatch.addActionListener(new ActionListener() {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    if (SPGlobal.logging()) {
@@ -181,6 +182,7 @@ public class SUMGUI extends JFrame {
 		}
 	    });
 	    startPatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -211,6 +213,7 @@ public class SUMGUI extends JFrame {
 	    cancelPatch = new LButton("Cancel");
 	    cancelPatch.setLocation(startPatch.getX() - cancelPatch.getWidth() - 5, 5);
 	    cancelPatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -243,6 +246,7 @@ public class SUMGUI extends JFrame {
 		}
 	    });
 	    cancelPatch.addActionListener(new ActionListener() {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    if (SPGlobal.logging()) {
@@ -257,6 +261,7 @@ public class SUMGUI extends JFrame {
 	    forcePatch.setLocation(rightDimensions.x + 10, cancelPatch.getY() + cancelPatch.getHeight() / 2 - forcePatch.getHeight() / 2);
 	    forcePatch.setOffset(-4);
 	    forcePatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -291,6 +296,7 @@ public class SUMGUI extends JFrame {
 	    backgroundPanel.add(patchNeededLabel);
 
 	    progress.addWindowListener(new WindowListener() {
+
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 		}
@@ -367,8 +373,11 @@ public class SUMGUI extends JFrame {
     public static void open(final SUM hook, String[] mainArgs) {
 	handleArgs(mainArgs);
 
+	loadBlockedMods("Files/BlockList.txt");
+
 	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		if (singleton == null) {
@@ -414,6 +423,36 @@ public class SUMGUI extends JFrame {
 	});
     }
 
+    static void loadBlockedMods(String path) {
+	File f = new File(path);
+	if (f.exists()) {
+	    try {
+		boolean foundMods = false;
+		ArrayList<String> blockMods = Ln.loadFileToStrings(f, true);
+		for (String s : blockMods) {
+		    s = Ln.cleanLine(s, "//");
+		    if (foundMods && !"".equals(s)) {
+			SPGlobal.addModToSkip(s);
+		    } else if (s.contains("MOD BLOCKS")) {
+			foundMods = true;
+		    }
+		}
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
+	} else {
+	    // Create a placeholder for people to see
+	    try {
+		BufferedWriter out = new BufferedWriter(new FileWriter(path));
+		out.write("==MOD BLOCKS==\n");
+		out.write("//Add a mod names or keywords to look for to block\n//One per line");
+		out.close();
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
+	}
+    }
+
     static void handleArgs(String[] args) {
 	final ArrayList<String> arguments = Ln.toUpper(new ArrayList<>(Arrays.asList(args)));
 
@@ -432,6 +471,25 @@ public class SUMGUI extends JFrame {
 	}
 
 	justSettings = arguments.contains("-JUSTSETTINGS");
+
+	index = arguments.indexOf("-LANGUAGE");
+	if (index != -1) {
+	    String lang = arguments.get(index + 1).substring(1);
+	    for (Language l : Language.values()) {
+		if (lang.equalsIgnoreCase(l.toString())) {
+		    SPGlobal.language = l;
+		    break;
+		}
+	    }
+	}
+
+	if (arguments.contains("-SUMBLOCK")) {
+	    try {
+		loadBlockedMods(SPGlobal.getSkyProcDocuments() + "\\SUM Mod Blocklist.txt");
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
+	}
 
 	if (arguments.contains("-FORCE")) {
 	    setPatchNeeded(true);
@@ -460,6 +518,7 @@ public class SUMGUI extends JFrame {
 	try {
 	    final LImagePane backToSUM = new LImagePane(SUMprogram.class.getResource("BackToSUMdark.png"));
 	    backToSUM.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    exitProgram(false, true);

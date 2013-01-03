@@ -14,8 +14,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -26,8 +24,8 @@ import javax.swing.SwingUtilities;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
-import lev.gui.resources.LFonts;
 import skyproc.*;
+import skyproc.SPGlobal.Language;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -165,6 +163,7 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -174,6 +173,7 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
+
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -352,6 +352,8 @@ public class SUMprogram implements SUM {
 	LCheckBox runBoss;
 	LCheckBox mergePatches;
 	LNumericSetting maxMem;
+	LLabel langLabel;
+	LComboBox language;
 
 	OptionsMenu(SPMainMenuPanel parent_) {
 	    super(parent_, "SUM Options", grey);
@@ -380,6 +382,19 @@ public class SUMprogram implements SUM {
 	    maxMem.tie(SUMSettings.MAX_MEM, SUMsave, SUMGUI.helpPanel, true);
 	    setPlacement(maxMem);
 	    AddSetting(maxMem);
+
+	    langLabel = new LLabel("Language", settingFont, SUMGUI.light);
+	    language = new LComboBox("Language");
+	    language.setSize(150, 25);
+	    for (Enum e : SPGlobal.Language.values()) {
+		language.addItem(e);
+	    }
+	    language.tie(SUMSettings.LANGUAGE, SUMsave, SUMGUI.helpPanel, true);
+	    setPlacement(language, last.x + langLabel.getWidth() + 15, last.y);
+	    AddSetting(language);
+	    langLabel.setLocation(language.getX() - langLabel.getWidth() - 15, language.getY() + language.getHeight() / 2 - langLabel.getHeight() / 2);
+	    langLabel.addShadow();
+	    settingsPanel.add(langLabel);
 
 	    alignRight();
 
@@ -450,6 +465,7 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -495,6 +511,7 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -592,6 +609,7 @@ public class SUMprogram implements SUM {
 	    Add(SUMSettings.DISABLED, new HashSet<String>(0), true);
 	    Add(SUMSettings.RUN_BOSS, true, false);
 	    Add(SUMSettings.MAX_MEM, 750, false);
+	    Add(SUMSettings.LANGUAGE, 0, true);
 	}
 
 	@Override
@@ -613,6 +631,8 @@ public class SUMprogram implements SUM {
 		    + "If you experience this, then try allocating more memory.\n\n"
 		    + "Windows has the final say in how much memory it will allow the programs.  If your request"
 		    + " is denied you'll see an error.  Just lower your memory request and try again.");
+	    helpInfo.put(SUMSettings.LANGUAGE,
+		    "You can set your preferred language here.  This will make the patchers import strings files of that language first.");
 	}
     }
 
@@ -621,7 +641,8 @@ public class SUMprogram implements SUM {
 	MAX_MEM,
 	MERGE_PATCH,
 	DISABLED,
-	RUN_BOSS,;
+	RUN_BOSS,
+	LANGUAGE;
     }
 
     enum SUMlogs {
@@ -775,12 +796,19 @@ public class SUMprogram implements SUM {
      */
     @Override
     public void onExit(boolean patchWasGenerated) {
+	// Save disabled links
 	Set<String> disabledLinks = SUMsave.getStrings(SUMSettings.DISABLED);
 	disabledLinks.clear();
 	for (PatcherLink link : links) {
 	    if (!link.isActive()) {
 		disabledLinks.add(link.getName().toUpperCase());
 	    }
+	}
+	
+	// Delete unused blocklist file
+	File blocklist = new File("Files\\Blocklist.txt");
+	if (blocklist.isFile()) {
+	    blocklist.delete();
 	}
     }
 
@@ -931,10 +959,13 @@ public class SUMprogram implements SUM {
 	args.add("-GENPATCH");
 	args.add("-NONEW");
 	args.add("-NOMODSAFTER");
+	args.add("-LANGUAGE");
+	args.add("-" + SUMsave.getEnum(SUMSettings.LANGUAGE));
 	if (forceAllPatches.isSelected()) {
 	    args.add("-FORCE");
 	}
 	args.add("-PROGRESSLOCATION");
+	args.add("-SUMBLOCK");
 	args.add("-" + (SUMGUI.progress.getWidth() + 10));
 	args.add("-" + 0);
 	return NiftyFunc.startProcess(new File(link.path.getParentFile().getPath() + "\\"), args.toArray(new String[0]));

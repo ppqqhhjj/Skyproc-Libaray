@@ -145,7 +145,7 @@ class Consistency {
     static void getConsistencyFile() throws FileNotFoundException, IOException {
 	if (consistencyFile == null) {
 	    File myDocs = SPGlobal.getSkyProcDocuments();
-	    consistencyFile = new File(myDocs.getPath() + "\\" + "Consistency");
+	    consistencyFile = new File(myDocs.getPath() + "\\Consistency");
 	}
     }
 
