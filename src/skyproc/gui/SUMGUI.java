@@ -456,6 +456,13 @@ public class SUMGUI extends JFrame {
     static void handleArgs(String[] args) {
 	final ArrayList<String> arguments = Ln.toUpper(new ArrayList<>(Arrays.asList(args)));
 
+	if (SPGlobal.logging()) {
+	    SPGlobal.logMain("Run Location", "Program running from: " + (new File(".").getAbsolutePath()));
+	    for (String arg : arguments) {
+		SPGlobal.logMain("SUM", "Arg: " + arg);
+	    }
+	}
+	
 	// Just Patching
 	justPatching = arguments.contains("-GENPATCH");
 
@@ -498,10 +505,6 @@ public class SUMGUI extends JFrame {
 	SPGlobal.setStreamMode(!arguments.contains("-NOSTREAM"));
 
 	if (SPGlobal.logging()) {
-	    SPGlobal.logMain("Run Location", "Program running from: " + (new File(".").getAbsolutePath()));
-	    for (String arg : arguments) {
-		SPGlobal.logMain("SUM", "Arg: " + arg);
-	    }
 	    if (justPatching) {
 		SPGlobal.logMain("SUM", "Program is just patching. (-GENPATCH)");
 	    }

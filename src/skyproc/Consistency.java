@@ -159,14 +159,17 @@ class Consistency {
 		getConsistencyFile();
 		if (consistencyFile.isFile()) {
 		    BufferedReader in = new BufferedReader(new FileReader(consistencyFile));
+		    ModListing globalPatch = SPGlobal.getGlobalPatch().getInfo();
 		    while (in.ready()) {
 			String EDID = in.readLine();
 			String form = in.readLine();
 			FormID ID = new FormID(form);
-			edidToForm.put(EDID, ID);
-			IDs.add(ID);
-			if (SPGlobal.debugConsistencyImport && SPGlobal.logging()) {
-			    SPGlobal.log("Consistency Import", form + " with " + EDID);
+			if (ID.getMaster().equals(globalPatch)) {
+			    edidToForm.put(EDID, ID);
+			    IDs.add(ID);
+			    if (SPGlobal.debugConsistencyImport && SPGlobal.logging()) {
+				SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "Consistency Import", form + " with " + EDID);
+			    }
 			}
 		    }
 		    in.close();
@@ -187,7 +190,7 @@ class Consistency {
 			+ "This means your savegame has a good chance of having mismatched records.<br><br>"
 			+ "It would be greatly appreciated if you sent the failed consistency file located in<br>"
 			+ "Files/ to Leviathan1753 for analysis."
-                        + "<br><br> If this is the first time running the patch, please ignore this message.</html>");
+			+ "<br><br> If this is the first time running the patch, please ignore this message.</html>");
 	    }
 	}
     }

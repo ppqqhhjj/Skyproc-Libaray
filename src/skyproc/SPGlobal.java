@@ -295,7 +295,7 @@ public class SPGlobal {
      * print messages to them.<br> Do this step early in your program.
      */
     public static void createGlobalLog() {
-	createGlobalLog("");
+	createGlobalLog("SkyProcDebug/");
     }
 
     /**
@@ -305,8 +305,8 @@ public class SPGlobal {
      * @param path The path to create the "SkyProcDebug/" folder.
      */
     public static void createGlobalLog(String path) {
-	pathToDebug = path + "SkyProcDebug/";
-	log = new SPLogger(pathToDebug);
+	pathToDebug = path;
+	log = new SPLogger(path);
     }
 
     static void logSync(String header, String... print) {

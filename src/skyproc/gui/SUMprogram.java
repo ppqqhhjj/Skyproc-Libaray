@@ -4,6 +4,7 @@
  */
 package skyproc.gui;
 
+import skyproc.SUMMergerProgram;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -94,6 +95,11 @@ public class SUMprogram implements SUM {
 	}
 	if (argsList.contains("-EMBEDDEDSCRIPTGEN")) {
 	    SkyProcTester.parseEmbeddedScripts();
+	    return false;
+	}
+	if (argsList.contains("-GENPATCH")) {
+	    SPGlobal.createGlobalLog("SkyProcDebug/Merger/");
+	    SUMGUI.open(new SUMMergerProgram(), args);
 	    return false;
 	}
 	return true;
@@ -363,12 +369,12 @@ public class SUMprogram implements SUM {
 	protected final void initialize() {
 	    super.initialize();
 
-//	    mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
-//	    mergePatches.setOffset(-3);
-//	    mergePatches.addShadow();
-//	    mergePatches.tie(SUMSettings.MERGE_PATCH, SUMsave, SUMGUI.helpPanel, true);
-//	    setPlacement(mergePatches);
-//	    AddSetting(mergePatches);
+	    mergePatches = new LCheckBox("Merge Patches", settingFont, SUMGUI.light);
+	    mergePatches.setOffset(-3);
+	    mergePatches.addShadow();
+	    mergePatches.tie(SUMSettings.MERGE_PATCH, SUMsave, SUMGUI.helpPanel, true);
+	    setPlacement(mergePatches);
+	    AddSetting(mergePatches);
 
 	    runBoss = new LCheckBox("Run BOSS", settingFont, SUMGUI.light);
 	    runBoss.setOffset(-3);
@@ -616,8 +622,7 @@ public class SUMprogram implements SUM {
 	protected void initHelp() {
 	    helpInfo.put(SUMSettings.MERGE_PATCH, "This will merge all of your SkyProc patches into one patch.  "
 		    + "This helps if you're hitting the max number of mods.\n\n"
-		    + "WARNING:  Existing savegames may break when switching this setting on/off.  It is "
-		    + "recommended you start fresh savegames when adjusting this setting.");
+		    + "WARNING:  This is an experimental setting.  In addition, existing savegames may break when switching this setting on/off, as all the references the savegame uses to the patches will be broken.  It is recommended you start new savegames when changing this setting.");
 	    helpInfo.put(SUMSettings.RUN_BOSS, "SUM will run BOSS before running the patchers to confirm that "
 		    + "they are all in the correct load order.  It is highly recommended you leave this setting on.\n\n"
 		    + "NOTE:  Be aware that BOSS reserves the right to change load ordering as it sees fit.  "
@@ -804,7 +809,7 @@ public class SUMprogram implements SUM {
 		disabledLinks.add(link.getName().toUpperCase());
 	    }
 	}
-	
+
 	// Delete unused blocklist file
 	File blocklist = new File("Files\\Blocklist.txt");
 	if (blocklist.isFile()) {
@@ -826,15 +831,32 @@ public class SUMprogram implements SUM {
     @Override
     public void runChangesToPatch() throws Exception {
 
+	// Setup
 	ArrayList<PatcherLink> activeLinks = getActiveLinks();
-	SUMGUI.progress.setBar(0);
-	SUMGUI.progress.setMax(activeLinks.size());
+	setupProgress(activeLinks);
 
+	// BOSS and sorting
 	setupLinksForBOSS(activeLinks);
 	runBOSS(activeLinks);
 	sortLinks(activeLinks);
 
 	runEachPatcher(activeLinks);
+
+	mergePatches(activeLinks);
+
+	SUMGUI.exitProgram(true, true);
+    }
+
+    void setupProgress(ArrayList<PatcherLink> activeLinks) {
+	SUMGUI.progress.setBar(0);
+	int progressMax = activeLinks.size();
+	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
+	    progressMax++;
+	}
+	if (SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
+	    progressMax++;
+	}
+	SUMGUI.progress.setMax(progressMax);
     }
 
     ArrayList<PatcherLink> getActiveLinks() {
@@ -902,6 +924,7 @@ public class SUMprogram implements SUM {
 	    if (response == JOptionPane.NO_OPTION) {
 		SUMGUI.exitProgram(false, true);
 	    }
+	    SUMGUI.progress.incrementBar();
 	}
     }
 
@@ -943,10 +966,8 @@ public class SUMprogram implements SUM {
 	    } else {
 		SPGlobal.logMain("Run Changes", "UNsuccessfully ran jar: " + link.path);
 	    }
-	    SUMGUI.progress.incrementBar();
 	}
 	SUMGUI.progress.done();
-	SUMGUI.exitProgram(true, true);
     }
 
     boolean runJarPatcher(PatcherLink link) {
@@ -960,14 +981,38 @@ public class SUMprogram implements SUM {
 	args.add("-NONEW");
 	args.add("-NOMODSAFTER");
 	args.add("-LANGUAGE");
-	args.add("-" + SUMsave.getEnum(SUMSettings.LANGUAGE));
+	args.add("-" + Language.values()[SUMsave.getInt(SUMSettings.LANGUAGE)]);
 	if (forceAllPatches.isSelected()) {
 	    args.add("-FORCE");
 	}
 	args.add("-PROGRESSLOCATION");
-	args.add("-SUMBLOCK");
 	args.add("-" + (SUMGUI.progress.getWidth() + 10));
 	args.add("-" + 0);
-	return NiftyFunc.startProcess(new File(link.path.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
+	args.add("-SUMBLOCK");
+	boolean ret = NiftyFunc.startProcess(new File(link.path.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
+	SUMGUI.progress.incrementBar();
+	return ret;
+    }
+
+    void mergePatches(ArrayList<PatcherLink> links) throws IOException {
+	if (SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
+	    // Save out list of patch names
+	    String path = getSUMPatchList();
+	    BufferedWriter out = new BufferedWriter(new FileWriter(path));
+	    for (PatcherLink link : links) {
+		out.write(link.getPatchName() + "\n");
+	    }
+	    out.close();
+
+	    File SUM = new File("SUM.jar");
+	    File SUMtmp = SUM.getAbsoluteFile();
+	    PatcherLink mergerLink = new PatcherLink(null, SUMtmp);
+	    // SUM triggers the merger program off the -GENPATCH arg
+	    runJarPatcher(mergerLink);
+	}
+    }
+
+    public static String getSUMPatchList() throws IOException {
+	return SPGlobal.getSkyProcDocuments() + "\\SUM patch list.txt";
     }
 }

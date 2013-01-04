@@ -144,7 +144,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if ("EDID".equals(getNextType(in))) {
 	    SubString EDID = subRecords.getSubString("EDID");
 	    EDID.parseData(EDID.extractRecordData(in));
-	    Consistency.addEntry(EDID.print(), ID);
 	}
 
 	importSubRecords(in);

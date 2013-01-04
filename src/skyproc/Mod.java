@@ -735,6 +735,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	for (FormID ID : allForms) {
 	    if (!ID.isNull()) {
 		ModListing master = ID.getMaster();
+		if (master.toString().equals("Automatic Variants.esp")) {
+		    int wer = 23;
+		}
 		if (!addedMods.contains(master)) {
 		    addMaster(master);
 		    addedMods.add(master);
