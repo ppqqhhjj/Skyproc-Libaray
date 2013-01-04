@@ -69,7 +69,7 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return !altTextures.isEmpty();
     }
 

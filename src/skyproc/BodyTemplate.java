@@ -68,7 +68,7 @@ public class BodyTemplate extends SubShell {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

@@ -110,7 +110,7 @@ class ConditionBase extends SubRecord {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return true;
     }
 

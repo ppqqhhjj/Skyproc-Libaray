@@ -118,7 +118,7 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return mast.isValid();
     }
 

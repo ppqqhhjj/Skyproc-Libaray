@@ -41,7 +41,7 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return (text.isValid() && !text.print().equals("")) || forceExport;
     }
 

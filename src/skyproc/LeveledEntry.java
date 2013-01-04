@@ -44,7 +44,7 @@ public class LeveledEntry extends SubShell {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return subRecords.isAnyValid();
     }
 
@@ -145,7 +145,7 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 

@@ -61,7 +61,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @return True if GRUP has records. (size > 0)
      */
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return !isEmpty();
     }
 

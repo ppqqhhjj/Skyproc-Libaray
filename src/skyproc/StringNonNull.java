@@ -35,7 +35,7 @@ class StringNonNull extends Record {
     }
 
     @Override
-     Boolean isValid() {
+     boolean isValid() {
         return data != null;
     }
 

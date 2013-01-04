@@ -81,7 +81,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return subRecords.get("PRKE").isValid() && subRecords.get("DATA").isValid();
 	}
     }
@@ -113,7 +113,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
     }

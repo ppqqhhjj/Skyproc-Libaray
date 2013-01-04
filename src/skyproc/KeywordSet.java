@@ -33,7 +33,7 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return counter.isValid()
 		&& keywords.isValid();
     }

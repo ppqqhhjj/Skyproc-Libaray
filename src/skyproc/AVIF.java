@@ -48,7 +48,7 @@ public class AVIF extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

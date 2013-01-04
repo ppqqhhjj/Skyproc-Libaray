@@ -98,7 +98,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

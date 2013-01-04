@@ -79,7 +79,7 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	for (FormID ID : IDs) {
 	    if (ID.isValid()) {
 		return true;

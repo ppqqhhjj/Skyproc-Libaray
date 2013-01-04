@@ -31,7 +31,7 @@ public abstract class Record implements Serializable {
 	parseData(new LShrinkArray(in));
     }
 
-    Boolean isValid() {
+    boolean isValid() {
 	return true;
     }
 

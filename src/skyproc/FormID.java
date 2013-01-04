@@ -236,7 +236,7 @@ public class FormID implements Comparable, Serializable {
 	}
     }
 
-    Boolean isValid() {
+    boolean isValid() {
 	return !equals(NULL);
     }
 

@@ -47,7 +47,7 @@ class SubString extends SubRecordTyped {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return (string != null);
     }
 

@@ -54,7 +54,7 @@ class SubFlag extends SubRecordTyped {
     }
 
     @Override
-    public Boolean isValid() {
+    public boolean isValid() {
 	return flags != null;
     }
 

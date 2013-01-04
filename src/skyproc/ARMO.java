@@ -104,7 +104,7 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

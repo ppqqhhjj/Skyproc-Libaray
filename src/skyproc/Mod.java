@@ -1365,7 +1365,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 
@@ -1504,7 +1504,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

@@ -83,7 +83,7 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return name != null;
     }
 

@@ -61,7 +61,7 @@ class SubData extends SubRecordTyped {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return data != null;
     }
 

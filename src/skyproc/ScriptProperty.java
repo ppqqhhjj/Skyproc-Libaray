@@ -179,7 +179,7 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return name != null;
     }
 

@@ -99,7 +99,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -167,7 +167,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -239,7 +239,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -301,7 +301,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 

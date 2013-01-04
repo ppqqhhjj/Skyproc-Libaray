@@ -109,7 +109,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return true;
     }
 

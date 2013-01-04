@@ -333,7 +333,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 
@@ -467,7 +467,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 
@@ -549,7 +549,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 
@@ -619,7 +619,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -724,7 +724,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -781,7 +781,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 
@@ -830,7 +830,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return valid;
 	}
 

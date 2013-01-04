@@ -44,7 +44,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return !collection.isEmpty();
     }
 

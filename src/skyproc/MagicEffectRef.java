@@ -53,7 +53,7 @@ public class MagicEffectRef extends SubShellBulkType {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return subRecords.isAnyValid();
     }
 
@@ -120,7 +120,7 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 

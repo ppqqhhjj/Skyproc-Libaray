@@ -106,7 +106,7 @@ class SubForm extends SubRecordTyped {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return ID.isValid();
     }
 

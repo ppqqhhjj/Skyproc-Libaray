@@ -235,7 +235,7 @@ public class QUST extends MajorRecordNamed {
     static class INDX extends SubRecord {
 
 	int index = 0;
-	LFlags flags = new LFlags(1);
+	LFlags flags = new LFlags(2);
 
 	INDX() {
 	    super();
@@ -427,7 +427,7 @@ public class QUST extends MajorRecordNamed {
 
 	@Override
 	ArrayList<String> getTypes() {
-	    return Record.getTypeList("QSDT");
+	    return Record.getTypeList("QSTA");
 	}
     }
 

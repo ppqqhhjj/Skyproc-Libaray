@@ -223,7 +223,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return true;
 	}
 
@@ -292,7 +292,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	Boolean isValid() {
+	boolean isValid() {
 	    return !sounds.isEmpty();
 	}
 

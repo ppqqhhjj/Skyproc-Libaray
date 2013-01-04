@@ -297,7 +297,7 @@ public class Condition extends SubShell {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return getBase().isValid();
     }
 

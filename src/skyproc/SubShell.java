@@ -26,7 +26,7 @@ class SubShell extends SubRecord {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return subRecords.isValid();
     }
 

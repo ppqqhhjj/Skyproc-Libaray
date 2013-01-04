@@ -34,7 +34,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	return scripts.size() > 0;
     }
 

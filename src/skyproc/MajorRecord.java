@@ -117,7 +117,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    Boolean isValid() {
+    boolean isValid() {
 	if (ID == null) {
 	    return false;
 	} else {
