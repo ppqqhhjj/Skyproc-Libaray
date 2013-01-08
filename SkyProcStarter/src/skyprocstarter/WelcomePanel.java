@@ -25,8 +25,7 @@ public class WelcomePanel extends SPSettingPanel {
 	super.initialize();
 
 	introText = new LTextPane(settingsPanel.getWidth() - 40, 400, SkyProcStarter.settingsColor);
-	introText.setText("This is the standard starter project for SkyProc.  "
-		+ "I hope it helps you get on your way to making an awesome patcher!");
+	introText.setText(SkyProcStarter.welcomeText);
 	introText.setEditable(false);
 	introText.setFont(SkyProcStarter.settingsFont);
 	introText.setCentered();

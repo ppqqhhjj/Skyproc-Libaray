@@ -6,3 +6,4 @@ jsquish.jar
 junit-4.5.jar
 Lev.jar
 skyproc.jar
+WinRegistry.jar

@@ -735,9 +735,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	for (FormID ID : allForms) {
 	    if (!ID.isNull()) {
 		ModListing master = ID.getMaster();
-		if (master.toString().equals("Automatic Variants.esp")) {
-		    int wer = 23;
-		}
 		if (!addedMods.contains(master)) {
 		    addMaster(master);
 		    addedMods.add(master);
@@ -748,13 +745,16 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// Go through each record, and add all mods that reference that record
 	// Just to symbolize that they "had part" in the patch
 	// And help encourage repatching when mods are removed.
-	for (GRUP<MajorRecord> g : srcMod) {
-	    for (MajorRecord major : g) {
-		FormID id = major.getForm();
-		for (Mod mod : SPGlobal.getDB().getImportedMods()) {
-		    if (mod.contains(id) && !addedMods.contains(mod.getInfo()) && !mod.equals(SPGlobal.getGlobalPatch())) {
-			addMaster(mod.getInfo());
-			addedMods.add(mod.getInfo());
+	if (!SPGlobal.mergeMode) {
+	    for (GRUP<MajorRecord> g : srcMod) {
+		for (MajorRecord major : g) {
+		    FormID id = major.getForm();
+		    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
+			if (mod.contains(id) && !addedMods.contains(mod.getInfo()) 
+				&& !mod.equals(SPGlobal.getGlobalPatch())) {
+			    addMaster(mod.getInfo());
+			    addedMods.add(mod.getInfo());
+			}
 		    }
 		}
 	    }
@@ -1329,6 +1329,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubPrototype TES4proto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());

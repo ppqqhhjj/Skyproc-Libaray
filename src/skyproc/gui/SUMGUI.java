@@ -5,20 +5,16 @@
 package skyproc.gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.*;
+import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -28,8 +24,8 @@ import lev.debug.LDebug;
 import lev.gui.*;
 import lev.gui.resources.LFonts;
 import lev.gui.resources.LImages;
-import skyproc.*;
 import skyproc.SPGlobal.Language;
+import skyproc.*;
 
 /**
  * The standard GUI setup used in SUM. This can be used to create GUIs that
@@ -462,7 +458,7 @@ public class SUMGUI extends JFrame {
 		SPGlobal.logMain("SUM", "Arg: " + arg);
 	    }
 	}
-	
+
 	// Just Patching
 	justPatching = arguments.contains("-GENPATCH");
 
@@ -848,6 +844,12 @@ public class SUMGUI extends JFrame {
 		SPGlobal.logException(e);
 	    }
 	}
+
+	if (singleton != null) {
+	    singleton.dispose();
+	}
+	progress.dispose();
+
 	try {
 	    hook.onExit(generatedPatch);
 	} catch (Exception e) {
@@ -861,10 +863,6 @@ public class SUMGUI extends JFrame {
 	    LDebug.wrapUpAndExit();
 	} else {
 	    LDebug.wrapUp();
-	    if (singleton != null) {
-		singleton.dispose();
-	    }
-	    progress.dispose();
 	}
     }
 
@@ -1027,8 +1025,16 @@ public class SUMGUI extends JFrame {
 	 * @param status
 	 */
 	@Override
-	public void setStatus(int min, int max, String status) {
-	    progress.setStatus(min, max, status);
+	public void setStatusNumbered(int min, int max, String status) {
+	    progress.setStatusNumbered(min, max, status);
+	    if (!progress.paused()) {
+		statusUpdate.setText(status);
+	    }
+	}
+	
+	@Override
+	public void setStatusNumbered(String status) {
+	    progress.setStatusNumbered(status);
 	    if (!progress.paused()) {
 		statusUpdate.setText(status);
 	    }

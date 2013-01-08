@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.awt.Color;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +124,8 @@ public class SUMMergerProgram implements SUM {
     @Override
     public void onStart() throws Exception {
 	SPGlobal.debugConsistencyImport = true;
+	SPGlobal.streamMode = false;
+	SPGlobal.mergeMode = true;
     }
 
     @Override
@@ -157,7 +160,7 @@ public class SUMMergerProgram implements SUM {
 		}
 	    }
 	}
-	
+
 	// Replace all formID references to new IDs
 	ArrayList<FormID> allFormIDs = SPGlobal.getGlobalPatch().allFormIDs();
 	for (FormID id : allFormIDs) {
@@ -165,14 +168,16 @@ public class SUMMergerProgram implements SUM {
 	    if (newID != null) {
 		id.form = newID.form;
 		id.master = newID.master;
-	    } else if (id.getMaster().toString().equals("Automatic Variants.esp")) {
-		int wer = 23;
-	    }
+	    } 
 	}
-	
-	// Remove SkyProc patches from master list
+
+	// Remove SkyProc patches from master list and delete their files
 	for (Mod m : SPGlobal.getDB()) {
 	    SPGlobal.getGlobalPatch().tes.getMasters().remove(m.getInfo());
+	    File modFile = new File(SPGlobal.pathToData + m.getName());
+	    if (modFile.exists()) {
+		modFile.delete();
+	    }
 	}
     }
 }

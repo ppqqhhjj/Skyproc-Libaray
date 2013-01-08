@@ -153,6 +153,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    @Override
 	    protected void addRecords() {
 		add(new SubForm("CSDI"));
+		forceExport("CSDI");
 		add(new SubInt("CSDC", 1));
 	    }
 	};

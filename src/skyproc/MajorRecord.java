@@ -145,7 +145,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    SubString EDID = subRecords.getSubString("EDID");
 	    EDID.parseData(EDID.extractRecordData(in));
 	}
-
+	
 	importSubRecords(in);
     }
 
@@ -197,10 +197,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
-
-	    if (getEDID().equals("AV_n80326256_BellyachesAnimals_Deer_Skin_Normal_armo")) {
-		int wer = 23;
-	    }
 
 	    subRecords.export(out, srcMod);
 	}

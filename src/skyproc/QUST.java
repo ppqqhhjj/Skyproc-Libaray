@@ -40,9 +40,9 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubInt("ALFA"));
 	    add(new SubInt("ALNA"));
 	    add(new SubInt("ALNT"));
+	    add(new SubData("ALED"));
 	    add(new SubForm("VTCK"));
 	    forceExport("VTCK");
-	    add(new SubData("ALED"));
 	    add(new SubForm("ALDN"));
 	    add(new SubList<>(new SubForm("ALFC")));
 	    add(new SubList<>(new SubInt("ALFI")));
@@ -106,6 +106,15 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new QuestTarget()));
 	}
     };
+    static final SubPrototype nextConds = new SubPrototype() {
+
+	@Override
+	protected void addRecords() {
+	    add(new SubData("NEXT"));
+	    forceExport("NEXT");
+	    add(new SubList<>(new Condition()));
+	}
+    };
     static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
@@ -116,8 +125,7 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubForm("QTGL"));
 	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
-	    add(new SubData("NEXT"));
-	    forceExport("NEXT");
+	    add(new SubShellBulkType(nextConds, false));
 	    add(new SubList<>(new QuestStage()));
 	    add(new SubInt("ANAM"));
 	    add(new SubList<>(new QuestObjective()));
@@ -125,6 +133,8 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new AliasReference()));
 	}
     };
+//    static final byte[] oldVers = { 0x28, 0, 2, 0 }; 
+//    static final byte[] curVers = { 0x28, 0, 8, 0 }; 
 
     abstract static class Alias extends SubShellBulkType {
 
@@ -563,6 +573,14 @@ public class QUST extends MajorRecordNamed {
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
+
+//    @Override
+//    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+//	super.parseData(in);
+//	if (Arrays.equals(version, oldVers)) {
+//	    System.arraycopy(oldVers, 0, version, 0, version.length);
+//	}
+//    }
 
     public ArrayList<AliasReference> getReferenceAliases() {
 	return subRecords.getSubList("ALST").toPublic();

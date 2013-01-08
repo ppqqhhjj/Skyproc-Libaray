@@ -20,6 +20,7 @@ public class SPGlobal {
     static SPDatabase globalDatabase = new SPDatabase();
     static boolean testing = false;
     static boolean streamMode = true;
+    static boolean mergeMode = false;
     public static boolean noModsAfter = false;
     static MajorRecord lastStreamed;
     /*

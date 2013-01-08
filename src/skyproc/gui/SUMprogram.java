@@ -4,7 +4,6 @@
  */
 package skyproc.gui;
 
-import skyproc.SUMMergerProgram;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,19 +13,17 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import javax.imageio.ImageIO;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import lev.Ln;
 import lev.debug.LDebug;
 import lev.gui.*;
-import skyproc.*;
 import skyproc.SPGlobal.Language;
+import skyproc.*;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -628,7 +625,8 @@ public class SUMprogram implements SUM {
 		    + "NOTE:  Be aware that BOSS reserves the right to change load ordering as it sees fit.  "
 		    + "If it adjusts its load order and shuffles SkyProc patchers around "
 		    + "to be in a different order, your savegame may or may not function with the new ordering.  This is "
-		    + "most likely to occur if the SkyProc patcher is brand new, and hasn't been processed yet by BOSS.");
+		    + "most likely to occur if the SkyProc patcher is brand new, and hasn't been processed yet by BOSS.\n\n"
+		    + "SUM does not update BOSS before running it.");
 	    helpInfo.put(SUMSettings.MAX_MEM,
 		    "This will determine the max amount of megabytes of memory patchers will be allowed to use.\n\n"
 		    + "If a patcher runs out of memory the program will essentially halt as it "
@@ -844,6 +842,7 @@ public class SUMprogram implements SUM {
 
 	mergePatches(activeLinks);
 
+	SUMGUI.progress.done();
 	SUMGUI.exitProgram(true, true);
     }
 
@@ -885,7 +884,8 @@ public class SUMprogram implements SUM {
 	// Handle non-existant patchers
 	for (Mod newPatcher : nonExistantPatchers) {
 	    // Export tmp patch as a placeholder
-	    newPatcher.export();
+	    BufferedWriter placeholder = new BufferedWriter(new FileWriter(SPGlobal.pathToData + newPatcher.getName()));
+	    placeholder.close();
 	    // Add listing to plugins.txt
 	    pluginsLines.add(newPatcher.getName());
 	}
@@ -908,15 +908,25 @@ public class SUMprogram implements SUM {
     void runBOSS(ArrayList<PatcherLink> activeLinks) {
 	// Run BOSS
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
-	    SUMGUI.progress.setStatus("Running BOSS");
+	    SwingUtilities.invokeLater(new Runnable() {
+
+		@Override
+		public void run() {
+		    SUMGUI.progress.setStatusNumbered("Running BOSS");
+		}
+	    });
+	    SPGlobal.logMain("BOSS", "Looking for BOSS.");
 	    File bossFolder = new File(WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path"));
 	    File bossExe = new File(bossFolder.getPath() + "\\BOSS.exe");
 	    int response = JOptionPane.YES_OPTION;
 	    if (bossExe.isFile()) {
-		if (!NiftyFunc.startProcess(bossFolder, new String[]{bossExe.getPath(), "-s", "-g", "Skyrim"})) {
+		SPGlobal.logMain("BOSS", "Running BOSS.");
+		if (!NiftyFunc.startProcess(bossFolder, new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
+		    SPGlobal.logMain("BOSS", "BOSS complete.");
 		    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
 		}
 	    } else {
+		SPGlobal.logMain("BOSS", "BOSS could not be found.");
 		response = JOptionPane.showConfirmDialog(null, "BOSS could not be located.\n"
 			+ "It is highly recommended you download BOSS so that it can be used.\n\n"
 			+ "Do you want to continue patching without BOSS?", "Cannot locate BOSS", JOptionPane.YES_NO_OPTION);
@@ -930,24 +940,28 @@ public class SUMprogram implements SUM {
 
     void sortLinks(ArrayList<PatcherLink> links) {
 	try {
-	    ArrayList<PatcherLink> tmp = new ArrayList<>(links.size());
-	    String list;
+	    ArrayList<PatcherLink> sorted = new ArrayList<>(links.size());
+	    ArrayList<PatcherLink> unsorted = new ArrayList<>(links);
+	    // Use loadorder.txt if it exists first, then plugins.txt
+	    String listPath;
 	    try {
-		list = SPGlobal.getLoadOrderTxt();
+		listPath = SPGlobal.getLoadOrderTxt();
 	    } catch (IOException ex) {
-		list = SPGlobal.getPluginsTxt();
+		listPath = SPGlobal.getPluginsTxt();
 	    }
-	    ArrayList<String> pluginList = Ln.loadFileToStrings(list, false);
+	    ArrayList<String> pluginList = Ln.loadFileToStrings(listPath, false);
 	    for (String plugin : pluginList) {
-		for (PatcherLink link : links) {
-		    if (link.getPatchName().equalsIgnoreCase(plugin.trim()) && !tmp.contains(link)) {
-			tmp.add(link);
+		for (PatcherLink link : unsorted) {
+		    if (link.getPatchName().equalsIgnoreCase(plugin.trim()) && !sorted.contains(link)) {
+			sorted.add(link);
+			unsorted.remove(link);
 			break;
 		    }
 		}
 	    }
 	    links.clear();
-	    links.addAll(tmp);
+	    links.addAll(sorted);
+	    links.addAll(unsorted);
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
 	}
@@ -957,7 +971,7 @@ public class SUMprogram implements SUM {
 	SUMGUI.progress.setStatus("Running Patchers");
 	for (int i = 0; i < activeLinks.size(); i++) {
 	    PatcherLink link = activeLinks.get(i);
-	    SUMGUI.progress.setStatus(i + 1, activeLinks.size(), "Running " + link.getName());
+	    SUMGUI.progress.setStatusNumbered("Running " + link.getName());
 	    SPGlobal.logMain("Run Changes", "Running jar: " + link.path);
 	    if (!link.isActive()) {
 		SPGlobal.logMain("Run Changes", "Skipped jar because it was not selected: " + link.path);
@@ -967,7 +981,6 @@ public class SUMprogram implements SUM {
 		SPGlobal.logMain("Run Changes", "UNsuccessfully ran jar: " + link.path);
 	    }
 	}
-	SUMGUI.progress.done();
     }
 
     boolean runJarPatcher(PatcherLink link) {
@@ -996,6 +1009,7 @@ public class SUMprogram implements SUM {
 
     void mergePatches(ArrayList<PatcherLink> links) throws IOException {
 	if (SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
+	    SUMGUI.progress.setStatusNumbered("Merging Patches");
 	    // Save out list of patch names
 	    String path = getSUMPatchList();
 	    BufferedWriter out = new BufferedWriter(new FileWriter(path));
@@ -1004,11 +1018,11 @@ public class SUMprogram implements SUM {
 	    }
 	    out.close();
 
-	    File SUM = new File("SUM.jar");
-	    File SUMtmp = SUM.getAbsoluteFile();
-	    PatcherLink mergerLink = new PatcherLink(null, SUMtmp);
+	    File SUM = new File("SUM.jar").getAbsoluteFile();
+	    PatcherLink mergerLink = new PatcherLink(null, SUM);
 	    // SUM triggers the merger program off the -GENPATCH arg
 	    runJarPatcher(mergerLink);
+	    SUMGUI.progress.incrementBar();
 	}
     }
 

@@ -122,8 +122,6 @@ public class SPDatabase implements Iterable<Mod> {
 	    Mod mod = SPGlobal.getDB().getMod(m);
 	    if (mod != null) {
 		out.add(mod);
-	    } else {
-		SPGlobal.logError("Get Imported Mods", "Listing " + m + " returned a null Mod.");
 	    }
 	}
 	return out;
