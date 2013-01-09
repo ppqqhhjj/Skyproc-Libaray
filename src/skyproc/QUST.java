@@ -21,6 +21,7 @@ public class QUST extends MajorRecordNamed {
 
     // Static prototypes and definitions
     static SubPrototype ALSTALLSproto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(SubString.getNew("ALID", true));
@@ -58,6 +59,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasLocationProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALLS"));
@@ -65,6 +67,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasReferenceProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALST"));
@@ -72,6 +75,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questLogEntryProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubFlag("QSDT", 1));
@@ -84,6 +88,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questStageProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new INDX());
@@ -91,6 +96,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questTargetProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new QuestTargetData());
@@ -98,6 +104,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questObjectiveProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("QOBJ", 2));
@@ -106,16 +113,8 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new QuestTarget()));
 	}
     };
-    static final SubPrototype nextConds = new SubPrototype() {
-
-	@Override
-	protected void addRecords() {
-	    add(new SubData("NEXT"));
-	    forceExport("NEXT");
-	    add(new SubList<>(new Condition()));
-	}
-    };
     static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
+
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
@@ -125,7 +124,15 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubForm("QTGL"));
 	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
-	    add(new SubShellBulkType(nextConds, false));
+	    add(new SubShellBulkType(new SubPrototype() {
+
+		@Override
+		protected void addRecords() {
+		    add(new SubData("NEXT"));
+		    forceExport("NEXT");
+		    add(new SubList<>(new Condition()));
+		}
+	    }, false));
 	    add(new SubList<>(new QuestStage()));
 	    add(new SubInt("ANAM"));
 	    add(new SubList<>(new QuestObjective()));
@@ -133,8 +140,6 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new AliasReference()));
 	}
     };
-//    static final byte[] oldVers = { 0x28, 0, 2, 0 }; 
-//    static final byte[] curVers = { 0x28, 0, 8, 0 }; 
 
     abstract static class Alias extends SubShellBulkType {
 
@@ -146,7 +151,7 @@ public class QUST extends MajorRecordNamed {
 	    subRecords.setSubStringPointer("ALID", name);
 	}
 
-	public String getName () {
+	public String getName() {
 	    return subRecords.getSubString("ALID").print();
 	}
     }
@@ -573,15 +578,7 @@ public class QUST extends MajorRecordNamed {
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
-
-//    @Override
-//    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-//	super.parseData(in);
-//	if (Arrays.equals(version, oldVers)) {
-//	    System.arraycopy(oldVers, 0, version, 0, version.length);
-//	}
-//    }
-
+    
     public ArrayList<AliasReference> getReferenceAliases() {
 	return subRecords.getSubList("ALST").toPublic();
     }

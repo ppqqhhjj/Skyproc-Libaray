@@ -7,6 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -22,6 +23,13 @@ import skyproc.exceptions.BadRecord;
 public class RACE extends MajorRecordDescription {
 
     // Static prototypes and definitions
+    static final SubPrototype attackDataProto = new SubPrototype() {
+		@Override
+		protected void addRecords() {
+		    add(new AttackDataInternal());
+		    add(SubString.getNew("ATKE", true));
+		}
+	    };
     static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
@@ -47,13 +55,7 @@ public class RACE extends MajorRecordDescription {
 	    add(new SubData("PNAM"));
 	    add(new SubData("UNAM"));
 	    add(new SubForm("ATKR"));
-	    add(new SubList<>(new SubShell(new SubPrototype() {
-		@Override
-		protected void addRecords() {
-		    add(new SubData("ATKD"));
-		    add(SubString.getNew("ATKE", true));
-		}
-	    })));
+	    add(new SubList<>(new AttackData()));
 	    add(new SubShellBulkType(new SubPrototype() {
 		@Override
 		protected void addRecords() {
@@ -278,6 +280,222 @@ public class RACE extends MajorRecordDescription {
 	@Override
 	ArrayList<String> getTypes() {
 	    return Record.getTypeList("DATA");
+	}
+    }
+    
+    static final public class AttackDataInternal extends SubRecord {
+
+	float damageMult = 0;
+	float attackChance = 0;
+	FormID attackSpell = new FormID();
+	LFlags flags = new LFlags(4);
+	float attackAngle = 0;
+	float strikeAngle = 0;
+	float stagger = 0;
+	FormID attackType = new FormID();
+	float knockDown = 0;
+	float recoveryTime = 0;
+	float fatigueMult = 0;
+	
+	void copy(AttackDataInternal rhs) {
+	    damageMult = rhs.damageMult;
+	    attackChance = rhs.attackChance;
+	    attackSpell = new FormID(rhs.attackSpell);
+	    flags = new LFlags(rhs.flags);
+	    attackAngle = rhs.attackAngle;
+	    strikeAngle = rhs.strikeAngle;
+	    stagger = rhs.stagger;
+	    attackType = new FormID(rhs.attackType);
+	    knockDown = rhs.knockDown;
+	    recoveryTime = rhs.recoveryTime;
+	    fatigueMult = rhs.fatigueMult;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<>(2);
+	    out.add(attackSpell);
+	    out.add(attackType);
+	    return out;
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    super.export(out, srcMod);
+	    out.write(damageMult);
+	    out.write(attackChance);
+	    attackSpell.export(out);
+	    out.write(flags.export());
+	    out.write(attackAngle);
+	    out.write(strikeAngle);
+	    out.write(stagger);
+	    attackType.export(out);
+	    out.write(knockDown);
+	    out.write(recoveryTime);
+	    out.write(fatigueMult);
+	}
+
+	@Override
+	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in);
+	    damageMult = in.extractFloat();
+	    attackChance = in.extractFloat();
+	    attackSpell.setInternal(in.extract(4));
+	    flags.set(in.extract(4));
+	    attackAngle = in.extractFloat();
+	    strikeAngle = in.extractFloat();
+	    stagger = in.extractFloat();
+	    attackType.setInternal(in.extract(4));
+	    knockDown = in.extractFloat();
+	    recoveryTime = in.extractFloat();
+	    fatigueMult = in.extractFloat();
+	}
+	
+	@Override
+	SubRecord getNew(String type) {
+	    return new AttackDataInternal();
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    return Record.getTypeList("ATKD");
+	}
+
+	@Override
+	int getContentLength(Mod srcMod) {
+	    return 44;
+	}
+	
+    }
+    
+    static final public class AttackData extends SubShell {
+	
+	AttackData () {
+	    super(attackDataProto);
+	}
+	
+	public AttackData(String eventName) {
+	    this();
+	    subRecords.setSubString("ATKE", eventName);
+	}
+	
+	public String getEventName() {
+	    return subRecords.getSubString("ATKE").print();
+	}
+	
+	AttackDataInternal getATKD() {
+	    return (AttackDataInternal) subRecords.get("ATKD");
+	}
+	
+	public void copyData(AttackData rhs) {
+	    getATKD().copy(rhs.getATKD());
+	}
+
+	@Override
+	SubRecord getNew(String type) {
+	    return new AttackData();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final AttackData other = (AttackData) obj;
+	    if (!Objects.equals(this.getEventName(), other.getEventName())) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    hash = 31 * hash + Objects.hashCode(this.getEventName());
+	    return hash;
+	}
+	
+	public void setDamageMult(float in) {
+	    getATKD().damageMult = in;
+	}
+	
+	public float getDamageMult() {
+	    return getATKD().damageMult;
+	}
+	
+	public void setAttackChance(float in) {
+	    getATKD().attackChance = in;
+	}
+	
+	public float getAttackChance() {
+	    return getATKD().attackChance;
+	}
+	
+	public void setAttackSpell(FormID spell) {
+	    getATKD().attackSpell = spell;
+	}
+	
+	public FormID getAttackSpell() {
+	    return getATKD().attackSpell;
+	}
+	
+	public void setAttackAngle(float in) {
+	    getATKD().attackAngle = in;
+	}
+	
+	public float getAttackAngle() {
+	    return getATKD().attackAngle;
+	}
+	
+	public void setStrikeAngle(float in) {
+	    getATKD().strikeAngle = in;
+	}
+	
+	public float getStrikeAngle () {
+	    return getATKD().strikeAngle;
+	}
+	
+	public void setStagger(float in) {
+	    getATKD().stagger = in;
+	}
+	
+	public float getStagger() {
+	    return getATKD().stagger;
+	}
+	
+	public void setAttackType(FormID id) {
+	    getATKD().attackType = id;
+	}
+	
+	public FormID getAttackType() {
+	    return getATKD().attackType;
+	}
+	
+	public void setKnockDown(float in) {
+	    getATKD().knockDown = in;
+	}
+	
+	public float getKnockDown () {
+	    return getATKD().knockDown;
+	}
+	
+	public void setRecoveryTime(float in) {
+	    getATKD().recoveryTime = in;
+	}
+	
+	public float getRecoveryTime () {
+	    return getATKD().recoveryTime;
+	}
+	
+	public void setFatigueMult(float in) {
+	    getATKD().fatigueMult = in;
+	}
+	
+	public float getFatigueMult () {
+	    return getATKD().fatigueMult;
 	}
     }
 
@@ -1025,6 +1243,29 @@ public class RACE extends MajorRecordDescription {
     public void clearAttackData() {
 	subRecords.getSubList("ATKD").clear();
     }
+    
+    public ArrayList<AttackData> getAttackData() {
+	return subRecords.getSubList("ATKD").toPublic();
+    }
+    
+    public void addAttackData(AttackData data) {
+	subRecords.getSubList("ATKD").add(data);
+    }
+    
+    public void removeAttackData(AttackData data) {
+	subRecords.getSubList("ATKD").remove(data);
+    }
+    
+    public void copyAttackData(RACE rhs) {
+	ArrayList<AttackData> attackList = this.getAttackData();
+	attackList.clear();
+	ArrayList<AttackData> rhsAttackList = rhs.getAttackData();
+	for (AttackData rhsData : rhsAttackList) {
+	    AttackData newData = new AttackData(rhsData.getEventName());
+	    newData.copyData(rhsData);
+	    attackList.add(newData);
+	}
+    }
 
     /**
      *
@@ -1280,5 +1521,21 @@ public class RACE extends MajorRecordDescription {
      */
     public ArmorType getArmorType() {
 	return subRecords.getBodyTemplate().getArmorType();
+    }
+    
+    public void setArmorRace(FormID race) {
+	subRecords.setSubForm("RNAM", race);
+    }
+    
+    public FormID getArmorRace() {
+	return subRecords.getSubForm("RNAM").getForm();
+    }
+    
+    public void setMorphRace(FormID race) {
+	subRecords.setSubForm("NAM8", race);
+    }
+    
+    public FormID getMorphRace() {
+	return subRecords.getSubForm("NAM8").getForm();
     }
 }
