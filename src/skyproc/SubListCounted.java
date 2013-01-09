@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubListCounted<T extends SubRecord> extends SubList {
+class SubListCounted<T extends SubRecord> extends SubList {
 
     String counterType = "";
     private int counterLength = 4;

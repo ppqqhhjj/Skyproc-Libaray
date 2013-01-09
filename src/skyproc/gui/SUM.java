@@ -129,6 +129,10 @@ public interface SUM {
      * @return Whether or not your program requires a patch.
      */
     public boolean needsPatching();
+    /**
+     * 
+     * @return A description of your patcher for display in SUM.
+     */
     public String description();
     /**
      *

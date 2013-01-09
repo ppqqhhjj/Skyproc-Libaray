@@ -21,7 +21,7 @@ public class SPGlobal {
     static boolean testing = false;
     static boolean streamMode = true;
     static boolean mergeMode = false;
-    public static boolean noModsAfter = false;
+    static boolean noModsAfter = false;
     static MajorRecord lastStreamed;
     /*
      * Customizable Strings
@@ -148,7 +148,7 @@ public class SPGlobal {
 
     /**
      *
-     * @param keyword
+     * @param s 
      */
     public static void addModToSkip(String s) {
 	if (s.contains(".ESP") || s.contains(".ESM")) {
@@ -228,6 +228,11 @@ public class SPGlobal {
     }
     static String appDataFolder;
 
+    /**
+     * 
+     * @return Path to the skyrim local application data folder.
+     * @throws IOException
+     */
     static public String getSkyrimAppData() throws IOException {
 	if (appDataFolder == null) {
 	    appDataFolder = System.getenv("LOCALAPPDATA");
@@ -275,6 +280,11 @@ public class SPGlobal {
 	return pluginsFile;
     }
 
+    /**
+     * 
+     * @return The loadorder.txt file that contains all load order information.
+     * @throws IOException
+     */
     static public String getLoadOrderTxt() throws IOException {
 	String loadorderFile = getSkyrimAppData() + "\\loadorder.txt";
 	File loadorderPath = new File(loadorderFile);
@@ -284,9 +294,23 @@ public class SPGlobal {
 	return loadorderFile;
     }
 
+    /**
+     * 
+     * @param on True if you want data to be streamed on demand; False if you want 
+     * it to all be imported at once.
+     */
     static public void setStreamMode(boolean on) {
 	streamMode = on;
     }
+    
+    /**
+     * 
+     * @param on True if you want the patcher to ignore mods that come after it in the load order.
+     */
+    static public void setNoModsAfter(boolean on) {
+	noModsAfter = on;
+    }
+    
     /*
      * Logging functions
      */

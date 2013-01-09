@@ -156,41 +156,71 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public static class AliasLocation extends Alias {
 
 	AliasLocation() {
 	    super(aliasLocationProto);
 	}
 
+	/**
+	 * 
+	 * @param name
+	 */
 	public AliasLocation(String name) {
 	    this();
 	    setName(name);
 	}
 
+	/**
+	 * 
+	 * @param loc
+	 */
 	public void setLocation(int loc) {
 	    subRecords.setSubInt("ALLS", loc);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getLocation() {
 	    return subRecords.getSubInt("ALLS").get();
 	}
     }
 
+    /**
+     * 
+     */
     public static class AliasReference extends Alias {
 
 	AliasReference() {
 	    super(aliasReferenceProto);
 	}
 
+	/**
+	 * 
+	 * @param name
+	 */
 	public AliasReference(String name) {
 	    this();
 	    setName(name);
 	}
 
+	/**
+	 * 
+	 * @param ref
+	 */
 	public void setReference(int ref) {
 	    subRecords.setSubInt("ALST", ref);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getReference() {
 	    return subRecords.getSubInt("ALST").get();
 	}
@@ -286,8 +316,14 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public static class QuestStage extends SubShellBulkType {
 
+	/**
+	 * 
+	 */
 	public QuestStage() {
 	    super(questStageProto, false);
 	}
@@ -296,33 +332,65 @@ public class QUST extends MajorRecordNamed {
 	    return (INDX) subRecords.get("INDX");
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getJournalIndex() {
 	    return getINDX().index;
 	}
 
+	/**
+	 * 
+	 * @param value
+	 */
 	public void setJournalIndex(int value) {
 	    getINDX().index = value;
 	}
 
+	/**
+	 * 
+	 * @param flag
+	 * @return
+	 */
 	public boolean get(QuestStageFlags flag) {
 	    return getINDX().flags.get(flag.ordinal() + 1);
 	}
 
+	/**
+	 * 
+	 * @param flag
+	 * @param on
+	 */
 	public void set(QuestStageFlags flag, boolean on) {
 	    getINDX().flags.set(flag.ordinal() + 1, on);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<QuestLogEntry> getLogEntries() {
 	    return subRecords.getSubList("QSDT").toPublic();
 	}
 
+	/**
+	 * 
+	 * @param entry
+	 */
 	public void addLogEntry(QuestLogEntry entry) {
 	    subRecords.getSubList("QSDT").add(entry);
 	}
     }
 
+    /**
+     * 
+     */
     public static class QuestLogEntry extends SubShell {
 
+	/**
+	 * 
+	 */
 	public QuestLogEntry() {
 	    super(questLogEntryProto);
 	}
@@ -332,10 +400,20 @@ public class QUST extends MajorRecordNamed {
 	    return new QuestLogEntry();
 	}
 
+	/**
+	 * 
+	 * @param flag
+	 * @param on
+	 */
 	public void set(QuestLogFlags flag, boolean on) {
 	    subRecords.setSubFlag("QSDT", flag.ordinal(), on);
 	}
 
+	/**
+	 * 
+	 * @param flag
+	 * @return
+	 */
 	public boolean get(QuestLogFlags flag) {
 	    return subRecords.getSubFlag("QSDT").is(flag.ordinal());
 	}
@@ -365,12 +443,20 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public static class QuestObjective extends SubShellBulkType {
 
 	QuestObjective() {
 	    super(questObjectiveProto, false);
 	}
 
+	/**
+	 * 
+	 * @param index
+	 * @param name
+	 */
 	public QuestObjective(int index, String name) {
 	    this();
 	    setIndex(index);
@@ -382,26 +468,50 @@ public class QUST extends MajorRecordNamed {
 	    return new QuestObjective();
 	}
 
+	/**
+	 * 
+	 * @param index
+	 */
 	public final void setIndex(int index) {
 	    subRecords.setSubInt("QOBJ", index);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getIndex() {
 	    return subRecords.getSubInt("QOBJ").get();
 	}
 
+	/**
+	 * 
+	 * @param in
+	 */
 	public final void setName(String in) {
 	    subRecords.setSubStringPointer("NNAM", in);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getName() {
 	    return subRecords.getSubStringPointer("NNAM").print();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<QuestTarget> getTargets() {
 	    return subRecords.getSubList("QSTA").toPublic();
 	}
 
+	/**
+	 * 
+	 * @param target
+	 */
 	public void addTarget(QuestTarget target) {
 	    subRecords.getSubList("QSTA").add(target);
 	}
@@ -446,12 +556,19 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
+    /**
+     * 
+     */
     public static class QuestTarget extends SubShell {
 
 	QuestTarget() {
 	    super(questTargetProto);
 	}
 
+	/**
+	 * 
+	 * @param aliasID
+	 */
 	public QuestTarget(int aliasID) {
 	    this();
 	    setTargetAlias(aliasID);
@@ -466,11 +583,19 @@ public class QUST extends MajorRecordNamed {
 	    return (QuestTargetData) subRecords.get("QSDT");
 	}
 
+	/**
+	 * 
+	 * @param aliasID
+	 */
 	public final void setTargetAlias(int aliasID) {
 	    getData().targetAlias = aliasID;
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getTargetAlias() {
 	    return getData().targetAlias;
 	}
@@ -501,16 +626,37 @@ public class QUST extends MajorRecordNamed {
     }
 
     // Enums
+    /**
+     * 
+     */
     public enum QuestStageFlags {
 
+	/**
+	 * 
+	 */
 	StartUpStage,
+	/**
+	 * 
+	 */
 	ShutDownStage,
+	/**
+	 * 
+	 */
 	KeepInstanceDataFromHereOn;
     }
 
+    /**
+     * 
+     */
     public enum QuestLogFlags {
 
+	/**
+	 * 
+	 */
 	CompleteQuest,
+	/**
+	 * 
+	 */
 	FailQuest;
     }
 
@@ -571,18 +717,34 @@ public class QUST extends MajorRecordNamed {
 	subRecords.getSubList("CTDA").remove(c);
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<QuestStage> getQuestStages() {
 	return subRecords.getSubList("INDX").toPublic();
     }
 
+    /**
+     * 
+     * @param stage
+     */
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
     
+    /**
+     * 
+     * @return
+     */
     public ArrayList<AliasReference> getReferenceAliases() {
 	return subRecords.getSubList("ALST").toPublic();
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<AliasLocation> getLocationAliases() {
 	return subRecords.getSubList("ALLS").toPublic();
     }

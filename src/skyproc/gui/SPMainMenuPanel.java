@@ -110,6 +110,15 @@ public class SPMainMenuPanel extends JPanel {
 	return addMenu(panel, color, checkBoxPresent, save, setting);
     }
 
+    /**
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * @param panel Panel to add to the main menu
+     * @param c Color to make the menu text
+     * @param checkBoxPresent
+     * @param save Save to tie to.
+     * @param setting Setting to tie to.
+     * @return The main menu GUI component
+     */
     public SPMainMenuConfig addMenu(SPSettingPanel panel, Color c, boolean checkBoxPresent, LSaveFile save, Enum setting) {
 	SPMainMenuConfig menuConfig = new SPMainMenuConfig(panel.header, checkBoxPresent, c, new Point(xPlacement, yPlacement), save, setting);
 	yPlacement += spacing;

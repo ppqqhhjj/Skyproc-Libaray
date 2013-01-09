@@ -170,6 +170,9 @@ public class PROJ extends MajorRecordNamed {
 	 *
 	 */
 	Explosion(1),
+	/**
+	 * 
+	 */
 	AltTrigger(2),
 	/**
 	 *

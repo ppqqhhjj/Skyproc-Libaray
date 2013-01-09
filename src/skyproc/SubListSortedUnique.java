@@ -8,7 +8,7 @@ package skyproc;
  *
  * @author Justin Swanson
  */
-public class SubListSortedUnique<T extends SubRecord> extends SubListSorted<T> {
+class SubListSortedUnique<T extends SubRecord> extends SubListSorted<T> {
 
     SubListSortedUnique(T prototype_) {
         super(prototype_);

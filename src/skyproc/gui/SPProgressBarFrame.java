@@ -18,12 +18,23 @@ import skyproc.SPGlobal;
  */
 public class SPProgressBarFrame extends LProgressBarFrame {
     
+    /**
+     * 
+     * @param header
+     * @param headerC
+     * @param footer
+     * @param footerC
+     */
     public SPProgressBarFrame(final Font header, final Color headerC, final Font footer, final Color footerC) {
 	super(header, headerC, footer, footerC);
 	title.addShadow();
 	bar.addShadow();
     }
 
+    /**
+     * 
+     * @param logo URL of the logo image to display.
+     */
     public void addLogo(URL logo) {
 	try {
 	    LImagePane logoPane = new LImagePane(logo);

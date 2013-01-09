@@ -119,6 +119,9 @@ public enum GRUP_TYPE {
      *
      */
     ECZN,
+    /**
+     * 
+     */
     LGTM,
     /**
      *
@@ -128,6 +131,8 @@ public enum GRUP_TYPE {
     static boolean unfinished (GRUP_TYPE g) {
 	switch (g) {
 	    case QUST:
+		return true;
+	    case LGTM:
 		return true;
 	    default:
 		return false;

@@ -17,6 +17,9 @@ import lev.Ln;
 public class SPDatabase implements Iterable<Mod> {
 
     static ArrayList<ModListing> activePlugins = new ArrayList<>();
+    /**
+     * Delimiter used in separating modname from date in storage files.
+     */
     static public final String dateDelim = "<--DATE-->";
     ArrayList<ModListing> addedPlugins = new ArrayList<>();
     Map<ModListing, Mod> modLookup = new TreeMap<>();

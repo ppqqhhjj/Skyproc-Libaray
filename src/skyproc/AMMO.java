@@ -98,12 +98,15 @@ public class AMMO extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	IgnoresWeaponResistance, // 0
-	NonPlayable, //1
+	IgnoresWeaponResistance,
+	/**
+	 * 
+	 */
+	NonPlayable,
 	/**
 	 *
 	 */
-	VanishesWhenNotInFlight; //2
+	VanishesWhenNotInFlight;
     }
 
     // Common Functions

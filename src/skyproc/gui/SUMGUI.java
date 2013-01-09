@@ -365,6 +365,7 @@ public class SUMGUI extends JFrame {
      * Opens and hooks onto a program that implements the SUM interface.
      *
      * @param hook Program to open and hook to
+     * @param mainArgs Pass the main String args from your main function here 
      */
     public static void open(final SUM hook, String[] mainArgs) {
 	handleArgs(mainArgs);
@@ -463,7 +464,7 @@ public class SUMGUI extends JFrame {
 	justPatching = arguments.contains("-GENPATCH");
 
 	// Exclude mods after the patch?
-	SPGlobal.noModsAfter = arguments.contains("-NOMODSAFTER");
+	SPGlobal.setNoModsAfter(arguments.contains("-NOMODSAFTER"));
 
 	// Progress Bar Location
 	int index = arguments.indexOf("-PROGRESSLOCATION");
@@ -822,6 +823,8 @@ public class SUMGUI extends JFrame {
      * program.<br> NO patch is generated.
      *
      * @param generatedPatch True if a patch was generated before exiting.
+     * @param forceClose Will force close if true, otherwise will dispose and naturally
+     *  let the program close (which may not happen, given certain circumstances)
      */
     static public void exitProgram(boolean generatedPatch, boolean forceClose) {
 	SPGlobal.log(header, "Exit requested.");
@@ -1032,6 +1035,10 @@ public class SUMGUI extends JFrame {
 	    }
 	}
 	
+	/**
+	 * 
+	 * @param status
+	 */
 	@Override
 	public void setStatusNumbered(String status) {
 	    progress.setStatusNumbered(status);

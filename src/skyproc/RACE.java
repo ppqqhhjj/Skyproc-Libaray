@@ -283,6 +283,9 @@ public class RACE extends MajorRecordDescription {
 	}
     }
     
+    /**
+     * 
+     */
     static final public class AttackDataInternal extends SubRecord {
 
 	float damageMult = 0;
@@ -368,17 +371,28 @@ public class RACE extends MajorRecordDescription {
 	
     }
     
+    /**
+     * 
+     */
     static final public class AttackData extends SubShell {
 	
 	AttackData () {
 	    super(attackDataProto);
 	}
 	
+	/**
+	 * 
+	 * @param eventName
+	 */
 	public AttackData(String eventName) {
 	    this();
 	    subRecords.setSubString("ATKE", eventName);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getEventName() {
 	    return subRecords.getSubString("ATKE").print();
 	}
@@ -387,6 +401,10 @@ public class RACE extends MajorRecordDescription {
 	    return (AttackDataInternal) subRecords.get("ATKD");
 	}
 	
+	/**
+	 * 
+	 * @param rhs
+	 */
 	public void copyData(AttackData rhs) {
 	    getATKD().copy(rhs.getATKD());
 	}
@@ -396,6 +414,11 @@ public class RACE extends MajorRecordDescription {
 	    return new AttackData();
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 	    if (obj == null) {
@@ -411,6 +434,10 @@ public class RACE extends MajorRecordDescription {
 	    return true;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public int hashCode() {
 	    int hash = 7;
@@ -418,82 +445,162 @@ public class RACE extends MajorRecordDescription {
 	    return hash;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setDamageMult(float in) {
 	    getATKD().damageMult = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getDamageMult() {
 	    return getATKD().damageMult;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setAttackChance(float in) {
 	    getATKD().attackChance = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getAttackChance() {
 	    return getATKD().attackChance;
 	}
 	
+	/**
+	 * 
+	 * @param spell
+	 */
 	public void setAttackSpell(FormID spell) {
 	    getATKD().attackSpell = spell;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public FormID getAttackSpell() {
 	    return getATKD().attackSpell;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setAttackAngle(float in) {
 	    getATKD().attackAngle = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getAttackAngle() {
 	    return getATKD().attackAngle;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setStrikeAngle(float in) {
 	    getATKD().strikeAngle = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getStrikeAngle () {
 	    return getATKD().strikeAngle;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setStagger(float in) {
 	    getATKD().stagger = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getStagger() {
 	    return getATKD().stagger;
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 */
 	public void setAttackType(FormID id) {
 	    getATKD().attackType = id;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public FormID getAttackType() {
 	    return getATKD().attackType;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setKnockDown(float in) {
 	    getATKD().knockDown = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getKnockDown () {
 	    return getATKD().knockDown;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setRecoveryTime(float in) {
 	    getATKD().recoveryTime = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getRecoveryTime () {
 	    return getATKD().recoveryTime;
 	}
 	
+	/**
+	 * 
+	 * @param in
+	 */
 	public void setFatigueMult(float in) {
 	    getATKD().fatigueMult = in;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public float getFatigueMult () {
 	    return getATKD().fatigueMult;
 	}
@@ -1244,18 +1351,34 @@ public class RACE extends MajorRecordDescription {
 	subRecords.getSubList("ATKD").clear();
     }
     
+    /**
+     * 
+     * @return
+     */
     public ArrayList<AttackData> getAttackData() {
 	return subRecords.getSubList("ATKD").toPublic();
     }
     
+    /**
+     * 
+     * @param data
+     */
     public void addAttackData(AttackData data) {
 	subRecords.getSubList("ATKD").add(data);
     }
     
+    /**
+     * 
+     * @param data
+     */
     public void removeAttackData(AttackData data) {
 	subRecords.getSubList("ATKD").remove(data);
     }
     
+    /**
+     * 
+     * @param rhs
+     */
     public void copyAttackData(RACE rhs) {
 	ArrayList<AttackData> attackList = this.getAttackData();
 	attackList.clear();
@@ -1523,18 +1646,34 @@ public class RACE extends MajorRecordDescription {
 	return subRecords.getBodyTemplate().getArmorType();
     }
     
+    /**
+     * 
+     * @param race
+     */
     public void setArmorRace(FormID race) {
 	subRecords.setSubForm("RNAM", race);
     }
     
+    /**
+     * 
+     * @return
+     */
     public FormID getArmorRace() {
 	return subRecords.getSubForm("RNAM").getForm();
     }
     
+    /**
+     * 
+     * @param race
+     */
     public void setMorphRace(FormID race) {
 	subRecords.setSubForm("NAM8", race);
     }
     
+    /**
+     * 
+     * @return
+     */
     public FormID getMorphRace() {
 	return subRecords.getSubForm("NAM8").getForm();
     }

@@ -317,6 +317,10 @@ public class SUMprogram implements SUM {
 	return new ArrayList<>(0);
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public String description() {
 	throw new UnsupportedOperationException("Not supported yet.");
@@ -1026,6 +1030,11 @@ public class SUMprogram implements SUM {
 	}
     }
 
+    /**
+     * 
+     * @return Path to the text document containing the most recent list of executed SkyProc patchers.
+     * @throws IOException
+     */
     public static String getSUMPatchList() throws IOException {
 	return SPGlobal.getSkyProcDocuments() + "\\SUM patch list.txt";
     }

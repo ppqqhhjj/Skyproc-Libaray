@@ -398,6 +398,12 @@ public class NiftyFunc {
 	return correct;
     }
 
+    /**
+     * Starts a process as if from the command line, with the given working directory.
+     * @param directory
+     * @param args
+     * @return
+     */
     static public boolean startProcess(File directory, String... args) {
 	try {
 	    ProcessBuilder proc = new ProcessBuilder(args);
@@ -423,6 +429,11 @@ public class NiftyFunc {
 	return true;
     }
 
+    /**
+     * Starts a process as if from the command line.
+     * @param args
+     * @return
+     */
     static public boolean startProcess(String... args) {
 	return startProcess(null, args);
     }
