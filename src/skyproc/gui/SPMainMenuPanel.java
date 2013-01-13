@@ -23,7 +23,8 @@ import skyproc.SPGlobal;
 
 /**
  * A GUI panel that functions as the main menu in SUMGUI setups, and links to
- *  several SPSettingPanel instantiations.
+ * several SPSettingPanel instantiations.
+ *
  * @author Justin Swanson
  */
 public class SPMainMenuPanel extends JPanel {
@@ -44,6 +45,7 @@ public class SPMainMenuPanel extends JPanel {
 
     /**
      * Creates a new Main Menu with the desired menu color.
+     *
      * @param menuColor
      */
     public SPMainMenuPanel(Color menuColor) {
@@ -64,6 +66,7 @@ public class SPMainMenuPanel extends JPanel {
 
     /**
      * Adds the desired logo to the top portion of the main menu.
+     *
      * @param logo
      */
     public void addLogo(URL logo) {
@@ -81,25 +84,35 @@ public class SPMainMenuPanel extends JPanel {
 
     /**
      * Adds the version number just under the logo's position.
+     *
      * @param version
      */
     public void setVersion(String version) {
-	setVersion(version, new Point(customLogo.getX(), customLogo.getHeight() + customLogo.getY() + 3));
+	setVersion(version, new Point(5, 5));
     }
 
     /**
      * Adds the version number at the desired location.
+     *
      * @param version
      * @param location
      */
     public void setVersion(String version, Point location) {
-	this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
+	if (!hasVersion()) {
+	    this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
+	    menuPanel.Add(this.version);
+	}
 	this.version.setLocation(location);
-	menuPanel.Add(this.version);
+    }
+
+    public boolean hasVersion() {
+	return version != null;
     }
 
     /**
-     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing
+     * on the main menu.
+     *
      * @param panel Panel to add to the main menu
      * @param checkBoxPresent
      * @param save Save to tie to.
@@ -111,7 +124,9 @@ public class SPMainMenuPanel extends JPanel {
     }
 
     /**
-     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing
+     * on the main menu.
+     *
      * @param panel Panel to add to the main menu
      * @param c Color to make the menu text
      * @param checkBoxPresent
@@ -128,16 +143,19 @@ public class SPMainMenuPanel extends JPanel {
     }
 
     /**
-     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing on the main menu.
+     * Hooks together a SPSettingPanel to the main menu, and adds a GUI listing
+     * on the main menu.
+     *
      * @param panel Panel to add to the main menu
      * @return The main menu GUI component
      */
-    public SPMainMenuConfig addMenu(SPSettingPanel panel){
+    public SPMainMenuConfig addMenu(SPSettingPanel panel) {
 	return addMenu(panel, false, null, null);
     }
 
     /**
      * Opens and displays a panel.
+     *
      * @param panel
      */
     public void openPanel(SPSettingPanel panel) {
@@ -157,18 +175,18 @@ public class SPMainMenuPanel extends JPanel {
 
     /**
      * Sets a panel to be displayed upon opening the program.
+     *
      * @param panel
      */
-    public void setWelcomePanel (SPSettingPanel panel) {
+    public void setWelcomePanel(SPSettingPanel panel) {
 	welcome = panel;
 	welcome.open();
 	tieWelcomeAndLogo();
     }
 
-    void tieWelcomeAndLogo () {
+    void tieWelcomeAndLogo() {
 	if (welcome != null && customLogo != null) {
-	    customLogo.addMouseListener(new MouseListener(){
-
+	    customLogo.addMouseListener(new MouseListener() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    welcome.open();
@@ -234,5 +252,4 @@ public class SPMainMenuPanel extends JPanel {
 	setVisible(true);
 	repaint();
     }
-
 }

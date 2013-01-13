@@ -96,7 +96,8 @@ public class SPDatabase implements Iterable<Mod> {
 
     /**
      *
-     * @return All mod listings including ones on the load order + ones created while patching.
+     * @return All mod listings including ones on the load order + ones created
+     * while patching.
      */
     public ArrayList<ModListing> getMods() {
 	return new ArrayList<>(addedPlugins);
@@ -131,17 +132,17 @@ public class SPDatabase implements Iterable<Mod> {
     }
 
     /**
-     * Exports the mod load order to "Files/Last Modlist.txt"<br>
-     * Used for checking if patches are needed.
+     * Exports the mod load order to "Files/Last Modlist.txt"<br> Used for
+     * checking if patches are needed.
+     *
      * @param path
      * @throws IOException
      */
     public void exportModList(String path) throws IOException {
 	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));
-	for (ModListing m : SPImporter.getActiveModList()) {
-	    File modFile = new File(SPGlobal.pathToData + m.toString());
-	    writer.write(m.toString() + dateDelim + modFile.lastModified() + "\n");
+	for (String s : getModListDates()) {
+	    writer.write(s);
 	}
 	writer.close();
 
@@ -151,6 +152,18 @@ public class SPDatabase implements Iterable<Mod> {
 	}
 
 	Ln.moveFile(modListTmp, modList, false);
+    }
+
+    public ArrayList<String> getModListDates() {
+	ArrayList<String> out = new ArrayList<>();
+	try {
+	    for (ModListing m : SPImporter.getActiveModList()) {
+		File modFile = new File(SPGlobal.pathToData + m.toString());
+		out.add(m.toString() + dateDelim + modFile.lastModified());
+	    }
+	} catch (Exception e) {
+	}
+	return out;
     }
 
     /**

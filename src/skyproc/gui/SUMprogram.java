@@ -318,7 +318,7 @@ public class SUMprogram implements SUM {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -604,16 +604,12 @@ public class SUMprogram implements SUM {
 	}
     }
 
-    class SUMsave extends LSaveFile {
-
-	SUMsave() {
-	    super(SPGlobal.pathToInternalFiles);
-	}
+    class SUMsave extends SkyProcSave {
 
 	@Override
 	protected void initSettings() {
 	    Add(SUMSettings.MERGE_PATCH, false, true);
-	    Add(SUMSettings.DISABLED, new HashSet<String>(0), true);
+	    Add(SUMSettings.DISABLED, new ArrayList<String>(0), true);
 	    Add(SUMSettings.RUN_BOSS, true, false);
 	    Add(SUMSettings.MAX_MEM, 750, false);
 	    Add(SUMSettings.LANGUAGE, 0, true);
@@ -804,7 +800,7 @@ public class SUMprogram implements SUM {
     @Override
     public void onExit(boolean patchWasGenerated) {
 	// Save disabled links
-	Set<String> disabledLinks = SUMsave.getStrings(SUMSettings.DISABLED);
+	ArrayList<String> disabledLinks = SUMsave.getStrings(SUMSettings.DISABLED);
 	disabledLinks.clear();
 	for (PatcherLink link : links) {
 	    if (!link.isActive()) {
@@ -1031,7 +1027,7 @@ public class SUMprogram implements SUM {
     }
 
     /**
-     * 
+     *
      * @return Path to the text document containing the most recent list of executed SkyProc patchers.
      * @throws IOException
      */

@@ -15,6 +15,6 @@ public abstract class SkyProcSave extends LSaveFile {
      *
      */
     public SkyProcSave () {
-	super(SPGlobal.pathToInternalFiles);
+	super(SPGlobal.pathToInternalFiles + "/Savefile");
     }
 }
