@@ -173,7 +173,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     }
 
     public void removeAllEntries(FormID id) {
-	ArrayList<LeveledEntry> list = new ArrayList<>(getEntries());
+	ArrayList<LeveledEntry> list = getEntries();
 	for (int i = 0 ; i < list.size() ; ) {
 	    if (list.get(i).getForm().equals(id)) {
 		list.remove(i);
