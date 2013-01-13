@@ -274,8 +274,22 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	if (query != null && query.getMaster() != null) {
 	    for (GRUP_TYPE g : grup_types) {
 		GRUP grup = GRUPs.get(g);
-		if (grup.mapRecords.containsKey(query)) {
-		    return (MajorRecord) grup.mapRecords.get(query);
+		MajorRecord mr = (MajorRecord) grup.get(query);
+		if (mr != null) {
+		    return mr;
+		}
+	    }
+	}
+	return null;
+    }
+
+    public MajorRecord getMajor(String edid, GRUP_TYPE... grup_types) {
+	if (edid != null) {
+	    for (GRUP_TYPE g : grup_types) {
+		GRUP grup = GRUPs.get(g);
+		MajorRecord mr = (MajorRecord) grup.get(edid);
+		if (mr != null) {
+		    return mr;
 		}
 	    }
 	}
@@ -750,7 +764,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		for (MajorRecord major : g) {
 		    FormID id = major.getForm();
 		    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
-			if (mod.contains(id) && !addedMods.contains(mod.getInfo()) 
+			if (mod.contains(id) && !addedMods.contains(mod.getInfo())
 				&& !mod.equals(SPGlobal.getGlobalPatch())) {
 			    addMaster(mod.getInfo());
 			    addedMods.add(mod.getInfo());

@@ -162,6 +162,27 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	subRecords.getSubList("LVLO").remove(i);
     }
 
+    public void removeFirstEntry(FormID id) {
+	ArrayList<LeveledEntry> list = getEntries();
+	for (int i = 0 ; i < list.size() ; i++) {
+	    if (list.get(i).getForm().equals(id)) {
+		list.remove(i);
+		break;
+	    }
+	}
+    }
+
+    public void removeAllEntries(FormID id) {
+	ArrayList<LeveledEntry> list = new ArrayList<>(getEntries());
+	for (int i = 0 ; i < list.size() ; ) {
+	    if (list.get(i).getForm().equals(id)) {
+		list.remove(i);
+	    } else {
+		i++;
+	    }
+	}
+    }
+
     /**
      *
      * @return The percent chance nothing will spawn from this LVLN. (0.0-1.0)

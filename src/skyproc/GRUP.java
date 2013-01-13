@@ -25,6 +25,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     byte[] version = new byte[4];
     ArrayList<T> listRecords = new ArrayList<>();
     Map<FormID, T> mapRecords = new HashMap<>();
+    Map<String, T> edidRecords = new HashMap<>();
     Mod srcMod;
     T prototype;
 
@@ -195,6 +196,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     public boolean removeRecord(FormID id) {
 	if (mapRecords.containsKey(id)) {
 	    listRecords.remove(mapRecords.get(id));
+	    MajorRecord r = mapRecords.get(id);
+	    edidRecords.remove(r.getEDID());
 	    mapRecords.remove(id);
 	    return true;
 	} else {
@@ -234,6 +237,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     public void addRecord(T item) {
 	removeRecord(item);
 	mapRecords.put(item.getForm(), item);
+	edidRecords.put(item.getEDID(), item);
 	listRecords.add(item);
     }
 
@@ -267,8 +271,12 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param id FormID to check check for containment.
      * @return Returns true if GRUP contains a record with id.
      */
-    public Boolean contains(FormID id) {
+    public boolean contains(FormID id) {
 	return mapRecords.containsKey(id);
+    }
+
+    public boolean contains(String edid) {
+	return edidRecords.containsKey(edid);
     }
 
     /**
@@ -276,7 +284,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      * @param item Record to check check for containment. (based on its FormID)
      * @return Returns true if GRUP contains a record with FormID == id.
      */
-    public Boolean contains(T item) {
+    public boolean contains(T item) {
 	return contains(item.getForm());
     }
 
@@ -289,12 +297,17 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	return mapRecords.get(id);
     }
 
+    public MajorRecord get(String edid) {
+	return edidRecords.get(edid);
+    }
+
     /**
      * Deletes all records from the GRUP.
      */
     public void clear() {
 	listRecords.clear();
 	mapRecords.clear();
+	edidRecords.clear();
     }
 
     @Override
