@@ -1113,7 +1113,7 @@ public class SUMGUI extends JFrame {
 	CrashState;
     }
 
-    static public class SUMGUISave extends LSaveFile {
+    static class SUMGUISave extends LSaveFile {
 
 	SUMGUISave() {
 	    super(SPGlobal.pathToInternalFiles + "SUMsave");
