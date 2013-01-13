@@ -154,6 +154,10 @@ public class SPDatabase implements Iterable<Mod> {
 	Ln.moveFile(modListTmp, modList, false);
     }
 
+    /**
+     *
+     * @return ArrayList of mod names + date modified data separated by the date delimiter.
+     */
     public ArrayList<String> getModListDates() {
 	ArrayList<String> out = new ArrayList<>();
 	try {

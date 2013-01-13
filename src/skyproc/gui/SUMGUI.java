@@ -1105,7 +1105,7 @@ public class SUMGUI extends JFrame {
 	}
     }
 
-    public enum SUMGUISettings {
+    enum SUMGUISettings {
 
 	LastMasterlist,
 	LastModlist,

@@ -105,6 +105,10 @@ public class SPMainMenuPanel extends JPanel {
 	this.version.setLocation(location);
     }
 
+    /**
+     *
+     * @return True if version display has already been created.
+     */
     public boolean hasVersion() {
 	return version != null;
     }
