@@ -18,7 +18,6 @@ import skyproc.gui.SUMGUI;
 public class OtherSettingsPanel extends SPSettingPanel {
 
     LCheckBox importOnStartup;
-    LComboBox language;
 
     public OtherSettingsPanel(SPMainMenuPanel parent_) {
 	super(parent_, "Other Settings", SkyProcStarter.headerColor);
@@ -34,15 +33,6 @@ public class OtherSettingsPanel extends SPSettingPanel {
 	importOnStartup.addShadow();
 	setPlacement(importOnStartup);
 	AddSetting(importOnStartup);
-
-	language = new LComboBox("Language", SkyProcStarter.settingsFont, SkyProcStarter.settingsColor);
-	language.setSize(260, 60);
-	for (Enum e : SPGlobal.Language.values()) {
-	    language.addItem(e);
-	}
-	language.tie(YourSaveFile.Settings.LANGUAGE, SkyProcStarter.save, SUMGUI.helpPanel, true);
-	setPlacement(language);
-	AddSetting(language);
 
 	alignRight();
 

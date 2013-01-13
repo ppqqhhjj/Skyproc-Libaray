@@ -16,7 +16,6 @@ public class YourSaveFile extends SkyProcSave {
     protected void initSettings() {
 	//  The Setting,	    The default value,	    Whether or not it changing means a new patch should be made
 	Add(Settings.IMPORT_AT_START,		true,	    false);
-	Add(Settings.LANGUAGE,			0,	    true); // 0 is the default value because English is index 0 on the language enum.
 
     }
 
@@ -35,10 +34,6 @@ public class YourSaveFile extends SkyProcSave {
 		+ "- Having this on might make the GUI respond sluggishly while it processes in the "
 		+ "background.");
 
-	helpInfo.put(Settings.LANGUAGE,
-		"You can set your language here.  This will make SkyProc import strings files of that language.\n\n"
-		+ "NOTE:  You must restart the program for this to take effect.");
-
 	helpInfo.put(Settings.OTHER_SETTINGS,
 		"These are other settings related to this patcher program.");
     }
@@ -47,7 +42,6 @@ public class YourSaveFile extends SkyProcSave {
     // initSettings().
     public enum Settings {
 	IMPORT_AT_START,
-	LANGUAGE,
 	OTHER_SETTINGS;
     }
 }

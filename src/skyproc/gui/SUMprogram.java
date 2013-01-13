@@ -8,15 +8,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import lev.Ln;
@@ -34,8 +33,10 @@ import skyproc.exceptions.BadRecord;
  */
 public class SUMprogram implements SUM {
 
+    String version = "1.0.1";
     ArrayList<String> exclude = new ArrayList<>(2);
     ArrayList<PatcherLink> links = new ArrayList<>();
+    ArrayList<File> blockedLinks = new ArrayList<>();
     // GUI
     SPMainMenuPanel mmenu;
     HookMenu hookMenu;
@@ -148,6 +149,7 @@ public class SUMprogram implements SUM {
     void openGUI() {
 	mmenu = new SPMainMenuPanel();
 	mmenu.addLogo(this.getLogo());
+	mmenu.setVersion(getVersion(), new Point(13, 15));
 
 	hookMenu = new HookMenu(mmenu);
 	mmenu.addMenu(hookMenu, green, false, SUMsave, null);
@@ -166,7 +168,6 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -176,7 +177,6 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
-
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -227,6 +227,18 @@ public class SUMprogram implements SUM {
 		links.remove(link);
 	    }
 	}
+	if (blockedLinks.size() > 0) {
+	    LTextArea blockedLinksArea = new LTextArea(grey);
+	    blockedLinksArea.setSize(SUMGUI.middleDimensions.width - 50, 200);
+	    blockedLinksArea.setLocation(25, height + 20);
+	    height = blockedLinksArea.getY() + blockedLinksArea.getHeight();
+	    String text = "Blocked Patchers:\n";
+	    for (File jar : blockedLinks) {
+		text += "            " + jar.getName() + "\n";
+	    }
+	    blockedLinksArea.setText(text);
+	    hookMenu.hookMenu.add(blockedLinksArea);
+	}
 	hookMenu.hookMenu.setPreferredSize(new Dimension(SUMGUI.middleDimensions.width, height + 25));
     }
 
@@ -270,7 +282,12 @@ public class SUMprogram implements SUM {
 		link.hook.description();
 	    } catch (java.lang.AbstractMethodError ex) {
 		links.remove(link);
+		blockedLinks.add(link.path);
 		SPGlobal.logSpecial(SUMlogs.JarHook, "Checking Links", "Removing link " + link.getName() + " because it was an older version of SUM.");
+	    } catch (UnsupportedOperationException ex) {
+		links.remove(link);
+		blockedLinks.add(link.path);
+		SPGlobal.logSpecial(SUMlogs.JarHook, "Checking Links", "Removing link " + link.getName() + " because it didn't fully implement SUM (Threw a UnsupportedOperationException).");
 	    }
 	}
 
@@ -472,7 +489,6 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -518,7 +534,6 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -768,7 +783,7 @@ public class SUMprogram implements SUM {
      */
     @Override
     public String getVersion() {
-	return "1.0";
+	return version;
     }
 
     /**
@@ -909,7 +924,6 @@ public class SUMprogram implements SUM {
 	// Run BOSS
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
 	    SwingUtilities.invokeLater(new Runnable() {
-
 		@Override
 		public void run() {
 		    SUMGUI.progress.setStatusNumbered("Running BOSS");
@@ -1028,7 +1042,8 @@ public class SUMprogram implements SUM {
 
     /**
      *
-     * @return Path to the text document containing the most recent list of executed SkyProc patchers.
+     * @return Path to the text document containing the most recent list of
+     * executed SkyProc patchers.
      * @throws IOException
      */
     public static String getSUMPatchList() throws IOException {

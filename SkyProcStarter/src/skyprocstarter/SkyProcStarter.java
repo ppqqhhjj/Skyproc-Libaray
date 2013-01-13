@@ -20,10 +20,9 @@ import skyprocstarter.YourSaveFile.Settings;
 public class SkyProcStarter implements SUM {
 
     /*
-     * The important functions to change are: - getStandardMenu(), where you set
-     * up the GUI - Change the import requests to be the records you're
-     * interested in. - runChangesToPatch(), where you put all the processing
-     * code and add records to the output patch.
+     * The important functions to change are:
+     * - getStandardMenu(), where you set up the GUI
+     * - runChangesToPatch(), where you put all the processing code and add records to the output patch.
      */
 
     /*
@@ -31,9 +30,8 @@ public class SkyProcStarter implements SUM {
      * customize the import to what you need.
      */
     GRUP_TYPE[] importRequests = new GRUP_TYPE[]{
-	GRUP_TYPE.ALCH,
-	GRUP_TYPE.COBJ,
-	GRUP_TYPE.MISC
+	GRUP_TYPE.INGR,
+	GRUP_TYPE.WEAP
     };
     public static String myPatchName = "My Patch";
     public static String authorName = "Me";
@@ -188,7 +186,7 @@ public class SkyProcStarter implements SUM {
     public String description() {
 	return descriptionToShowInSUM;
     }
-    
+
     // This is where you should write the bulk of your code.
     // Write the changes you would like to make to the patch,
     // but DO NOT export it.  Exporting is handled internally.
