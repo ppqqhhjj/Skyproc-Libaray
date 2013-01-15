@@ -76,6 +76,12 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
+    void clear() {
+	super.clear();
+	pos.clear();
+    }
+
+    @Override
     void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	if (contains(nextType)) {

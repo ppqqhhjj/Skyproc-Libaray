@@ -6,7 +6,9 @@ package skyproc;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -29,6 +31,8 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public void setPrototype(SubPrototype proto) {
     }
+    
+    public abstract SubPrototype getPrototype();
 
     public void add(SubRecord r) {
 	for (String t : r.getTypes()) {
@@ -40,6 +44,10 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	for (SubRecord s : this) {
 	    s.export(out, srcMod);
 	}
+    }
+
+    void clear() {
+	map.clear();
     }
 
     public boolean shouldExport(SubRecord s) {

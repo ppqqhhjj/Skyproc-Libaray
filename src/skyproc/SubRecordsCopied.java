@@ -7,7 +7,6 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 import lev.LExporter;
 import lev.Ln;
 
@@ -90,5 +89,19 @@ class SubRecordsCopied extends SubRecords {
     @Override
     public ArrayList<String> getTopLevelTypes() {
 	return orig.getTopLevelTypes();
+    }
+
+    @Override
+    public ArrayList<FormID> allFormIDs() {
+	ArrayList<FormID> out = new ArrayList<>();
+	for (SubRecord s : iteratorNoCopy()) {
+	    out.addAll(s.allFormIDs());
+	}
+	return out;
+    }
+
+    @Override
+    public SubPrototype getPrototype() {
+	return orig.getPrototype();
     }
 }

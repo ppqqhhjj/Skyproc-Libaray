@@ -145,7 +145,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    SubString EDID = subRecords.getSubString("EDID");
 	    EDID.parseData(EDID.extractRecordData(in));
 	}
-	
+
 	importSubRecords(in);
     }
 
@@ -199,6 +199,12 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(version, 4);
 
 	    subRecords.export(out, srcMod);
+	    if (SPGlobal.deleteAfterExport) {
+		// Save EDID for record validation tests
+		SubRecord edid = subRecords.get("EDID");
+		subRecords = new SubRecordsDerived(subRecords.getPrototype());
+		subRecords.add(edid);
+	    }
 	}
     }
 

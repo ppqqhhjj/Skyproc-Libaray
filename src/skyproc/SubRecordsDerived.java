@@ -23,6 +23,11 @@ class SubRecordsDerived extends SubRecords {
     public void setPrototype(SubPrototype proto) {
 	prototype = proto;
     }
+    
+    @Override
+    public SubPrototype getPrototype() {
+	return prototype;
+    }
 
     @Override
     public boolean shouldExport(SubRecord s) {
