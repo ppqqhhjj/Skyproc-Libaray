@@ -118,7 +118,10 @@ public class SPImporter {
 			    SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
 			    break;
 			} else if (!SPGlobal.modsToSkip.contains(nextMod)
-				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)) {
+				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)
+				&& ((SPGlobal.modsWhiteList.isEmpty() && SPGlobal.modsWhiteListStr.isEmpty())
+				    || SPGlobal.modsWhiteList.contains(nextMod)
+				    || Ln.hasAnyKeywords(line, SPGlobal.modsWhiteListStr))) {
 			    if (pluginName.isFile()) {
 				if (Ln.indexOfIgnoreCase(lines, line) == -1) {
 				    SPGlobal.logSync(header, "Adding mod: " + line);

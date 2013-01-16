@@ -138,6 +138,8 @@ public class SPGlobal {
     }
     static ArrayList<ModListing> modsToSkip = new ArrayList<>();
     static ArrayList<String> modsToSkipStr = new ArrayList<>();
+    static ArrayList<ModListing> modsWhiteList = new ArrayList<>();
+    static ArrayList<String> modsWhiteListStr = new ArrayList<>();
 
     /**
      *
@@ -156,6 +158,18 @@ public class SPGlobal {
 	    addModToSkip(new ModListing(s));
 	} else {
 	    modsToSkipStr.add(s);
+	}
+    }
+
+    public static void addModToWhiteList(ModListing m) {
+	modsWhiteList.add(m);
+    }
+
+    public static void addModToWhiteList(String s) {
+	if (s.contains(".ESP") || s.contains(".ESM")) {
+	    addModToWhiteList(new ModListing(s));
+	} else {
+	    modsWhiteListStr.add(s);
 	}
     }
 
