@@ -52,7 +52,7 @@ public class SPProgressBarPlug {
 	@Override
 	public void setStatusNumbered(int cur, int max, String status) {
 	}
-	
+
 	@Override
 	public void setStatusNumbered(String status) {
 	}
@@ -147,10 +147,18 @@ public class SPProgressBarPlug {
      * @param max
      * @param status
      */
-    public static void setStatus(int cur, int max, String status) {
+    public static void setStatusNumbered(int cur, int max, String status) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
 		p.setStatusNumbered(cur, max, status);
+	    }
+	}
+    }
+
+    public static void setStatusNumbered(String status) {
+	if (!paused()) {
+	    for (LProgressBarInterface p : bars) {
+		p.setStatusNumbered(status);
 	    }
 	}
     }

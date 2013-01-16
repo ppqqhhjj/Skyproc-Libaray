@@ -446,7 +446,7 @@ public class SPImporter {
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
 	    int curBar = SPProgressBarPlug.getBar();
-	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(mods.get(i)));
+	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -463,7 +463,7 @@ public class SPImporter {
 		    }
 		}
 	    } else {
-		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
+		SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
 	    }
 	    SPProgressBarPlug.setBar(curBar + (grup_targets.length + extraStepsPerMod));
 	    curMod++;
@@ -539,7 +539,7 @@ public class SPImporter {
 
 	    String result;
 	    while (!"NULL".equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": " + result);
+		SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input));
 		typeTargets.remove(result);
@@ -551,7 +551,7 @@ public class SPImporter {
 	    }
 
 	    SPProgressBarPlug.setBar(curBar + grup_targets.length);
-	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Standardizing");
+	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Fetching Strings");
 	    plugin.fetchStringPointers();
 	    SPProgressBarPlug.incrementBar();
 
@@ -562,12 +562,12 @@ public class SPImporter {
 	    if (!SPGlobal.streamMode) {
 		input.close();
 	    }
-	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Done");
+	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPProgressBarPlug.setStatus(curMod, maxMod, genStatus(listing) + ": Failed");
+	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Failed");
 	    SPProgressBarPlug.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}

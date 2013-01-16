@@ -35,6 +35,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<ENCH> enchantments = new GRUP<>(this, new ENCH());
     GRUP<SPEL> spells = new GRUP<>(this, new SPEL());
     GRUP<ARMO> armors = new GRUP<>(this, new ARMO());
+    GRUP<BOOK> books = new GRUP<>(this, new BOOK());
     GRUP<INGR> ingredients = new GRUP<>(this, new INGR());
     GRUP<MISC> miscObjects = new GRUP<>(this, new MISC());
     GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
@@ -120,6 +121,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(enchantments.getContainedType(), enchantments);
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
+	GRUPs.put(books.getContainedType(), books);
 	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
 	GRUPs.put(ingredients.getContainedType(), ingredients);
 	miscObjects.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
@@ -730,20 +732,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	LExporter out = new LExporter(outPath);
 
+	ArrayList<GRUP> exportGRUPs = new ArrayList<>();
+
 	// Progress Bar Setup
-	int fullGRUPS = 0;
 	for (GRUP g : GRUPs.values()) {
 	    if (!g.isEmpty()) {
-		fullGRUPS++;
+		exportGRUPs.add(g);
 	    }
 	}
-	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    fullGRUPS++;
-	}
 	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(fullGRUPS, "Exporting " + srcMod);
-
+	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + srcMod);
 	// Add all mods that contained any of the FormIDs used.
+	SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
 	Set<ModListing> addedMods = new HashSet<>();
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
 	for (FormID ID : allForms) {
@@ -755,10 +755,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		}
 	    }
 	}
+	SPProgressBarPlug.incrementBar();
 
 	// Go through each record, and add all mods that reference that record
 	// Just to symbolize that they "had part" in the patch
 	// And help encourage repatching when mods are removed.
+	SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
 	if (!SPGlobal.mergeMode) {
 	    for (GRUP<MajorRecord> g : srcMod) {
 		for (MajorRecord major : g) {
@@ -773,11 +775,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		}
 	    }
 	}
+	SPProgressBarPlug.incrementBar();
 
 	// Standardize all formIDs for good measure
+	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
 	for (FormID id : allForms) {
 	    id.standardize(srcMod);
 	}
+	SPProgressBarPlug.incrementBar();
 
 	// Export Header
 	tes.setNumRecords(numRecords());
@@ -794,20 +799,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	tes.export(out, srcMod);
 
 	// Export GRUPs
-	int count = 1;
-	for (GRUP g : GRUPs.values()) {
-	    if (!g.isEmpty()) {
-		SPProgressBarPlug.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": " + g.getContainedType());
-	    }
+	for (GRUP g : exportGRUPs) {
+	    SPProgressBarPlug.setStatusNumbered("Exporting " + srcMod + ": " + g.getContainedType());
 	    g.export(out, srcMod);
-	    if (!g.isEmpty()) {
-		SPProgressBarPlug.incrementBar();
-	    }
+	    SPProgressBarPlug.incrementBar();
 	}
 
 	// Export or clean up STRINGS files
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPProgressBarPlug.setStatus(count++, fullGRUPS, "Exporting " + srcMod + ": STRINGS files");
+	    SPProgressBarPlug.setStatusNumbered("Exporting " + srcMod + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
@@ -816,10 +816,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    deleteStringsFiles();
 	}
 	out.close();
-	SPProgressBarPlug.setStatus(fullGRUPS, fullGRUPS, "Exporting " + srcMod + ": DONE");
 
 
 	// Check if any duplicate EDIDS or FormIDS
+	SPProgressBarPlug.setStatusNumbered("Checking for Duplicates");
 	Map<String, MajorRecord> edids = new HashMap<>();
 	Set<FormID> IDs = new HashSet<>();
 	boolean bad = false;
@@ -846,19 +846,24 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		}
 	    }
 	}
+	SPProgressBarPlug.incrementBar();
 	if (bad) {
 	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
 	}
 
+	SPProgressBarPlug.setStatusNumbered("Validating Record Lengths");
 	// Validate all record lengths are correct
 	if (!NiftyFunc.validateRecordLengths(outPath, 1)) {
 	    SPGlobal.logError("Record Length Check", "Record lengths were off.");
 	    throw new BadRecord("Record lengths are off.");
 	}
+	SPProgressBarPlug.incrementBar();
 
+	SPProgressBarPlug.setStatusNumbered("Exporting Consistency File");
 	if (Consistency.automaticExport) {
 	    Consistency.export();
 	}
+	SPProgressBarPlug.incrementBar();
     }
 
     /**
@@ -1241,6 +1246,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     /**
      *
+     * @see GRUP
+     * @return The GRUP containing Book records
+     */
+    public GRUP<BOOK> getBooks() {
+	return books;
+    }
+
+    /**
+     *
      * @return The name of the mod (including suffix)
      */
     public String getName() {
@@ -1343,7 +1357,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubPrototype TES4proto = new SubPrototype() {
-
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());

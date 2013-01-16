@@ -159,7 +159,6 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 		    logSync(this.toString(), t.toString());
 		}
 		t.export(out, srcMod);
-		SPProgressBarPlug.incrementBar();
 	    }
 	}
     }
