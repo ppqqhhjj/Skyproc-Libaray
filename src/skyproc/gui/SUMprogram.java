@@ -16,6 +16,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import lev.Ln;
@@ -168,6 +170,7 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -177,6 +180,7 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
+
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -489,6 +493,7 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -534,6 +539,7 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -921,21 +927,34 @@ public class SUMprogram implements SUM {
     }
 
     void runBOSS(ArrayList<PatcherLink> activeLinks) {
-	// Run BOSS
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
 	    SwingUtilities.invokeLater(new Runnable() {
+
 		@Override
 		public void run() {
 		    SUMGUI.progress.setStatusNumbered("Running BOSS");
 		}
 	    });
+	    
+	    // Find BOSS
 	    SPGlobal.logMain("BOSS", "Looking for BOSS.");
-	    File bossFolder = new File(WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path"));
-	    File bossExe = new File(bossFolder.getPath() + "\\BOSS.exe");
 	    int response = JOptionPane.YES_OPTION;
-	    if (bossExe.isFile()) {
+	    String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
+	    File bossExe;
+	    if (bossPath != null) {
+		bossExe = new File(bossPath + "\\BOSS.exe");
+	    } else {
+		try {
+		    bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
+		} catch (IOException ex) {
+		    bossExe = new File(".");
+		}
+	    }
+	    
+	    // Run BOSS
+	    if (bossExe != null && bossExe.isFile()) {
 		SPGlobal.logMain("BOSS", "Running BOSS.");
-		if (!NiftyFunc.startProcess(bossFolder, new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
+		if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
 		    SPGlobal.logMain("BOSS", "BOSS complete.");
 		    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
 		}
