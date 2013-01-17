@@ -402,12 +402,11 @@ public class SUMGUI extends JFrame {
 		    progress.setGUIref(singleton);
 		    progress.moveToCorrectLocation();
 
-		    if (justPatching) {
+		    if (justPatching && needsImporting()) {
 			exitRequested = true;
 			progress.open();
-		    }
-
-		    if (justPatching || hook.importAtStart()) {
+			runThread();
+		    } else if (!justPatching && hook.importAtStart()) {
 			runThread();
 		    } else if (testNeedsPatching(false)) {
 			setPatchNeeded(true);
@@ -607,6 +606,9 @@ public class SUMGUI extends JFrame {
     static boolean needsImporting() {
 
 	if (forcePatch.isSelected() || testNeedsPatching(false)) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain("Needs Importing", "Needs importing because force patch was on or patch needed updating.");
+	    }
 	    setPatchNeeded(true);
 	    return true;
 	}
@@ -663,10 +665,19 @@ public class SUMGUI extends JFrame {
 	if (needsPatching) {
 	    return true;
 	}
+
 	// Check if patch exists
 	if (!SPGlobal.getGlobalPatch().exists()) {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMain(header, "Patch needed because no patch existed.");
+	    }
+	    return true;
+	}
+
+	// Check if crashed earlier while needing to patch
+	if (save.getBool(SUMGUISettings.CrashState)) {
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Patch needed because it closed prematurely earlier while needing to patch.");
 	    }
 	    return true;
 	}
@@ -688,19 +699,15 @@ public class SUMGUI extends JFrame {
 		return true;
 	    }
 	}
-	// Check if crashed earlier while needing to patch
-	if (save.getBool(SUMGUISettings.CrashState)) {
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMain(header, "Patch needed because it closed prematurely earlier while needing to patch.");
-	    }
-	    return true;
-	}
 
 	// If imported, check master lists
 	if (imported) {
 	    try {
 		// Compile old and new Master lists
 		ArrayList<String> oldMasterList = save.getStrings(SUMGUISettings.LastMasterlist);
+		for (String s : oldMasterList) {
+		    SPGlobal.logMain("TEST", s);
+		}
 
 		SPDatabase db = SPGlobal.getDB();
 		ArrayList<String> curImportedMods = new ArrayList<>();
@@ -716,7 +723,7 @@ public class SUMGUI extends JFrame {
 		    if (oldMasterList.contains(curName)) {
 			for (int j = 0; j < oldMasterList.size(); j++) {
 			    if (oldMasterList.get(j).equalsIgnoreCase(curName)) {
-				oldMasterList.remove(curName);
+				oldMasterList.remove(j);
 				break;
 			    } else if (curImportedModsTmp.contains(oldMasterList.get(j))) {
 				//Matching mods out of order, need to patch
@@ -732,7 +739,10 @@ public class SUMGUI extends JFrame {
 		//If old masters are missing, need patch
 		if (!oldMasterList.isEmpty()) {
 		    if (SPGlobal.logging()) {
-			SPGlobal.logMain(header, "Patch needed because old masters are missing.");
+			SPGlobal.logMain(header, "Patch needed because old masters are missing:");
+			for (String s : oldMasterList) {
+			    SPGlobal.logMain(header, "   " + s);
+			}
 		    }
 		    return true;
 		}
