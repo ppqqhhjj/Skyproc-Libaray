@@ -315,7 +315,9 @@ public class SUMGUI extends JFrame {
 		public void windowOpened(WindowEvent arg0) {
 		}
 	    });
-	    progress.setGUIref(singleton);
+	    if (!justPatching) {
+		progress.setGUIref(singleton);
+	    }
 	    if (hook.hasLogo()) {
 		SUMGUI.progress.addLogo(hook.getLogo());
 	    }
@@ -399,7 +401,7 @@ public class SUMGUI extends JFrame {
 			}
 			singleton.add(menu);
 		    }
-		    progress.setGUIref(singleton);
+		    
 		    progress.moveToCorrectLocation();
 
 		    if (justPatching && needsImporting()) {

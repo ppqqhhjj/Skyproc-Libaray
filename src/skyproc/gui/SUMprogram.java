@@ -935,7 +935,7 @@ public class SUMprogram implements SUM {
 		    SUMGUI.progress.setStatusNumbered("Running BOSS");
 		}
 	    });
-	    
+
 	    // Find BOSS
 	    SPGlobal.logMain("BOSS", "Looking for BOSS.");
 	    int response = JOptionPane.YES_OPTION;
@@ -950,7 +950,7 @@ public class SUMprogram implements SUM {
 		    bossExe = new File(".");
 		}
 	    }
-	    
+
 	    // Run BOSS
 	    if (bossExe != null && bossExe.isFile()) {
 		SPGlobal.logMain("BOSS", "Running BOSS.");
@@ -1032,8 +1032,8 @@ public class SUMprogram implements SUM {
 	    args.add("-FORCE");
 	}
 	args.add("-PROGRESSLOCATION");
-	args.add("-" + (SUMGUI.progress.getWidth() + 10));
-	args.add("-" + 0);
+	args.add("-" + (SUMGUI.progress.getX() + SUMGUI.progress.getWidth() + 10));
+	args.add("-" + SUMGUI.progress.getY());
 	args.add("-SUMBLOCK");
 	boolean ret = NiftyFunc.startProcess(new File(link.path.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
 	SUMGUI.progress.incrementBar();
