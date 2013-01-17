@@ -35,7 +35,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class SUMprogram implements SUM {
 
-    String version = "1.0.1";
+    String version = "1.0.2";
     ArrayList<String> exclude = new ArrayList<>(2);
     ArrayList<PatcherLink> links = new ArrayList<>();
     ArrayList<File> blockedLinks = new ArrayList<>();
@@ -821,13 +821,13 @@ public class SUMprogram implements SUM {
     @Override
     public void onExit(boolean patchWasGenerated) {
 	// Save disabled links
-	ArrayList<String> disabledLinks = SUMsave.getStrings(SUMSettings.DISABLED);
-	disabledLinks.clear();
+	ArrayList<String> disabledLinks = new ArrayList<>();
 	for (PatcherLink link : links) {
 	    if (!link.isActive()) {
 		disabledLinks.add(link.getName().toUpperCase());
 	    }
 	}
+	SUMsave.setStrings(SUMSettings.DISABLED, disabledLinks);
 
 	// Delete unused blocklist file
 	File blocklist = new File("Files\\Blocklist.txt");
