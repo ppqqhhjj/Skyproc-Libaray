@@ -24,12 +24,12 @@ public class RACE extends MajorRecordDescription {
 
     // Static prototypes and definitions
     static final SubPrototype attackDataProto = new SubPrototype() {
-		@Override
-		protected void addRecords() {
-		    add(new AttackDataInternal());
-		    add(SubString.getNew("ATKE", true));
-		}
-	    };
+	@Override
+	protected void addRecords() {
+	    add(new AttackDataInternal());
+	    add(SubString.getNew("ATKE", true));
+	}
+    };
     static final SubPrototype RACEproto = new SubPrototype(MajorRecordDescription.descProto) {
 	@Override
 	protected void addRecords() {
@@ -196,6 +196,7 @@ public class RACE extends MajorRecordDescription {
 	float angularAcceleration = 0;
 	float angularTolerance = 0;
 	byte[] fluff6 = new byte[4];
+	byte[] mountData;
 
 	DATA() {
 	    super();
@@ -232,6 +233,9 @@ public class RACE extends MajorRecordDescription {
 	    out.write(angularAcceleration);
 	    out.write(angularTolerance);
 	    out.write(fluff6, 4);
+	    if (mountData != null) {
+		out.write(mountData);
+	    }
 	}
 
 	@Override
@@ -265,6 +269,9 @@ public class RACE extends MajorRecordDescription {
 	    angularAcceleration = in.extractFloat();
 	    angularTolerance = in.extractFloat();
 	    fluff6 = in.extract(4);
+	    if (!in.isDone()) {
+		mountData = in.extract(36);
+	    }
 	}
 
 	@Override
@@ -274,7 +281,11 @@ public class RACE extends MajorRecordDescription {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return 128;
+	    if (mountData == null) {
+		return 128;
+	    } else {
+		return 164;
+	    }
 	}
 
 	@Override
@@ -282,9 +293,9 @@ public class RACE extends MajorRecordDescription {
 	    return Record.getTypeList("DATA");
 	}
     }
-    
+
     /**
-     * 
+     *
      */
     static final public class AttackDataInternal extends SubRecord {
 
@@ -299,7 +310,7 @@ public class RACE extends MajorRecordDescription {
 	float knockDown = 0;
 	float recoveryTime = 0;
 	float fatigueMult = 0;
-	
+
 	void copy(AttackDataInternal rhs) {
 	    damageMult = rhs.damageMult;
 	    attackChance = rhs.attackChance;
@@ -353,7 +364,7 @@ public class RACE extends MajorRecordDescription {
 	    recoveryTime = in.extractFloat();
 	    fatigueMult = in.extractFloat();
 	}
-	
+
 	@Override
 	SubRecord getNew(String type) {
 	    return new AttackDataInternal();
@@ -368,41 +379,40 @@ public class RACE extends MajorRecordDescription {
 	int getContentLength(Mod srcMod) {
 	    return 44;
 	}
-	
     }
-    
+
     /**
-     * 
+     *
      */
     static final public class AttackData extends SubShell {
-	
-	AttackData () {
+
+	AttackData() {
 	    super(attackDataProto);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param eventName
 	 */
 	public AttackData(String eventName) {
 	    this();
 	    subRecords.setSubString("ATKE", eventName);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getEventName() {
 	    return subRecords.getSubString("ATKE").print();
 	}
-	
+
 	AttackDataInternal getATKD() {
 	    return (AttackDataInternal) subRecords.get("ATKD");
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param rhs
 	 */
 	public void copyData(AttackData rhs) {
@@ -415,7 +425,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param obj
 	 * @return
 	 */
@@ -435,7 +445,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -444,164 +454,164 @@ public class RACE extends MajorRecordDescription {
 	    hash = 31 * hash + Objects.hashCode(this.getEventName());
 	    return hash;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setDamageMult(float in) {
 	    getATKD().damageMult = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public float getDamageMult() {
 	    return getATKD().damageMult;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setAttackChance(float in) {
 	    getATKD().attackChance = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public float getAttackChance() {
 	    return getATKD().attackChance;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param spell
 	 */
 	public void setAttackSpell(FormID spell) {
 	    getATKD().attackSpell = spell;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public FormID getAttackSpell() {
 	    return getATKD().attackSpell;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setAttackAngle(float in) {
 	    getATKD().attackAngle = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public float getAttackAngle() {
 	    return getATKD().attackAngle;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setStrikeAngle(float in) {
 	    getATKD().strikeAngle = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
-	public float getStrikeAngle () {
+	public float getStrikeAngle() {
 	    return getATKD().strikeAngle;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setStagger(float in) {
 	    getATKD().stagger = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public float getStagger() {
 	    return getATKD().stagger;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setAttackType(FormID id) {
 	    getATKD().attackType = id;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public FormID getAttackType() {
 	    return getATKD().attackType;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setKnockDown(float in) {
 	    getATKD().knockDown = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
-	public float getKnockDown () {
+	public float getKnockDown() {
 	    return getATKD().knockDown;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setRecoveryTime(float in) {
 	    getATKD().recoveryTime = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
-	public float getRecoveryTime () {
+	public float getRecoveryTime() {
 	    return getATKD().recoveryTime;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public void setFatigueMult(float in) {
 	    getATKD().fatigueMult = in;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
-	public float getFatigueMult () {
+	public float getFatigueMult() {
 	    return getATKD().fatigueMult;
 	}
     }
@@ -1350,33 +1360,33 @@ public class RACE extends MajorRecordDescription {
     public void clearAttackData() {
 	subRecords.getSubList("ATKD").clear();
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public ArrayList<AttackData> getAttackData() {
 	return subRecords.getSubList("ATKD").toPublic();
     }
-    
+
     /**
-     * 
+     *
      * @param data
      */
     public void addAttackData(AttackData data) {
 	subRecords.getSubList("ATKD").add(data);
     }
-    
+
     /**
-     * 
+     *
      * @param data
      */
     public void removeAttackData(AttackData data) {
 	subRecords.getSubList("ATKD").remove(data);
     }
-    
+
     /**
-     * 
+     *
      * @param rhs
      */
     public void copyAttackData(RACE rhs) {
@@ -1645,33 +1655,33 @@ public class RACE extends MajorRecordDescription {
     public ArmorType getArmorType() {
 	return subRecords.getBodyTemplate().getArmorType();
     }
-    
+
     /**
-     * 
+     *
      * @param race
      */
     public void setArmorRace(FormID race) {
 	subRecords.setSubForm("RNAM", race);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public FormID getArmorRace() {
 	return subRecords.getSubForm("RNAM").getForm();
     }
-    
+
     /**
-     * 
+     *
      * @param race
      */
     public void setMorphRace(FormID race) {
 	subRecords.setSubForm("NAM8", race);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public FormID getMorphRace() {
