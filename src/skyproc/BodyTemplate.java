@@ -33,8 +33,8 @@ public class BodyTemplate extends SubShell {
 
 	LFlags bodyParts = new LFlags(4);
 	LFlags flags = new LFlags(4);
-	ArmorType armorType = ArmorType.CLOTHING;
-	boolean old = false;
+	ArmorType armorType = null;
+	boolean valid = false;
 
 	BodyTemplateMain() {
 	    super();
@@ -45,7 +45,7 @@ public class BodyTemplate extends SubShell {
 	    super.export(out, srcMod);
 	    out.write(bodyParts.export(), 4);
 	    out.write(flags.export(), 4);
-	    if (!old) {
+	    if (armorType != null) {
 		out.write(armorType.ordinal());
 	    }
 	}
@@ -57,9 +57,8 @@ public class BodyTemplate extends SubShell {
 	    flags = new LFlags(in.extract(4));
 	    if (!in.isDone()) {
 		armorType = ArmorType.values()[in.extractInt(4)];
-	    } else {
-		old = true;
 	    }
+	    valid = true;
 	}
 
 	@Override
@@ -69,12 +68,12 @@ public class BodyTemplate extends SubShell {
 
 	@Override
 	boolean isValid() {
-	    return true;
+	    return valid;
 	}
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return old ? 8 : 12;
+	    return armorType == null ? 8 : 12;
 	}
 
 	@Override
@@ -258,7 +257,10 @@ public class BodyTemplate extends SubShell {
      * @param on
      */
     public void set(FirstPersonFlags flag, boolean on) {
-	getMain().bodyParts.set(flag.ordinal(), on);
+	BodyTemplateMain main = getMain();
+	main.bodyParts.set(flag.ordinal(), on);
+	main.valid = true;
+
     }
 
     /**
@@ -267,7 +269,9 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public boolean get(FirstPersonFlags part) {
-	return getMain().bodyParts.get(part.ordinal());
+	BodyTemplateMain main = getMain();
+	main.valid = true;
+	return main.bodyParts.get(part.ordinal());
     }
 
     /**
@@ -276,7 +280,9 @@ public class BodyTemplate extends SubShell {
      * @param on
      */
     public void set(GeneralFlags flag, boolean on) {
-	getMain().flags.set(flag.value, on);
+	BodyTemplateMain main = getMain();
+	main.valid = true;
+	main.flags.set(flag.value, on);
     }
 
     /**
@@ -285,7 +291,9 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public boolean get(GeneralFlags flag) {
-	return getMain().flags.get(flag.value);
+	BodyTemplateMain main = getMain();
+	main.valid = true;
+	return main.flags.get(flag.value);
     }
 
     /**
@@ -293,7 +301,9 @@ public class BodyTemplate extends SubShell {
      * @param type
      */
     public void setArmorType(ArmorType type) {
-	getMain().armorType = type;
+	BodyTemplateMain main = getMain();
+	main.valid = true;
+	main.armorType = type;
     }
 
     /**
@@ -301,6 +311,8 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public ArmorType getArmorType() {
-	return getMain().armorType;
+	BodyTemplateMain main = getMain();
+	main.valid = true;
+	return main.armorType;
     }
 }
