@@ -18,12 +18,13 @@ import skyproc.exceptions.BadRecord;
  * @author Justin Swanson
  */
 public class BOOK extends MajorRecordDescription {
-    
+
     // Static prototypes and definitions
     static final class DATA extends SubRecord {
 
 	LFlags flags = new LFlags(4);
-	int bookType = 0;
+	ActorValue teachesAV = ActorValue.AbsorbChance;
+	FormID teachesSpell = new FormID();
 	int value = 0;
 	float weight = 0;
 
@@ -35,7 +36,11 @@ public class BOOK extends MajorRecordDescription {
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(flags.export());
-	    out.write(bookType);
+	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
+		out.write(teachesAV.ordinal());
+	    } else {
+		teachesSpell.export(out);
+	    }
 	    out.write(value);
 	    out.write(weight);
 	}
@@ -44,7 +49,11 @@ public class BOOK extends MajorRecordDescription {
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
-	    bookType = in.extractInt(4);
+	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
+		teachesAV = ActorValue.value(in.extractInt(4));
+	    } else {
+		teachesSpell.setInternal(in.extract(4));
+	    }
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	}
@@ -57,6 +66,13 @@ public class BOOK extends MajorRecordDescription {
 	@Override
 	int getContentLength(Mod srcMod) {
 	    return 16;
+	}
+
+	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<>(1);
+	    out.add(teachesSpell);
+	    return out;
 	}
 
 	@Override
@@ -87,6 +103,15 @@ public class BOOK extends MajorRecordDescription {
 	}
     };
 
+    //Enums
+    public enum BookFlag {
+
+	TeachesSkill,
+	CantBeTaken,
+	TeachesSpell,
+	Read;
+    }
+
     // Common Functions
     BOOK() {
 	super();
@@ -97,9 +122,176 @@ public class BOOK extends MajorRecordDescription {
     Record getNew() {
 	return new BOOK();
     }
-    
+
     @Override
     ArrayList<String> getTypes() {
 	return Record.getTypeList("BOOK");
+    }
+
+    //Get/Set
+    /**
+     *
+     * @return
+     */
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
+
+    /**
+     *
+     * @param path
+     */
+    public void setModel(String path) {
+	subRecords.setSubString("MODL", path);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getModel() {
+	return subRecords.getSubString("MODL").print();
+    }
+
+    /**
+     *
+     * @param path
+     */
+    public void setInventoryImage(String path) {
+	subRecords.setSubString("ICON", path);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getInventoryImage() {
+	return subRecords.getSubString("ICON").print();
+    }
+
+    /**
+     *
+     * @param path
+     */
+    public void setMessageImage(String path) {
+	subRecords.setSubString("MICO", path);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMessageImage() {
+	return subRecords.getSubString("MICO").print();
+    }
+
+    /**
+     *
+     * @param sound
+     */
+    public void setPickupSound(FormID sound) {
+	subRecords.setSubForm("YNAM", sound);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public FormID getPickupSound() {
+	return subRecords.getSubForm("YNAM").getForm();
+    }
+
+    /**
+     *
+     * @param sound
+     */
+    public void setDropSound(FormID sound) {
+	subRecords.setSubForm("ZNAM", sound);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public FormID getDropSound() {
+	return subRecords.getSubForm("ZNAM").getForm();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public KeywordSet getKeywordSet() {
+	return subRecords.getKeywords();
+    }
+
+    DATA getDATA() {
+	return (DATA) subRecords.get("DATA");
+    }
+
+    public void setValue(int gold) {
+	getDATA().value = gold;
+    }
+
+    public int getValue() {
+	return getDATA().value;
+    }
+
+    public void setWeight(float weight) {
+	getDATA().weight = weight;
+    }
+
+    public float getWeight() {
+	return getDATA().weight;
+    }
+
+    public void set(BookFlag flag, boolean on) {
+	getDATA().flags.set(flag.ordinal(), on);
+    }
+
+    public boolean get(BookFlag flag) {
+	return getDATA().flags.get(flag.ordinal());
+    }
+    
+    public void setTeachesAV(ActorValue val) {
+	getDATA().teachesAV = val;
+    }
+    
+    public ActorValue getTeachesAV() {
+	return getDATA().teachesAV;
+    }
+    
+    public void setTeachesSpell(FormID spell) {
+	getDATA().teachesSpell = spell;
+    }
+    
+    public FormID getTeachesSpell () {
+	return getDATA().teachesSpell;
+    }
+    
+    public void setInventoryArt(FormID id) {
+	subRecords.setSubForm("INAM", id);
+    }
+    
+    public FormID getInventoryArt() {
+	return subRecords.getSubForm("INAM").getForm();
+    }
+
+    @Override
+    public String getDescription() {
+	return subRecords.getSubStringPointer("CNAM").print();
+    }
+
+    @Override
+    public void setDescription(String description) {
+	subRecords.setSubStringPointer("CNAM", description);
+    }
+    
+    public String getText() {
+	return subRecords.getSubStringPointer("DESC").print();
+    }
+    
+    public void setText(String text) {
+	subRecords.setSubStringPointer("DESC", text);
     }
 }
