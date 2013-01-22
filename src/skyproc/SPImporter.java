@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
-import javax.swing.SwingUtilities;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -22,7 +21,6 @@ import skyproc.gui.SPProgressBarPlug;
 public class SPImporter {
 
     private static String header = "Importer";
-    static int extraStepsPerMod = 1;
 
     /**
      * A placeholder constructor not meant to be called.<br> An SPImporter
@@ -33,31 +31,20 @@ public class SPImporter {
     }
 
     /**
-     * This function can be used in conjunction with runBackgroundImport() to
-     * create import functionality in a separate thread, as to not halt GUI
-     * response while importing.<br> Override this function in an extended
-     * SPImporter class, and add custom code to it for use with
-     * runBackgroundImport().
-     */
-    public void importControl() {
-    }
-
-    /**
      * Creates a new thread and runs any code in importControl in the
      * background. This is useful for GUI programs where you don't want the
      * program to freeze while it processes. <br> <br> NOTE: You MUST override
      * importControl() with custom code telling the program what you want it to
      * do in the background.
      */
-    public void runBackgroundImport() {
+    static public void runBackgroundImport() {
 	(new Thread(new StartImportThread())).start();
     }
 
-    private class StartImportThread implements Runnable {
+    private static class StartImportThread implements Runnable {
 
 	@Override
 	public void run() {
-	    importControl();
 	}
 
 	public void main(String args[]) {
@@ -231,7 +218,7 @@ public class SPImporter {
      * @return A set of Mods with all their data imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importAllMods() {
+    static public Set<Mod> importAllMods() {
 	return importAllMods(GRUP_TYPE.values());
     }
 
@@ -248,7 +235,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) {
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
     }
 
@@ -265,7 +252,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
+    static public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -287,7 +274,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    public Set<Mod> importActiveMods() throws IOException {
+    static public Set<Mod> importActiveMods() throws IOException {
 	return importActiveMods(GRUP_TYPE.values());
     }
 
@@ -309,7 +296,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException {
+    static public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException {
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
     }
 
@@ -331,7 +318,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
+    static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -349,7 +336,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) {
 	return importMods(mods, SPGlobal.pathToData, grup_targets);
     }
 
@@ -366,7 +353,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -383,7 +370,7 @@ public class SPImporter {
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(ArrayList<ModListing> mods) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods) {
 	return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
     }
 
@@ -398,7 +385,7 @@ public class SPImporter {
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(ArrayList<ModListing> mods, String path) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, String path) {
 	return importMods(mods, path, GRUP_TYPE.values());
     }
 
@@ -414,7 +401,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
 
 	if (grup_targets.length == 0) {
 	    SPGlobal.logMain(header, "Skipping import because requests were empty.");
@@ -487,7 +474,7 @@ public class SPImporter {
      * @throws BadMod If SkyProc runs into any unexpected data structures, or
      * has any error importing a mod at all.
      */
-    public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
+    static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -508,8 +495,7 @@ public class SPImporter {
      * types = new GRUP_TYPE[grup_targets.size()]; types =
      * grup_targets.toArray(types); return importMod(listing, path, types); }
      */
-    Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
-	int curBar = SPProgressBarPlug.getBar();
+    static Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
 	try {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_targets));
 
@@ -557,8 +543,6 @@ public class SPImporter {
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Failed");
-	    SPProgressBarPlug.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 

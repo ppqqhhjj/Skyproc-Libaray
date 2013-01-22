@@ -41,7 +41,7 @@ class Consistency {
 	}
     }
 
-    static void mergetIntoKnownEDIDs(Mod mod) throws IOException {
+    static void mergeIntoKnownEDIDs(Mod mod) throws IOException {
 	for (GRUP g : mod.GRUPs.values()) {
 	    for (Object o : g) {
 		MajorRecord m = (MajorRecord) o;
@@ -81,19 +81,16 @@ class Consistency {
 	if (!f.exists()) {
 	    return;
 	}
-	SPImporter importer = new SPImporter();
 	Mod consistencyPatch;
 	try {
-	    SPProgressBarPlug.reset();
-	    SPProgressBarPlug.setMax(GRUP_TYPE.values().length + SPImporter.extraStepsPerMod);
 	    SPImporter.getActiveModList();
 	    SPGlobal.newSyncLog("Mod Import/ConsistencyPatch.txt");
 	    boolean syncing = SPGlobal.sync();
 	    SPGlobal.sync(true);
-	    consistencyPatch = importer.importMod(patch.modInfo, SPGlobal.pathToData, false, GRUP_TYPE.values());
+	    consistencyPatch = SPImporter.importMod(patch.modInfo, SPGlobal.pathToData, false, GRUP_TYPE.values());
 	    edidToForm = new HashMap<>(consistencyPatch.numRecords());
 	    SPGlobal.sync(syncing);
-	    mergetIntoKnownEDIDs(consistencyPatch);
+	    mergeIntoKnownEDIDs(consistencyPatch);
 
 	} catch (Exception ex) {
 	    SPGlobal.logException(ex);
