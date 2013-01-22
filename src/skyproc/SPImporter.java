@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import javax.swing.SwingUtilities;
 import lev.LFileChannel;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -21,8 +22,6 @@ import skyproc.gui.SPProgressBarPlug;
 public class SPImporter {
 
     private static String header = "Importer";
-    int curMod = 1;
-    int maxMod = 1;
     static int extraStepsPerMod = 1;
 
     /**
@@ -120,8 +119,8 @@ public class SPImporter {
 			} else if (!SPGlobal.modsToSkip.contains(nextMod)
 				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)
 				&& ((SPGlobal.modsWhiteList.isEmpty() && SPGlobal.modsWhiteListStr.isEmpty())
-				    || SPGlobal.modsWhiteList.contains(nextMod)
-				    || Ln.hasAnyKeywords(line, SPGlobal.modsWhiteListStr))) {
+				|| SPGlobal.modsWhiteList.contains(nextMod)
+				|| Ln.hasAnyKeywords(line, SPGlobal.modsWhiteListStr))) {
 			    if (pluginName.isFile()) {
 				if (Ln.indexOfIgnoreCase(lines, line) == -1) {
 				    SPGlobal.logSync(header, "Adding mod: " + line);
@@ -415,7 +414,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    public Set<Mod> importMods(ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
+    public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
 
 	if (grup_targets.length == 0) {
 	    SPGlobal.logMain(header, "Skipping import because requests were empty.");
@@ -441,15 +440,11 @@ public class SPImporter {
 
 	Set<Mod> outSet = new TreeSet<>();
 
-	curMod = 1;
-	maxMod = mods.size();
-	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(mods.size() * (grup_targets.length + extraStepsPerMod), "Importing plugins.");
+	SPProgressBarPlug.setMax(mods.size(), "Importing plugins.");
 
 	for (int i = 0; i < mods.size(); i++) {
 	    String mod = mods.get(i).print();
-	    int curBar = SPProgressBarPlug.getBar();
-	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(mods.get(i)));
+	    SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
@@ -466,10 +461,9 @@ public class SPImporter {
 		    }
 		}
 	    } else {
-		SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(mods.get(i)) + ": Skipped!");
+		SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)) + ": Skipped!");
 	    }
-	    SPProgressBarPlug.setBar(curBar + (grup_targets.length + extraStepsPerMod));
-	    curMod++;
+	    SPProgressBarPlug.incrementBar();
 	}
 
 	if (SPGlobal.logging()) {
@@ -494,10 +488,6 @@ public class SPImporter {
      * has any error importing a mod at all.
      */
     public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
-	curMod = 1;
-	maxMod = 1;
-	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(grup_targets.length + extraStepsPerMod);
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -542,21 +532,18 @@ public class SPImporter {
 
 	    String result;
 	    while (!"NULL".equals((result = scanToRecordStart(input, typeTargets)))) {
-		SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": " + result);
+		SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
 		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
 		plugin.parseData(result, extractGRUPData(input));
 		typeTargets.remove(result);
 		SPGlobal.flush();
-		SPProgressBarPlug.incrementBar();
 		if (grups.isEmpty()) {
 		    break;
 		}
 	    }
 
-	    SPProgressBarPlug.setBar(curBar + grup_targets.length);
-	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Fetching Strings");
+	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Fetching Strings");
 	    plugin.fetchStringPointers();
-	    SPProgressBarPlug.incrementBar();
 
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
@@ -565,12 +552,12 @@ public class SPImporter {
 	    if (!SPGlobal.streamMode) {
 		input.close();
 	    }
-	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Done");
+	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
 
 	    return plugin;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
-	    SPProgressBarPlug.setStatusNumbered(curMod, maxMod, genStatus(listing) + ": Failed");
+	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Failed");
 	    SPProgressBarPlug.setBar(curBar + grup_targets.length + extraStepsPerMod);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
