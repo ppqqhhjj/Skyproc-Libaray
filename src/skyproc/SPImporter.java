@@ -3,6 +3,8 @@ package skyproc;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import lev.LFileChannel;
 import lev.LShrinkArray;
@@ -497,7 +499,6 @@ public class SPImporter {
      */
     static Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
 	try {
-	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_targets));
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
@@ -511,21 +512,13 @@ public class SPImporter {
 		importStringLocations(plugin);
 	    }
 
-	    ArrayList<String> typeTargets = new ArrayList<>();
-	    for (GRUP_TYPE g : grup_targets) {
-		typeTargets.add(g.toString());
-	    }
-
-	    String result;
-	    while (!"NULL".equals((result = scanToRecordStart(input, typeTargets)))) {
+	    GRUPIterator iter = new GRUPIterator(plugin, grup_targets, input);
+	    while (iter.hasNext()) {
+		String result = iter.loading();
 		SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
-		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), "===================");
-		plugin.parseData(result, extractGRUPData(input));
-		typeTargets.remove(result);
+		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
+		plugin.parseData(result, iter.next());
 		SPGlobal.flush();
-		if (grups.isEmpty()) {
-		    break;
-		}
 	    }
 
 	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Fetching Strings");
@@ -546,6 +539,128 @@ public class SPImporter {
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 
+    }
+
+    static public Iterator<byte[]> getSubRecordsInGRUPs(String typeString, GRUP_TYPE... grups) {
+	return new ParsingIterator(typeString, grups);
+    }
+
+    static public Iterator<byte[]> getSubRecordsInGRUPs(ModListing targetMod, String typeString, GRUP_TYPE... grups) {
+	return new ParsingIterator(targetMod, typeString, grups);
+    }
+
+    static class GRUPIterator implements Iterator<RecordShrinkArray> {
+
+	LFileChannel input;
+	Mod srcMod;
+	ArrayList<String> targets;
+	String loading;
+
+	GRUPIterator(Mod mod, GRUP_TYPE[] grup_targets, LFileChannel input) {
+	    ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
+	    targets = new ArrayList<>(tmp.size());
+	    for (GRUP_TYPE g : tmp) {
+		targets.add(g.toString());
+	    }
+	    this.input = input;
+	    srcMod = mod;
+	}
+
+	@Override
+	public boolean hasNext() {
+	    if (targets.isEmpty()) {
+		return false;
+	    }
+	    try {
+		loading = scanToRecordStart(input, targets);
+		targets.remove(loading);
+		return !"NULL".equals(loading);
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+		return false;
+	    }
+	}
+
+	@Override
+	public RecordShrinkArray next() {
+	    RecordShrinkArray out;
+	    try {
+		out = extractGRUPData(input);
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+		out = new RecordShrinkArray();
+	    }
+	    return out;
+	}
+
+	public String loading() {
+	    return loading;
+	}
+
+	@Override
+	public void remove() {
+	}
+    }
+
+    static class ParsingIterator implements Iterator<byte[]> {
+
+	String typeString;
+	GRUP_TYPE[] grups;
+	LFileChannel in;
+	byte[] next;
+	boolean gotten = false;
+	ArrayList<ModListing> activeMods;
+
+	ParsingIterator(String typeString, GRUP_TYPE[] grups) {
+	    this.typeString = typeString;
+	    this.grups = grups;
+	    try {
+		activeMods = SPImporter.getActiveModList();
+	    } catch (IOException ex) {
+		activeMods = new ArrayList<>();
+		SPGlobal.logException(ex);
+	    }
+	}
+
+	ParsingIterator(ModListing mod, String typeString, GRUP_TYPE[] grups) {
+	    this.typeString = typeString;
+	    this.grups = grups;
+	    activeMods = new ArrayList<>();
+	    activeMods.add(mod);
+	}
+
+	@Override
+	public boolean hasNext() {
+	    grabNext();
+	    return next != null;
+	}
+
+	@Override
+	public byte[] next() {
+	    grabNext();
+	    return next;
+	}
+
+	void grabNext() {
+
+	    // If stream is dead, we need to move to next mod.
+	    if (in == null || in.isDone()) {
+		// If we have mods left, switch to it.
+		if (activeMods.size() > 0) {
+		    in = new LFileChannel(SPGlobal.pathToData + activeMods.get(0).print());
+		    activeMods.remove(0);
+		} else {
+		    next = null;
+		    return;
+		}
+	    }
+
+	    // 
+	}
+
+	@Override
+	public void remove() {
+	}
     }
 
     static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {

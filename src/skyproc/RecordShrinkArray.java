@@ -25,6 +25,11 @@ class RecordShrinkArray extends LShrinkArray {
 	super(rhs);
 	offset = (int) rhs.pos();
     }
+    
+    public RecordShrinkArray() {
+	super(new byte[0]);
+	offset = 0;
+    }
 
     @Override
     public long pos() {
