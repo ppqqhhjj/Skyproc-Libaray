@@ -3,12 +3,9 @@ package skyproc;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
-import lev.LFileChannel;
-import lev.LShrinkArray;
-import lev.Ln;
+import lev.*;
+import skyproc.MajorRecord.MajorFlags;
 import skyproc.SPGlobal.Language;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadMod;
@@ -33,11 +30,11 @@ public class SPImporter {
     }
 
     /**
-     * Creates a new thread and runs any code in importControl in the
+     * Creates a new thread and runs any code input importControl input the
      * background. This is useful for GUI programs where you don't want the
      * program to freeze while it processes. <br> <br> NOTE: You MUST override
      * importControl() with custom code telling the program what you want it to
-     * do in the background.
+     * do input the background.
      */
     static public void runBackgroundImport() {
 	(new Thread(new StartImportThread())).start();
@@ -55,18 +52,18 @@ public class SPImporter {
     }
 
     /**
-     * Loads in plugins.txt and reads in the mods the user has active and
-     * returns an ArrayList of the ModListings in load order. If a mod being
-     * read in fits the criteria of isModToSkip(), then it will be omitted in
-     * the results.<br> If any mods on the list are not present in the data
-     * folder, they will be skipped.<br><br> If the program cannot locate
+     * Loads input plugins.txt and reads input the mods the user has active and
+     * returns an ArrayList of the ModListings input load order. If a mod being
+     * read input fits the criteria of isModToSkip(), then it will be omitted
+     * input the results.<br> If any mods on the list are not present input the
+     * data folder, they will be skipped.<br><br> If the program cannot locate
      * plugins.txt, it will prompt the user to locate the file themselves. Once
      * they do, it will create a file and use that as a reference for future
-     * patch generations.<br><br> Related settings in SPGlobal:<br> -
+     * patch generations.<br><br> Related settings input SPGlobal:<br> -
      * pluginsListPath<br> - pathToData<br> - pluginListBackupPath
      *
      * @see SPGlobal
-     * @return An ArrayList of ModListings of all active mods present in the
+     * @return An ArrayList of ModListings of all active mods present input the
      * data folder.
      * @throws java.io.IOException
      */
@@ -145,13 +142,14 @@ public class SPImporter {
 
     /**
      * Will scan the data folder and ModListings for all .esp and .esm files,
-     * regardless of if they are active. It will return a complete list in load
-     * order. If a mod being read in fits the criteria of isModToSkip(), then it
-     * will be omitted in the results.<br><br> Related settings in SPGlobal:<br>
-     * - pathToData
+     * regardless of if they are active. It will return a complete list input
+     * load order. If a mod being read input fits the criteria of isModToSkip(),
+     * then it will be omitted input the results.<br><br> Related settings input
+     * SPGlobal:<br> - pathToData
      *
      * @see SPGlobal
-     * @return ArrayList of ModListings of all mods present in the data folder.
+     * @return ArrayList of ModListings of all mods present input the data
+     * folder.
      */
     static public ArrayList<ModListing> getModList() {
 	SPGlobal.newSyncLog("Get All Present Mod List.txt");
@@ -175,7 +173,7 @@ public class SPImporter {
 
     static ArrayList<ModListing> sortModListings(ArrayList<String> lines) {
 	SPGlobal.sync(true);
-	//Read it in
+	//Read it input
 	ArrayList<String> esms = new ArrayList<>();
 	ArrayList<String> esps = new ArrayList<>();
 
@@ -210,12 +208,12 @@ public class SPImporter {
     }
 
     /**
-     * Imports all mods in the user's Data/ folder, no matter if they are
+     * Imports all mods input the user's Data/ folder, no matter if they are
      * currently active or not. Imports all GRUPs currently supported by
-     * SkyProc. If a mod being read in fits the criteria of isModToSkip(), then
-     * it will be omitted in the results.<br><br> NOTE: It is suggested for
-     * speed reasons to only import the GRUP types you are interested in by
-     * using other import functions.
+     * SkyProc. If a mod being read input fits the criteria of isModToSkip(),
+     * then it will be omitted input the results.<br><br> NOTE: It is suggested
+     * for speed reasons to only import the GRUP types you are interested input
+     * by using other import functions.
      *
      * @return A set of Mods with all their data imported and ready to be
      * manipulated.
@@ -225,11 +223,11 @@ public class SPImporter {
     }
 
     /**
-     * Imports all mods in the user's Data/ folder, no matter if they are
-     * currently active or not. Imports only GRUPS specified in the parameter.
-     * If a mod being read in fits the criteria of isModToSkip(), then it will
-     * be omitted in the results.<br><br> Related settings in SPGlobal:<br> -
-     * pathToData
+     * Imports all mods input the user's Data/ folder, no matter if they are
+     * currently active or not. Imports only GRUPS specified input the
+     * parameter. If a mod being read input fits the criteria of isModToSkip(),
+     * then it will be omitted input the results.<br><br> Related settings input
+     * SPGlobal:<br> - pathToData
      *
      * @see SPGlobal
      * @param grup_targets Any amount of GRUP targets, separated by commas, that
@@ -242,11 +240,11 @@ public class SPImporter {
     }
 
     /**
-     * Imports all mods in the user's Data/ folder, no matter if they are
-     * currently active or not. Imports only GRUPS specified in the parameter.
-     * If a mod being read in fits the criteria of isModToSkip(), then it will
-     * be omitted in the results.<br><br> Related settings in SPGlobal:<br> -
-     * pathToData
+     * Imports all mods input the user's Data/ folder, no matter if they are
+     * currently active or not. Imports only GRUPS specified input the
+     * parameter. If a mod being read input fits the criteria of isModToSkip(),
+     * then it will be omitted input the results.<br><br> Related settings input
+     * SPGlobal:<br> - pathToData
      *
      * @see SPGlobal
      * @param grup_targets An arraylist of GRUP_TYPE with the desired types to
@@ -260,16 +258,17 @@ public class SPImporter {
     }
 
     /**
-     * Loads in plugins.txt and reads in the mods the user has active, and loads
-     * only those that are also present in the data folder. Imports all GRUPs
-     * currently supported by SkyProc. If a mod being read in fits the criteria
-     * of isModToSkip(), then it will be omitted in the results.<br><br> If the
-     * program cannot locate plugins.txt, it will prompt the user to locate the
-     * file themselves. Once they do, it will create a file and use that as a
-     * reference for future patch generations.<br><br> NOTE: It is suggested for
-     * speed reasons to only import the GRUP types you are interested in by
-     * using other import functions.<br><br> Related settings in SPGlobal:<br> -
-     * pluginsListPath<br> - pathToData<br> - pluginListBackupPath
+     * Loads input plugins.txt and reads input the mods the user has active, and
+     * loads only those that are also present input the data folder. Imports all
+     * GRUPs currently supported by SkyProc. If a mod being read input fits the
+     * criteria of isModToSkip(), then it will be omitted input the
+     * results.<br><br> If the program cannot locate plugins.txt, it will prompt
+     * the user to locate the file themselves. Once they do, it will create a
+     * file and use that as a reference for future patch generations.<br><br>
+     * NOTE: It is suggested for speed reasons to only import the GRUP types you
+     * are interested input by using other import functions.<br><br> Related
+     * settings input SPGlobal:<br> - pluginsListPath<br> - pathToData<br> -
+     * pluginListBackupPath
      *
      * @see SPGlobal
      * @return A set of Mods with all their data imported and ready to be
@@ -281,15 +280,15 @@ public class SPImporter {
     }
 
     /**
-     * Loads in plugins.txt and reads in the mods the user has active, and loads
-     * only those that are also present in the data folder. Imports only GRUPS
-     * specified in the parameter. If a mod being read in fits the criteria of
-     * isModToSkip(), then it will be omitted in the results.<br><br> If the
-     * program cannot locate plugins.txt, it will prompt the user to locate the
-     * file themselves. Once they do, it will create a file and use that as a
-     * reference for future patch generations.<br><br> Related settings in
-     * SPGlobal:<br> - pluginsListPath<br> - pathToData<br> -
-     * pluginListBackupPath
+     * Loads input plugins.txt and reads input the mods the user has active, and
+     * loads only those that are also present input the data folder. Imports
+     * only GRUPS specified input the parameter. If a mod being read input fits
+     * the criteria of isModToSkip(), then it will be omitted input the
+     * results.<br><br> If the program cannot locate plugins.txt, it will prompt
+     * the user to locate the file themselves. Once they do, it will create a
+     * file and use that as a reference for future patch generations.<br><br>
+     * Related settings input SPGlobal:<br> - pluginsListPath<br> -
+     * pathToData<br> - pluginListBackupPath
      *
      * @see SPGlobal
      * @param grup_targets Any amount of GRUP targets, separated by commas, that
@@ -303,15 +302,15 @@ public class SPImporter {
     }
 
     /**
-     * Loads in plugins.txt and reads in the mods the user has active, and loads
-     * only those that are also present in the data folder. Imports only GRUPS
-     * specified in the parameter. If a mod being read in fits the criteria of
-     * isModToSkip(), then it will be omitted in the results.<br><br> If the
-     * program cannot locate plugins.txt, it will prompt the user to locate the
-     * file themselves. Once they do, it will create a file and use that as a
-     * reference for future patch generations.<br><br> Related settings in
-     * SPGlobal:<br> - pluginsListPath<br> - pathToData<br> -
-     * pluginListBackupPath
+     * Loads input plugins.txt and reads input the mods the user has active, and
+     * loads only those that are also present input the data folder. Imports
+     * only GRUPS specified input the parameter. If a mod being read input fits
+     * the criteria of isModToSkip(), then it will be omitted input the
+     * results.<br><br> If the program cannot locate plugins.txt, it will prompt
+     * the user to locate the file themselves. Once they do, it will create a
+     * file and use that as a reference for future patch generations.<br><br>
+     * Related settings input SPGlobal:<br> - pluginsListPath<br> -
+     * pathToData<br> - pluginListBackupPath
      *
      * @see SPGlobal
      * @param grup_targets An arraylist of GRUP_TYPE with the desired types to
@@ -327,9 +326,9 @@ public class SPImporter {
 
     /**
      * Looks for mods that match the given ModListings inside the data folder.
-     * It imports any that are properly located, and loads in only GRUPS
-     * specified in the parameter.<br><br> Related settings in SPGlobal:<br> -
-     * pathToData<br>
+     * It imports any that are properly located, and loads input only GRUPS
+     * specified input the parameter.<br><br> Related settings input
+     * SPGlobal:<br> - pathToData<br>
      *
      * @see SPGlobal
      * @param mods ModListings to look for and import from the data folder.
@@ -344,9 +343,9 @@ public class SPImporter {
 
     /**
      * Looks for mods that match the given ModListings inside the data folder.
-     * It imports any that are properly located, and loads in only GRUPS
-     * specified in the parameter.<br><br> Related settings in SPGlobal:<br> -
-     * pathToData<br>
+     * It imports any that are properly located, and loads input only GRUPS
+     * specified input the parameter.<br><br> Related settings input
+     * SPGlobal:<br> - pathToData<br>
      *
      * @see SPGlobal
      * @param mods ModListings to look for and import from the data folder.
@@ -364,8 +363,8 @@ public class SPImporter {
      * Looks for mods that match the given ModListings inside the data folder.
      * It imports any that are properly located, and loads ALL GRUPs supported
      * by SkyProc.<br><br> NOTE: It is suggested for speed reasons to only
-     * import the GRUP types you are interested in by using other import
-     * functions.<br><br> Related settings in SPGlobal:<br> - pathToData
+     * import the GRUP types you are interested input by using other import
+     * functions.<br><br> Related settings input SPGlobal:<br> - pathToData
      *
      * @see SPGlobal
      * @param mods ModListings to look for and import from the data folder.
@@ -377,10 +376,11 @@ public class SPImporter {
     }
 
     /**
-     * Looks for mods that match the given ModListings in the path specified. It
-     * imports any that are properly located, and loads ALL GRUPs supported by
-     * SkyProc.<br><br> NOTE: It is suggested for speed reasons to only import
-     * the GRUP types you are interested in by using other import functions.
+     * Looks for mods that match the given ModListings input the path specified.
+     * It imports any that are properly located, and loads ALL GRUPs supported
+     * by SkyProc.<br><br> NOTE: It is suggested for speed reasons to only
+     * import the GRUP types you are interested input by using other import
+     * functions.
      *
      * @param mods ModListings to look for and import from the data folder.
      * @param path Path from patch location to where to load mods from.
@@ -392,9 +392,9 @@ public class SPImporter {
     }
 
     /**
-     * Looks for mods that match the given ModListings in the path specified. It
-     * imports any that are properly located, and loads in only GRUPS specified
-     * in the parameter.
+     * Looks for mods that match the given ModListings input the path specified.
+     * It imports any that are properly located, and loads input only GRUPS
+     * specified input the parameter.
      *
      * @param mods ModListings to look for and import from the data folder.
      * @param path Path from patch location to where to load mods from.
@@ -465,7 +465,7 @@ public class SPImporter {
 
     /**
      * Looks for a mod matching the ModListing inside the given path. If
-     * properly located, it imports only GRUPS specified in the parameter.
+     * properly located, it imports only GRUPS specified input the parameter.
      *
      * @param listing Mod name and suffix to look for.
      * @param path Path to look for the mod data.
@@ -482,7 +482,7 @@ public class SPImporter {
 
     /**
      * Looks for a mod matching the ModListing inside the given path. If
-     * properly located, it imports only GRUPS specified in the parameter.
+     * properly located, it imports only GRUPS specified input the parameter.
      *
      * @param listing Mod name and suffix to look for.
      * @param path Path to look for the mod data.
@@ -512,7 +512,7 @@ public class SPImporter {
 		importStringLocations(plugin);
 	    }
 
-	    GRUPIterator iter = new GRUPIterator(plugin, grup_targets, input);
+	    GRUPIterator iter = new GRUPIterator(grup_targets, input);
 	    while (iter.hasNext()) {
 		String result = iter.loading();
 		SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
@@ -541,29 +541,31 @@ public class SPImporter {
 
     }
 
-    static public Iterator<byte[]> getSubRecordsInGRUPs(String typeString, GRUP_TYPE... grups) {
-	return new ParsingIterator(typeString, grups);
+    static public DirtyParsingIterator getSubRecordsInGRUPs(String typeString, String... grups) {
+	return new DirtyParsingIterator(typeString, grups);
     }
 
-    static public Iterator<byte[]> getSubRecordsInGRUPs(ModListing targetMod, String typeString, GRUP_TYPE... grups) {
-	return new ParsingIterator(targetMod, typeString, grups);
+    static public DirtyParsingIterator getSubRecordsInGRUPs(ModListing targetMod, String typeString, String... grups) {
+	return new DirtyParsingIterator(targetMod, typeString, grups);
     }
 
     static class GRUPIterator implements Iterator<RecordShrinkArray> {
 
 	LFileChannel input;
-	Mod srcMod;
 	ArrayList<String> targets;
 	String loading;
 
-	GRUPIterator(Mod mod, GRUP_TYPE[] grup_targets, LFileChannel input) {
+	GRUPIterator() {
+	    targets = new ArrayList<>(0);
+	}
+
+	GRUPIterator(GRUP_TYPE[] grup_targets, LFileChannel input) {
 	    ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
 	    targets = new ArrayList<>(tmp.size());
 	    for (GRUP_TYPE g : tmp) {
 		targets.add(g.toString());
 	    }
 	    this.input = input;
-	    srcMod = mod;
 	}
 
 	@Override
@@ -572,7 +574,7 @@ public class SPImporter {
 		return false;
 	    }
 	    try {
-		loading = scanToRecordStart(input, targets);
+		loading = scanToGRUPStart(input, targets);
 		targets.remove(loading);
 		return !"NULL".equals(loading);
 	    } catch (IOException ex) {
@@ -602,31 +604,44 @@ public class SPImporter {
 	}
     }
 
-    static class ParsingIterator implements Iterator<byte[]> {
+    public static class DirtyParsingIterator implements Iterator<RecordShrinkArray> {
 
 	String typeString;
-	GRUP_TYPE[] grups;
-	LFileChannel in;
-	byte[] next;
-	boolean gotten = false;
+	ArrayList<String> grups;
+	LChannel input;
+	LFileChannel fileInput;
+	LShrinkArray uncompressed = new LShrinkArray(new byte[0]);
+	String inputStr = "";
+	String majorRecordType = "";
+	RecordShrinkArray next;
 	ArrayList<ModListing> activeMods;
+	ModListing activeMod;
 
-	ParsingIterator(String typeString, GRUP_TYPE[] grups) {
-	    this.typeString = typeString;
-	    this.grups = grups;
+	DirtyParsingIterator(String typeString, String[] grups) {
+	    init(typeString, grups);
 	    try {
 		activeMods = SPImporter.getActiveModList();
 	    } catch (IOException ex) {
 		activeMods = new ArrayList<>();
 		SPGlobal.logException(ex);
 	    }
+	    switchToNextMod();
 	}
 
-	ParsingIterator(ModListing mod, String typeString, GRUP_TYPE[] grups) {
-	    this.typeString = typeString;
-	    this.grups = grups;
+	DirtyParsingIterator(ModListing mod, String typeString, String[] grups) {
+	    init(typeString, grups);
 	    activeMods = new ArrayList<>();
 	    activeMods.add(mod);
+	    switchToNextMod();
+	}
+
+	void init(String typeString, String[] grupTypes) {
+	    this.typeString = typeString;
+	    grups = new ArrayList<>(Arrays.asList(grupTypes));
+	}
+
+	public ModListing activeMod () {
+	    return activeMod;
 	}
 
 	@Override
@@ -636,26 +651,83 @@ public class SPImporter {
 	}
 
 	@Override
-	public byte[] next() {
-	    grabNext();
+	public RecordShrinkArray next() {
 	    return next;
 	}
 
 	void grabNext() {
 
-	    // If stream is dead, we need to move to next mod.
-	    if (in == null || in.isDone()) {
-		// If we have mods left, switch to it.
-		if (activeMods.size() > 0) {
-		    in = new LFileChannel(SPGlobal.pathToData + activeMods.get(0).print());
-		    activeMods.remove(0);
+	    while (fileInput.available() >= 4 || uncompressed.available() >= 4) {
+		if (uncompressed.available() >= 4) {
+		    input = uncompressed;
 		} else {
-		    next = null;
+		    input = fileInput;
+		}
+		inputStr = input.extractString(0, 4);
+		if ("TES4".equals(inputStr)) {
+		    input.skip(input.extractInt(4) + 16);
+		} else if ("GRUP".equals(inputStr)) {
+		    int size = input.extractInt(4);
+		    String tmpMajorType = input.extractString(0, 4);
+		    if (grups.contains(tmpMajorType)) {
+			input.skip(12);
+			majorRecordType = tmpMajorType;
+		    } else if (!tmpMajorType.matches("[a-zA-Z0-9_]*")) {
+			input.skip(12);
+		    } else {
+			input.skip(size - 12);
+		    }
+		} else if (majorRecordType.equals(inputStr)
+			|| "REFR".equals(inputStr)
+			|| "ACHR".equals(inputStr)) {
+		    // If major record is target type
+		    if (typeString.equals(inputStr)) {
+			next = new RecordShrinkArray(input.extract(input.extractInt(4) + 16));
+			return;
+		    }
+
+		    // Uncompress if compressed
+		    int size = input.extractInt(4);
+		    LFlags flags = new LFlags(input.extract(4));
+		    input.skip(12);
+		    if (flags.get(MajorFlags.Compressed.value)) {
+			uncompressed = new LShrinkArray(input.extract(size));
+			try {
+			    uncompressed = uncompressed.correctForCompression();
+			} catch (DataFormatException ex) {
+			    SPGlobal.logException(ex);
+			}
+		    }
+
+		} else if (typeString.equals(inputStr)) {
+		    // Found target type
+		    next = new RecordShrinkArray(input.extract(input.extractInt(2)));
 		    return;
+		} else {
+		    // Skip Subrecord
+		    input.skip(input.extractInt(2));
 		}
 	    }
 
-	    // 
+	    if (switchToNextMod()) {
+		grabNext();
+	    }
+	}
+
+	boolean switchToNextMod() {
+	    if (fileInput != null) {
+		fileInput.close();
+	    }
+	    // If we have mods left, switch to it.
+	    if (activeMods.size() > 0) {
+		fileInput = new LFileChannel(SPGlobal.pathToData + activeMods.get(0).print());
+		activeMod = activeMods.get(0);
+		activeMods.remove(0);
+		return true;
+	    } else {
+		next = null;
+	    }
+	    return false;
 	}
 
 	@Override
@@ -663,14 +735,13 @@ public class SPImporter {
 	}
     }
 
-    static ByteBuffer extractHeaderInfo(LFileChannel in) throws BadMod, IOException {
+    static ByteBuffer extractHeaderInfo(LFileChannel in) {
 	if (Ln.arrayToString(in.extractInts(0, 4)).equals("TES4")) {
 	    int size = Ln.arrayToInt(in.extractInts(0, 4)) + 24;  // +24 for TES4 extra info
 	    in.skip(-8); // To start of TES4 header
 	    return in.extractByteBuffer(0, size);
-	} else {
-	    throw new BadMod("Mod did not have TES4 at the start of the file.");
 	}
+	return ByteBuffer.allocate(0);
     }
 
     static void importStringLocations(Mod mod) {
@@ -743,25 +814,26 @@ public class SPImporter {
 	return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + l + "." + file;
     }
 
-    static String scanToRecordStart(LFileChannel in, ArrayList<String> target) throws java.io.IOException {
+    static String scanToGRUPStart(LFileChannel in, ArrayList<String> target) throws java.io.IOException {
 	String type;
+	String intro;
 	int size;
 
 	while (in.available() >= 12) {
+	    intro = Ln.arrayToString(in.getBytes(0, 4));
+	    if ("TES4".equals(intro)) {
+		extractHeaderInfo(in);
+	    }
 	    size = Ln.arrayToInt(in.extractInts(4, 4));
-	    try {
-		type = Ln.arrayToString(in.extractInts(0, 4));
-		for (String t : target) {
-		    if (t.equals(type)) {
-			in.skip(-12); // Go to start of GRUP
-			return type;
-		    }
+	    type = Ln.arrayToString(in.extractInts(0, 4));
+	    for (String t : target) {
+		if (t.equals(type)) {
+		    in.skip(-12); // Go to start of GRUP
+		    return type;
 		}
-	    } catch (java.lang.IllegalArgumentException e) {
-		// In case the GRUP type isn't in program yet, we want to continue
 	    }
 	    // else skip GRUP
-	    in.skip(size - 12);  // -12 for parts already read in
+	    in.skip(size - 12);  // -12 for parts already read input
 	}
 
 	return "NULL";

@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import lev.*;
 import skyproc.SPGlobal.Language;
 import skyproc.SubStringPointer.Files;
+import skyproc.exceptions.BadMod;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import skyproc.gui.SPProgressBarPlug;
@@ -78,6 +79,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
 	this(info, true);
 	SPGlobal.logSync("MOD", "Parsing header");
+	if (!headerInfo.hasRemaining()) {
+	    throw new BadMod(info.print() + " did not have a TES4 header.");
+	}
 	tes.parseData(headerInfo);
     }
 

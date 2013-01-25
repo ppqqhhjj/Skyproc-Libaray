@@ -294,7 +294,7 @@ public class FormID implements Comparable, Serializable {
     }
 
     /**
-     * 
+     *
      * @param o
      * @return
      */

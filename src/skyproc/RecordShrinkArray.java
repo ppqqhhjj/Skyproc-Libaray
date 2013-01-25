@@ -5,14 +5,13 @@
 package skyproc;
 
 import lev.LChannel;
-import lev.LFileChannel;
 import lev.LShrinkArray;
 
 /**
  *
  * @author Justin Swanson
  */
-class RecordShrinkArray extends LShrinkArray {
+public class RecordShrinkArray extends LShrinkArray {
 
     int offset;
 
@@ -25,9 +24,14 @@ class RecordShrinkArray extends LShrinkArray {
 	super(rhs);
 	offset = (int) rhs.pos();
     }
-    
+
     public RecordShrinkArray() {
 	super(new byte[0]);
+	offset = 0;
+    }
+
+    public RecordShrinkArray(byte[] in) {
+	super(in);
 	offset = 0;
     }
 
@@ -39,5 +43,30 @@ class RecordShrinkArray extends LShrinkArray {
     @Override
     public void pos(long in) {
 	super.pos(in - offset);
+    }
+
+    FormID extractFormID(Mod modToStandardizeTo) {
+	FormID out = new FormID();
+	if (!isDone()) {
+	    out.setInternal(extract(4));
+	    out.standardize(modToStandardizeTo);
+	}
+	return out;
+    }
+
+    public FormID extractFormID(String type, Mod modToStandardizeTo) {
+	extractUntil(type);
+	if (!isDone()) {
+	    skip(2); // Length bytes
+	}
+	return extractFormID(modToStandardizeTo);
+    }
+
+    public FormID extractFormID(String type, ModListing modToStandardizeTo) {
+	Mod mod = SPGlobal.getDB().getMod(modToStandardizeTo);
+	if (mod == null) {
+	    return new FormID();
+	}
+	return extractFormID(type, mod);
     }
 }

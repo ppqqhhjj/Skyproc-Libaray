@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Form List Record
@@ -62,6 +63,10 @@ public class FLST extends MajorRecord {
      */
     public void addFormEntry(FormID entry) {
 	subRecords.getSubList("LNAM").add(new SubForm("LNAM", entry));
+    }
+
+    public void addAll(Collection<FormID> entries) {
+	subRecords.getSubList("LNAM").collection.addAll(entries);
     }
 
     /**
