@@ -49,10 +49,10 @@ public class BOOK extends MajorRecordDescription {
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    flags.set(in.extract(4));
-	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
-		teachesAV = ActorValue.value(in.extractInt(4));
-	    } else {
+	    if (flags.get(BookFlag.TeachesSpell.ordinal())) {
 		teachesSpell.setInternal(in.extract(4));
+	    } else {
+		teachesAV = ActorValue.value(in.extractInt(4));
 	    }
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
@@ -252,27 +252,27 @@ public class BOOK extends MajorRecordDescription {
     public boolean get(BookFlag flag) {
 	return getDATA().flags.get(flag.ordinal());
     }
-    
+
     public void setTeachesAV(ActorValue val) {
 	getDATA().teachesAV = val;
     }
-    
+
     public ActorValue getTeachesAV() {
 	return getDATA().teachesAV;
     }
-    
+
     public void setTeachesSpell(FormID spell) {
 	getDATA().teachesSpell = spell;
     }
-    
+
     public FormID getTeachesSpell () {
 	return getDATA().teachesSpell;
     }
-    
+
     public void setInventoryArt(FormID id) {
 	subRecords.setSubForm("INAM", id);
     }
-    
+
     public FormID getInventoryArt() {
 	return subRecords.getSubForm("INAM").getForm();
     }
@@ -286,11 +286,11 @@ public class BOOK extends MajorRecordDescription {
     public void setDescription(String description) {
 	subRecords.setSubStringPointer("CNAM", description);
     }
-    
+
     public String getText() {
 	return subRecords.getSubStringPointer("DESC").print();
     }
-    
+
     public void setText(String text) {
 	subRecords.setSubStringPointer("DESC", text);
     }
