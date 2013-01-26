@@ -354,55 +354,7 @@ public class ARMO extends MajorRecordDescription {
 	return subRecords.getScripts();
     }
 
-    /**
-     *
-     * @param flag
-     * @param on
-     */
-    public void set(BodyTemplate.FirstPersonFlags flag, boolean on) {
-	subRecords.getBodyTemplate().set(flag, on);
-    }
-
-    /**
-     *
-     * @param flag
-     * @return
-     */
-    public boolean get(BodyTemplate.FirstPersonFlags flag) {
-	return subRecords.getBodyTemplate().get(flag);
-    }
-
-    /**
-     *
-     * @param flag
-     * @param on
-     */
-    public void set(BodyTemplate.GeneralFlags flag, boolean on) {
-	subRecords.getBodyTemplate().set(flag, on);
-    }
-
-    /**
-     *
-     * @param flag
-     * @return
-     */
-    public boolean get(BodyTemplate.GeneralFlags flag) {
-	return subRecords.getBodyTemplate().get(flag);
-    }
-
-    /**
-     *
-     * @param type
-     */
-    public void setArmorType(ArmorType type) {
-	subRecords.getBodyTemplate().setArmorType(type);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArmorType getArmorType () {
-	return subRecords.getBodyTemplate().getArmorType();
+    public BodyTemplate getBodyTemplate() {
+	return subRecords.getBodyTemplate();
     }
 }

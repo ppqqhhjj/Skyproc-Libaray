@@ -31,7 +31,7 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public void setPrototype(SubPrototype proto) {
     }
-    
+
     public abstract SubPrototype getPrototype();
 
     public void add(SubRecord r) {

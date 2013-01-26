@@ -24,27 +24,29 @@ public class BodyTemplate extends SubShell {
     static SubPrototype BODTproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
-	    add(new BodyTemplateMain());
-	    add(new SubData("BOD2"));
+	    add(new BodyTemplateMain("BODT"));
+	    add(new BodyTemplateMain("BOD2"));
 	}
     };
 
-    static class BodyTemplateMain extends SubRecord {
+    static class BodyTemplateMain extends SubRecordTyped {
 
 	LFlags bodyParts = new LFlags(4);
 	LFlags flags = new LFlags(4);
 	ArmorType armorType = null;
 	boolean valid = false;
 
-	BodyTemplateMain() {
-	    super();
+	BodyTemplateMain(String type) {
+	    super(type);
 	}
 
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
 	    out.write(bodyParts.export(), 4);
-	    out.write(flags.export(), 4);
+	    if (isBODT()) {
+		out.write(flags.export(), 4);
+	    }
 	    if (armorType != null) {
 		out.write(armorType.ordinal());
 	    }
@@ -54,7 +56,9 @@ public class BodyTemplate extends SubShell {
 	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in);
 	    bodyParts = new LFlags(in.extract(4));
-	    flags = new LFlags(in.extract(4));
+	    if (isBODT()) {
+		flags = new LFlags(in.extract(4));
+	    }
 	    if (!in.isDone()) {
 		armorType = ArmorType.values()[in.extractInt(4)];
 	    }
@@ -63,7 +67,11 @@ public class BodyTemplate extends SubShell {
 
 	@Override
 	SubRecord getNew(String type) {
-	    return new BodyTemplateMain();
+	    return new BodyTemplateMain(type);
+	}
+
+	boolean isBODT() {
+	    return "BODT".equals(getType());
 	}
 
 	@Override
@@ -73,12 +81,14 @@ public class BodyTemplate extends SubShell {
 
 	@Override
 	int getContentLength(Mod srcMod) {
-	    return armorType == null ? 8 : 12;
-	}
-
-	@Override
-	ArrayList<String> getTypes() {
-	    return Record.getTypeList("BODT");
+	    int out = 4;
+	    if (isBODT()) {
+		out += 4;
+	    }
+	    if (armorType != null) {
+		out += 4;
+	    }
+	    return out;
 	}
     }
 
@@ -220,7 +230,8 @@ public class BodyTemplate extends SubShell {
 	/**
 	 *
 	 */
-	FX01,}
+	FX01,
+    }
 
     /**
      *
@@ -242,8 +253,17 @@ public class BodyTemplate extends SubShell {
 	}
     }
 
-    BodyTemplateMain getMain() {
-	return (BodyTemplateMain) subRecords.get("BODT");
+    public enum BodyTemplateType {
+	Normal ("BODT"),
+	Biped ("BOD2");
+	String type;
+	BodyTemplateType (String in) {
+	    type = in;
+	}
+    }
+
+    BodyTemplateMain getMain(BodyTemplateType type) {
+	return (BodyTemplateMain) subRecords.get(type.type);
     }
 
     @Override
@@ -256,8 +276,8 @@ public class BodyTemplate extends SubShell {
      * @param flag
      * @param on
      */
-    public void set(FirstPersonFlags flag, boolean on) {
-	BodyTemplateMain main = getMain();
+    public void set(BodyTemplateType type, FirstPersonFlags flag, boolean on) {
+	BodyTemplateMain main = getMain(type);
 	main.bodyParts.set(flag.ordinal(), on);
 	main.valid = true;
 
@@ -268,8 +288,8 @@ public class BodyTemplate extends SubShell {
      * @param part
      * @return
      */
-    public boolean get(FirstPersonFlags part) {
-	BodyTemplateMain main = getMain();
+    public boolean get(BodyTemplateType type, FirstPersonFlags part) {
+	BodyTemplateMain main = getMain(type);
 	main.valid = true;
 	return main.bodyParts.get(part.ordinal());
     }
@@ -280,7 +300,7 @@ public class BodyTemplate extends SubShell {
      * @param on
      */
     public void set(GeneralFlags flag, boolean on) {
-	BodyTemplateMain main = getMain();
+	BodyTemplateMain main = getMain(BodyTemplateType.Normal);
 	main.valid = true;
 	main.flags.set(flag.value, on);
     }
@@ -291,7 +311,7 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public boolean get(GeneralFlags flag) {
-	BodyTemplateMain main = getMain();
+	BodyTemplateMain main = getMain(BodyTemplateType.Normal);
 	main.valid = true;
 	return main.flags.get(flag.value);
     }
@@ -300,18 +320,18 @@ public class BodyTemplate extends SubShell {
      *
      * @param type
      */
-    public void setArmorType(ArmorType type) {
-	BodyTemplateMain main = getMain();
+    public void setArmorType(BodyTemplateType type, ArmorType armorType) {
+	BodyTemplateMain main = getMain(type);
 	main.valid = true;
-	main.armorType = type;
+	main.armorType = armorType;
     }
 
     /**
      *
      * @return
      */
-    public ArmorType getArmorType() {
-	BodyTemplateMain main = getMain();
+    public ArmorType getArmorType(BodyTemplateType type) {
+	BodyTemplateMain main = getMain(type);
 	main.valid = true;
 	return main.armorType;
     }
