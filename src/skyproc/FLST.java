@@ -66,7 +66,9 @@ public class FLST extends MajorRecord {
     }
 
     public void addAll(Collection<FormID> entries) {
-	subRecords.getSubList("LNAM").collection.addAll(entries);
+	for (FormID id : entries) {
+	    addFormEntry(id);
+	}
     }
 
     /**
