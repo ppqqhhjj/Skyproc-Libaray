@@ -45,13 +45,21 @@ public class RecordShrinkArray extends LShrinkArray {
 	super.pos(in - offset);
     }
 
-    FormID extractFormID(Mod modToStandardizeTo) {
+    public FormID extractFormID(Mod modToStandardizeTo) {
 	FormID out = new FormID();
 	if (!isDone()) {
 	    out.setInternal(extract(4));
 	    out.standardize(modToStandardizeTo);
 	}
 	return out;
+    }
+
+    public FormID extractFormID(ModListing modToStandardizeTo) {
+	Mod mod = SPGlobal.getDB().getMod(modToStandardizeTo);
+	if (mod == null) {
+	    return new FormID();
+	}
+	return extractFormID(mod);
     }
 
     public FormID extractFormID(String type, Mod modToStandardizeTo) {
