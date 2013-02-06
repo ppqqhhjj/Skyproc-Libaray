@@ -743,10 +743,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + srcMod);
+	ArrayList<FormID> allForms = srcMod.allFormIDs();
+
+	// Standardize all formIDs for good measure
+	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
+	for (FormID id : allForms) {
+	    id.standardize(srcMod);
+	}
+	SPProgressBarPlug.incrementBar();
+
 	// Add all mods that contained any of the FormIDs used.
 	SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
 	Set<ModListing> addedMods = new HashSet<>();
-	ArrayList<FormID> allForms = srcMod.allFormIDs();
 	for (FormID ID : allForms) {
 	    if (!ID.isNull()) {
 		ModListing master = ID.getMaster();
@@ -778,13 +786,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 	SPProgressBarPlug.incrementBar();
 
-	// Standardize all formIDs for good measure
-	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
-	for (FormID id : allForms) {
-	    id.standardize(srcMod);
-	}
-	SPProgressBarPlug.incrementBar();
-
 	// Export Header
 	tes.setNumRecords(numRecords());
 	if (SPGlobal.logging()) {
@@ -792,8 +793,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    SPGlobal.sync(true);
 	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
 	    SPGlobal.logSync(this.getName(), "Masters: ");
+	    int i = 0;
 	    for (String s : this.getMastersStrings()) {
-		SPGlobal.logSync(this.getName(), "   " + s);
+		SPGlobal.logSync(this.getName(), "   " + Ln.printHex(i++) + "  " + s);
 	    }
 	}
 

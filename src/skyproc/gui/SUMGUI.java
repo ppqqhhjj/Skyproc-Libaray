@@ -707,9 +707,6 @@ public class SUMGUI extends JFrame {
 	    try {
 		// Compile old and new Master lists
 		ArrayList<String> oldMasterList = save.getStrings(SUMGUISettings.LastMasterlist);
-		for (String s : oldMasterList) {
-		    SPGlobal.logMain("TEST", s);
-		}
 
 		SPDatabase db = SPGlobal.getDB();
 		ArrayList<String> curImportedMods = new ArrayList<>();

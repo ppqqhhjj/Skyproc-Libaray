@@ -677,9 +677,13 @@ public class SPImporter {
 		    } else {
 			input.skip(size - 12);
 		    }
+//		    System.out.println("Passed GRUP");
 		} else if (majorRecordType.equals(inputStr)
 			|| "REFR".equals(inputStr)
-			|| "ACHR".equals(inputStr)) {
+			|| "ACHR".equals(inputStr)
+			|| "LAND".equals(inputStr)
+			|| "NAVM".equals(inputStr)
+			|| "NVNM".equals(inputStr)) {
 		    // If major record is target type
 		    if (typeString.equals(inputStr)) {
 			next = new RecordShrinkArray(input.extract(input.extractInt(4) + 16));
@@ -689,7 +693,17 @@ public class SPImporter {
 		    // Uncompress if compressed
 		    int size = input.extractInt(4);
 		    LFlags flags = new LFlags(input.extract(4));
-		    input.skip(12);
+		    FormID id = new FormID();
+		    id.setInternal(input.extract(4));
+//		    System.out.println(inputStr + " major record with ID: " + id);
+		    input.skip(8);
+
+		    if (inputStr.equals("NAVM")) {
+			input.skip(size);
+//			System.out.println("Skipping size:  " + size);
+			continue;
+		    }
+
 		    if (flags.get(MajorFlags.Compressed.value)) {
 			uncompressed = new LShrinkArray(input.extract(size));
 			try {
@@ -705,6 +719,7 @@ public class SPImporter {
 		    return;
 		} else {
 		    // Skip Subrecord
+//		    System.out.println(inputStr + " sub record");
 		    input.skip(input.extractInt(2));
 		}
 	    }

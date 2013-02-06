@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import lev.LFileChannel;
@@ -292,8 +292,8 @@ public class NiftyFunc {
 	    int length;
 	    long start = 0;
 	    String EDID = "";
-	    Set<Integer> formids = new HashSet<>();
-	    Set<Integer> dupIds = new HashSet<>();
+	    Map<Integer, String> formids = new HashMap<>();
+	    Map<Integer, String> dupIds = new HashMap<>();
 	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
 
 		inputStr = input.extractString(0, 4);
@@ -313,15 +313,15 @@ public class NiftyFunc {
 		    length = input.extractInt(0, 4);
 		    input.skip(4);
 		    int formID = input.extractInt(4);
-		    if (formids.contains(formID)) {
-			dupIds.add(formID);
-		    } else {
-			formids.add(formID);
-		    }
 		    input.skip(8);
 		    int edidLength = input.extractInt(4, 2);
 		    EDID = input.extractString(0, edidLength - 1);
 		    input.skip(length - 6 - EDID.length());
+		    if (formids.containsKey(formID)) {
+			dupIds.put(formID, EDID);
+		    } else {
+			formids.put(formID, EDID);
+		    }
 		} else {
 		    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
 		    numErrors++;
@@ -331,8 +331,8 @@ public class NiftyFunc {
 
 	    if (!dupIds.isEmpty()) {
 		SPGlobal.logError(recordLengths, "Duplicate FormIDs: ");
-		for (int id : dupIds) {
-		    SPGlobal.logError(recordLengths, Ln.printHex(id));
+		for (int id : dupIds.keySet()) {
+		    SPGlobal.logError(recordLengths, Ln.printHex(id) + ", EDIDS: " + dupIds.get(id) + ", and " + formids.get(id));
 		}
 		correct = false;
 	    }

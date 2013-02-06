@@ -48,7 +48,10 @@ public class RecordShrinkArray extends LShrinkArray {
     public FormID extractFormID(Mod modToStandardizeTo) {
 	FormID out = new FormID();
 	if (!isDone()) {
-	    out.setInternal(extract(4));
+	    byte[] extract = extract(4);
+	    byte[] copy = new byte[4];
+	    System.arraycopy(extract, 0, copy, 0, copy.length);
+	    out.setInternal(copy);
 	    out.standardize(modToStandardizeTo);
 	}
 	return out;
