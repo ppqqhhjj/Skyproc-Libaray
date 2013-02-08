@@ -745,13 +745,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + srcMod);
 	ArrayList<FormID> allForms = srcMod.allFormIDs();
 
-	// Standardize all formIDs for good measure
-	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
-	for (FormID id : allForms) {
-	    id.standardize(srcMod);
-	}
-	SPProgressBarPlug.incrementBar();
-
 	// Add all mods that contained any of the FormIDs used.
 	SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
 	Set<ModListing> addedMods = new HashSet<>();
@@ -783,6 +776,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		    }
 		}
 	    }
+	}
+	SPProgressBarPlug.incrementBar();
+
+	// Standardize all formIDs for good measure
+	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
+	for (FormID id : allForms) {
+	    id.standardize(srcMod);
 	}
 	SPProgressBarPlug.incrementBar();
 
