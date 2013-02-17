@@ -76,7 +76,10 @@ class SubRecordsCopied extends SubRecords {
     @Override
     public SubRecord get(String in) {
 	if (!map.containsKey(in)) {
-	    map.put(in, (SubRecord) Ln.deepCopy(orig.get(in)));
+	    SubRecord s = (SubRecord) Ln.deepCopy(orig.get(in));
+	    for (String t : s.getTypes()) {
+		map.put(t, s);
+	    }
 	}
 	return map.get(in);
     }
