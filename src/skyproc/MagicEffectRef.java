@@ -203,4 +203,28 @@ public class MagicEffectRef extends SubShellBulkType {
     public int getDuration() {
 	return getEFIT().duration;
     }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Condition> getConditions() {
+	return subRecords.getSubList("CTDA").toPublic();
+    }
+
+    /**
+     *
+     * @param c
+     */
+    public void addCondition(Condition c) {
+	subRecords.getSubList("CTDA").add(c);
+    }
+
+    /**
+     *
+     * @param c
+     */
+    public void removeCondition(Condition c) {
+	subRecords.getSubList("CTDA").remove(c);
+    }
 }
