@@ -4,21 +4,15 @@
  */
 package skyproc.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import lev.gui.LImagePane;
-import lev.gui.LLabel;
-import lev.gui.LPanel;
-import lev.gui.LSaveFile;
-import lev.gui.resources.LFonts;
+import javax.swing.JScrollPane;
+import lev.gui.*;
 import skyproc.SPGlobal;
 
 /**
@@ -31,13 +25,14 @@ public class SPMainMenuPanel extends JPanel {
 
     static final int spacing = 35;
     static final int xPlacement = SUMGUI.leftDimensions.width - 25;
-    int yPlacement = 170;
+    int yPlacement = 0;
     LImagePane customLogo;
     LLabel version;
     Color color;
     /**
      * Reference to the left column main menu panel.
      */
+    protected LScrollPane menuScroll;
     protected LPanel menuPanel = new LPanel(SUMGUI.leftDimensions);
     ArrayList<SPSettingPanel> panels = new ArrayList<>();
     SPSettingPanel welcome = null;
@@ -52,7 +47,14 @@ public class SPMainMenuPanel extends JPanel {
 	this.setLayout(null);
 	setSize(SUMGUI.middleLeftDimensions.getSize());
 	setLocation(0, 0);
-	add(menuPanel);
+	int topMargin = 170;
+	int bottomMargin = 40;
+	menuPanel.setPreferredSize(menuPanel.getSize());
+	menuScroll = new LScrollPane(menuPanel);
+	menuScroll.setLocation(0, topMargin);
+	menuScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	menuScroll.setSize(SUMGUI.leftDimensions.width, SUMGUI.leftDimensions.height - topMargin - bottomMargin);
+	add(menuScroll);
 	setOpaque(false);
 	color = menuColor;
     }
@@ -75,7 +77,7 @@ public class SPMainMenuPanel extends JPanel {
 	    customLogo = new LImagePane(logo);
 	    customLogo.setMaxSize(SUMGUI.leftDimensions.width, height);
 	    customLogo.setLocation(SUMGUI.leftDimensions.width / 2 - customLogo.getWidth() / 2, 14);
-	    menuPanel.Add(customLogo);
+	    add(customLogo);
 	    tieWelcomeAndLogo();
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
@@ -100,7 +102,7 @@ public class SPMainMenuPanel extends JPanel {
     public void setVersion(String version, Point location) {
 	if (!hasVersion()) {
 	    this.version = new LLabel(version, new Font("Serif", Font.PLAIN, 10), SUMGUI.darkGray);
-	    menuPanel.Add(this.version);
+	    add(this.version);
 	}
 	this.version.setLocation(location);
     }
@@ -143,6 +145,7 @@ public class SPMainMenuPanel extends JPanel {
 	yPlacement += spacing;
 	menuConfig.addActionListener(panel.getOpenHandler());
 	menuPanel.add(menuConfig);
+	menuPanel.setPreferredSize(new Dimension(menuPanel.getPreferredSize().width, yPlacement));
 	return menuConfig;
     }
 
