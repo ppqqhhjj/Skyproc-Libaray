@@ -318,18 +318,26 @@ public class ARMO extends MajorRecordDescription {
      *
      * @param rating
      */
-    public void setArmorRating(int rating) {
-	subRecords.setSubData("DNAM", rating * 100);
+    public void setArmorRatingFloat(float rating) {
+	subRecords.setSubData("DNAM", (int) rating * 100);
     }
 
     /**
      *
      * @return
      */
-    public int getArmorRating() {
-	return subRecords.getSubData("DNAM").toInt() / 100;
+    public float getArmorRatingFloat() {
+	return (float) (subRecords.getSubData("DNAM").toInt() / 100.0);
     }
-
+    
+    public void setArmorRating(int rating) {
+	subRecords.setSubData("DNAM", rating);
+    }
+    
+    public int getArmorRating() {
+	return subRecords.getSubData("DNAM").toInt();
+    }
+    
     /**
      *
      * @param template
