@@ -92,6 +92,7 @@ public enum GRUP_TYPE {
      *
      */
     LVLI,
+    WTHR,
     /**
      * Image Spaces
      */

@@ -47,6 +47,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<NPC_> NPCs = new GRUP<>(this, new NPC_());
     GRUP<LVLN> leveledCreatures = new GRUP<>(this, new LVLN());
     GRUP<LVLI> leveledItems = new GRUP<>(this, new LVLI());
+    GRUP<WTHR> weathers = new GRUP<>(this, new WTHR());
     GRUP<QUST> quests = new GRUP<>(this, new QUST());
     GRUP<IMGS> imageSpaces = new GRUP<>(this, new IMGS());
     GRUP<FLST> formLists = new GRUP<>(this, new FLST());
@@ -141,6 +142,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(leveledCreatures.getContainedType(), leveledCreatures);
 	leveledItems.dateStamp = new byte[]{(byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0};
 	GRUPs.put(leveledItems.getContainedType(), leveledItems);
+	GRUPs.put(weathers.getContainedType(), weathers);
 	GRUPs.put(quests.getContainedType(), quests);
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
@@ -1254,6 +1256,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<BOOK> getBooks() {
 	return books;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Book records
+     */
+    public GRUP<WTHR> getWeathers() {
+	return weathers;
     }
 
     /**
