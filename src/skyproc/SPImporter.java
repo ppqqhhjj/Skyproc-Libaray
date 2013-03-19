@@ -561,6 +561,11 @@ public class SPImporter {
 
 	GRUPIterator(GRUP_TYPE[] grup_targets, LFileChannel input) {
 	    ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
+	    for (GRUP_TYPE g : new ArrayList<>(tmp)) {
+		if (GRUP_TYPE.unfinished(g)) {
+		    tmp.remove(g);
+		}
+	    }
 	    targets = new ArrayList<>(tmp.size());
 	    for (GRUP_TYPE g : tmp) {
 		targets.add(g.toString());
