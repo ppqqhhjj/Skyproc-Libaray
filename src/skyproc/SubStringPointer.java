@@ -2,6 +2,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -159,4 +160,28 @@ class SubStringPointer extends SubRecordTyped {
 
 	STRINGS, ILSTRINGS, DLSTRINGS;
     }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 97 * hash + Objects.hashCode(this.text);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubStringPointer other = (SubStringPointer) obj;
+	if (!Objects.equals(this.text, other.text)) {
+	    return false;
+	}
+	return true;
+    }
+
+    
 }

@@ -128,4 +128,21 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	out.addAll(markers);
 	return out;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubMarkerSet<T> other = (SubMarkerSet<T>) obj;
+	for (String marker : markers) {
+	    if (!set.get(marker).equals(other.set.get(marker))) {
+		return false;
+	    }
+	}
+	return true;
+    }
 }

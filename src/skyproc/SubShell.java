@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -72,5 +73,27 @@ class SubShell extends SubRecord {
     @Override
     SubRecord getNew(String type) {
 	return new SubShell(subRecords.prototype);
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 61 * hash + Objects.hashCode(this.subRecords);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubShell other = (SubShell) obj;
+	if (!this.subRecords.equals(other.subRecords)) {
+	    return false;
+	}
+	return true;
     }
 }

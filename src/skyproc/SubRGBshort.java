@@ -113,4 +113,40 @@ public class SubRGBshort extends SubRecordTyped {
 		return a;
 	}
     }
+
+    @Override
+    public int hashCode() {
+	int hash = 3;
+	hash = 97 * hash + this.r;
+	hash = 97 * hash + this.g;
+	hash = 97 * hash + this.b;
+	hash = 97 * hash + this.a;
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubRGBshort other = (SubRGBshort) obj;
+	if (this.r != other.r) {
+	    return false;
+	}
+	if (this.g != other.g) {
+	    return false;
+	}
+	if (this.b != other.b) {
+	    return false;
+	}
+	if (this.a != other.a) {
+	    return false;
+	}
+	return true;
+    }
+
+    
 }

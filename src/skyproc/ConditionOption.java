@@ -21,7 +21,7 @@ class ConditionOption implements Serializable {
     Enum script;
     RunOnType runType = RunOnType.Subject;
     FormID reference = new FormID();
-    byte[] p3placeholder = { 0xF, 0xF, 0xF, 0xF };
+    byte[] p3placeholder = { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
 
     public static ConditionOption getOption(int index) {
 	Enum script = Condition.getScript(index);

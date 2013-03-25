@@ -293,8 +293,8 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	if (!(o instanceof SubList)) {
 	    return false;
 	}
-	SubList s = (SubList) o; // Convert the object to a Person
-	return (this.collection.equals(s.collection));
+	SubList s = (SubList) o;
+	return (Ln.equals(collection, s.collection, true));
     }
 
     @Override

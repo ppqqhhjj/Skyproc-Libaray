@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -259,4 +260,24 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
 	return out;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (!(obj instanceof SubRecords)) {
+	    return false;
+	}
+	final SubRecords other = (SubRecords) obj;
+	Iterator<SubRecord> lhs = this.iterator();
+	Iterator<SubRecord> rhs = other.iterator();
+	while (lhs.hasNext() && rhs.hasNext()) {
+	    if (!lhs.next().equals(rhs.next())) {
+		return false;
+	    }
+	}
+	return !lhs.hasNext() && !rhs.hasNext();
+    }
+
 }

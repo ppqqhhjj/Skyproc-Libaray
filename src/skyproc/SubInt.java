@@ -5,6 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LExporter;
 import lev.LShrinkArray;
@@ -80,5 +81,27 @@ class SubInt extends SubRecordTyped {
     @Override
     boolean isValid() {
 	return data != null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubInt other = (SubInt) obj;
+	if (!Objects.equals(this.data, other.data)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 71 * hash + Objects.hashCode(this.data);
+	return hash;
     }
 }

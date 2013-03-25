@@ -73,7 +73,7 @@ public class SubFormInt extends SubFormData {
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = super.hashCode();
         hash = 79 * hash + this.num;
         return hash;
     }
@@ -90,6 +90,10 @@ public class SubFormInt extends SubFormData {
             return false;
         }
         SubFormInt s = (SubFormInt) o;
-        return this.ID.equals(s.ID);
+	if (!this.ID.equals(s.ID) || num != s.num) {
+	    return false;
+	}
+	
+        return true;
     }
 }

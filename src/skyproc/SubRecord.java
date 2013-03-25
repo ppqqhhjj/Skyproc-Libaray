@@ -68,6 +68,25 @@ public abstract class SubRecord extends Record {
     void fetchStringPointers (MajorRecord r) {
 	fetchStringPointers(r.srcMod);
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	SubRecord other = (SubRecord) obj;
+	if (!other.getType().equals(getType())) {
+	    return false;
+	}
+	return subRecordEquals(other);
+    }
+    
+    boolean subRecordEquals(SubRecord subRecord) {
+	throw new UnsupportedOperationException("Equals functionality not yet supported for subrecord: " + this.getClass().getSimpleName());
+    }
 
     @Override
     Record getNew() {

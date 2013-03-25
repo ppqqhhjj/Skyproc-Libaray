@@ -1,6 +1,7 @@
 package skyproc;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -61,5 +62,27 @@ class SubFlag extends SubRecordTyped {
     @Override
     int getContentLength(Mod srcMod) {
 	return flags.length();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubFlag other = (SubFlag) obj;
+	if (!Objects.equals(this.flags, other.flags)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 89 * hash + Objects.hashCode(this.flags);
+	return hash;
     }
 }

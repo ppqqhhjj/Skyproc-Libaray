@@ -23,50 +23,50 @@ class SubFormData extends SubForm {
     byte[] data;
 
     SubFormData(String type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-        this(type);
-        parseData(in);
+	this(type);
+	parseData(in);
     }
 
     SubFormData(String type, FormID id, byte[] data) {
-        super(type, id);
-        this.data = data;
+	super(type, id);
+	this.data = data;
     }
 
     SubFormData(String in) {
-        super(in);
+	super(in);
     }
 
     @Override
     void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-        super.parseData(in);
-        setData(in.extract(4));
+	super.parseData(in);
+	setData(in.extract(4));
     }
 
     @Override
     int getContentLength(Mod srcMod) {
-        return data.length + super.getContentLength(srcMod);
+	return data.length + super.getContentLength(srcMod);
     }
 
     @Override
     SubRecord getNew(String type_) {
-        return new SubFormData(type_);
+	return new SubFormData(type_);
     }
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-        super.export(out, srcMod);
-        out.write(data, 0);
+	super.export(out, srcMod);
+	out.write(data, 0);
     }
 
     public byte[] getData() {
-        return data;
+	return data;
     }
 
     public void setData(byte[] in) {
-        data = in;
-        if (logging()) {
-            logSync(toString(), "Setting " + toString() + " data: " + Ln.printHex(in, false, true));
-        }
+	data = in;
+	if (logging()) {
+	    logSync(toString(), "Setting " + toString() + " data: " + Ln.printHex(in, false, true));
+	}
     }
 
     @Override
@@ -78,7 +78,8 @@ class SubFormData extends SubForm {
 	    return false;
 	}
 	final SubFormData other = (SubFormData) obj;
-	if (!Arrays.equals(this.data, other.data) && this.ID.equals(other.ID)) {
+	if (!ID.equals(other.ID)
+		|| !Arrays.equals(this.data, other.data)) {
 	    return false;
 	}
 	return true;
@@ -86,8 +87,8 @@ class SubFormData extends SubForm {
 
     @Override
     public int hashCode() {
-	int hash = 3;
-	hash = 79 * hash + Arrays.hashCode(this.data);
+	int hash = super.hashCode();
+	hash = 61 * hash + Arrays.hashCode(this.data);
 	return hash;
     }
 }
