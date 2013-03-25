@@ -132,7 +132,7 @@ public class QUST extends MajorRecordNamed {
     };
 
     public abstract static class Alias extends SubShellBulkType {
-
+	
 	Alias(SubPrototype proto) {
 	    super(proto, false);
 	}
@@ -144,6 +144,25 @@ public class QUST extends MajorRecordNamed {
 	public String getName() {
 	    return subRecords.getSubString("ALID").print();
 	}
+	
+	public abstract void setAliasID(int val);
+	
+	public abstract int getAliasID();
+	
+	public void setAliasName(String name) {
+	    subRecords.setSubString("ALID", name);
+	}
+	
+	public String getAliasName() {
+	    return subRecords.getSubString("ALID").print();
+	}
+	
+	public void setUniqueActor(FormID id) {
+	}
+	
+	public FormID getUniqueActor() {
+	    return FormID.NULL;
+	}
     }
 
     /**
@@ -151,6 +170,11 @@ public class QUST extends MajorRecordNamed {
      */
     public static class AliasLocation extends Alias {
 
+	public AliasLocation(int val) {
+	    this();
+	    setAliasID(val);
+	}
+	
 	AliasLocation() {
 	    super(aliasLocationProto);
 	}
@@ -164,19 +188,13 @@ public class QUST extends MajorRecordNamed {
 	    setName(name);
 	}
 
-	/**
-	 *
-	 * @param loc
-	 */
-	public void setLocation(int loc) {
-	    subRecords.setSubInt("ALLS", loc);
+	@Override
+	public void setAliasID(int val) {
+	    subRecords.setSubInt("ALLS", val);
 	}
 
-	/**
-	 *
-	 * @return
-	 */
-	public int getLocation() {
+	@Override
+	public int getAliasID() {
 	    return subRecords.getSubInt("ALLS").get();
 	}
     }
@@ -186,6 +204,11 @@ public class QUST extends MajorRecordNamed {
      */
     public static class AliasReference extends Alias {
 
+	public AliasReference(int val) {
+	    this();
+	    setAliasID(val);
+	}
+	
 	AliasReference() {
 	    super(aliasReferenceProto);
 	}
@@ -199,21 +222,26 @@ public class QUST extends MajorRecordNamed {
 	    setName(name);
 	}
 
-	/**
-	 *
-	 * @param ref
-	 */
-	public void setReference(int ref) {
-	    subRecords.setSubInt("ALST", ref);
+	@Override
+	public void setAliasID(int val) {
+	    subRecords.setSubInt("ALST", val);
 	}
 
-	/**
-	 *
-	 * @return
-	 */
-	public int getReference() {
+	@Override
+	public int getAliasID() {
 	    return subRecords.getSubInt("ALST").get();
 	}
+
+	@Override
+	public FormID getUniqueActor() {
+	    return subRecords.getSubForm("ALUA").getForm();
+	}
+
+	@Override
+	public void setUniqueActor(FormID id) {
+	    subRecords.setSubForm("ALUA", id);
+	}
+	
     }
 
     static class DNAM extends SubRecord {
@@ -777,22 +805,6 @@ public class QUST extends MajorRecordNamed {
      */
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArrayList<AliasReference> getReferenceAliases() {
-	return subRecords.getSubList("ALST").toPublic();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArrayList<AliasLocation> getLocationAliases() {
-	return subRecords.getSubList("ALLS").toPublic();
     }
     
     DNAM getDNAM() {

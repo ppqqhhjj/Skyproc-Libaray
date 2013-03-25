@@ -895,4 +895,13 @@ public class WEAP extends MajorRecordDescription {
     public FormID getTemplate() {
 	return subRecords.getSubForm("CNAM").getForm();
     }
+    
+    public ArrayList<AltTextures.AltTexture> getAltTextures() {
+	AltTextures t = (AltTextures) subRecords.get("MODS");
+	return t.altTextures;
+    }
+    
+    public boolean equalAltTextures(WEAP rhs) {
+	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
+    }
 }
