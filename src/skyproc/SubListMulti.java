@@ -17,13 +17,20 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubListMulti extends SubList {
+public class SubListMulti<T extends SubRecord> extends SubList {
 
     Map<String, SubRecord> prototypes = new HashMap<>(2);
 
     SubListMulti(SubRecord ... prototypes) {
 	super(prototypes[0]);
 	for (SubRecord s : prototypes) {
+	    this.prototypes.put(s.getType(), s);
+	}
+    }
+
+    SubListMulti(SubListMulti<T> rhs) {
+	super(rhs);
+	for (SubRecord s : rhs.prototypes.values()) {
 	    this.prototypes.put(s.getType(), s);
 	}
     }
@@ -51,5 +58,10 @@ public class SubListMulti extends SubList {
 	    set.addAll(s.getTypes());
 	}
 	return new ArrayList<>(set);
+    }
+
+    @Override
+    SubRecord getNew(String type) {
+	return new SubListMulti(this);
     }
 }

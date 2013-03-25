@@ -20,8 +20,7 @@ import skyproc.exceptions.BadRecord;
 public class QUST extends MajorRecordNamed {
 
     // Static prototypes and definitions
-    static SubPrototype ALSTALLSproto = new SubPrototype() {
-
+    static final SubPrototype ALSTALLSproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
 	    add(SubString.getNew("ALID", true));
@@ -32,18 +31,17 @@ public class QUST extends MajorRecordNamed {
 	    add(SubString.getNew("ALFE", false));
 	    add(new SubForm("ALFL"));
 	    add(new SubForm("ALFR"));
+	    add(new SubInt("ALFA"));
 	    add(new SubForm("ALRT"));
 	    add(new SubInt("ALFD"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubInt("ALCA"));
+	    add(new SubData("ALCA"));
 	    add(new SubInt("ALCL"));
 	    add(new SubInt("ALEA"));
-	    add(new SubInt("ALFA"));
 	    add(new SubInt("ALNA"));
 	    add(new SubInt("ALNT"));
-	    add(new SubData("ALED"));
 	    add(new SubForm("VTCK"));
-	    forceExport("VTCK");
+	    add(new SubData("ALED"));
 	    add(new SubForm("ALDN"));
 	    add(new SubList<>(new SubForm("ALFC")));
 	    add(new SubList<>(new SubInt("ALFI")));
@@ -59,7 +57,6 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasLocationProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALLS"));
@@ -67,15 +64,14 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasReferenceProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALST"));
 	    mergeIn(ALSTALLSproto);
+	    forceExport("VTCK");
 	}
     };
     static final SubPrototype questLogEntryProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubFlag("QSDT", 1));
@@ -88,7 +84,6 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questStageProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new INDX());
@@ -96,7 +91,6 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questTargetProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new QuestTargetData());
@@ -104,7 +98,6 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questObjectiveProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("QOBJ", 2));
@@ -114,7 +107,6 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
-
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
@@ -125,7 +117,6 @@ public class QUST extends MajorRecordNamed {
 	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
 	    add(new SubShellBulkType(new SubPrototype() {
-
 		@Override
 		protected void addRecords() {
 		    add(new SubData("NEXT"));
@@ -134,10 +125,11 @@ public class QUST extends MajorRecordNamed {
 		}
 	    }, false));
 	    add(new SubList<>(new QuestStage()));
-	    add(new SubInt("ANAM"));
 	    add(new SubList<>(new QuestObjective()));
-	    add(new SubList<>(new AliasLocation()));
-	    add(new SubList<>(new AliasReference()));
+	    add(new SubInt("ANAM"));
+//	    add(new SubList<>(new AliasLocation()));
+//	    add(new SubList<>(new AliasReference()));
+	    add(new SubListMulti<Alias>(new AliasLocation(), new AliasReference()));
 	}
     };
 
@@ -157,7 +149,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class AliasLocation extends Alias {
 
@@ -166,7 +158,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 */
 	public AliasLocation(String name) {
@@ -175,7 +167,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param loc
 	 */
 	public void setLocation(int loc) {
@@ -183,7 +175,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getLocation() {
@@ -192,7 +184,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class AliasReference extends Alias {
 
@@ -201,7 +193,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 */
 	public AliasReference(String name) {
@@ -210,7 +202,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ref
 	 */
 	public void setReference(int ref) {
@@ -218,7 +210,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getReference() {
@@ -317,12 +309,12 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class QuestStage extends SubShellBulkType {
 
 	/**
-	 * 
+	 *
 	 */
 	public QuestStage() {
 	    super(questStageProto, false);
@@ -333,7 +325,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getJournalIndex() {
@@ -341,7 +333,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param value
 	 */
 	public void setJournalIndex(int value) {
@@ -349,7 +341,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param flag
 	 * @return
 	 */
@@ -358,7 +350,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param flag
 	 * @param on
 	 */
@@ -367,7 +359,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public ArrayList<QuestLogEntry> getLogEntries() {
@@ -375,7 +367,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param entry
 	 */
 	public void addLogEntry(QuestLogEntry entry) {
@@ -384,12 +376,12 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class QuestLogEntry extends SubShell {
 
 	/**
-	 * 
+	 *
 	 */
 	public QuestLogEntry() {
 	    super(questLogEntryProto);
@@ -401,7 +393,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param flag
 	 * @param on
 	 */
@@ -410,7 +402,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param flag
 	 * @return
 	 */
@@ -444,7 +436,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class QuestObjective extends SubShellBulkType {
 
@@ -453,7 +445,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param index
 	 * @param name
 	 */
@@ -469,7 +461,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param index
 	 */
 	public final void setIndex(int index) {
@@ -477,7 +469,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getIndex() {
@@ -485,7 +477,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param in
 	 */
 	public final void setName(String in) {
@@ -493,7 +485,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getName() {
@@ -501,7 +493,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public ArrayList<QuestTarget> getTargets() {
@@ -509,7 +501,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param target
 	 */
 	public void addTarget(QuestTarget target) {
@@ -557,7 +549,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      */
     public static class QuestTarget extends SubShell {
 
@@ -566,7 +558,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param aliasID
 	 */
 	public QuestTarget(int aliasID) {
@@ -584,7 +576,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param aliasID
 	 */
 	public final void setTargetAlias(int aliasID) {
@@ -593,7 +585,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getTargetAlias() {
@@ -627,35 +619,35 @@ public class QUST extends MajorRecordNamed {
 
     // Enums
     /**
-     * 
+     *
      */
     public enum QuestStageFlags {
 
 	/**
-	 * 
+	 *
 	 */
 	StartUpStage,
 	/**
-	 * 
+	 *
 	 */
 	ShutDownStage,
 	/**
-	 * 
+	 *
 	 */
 	KeepInstanceDataFromHereOn;
     }
 
     /**
-     * 
+     *
      */
     public enum QuestLogFlags {
 
 	/**
-	 * 
+	 *
 	 */
 	CompleteQuest,
 	/**
-	 * 
+	 *
 	 */
 	FailQuest;
     }
@@ -718,7 +710,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArrayList<QuestStage> getQuestStages() {
@@ -726,15 +718,15 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @param stage
      */
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public ArrayList<AliasReference> getReferenceAliases() {
@@ -742,7 +734,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public ArrayList<AliasLocation> getLocationAliases() {

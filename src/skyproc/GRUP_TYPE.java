@@ -122,7 +122,7 @@ public enum GRUP_TYPE {
      */
     ECZN,
     /**
-     * 
+     *
      */
     LGTM,
     /**

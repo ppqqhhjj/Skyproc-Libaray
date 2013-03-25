@@ -65,6 +65,16 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if (!other.getType().equals(getType())) {
 	    return false;
 	}
+	if (!ID.equals(other.ID)) {
+	    return false;
+	}
+	return true;
+    }
+
+    public boolean deepEquals(MajorRecord other) {
+	if (!other.getType().equals(getType())) {
+	    return false;
+	}
 	if (!subRecords.equals(other.subRecords)) {
 	    return false;
 	}
