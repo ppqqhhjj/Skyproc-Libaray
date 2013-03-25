@@ -52,6 +52,7 @@ public class ARMA extends MajorRecord {
 	    add(new SubForm("NAM3"));
 	    add(new SubList<>(new SubForm("MODL")));
 	    add(new SubForm("SNDD"));
+	    add(new SubForm("ONAM"));
 	}
     };
     static final class DNAM extends SubRecord {

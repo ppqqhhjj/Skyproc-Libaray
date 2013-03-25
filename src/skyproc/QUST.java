@@ -76,7 +76,7 @@ public class QUST extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubFlag("QSDT", 1));
 	    add(new SubForm("NAM0"));
-	    add(SubString.getNew("CNAM", true));
+	    add(new SubStringPointer("CNAM", SubStringPointer.Files.DLSTRINGS));
 	    add(new SubData("SCHR"));
 	    add(new SubForm("QNAM"));
 	    add(SubString.getNew("SCTX", false));
@@ -113,7 +113,7 @@ public class QUST extends MajorRecordNamed {
 	    reposition("FULL");
 	    add(new DNAM());
 	    add(SubString.getNew("ENAM", false));
-	    add(new SubForm("QTGL"));
+	    add(new SubList<>(new SubForm("QTGL")));
 	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
 	    add(new SubShellBulkType(new SubPrototype() {
@@ -127,13 +127,11 @@ public class QUST extends MajorRecordNamed {
 	    add(new SubList<>(new QuestStage()));
 	    add(new SubList<>(new QuestObjective()));
 	    add(new SubInt("ANAM"));
-//	    add(new SubList<>(new AliasLocation()));
-//	    add(new SubList<>(new AliasReference()));
 	    add(new SubListMulti<Alias>(new AliasLocation(), new AliasReference()));
 	}
     };
 
-    abstract static class Alias extends SubShellBulkType {
+    public abstract static class Alias extends SubShellBulkType {
 
 	Alias(SubPrototype proto) {
 	    super(proto, false);
@@ -220,12 +218,11 @@ public class QUST extends MajorRecordNamed {
 
     static class DNAM extends SubRecord {
 
-	LFlags flags1 = new LFlags(1);
-	LFlags flags2 = new LFlags(1);
+	LFlags flags = new LFlags(2);
 	byte priority = 0;
 	byte unknown = 0;
 	int unknown2 = 0;
-	int questType = 0;
+	QuestType questType = QuestType.None;
 
 	DNAM() {
 	    super();
@@ -244,23 +241,21 @@ public class QUST extends MajorRecordNamed {
 	@Override
 	void export(LExporter out, Mod srcMod) throws IOException {
 	    super.export(out, srcMod);
-	    out.write(flags1.export());
-	    out.write(flags2.export());
+	    out.write(flags.export());
 	    out.write(priority, 1);
 	    out.write(unknown, 1);
 	    out.write(unknown2);
-	    out.write(questType);
+	    out.write(questType.ordinal());
 	}
 
 	@Override
 	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in);
-	    flags1.set(in.extract(1));
-	    flags2.set(in.extract(1));
+	    flags.set(in.extract(2));
 	    priority = in.extract(1)[0];
 	    unknown = in.extract(1)[0];
 	    unknown2 = in.extractInt(4);
-	    questType = in.extractInt(4);
+	    questType = QuestType.values()[in.extractInt(4)];
 	}
 
 	@Override
@@ -433,6 +428,22 @@ public class QUST extends MajorRecordNamed {
 	public void removeCondition(Condition c) {
 	    subRecords.getSubList("CTDA").remove(c);
 	}
+	
+	public void setJournalText(String text) {
+	    subRecords.setSubStringPointer("CNAM", text);
+	}
+	
+	public String getJournalText() {
+	    return subRecords.getSubStringPointer("CNAM").print();
+	}
+	
+	public void setNextQuest(FormID id) {
+	    subRecords.setSubForm("NAM0", id);
+	}
+	
+	public FormID getNextQuest() {
+	    return subRecords.getSubForm("NAM0").getForm();
+	}
     }
 
     /**
@@ -498,6 +509,10 @@ public class QUST extends MajorRecordNamed {
 	 */
 	public ArrayList<QuestTarget> getTargets() {
 	    return subRecords.getSubList("QSTA").toPublic();
+	}
+	
+	public void clearTargets() {
+	    subRecords.getSubList("QSTA").clear();
 	}
 
 	/**
@@ -615,6 +630,14 @@ public class QUST extends MajorRecordNamed {
 	public void removeCondition(Condition c) {
 	    subRecords.getSubList("CTDA").remove(c);
 	}
+	
+	public void setCompassMarkersIgnoreLocks(boolean on) {
+	    getData().flags.set(0, on);
+	}
+	
+	public boolean getCompassMarkersIgnoreLocks() {
+	    return getData().flags.get(0);
+	}
     }
 
     // Enums
@@ -651,6 +674,35 @@ public class QUST extends MajorRecordNamed {
 	 */
 	FailQuest;
     }
+    
+    public enum QuestFlags {
+	StartGameEnabled (0),
+	WildernessEncounter(2),
+	AllowRepeatedStages(3),
+	RunOnce(4),
+	ExcludeFromDialogueExport(5),
+	WarnOnAliasFillFailure(6);
+	
+	int value;
+	QuestFlags(int val) {
+	    value = val;
+	}
+    }
+    
+    public enum QuestType {
+	None,
+	MainQuest,
+	MageGuild,
+	ThievesGuild,
+	DarkBrotherhood,
+	Companion,
+	Misc,
+	Daedric,
+	Side,
+	CivilWar,
+	Vampire,
+	Dragonborn
+    }
 
     QUST() {
 	super();
@@ -661,9 +713,9 @@ public class QUST extends MajorRecordNamed {
 	this();
 	originateFrom(modToOriginateFrom, edid);
 	DNAM dnam = (DNAM) subRecords.get("DNAM");
-	dnam.flags1.set(0, true);
-	dnam.flags1.set(4, true);
-	dnam.flags2.set(0, true);
+	dnam.flags.set(0, true);
+	dnam.flags.set(4, true);
+	dnam.flags.set(8, true);
 	subRecords.getSubInt("ANAM").set(0);
     }
 
@@ -677,6 +729,8 @@ public class QUST extends MajorRecordNamed {
 	return Record.getTypeList("QUST");
     }
 
+    // Get Set Functions
+    
     /**
      *
      * @return
@@ -739,5 +793,90 @@ public class QUST extends MajorRecordNamed {
      */
     public ArrayList<AliasLocation> getLocationAliases() {
 	return subRecords.getSubList("ALLS").toPublic();
+    }
+    
+    DNAM getDNAM() {
+	return (DNAM) subRecords.get("DNAM");
+    }
+    
+    public int getPriority() {
+	return getDNAM().priority;
+    }
+    
+    public void setPriority(int priority) {
+	if (priority < 0) {
+	    priority = 0;
+	} else if (priority > 100) {
+	    priority = 100;
+	}
+	getDNAM().priority = (byte) priority;
+    }
+    
+    public void set(QuestFlags flag, boolean on) {
+	getDNAM().flags.set(flag.value, on);
+    }
+    
+    public boolean get(QuestFlags flag) {
+	return getDNAM().flags.get(flag.value);
+    }
+    
+    public void setQuestType(QuestType type) {
+	getDNAM().questType = type;
+    }
+    
+    public QuestType getQuestType() {
+	return getDNAM().questType;
+    }
+    
+    public String getShortName() {
+	return subRecords.getSubString("ENAM").print();
+    }
+    
+    public void setShortName(String shortName) {
+	subRecords.setSubString("ENAM", shortName);
+    }
+    
+    public String getObjectWindowFilter() {
+	return subRecords.getSubString("FLTR").print();
+    }
+    
+    public void setObjectWindowFilter(String name) {
+	subRecords.setSubString("FLTR", name);
+    }
+    
+    public ArrayList<QuestStage> getStages() {
+	return subRecords.getSubList("INDX").toPublic();
+    }
+    
+    public void clearStages() {
+	subRecords.getSubList("INDX").clear();
+    }
+    
+    public void addStage(QuestStage stage) {
+	subRecords.getSubList("INDX").add(stage);
+    }
+    
+    public ArrayList<QuestObjective> getObjectives() {
+	return subRecords.getSubList("QOBJ").toPublic();
+    }
+    
+    public void clearObjectives() {
+	subRecords.getSubList("QOBJ").clear();
+    }
+    
+    public void addObjective(QuestStage stage) {
+	subRecords.getSubList("QOBJ").add(stage);
+    }
+    
+    public ArrayList<Alias> getAliases() {
+	return subRecords.getSubList("ALLS").toPublic();
+    }
+    
+    public void addAlias(Alias alias) {
+	subRecords.getSubList("ALLS").add(alias);
+    }
+    
+    public void clearAliases() {
+	subRecords.getSubList("ALLS").clear();
     }
 }
