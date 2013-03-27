@@ -737,7 +737,7 @@ public class QUST extends MajorRecordNamed {
 	subRecords.setPrototype(QUSTproto);
     }
 
-    QUST(Mod modToOriginateFrom, String edid) {
+    public QUST(Mod modToOriginateFrom, String edid) {
 	this();
 	originateFrom(modToOriginateFrom, edid);
 	DNAM dnam = (DNAM) subRecords.get("DNAM");
