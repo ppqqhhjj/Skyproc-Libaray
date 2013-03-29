@@ -58,14 +58,14 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
 	    case "KSIZ":
-		counter.parseData(in);
+		counter.parseData(in, srcMod);
 		keywords = new SubFormArray("KWDA", counter.toInt());
 		break;
 	    case "KWDA":
-		keywords.parseData(in);
+		keywords.parseData(in, srcMod);
 		break;
 	}
     }

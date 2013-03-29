@@ -23,7 +23,7 @@ public class SubStringNonNull extends SubString {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	in.skip(getIdentifierLength() + getSizeLength());
 	string = Ln.arrayToString(in.extractInts(in.available()));
 	if (logging()) {

@@ -58,8 +58,8 @@ public class AMMO extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    projectile.setInternal(in.extract(4));
 	    flags.set(in.extract(4));
 	    damage = in.extractFloat();

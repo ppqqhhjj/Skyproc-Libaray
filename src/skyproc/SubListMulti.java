@@ -36,18 +36,18 @@ public class SubListMulti<T extends SubRecord> extends SubList {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	parseData(in, getNextType(in));
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	parseData(in, srcMod, getNextType(in));
     }
 
     @Override
-    void parseData(LChannel in, String nextType) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (prototypes.containsKey(nextType)) {
 	    SubRecord newRecord = prototypes.get(nextType).getNew(nextType);
-	    newRecord.parseData(in);
+	    newRecord.parseData(in, srcMod);
 	    add(newRecord);
 	} else {
-	    get(size() - 1).parseData(in);
+	    get(size() - 1).parseData(in, srcMod);
 	}
     }
 

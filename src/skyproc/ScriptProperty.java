@@ -30,6 +30,10 @@ class ScriptProperty extends Record implements Serializable {
     ScriptProperty(String name) {
 	this.name.set(name);
     }
+    
+    ScriptProperty(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	parseData(in, srcMod);
+    }
 
     public ScriptProperty(String name, boolean b) {
 	this(name);
@@ -98,10 +102,6 @@ class ScriptProperty extends Record implements Serializable {
 	data = tmp;
     }
 
-    ScriptProperty(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	parseData(in);
-    }
-
     void standardizeMasters(Mod srcMod) {
 	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
 	    ((FormIDData) data).id.standardize(srcMod);
@@ -117,7 +117,7 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
 	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
@@ -163,7 +163,7 @@ class ScriptProperty extends Record implements Serializable {
 		in.extractInts(1000);  // break extraction to exclude NPC from database
 	}
 	if (data != null) {
-	    data.parseData(in);
+	    data.parseData(in, srcMod);
 	}
 	if (logging()) {
 	    logSync("VMAD", "      Data: " + data.print());
@@ -278,7 +278,7 @@ class ScriptProperty extends Record implements Serializable {
     // Data classes
     interface ScriptData {
 
-	void parseData(LChannel in);
+	void parseData(LChannel in, Mod srcMod);
 
 	int getContentLength();
 
@@ -294,7 +294,7 @@ class ScriptProperty extends Record implements Serializable {
 	String data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    data = in.extractString(in.extractInt(2));
 	}
 
@@ -325,7 +325,7 @@ class ScriptProperty extends Record implements Serializable {
 	int data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    data = in.extractInt(4);
 	}
 
@@ -355,7 +355,7 @@ class ScriptProperty extends Record implements Serializable {
 	boolean data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    data = in.extractBool(1);
 	}
 
@@ -401,7 +401,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    data = in.extract(4);
 	    id = new FormID();
 	    id.setInternal(in.extract(4));
@@ -434,7 +434,7 @@ class ScriptProperty extends Record implements Serializable {
 	float data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    data = in.extractFloat();
 	}
 
@@ -464,7 +464,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Integer> data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -505,7 +505,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<String> data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -552,12 +552,12 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<FormIDData> data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
 		FormIDData id = new FormIDData();
-		id.parseData(in);
+		id.parseData(in, srcMod);
 		data.add(id);
 	    }
 	}
@@ -595,7 +595,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Boolean> data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -640,7 +640,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Float> data;
 
 	@Override
-	public void parseData(LChannel in){
+	public void parseData(LChannel in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {

@@ -40,13 +40,13 @@ public class ScriptRef extends Record implements Iterable<String> {
     public ScriptRef(String name) {
 	this.name.set(name);
     }
-
-    ScriptRef(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	parseData(in);
+    
+    ScriptRef(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	parseData(in, srcMod);
     }
-
+    
     @Override
-    final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
 	unknown = in.extractInt(1);
 	int propertyCount = in.extractInt(2);
@@ -54,7 +54,7 @@ public class ScriptRef extends Record implements Iterable<String> {
 	    logSync("VMAD", "  Script " + name.toString() + " with " + propertyCount + " properties. Unknown: " + unknown);
 	}
 	for (int i = 0; i < propertyCount; i++) {
-	    properties.add(new ScriptProperty(in));
+	    properties.add(new ScriptProperty(in, srcMod));
 	}
     }
 

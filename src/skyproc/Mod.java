@@ -83,7 +83,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	if (!headerInfo.hasRemaining()) {
 	    throw new BadMod(info.print() + " did not have a TES4 header.");
 	}
-	tes.parseData(headerInfo);
+	tes.parseData(headerInfo, this);
     }
 
     Mod(ModListing info, boolean temp) {
@@ -955,7 +955,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void parseData(String type, LChannel data) throws Exception {
-	GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data);
+	GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
     }
 
     /**
@@ -1393,17 +1393,17 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	TES4(LShrinkArray in) throws Exception {
 	    this();
-	    parseData(in);
+	    parseData(in, null);
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    fluff1 = Ln.arrayToInt(in.extractInts(4));
 	    fluff2 = Ln.arrayToInt(in.extractInts(4));
 	    fluff3 = Ln.arrayToInt(in.extractInts(4));
-	    subRecords.importSubRecords(in);
+	    subRecords.importSubRecords(in, srcMod);
 	}
 
 	@Override
@@ -1499,7 +1499,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	HEDR(LShrinkArray in) throws Exception {
 	    this();
-	    parseData(in);
+	    parseData(in, null);
 	}
 
 	void setRecords(int num) {
@@ -1527,8 +1527,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    version = in.extract(4);
 	    numRecords = in.extractInt(4);
 	    nextID = in.extractInt(4);

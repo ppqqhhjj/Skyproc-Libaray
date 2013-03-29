@@ -239,8 +239,8 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    fluff1 = in.extract(16);
 	    maleHeight = in.extractFloat();
 	    femaleHeight = in.extractFloat();
@@ -350,8 +350,8 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();
 	    attackSpell.setInternal(in.extract(4));

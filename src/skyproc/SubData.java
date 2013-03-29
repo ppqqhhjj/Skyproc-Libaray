@@ -26,11 +26,6 @@ class SubData extends SubRecordTyped {
 	super(type_);
     }
 
-    SubData(LShrinkArray in, String type_) throws BadRecord, DataFormatException, BadParameter {
-	this(type_);
-	parseData(in);
-    }
-
     SubData(String type_, byte[] in) {
 	this(type_);
 	if (in != null) {
@@ -52,8 +47,8 @@ class SubData extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	setData(in.extractAllBytes());
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + print());

@@ -42,11 +42,6 @@ public class MagicEffectRef extends SubShellBulkType {
 	super(magicEffProto, false);
     }
 
-    MagicEffectRef(LShrinkArray in) throws DataFormatException, BadParameter, BadRecord, IOException {
-	this();
-	parseData(in);
-    }
-
     @Override
     SubRecord getNew(String type) {
 	return new MagicEffectRef();
@@ -107,8 +102,8 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    magnitude = in.extractFloat();
 	    AOE = in.extractInt(4);
 	    duration = in.extractInt(4);

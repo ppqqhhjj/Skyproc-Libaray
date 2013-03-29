@@ -163,17 +163,17 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	parseData(in, getNextType(in));
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	parseData(in, srcMod, getNextType(in));
     }
 
-    void parseData(LChannel in, String nextType) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (nextType.equals(getType())) {
 	    T newRecord = (T) prototype.getNew(getType());
-	    newRecord.parseData(in);
+	    newRecord.parseData(in, srcMod);
 	    add(newRecord);
 	} else {
-	    get(size() - 1).parseData(in);
+	    get(size() - 1).parseData(in, srcMod);
 	}
     }
 

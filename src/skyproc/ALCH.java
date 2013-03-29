@@ -63,8 +63,8 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    flags.set(in.extract(4));
 	    addiction.setInternal(in.extract(4));

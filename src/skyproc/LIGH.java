@@ -82,8 +82,8 @@ public class LIGH extends MajorRecordNamed {
         }
 
         @Override
-        void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-            super.parseData(in);
+        void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+            super.parseData(in, srcMod);
             time = in.extractInt(4);
             radius = in.extractInt(4);
             red = in.extractInt(1);

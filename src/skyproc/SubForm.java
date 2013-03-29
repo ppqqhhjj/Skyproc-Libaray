@@ -80,19 +80,14 @@ class SubForm extends SubRecordTyped {
 	super(type_);
     }
 
-    SubForm(LShrinkArray in, String type_) throws BadRecord, DataFormatException, BadParameter {
-	this(type_);
-	parseData(in);
-    }
-
     SubForm(String type, FormID form) {
 	this(type);
 	setForm(form);
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	setForm(in.extract(4));
     }
 

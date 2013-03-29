@@ -56,13 +56,13 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    switch (GMSTtype) {
 		case String:
-		    DATAs.parseData(in);
+		    DATAs.parseData(in, srcMod);
 		    break;
 		default:
-		    DATA.parseData(in);
+		    DATA.parseData(in, srcMod);
 	    }
 	}
 

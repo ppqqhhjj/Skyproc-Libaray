@@ -45,10 +45,10 @@ class SubListCounted<T extends SubRecord> extends SubList {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
         String t = getNextType(in);
         if (!t.equals(counterType)) {
-            super.parseData(in, t);
+            super.parseData(in, srcMod, t);
         }
     }
 

@@ -43,19 +43,14 @@ public class ECZN extends MajorRecord {
 	    valid = false;
 	}
 
-	DATA(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
 	@Override
 	SubRecord getNew(String type) {
 	    return new DATA();
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 
 	    owner.setInternal(in.extract(4));
 	    location.setInternal(in.extract(4));

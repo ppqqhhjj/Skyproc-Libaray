@@ -82,7 +82,7 @@ class ConditionOption implements Serializable {
 	exportParam3(out);
     }
 
-    public void parseData(LChannel in) {
+    public void parseData(LChannel in, Mod srcMod) {
 	parseParam1(in);
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.setInternal(in.extract(4));

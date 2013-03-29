@@ -102,8 +102,8 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    amb = extractColor(in);
 	    dir = extractColor(in);
 	    fog = extractColor(in);
@@ -173,8 +173,8 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    dirAmbXpos = extractColor(in);
 	    dirAmbXneg = extractColor(in);
 	    dirAmbYpos = extractColor(in);

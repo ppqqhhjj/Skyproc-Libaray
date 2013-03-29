@@ -47,19 +47,14 @@ public class IMGS extends MajorRecord {
 	    valid = false;
 	}
 
-	HNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
 	@Override
 	SubRecord getNew(String type) {
 	    return new HNAM();
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 
 	    eyeAdaptSpeed = in.extractFloat();
 	    bloomRadius = in.extractFloat();
@@ -130,19 +125,14 @@ public class IMGS extends MajorRecord {
 	    valid = false;
 	}
 
-	public CNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
 	@Override
 	SubRecord getNew(String type) {
 	    return new CNAM();
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 
 	    saturation = in.extractFloat();
 	    brightness = in.extractFloat();
@@ -199,19 +189,14 @@ public class IMGS extends MajorRecord {
 	    valid = false;
 	}
 
-	public TNAM(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
 	@Override
 	SubRecord getNew(String type) {
 	    return new TNAM();
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 
 	    alpha = in.extractFloat();
 	    red = in.extractFloat();
@@ -284,8 +269,8 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    DOFstrength = in.extractFloat();
 	    DOFdistance = in.extractFloat();
 	    DOFrange = in.extractFloat();

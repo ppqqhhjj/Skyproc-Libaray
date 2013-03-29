@@ -58,8 +58,8 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	    if (SPGlobal.logging()) {
@@ -100,8 +100,8 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));
 	    if (SPGlobal.logging()) {

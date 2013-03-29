@@ -46,8 +46,8 @@ public class BOOK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    if (flags.get(BookFlag.TeachesSpell.ordinal())) {
 		teachesSpell.setInternal(in.extract(4));

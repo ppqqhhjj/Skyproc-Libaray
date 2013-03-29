@@ -61,8 +61,8 @@ class ConditionBase extends SubRecord {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	//Flags and Operator
 	flags.set(in.extract(1));
 	int operatorInt = flags.export()[0];
@@ -90,7 +90,7 @@ class ConditionBase extends SubRecord {
 	    logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat);
 	}
 
-	option.parseData(in);
+	option.parseData(in, srcMod);
 
     }
 

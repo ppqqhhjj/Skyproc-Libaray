@@ -21,12 +21,7 @@ import lev.LChannel;
 class SubFormData extends SubForm {
 
     byte[] data;
-
-    SubFormData(String type, LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	this(type);
-	parseData(in);
-    }
-
+    
     SubFormData(String type, FormID id, byte[] data) {
 	super(type, id);
 	this.data = data;
@@ -37,8 +32,8 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	setData(in.extract(4));
     }
 

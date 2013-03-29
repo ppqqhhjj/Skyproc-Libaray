@@ -57,8 +57,8 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	version = in.extractInt(2);
 	unknown = in.extractInt(2);
 	int scriptCount = in.extractInt(2);
@@ -66,7 +66,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
 	    logSync(toString(), "Importing VMAD record with " + scriptCount + " scripts.  Version: " + version + ", unknown: " + unknown);
 	}
 	for (int i = 0; i < scriptCount; i++) {
-	    scripts.add(new ScriptRef(in));
+	    scripts.add(new ScriptRef(in, srcMod));
 	}
     }
 

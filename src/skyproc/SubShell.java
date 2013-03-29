@@ -52,8 +52,8 @@ class SubShell extends SubRecord {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	subRecords.importSubRecords(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	subRecords.importSubRecords(in, srcMod);
     }
 
     SubPrototype getPrototype() {

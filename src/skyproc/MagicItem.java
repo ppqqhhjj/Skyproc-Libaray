@@ -51,20 +51,15 @@ abstract class MagicItem extends MajorRecordDescription {
 	    super();
 	    valid = false;
 	}
-
-	SPIT(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	    this();
-	    parseData(in);
-	}
-
+	
 	@Override
 	SubRecord getNew(String type) {
 	    return new SPIT();
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 
 	    baseCost = in.extractInt(4);
 	    flags = new LFlags(in.extract(4));

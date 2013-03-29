@@ -26,11 +26,6 @@ public class ModListing extends SubRecord implements Comparable {
     SubString mast = SubString.getNew("MAST", true);
     boolean master = false;
 
-    ModListing(LShrinkArray in) throws BadRecord, DataFormatException, BadParameter {
-	this();
-	parseData(in);
-    }
-
     /**
      * ModListing objects are used to uniquely identify mods via name and master
      * tag.
@@ -99,10 +94,10 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
 	    case "MAST":
-		mast.parseData(in);
+		mast.parseData(in, srcMod);
 		setString(mast.string);
 	}
     }

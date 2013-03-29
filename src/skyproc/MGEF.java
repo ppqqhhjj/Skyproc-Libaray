@@ -131,8 +131,8 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    baseCost = in.extractFloat();
 	    relatedID.setInternal(in.extract(4));
@@ -276,8 +276,8 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    while (!in.isDone()) {
 		SNDD.Sound sound = new SNDD.Sound();
 		sound.sound = SoundData.values()[in.extractInt(4)];

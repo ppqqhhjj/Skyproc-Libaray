@@ -80,8 +80,8 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    malePriority = in.extractInt(1);
 	    femalePriority = in.extractInt(1);
 	    unknown = in.extract(4);

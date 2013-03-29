@@ -111,8 +111,8 @@ public class PROJ extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    flags.set(in.extract(2));
 	    projType.set(in.extract(2));
 	    gravity = in.extractFloat();

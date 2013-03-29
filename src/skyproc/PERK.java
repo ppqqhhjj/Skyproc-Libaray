@@ -58,9 +58,9 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	final void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    SubData PRKE = subRecords.getSubData("PRKE");
-	    PRKE.parseData(PRKE.extractRecordData(in));
+	    PRKE.parseData(PRKE.extractRecordData(in), srcMod);
 	    PerkType perkType = PerkType.values()[subRecords.getSubData("PRKE").getData()[0]];
 	    switch (perkType) {
 		case QUEST:
@@ -72,7 +72,7 @@ public class PERK extends MajorRecordDescription {
 		    subRecords.add(new SubForm("DATA"));
 		    break;
 	    }
-	    super.parseData(in);
+	    super.parseData(in, srcMod);
 	}
 
 	@Override
@@ -98,18 +98,18 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
 		case "EPFT":
 		    SubData EPFT = subRecords.getSubData("EPFT");
-		    EPFT.parseData(in);
+		    EPFT.parseData(in, srcMod);
 		    if (EPFT.toInt() >= 3 && EPFT.toInt() <= 5) {
 			subRecords.remove("EPFD");
 			subRecords.add(new SubForm("EPFD"));
 		    }
 		    return;
 	    }
-	    super.parseData(in);
+	    super.parseData(in, srcMod);
 	}
 
 	@Override

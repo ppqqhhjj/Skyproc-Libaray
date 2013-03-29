@@ -44,8 +44,8 @@ public class SubRGBshort extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	r = (short) in.extractInt(1);
 	g = (short) in.extractInt(1);
 	b = (short) in.extractInt(1);

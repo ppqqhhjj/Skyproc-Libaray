@@ -23,12 +23,12 @@ public abstract class Record implements Serializable {
     Record() {
     }
 
-    void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	in.skip(getIdentifierLength() + getSizeLength());
     }
 
-    final void parseData(ByteBuffer in) throws BadRecord, BadParameter, DataFormatException {
-	parseData(new LShrinkArray(in));
+    final void parseData(ByteBuffer in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	parseData(new LShrinkArray(in), srcMod);
     }
 
     boolean isValid() {

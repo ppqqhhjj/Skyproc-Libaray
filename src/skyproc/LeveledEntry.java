@@ -89,8 +89,8 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    level = in.extractInt(4);
 	    entry.setInternal(in.extract(4));
 	    count = in.extractInt(4);
@@ -136,8 +136,8 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    super.parseData(in, srcMod);
 	    owner.setInternal(in.extract(4));
 	    reqRank = in.extractInt(4);
 	    fluff = in.extract(4);

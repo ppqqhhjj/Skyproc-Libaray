@@ -82,7 +82,7 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
-    void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	if (contains(nextType)) {
 	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
@@ -99,7 +99,7 @@ class SubRecordsStream extends SubRecordsDerived {
 		in.skip(prototype.get(nextType).getRecordLength(in));
 	    } else {
 		SubRecord record = getSilent(nextType);
-		record.parseData(record.extractRecordData(in));
+		record.parseData(record.extractRecordData(in), srcMod);
 		standardize(record);
 	    }
 	} else {
@@ -128,7 +128,7 @@ class SubRecordsStream extends SubRecordsDerived {
 			}
 		    }
 		    for (int i = 0; i < position.num; i++) {
-			s.parseData(s.extractRecordData(major.srcMod.input));
+			s.parseData(s.extractRecordData(major.srcMod.input), major.srcMod);
 		    }
 		    pos.remove(s.getType());
 		} catch (Exception e) {

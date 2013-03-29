@@ -53,7 +53,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String next = Record.getNextType(in);
 	if (markers.contains(next)) {
 	    logSync("", "Loaded Marker " + next);
@@ -62,7 +62,7 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
 	    if (!set.containsKey(loadedMarker)) {
 		set.put(loadedMarker, (T) prototype.getNew(next));
 	    }
-	    set.get(loadedMarker).parseData(in);
+	    set.get(loadedMarker).parseData(in, srcMod);
 	}
     }
 

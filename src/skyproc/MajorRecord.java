@@ -139,8 +139,8 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 
 	majorFlags = new LFlags(in.extract(4));
 	setForm(in.extract(4));
@@ -156,14 +156,14 @@ public abstract class MajorRecord extends Record implements Serializable {
 
 	if ("EDID".equals(getNextType(in))) {
 	    SubString EDID = subRecords.getSubString("EDID");
-	    EDID.parseData(EDID.extractRecordData(in));
+	    EDID.parseData(EDID.extractRecordData(in), srcMod);
 	}
 
 	importSubRecords(in);
     }
 
     void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	subRecords.importSubRecords(in);
+	subRecords.importSubRecords(in, srcMod);
     }
 
     ArrayList<FormID> allFormIDs() {
@@ -171,6 +171,13 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.add(ID);
 	out.addAll(subRecords.allFormIDs());
 	return out;
+    }
+    
+    void standardizeMaster() {
+	ArrayList<FormID> set = allFormIDs();
+	for (FormID id : set) {
+	    id.standardize(srcMod);
+	}
     }
 
     /**

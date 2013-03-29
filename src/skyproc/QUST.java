@@ -277,8 +277,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    flags.set(in.extract(2));
 	    priority = in.extract(1)[0];
 	    unknown = in.extract(1)[0];
@@ -309,8 +309,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    index = in.extractInt(2);
 	    flags.set(in.extract(2));
 	}
@@ -569,8 +569,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in);
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
 	    targetAlias = in.extractInt(4);
 	    flags.set(in.extract(4));
 	}

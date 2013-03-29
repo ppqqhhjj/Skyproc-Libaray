@@ -26,11 +26,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     ArrayList<T> listRecords = new ArrayList<>();
     Map<FormID, T> mapRecords = new HashMap<>();
     Map<String, T> edidRecords = new HashMap<>();
-    Mod srcMod;
     T prototype;
 
     GRUP(Mod srcMod_, T prototype) {
-	srcMod = srcMod_;
 	this.prototype = prototype;
     }
 
@@ -54,7 +52,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
      */
     @Override
     public String toString() {
-	return srcMod.getName() + " - " + getContainedType().toString() + " GRUP";
+	return getContainedType().toString() + " GRUP";
     }
 
     /**
@@ -75,8 +73,8 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	in.skip(4); // GRUP type
 	grupType = in.extract(4); // What kind of GRUP data it has.
 	dateStamp = in.extract(4);
@@ -90,7 +88,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	    item.subRecords.setMajor(item);
 	    try {
 
-		item.parseData(item.extractRecordData(in));
+		item.parseData(item.extractRecordData(in), srcMod);
 
 		// Customizable middle stage for specialized GRUPs
 		parseDataHelper(item);
@@ -219,7 +217,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	if (logging()) {
 	    if (r.isValid()) {
 		logSync(toString(), "Caught a bad record: " + r + ", reason: " + reason);
-		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r + " from " + srcMod + ", reason: " + reason);
+		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r + " from " + r.srcMod + ", reason: " + reason);
 	    } else {
 		logSync(toString(), "Caught a bad record, reason:" + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);
@@ -250,14 +248,7 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     void standardizeMasters() {
 	for (T item : listRecords) {
-	    standardizeMaster(item);
-	}
-    }
-
-    void standardizeMaster(T item) {
-	ArrayList<FormID> set = item.allFormIDs();
-	for (FormID id : set) {
-	    id.standardize(srcMod);
+	    item.standardizeMaster();
 	}
     }
 

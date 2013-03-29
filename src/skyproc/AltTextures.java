@@ -41,8 +41,8 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in);
+    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	super.parseData(in, srcMod);
 	int numTextures = in.extractInt(4);
 	for (int i = 0; i < numTextures; i++) {
 	    int strLength = Ln.arrayToInt(in.getInts(0, 4));

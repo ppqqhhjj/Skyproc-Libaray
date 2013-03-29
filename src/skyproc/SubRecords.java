@@ -213,17 +213,17 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
     }
 
-    void importSubRecords(LChannel in) throws BadRecord, BadParameter, DataFormatException {
+    void importSubRecords(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	while (!in.isDone()) {
-	    importSubRecord(in);
+	    importSubRecord(in, srcMod);
 	}
     }
 
-    void importSubRecord(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	SubRecord record = get(nextType);
 	if (record != null) {
-	    record.parseData(record.extractRecordData(in));
+	    record.parseData(record.extractRecordData(in), srcMod);
 	} else {
 	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType + " record.");
 	}
