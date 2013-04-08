@@ -510,6 +510,7 @@ public class SPImporter {
 
 	    if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
 		importStringLocations(plugin);
+		plugin.openStringStreams();
 	    }
 
 	    GRUPIterator iter = new GRUPIterator(grup_targets, input);
@@ -645,7 +646,7 @@ public class SPImporter {
 	    grups = new ArrayList<>(Arrays.asList(grupTypes));
 	}
 
-	public ModListing activeMod () {
+	public ModListing activeMod() {
 	    return activeMod;
 	}
 

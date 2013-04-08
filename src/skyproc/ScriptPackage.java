@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
+import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -23,6 +24,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
     int version = 5;
     int unknown = 2;
     ArrayList<ScriptRef> scripts = new ArrayList<>();
+    ScriptFragments fragments;
 
     ScriptPackage() {
 	super();
@@ -43,6 +45,9 @@ public class ScriptPackage extends SubRecord implements Serializable {
 	int out = 6;
 	for (ScriptRef s : scripts) {
 	    out += s.getTotalLength(srcMod);
+	}
+	if (fragments != null) {
+	    out += fragments.getContentLength(srcMod);
 	}
 	return out;
     }
@@ -68,6 +73,10 @@ public class ScriptPackage extends SubRecord implements Serializable {
 	for (int i = 0; i < scriptCount; i++) {
 	    scripts.add(new ScriptRef(in, srcMod));
 	}
+	if (!in.isDone()) {
+	    fragments = new ScriptFragments();
+	    fragments.parseData(in, srcMod);
+	}
     }
 
     @Override
@@ -80,6 +89,70 @@ public class ScriptPackage extends SubRecord implements Serializable {
 	    for (ScriptRef s : scripts) {
 		s.export(out, srcMod);
 	    }
+	    if (fragments != null) {
+		fragments.export(out, srcMod);
+	    }
+	}
+    }
+
+    class ScriptFragments {
+
+	byte unknown = 0;
+	LFlags fragmentFlags = new LFlags(1);
+	StringNonNull fragmentFile = new StringNonNull();
+	ArrayList<ScriptFragment> fragments = new ArrayList<>();
+
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(1)[0];
+	    fragmentFlags.set(in.extract(1));
+	    fragmentFile.set(in.extractString(in.extractInt(2)));
+	    while (!in.isDone()) {
+		ScriptFragment frag = new ScriptFragment();
+		frag.parseData(in, srcMod);
+		fragments.add(frag);
+	    }
+	}
+
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(unknown, 1);
+	    out.write(fragmentFlags.export());
+	    fragmentFile.export(out, srcMod);
+	    for (ScriptFragment frag : fragments) {
+		frag.export(out, srcMod);
+	    }
+	}
+	
+	int getContentLength(Mod srcMod) {
+	    int out = 2;
+	    out += fragmentFile.getTotalLength(srcMod);
+	    for (ScriptFragment frag : fragments) {
+		out += frag.getContentLength(srcMod);
+	    }
+	    return out;
+	}
+    }
+
+    class ScriptFragment {
+
+	byte unknown = 0;
+	StringNonNull scriptName = new StringNonNull();
+	StringNonNull fragmentName = new StringNonNull();
+
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(1)[0];
+	    scriptName.set(in.extractString(in.extractInt(2)));
+	    fragmentName.set(in.extractString(in.extractInt(2)));
+	}
+
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(unknown, 1);
+	    scriptName.export(out, srcMod);
+	    fragmentName.export(out, srcMod);
+	}
+	
+	int getContentLength(Mod srcMod) {
+	    return 1 + scriptName.getTotalLength(srcMod) 
+		    + fragmentName.getTotalLength(srcMod);
 	}
     }
 

@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
-import skyproc.gui.SPProgressBarPlug;
 
 /**
  * A GRUP is a collection of Major Records.
@@ -18,8 +18,9 @@ import skyproc.gui.SPProgressBarPlug;
  * @param <T> The type of Major Record a GRUP contains.
  * @author Justin Swanson
  */
-public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
+public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T> {
 
+    byte[] contained;
     byte[] grupType = new byte[4];
     byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
     byte[] version = new byte[4];
@@ -28,8 +29,9 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     Map<String, T> edidRecords = new HashMap<>();
     T prototype;
 
-    GRUP(Mod srcMod_, T prototype) {
+    GRUP(T prototype) {
 	this.prototype = prototype;
+	contained = Ln.toByteArray(prototype.getType());
     }
 
     @Override
@@ -75,44 +77,44 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
     @Override
     void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
-	in.skip(4); // GRUP type
+	contained = in.extract(4);
 	grupType = in.extract(4); // What kind of GRUP data it has.
 	dateStamp = in.extract(4);
 	version = in.extract(4);
 	while (!in.isDone()) {
-	    if (logging()) {
-		logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
-	    }
-	    T item = (T) prototype.getNew();
-	    item.srcMod = srcMod;
-	    item.subRecords.setMajor(item);
-	    try {
-
-		item.parseData(item.extractRecordData(in), srcMod);
-
-		// Customizable middle stage for specialized GRUPs
-		parseDataHelper(item);
-
-		// Add to GRUP
-		if (item.isValid()) {
-		    addRecord(item);
-		} else if (logging()) {
-		    logSync(toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
-		}
-
-		if (logging()) {
-		    logSync(toString(), "=============== DONE ==============");
-		}
-	    } catch (java.nio.BufferUnderflowException e) {
-		handleBadRecord(item, e.toString());
-	    }
+	    extractMajor(in, srcMod);
 	}
 	if (logging()) {
 	    logSync(toString(), "Data exhausted");
 	}
     }
 
-    void parseDataHelper(T item) {
+    public MajorRecord extractMajor(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	if (logging()) {
+	    logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
+	}
+	T item = (T) prototype.getNew();
+	item.srcMod = srcMod;
+	item.subRecords.setMajor(item);
+	try {
+
+	    item.parseData(item.extractRecordData(in), srcMod);
+
+	    // Add to GRUP
+	    if (item.isValid()) {
+		addRecord(item);
+	    } else if (logging()) {
+		logSync(toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
+	    }
+
+	    if (logging()) {
+		logSync(toString(), "=============== DONE ==============");
+	    }
+	    return item;
+	} catch (java.nio.BufferUnderflowException e) {
+	    handleBadRecord(item, e.toString());
+	}
+	return null;
     }
 
     /**
@@ -143,24 +145,23 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	if (isValid()) {
-	    super.export(out, srcMod);
-	    out.write(this.getContainedType().toString());
-	    out.write(grupType, 4);
-	    out.write(dateStamp, 4);
-	    out.write(version, 4);
+	super.export(out, srcMod);
+	out.write(contained);
+	out.write(grupType);
+	out.write(dateStamp);
+	out.write(version);
+	if (logging()) {
+	    logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
+	}
+	for (MajorRecord t : this) {
 	    if (logging()) {
-		logSync(this.toString(), "Exporting " + this.numRecords() + " " + getContainedType() + " records.");
+		logSync(this.toString(), t.toString());
 	    }
-	    for (MajorRecord t : this) {
-		if (logging()) {
-		    logSync(this.toString(), t.toString());
-		}
-		t.export(out, srcMod);
-	    }
+	    t.export(out, srcMod);
 	}
     }
 
+    @Override
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	for (T item : listRecords) {
@@ -361,5 +362,15 @@ public class GRUP<T extends MajorRecord> extends Record implements Iterable<T> {
 	ArrayList<T> temp = new ArrayList<>();
 	temp.addAll(listRecords);
 	return temp.iterator();
+    }
+
+    @Override
+    SubRecord getNew(String type) {
+	return new GRUP<>(prototype);
+    }
+
+    @Override
+    public int getRecordLength(LChannel in) {
+	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()));
     }
 }

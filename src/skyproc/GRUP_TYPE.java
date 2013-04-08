@@ -93,6 +93,8 @@ public enum GRUP_TYPE {
      */
     LVLI,
     WTHR,
+    DIAL,
+    INFO,
     /**
      * Image Spaces
      */
@@ -133,6 +135,10 @@ public enum GRUP_TYPE {
     static boolean unfinished (GRUP_TYPE g) {
 	switch (g) {
 	    case QUST:
+		return true;
+	    case DIAL:
+		return true;
+	    case INFO:
 		return true;
 	    case LGTM:
 		return true;

@@ -5,8 +5,12 @@
 package skyproc;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import lev.LFileChannel;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
@@ -21,9 +25,9 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.QUST};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.DIAL};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
-    static boolean streaming = true;
+    static boolean streaming = false;
 
     /**
      * @param test
@@ -46,6 +50,9 @@ public class SkyProcTester {
 		    break;
 		case 3:
 		    copyTest();
+		    break;
+		case 4:
+		    VMADshaver(GRUP_TYPE.DIAL);
 		    break;
 	    }
 	    gui.finished();
@@ -160,6 +167,54 @@ public class SkyProcTester {
 	SPProgressBarPlug.pause(false);
 	SPProgressBarPlug.incrementBar();
 	return passed;
+    }
+
+    static void VMADshaver(GRUP_TYPE type) throws IOException {
+	LFileChannel in = new LFileChannel(new File("Validation Files/" + type.toString() + "validation.esp"));
+	FileOutputStream oStream = new FileOutputStream(new File("Validation Files/" + type.toString() + "validation.esp.tmp"));
+	FileChannel oChannel = oStream.getChannel();
+	System.out.println(in.available());
+	long pos = in.pos(), grupPos = 0, infoPos = 0, vmadPos = 0;
+	int grupSize = 0, infoSize = 0, vmadSize = 0, skip = 0;
+	String result;
+	while (!"".equals(result = in.scanTo("VMAD", "GRUP", "INFO"))) {
+	    if (result.equals("VMAD")) {
+		vmadPos = oChannel.position();
+		vmadSize = in.extractInt(2);
+		in.skip(4);
+		int numScripts = in.extractInt(2);
+		int runningSize = 6;
+		for (int i = 0; i < numScripts; i++) {
+		    int scriptSize = in.extractInt(2);
+		    runningSize += 2 + 3 + scriptSize;
+		    in.skip(scriptSize + 3);
+		}
+		skip = vmadSize - runningSize;
+	    }
+	    in.transferTo(pos, in.pos() - pos, oChannel);
+
+	    if (skip > 0) {
+		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(grupSize - skip)), grupPos);
+		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(infoSize - skip)), infoPos);
+		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(vmadSize - skip)), vmadPos);
+		System.out.println("Correct difference of: " + skip + " at position " + in.pos());
+	    }
+
+	    if (result.equals("GRUP")) {
+		grupPos = oChannel.position();
+		grupSize = in.extractInt(4);
+		in.jumpBack(4);
+	    } else if (result.equals("INFO")) {
+		infoPos = oChannel.position();
+		infoSize = in.extractInt(4);
+		in.jumpBack(4);
+	    }
+
+	    in.skip(skip);
+	    skip = 0;
+	    pos = in.pos();
+	}
+	oChannel.close();
     }
 
     /**

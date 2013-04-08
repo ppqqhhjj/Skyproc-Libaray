@@ -81,6 +81,10 @@ public class SUMprogram implements SUM {
 	for (String s : args) {
 	    argsList.add(s.toUpperCase());
 	}
+	if (argsList.contains("-VMAD")) {
+	    SkyProcTester.runTests(4);
+	    return false;
+	}
 	if (argsList.contains("-TESTCOPY")) {
 	    SkyProcTester.runTests(3);
 	    return false;

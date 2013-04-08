@@ -25,38 +25,39 @@ public class Mod implements Comparable, Iterable<GRUP> {
     TES4 tes = new TES4();
     ModListing modInfo;
     Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
-    GRUP<GMST> gameSettings = new GRUP<>(this, new GMST());
-    GRUP<KYWD> keywords = new GRUP<>(this, new KYWD());
-    GRUP<TXST> textures = new GRUP<>(this, new TXST());
-    GRUP<GLOB> globals = new GRUP<>(this, new GLOB());
-    GRUP<FACT> factions = new GRUP<>(this, new FACT());
-    GRUP<HDPT> headParts = new GRUP<>(this, new HDPT());
-    GRUP<RACE> races = new GRUP<>(this, new RACE());
-    GRUP<MGEF> magicEffects = new GRUP<>(this, new MGEF());
-    GRUP<ENCH> enchantments = new GRUP<>(this, new ENCH());
-    GRUP<SPEL> spells = new GRUP<>(this, new SPEL());
-    GRUP<ARMO> armors = new GRUP<>(this, new ARMO());
-    GRUP<BOOK> books = new GRUP<>(this, new BOOK());
-    GRUP<INGR> ingredients = new GRUP<>(this, new INGR());
-    GRUP<MISC> miscObjects = new GRUP<>(this, new MISC());
-    GRUP<ALCH> alchemy = new GRUP<>(this, new ALCH());
-    GRUP<COBJ> constructibleObjects = new GRUP<>(this, new COBJ());
-    GRUP<PROJ> projectiles = new GRUP<>(this, new PROJ());
-    GRUP<WEAP> weapons = new GRUP<>(this, new WEAP());
-    GRUP<AMMO> ammo = new GRUP<>(this, new AMMO());
-    GRUP<NPC_> NPCs = new GRUP<>(this, new NPC_());
-    GRUP<LVLN> leveledCreatures = new GRUP<>(this, new LVLN());
-    GRUP<LVLI> leveledItems = new GRUP<>(this, new LVLI());
-    GRUP<WTHR> weathers = new GRUP<>(this, new WTHR());
-    GRUP<QUST> quests = new GRUP<>(this, new QUST());
-    GRUP<IMGS> imageSpaces = new GRUP<>(this, new IMGS());
-    GRUP<FLST> formLists = new GRUP<>(this, new FLST());
-    GRUP<PERK> perks = new GRUP<>(this, new PERK());
-    GRUP<AVIF> actorValues = new GRUP<>(this, new AVIF());
-    GRUP<ARMA> armatures = new GRUP<>(this, new ARMA());
-    GRUP<ECZN> encounterZones = new GRUP<>(this, new ECZN());
-    GRUP<LGTM> lightingTemplates = new GRUP<>(this, new LGTM());
-    GRUP<OTFT> outfits = new GRUP<>(this, new OTFT());
+    GRUP<GMST> gameSettings = new GRUP<>(new GMST());
+    GRUP<KYWD> keywords = new GRUP<>(new KYWD());
+    GRUP<TXST> textures = new GRUP<>(new TXST());
+    GRUP<GLOB> globals = new GRUP<>(new GLOB());
+    GRUP<FACT> factions = new GRUP<>(new FACT());
+    GRUP<HDPT> headParts = new GRUP<>(new HDPT());
+    GRUP<RACE> races = new GRUP<>(new RACE());
+    GRUP<MGEF> magicEffects = new GRUP<>(new MGEF());
+    GRUP<ENCH> enchantments = new GRUP<>(new ENCH());
+    GRUP<SPEL> spells = new GRUP<>(new SPEL());
+    GRUP<ARMO> armors = new GRUP<>(new ARMO());
+    GRUP<BOOK> books = new GRUP<>(new BOOK());
+    GRUP<INGR> ingredients = new GRUP<>(new INGR());
+    GRUP<MISC> miscObjects = new GRUP<>(new MISC());
+    GRUP<ALCH> alchemy = new GRUP<>(new ALCH());
+    GRUP<COBJ> constructibleObjects = new GRUP<>(new COBJ());
+    GRUP<PROJ> projectiles = new GRUP<>(new PROJ());
+    GRUP<WEAP> weapons = new GRUP<>(new WEAP());
+    GRUP<AMMO> ammo = new GRUP<>(new AMMO());
+    GRUP<NPC_> NPCs = new GRUP<>(new NPC_());
+    GRUP<LVLN> leveledCreatures = new GRUP<>(new LVLN());
+    GRUP<LVLI> leveledItems = new GRUP<>(new LVLI());
+    GRUP<WTHR> weathers = new GRUP<>(new WTHR());
+    GRUPRecursive<DIAL> dialogs = new GRUPRecursive<>(new DIAL());
+    GRUP<QUST> quests = new GRUP<>(new QUST());
+    GRUP<IMGS> imageSpaces = new GRUP<>(new IMGS());
+    GRUP<FLST> formLists = new GRUP<>(new FLST());
+    GRUP<PERK> perks = new GRUP<>(new PERK());
+    GRUP<AVIF> actorValues = new GRUP<>(new AVIF());
+    GRUP<ARMA> armatures = new GRUP<>(new ARMA());
+    GRUP<ECZN> encounterZones = new GRUP<>(new ECZN());
+    GRUP<LGTM> lightingTemplates = new GRUP<>(new LGTM());
+    GRUP<OTFT> outfits = new GRUP<>(new OTFT());
     LFileChannel input;
     Language language = Language.English;
     Map<ModListing, Integer> masterMap = new HashMap<>();
@@ -143,6 +144,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	leveledItems.dateStamp = new byte[]{(byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0};
 	GRUPs.put(leveledItems.getContainedType(), leveledItems);
 	GRUPs.put(weathers.getContainedType(), weathers);
+	GRUPs.put(dialogs.getContainedType(), dialogs);
 	GRUPs.put(quests.getContainedType(), quests);
 	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
 	GRUPs.put(formLists.getContainedType(), formLists);
@@ -455,7 +457,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void fetchStringPointers() throws IOException {
-	openStringStreams();
 	for (GRUP g : GRUPs.values()) {
 	    g.fetchStringPointers();
 	}
@@ -1265,6 +1266,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<WTHR> getWeathers() {
 	return weathers;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Book records
+     */
+    public GRUP<DIAL> getDialogs() {
+	return dialogs;
     }
 
     /**

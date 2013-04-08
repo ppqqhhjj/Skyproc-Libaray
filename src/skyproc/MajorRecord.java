@@ -172,7 +172,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.addAll(subRecords.allFormIDs());
 	return out;
     }
-    
+
     void standardizeMaster() {
 	ArrayList<FormID> set = allFormIDs();
 	for (FormID id : set) {
@@ -224,6 +224,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 		SubRecord edid = subRecords.get("EDID");
 		subRecords = new SubRecordsDerived(subRecords.getPrototype());
 		subRecords.add(edid);
+	    }
+	    
+	    if (getGRUPAppend() != null && shouldExportGRUP()) {
+		getGRUPAppend().export(out, srcMod);
 	    }
 	}
     }
@@ -382,5 +386,13 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public boolean get(MajorFlags flag) {
 	return majorFlags.get(flag.value);
+    }
+
+    public GRUP getGRUPAppend() {
+	return null;
+    }
+    
+    public boolean shouldExportGRUP() {
+	return false;
     }
 }

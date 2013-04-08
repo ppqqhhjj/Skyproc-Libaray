@@ -12,19 +12,21 @@ import java.util.ArrayList;
  */
 public class DIAL extends MajorRecord {
 
+    static final INFO info = new INFO();
     static final SubPrototype DIALprototype = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
-	    add(SubString.getNew("FULL", true));
+	    add(new SubStringPointer("FULL", SubStringPointer.Files.STRINGS));
 	    add(new SubData("PNAM"));
 	    add(new SubForm("BNAM"));
 	    add(new SubForm("QNAM"));
-	    add(SubString.getNew("SNAM", false));
 	    add(new SubData("DATA"));
+	    add(SubString.getNew("SNAM", false));
 	    add(new SubInt("TIFC"));
 	}
     };
+    GRUP<INFO> grup = new GRUP<>(info);
 
     DIAL() {
 	super();
@@ -39,5 +41,15 @@ public class DIAL extends MajorRecord {
     @Override
     Record getNew() {
 	return new DIAL();
+    }
+
+    @Override
+    public GRUP getGRUPAppend() {
+	return grup;
+    }
+    
+    @Override
+    public boolean shouldExportGRUP() {
+	return true;//!grup.isEmpty();// || version[2] != 1;
     }
 }
