@@ -21,7 +21,6 @@ public class ARMO extends MajorRecordDescription {
 
     // Static prototypes and definitions
     static final SubPrototype ARMOprototype = new SubPrototype(MajorRecordDescription.descProto) {
-
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
@@ -30,11 +29,11 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubForm("EITM"));
 	    add(SubString.getNew("MOD2", true));
 	    add(new SubData("MO2T"));
-	    add(new SubData("MO2S"));
+	    add(new AltTextures("MO2S"));
 	    add(SubString.getNew("ICON", true));
 	    add(SubString.getNew("MOD4", true));
 	    add(new SubData("MO4T"));
-	    add(new SubData("MO4S"));
+	    add(new AltTextures("MO4S"));
 	    add(SubString.getNew("ICO2", true));
 	    add(new BodyTemplate());
 	    add(new DestructionData());
@@ -168,17 +167,52 @@ public class ARMO extends MajorRecordDescription {
 	return subRecords.getSubForm("EITM").getForm();
     }
 
+    String getAltTexType(Gender gender) {
+	switch (gender) {
+	    case MALE:
+		return "MO2S";
+	    default:
+		return "MO4S";
+	}
+    }
+
+    /**
+     * Returns the set of AltTextures applied to a specified gender and
+     * perspective.
+     *
+     * @param gender Gender of the AltTexture set to query.
+     * @param perspective Perspective of the AltTexture set to query.
+     * @return List of the AltTextures applied to the gender/perspective.
+     */
+    public ArrayList<AltTextures.AltTexture> getAltTextures(Gender gender) {
+	AltTextures t = (AltTextures) subRecords.get(getAltTexType(gender));
+	return t.altTextures;
+    }
+
+    /**
+     *
+     * @param rhs Other ARMA record.
+     * @param gender Gender of the pack to compare.
+     * @param perspective Perspective of the pack to compare
+     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
+     * matching Alt Textures with the same name and TXST formID reference, in
+     * the same corresponding indices.
+     */
+    public boolean equalAltTextures(ARMO rhs, Gender gender) {
+	return AltTextures.equal(getAltTextures(gender), rhs.getAltTextures(gender));
+    }
+
     /**
      *
      * @param path
      * @param perspective
      */
-    public void setModel(String path, Perspective perspective) {
-	switch (perspective) {
-	    case THIRD_PERSON:
+    public void setModel(String path, Gender g) {
+	switch (g) {
+	    case MALE:
 		subRecords.setSubString("MOD2", path);
 		break;
-	    case FIRST_PERSON:
+	    case FEMALE:
 		subRecords.setSubString("MOD4", path);
 		break;
 	}
@@ -189,9 +223,9 @@ public class ARMO extends MajorRecordDescription {
      * @param perspective
      * @return
      */
-    public String getModel(Perspective perspective) {
-	switch (perspective) {
-	    case THIRD_PERSON:
+    public String getModel(Gender g) {
+	switch (g) {
+	    case MALE:
 		return subRecords.getSubString("MOD2").print();
 	    default:
 		return subRecords.getSubString("MOD4").print();
@@ -329,15 +363,15 @@ public class ARMO extends MajorRecordDescription {
     public float getArmorRatingFloat() {
 	return (float) (subRecords.getSubData("DNAM").toInt() / 100.0);
     }
-    
+
     public void setArmorRating(int rating) {
 	subRecords.setSubData("DNAM", rating);
     }
-    
+
     public int getArmorRating() {
 	return subRecords.getSubData("DNAM").toInt();
     }
-    
+
     /**
      *
      * @param template
