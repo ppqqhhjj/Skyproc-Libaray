@@ -583,6 +583,17 @@ public class SPGlobal {
 
 	System.setOut(new PrintStream(outToDebug, true));
     }
+    
+    static void reset() {
+	SPDatabase.activePlugins.clear();
+	getDB().addedPlugins.clear();
+	getDB().modLookup.clear();
+	FormID.allIDs.clear();
+	Consistency.IDs.clear();
+	Consistency.edidToForm.clear();
+	Consistency.imported = false;
+	Consistency.newIDs.clear();
+    }
 
     /**
      * Closes all logs.

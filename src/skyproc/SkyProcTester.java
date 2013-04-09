@@ -5,12 +5,8 @@
 package skyproc;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import lev.LFileChannel;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
@@ -25,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.PERK};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.PERK};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
     /**
@@ -43,16 +39,13 @@ public class SkyProcTester {
 	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	    switch (test) {
 		case 1:
-		    validate();
+		    validateAll();
 		    break;
 		case 2:
 		    importTest();
 		    break;
 		case 3:
 		    copyTest();
-		    break;
-		case 4:
-		    VMADshaver(GRUP_TYPE.DIAL);
 		    break;
 	    }
 	    gui.finished();
@@ -62,20 +55,30 @@ public class SkyProcTester {
 	LDebug.wrapUp();
     }
 
-    private static void validate() throws Exception {
+    private static void validateAll() throws Exception {
+	String[] mods = {
+	    "Skyrim.esm",
+//	    "Dawnguard.esm",
+//	    "Dragonborn.esm"
+	};
+	for (String mod : mods) {
+	    validate(new ModListing(mod));
+	}
+    }
+    
+    private static void validate(ModListing mod) throws Exception {
 
 	SubStringPointer.shortNull = false;
 
 	FormID.allIDs.clear();
-	SPImporter importer = new SPImporter();
-	importer.importMod(new ModListing("Skyrim.esm"), SPGlobal.pathToData, types);
+	SPImporter.importMod(mod, SPGlobal.pathToData, types);
 
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
 
 	for (GRUP_TYPE g : types) {
 	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
-		if (!test(g)) {
+		if (!test(g, mod)) {
 		    SPProgressBarPlug.setStatus("FAILED: " + g);
 		    break;
 		}
@@ -96,9 +99,11 @@ public class SkyProcTester {
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}
+	
+	SPGlobal.reset();
     }
 
-    private static boolean test(GRUP_TYPE type) throws IOException, BadRecord, BadMod {
+    private static boolean test(GRUP_TYPE type, ModListing mod) throws IOException, BadRecord, BadMod {
 	System.out.println("Testing " + type);
 	SPProgressBarPlug.setStatus("Validating " + type);
 	SPProgressBarPlug.pause(true);
@@ -128,7 +133,7 @@ public class SkyProcTester {
 	    System.out.println("Record Lengths were off.");
 	}
 	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
-	File validF = new File("Validation Files/" + type.toString() + "validation.esp");
+	File validF = new File("Validation Files/" + type.toString() + "_" + mod.printNoSuffix() + ".esp");
 	if (validF.isFile()) {
 	    passed = Ln.validateCompare(SPGlobal.pathToData + "Test.esp", validF.getPath(), 10) && passed;
 	} else {
@@ -168,55 +173,7 @@ public class SkyProcTester {
 	SPProgressBarPlug.incrementBar();
 	return passed;
     }
-
-    static void VMADshaver(GRUP_TYPE type) throws IOException {
-	LFileChannel in = new LFileChannel(new File("Validation Files/" + type.toString() + "validation.esp"));
-	FileOutputStream oStream = new FileOutputStream(new File("Validation Files/" + type.toString() + "validation.esp.tmp"));
-	FileChannel oChannel = oStream.getChannel();
-	System.out.println(in.available());
-	long pos = in.pos(), grupPos = 0, infoPos = 0, vmadPos = 0;
-	int grupSize = 0, infoSize = 0, vmadSize = 0, skip = 0;
-	String result;
-	while (!"".equals(result = in.scanTo("VMAD", "GRUP", "INFO"))) {
-	    if (result.equals("VMAD")) {
-		vmadPos = oChannel.position();
-		vmadSize = in.extractInt(2);
-		in.skip(4);
-		int numScripts = in.extractInt(2);
-		int runningSize = 6;
-		for (int i = 0; i < numScripts; i++) {
-		    int scriptSize = in.extractInt(2);
-		    runningSize += 2 + 3 + scriptSize;
-		    in.skip(scriptSize + 3);
-		}
-		skip = vmadSize - runningSize;
-	    }
-	    in.transferTo(pos, in.pos() - pos, oChannel);
-
-	    if (skip > 0) {
-		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(grupSize - skip)), grupPos);
-		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(infoSize - skip)), infoPos);
-		oChannel.write(ByteBuffer.wrap(Ln.toByteArray(vmadSize - skip)), vmadPos);
-		System.out.println("Correct difference of: " + skip + " at position " + in.pos());
-	    }
-
-	    if (result.equals("GRUP")) {
-		grupPos = oChannel.position();
-		grupSize = in.extractInt(4);
-		in.jumpBack(4);
-	    } else if (result.equals("INFO")) {
-		infoPos = oChannel.position();
-		infoSize = in.extractInt(4);
-		in.jumpBack(4);
-	    }
-
-	    in.skip(skip);
-	    skip = 0;
-	    pos = in.pos();
-	}
-	oChannel.close();
-    }
-
+    
     /**
      *
      */

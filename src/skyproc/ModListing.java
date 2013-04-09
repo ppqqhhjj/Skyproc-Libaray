@@ -72,10 +72,14 @@ public class ModListing extends SubRecord implements Comparable {
     @Override
     public String print() {
 	if (master) {
-	    return mast.print() + ".esm";
+	    return printNoSuffix() + ".esm";
 	} else {
-	    return mast.print() + ".esp";
+	    return printNoSuffix() + ".esp";
 	}
+    }
+    
+    public String printNoSuffix() {
+	return mast.print();
     }
 
     @Override
