@@ -112,6 +112,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	    }
 	    return item;
 	} catch (java.nio.BufferUnderflowException e) {
+	    SPGlobal.logException(e);
 	    handleBadRecord(item, e.toString());
 	}
 	return null;
