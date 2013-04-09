@@ -158,6 +158,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    SubString EDID = subRecords.getSubString("EDID");
 	    EDID.parseData(EDID.extractRecordData(in), srcMod);
 	}
+	
+	if (getEDID().equals("DA11Cannibalism")) {
+	    int wer = 23;
+	}
 
 	importSubRecords(in);
     }
@@ -202,6 +206,15 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
+    int getTotalLength(Mod srcMod) {
+	int out = super.getTotalLength(srcMod);
+	if (shouldExportGRUP()) {
+	    out += getGRUPAppend().getTotalLength(srcMod);
+	}
+	return out;
+    }
+
+    @Override
     int getSizeLength() {
 	return 4;
     }
@@ -226,7 +239,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 		subRecords.add(edid);
 	    }
 	    
-	    if (getGRUPAppend() != null && shouldExportGRUP()) {
+	    if (shouldExportGRUP()) {
 		getGRUPAppend().export(out, srcMod);
 	    }
 	}

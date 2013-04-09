@@ -136,11 +136,16 @@ public enum GRUP_TYPE {
 	switch (g) {
 	    case QUST:
 		return true;
-	    case DIAL:
-		return true;
-	    case INFO:
-		return true;
 	    case LGTM:
+		return true;
+	    default:
+		return false;
+	}
+    }
+    
+    static boolean internal (GRUP_TYPE g) {
+	switch (g) {
+	    case INFO:
 		return true;
 	    default:
 		return false;

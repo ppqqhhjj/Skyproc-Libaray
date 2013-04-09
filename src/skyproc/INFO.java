@@ -22,7 +22,7 @@ public class INFO extends MajorRecord {
     static final SubPrototype INFOprototype = new SubPrototype(MajorRecord.majorProto) {
 	@Override
 	protected void addRecords() {
-	    add(new ScriptPackage());
+	    add(new ScriptPackage(new ScriptFragments()));
 	    add(new SubData("DATA"));
 	    add(new ENAM());
 	    add(new SubForm("TPIC"));
@@ -51,8 +51,8 @@ public class INFO extends MajorRecord {
 		    add(new SubForm("LNAM"));
 		}
 	    }, false)));
-	    add(new SubForm("ANAM"));
 	    add(new SubStringPointer("RNAM", SubStringPointer.Files.STRINGS));
+	    add(new SubForm("ANAM"));
 	    add(new SubForm("TWAT"));
 	    add(new SubForm("ONAM"));
 	}
@@ -134,7 +134,89 @@ public class INFO extends MajorRecord {
 	    return 4;
 	}
     }
+    
+    static class ScriptFragments extends SubRecord {
 
+	byte unknown = 0;
+	LFlags fragmentFlags = new LFlags(1);
+	StringNonNull fragmentFile = new StringNonNull();
+	ArrayList<ScriptFragment> fragments = new ArrayList<>();
+	boolean valid = false;
+
+	@Override
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(1)[0];
+	    fragmentFlags.set(in.extract(1));
+	    fragmentFile.set(in.extractString(in.extractInt(2)));
+	    while (!in.isDone()) {
+		ScriptFragment frag = new ScriptFragment();
+		frag.parseData(in, srcMod);
+		fragments.add(frag);
+	    }
+	    valid = true;
+	}
+
+	@Override
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    if (!valid) {
+		return;
+	    }
+	    out.write(unknown, 1);
+	    out.write(fragmentFlags.export());
+	    fragmentFile.export(out, srcMod);
+	    for (ScriptFragment frag : fragments) {
+		frag.export(out, srcMod);
+	    }
+	}
+	
+	@Override
+	int getContentLength(Mod srcMod) {
+	    if (!valid) {
+		return 0;
+	    }
+	    int out = 2;
+	    out += fragmentFile.getTotalLength(srcMod);
+	    for (ScriptFragment frag : fragments) {
+		out += frag.getContentLength(srcMod);
+	    }
+	    return out;
+	}
+
+	@Override
+	SubRecord getNew(String type) {
+	    return new ScriptFragments();
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
+    }
+
+    static class ScriptFragment {
+
+	byte unknown = 0;
+	StringNonNull scriptName = new StringNonNull();
+	StringNonNull fragmentName = new StringNonNull();
+
+	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(1)[0];
+	    scriptName.set(in.extractString(in.extractInt(2)));
+	    fragmentName.set(in.extractString(in.extractInt(2)));
+	}
+
+	void export(LExporter out, Mod srcMod) throws IOException {
+	    out.write(unknown, 1);
+	    scriptName.export(out, srcMod);
+	    fragmentName.export(out, srcMod);
+	}
+	
+	int getContentLength(Mod srcMod) {
+	    return 1 + scriptName.getTotalLength(srcMod) 
+		    + fragmentName.getTotalLength(srcMod);
+	}
+    }
+    
     // Common Functions
     INFO() {
 	super();

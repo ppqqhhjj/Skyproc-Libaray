@@ -8,10 +8,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.JOptionPane;
 import lev.LFileChannel;
 import lev.Ln;
@@ -23,6 +23,8 @@ import lev.Ln;
  */
 public class NiftyFunc {
 
+    static String[] validationSkip = { "DIAL" };
+    
     /**
      * A common way to attach scripts to NPCs that normally cannot have scripts
      * attached<br> (Any NPC that is referenced by a LVLN)<br> is to give a
@@ -273,6 +275,7 @@ public class NiftyFunc {
     public static boolean validateRecordLengths(String testFilePath, int numErrorsToPrint) {
 	boolean correct = true;
 	int numErrors = 0;
+	ArrayList<String> skip = new ArrayList<>(Arrays.asList(validationSkip));
 	try {
 	    File file = new File(testFilePath);
 	    if (file.isFile()) {
@@ -307,7 +310,11 @@ public class NiftyFunc {
 		    grupPos = input.pos() - 4;
 		    grupLength = input.extractInt(0, 4);
 		    majorRecordType = input.extractString(0, 4);
-		    input.skip(12);
+		    if (skip.contains(majorRecordType)) {
+			input.skip(grupLength - 12);
+		    } else {
+			input.skip(12);
+		    }
 		} else if (inputStr.equals(majorRecordType)) {
 		    start = input.pos() - 4;
 		    length = input.extractInt(0, 4);
@@ -381,7 +388,9 @@ public class NiftyFunc {
     }
 
     /**
-     * Starts a process as if from the command line, with the given working directory.
+     * Starts a process as if from the command line, with the given working
+     * directory.
+     *
      * @param directory
      * @param args
      * @return
@@ -413,6 +422,7 @@ public class NiftyFunc {
 
     /**
      * Starts a process as if from the command line.
+     *
      * @param args
      * @return
      */

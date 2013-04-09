@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
-import lev.LShrinkArray;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;

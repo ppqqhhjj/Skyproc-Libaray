@@ -27,6 +27,7 @@ public class DIAL extends MajorRecord {
 	}
     };
     GRUP<INFO> grup = new GRUP<>(info);
+    boolean gruped = false;
 
     DIAL() {
 	super();
@@ -45,11 +46,12 @@ public class DIAL extends MajorRecord {
 
     @Override
     public GRUP getGRUPAppend() {
+	gruped = true;
 	return grup;
     }
     
     @Override
     public boolean shouldExportGRUP() {
-	return true;//!grup.isEmpty();// || version[2] != 1;
+	return gruped;//!grup.isEmpty() || version[2] != 1 || getEDID().equals("");
     }
 }

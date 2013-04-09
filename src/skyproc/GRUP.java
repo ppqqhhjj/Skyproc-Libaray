@@ -145,7 +145,8 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 
     @Override
     void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+	out.write(getType().toString());
+	out.write(getContentLength(srcMod) + getHeaderLength(), getSizeLength());
 	out.write(contained);
 	out.write(grupType);
 	out.write(dateStamp);
@@ -343,7 +344,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 
     @Override
     int getContentLength(Mod srcMod) {
-	int length = getHeaderLength();
+	int length = 0;
 	for (T t : listRecords) {
 	    if (t.isValid()) {
 		length += t.getTotalLength(srcMod);

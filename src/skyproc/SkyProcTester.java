@@ -74,7 +74,7 @@ public class SkyProcTester {
 	SPProgressBarPlug.setMax(types.length);
 
 	for (GRUP_TYPE g : types) {
-	    if (!GRUP_TYPE.unfinished(g)) {
+	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
 		if (!test(g)) {
 		    SPProgressBarPlug.setStatus("FAILED: " + g);
 		    break;
