@@ -57,6 +57,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<ARMA> armatures = new GRUP<>(new ARMA());
     GRUP<ECZN> encounterZones = new GRUP<>(new ECZN());
     GRUP<LGTM> lightingTemplates = new GRUP<>(new LGTM());
+    GRUP<DLBR> dialogBranches = new GRUP<>(new DLBR());
+    GRUP<DLVW> dialogViews = new GRUP<>(new DLVW());
     GRUP<OTFT> outfits = new GRUP<>(new OTFT());
     LFileChannel input;
     Language language = Language.English;
@@ -155,6 +157,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(encounterZones.getContainedType(), encounterZones);
 	outfits.dateStamp = new byte[]{(byte) 0x17, (byte) 0x4E, (byte) 0x23, 0};
 	GRUPs.put(lightingTemplates.getContainedType(), lightingTemplates);
+	GRUPs.put(dialogBranches.getContainedType(), dialogBranches);
+	GRUPs.put(dialogViews.getContainedType(), dialogViews);
 	GRUPs.put(outfits.getContainedType(), outfits);
     }
 
@@ -1275,6 +1279,24 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<DIAL> getDialogs() {
 	return dialogs;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Book records
+     */
+    public GRUP<DLBR> getDialogBranches() {
+	return dialogBranches;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return The GRUP containing Book records
+     */
+    public GRUP<DLVW> getDialogViews() {
+	return dialogViews;
     }
 
     /**

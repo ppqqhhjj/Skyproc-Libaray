@@ -127,6 +127,8 @@ public enum GRUP_TYPE {
      *
      */
     LGTM,
+    DLBR,
+    DLVW,
     /**
      *
      */
@@ -142,7 +144,7 @@ public enum GRUP_TYPE {
 		return false;
 	}
     }
-    
+
     static boolean internal (GRUP_TYPE g) {
 	switch (g) {
 	    case INFO:

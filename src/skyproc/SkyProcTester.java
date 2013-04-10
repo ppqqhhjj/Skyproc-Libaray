@@ -21,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.ALCH};
-    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static GRUP_TYPE[] types = {GRUP_TYPE.DLVW};
+//    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
     /**
@@ -34,9 +34,9 @@ public class SkyProcTester {
 	ModListing skyrim = new ModListing("Skyrim.esm");
 	badIDs.add(new FormID("018A45", skyrim));  //RiverwoodZone
 	badIDs.add(new FormID("00001E", skyrim));  //NoZoneZone
+	SPGlobal.testing = true;
+	SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	try {
-	    SPGlobal.testing = true;
-	    SPDefaultGUI gui = new SPDefaultGUI("Tester Program", "A tester program meant to flex SkyProc.");
 	    switch (test) {
 		case 1:
 		    validateAll();
@@ -50,6 +50,7 @@ public class SkyProcTester {
 	    }
 	    gui.finished();
 	} catch (Exception e) {
+	    gui.finished();
 	    SPGlobal.logException(e);
 	}
 	LDebug.wrapUp();
@@ -59,15 +60,14 @@ public class SkyProcTester {
 	String[] mods = {
 	    "Skyrim.esm",
 	    "Dawnguard.esm",
-	    "Dragonborn.esm",
-	};
+	    "Dragonborn.esm",};
 	for (String mod : mods) {
 	    if (!validate(new ModListing(mod))) {
 		break;
 	    }
 	}
     }
-    
+
     private static boolean validate(ModListing mod) throws Exception {
 
 	SubStringPointer.shortNull = false;
@@ -103,9 +103,9 @@ public class SkyProcTester {
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}
-	
+
 	SPGlobal.reset();
-	
+
 	return exportPass && idPass;
     }
 
@@ -179,7 +179,7 @@ public class SkyProcTester {
 	SPProgressBarPlug.incrementBar();
 	return passed;
     }
-    
+
     /**
      *
      */

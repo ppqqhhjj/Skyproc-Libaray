@@ -234,7 +234,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 		subRecords = new SubRecordsDerived(subRecords.getPrototype());
 		subRecords.add(edid);
 	    }
-	    
+
 	    if (shouldExportGRUP()) {
 		getGRUPAppend().export(out, srcMod);
 	    }
@@ -400,7 +400,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     GRUP getGRUPAppend() {
 	return null;
     }
-    
+
     boolean shouldExportGRUP() {
 	return false;
     }
