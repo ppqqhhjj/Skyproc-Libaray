@@ -21,7 +21,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.PERK};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.ALCH};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
@@ -58,15 +58,17 @@ public class SkyProcTester {
     private static void validateAll() throws Exception {
 	String[] mods = {
 	    "Skyrim.esm",
-//	    "Dawnguard.esm",
-//	    "Dragonborn.esm"
+	    "Dawnguard.esm",
+	    "Dragonborn.esm",
 	};
 	for (String mod : mods) {
-	    validate(new ModListing(mod));
+	    if (!validate(new ModListing(mod))) {
+		break;
+	    }
 	}
     }
     
-    private static void validate(ModListing mod) throws Exception {
+    private static boolean validate(ModListing mod) throws Exception {
 
 	SubStringPointer.shortNull = false;
 
@@ -76,35 +78,39 @@ public class SkyProcTester {
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
 
+	boolean exportPass = true;
 	for (GRUP_TYPE g : types) {
 	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
 		if (!test(g, mod)) {
 		    SPProgressBarPlug.setStatus("FAILED: " + g);
+		    exportPass = false;
 		    break;
 		}
 		SPProgressBarPlug.setStatus("Validating DONE");
 	    }
 	}
 
-	boolean idFail = false;
+	boolean idPass = true;
 	for (FormID id : FormID.allIDs) {
 	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id)) {
 		System.out.println("A bad id: " + id);
-		idFail = true;
+		idPass = false;
 		break;
 	    }
 	}
-	if (idFail) {
+	if (!idPass) {
 	    System.out.println("Some FormIDs were unstandardized!!");
 	} else {
 	    System.out.println("All FormIDs properly standardized.");
 	}
 	
 	SPGlobal.reset();
+	
+	return exportPass && idPass;
     }
 
     private static boolean test(GRUP_TYPE type, ModListing mod) throws IOException, BadRecord, BadMod {
-	System.out.println("Testing " + type);
+	System.out.println("Testing " + type + " in " + mod);
 	SPProgressBarPlug.setStatus("Validating " + type);
 	SPProgressBarPlug.pause(true);
 
