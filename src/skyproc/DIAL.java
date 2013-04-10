@@ -4,7 +4,10 @@
  */
 package skyproc;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import lev.LExporter;
+import lev.Ln;
 
 /**
  *
@@ -18,7 +21,7 @@ public class DIAL extends MajorRecord {
 	@Override
 	protected void addRecords() {
 	    add(new SubStringPointer("FULL", SubStringPointer.Files.STRINGS));
-	    add(new SubData("PNAM"));
+	    add(new SubFloat("PNAM"));
 	    add(new SubForm("BNAM"));
 	    add(new SubForm("QNAM"));
 	    add(new SubData("DATA"));
@@ -45,13 +48,67 @@ public class DIAL extends MajorRecord {
     }
 
     @Override
-    public GRUP getGRUPAppend() {
+    GRUP getGRUPAppend() {
 	gruped = true;
 	return grup;
     }
-    
+
     @Override
-    public boolean shouldExportGRUP() {
+    boolean shouldExportGRUP() {
 	return gruped;//!grup.isEmpty() || version[2] != 1 || getEDID().equals("");
+    }
+
+    @Override
+    void export(LExporter out, Mod srcMod) throws IOException {
+	subRecords.setSubInt("TIFC", grup.getRecords().size());
+	super.export(out, srcMod);
+    }
+    
+    // Get/Set
+    public void setDialog(String dialog) {
+	subRecords.setSubStringPointer("FULL", dialog);
+    }
+
+    public String getDialog() {
+	return subRecords.getSubStringPointer("FULL").print();
+    }
+
+    public void setPriority(Float f) {
+	subRecords.setSubFloat("PNAM", f);
+    }
+
+    public float getPriority() {
+	return subRecords.getSubFloat("PNAM").get();
+    }
+
+    public void setBranch(FormID branch) {
+	subRecords.setSubForm("BNAM", branch);
+    }
+
+    public FormID getBranch() {
+	return subRecords.getSubForm("BNAM").getForm();
+    }
+
+    public void setQuest(FormID quest) {
+	subRecords.setSubForm("QNAM", quest);
+    }
+
+    public FormID getQuest() {
+	return subRecords.getSubForm("QNAM").getForm();
+    }
+
+    public void setSubTypeName(String name) {
+	if (name.length() < 4) {
+	    name = Ln.spaceRight(4, '_', name);
+	}
+	subRecords.setSubString("SNAM", name);
+    }
+    
+    public String getSubTypeName () {
+	return subRecords.getSubString("SNAM").print();
+    }
+    
+    public ArrayList<INFO> getDialogTopicInfos() {
+	return grup.getRecords();
     }
 }

@@ -19,6 +19,18 @@ import skyproc.exceptions.BadRecord;
  */
 public class INFO extends MajorRecord {
 
+    static final SubPrototype responseProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new TRDT());
+	    add(new SubStringPointer("NAM1", SubStringPointer.Files.ILSTRINGS));
+	    add(new SubString("NAM2"));
+	    add(new SubData("NAM3"));
+	    add(new SubForm("SNAM"));
+	    add(new SubList<>(new Condition()));
+	    add(new SubForm("LNAM"));
+	}
+    };
     static final SubPrototype INFOprototype = new SubPrototype(MajorRecord.majorProto) {
 	@Override
 	protected void addRecords() {
@@ -39,18 +51,7 @@ public class INFO extends MajorRecord {
 		    add(new SubData("NEXT"));
 		}
 	    })));
-	    add(new SubList<>(new SubShellBulkType(new SubPrototype() {
-		@Override
-		protected void addRecords() {
-		    add(new TRDT());
-		    add(new SubStringPointer("NAM1", SubStringPointer.Files.ILSTRINGS));
-		    add(new SubString("NAM2"));
-		    add(new SubData("NAM3"));
-		    add(new SubForm("SNAM"));
-		    add(new SubList<>(new Condition()));
-		    add(new SubForm("LNAM"));
-		}
-	    }, false)));
+	    add(new SubList<>(new SubShellBulkType(responseProto, false)));
 	    add(new SubStringPointer("RNAM", SubStringPointer.Files.STRINGS));
 	    add(new SubForm("ANAM"));
 	    add(new SubForm("TWAT"));
@@ -134,7 +135,7 @@ public class INFO extends MajorRecord {
 	    return 4;
 	}
     }
-    
+
     static class ScriptFragments extends SubRecord {
 
 	byte unknown = 0;
@@ -168,7 +169,7 @@ public class INFO extends MajorRecord {
 		frag.export(out, srcMod);
 	    }
 	}
-	
+
 	@Override
 	int getContentLength(Mod srcMod) {
 	    if (!valid) {
@@ -210,13 +211,120 @@ public class INFO extends MajorRecord {
 	    scriptName.export(out, srcMod);
 	    fragmentName.export(out, srcMod);
 	}
-	
+
 	int getContentLength(Mod srcMod) {
-	    return 1 + scriptName.getTotalLength(srcMod) 
+	    return 1 + scriptName.getTotalLength(srcMod)
 		    + fragmentName.getTotalLength(srcMod);
 	}
     }
-    
+
+    public class Response extends SubShell {
+
+	Response() {
+	    super(responseProto);
+	}
+
+	TRDT getTRDT() {
+	    return (TRDT) subRecords.get("TRDT");
+	}
+
+	public void setEmotionType(EmotionType type) {
+	    getTRDT().emotion = type;
+	}
+
+	public EmotionType getEmotionType() {
+	    return getTRDT().emotion;
+	}
+
+	public void setEmotionValue(int val) {
+	    val %= 100;
+	    getTRDT().emotionValue = val;
+	}
+
+	public int getEmotionValue() {
+	    return getTRDT().emotionValue;
+	}
+
+	public void setResponseText(String text) {
+	    subRecords.setSubStringPointer("NAM1", text);
+	}
+
+	public String getResponseText() {
+	    return subRecords.getSubStringPointer("NAM1").print();
+	}
+
+	public void setActorNotes(String text) {
+	    subRecords.setSubStringPointer("NAM2", text);
+	}
+
+	public String getActorNotes() {
+	    return subRecords.getSubStringPointer("NAM2").print();
+	}
+
+	public void setIdleAnimSpeaker(FormID id) {
+	    subRecords.setSubForm("SNAM", id);
+	}
+
+	public FormID getIdleAnimSpeaker() {
+	    return subRecords.getSubForm("SNAM").getForm();
+	}
+
+	public void setIdleAnimListener(FormID id) {
+	    subRecords.setSubForm("LNAM", id);
+	}
+
+	public FormID getIdleAnimListener() {
+	    return subRecords.getSubForm("LNAM").getForm();
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public ArrayList<Condition> getConditions() {
+	    return subRecords.getSubList("CTDA").toPublic();
+	}
+
+	/**
+	 *
+	 * @param c
+	 */
+	public void addCondition(Condition c) {
+	    subRecords.getSubList("CTDA").add(c);
+	}
+
+	/**
+	 *
+	 * @param c
+	 */
+	public void removeCondition(Condition c) {
+	    subRecords.getSubList("CTDA").remove(c);
+	}
+    }
+
+    // Enums
+    public enum ResponseFlag {
+
+	Goodbye(0),
+	Random(1),
+	SayOnce(2),
+	RandomEnd(5),
+	InvisibleContinue(6),
+	WalkAway(7),
+	WalkAwayInvisbleInMenu(8),
+	ForceSubtitle(9),
+	CanMoveWhileGreeting(10),
+	HasNoLipFile(11),
+	RequiresPostProcessing(12),
+	AudioOutputOverride(13),
+	SpendsFavorPoints(14),;
+	int value;
+
+	ResponseFlag(int val) {
+	    value = val;
+	}
+    }
+
     // Common Functions
     INFO() {
 	super();
@@ -231,5 +339,144 @@ public class INFO extends MajorRecord {
     @Override
     Record getNew() {
 	return new INFO();
+    }
+
+    // Get/set
+    /**
+     *
+     * @return
+     */
+    public ScriptPackage getScriptPackage() {
+	return subRecords.getScripts();
+    }
+
+    ENAM getENAM() {
+	return (ENAM) subRecords.get("ENAM");
+    }
+
+    public void set(ResponseFlag res, boolean on) {
+	getENAM().flags.set(res.value, on);
+    }
+
+    public boolean get(ResponseFlag res) {
+	return getENAM().flags.get(res.value);
+    }
+
+    public void setResetTime(float hours) {
+	hours /= 24;
+	getENAM().hoursReset = (int) (hours * 65535);
+    }
+
+    public float getResetTime() {
+	float tmp = ((float) getENAM().hoursReset) / 65535;
+	return tmp * 24;
+    }
+
+    public void setTopic(FormID id) {
+	subRecords.setSubForm("TPIC", id);
+    }
+
+    public FormID getTopic() {
+	return subRecords.getSubForm("TPIC").getForm();
+    }
+
+    public void setPreviousINFO(FormID id) {
+	subRecords.setSubForm("PNAM", id);
+    }
+
+    public FormID getPreviousINFO() {
+	return subRecords.getSubForm("PNAM").getForm();
+    }
+
+    public void setFavorLevel(FavorLevel lev) {
+	subRecords.setSubInt("CNAM", lev.ordinal());
+    }
+
+    public FavorLevel getFavorLevel() {
+	return FavorLevel.values()[subRecords.getSubInt("CNAM").get()];
+    }
+
+    public ArrayList<FormID> getLinkTo() {
+	return SubList.subFormToPublic(subRecords.getSubList("TCLT"));
+    }
+
+    public void removeLinkTo(FormID id) {
+	subRecords.getSubList("TCLT").remove(new SubForm("TCLT", id));
+    }
+
+    public void addLinkTo(FormID id) {
+	subRecords.getSubList("TCLT").add(new SubForm("TCLT", id));
+    }
+
+    public void clearLinkTo() {
+	subRecords.getSubList("TCLT").clear();
+    }
+
+    public void setResponseData(FormID id) {
+	subRecords.setSubForm("DNAM", id);
+    }
+
+    public FormID getResponseData() {
+	return subRecords.getSubForm("DNAM").getForm();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<Condition> getConditions() {
+	return subRecords.getSubList("CTDA").toPublic();
+    }
+
+    /**
+     *
+     * @param c
+     */
+    public void addCondition(Condition c) {
+	subRecords.getSubList("CTDA").add(c);
+    }
+
+    /**
+     *
+     * @param c
+     */
+    public void removeCondition(Condition c) {
+	subRecords.getSubList("CTDA").remove(c);
+    }
+
+    public ArrayList<Response> getResponses() {
+	return subRecords.getSubList("TRDT").toPublic();
+    }
+
+    public void setPrompt(String text) {
+	subRecords.setSubStringPointer("RNAM", text);
+    }
+
+    public String getPrompt() {
+	return subRecords.getSubStringPointer("RNAM").print();
+    }
+
+    public void setSpeaker(FormID id) {
+	subRecords.setSubForm("ANAM", id);
+    }
+
+    public FormID getSpeaker() {
+	return subRecords.getSubForm("ANAM").getForm();
+    }
+
+    public void setWalkAwayTopic(FormID id) {
+	subRecords.setSubForm("TWAT", id);
+    }
+
+    public FormID getWalkAwayTopic () {
+	return subRecords.getSubForm("TWAT").getForm();
+    }
+
+    public void setAudioOverride(FormID id) {
+	subRecords.setSubForm("ONAM", id);
+    }
+
+    public FormID getAudioOverride () {
+	return subRecords.getSubForm("ONAM").getForm();
     }
 }

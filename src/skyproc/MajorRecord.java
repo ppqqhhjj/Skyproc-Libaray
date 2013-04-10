@@ -397,11 +397,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return majorFlags.get(flag.value);
     }
 
-    public GRUP getGRUPAppend() {
+    GRUP getGRUPAppend() {
 	return null;
     }
     
-    public boolean shouldExportGRUP() {
+    boolean shouldExportGRUP() {
 	return false;
     }
 }
