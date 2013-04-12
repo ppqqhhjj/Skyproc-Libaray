@@ -570,7 +570,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_types));
 	    mergeMasters(rhs);
 	    for (GRUP_TYPE t : grups) {
-		GRUPs.get(t).merge(rhs.GRUPs.get(t));
+		GRUP g = GRUPs.get(t);
+		if (g != null) {
+		    g.merge(rhs.GRUPs.get(t));
+		}
 	    }
 	}
     }
