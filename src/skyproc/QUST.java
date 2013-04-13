@@ -876,8 +876,8 @@ public class QUST extends MajorRecordNamed {
 	subRecords.getSubList("QOBJ").clear();
     }
     
-    public void addObjective(QuestStage stage) {
-	subRecords.getSubList("QOBJ").add(stage);
+    public void addObjective(QuestObjective objective) {
+	subRecords.getSubList("QOBJ").add(objective);
     }
     
     public ArrayList<Alias> getAliases() {
