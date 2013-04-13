@@ -2826,6 +2826,7 @@ public class Condition extends SubShell {
 	 *
 	 */
 	DoesNotExist(726),
+	IsOnFlyingMount(730),
 	/**
 	 *
 	 */

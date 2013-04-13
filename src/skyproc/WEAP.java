@@ -42,9 +42,9 @@ public class WEAP extends MajorRecordDescription {
 	    reposition("DESC");
 	    add(SubString.getNew("NNAM", true));
 	    add(new SubForm("INAM"));
+	    add(new SubForm("WNAM"));
 	    add(new SubForm("SNAM"));
 	    add(new SubForm("XNAM"));
-	    add(new SubForm("WNAM"));
 	    add(new SubForm("TNAM"));
 	    add(new SubForm("UNAM"));
 	    add(new SubForm("NAM9"));

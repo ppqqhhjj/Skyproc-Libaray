@@ -29,9 +29,9 @@ public class ALCH extends MagicItem {
 	    add(SubString.getNew("MODL", true));
 	    add(new SubData("MODT"));
 	    add(new AltTextures("MODS"));
+	    add(new SubData("MODS"));
 	    add(new SubForm("YNAM"));
 	    add(new SubForm("ZNAM"));
-	    add(new SubData("MODS"));
 	    add(new SubFloat("DATA"));
 	    add(new ENIT());
 	    add(SubString.getNew("ICON", true));
