@@ -32,7 +32,8 @@ public abstract class MajorRecord extends Record implements Serializable {
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
     byte[] revision = new byte[4];
-    byte[] version = {0x28, 0, 0, 0};
+    int formVersion = 0x28;
+    byte[] version = new byte[2];
     Mod srcMod;
 
     MajorRecord() {
@@ -146,7 +147,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 	setForm(in.extract(4));
 	ID.standardize(srcMod);
 	revision = in.extract(4);
-	version = in.extract(4);
+	formVersion = in.extractInt(2);
+	version = in.extract(2);
 
 	if (get(MajorFlags.Compressed)) {
 	    set(MajorFlags.Compressed, false);
@@ -225,9 +227,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(out)));
 	    }
 	    out.write(majorFlags.export(), 4);
-	    out.write(ID.getInternal(true), 4);
+	    ID.export(out);
 	    out.write(revision, 4);
-	    out.write(version, 4);
+	    out.write(formVersion, 2);
+	    out.write(version, 2);
 
 	    subRecords.export(out);
 	    if (SPGlobal.deleteAfterExport) {

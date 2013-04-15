@@ -38,8 +38,10 @@ public class BOOK extends MajorRecordDescription {
 	    out.write(flags.export());
 	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
 		out.write(teachesAV.ordinal());
-	    } else {
+	    } else if (flags.get(BookFlag.TeachesSpell.ordinal())) {
 		teachesSpell.export(out);
+	    } else {
+		out.write(-1);
 	    }
 	    out.write(value);
 	    out.write(weight);
@@ -81,7 +83,6 @@ public class BOOK extends MajorRecordDescription {
 	}
     }
     static final SubPrototype BOOKprototype = new SubPrototype(MajorRecordDescription.descProto) {
-
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
@@ -267,7 +268,7 @@ public class BOOK extends MajorRecordDescription {
 	getDATA().teachesSpell = spell;
     }
 
-    public FormID getTeachesSpell () {
+    public FormID getTeachesSpell() {
 	return getDATA().teachesSpell;
     }
 
