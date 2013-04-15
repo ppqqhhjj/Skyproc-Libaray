@@ -19,7 +19,7 @@ import skyproc.gui.SPProgressBarPlug;
  *
  * @author Justin Swanson
  */
-class Consistency {
+public class Consistency {
 
     static String header = "Consistency";
     static Map<String, FormID> edidToForm = new HashMap<>();
@@ -116,7 +116,7 @@ class Consistency {
 	cleaned = true;
     }
 
-    static String getAvailableEDID(String edid) {
+    public static String getAvailableEDID(String edid) {
 	// Currently not fixing EDIDs for newbs
 	// It will cause tough bugs down the road
 	// Its preferable to force them to do it right
@@ -130,6 +130,10 @@ class Consistency {
 		newEDID = edid + (++num);
 	    }
 	    edid = newEDID;
+	}
+	char[] badChars = {(char) 0x0D, (char) 0x0A};
+	for (char c : badChars) {
+	    edid = edid.replaceAll(String.valueOf(c), "");
 	}
 	return edid;
     }
