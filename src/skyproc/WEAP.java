@@ -34,7 +34,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new AltTextures("MODS"));
 	    add(new SubForm("EITM"));
 	    add(new SubData("EAMT"));
-	    add(new SubData("MODS"));
+	    add(new SubData("MODB"));
 	    add(new SubForm("ETYP"));
 	    add(new SubForm("BIDS"));
 	    add(new SubForm("BAMT"));
@@ -895,12 +895,12 @@ public class WEAP extends MajorRecordDescription {
     public FormID getTemplate() {
 	return subRecords.getSubForm("CNAM").getForm();
     }
-    
+
     public ArrayList<AltTextures.AltTexture> getAltTextures() {
 	AltTextures t = (AltTextures) subRecords.get("MODS");
 	return t.altTextures;
     }
-    
+
     public boolean equalAltTextures(WEAP rhs) {
 	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
     }

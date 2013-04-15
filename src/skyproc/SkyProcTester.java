@@ -21,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.BOOK};
-    static GRUP_TYPE[] types = GRUP_TYPE.values();
+    static GRUP_TYPE[] types = {GRUP_TYPE.WEAP};
+//    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
     /**
