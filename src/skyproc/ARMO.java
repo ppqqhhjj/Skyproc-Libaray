@@ -81,8 +81,8 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(value);
 	    out.write(weight);
 	}
@@ -108,7 +108,7 @@ public class ARMO extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8;
 	}
 

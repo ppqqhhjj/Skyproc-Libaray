@@ -47,17 +47,17 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
-	    if (srcMod.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
-		data.setData(Ln.toByteArray(srcMod.addOutString(text.string, file), 4));
-		data.export(out, srcMod);
+	    if (out.getExportMod().isFlag(Mod.Mod_Flags.STRING_TABLED)) {
+		data.setData(Ln.toByteArray(out.getExportMod().addOutString(text.string, file), 4));
+		data.export(out);
 	    } else {
 		if (text.isValid()) {
-		    text.export(out, srcMod);
+		    text.export(out);
 		} else if (forceExport) {
 		    data.setData(0, shortNull? 1 : 4); // If short null 1, else 4
-		    data.export(out, srcMod);
+		    data.export(out);
 		}
 	    }
 	}
@@ -135,12 +135,12 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	if (isValid()) {
-	    if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
+	    if (out.getExportMod().isFlag(Mod_Flags.STRING_TABLED)) {
 		return 4; // length of 4
 	    } else if (text.isValid()) {
-		return text.getContentLength(srcMod);
+		return text.getContentLength(out);
 	    }
 	}
 
@@ -148,9 +148,9 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    int getTotalLength(Mod srcMod) {
+    int getTotalLength(ModExporter out) {
 	if (isValid() || forceExport) {
-	    return getContentLength(srcMod) + getHeaderLength();
+	    return getContentLength(out) + getHeaderLength();
 	} else {
 	    return 0;
 	}
@@ -183,5 +183,5 @@ class SubStringPointer extends SubRecordTyped {
 	return true;
     }
 
-    
+
 }

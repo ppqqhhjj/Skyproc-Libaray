@@ -33,8 +33,8 @@ class ConditionBase extends SubRecord {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	//Flags and Operator
 	int operatorInt = operator.ordinal();
 	operatorInt *= 32;
@@ -115,7 +115,7 @@ class ConditionBase extends SubRecord {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return 32;
     }
 

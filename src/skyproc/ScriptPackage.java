@@ -48,15 +48,15 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int out = 6;
+    int getContentLength(ModExporter out) {
+	int len = 6;
 	for (ScriptRef s : scripts) {
-	    out += s.getTotalLength(srcMod);
+	    len += s.getTotalLength(out);
 	}
 	if (fragments != null) {
-	    out += fragments.getContentLength(srcMod);
+	    len += fragments.getContentLength(out);
 	}
-	return out;
+	return len;
     }
 
     @Override
@@ -86,17 +86,17 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	if (isValid()) {
 	    out.write(version, 2);
 	    out.write(unknown, 2);
 	    out.write(scripts.size(), 2);
 	    for (ScriptRef s : scripts) {
-		s.export(out, srcMod);
+		s.export(out);
 	    }
 	    if (fragments != null) {
-		fragments.export(out, srcMod);
+		fragments.export(out);
 	    }
 	}
     }

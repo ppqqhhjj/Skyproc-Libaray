@@ -81,8 +81,8 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    writeColor(out, amb);
 	    writeColor(out, dir);
 	    writeColor(out, fog);
@@ -128,7 +128,7 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 92;
 	}
 
@@ -160,8 +160,8 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    writeColor(out, dirAmbXpos);
 	    writeColor(out, dirAmbXneg);
 	    writeColor(out, dirAmbYpos);
@@ -191,7 +191,7 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 32;
 	}
 

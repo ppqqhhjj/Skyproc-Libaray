@@ -88,8 +88,8 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export(), 4);
 	    out.write(baseCost);
 	    relatedID.export(out);
@@ -228,7 +228,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 152;
 	}
 
@@ -267,8 +267,8 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    for (SNDD.Sound s : sounds) {
 		out.write(s.sound.ordinal());
 		s.soundID.export(out);
@@ -297,7 +297,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8 * sounds.size();
 	}
 

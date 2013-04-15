@@ -40,11 +40,11 @@ public class ScriptRef extends Record implements Iterable<String> {
     public ScriptRef(String name) {
 	this.name.set(name);
     }
-    
+
     ScriptRef(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod);
     }
-    
+
     @Override
     final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
@@ -59,12 +59,12 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	name.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	name.export(out);
 	out.write(unknown, 1);
 	out.write(properties.size(), 2);
 	for (ScriptProperty p : properties) {
-	    p.export(out, srcMod);
+	    p.export(out);
 	}
     }
 
@@ -123,12 +123,12 @@ public class ScriptRef extends Record implements Iterable<String> {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int out = name.getTotalLength(srcMod) + 3;
+    int getContentLength(ModExporter out) {
+	int len = name.getTotalLength(out) + 3;
 	for (ScriptProperty p : properties) {
-	    out += p.getTotalLength(srcMod);
+	    len += p.getTotalLength(out);
 	}
-	return out;
+	return len;
     }
 
     /**

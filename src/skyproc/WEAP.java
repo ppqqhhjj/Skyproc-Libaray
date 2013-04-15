@@ -85,8 +85,8 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(wtype.ordinal(), 1);
 	    out.write(unknown1, 3);
 	    out.write(speed);
@@ -178,7 +178,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 100;
 	}
 
@@ -199,8 +199,8 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(value);
 	    out.write(weight);
 	    out.write(damage, 2);
@@ -228,7 +228,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 10;
 	}
 
@@ -252,8 +252,8 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(critDmg);
 	    out.write(critMult);
 	    out.write(onDeath, 1);
@@ -286,7 +286,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 16;
 	}
 

@@ -62,8 +62,8 @@ public class LIGH extends MajorRecordNamed {
         }
 
         @Override
-        void export(LExporter out, Mod srcMod) throws IOException {
-            super.export(out, srcMod);
+        void export(ModExporter out) throws IOException {
+            super.export(out);
             out.write(time);
             out.write(radius);
             out.write(red, 1);
@@ -107,7 +107,7 @@ public class LIGH extends MajorRecordNamed {
         }
 
         @Override
-        int getContentLength(Mod srcMod) {
+        int getContentLength(ModExporter out) {
             return 48;
         }
 

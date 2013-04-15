@@ -29,9 +29,9 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	data = Ln.toByteArray(num, 4);
-	super.export(out, srcMod);
+	super.export(out);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return ID.getContentLength() + 4;
     }
 

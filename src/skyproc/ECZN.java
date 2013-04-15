@@ -71,8 +71,8 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		owner.export(out);
 		location.export(out);
@@ -89,7 +89,7 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		return 12;
 	    } else {

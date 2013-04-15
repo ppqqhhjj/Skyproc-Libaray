@@ -41,9 +41,9 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
     }
 
-    protected void export(LExporter out, Mod srcMod) throws IOException {
+    protected void export(ModExporter out) throws IOException {
 	for (SubRecord s : this) {
-	    s.export(out, srcMod);
+	    s.export(out);
 	}
     }
 
@@ -235,10 +235,10 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
     }
 
-    public int length(Mod srcMod) {
+    public int length(ModExporter out) {
 	int length = 0;
 	for (SubRecord s : this) {
-	    length += s.getTotalLength(srcMod);
+	    length += s.getTotalLength(out);
 	}
 	return length;
     }

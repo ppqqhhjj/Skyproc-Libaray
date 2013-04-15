@@ -69,7 +69,7 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 
@@ -81,8 +81,8 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(level, 4);
 	    entry.export(out);
 	    out.write(count, 4);
@@ -126,8 +126,8 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		owner.export(out);
 		out.write(reqRank);
@@ -150,7 +150,7 @@ public class LeveledEntry extends SubShell {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 

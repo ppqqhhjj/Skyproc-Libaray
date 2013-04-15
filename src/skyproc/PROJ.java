@@ -82,8 +82,8 @@ public class PROJ extends MajorRecordNamed {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export(), 2);
 	    out.write(projType.export(), 2);
 	    out.write(gravity);
@@ -149,7 +149,7 @@ public class PROJ extends MajorRecordNamed {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 92;
 	}
 

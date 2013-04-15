@@ -38,7 +38,7 @@ class SubRGB extends SubRecordTyped {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return 12;
     }
 
@@ -63,9 +63,9 @@ class SubRGB extends SubRecordTyped {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
-	    super.export(out, srcMod);
+	    super.export(out);
 	    out.write(r);
 	    out.write(g);
 	    out.write(b);

@@ -35,19 +35,19 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	for (String t : markers) {
 	    if (set.containsKey(t)) {
 		if (set.get(t).isValid()) {
 		    SubData marker = new SubData(t);
-		    marker.export(out, srcMod);
-		    set.get(t).export(out, srcMod);
+		    marker.export(out);
+		    set.get(t).export(out);
 		    continue;
 		}
 	    }
 	    if (forceMarkers) {
 		SubData marker = new SubData(t);
-		marker.export(out, srcMod);
+		marker.export(out);
 	    }
 	}
     }
@@ -80,20 +80,20 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int out = 0;
+    int getContentLength(ModExporter out) {
+	int len = 0;
 	for (String t : markers) {
 	    if (set.containsKey(t)) {
 		if (set.get(t).isValid()) {
-		    out += 6 + set.get(t).getTotalLength(srcMod);
+		    len += 6 + set.get(t).getTotalLength(out);
 		    continue;
 		}
 	    }
 	    if (forceMarkers) {
-		out += 6;
+		len += 6;
 	    }
 	}
-	return out;
+	return len;
     }
 
     public void clear() {

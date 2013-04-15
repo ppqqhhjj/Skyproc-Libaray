@@ -75,10 +75,10 @@ public abstract class Record implements Serializable {
 	return (Ln.arrayToString(in.getInts(0, 4)));
     }
 
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
 	    out.write(getType().toString());
-	    out.write(getContentLength(srcMod));
+	    out.write(getContentLength(out));
 	}
     }
 
@@ -119,11 +119,11 @@ public abstract class Record implements Serializable {
 
     abstract int getFluffLength();
 
-    int getTotalLength(Mod srcMod) {
-	return getContentLength(srcMod) + getHeaderLength();
+    int getTotalLength(ModExporter out) {
+	return getContentLength(out) + getHeaderLength();
     }
 
-    abstract int getContentLength(Mod srcMod);
+    abstract int getContentLength(ModExporter out);
 
     void newSyncLog(String fileName) {
 	SPGlobal.newSyncLog(fileName);

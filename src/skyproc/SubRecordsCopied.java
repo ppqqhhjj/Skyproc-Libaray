@@ -35,17 +35,17 @@ class SubRecordsCopied extends SubRecords {
     }
 
     @Override
-    protected void export(LExporter out, Mod srcMod) throws IOException {
+    protected void export(ModExporter out) throws IOException {
 	for (SubRecord s : iteratorNoCopy()) {
-	    s.export(out, srcMod);
+	    s.export(out);
 	}
     }
 
     @Override
-    public int length(Mod srcMod) {
+    public int length(ModExporter out) {
 	int length = 0;
 	for (SubRecord s : iteratorNoCopy()) {
-	    length += s.getTotalLength(srcMod);
+	    length += s.getTotalLength(out);
 	}
 	return length;
     }

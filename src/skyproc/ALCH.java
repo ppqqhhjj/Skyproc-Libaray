@@ -53,8 +53,8 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(value);
 	    out.write(flags.export());
 	    addiction.export(out);
@@ -86,7 +86,7 @@ public class ALCH extends MagicItem {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 20;
 	}
 

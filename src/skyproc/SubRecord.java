@@ -37,9 +37,9 @@ public abstract class SubRecord extends Record {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	out.write(getType().toString());
-	out.write(getContentLength(srcMod), getSizeLength());
+	out.write(getContentLength(out), getSizeLength());
     }
 
     abstract SubRecord getNew(String type);

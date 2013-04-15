@@ -49,8 +49,8 @@ public class MISC extends MajorRecordNamed {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(value);
 	    out.write(weight);
 	}
@@ -71,7 +71,7 @@ public class MISC extends MajorRecordNamed {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8;
 	}
 

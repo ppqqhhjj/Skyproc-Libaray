@@ -41,8 +41,8 @@ public class BodyTemplate extends SubShell {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(bodyParts.export(), 4);
 	    if (isBODT()) {
 		out.write(flags.export(), 4);
@@ -80,15 +80,15 @@ public class BodyTemplate extends SubShell {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
-	    int out = 4;
+	int getContentLength(ModExporter out) {
+	    int len = 4;
 	    if (isBODT()) {
-		out += 4;
+		len += 4;
 	    }
 	    if (armorType != null) {
-		out += 4;
+		len += 4;
 	    }
-	    return out;
+	    return len;
 	}
     }
 

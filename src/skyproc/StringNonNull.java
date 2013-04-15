@@ -29,8 +29,8 @@ class StringNonNull extends Record {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-        out.write(getContentLength(srcMod), 2);
+    void export(ModExporter out) throws IOException {
+        out.write(getContentLength(out), 2);
         out.write(data);
     }
 
@@ -78,7 +78,7 @@ class StringNonNull extends Record {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
         return data.length();
     }
 

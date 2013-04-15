@@ -88,12 +88,12 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	mast.string = print(); // Put the suffix in the record
-	mast.export(out, srcMod);
+	mast.export(out);
 	SubData data = new SubData("DATA");
 	data.initialize(8);
-	data.export(out, srcMod);
+	data.export(out);
 	setString(print()); // Take suffix back out of record
     }
 
@@ -112,8 +112,8 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	return mast.getContentLength(srcMod) + 14 + 4;  // 14 for DATA, 4 for .esp
+    int getContentLength(ModExporter out) {
+	return mast.getContentLength(out) + 14 + 4;  // 14 for DATA, 4 for .esp
     }
 
     @Override

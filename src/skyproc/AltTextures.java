@@ -30,8 +30,8 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	if (isValid()) {
 	    out.write(altTextures.size());
 	    for (AltTexture t : altTextures) {
@@ -74,12 +74,12 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int out = 4;  // num Textures
+    int getContentLength(ModExporter out) {
+	int len = 4;  // num Textures
 	for (AltTexture t : altTextures) {
-	    out += t.getTotalLength();
+	    len += t.getTotalLength();
 	}
-	return out;
+	return len;
     }
 
     /**

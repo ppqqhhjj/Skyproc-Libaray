@@ -37,13 +37,13 @@ class SubShell extends SubRecord {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	return subRecords.length(srcMod);
+    int getContentLength(ModExporter out) {
+	return subRecords.length(out);
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	subRecords.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	subRecords.export(out);
     }
 
     @Override

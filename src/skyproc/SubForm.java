@@ -124,13 +124,13 @@ class SubForm extends SubRecordTyped {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return ID.getContentLength();
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	ID.export(out);
     }
 

@@ -329,7 +329,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 52;
 	}
 
@@ -373,8 +373,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(skills, 36);
 	    out.write(health, 2);
 	    out.write(magicka, 2);
@@ -437,8 +437,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(ACBSflags.export(), 4);
 	    out.write(magickaOffset, 2);
 	    out.write(fatigueOffset, 2);
@@ -458,7 +458,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 24;
 	}
 
@@ -514,8 +514,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(aggression.ordinal(), 1);
 	    out.write(confidence.ordinal(), 1);
 	    out.write(energy, 1);
@@ -535,7 +535,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 20;
 	}
 
@@ -565,8 +565,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(damageMult);
 		out.write(attackChance);
@@ -610,7 +610,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 44;
 	}
 
@@ -656,8 +656,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(noseLong);
 	    out.write(noseUp);
 	    out.write(jawUp);
@@ -715,7 +715,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 76;
 	}
 
@@ -738,8 +738,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(nose);
 	    out.write(unknown);
 	    out.write(eyes);
@@ -767,7 +767,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 16;
 	}
 
@@ -789,8 +789,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    f1.export(out);
 	    f2.export(out);
 	    out.write(f);
@@ -816,7 +816,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 

@@ -70,8 +70,8 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(emotion.ordinal());
 	    out.write(emotionValue);
 	    out.write(fluff);
@@ -91,7 +91,7 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 24;
 	}
     }
@@ -106,8 +106,8 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export(), 2);
 	    out.write(hoursReset, 2);
 	}
@@ -131,7 +131,7 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 4;
 	}
     }
@@ -158,29 +158,29 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    if (!valid) {
 		return;
 	    }
 	    out.write(unknown, 1);
 	    out.write(fragmentFlags.export());
-	    fragmentFile.export(out, srcMod);
+	    fragmentFile.export(out);
 	    for (ScriptFragment frag : fragments) {
-		frag.export(out, srcMod);
+		frag.export(out);
 	    }
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (!valid) {
 		return 0;
 	    }
-	    int out = 2;
-	    out += fragmentFile.getTotalLength(srcMod);
+	    int len = 2;
+	    len += fragmentFile.getTotalLength(out);
 	    for (ScriptFragment frag : fragments) {
-		out += frag.getContentLength(srcMod);
+		len += frag.getContentLength(out);
 	    }
-	    return out;
+	    return len;
 	}
 
 	@Override
@@ -206,15 +206,15 @@ public class INFO extends MajorRecord {
 	    fragmentName.set(in.extractString(in.extractInt(2)));
 	}
 
-	void export(LExporter out, Mod srcMod) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    out.write(unknown, 1);
-	    scriptName.export(out, srcMod);
-	    fragmentName.export(out, srcMod);
+	    scriptName.export(out);
+	    fragmentName.export(out);
 	}
 
-	int getContentLength(Mod srcMod) {
-	    return 1 + scriptName.getTotalLength(srcMod)
-		    + fragmentName.getTotalLength(srcMod);
+	int getContentLength(ModExporter out) {
+	    return 1 + scriptName.getTotalLength(out)
+		    + fragmentName.getTotalLength(out);
 	}
     }
 

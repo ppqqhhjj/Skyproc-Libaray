@@ -21,14 +21,14 @@ class StringNull extends StringNonNull {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-        super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+        super.export(out);
         out.write(0, 1);
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-        return super.getContentLength(srcMod) + 1;
+    int getContentLength(ModExporter out) {
+        return super.getContentLength(out) + 1;
     }
 
     @Override

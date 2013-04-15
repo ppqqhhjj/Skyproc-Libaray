@@ -36,8 +36,8 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	if (isValid()) {
 	    for (FormID ID : IDs) {
 		out.write(ID.getInternal(true), 4);
@@ -89,7 +89,7 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return IDs.size() * 4;
     }
 

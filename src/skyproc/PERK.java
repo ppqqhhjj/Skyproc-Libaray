@@ -145,29 +145,29 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    if (!valid) {
 		return;
 	    }
 	    out.write(unknown, 1);
-	    fragmentFile.export(out, srcMod);
+	    fragmentFile.export(out);
 	    out.write(fragments.size(), 2);
 	    for (PERKScriptFragment frag : fragments) {
-		frag.export(out, srcMod);
+		frag.export(out);
 	    }
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (!valid) {
 		return 0;
 	    }
-	    int out = 3;
-	    out += fragmentFile.getTotalLength(srcMod);
+	    int len = 3;
+	    len += fragmentFile.getTotalLength(out);
 	    for (PERKScriptFragment frag : fragments) {
-		out += frag.getContentLength(srcMod);
+		len += frag.getContentLength(out);
 	    }
-	    return out;
+	    return len;
 	}
 
 	@Override
@@ -195,16 +195,16 @@ public class PERK extends MajorRecordDescription {
 	    fragmentName.set(in.extractString(in.extractInt(2)));
 	}
 
-	void export(LExporter out, Mod srcMod) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    out.write(index, 2);
 	    out.write(unknown);
-	    scriptName.export(out, srcMod);
-	    fragmentName.export(out, srcMod);
+	    scriptName.export(out);
+	    fragmentName.export(out);
 	}
 
-	int getContentLength(Mod srcMod) {
-	    return 5 + scriptName.getTotalLength(srcMod)
-		    + fragmentName.getTotalLength(srcMod);
+	int getContentLength(ModExporter out) {
+	    return 5 + scriptName.getTotalLength(out)
+		    + fragmentName.getTotalLength(out);
 	}
     }
 

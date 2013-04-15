@@ -197,17 +197,17 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	return subRecords.length(srcMod);
+    int getContentLength(ModExporter out) {
+	return subRecords.length(out);
     }
 
     @Override
-    int getTotalLength(Mod srcMod) {
-	int out = super.getTotalLength(srcMod);
+    int getTotalLength(ModExporter out) {
+	int len = super.getTotalLength(out);
 	if (shouldExportGRUP()) {
-	    out += getGRUPAppend().getTotalLength(srcMod);
+	    len += getGRUPAppend().getTotalLength(out);
 	}
-	return out;
+	return len;
     }
 
     @Override
@@ -216,18 +216,20 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	out.setSourceMod(srcMod);
+	out.setSourceMajor(this);
+	super.export(out);
 	if (isValid()) {
 	    if (logging() && SPGlobal.debugExportSummary) {
-		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(srcMod)));
+		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(out)));
 	    }
 	    out.write(majorFlags.export(), 4);
 	    out.write(ID.getInternal(true), 4);
 	    out.write(revision, 4);
 	    out.write(version, 4);
 
-	    subRecords.export(out, srcMod);
+	    subRecords.export(out);
 	    if (SPGlobal.deleteAfterExport) {
 		// Save EDID for record validation tests
 		SubRecord edid = subRecords.get("EDID");
@@ -236,7 +238,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    }
 
 	    if (shouldExportGRUP()) {
-		getGRUPAppend().export(out, srcMod);
+		getGRUPAppend().export(out);
 	    }
 	}
     }

@@ -49,8 +49,8 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(baseCost, 4);
 	    out.write(flags.export());
 	    out.write(castType.ordinal(), 4);
@@ -88,7 +88,7 @@ public class ENCH extends MagicItem {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (old) {
 		return 32;
 	    } else {

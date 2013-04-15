@@ -30,7 +30,7 @@ class ScriptProperty extends Record implements Serializable {
     ScriptProperty(String name) {
 	this.name.set(name);
     }
-    
+
     ScriptProperty(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod);
     }
@@ -171,11 +171,11 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	name.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	name.export(out);
 	out.write(getPropertyType().value, 1);
 	out.write(unknown, 1);
-	data.export(out, srcMod);
+	data.export(out);
     }
 
     @Override
@@ -219,9 +219,9 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int out = name.getTotalLength(srcMod) + 2;
-	return out + data.getContentLength();
+    int getContentLength(ModExporter out) {
+	int len = name.getTotalLength(out) + 2;
+	return len + data.getContentLength();
     }
 
     @Override
@@ -282,7 +282,7 @@ class ScriptProperty extends Record implements Serializable {
 
 	int getContentLength();
 
-	void export(LExporter out, Mod srcMod) throws IOException;
+	void export(ModExporter out) throws IOException;
 
 	ScriptPropertyType getType();
 
@@ -304,7 +304,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.length(), 2);
 	    out.write(data);
 	}
@@ -335,7 +335,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data);
 	}
 
@@ -365,7 +365,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    if (data) {
 		out.write(1, 1);
 	    } else {
@@ -413,7 +413,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data, 4);
 	    id.export(out);
 	}
@@ -444,7 +444,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data);
 	}
 
@@ -478,7 +478,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.size());
 	    for (Integer i : data) {
 		out.write(i);
@@ -524,7 +524,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.size());
 	    for (String i : data) {
 		out.write(i.length(), 2);
@@ -568,10 +568,10 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.size());
 	    for (FormIDData i : data) {
-		i.export(out, srcMod);
+		i.export(out);
 	    }
 	}
 
@@ -609,7 +609,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.size());
 	    for (Boolean i : data) {
 		if (i) {
@@ -654,7 +654,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void export(LExporter out, Mod srcMod) throws IOException {
+	public void export(ModExporter out) throws IOException {
 	    out.write(data.size());
 	    for (Float i : data) {
 		out.write(i);

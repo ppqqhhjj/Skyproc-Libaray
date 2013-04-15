@@ -32,14 +32,14 @@ public class SubStringNonNull extends SubString {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	return string.length();
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	out.write(getType().toString());
-	out.write(getContentLength(srcMod), 2);
+	out.write(getContentLength(out), 2);
 	out.write(string);
     }
 

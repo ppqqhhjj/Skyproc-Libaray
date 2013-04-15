@@ -94,7 +94,7 @@ class SubData extends SubRecordTyped {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	if (isValid()) {
 	    return data.length;
 	} else {
@@ -103,11 +103,11 @@ class SubData extends SubRecordTyped {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (data == null) {
 	    data = new byte[0];
 	}
-	super.export(out, srcMod);
+	super.export(out);
 	out.write(data, 0);
     }
 

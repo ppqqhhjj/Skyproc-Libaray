@@ -203,8 +203,8 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(fluff1, 16);
 	    out.write(maleHeight);
 	    out.write(femaleHeight);
@@ -280,7 +280,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (mountData == null) {
 		return 128;
 	    } else {
@@ -334,8 +334,8 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(damageMult);
 	    out.write(attackChance);
 	    attackSpell.export(out);
@@ -376,7 +376,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 44;
 	}
     }

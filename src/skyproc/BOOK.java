@@ -33,8 +33,8 @@ public class BOOK extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export());
 	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
 		out.write(teachesAV.ordinal());
@@ -64,7 +64,7 @@ public class BOOK extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 16;
 	}
 
@@ -99,7 +99,9 @@ public class BOOK extends MajorRecordDescription {
 	    add(new KeywordSet());
 	    add(new DATA());
 	    add(new SubForm("INAM"));
-	    add(new SubStringPointer("CNAM", SubStringPointer.Files.DLSTRINGS));
+	    SubStringPointer cnam = new SubStringPointer("CNAM", SubStringPointer.Files.DLSTRINGS);
+	    cnam.forceExport = true;
+	    add(cnam);
 	}
     };
 

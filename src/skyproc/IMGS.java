@@ -78,8 +78,8 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(eyeAdaptSpeed);
 		out.write(bloomRadius);
@@ -99,7 +99,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		return 36;
 	    } else {
@@ -147,8 +147,8 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(saturation);
 		out.write(brightness);
@@ -162,7 +162,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		return 12;
 	    } else {
@@ -213,8 +213,8 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(alpha);
 		out.write(red);
@@ -229,7 +229,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		return 16;
 	    } else {
@@ -256,8 +256,8 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(DOFstrength);
 		out.write(DOFdistance);
@@ -291,7 +291,7 @@ public class IMGS extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		if (unknown != null) {
 		    return 16;

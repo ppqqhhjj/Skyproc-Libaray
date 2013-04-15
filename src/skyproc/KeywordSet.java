@@ -44,16 +44,16 @@ public class KeywordSet extends SubRecord {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	return counter.getTotalLength(srcMod)
-		+ keywords.getTotalLength(srcMod);
+    int getContentLength(ModExporter out) {
+	return counter.getTotalLength(out)
+		+ keywords.getTotalLength(out);
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
-	    counter.export(out, srcMod);
-	    keywords.export(out, srcMod);
+	    counter.export(out);
+	    keywords.export(out);
 	}
     }
 

@@ -84,8 +84,8 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    if (isValid()) {
 		out.write(baseCost);
 		out.write(flags.export(), 4);
@@ -105,7 +105,7 @@ abstract class MagicItem extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    if (isValid()) {
 		return 36;
 	    } else {

@@ -183,20 +183,20 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	int length = 0;
 	for (SubRecord r : collection) {
-	    length += r.getTotalLength(srcMod);
+	    length += r.getTotalLength(out);
 	}
 	return length;
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
 	    Iterator<T> iter = iterator();
 	    while (iter.hasNext()) {
-		iter.next().export(out, srcMod);
+		iter.next().export(out);
 	    }
 	}
     }

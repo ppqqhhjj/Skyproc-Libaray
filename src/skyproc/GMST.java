@@ -45,13 +45,13 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    switch (GMSTtype) {
 		case String:
-		    DATAs.export(out, srcMod);
+		    DATAs.export(out);
 		    break;
 		default:
-		    DATA.export(out, srcMod);
+		    DATA.export(out);
 	    }
 	}
 
@@ -67,12 +67,12 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    switch (GMSTtype) {
 		case String:
-		    return DATAs.getContentLength(srcMod);
+		    return DATAs.getContentLength(out);
 		default:
-		    return DATA.getContentLength(srcMod);
+		    return DATA.getContentLength(out);
 	    }
 	}
 
@@ -12257,15 +12257,15 @@ public class GMST extends MajorRecord {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	updateDATAtype();
-	super.export(out, srcMod);
+	super.export(out);
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
+    int getContentLength(ModExporter out) {
 	updateDATAtype();
-	return super.getContentLength(srcMod);
+	return super.getContentLength(out);
     }
 
     // Get/set

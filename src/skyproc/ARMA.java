@@ -69,8 +69,8 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(malePriority, 1);
 	    out.write(femalePriority, 1);
 	    out.write(unknown, 4);
@@ -104,7 +104,7 @@ public class ARMA extends MajorRecord {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 

@@ -94,8 +94,8 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(magnitude);
 	    out.write(AOE);
 	    out.write(duration);
@@ -120,7 +120,7 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 

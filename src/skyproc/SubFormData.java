@@ -38,8 +38,8 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	return data.length + super.getContentLength(srcMod);
+    int getContentLength(ModExporter out) {
+	return data.length + super.getContentLength(out);
     }
 
     @Override
@@ -48,8 +48,8 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
-	super.export(out, srcMod);
+    void export(ModExporter out) throws IOException {
+	super.export(out);
 	out.write(data, 0);
     }
 

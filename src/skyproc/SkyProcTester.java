@@ -21,7 +21,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-//    static GRUP_TYPE[] types = {GRUP_TYPE.WTHR};
+//    static GRUP_TYPE[] types = {GRUP_TYPE.BOOK};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
@@ -58,7 +58,7 @@ public class SkyProcTester {
 
     private static void validateAll() throws Exception {
 	String[] mods = {
-//	    "Skyrim.esm",
+	    "Skyrim.esm",
 	    "Dawnguard.esm",
 	    "Dragonborn.esm",
 	};

@@ -59,9 +59,9 @@ public class DIAL extends MajorRecord {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	subRecords.setSubInt("TIFC", grup.getRecords().size());
-	super.export(out, srcMod);
+	super.export(out);
     }
     
     // Get/Set

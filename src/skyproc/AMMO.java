@@ -49,8 +49,8 @@ public class AMMO extends MajorRecordDescription {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    projectile.export(out);
 	    out.write(flags.export(), 4);
 	    out.write(damage);
@@ -72,7 +72,7 @@ public class AMMO extends MajorRecordDescription {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 16;
 	}
 

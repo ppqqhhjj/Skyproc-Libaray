@@ -262,13 +262,13 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export());
 	    out.write(priority, 1);
 	    out.write(unknown, 1);
@@ -302,8 +302,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(index, 2);
 	    out.write(flags.export());
 	}
@@ -321,7 +321,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 4;
 	}
 
@@ -562,8 +562,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(targetAlias);
 	    out.write(flags.export());
 	}
@@ -581,7 +581,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8;
 	}
 

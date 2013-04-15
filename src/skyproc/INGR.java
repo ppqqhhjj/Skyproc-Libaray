@@ -51,8 +51,8 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(value);
 	    out.write(weight);
 	}
@@ -73,7 +73,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8;
 	}
 
@@ -93,8 +93,8 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(baseCost);
 	    out.write(flags.export(), 4);
 	}
@@ -115,7 +115,7 @@ public class INGR extends MagicItem {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 8;
 	}
 

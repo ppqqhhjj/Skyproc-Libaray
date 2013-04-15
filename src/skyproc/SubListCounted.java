@@ -36,8 +36,8 @@ class SubListCounted<T extends SubRecord> extends SubList {
     }
 
     @Override
-    int getContentLength(Mod srcMod) {
-	int length = super.getContentLength(srcMod);
+    int getContentLength(ModExporter out) {
+	int length = super.getContentLength(out);
 	if (!"".equals(counterType)) {
 	    length += counterLength + 6;
 	}
@@ -58,13 +58,13 @@ class SubListCounted<T extends SubRecord> extends SubList {
     }
 
     @Override
-    void export(LExporter out, Mod srcMod) throws IOException {
+    void export(ModExporter out) throws IOException {
 	if (isValid()) {
 	    if (!"".equals(counterType)) {
 		SubData counter = new SubData(counterType, Ln.toByteArray(collection.size(), counterLength));
-		counter.export(out, srcMod);
+		counter.export(out);
 	    }
-	    super.export(out, srcMod);
+	    super.export(out);
 	}
     }
 

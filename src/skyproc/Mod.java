@@ -685,18 +685,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    int getTotalLength() {
-	return getContentLength() + tes.getTotalLength(this);
-    }
-
-    int getContentLength() {
-	int sum = 0;
-	for (GRUP g : GRUPs.values()) {
-	    sum += g.getTotalLength(this);
-	}
-	return sum;
-    }
-
     /**
      * Exports the mod to the path designated by SPGlobal.pathToData.
      *
@@ -741,7 +729,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	SPGlobal.logMain("Mod Export", "Exporting " + this);
 
-	LExporter out = new LExporter(outPath);
+	ModExporter out = new ModExporter(outPath, this);
 
 	ArrayList<GRUP> exportGRUPs = new ArrayList<>();
 
@@ -809,12 +797,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    }
 	}
 
-	tes.export(out, srcMod);
+	tes.export(out);
 
 	// Export GRUPs
 	for (GRUP g : exportGRUPs) {
 	    SPProgressBarPlug.setStatusNumbered("Exporting " + srcMod + ": " + g.getContainedType());
-	    g.export(out, srcMod);
+	    g.export(out);
 	    SPProgressBarPlug.incrementBar();
 	}
 
@@ -1457,13 +1445,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(flags.export(), 4);
 	    out.write(fluff1);
 	    out.write(fluff2);
 	    out.write(fluff3);
-	    subRecords.export(out, srcMod);
+	    subRecords.export(out);
 	}
 
 	void addMaster(ModListing mod) {
@@ -1488,8 +1476,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
-	    return subRecords.length(srcMod);
+	int getContentLength(ModExporter out) {
+	    return subRecords.length(out);
 	}
 
 	@Override
@@ -1554,8 +1542,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	void export(LExporter out, Mod srcMod) throws IOException {
-	    super.export(out, srcMod);
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
 	    out.write(version);
 	    out.write(numRecords);
 	    out.write(nextID);
@@ -1586,7 +1574,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	int getContentLength(Mod srcMod) {
+	int getContentLength(ModExporter out) {
 	    return 12;
 	}
 
