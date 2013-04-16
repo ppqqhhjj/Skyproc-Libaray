@@ -1828,6 +1828,7 @@ public class RACE extends MajorRecordDescription {
 	switch (g) {
 	    case FEMALE:
 		getHeadData(g).subRecords.getSubList("FTSF").add(new SubForm("FTSF", id));
+		break;
 	    default:
 		getHeadData(g).subRecords.getSubList("FTSM").add(new SubForm("FTSM", id));
 	}
@@ -1837,6 +1838,7 @@ public class RACE extends MajorRecordDescription {
 	switch (g) {
 	    case FEMALE:
 		getHeadData(g).subRecords.getSubList("FTSF").remove(new SubForm("FTSF", id));
+		break;
 	    default:
 		getHeadData(g).subRecords.getSubList("FTSM").remove(new SubForm("FTSM", id));
 	}
@@ -1846,6 +1848,7 @@ public class RACE extends MajorRecordDescription {
 	switch (g) {
 	    case FEMALE:
 		getHeadData(g).subRecords.getSubList("FTSF").clear();
+		break;
 	    default:
 		getHeadData(g).subRecords.getSubList("FTSM").clear();
 	}
