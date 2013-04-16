@@ -429,4 +429,14 @@ public class NiftyFunc {
     static public boolean startProcess(String... args) {
 	return startProcess(null, args);
     }
+    
+    static public String trimToFour (String in) {
+	if (in.length() > 4) {
+	    return in.substring(0, 3);
+	} else if (in.length() < 4) {
+	    return Ln.spaceRight(4, '_', in);
+	} else {
+	    return in;
+	}
+    }
 }

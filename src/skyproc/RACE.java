@@ -6,7 +6,6 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
@@ -23,6 +22,20 @@ import skyproc.exceptions.BadRecord;
 public class RACE extends MajorRecordDescription {
 
     // Static prototypes and definitions
+    static final SubPrototype morphProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData("MPAI"));
+	    add(new SubData("MPAV"));
+	}
+    };
+    static final SubPrototype headPartProto = new SubPrototype() {
+	@Override
+	protected void addRecords() {
+	    add(new SubData("INDX"));
+	    add(new SubData("HEAD"));
+	}
+    };
     static final SubPrototype attackDataProto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
@@ -74,6 +87,8 @@ public class RACE extends MajorRecordDescription {
 		    add(EGT);
 		}
 	    }, false));
+	    add(new SubFormArray("HNAM", 0));
+	    add(new SubFormArray("ENAM", 0));
 	    add(new SubForm("GNAM"));
 	    add(new SubData("NAM2"));
 	    add(new SubShellBulkType(new SubPrototype() {
@@ -118,30 +133,19 @@ public class RACE extends MajorRecordDescription {
 		@Override
 		protected void addRecords() {
 		    add(new SubData("NAM0"));
+		    forceExport("NAM0");
 		    add(new SubData("MNAM"));
 		    add(new SubData("FNAM"));
-		    add(new SubList<>(new SubShell(new SubPrototype() {
-			@Override
-			protected void addRecords() {
-			    add(new SubData("INDX"));
-			    add(new SubData("HEAD"));
-			}
-		    })));
-		    add(new SubList<>(new SubShell(new SubPrototype() {
-			@Override
-			protected void addRecords() {
-			    add(new SubData("MPAI"));
-			    add(new SubData("MPAV"));
-			}
-		    })));
+		    add(new SubList<>(new SubShell(headPartProto)));
+		    add(new SubList<>(new SubShell(morphProto)));
 		    add(new SubList<>(new SubForm("RPRM")));
 		    add(new SubList<>(new SubForm("RPRF")));
 		    add(new SubList<>(new SubForm("AHCM")));
 		    add(new SubList<>(new SubForm("AHCF")));
 		    add(new SubList<>(new SubForm("FTSM")));
 		    add(new SubList<>(new SubForm("FTSF")));
-		    add(new SubList<>(new SubForm("DFTM")));
-		    add(new SubList<>(new SubForm("DFTF")));
+		    add(new SubForm("DFTM"));
+		    add(new SubForm("DFTF"));
 		    add(new SubList<>(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
@@ -168,7 +172,8 @@ public class RACE extends MajorRecordDescription {
 
     static final class DATA extends SubRecord {
 
-	byte[] fluff1 = new byte[16];
+	ArrayList<ActorValue> skillBoosts = new ArrayList<>(7);
+	ArrayList<Integer> skillBoostValues = new ArrayList<>(7);
 	float maleHeight = 0;
 	float femaleHeight = 0;
 	float maleWeight = 0;
@@ -182,20 +187,21 @@ public class RACE extends MajorRecordDescription {
 	float accelerationRate = 0;
 	float decelerationRate = 0;
 	Size size = Size.MEDIUM;
-	byte[] fluff3 = new byte[8];
+	FirstPersonFlags headBipedObject = FirstPersonFlags.NONE;
+	FirstPersonFlags hairBipedObject = FirstPersonFlags.NONE;
 	float injuredHealthPct = 0;
-	byte[] fluff4 = new byte[4];
+	FirstPersonFlags shieldBipedObject = FirstPersonFlags.NONE;
 	float healthRegen = 0;
 	float magickaRegen = 0;
 	float staminaRegen = 0;
 	float unarmedDamage = 0;
 	float unarmedReach = 0;
-	byte[] fluff5 = new byte[4];
+	FirstPersonFlags bodyBipedObject = FirstPersonFlags.NONE;
 	float aimAngleTolerance = 0;
 	float flightRadius = 0;
 	float angularAcceleration = 0;
 	float angularTolerance = 0;
-	byte[] fluff6 = new byte[4];
+	LFlags flags2 = new LFlags(4);
 	byte[] mountData;
 
 	DATA() {
@@ -205,7 +211,11 @@ public class RACE extends MajorRecordDescription {
 	@Override
 	void export(ModExporter out) throws IOException {
 	    super.export(out);
-	    out.write(fluff1, 16);
+	    for (int i = 0; i < 7; i++) {
+		out.write(skillBoosts.get(i).ordinal(), 1);
+		out.write(skillBoostValues.get(i), 1);
+	    }
+	    out.write(0, 2);
 	    out.write(maleHeight);
 	    out.write(femaleHeight);
 	    out.write(maleWeight);
@@ -219,20 +229,21 @@ public class RACE extends MajorRecordDescription {
 	    out.write(accelerationRate);
 	    out.write(decelerationRate);
 	    out.write(size.ordinal(), 4);
-	    out.write(fluff3, 8);
+	    out.write(headBipedObject.getValue());
+	    out.write(hairBipedObject.getValue());
 	    out.write(injuredHealthPct);
-	    out.write(fluff4, 4);
+	    out.write(shieldBipedObject.getValue());
 	    out.write(healthRegen);
 	    out.write(magickaRegen);
 	    out.write(staminaRegen);
 	    out.write(unarmedDamage);
 	    out.write(unarmedReach);
-	    out.write(fluff5, 4);
+	    out.write(bodyBipedObject.getValue());
 	    out.write(aimAngleTolerance);
 	    out.write(flightRadius);
 	    out.write(angularAcceleration);
 	    out.write(angularTolerance);
-	    out.write(fluff6, 4);
+	    out.write(flags2.export());
 	    if (mountData != null) {
 		out.write(mountData);
 	    }
@@ -241,7 +252,11 @@ public class RACE extends MajorRecordDescription {
 	@Override
 	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
-	    fluff1 = in.extract(16);
+	    for (int i = 0; i < 7; i++) {
+		skillBoosts.add(ActorValue.values()[in.extractInt(1)]);
+		skillBoostValues.add(in.extractInt(1));
+	    }
+	    in.skip(2);
 	    maleHeight = in.extractFloat();
 	    femaleHeight = in.extractFloat();
 	    maleWeight = in.extractFloat();
@@ -255,20 +270,21 @@ public class RACE extends MajorRecordDescription {
 	    accelerationRate = in.extractFloat();
 	    decelerationRate = in.extractFloat();
 	    size = Size.values()[in.extractInt(4)];
-	    fluff3 = in.extract(8);
+	    headBipedObject = FirstPersonFlags.getValue(in.extractInt(4));
+	    hairBipedObject = FirstPersonFlags.getValue(in.extractInt(4));
 	    injuredHealthPct = in.extractFloat();
-	    fluff4 = in.extract(4);
+	    shieldBipedObject = FirstPersonFlags.getValue(in.extractInt(4));
 	    healthRegen = in.extractFloat();
 	    magickaRegen = in.extractFloat();
 	    staminaRegen = in.extractFloat();
 	    unarmedDamage = in.extractFloat();
 	    unarmedReach = in.extractFloat();
-	    fluff5 = in.extract(4);
+	    bodyBipedObject = FirstPersonFlags.getValue(in.extractInt(4));
 	    aimAngleTolerance = in.extractFloat();
 	    flightRadius = in.extractFloat();
 	    angularAcceleration = in.extractFloat();
 	    angularTolerance = in.extractFloat();
-	    fluff6 = in.extract(4);
+	    flags2.set(in.extract(4));
 	    if (!in.isDone()) {
 		mountData = in.extract(36);
 	    }
@@ -750,6 +766,18 @@ public class RACE extends MajorRecordDescription {
 	 *
 	 */
 	AvoidsRoads;
+    }
+
+    public enum RaceFlags2 {
+
+	UseAdvancedAvoidance(0),
+	NonHostile(1),
+	AllowMountedCombat(4);
+	int val;
+
+	RaceFlags2(int val) {
+	    this.val = val;
+	}
     }
 
     /**
@@ -1638,5 +1666,188 @@ public class RACE extends MajorRecordDescription {
      */
     public FormID getMorphRace() {
 	return subRecords.getSubForm("NAM8").getForm();
+    }
+
+    public void setSkillBoost(int boostIndex, ActorValue skill, int value) {
+	if (boostIndex < 7 && boostIndex >= 0) {
+	    getDATA().skillBoosts.set(boostIndex, skill);
+	    getDATA().skillBoostValues.set(boostIndex, value);
+	}
+    }
+
+    public ActorValue getSkillBoostSkill(int boostIndex) {
+	if (boostIndex < 7 && boostIndex >= 0) {
+	    return getDATA().skillBoosts.get(boostIndex);
+	} else {
+	    return null;
+	}
+    }
+
+    public int getSkillBoostValue(int boostIndex) {
+	if (boostIndex < 7 && boostIndex >= 0) {
+	    return getDATA().skillBoostValues.get(boostIndex);
+	} else {
+	    return -1;
+	}
+    }
+
+    public void setHeadBipedObject(FirstPersonFlags object) {
+	getDATA().headBipedObject = object;
+    }
+
+    public FirstPersonFlags getHeadBipedObject() {
+	return getDATA().headBipedObject;
+    }
+
+    public void setHairBipedObject(FirstPersonFlags object) {
+	getDATA().hairBipedObject = object;
+    }
+
+    public FirstPersonFlags getHairBipedObject() {
+	return getDATA().hairBipedObject;
+    }
+
+    public void setShieldBipedObject(FirstPersonFlags object) {
+	getDATA().shieldBipedObject = object;
+    }
+
+    public FirstPersonFlags getShieldBipedObject() {
+	return getDATA().shieldBipedObject;
+    }
+
+    public void setBodyBipedObject(FirstPersonFlags object) {
+	getDATA().bodyBipedObject = object;
+    }
+
+    public FirstPersonFlags getBodyBipedObject() {
+	return getDATA().bodyBipedObject;
+    }
+
+    public void set(RaceFlags2 flag, boolean on) {
+	getDATA().flags2.set(flag.val, on);
+    }
+
+    public boolean get(RaceFlags2 flag) {
+	return getDATA().flags2.get(flag.val);
+    }
+
+    public ArrayList<String> getMovementTypeNames() {
+	return SubList.subStringToPublic(subRecords.getSubList("MTNM"));
+    }
+
+    public void addMovementTypeName(String name) {
+	subRecords.getSubList("MTNM").add(new SubString("MTNM", NiftyFunc.trimToFour(name)));
+    }
+
+    public void clearMovementTypeNames() {
+	subRecords.getSubList("MTNM").clear();
+    }
+
+    public void removeMovementTypeName(String name) {
+	subRecords.getSubList("MTNM").remove(new SubString("MTNM", NiftyFunc.trimToFour(name)));
+    }
+
+    public void setFaceGenMainClamp(float in) {
+	subRecords.setSubFloat("PNAM", in);
+    }
+
+    public float getFaceGenMainClamp() {
+	return subRecords.getSubFloat("PNAM").get();
+    }
+
+    public void setFaceGenFaceClamp(float in) {
+	subRecords.setSubFloat("UNAM", in);
+    }
+
+    public float getFaceGenFaceClamp() {
+	return subRecords.getSubFloat("UNAM").get();
+    }
+
+    public void setAttackRace(FormID id) {
+	subRecords.setSubForm("ATKR", id);
+    }
+
+    public FormID getAttackRace() {
+	return subRecords.getSubForm("ATKR").getForm();
+    }
+
+    SubList<SubShell> getHeadData() {
+	return subRecords.getSubList("NAM0");
+    }
+
+    SubShell getHeadData(Gender g) {
+	String genderType;
+	switch (g) {
+	    case MALE:
+		genderType = "MNAM";
+		break;
+	    default:
+		genderType = "FNAM";
+	}
+	SubList<SubShell> data = getHeadData();
+	for (SubShell s : data) {
+	    if (s.subRecords.containsStrict(genderType)) {
+		return s;
+	    }
+	}
+	SubShell newData = (SubShell) data.prototype.getNew();
+	data.add(newData);
+	newData.subRecords.getSubData(genderType).initialize(0);
+	return newData;
+    }
+
+    public void setDefaultFaceTexture(Gender g, FormID id) {
+	switch (g) {
+	    case FEMALE:
+		getHeadData(g).subRecords.setSubForm("DFTF", id);
+		break;
+	    default:
+		getHeadData(g).subRecords.setSubForm("DFTM", id);
+	}
+    }
+
+    public FormID getDefaultFaceTexture(Gender g) {
+	switch (g) {
+	    case FEMALE:
+		return getHeadData(g).subRecords.getSubForm("DFTF").getForm();
+	    default:
+		return getHeadData(g).subRecords.getSubForm("DFTM").getForm();
+	}
+    }
+
+    public ArrayList<FormID> getFaceDetailsTextureSet(Gender g) {
+	switch (g) {
+	    case FEMALE:
+		return SubList.subFormToPublic(getHeadData(g).subRecords.getSubList("FTSF"));
+	    default:
+		return SubList.subFormToPublic(getHeadData(g).subRecords.getSubList("FTSM"));
+	}
+    }
+
+    public void addFaceDetailsTexture(Gender g, FormID id) {
+	switch (g) {
+	    case FEMALE:
+		getHeadData(g).subRecords.getSubList("FTSF").add(new SubForm("FTSF", id));
+	    default:
+		getHeadData(g).subRecords.getSubList("FTSM").add(new SubForm("FTSM", id));
+	}
+    }
+
+    public void removeFaceDetailsTexture(Gender g, FormID id) {
+	switch (g) {
+	    case FEMALE:
+		getHeadData(g).subRecords.getSubList("FTSF").remove(new SubForm("FTSF", id));
+	    default:
+		getHeadData(g).subRecords.getSubList("FTSM").remove(new SubForm("FTSM", id));
+	}
+    }
+
+    public void clearFaceDetailsTexture(Gender g) {
+	switch (g) {
+	    case FEMALE:
+		getHeadData(g).subRecords.getSubList("FTSF").clear();
+	    default:
+		getHeadData(g).subRecords.getSubList("FTSM").clear();
+	}
     }
 }

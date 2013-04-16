@@ -23,7 +23,7 @@ class SubRecordsDerived extends SubRecords {
     public void setPrototype(SubPrototype proto) {
 	prototype = proto;
     }
-    
+
     @Override
     public SubPrototype getPrototype() {
 	return prototype;
@@ -45,6 +45,10 @@ class SubRecordsDerived extends SubRecords {
     @Override
     public boolean contains(String t) {
 	return prototype.contains(t);
+    }
+
+    public boolean containsStrict(String t) {
+	return super.contains(t);
     }
 
     @Override

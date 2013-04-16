@@ -30,6 +30,11 @@ class SubString extends SubRecordTyped {
     SubString(String type_) {
 	super(type_);
     }
+    
+    SubString(String type, String in) {
+	this(type);
+	string = in;
+    }
 
     @Override
     void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
