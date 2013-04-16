@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
-import lev.LExporter;
 import lev.LFlags;
 import lev.Ln;
+import skyproc.Condition.Operator;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,7 +20,7 @@ import skyproc.exceptions.BadRecord;
  */
 class ConditionBase extends SubRecord {
 
-    Condition.Operator operator;
+    Operator operator = Operator.EqualTo;
     LFlags flags = new LFlags(1);
     byte[] fluff = new byte[3];
     FormID comparisonValueForm = new FormID();

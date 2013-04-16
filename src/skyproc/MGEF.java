@@ -478,7 +478,7 @@ public class MGEF extends MajorRecordDescription {
 
     @Override
     public String getDescription() {
-	return subRecords.getSubString("DNAM").print();
+	return subRecords.getSubStringPointer("DNAM").print();
     }
 
     /**
@@ -487,7 +487,7 @@ public class MGEF extends MajorRecordDescription {
      */
     @Override
     public void setDescription(String description) {
-	subRecords.setSubString("DNAM", description);
+	subRecords.setSubStringPointer("DNAM", description);
     }
 
     DATA getDATA() {
