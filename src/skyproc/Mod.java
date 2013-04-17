@@ -719,13 +719,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	if (backup.isFile()) {
 	    backup.delete();
 	}
-	export(tmp, this);
+	export(tmp);
 
 	Ln.moveFile(dest, backup, false);
 	Ln.moveFile(tmp, dest, false);
     }
 
-    void export(File outPath, Mod srcMod) throws IOException, BadRecord {
+    void export(File outPath) throws IOException, BadRecord {
 
 	SPGlobal.logMain("Mod Export", "Exporting " + this);
 
@@ -740,8 +740,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    }
 	}
 	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + srcMod);
-	ArrayList<FormID> allForms = srcMod.allFormIDs();
+	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + this);
+	ArrayList<FormID> allForms = allFormIDs();
 
 	// Add all mods that contained any of the FormIDs used.
 	SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
@@ -762,7 +762,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// And help encourage repatching when mods are removed.
 	SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
 	if (!SPGlobal.mergeMode) {
-	    for (GRUP<MajorRecord> g : srcMod) {
+	    for (GRUP<MajorRecord> g : this) {
 		for (MajorRecord major : g) {
 		    FormID id = major.getForm();
 		    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
@@ -780,14 +780,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// Standardize all formIDs for good measure
 	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
 	for (FormID id : allForms) {
-	    id.standardize(srcMod);
+	    id.standardize(this);
 	}
 	SPProgressBarPlug.incrementBar();
 
 	// Export Header
 	tes.setNumRecords(numRecords());
 	if (SPGlobal.logging()) {
-	    SPGlobal.newSyncLog("Export - " + srcMod.getName() + ".txt");
+	    SPGlobal.newSyncLog("Export - " + this.getName() + ".txt");
 	    SPGlobal.sync(true);
 	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
 	    SPGlobal.logSync(this.getName(), "Masters: ");
@@ -801,14 +801,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	// Export GRUPs
 	for (GRUP g : exportGRUPs) {
-	    SPProgressBarPlug.setStatusNumbered("Exporting " + srcMod + ": " + g.getContainedType());
+	    SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": " + g.getContainedType());
 	    g.export(out);
 	    SPProgressBarPlug.incrementBar();
 	}
 
 	// Export or clean up STRINGS files
-	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPProgressBarPlug.setStatusNumbered("Exporting " + srcMod + ": STRINGS files");
+	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
+	    SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": STRINGS files");
 	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
 	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
 	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);

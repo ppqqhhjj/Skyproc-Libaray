@@ -26,6 +26,7 @@ import lev.gui.resources.LFonts;
 import lev.gui.resources.LImages;
 import skyproc.SPGlobal.Language;
 import skyproc.*;
+import skyproc.exceptions.MissingMaster;
 
 /**
  * The standard GUI setup used in SUM. This can be used to create GUIs that
@@ -886,8 +887,7 @@ public class SUMGUI extends JFrame {
 	    SPGlobal.logMain("START IMPORT THREAD", "Starting of process thread.");
 	    try {
 		if (!imported) {
-		    SPImporter importer = new SPImporter();
-		    importer.importActiveMods(hook.importRequests());
+		    SPImporter.importActiveMods(hook.importRequests());
 		    imported();
 		    imported = true;
 		    for (Runnable r : afterImporting) {
@@ -933,6 +933,12 @@ public class SUMGUI extends JFrame {
 		    SPProgressBarPlug.done();
 		    exitProgram(true, false);
 		}
+	    } catch (MissingMaster m) {
+		System.err.println(m.toString());
+		SPGlobal.logException(m);
+		JOptionPane.showMessageDialog(null, m.toString() + "\n\n Please activate and try again.");
+		exitProgram(false, true);
+
 	    } catch (Exception e) {
 		System.err.println(e.toString());
 		SPGlobal.logException(e);

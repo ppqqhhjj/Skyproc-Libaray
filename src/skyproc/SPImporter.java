@@ -9,6 +9,7 @@ import skyproc.MajorRecord.MajorFlags;
 import skyproc.SPGlobal.Language;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadMod;
+import skyproc.exceptions.MissingMaster;
 import skyproc.gui.SPProgressBarPlug;
 
 /**
@@ -218,7 +219,7 @@ public class SPImporter {
      * @return A set of Mods with all their data imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importAllMods() {
+    static public Set<Mod> importAllMods() throws MissingMaster {
 	return importAllMods(GRUP_TYPE.values());
     }
 
@@ -235,7 +236,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) throws MissingMaster {
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
     }
 
@@ -252,7 +253,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) {
+    static public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -275,7 +276,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    static public Set<Mod> importActiveMods() throws IOException {
+    static public Set<Mod> importActiveMods() throws IOException, MissingMaster {
 	return importActiveMods(GRUP_TYPE.values());
     }
 
@@ -297,7 +298,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    static public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException {
+    static public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException, MissingMaster {
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
     }
 
@@ -319,7 +320,7 @@ public class SPImporter {
      * manipulated.
      * @throws IOException
      */
-    static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException {
+    static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException, MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -337,7 +338,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) throws MissingMaster {
 	return importMods(mods, SPGlobal.pathToData, grup_targets);
     }
 
@@ -354,7 +355,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
 	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
@@ -371,7 +372,7 @@ public class SPImporter {
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importMods(ArrayList<ModListing> mods) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods) throws MissingMaster {
 	return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
     }
 
@@ -387,7 +388,7 @@ public class SPImporter {
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importMods(ArrayList<ModListing> mods, String path) {
+    static public Set<Mod> importMods(ArrayList<ModListing> mods, String path) throws MissingMaster {
 	return importMods(mods, path, GRUP_TYPE.values());
     }
 
@@ -403,7 +404,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      */
-    static public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) {
+    static public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) throws MissingMaster {
 
 	if (grup_targets.length == 0) {
 	    SPGlobal.logMain(header, "Skipping import because requests were empty.");
@@ -438,6 +439,8 @@ public class SPImporter {
 		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
 		    outSet.add(importMod(new ModListing(mod), path, true, grup_targets));
+		} catch (MissingMaster m) {
+		    throw m;
 		} catch (BadMod ex) {
 		    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
 		    SPGlobal.logError(header, "  " + ex.toString());
@@ -476,7 +479,7 @@ public class SPImporter {
      * @throws BadMod If SkyProc runs into any unexpected data structures, or
      * has any error importing a mod at all.
      */
-    static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod {
+    static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	return importMod(listing, path, true, grup_targets);
     }
 
@@ -497,12 +500,13 @@ public class SPImporter {
      * types = new GRUP_TYPE[grup_targets.size()]; types =
      * grup_targets.toArray(types); return importMod(listing, path, types); }
      */
-    static Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod {
+    static Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	try {
 
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
+	    checkMissingMasters(plugin);
 	    plugin.input = input;
 	    if (SPGlobal.streamMode) {
 		plugin.input = input;
@@ -535,11 +539,29 @@ public class SPImporter {
 	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
 
 	    return plugin;
+	} catch (MissingMaster m) {
+	    throw m;
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
 	}
 
+    }
+
+    static public void checkMissingMasters(Mod plugin) throws MissingMaster {
+	ArrayList<ModListing> missingMasters = new ArrayList<>();
+	for (ModListing master : plugin.getMasters()) {
+	    if (SPGlobal.getDB().getMod(master) == null) {
+		missingMasters.add(master);
+	    }
+	}
+	if (!missingMasters.isEmpty()) {
+	    String error = "\n" + plugin.toString() + " has some missing masters:";
+	    for (ModListing m : missingMasters) {
+		error += "\n  - " + m.toString();
+	    }
+	    throw new MissingMaster(error);
+	}
     }
 
     static public DirtyParsingIterator getSubRecordsInGRUPs(String typeString, String... grups) {

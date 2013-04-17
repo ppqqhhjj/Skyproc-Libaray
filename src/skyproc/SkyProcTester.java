@@ -134,7 +134,7 @@ public class SkyProcTester {
 	}
 	patch.setAuthor("Leviathan1753");
 	try {
-	    patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
+	    patch.export(new File(SPGlobal.pathToData + patch.getName()));
 	} catch (BadRecord ex) {
 	    SPGlobal.logException(ex);
 	    System.out.println("Record Lengths were off.");
@@ -173,7 +173,7 @@ public class SkyProcTester {
 	    }
 	}
 
-	patch.export(new File(SPGlobal.pathToData + patch.getName()), patch);
+	patch.export(new File(SPGlobal.pathToData + patch.getName()));
 	passed = passed && NiftyFunc.validateRecordLengths(SPGlobal.pathToData + "Test.esp", 10);
 
 	SPProgressBarPlug.pause(false);
