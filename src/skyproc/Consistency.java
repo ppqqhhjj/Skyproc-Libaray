@@ -164,6 +164,18 @@ public class Consistency {
 		    while (in.ready()) {
 			String EDID = in.readLine();
 			String form = in.readLine();
+			
+			// Check to see if following line is actually a formid
+			boolean fail = false;
+			while (in.ready() && !form.toUpperCase().endsWith(".ESP") && !form.toUpperCase().endsWith(".ESM")) {
+			    form = in.readLine();
+			    fail = true;
+			}
+			// If not, skip whole "pair"
+			if (fail) {
+			    continue;
+			}
+
 			FormID ID = new FormID(form);
 			if (ID.getMaster().equals(globalPatch)) {
 			    edidToForm.put(EDID, ID);
