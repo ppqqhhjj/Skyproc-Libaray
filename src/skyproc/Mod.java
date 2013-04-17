@@ -777,7 +777,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 	SPProgressBarPlug.incrementBar();
 
-	// Standardize all formIDs for good measure
+	// Sort masters to match load order and restandardize
+	sortMasters();
 	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
 	for (FormID id : allForms) {
 	    id.standardize(this);
@@ -910,6 +911,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     String genStringsPath(SubStringPointer.Files file) {
 	return SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file;
+    }
+
+    void sortMasters() {
+	tes.getMasters().sort();
     }
 
     void exportStringsFile(ArrayList<String> list, SubStringPointer.Files file) throws FileNotFoundException, IOException {
@@ -1398,7 +1403,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    protected void addRecords() {
 		add(new HEDR());
 		add(SubString.getNew("CNAM", true));
-		add(new SubListSortedUnique<>(new ModListing()));
+		add(new SubList<>(new ModListing(), true));
 		add(SubString.getNew("SNAM", true));
 		add(new SubData("INTV"));
 		add(new SubData("ONAM"));
@@ -1462,8 +1467,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    subRecords.getSubList("MAST").clear();
 	}
 
-	SubListSorted<ModListing> getMasters() {
-	    return (SubListSorted<ModListing>) subRecords.get("MAST");
+	SubList<ModListing> getMasters() {
+	    return subRecords.getSubList("MAST");
 	}
 
 	void setAuthor(String in) {

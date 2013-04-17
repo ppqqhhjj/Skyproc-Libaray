@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.TreeSet;
 import java.util.zip.DataFormatException;
 import lev.LChannel;
 import lev.LExporter;
@@ -26,15 +27,22 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     ArrayList<T> collection = new ArrayList<>();
     T prototype;
+    boolean unique = false;
 
     SubList(T prototype_) {
 	super();
 	prototype = prototype_;
     }
 
+    SubList(T prototype_, boolean unique) {
+	this(prototype_);
+	setUnique(unique);
+    }
+
     SubList(SubList rhs) {
 	super();
 	prototype = (T) rhs.prototype;
+	unique = rhs.unique;
 	collection.addAll(rhs.collection);
     }
 
@@ -86,7 +94,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     boolean allow(T item) {
-	return true;
+	return !unique || !collection.contains(item);
     }
 
     public boolean addAtIndex(T item, int i) {
@@ -127,6 +135,17 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      */
     public int size() {
 	return collection.size();
+    }
+
+    public final void setUnique(boolean unique) {
+	this.unique = unique;
+    }
+
+    public void sort() {
+	TreeSet<T> sorter = new TreeSet<>();
+	sorter.addAll(collection);
+	collection.clear();
+	collection.addAll(sorter);
     }
 
     public void clear() {
