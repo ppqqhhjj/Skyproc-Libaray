@@ -104,9 +104,7 @@ class Consistency {
     static void importConsistency(boolean globalOnly) {
 	try {
 	    getConsistencyFile();
-	    if (v2import(globalOnly)) {
-		return;
-	    }
+	    v2import(globalOnly);
 	    v1import(globalOnly);
 	} catch (Exception ex) {
 	    SPGlobal.logException(ex);
@@ -118,31 +116,37 @@ class Consistency {
 	}
     }
 
-    static void insert(String EDID, FormID id) {
+    static boolean insert(String EDID, FormID id) {
 	Map<String, FormID> modEDIDlist = storage.get(id.master);
 	if (modEDIDlist == null) {
 	    modEDIDlist = new HashMap<>();
 	    storage.put(id.master, modEDIDlist);
 	}
-	if (set.contains(id)) {
-	    // FormID conflict
-	    String offendingEDID = "";
-	    for (String item : modEDIDlist.keySet()) {
-		if (modEDIDlist.get(item).equals(id)) {
-		    offendingEDID = item;
-		    break;
+	// If EDID is already logged, skip it.
+	if (!modEDIDlist.containsKey(EDID)) {
+	    if (set.contains(id)) {
+		// FormID conflict
+		String offendingEDID = "";
+		for (String item : modEDIDlist.keySet()) {
+		    if (modEDIDlist.get(item).equals(id)) {
+			offendingEDID = item;
+			break;
+		    }
+		}
+		conflicts.put(id, EDID);
+		conflicts.put(id, offendingEDID);
+		if (SPGlobal.logging()) {
+		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>> Duplicate FormID warning.  ID: " + id + "  EDID: " + EDID + " and EDID2: " + offendingEDID);
+		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		}
 	    }
-	    conflicts.put(id, EDID);
-	    conflicts.put(id, offendingEDID);
-	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>> Duplicate FormID warning.  ID: " + id + "  EDID: " + EDID + " and EDID2: " + offendingEDID);
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-	    }
+	    modEDIDlist.put(EDID, id);
+	    set.add(id);
+	    return true;
+	} else {
+	    return false;
 	}
-	modEDIDlist.put(EDID, id);
-	set.add(id);
     }
 
     static void export() throws IOException {
@@ -320,10 +324,6 @@ class Consistency {
 	    String EDID = in.readLine();
 	    String form = in.readLine();
 
-	    if (SPGlobal.logging()) {
-		SPGlobal.log("v1Import", "Read Lines: " + form + "  " + EDID);
-	    }
-
 	    // Check to see if following line is actually a formid
 	    boolean fail = false;
 	    while (in.ready() && !form.toUpperCase().endsWith(".ESP") && !form.toUpperCase().endsWith(".ESM")) {
@@ -341,9 +341,8 @@ class Consistency {
 	    FormID ID = new FormID(form);
 	    boolean isGlobal = ID.getMaster().equals(SPGlobal.getGlobalPatch().getInfo());
 	    if ((globalOnly && isGlobal) || (!globalOnly && !isGlobal)) {
-		insert(EDID, ID);
-		if (SPGlobal.logging()) {
-		    SPGlobal.log("Consistency Import", "  Inserting" + form + " with " + EDID);
+		if (insert(EDID, ID) && SPGlobal.logging()) {
+		    SPGlobal.log("Consistency Import", "  Inserting " + form + " with " + EDID);
 		}
 	    }
 	}

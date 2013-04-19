@@ -43,9 +43,6 @@ class SubInt extends SubRecordTyped {
 
     public void set (int in) {
 	data = in;
-        if (logging()) {
-            logSync(toString(), "Setting " + toString() + " to " + print());
-        }
     }
 
     public int get () {
