@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.Condition.RunOnType;
 
 /**
@@ -75,14 +75,14 @@ class ConditionOption implements Serializable {
 	return out;
     }
 
-    public void export(LExporter out) throws IOException {
+    public void export(LOutFile out) throws IOException {
 	exportParam1(out);
 	out.write(runType.ordinal());
 	reference.export(out);
 	exportParam3(out);
     }
 
-    public void parseData(LChannel in, Mod srcMod) {
+    public void parseData(LImport in, Mod srcMod) {
 	parseParam1(in);
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.setInternal(in.extract(4));
@@ -98,20 +98,20 @@ class ConditionOption implements Serializable {
 	return out;
     }
 
-    public void exportParam1(LExporter out) throws IOException {
+    public void exportParam1(LOutFile out) throws IOException {
 	out.write(0);
 	out.write(0);
     }
 
-    public void exportParam3(LExporter out) throws IOException {
+    public void exportParam3(LOutFile out) throws IOException {
 	out.write(p3placeholder);
     }
 
-    public void parseParam1(LChannel in) {
+    public void parseParam1(LImport in) {
 	in.skip(8);
     }
 
-    public void parseParam3(LChannel in) {
+    public void parseParam3(LImport in) {
 	p3placeholder = in.extract(4);
     }
 
@@ -147,13 +147,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -189,13 +189,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(axis.toString(), 4);
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
 	    if (SPGlobal.logging()) {
@@ -241,13 +241,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(source.ordinal());
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -293,13 +293,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(source.ordinal());
 	    p2.export(out);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -345,13 +345,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(p2);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -399,13 +399,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    p2.export(out);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -441,13 +441,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(g.ordinal());
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -483,13 +483,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(source.ordinal());
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -537,18 +537,18 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(p1);
 	    p2.export(out);
 	}
 
 	@Override
-	public void exportParam3(LExporter out) throws IOException {
+	public void exportParam3(LOutFile out) throws IOException {
 	    out.write(p3);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -557,7 +557,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void parseParam3(LChannel in) {
+	public void parseParam3(LImport in) {
 	    p3 = in.extractInt(4);
 	}
 
@@ -599,13 +599,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(p1);
 	    p2.export(out);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1 = in.extractInt(4);
 	    p2.setInternal(in.extract(4));
 	    if (SPGlobal.logging()) {
@@ -641,13 +641,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(state.ordinal());
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -683,13 +683,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(p1);
 	    out.write(0);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1 = in.extractInt(4);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
@@ -735,13 +735,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(p2);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
@@ -787,13 +787,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(a.toString(), 4);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
@@ -840,13 +840,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(c.ordinal());
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
@@ -892,13 +892,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    p1.export(out);
 	    out.write(f);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1.setInternal(in.extract(4));
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
@@ -936,13 +936,13 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(i1);
 	    out.write(i2);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
@@ -978,12 +978,12 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LExporter out) throws IOException {
+	public void exportParam1(LOutFile out) throws IOException {
 	    out.write(p1);
 	}
 
 	@Override
-	public void parseParam1(LChannel in){
+	public void parseParam1(LImport in){
 	    p1 = in.extract(4);
 	}
 

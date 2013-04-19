@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -56,7 +56,7 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    switch (GMSTtype) {
 		case String:
 		    DATAs.parseData(in, srcMod);
@@ -12248,7 +12248,7 @@ public class GMST extends MajorRecord {
     }
 
     @Override
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LImport in) throws BadRecord, DataFormatException, BadParameter {
 	SubRecord data = ((SubRecordsStream) subRecords).getSilent("DATA");
 	updateDATAtype();
 	super.importSubRecords(in);

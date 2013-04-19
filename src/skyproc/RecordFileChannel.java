@@ -6,13 +6,13 @@ package skyproc;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import lev.LFileChannel;
+import lev.LInChannel;
 
 /**
  *
  * @author Justin Swanson
  */
-class RecordFileChannel extends LFileChannel {
+class RecordFileChannel extends LInChannel {
 
     long pos;
 
@@ -21,7 +21,7 @@ class RecordFileChannel extends LFileChannel {
 	pos = 0;
     }
 
-    public RecordFileChannel (LFileChannel fc, int allocation) {
+    public RecordFileChannel (LInChannel fc, int allocation) {
 	super();
 	pos = fc.pos();
 	slice(fc, allocation);

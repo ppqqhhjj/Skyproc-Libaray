@@ -3,8 +3,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -64,7 +64,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    SubData PRKE = subRecords.getSubData("PRKE");
 	    PRKE.parseData(PRKE.extractRecordData(in), srcMod);
 	    PerkType perkType = PerkType.values()[subRecords.getSubData("PRKE").getData()[0]];
@@ -104,7 +104,7 @@ public class PERK extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    switch (getNextType(in)) {
 		case "EPFT":
 		    SubData EPFT = subRecords.getSubData("EPFT");
@@ -132,7 +132,7 @@ public class PERK extends MajorRecordDescription {
 	boolean valid = false;
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    unknown = in.extract(1)[0];
 	    fragmentFile.set(in.extractString(in.extractInt(2)));
 	    int numFrag = in.extractInt(2);
@@ -188,7 +188,7 @@ public class PERK extends MajorRecordDescription {
 	StringNonNull scriptName = new StringNonNull();
 	StringNonNull fragmentName = new StringNonNull();
 
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    index = in.extractInt(2);
 	    unknown = in.extract(3);
 	    scriptName.set(in.extractString(in.extractInt(2)));

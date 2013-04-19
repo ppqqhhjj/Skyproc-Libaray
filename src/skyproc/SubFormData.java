@@ -7,12 +7,12 @@ package skyproc;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 import lev.LShrinkArray;
-import lev.LChannel;
+import lev.LImport;
 
 /**
  *
@@ -21,7 +21,7 @@ import lev.LChannel;
 class SubFormData extends SubForm {
 
     byte[] data;
-    
+
     SubFormData(String type, FormID id, byte[] data) {
 	super(type, id);
 	this.data = data;
@@ -32,7 +32,7 @@ class SubFormData extends SubForm {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	setData(in.extract(4));
     }

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.Ln;
 import skyproc.Mod.Mod_Flags;
 import skyproc.exceptions.BadParameter;
@@ -64,7 +64,7 @@ class SubStringPointer extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in, srcMod);
 	if (logging()) {
 	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
@@ -74,12 +74,12 @@ class SubStringPointer extends SubRecordTyped {
     @Override
     void fetchStringPointers(Mod srcMod) {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
-	    Map<SubStringPointer.Files, LChannel> streams = srcMod.stringStreams;
+	    Map<SubStringPointer.Files, LImport> streams = srcMod.stringStreams;
 	    if (data.isValid() && streams.containsKey(file)) {
 		int index = Ln.arrayToInt(data.getData());
 		if (srcMod.stringLocations.get(file).containsKey(index)) {
 		    int offset = srcMod.stringLocations.get(file).get(index);
-		    LChannel stream = streams.get(file);
+		    LImport stream = streams.get(file);
 
 		    stream.pos(offset);
 

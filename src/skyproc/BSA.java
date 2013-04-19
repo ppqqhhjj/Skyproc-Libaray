@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.zip.DataFormatException;
-import lev.LFileChannel;
+import lev.LInChannel;
 import lev.LFlags;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -38,7 +38,7 @@ public class BSA {
     boolean loaded = false;
     boolean bad = false;
     Map<String, Map<String, BSAFileRef>> folders;
-    LFileChannel in = new LFileChannel();
+    LInChannel in = new LInChannel();
 
     BSA(File file, boolean load) throws FileNotFoundException, IOException, BadParameter {
 	this(file.getPath(), load);
@@ -302,7 +302,7 @@ public class BSA {
 		if (SPGlobal.logging()) {
 		    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
 		}
-		LFileChannel input = new LFileChannel(ini);
+		LInChannel input = new LInChannel(ini);
 
 		String line = "";
 		// First line

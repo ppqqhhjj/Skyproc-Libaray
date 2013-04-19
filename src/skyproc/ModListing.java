@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -77,7 +77,7 @@ public class ModListing extends SubRecord implements Comparable {
 	    return printNoSuffix() + ".esp";
 	}
     }
-    
+
     public String printNoSuffix() {
 	return mast.print();
     }
@@ -98,7 +98,7 @@ public class ModListing extends SubRecord implements Comparable {
     }
 
     @Override
-    final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	switch (getNextType(in)) {
 	    case "MAST":
 		mast.parseData(in, srcMod);

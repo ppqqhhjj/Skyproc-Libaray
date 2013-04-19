@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import lev.LFileChannel;
+import lev.LInChannel;
 import lev.LPair;
 import lev.LShrinkArray;
 import lev.Ln;
@@ -43,7 +43,7 @@ public class NIF {
      * standards)
      */
     public NIF(File f) throws FileNotFoundException, IOException, BadParameter {
-	LFileChannel in = new LFileChannel(f);
+	LInChannel in = new LInChannel(f);
 	fileName = f.getPath();
 	parseData(new LShrinkArray(in.extractByteBuffer(0, in.available())));
     }

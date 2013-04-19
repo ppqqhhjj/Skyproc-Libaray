@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -49,7 +49,7 @@ public class ECZN extends MajorRecord {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 
 	    owner.setInternal(in.extract(4));

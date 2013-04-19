@@ -350,7 +350,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    skills = in.extract(36);
 	    health = in.extractInt(2);
@@ -415,7 +415,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    ACBSflags.set(in.extract(4));
 	    magickaOffset = in.extractInt(2);
@@ -492,7 +492,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    aggression = Aggression.values()[in.extractInt(1)];
 	    confidence = Confidence.values()[in.extractInt(1)];
@@ -583,7 +583,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();
@@ -680,7 +680,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    noseLong = in.extractFloat();
 	    noseUp = in.extractFloat();
@@ -747,7 +747,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    nose = in.extractInt(4);
 	    unknown = in.extractInt(4);
@@ -797,7 +797,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    f1.setInternal(in.extract(4));
 	    f2.setInternal(in.extract(4));

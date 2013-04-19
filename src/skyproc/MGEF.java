@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -131,7 +131,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    baseCost = in.extractFloat();
@@ -276,7 +276,7 @@ public class MGEF extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    while (!in.isDone()) {
 		SNDD.Sound sound = new SNDD.Sound();

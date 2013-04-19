@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -45,7 +45,7 @@ class SubListCounted<T extends SubRecord> extends SubList {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
         String t = getNextType(in);
         if (!t.equals(counterType)) {
             super.parseData(in, srcMod, t);

@@ -6,7 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.Ln;
 
 /**
@@ -63,7 +63,7 @@ public class DIAL extends MajorRecord {
 	subRecords.setSubInt("TIFC", grup.getRecords().size());
 	super.export(out);
     }
-    
+
     // Get/Set
     public void setDialog(String dialog) {
 	subRecords.setSubStringPointer("FULL", dialog);
@@ -103,11 +103,11 @@ public class DIAL extends MajorRecord {
 	}
 	subRecords.setSubString("SNAM", name);
     }
-    
+
     public String getSubTypeName () {
 	return subRecords.getSubString("SNAM").print();
     }
-    
+
     public ArrayList<INFO> getDialogTopicInfos() {
 	return grup.getRecords();
     }

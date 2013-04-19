@@ -8,8 +8,8 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -43,14 +43,14 @@ public class LGTM extends MajorRecord {
 	return Record.getTypeList("LGTM");
     }
 
-    static Color extractColor(LChannel in) {
+    static Color extractColor(LImport in) {
 	return new Color(in.extractInt(1),
 		in.extractInt(1),
 		in.extractInt(1),
 		in.extractInt(1));
     }
 
-    static void writeColor(LExporter out, Color c) throws IOException {
+    static void writeColor(LOutFile out, Color c) throws IOException {
 	out.write(c.getRed(), 1);
 	out.write(c.getGreen(), 1);
 	out.write(c.getBlue(), 1);
@@ -102,7 +102,7 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    amb = extractColor(in);
 	    dir = extractColor(in);
@@ -173,7 +173,7 @@ public class LGTM extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    dirAmbXpos = extractColor(in);
 	    dirAmbXneg = extractColor(in);

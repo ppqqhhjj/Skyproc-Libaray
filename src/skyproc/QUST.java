@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -132,7 +132,7 @@ public class QUST extends MajorRecordNamed {
     };
 
     public abstract static class Alias extends SubShellBulkType {
-	
+
 	Alias(SubPrototype proto) {
 	    super(proto, false);
 	}
@@ -144,22 +144,22 @@ public class QUST extends MajorRecordNamed {
 	public String getName() {
 	    return subRecords.getSubString("ALID").print();
 	}
-	
+
 	public abstract void setAliasID(int val);
-	
+
 	public abstract int getAliasID();
-	
+
 	public void setAliasName(String name) {
 	    subRecords.setSubString("ALID", name);
 	}
-	
+
 	public String getAliasName() {
 	    return subRecords.getSubString("ALID").print();
 	}
-	
+
 	public void setUniqueActor(FormID id) {
 	}
-	
+
 	public FormID getUniqueActor() {
 	    return FormID.NULL;
 	}
@@ -174,7 +174,7 @@ public class QUST extends MajorRecordNamed {
 	    this();
 	    setAliasID(val);
 	}
-	
+
 	AliasLocation() {
 	    super(aliasLocationProto);
 	}
@@ -208,7 +208,7 @@ public class QUST extends MajorRecordNamed {
 	    this();
 	    setAliasID(val);
 	}
-	
+
 	AliasReference() {
 	    super(aliasReferenceProto);
 	}
@@ -241,7 +241,7 @@ public class QUST extends MajorRecordNamed {
 	public void setUniqueActor(FormID id) {
 	    subRecords.setSubForm("ALUA", id);
 	}
-	
+
     }
 
     static class DNAM extends SubRecord {
@@ -277,7 +277,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    flags.set(in.extract(2));
 	    priority = in.extract(1)[0];
@@ -309,7 +309,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    index = in.extractInt(2);
 	    flags.set(in.extract(2));
@@ -456,19 +456,19 @@ public class QUST extends MajorRecordNamed {
 	public void removeCondition(Condition c) {
 	    subRecords.getSubList("CTDA").remove(c);
 	}
-	
+
 	public void setJournalText(String text) {
 	    subRecords.setSubStringPointer("CNAM", text);
 	}
-	
+
 	public String getJournalText() {
 	    return subRecords.getSubStringPointer("CNAM").print();
 	}
-	
+
 	public void setNextQuest(FormID id) {
 	    subRecords.setSubForm("NAM0", id);
 	}
-	
+
 	public FormID getNextQuest() {
 	    return subRecords.getSubForm("NAM0").getForm();
 	}
@@ -538,7 +538,7 @@ public class QUST extends MajorRecordNamed {
 	public ArrayList<QuestTarget> getTargets() {
 	    return subRecords.getSubList("QSTA").toPublic();
 	}
-	
+
 	public void clearTargets() {
 	    subRecords.getSubList("QSTA").clear();
 	}
@@ -569,7 +569,7 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    targetAlias = in.extractInt(4);
 	    flags.set(in.extract(4));
@@ -658,11 +658,11 @@ public class QUST extends MajorRecordNamed {
 	public void removeCondition(Condition c) {
 	    subRecords.getSubList("CTDA").remove(c);
 	}
-	
+
 	public void setCompassMarkersIgnoreLocks(boolean on) {
 	    getData().flags.set(0, on);
 	}
-	
+
 	public boolean getCompassMarkersIgnoreLocks() {
 	    return getData().flags.get(0);
 	}
@@ -702,7 +702,7 @@ public class QUST extends MajorRecordNamed {
 	 */
 	FailQuest;
     }
-    
+
     public enum QuestFlags {
 	StartGameEnabled (0),
 	WildernessEncounter(2),
@@ -710,13 +710,13 @@ public class QUST extends MajorRecordNamed {
 	RunOnce(4),
 	ExcludeFromDialogueExport(5),
 	WarnOnAliasFillFailure(6);
-	
+
 	int value;
 	QuestFlags(int val) {
 	    value = val;
 	}
     }
-    
+
     public enum QuestType {
 	None,
 	MainQuest,
@@ -758,7 +758,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     // Get Set Functions
-    
+
     /**
      *
      * @return
@@ -806,15 +806,15 @@ public class QUST extends MajorRecordNamed {
     public void addQuestStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
-    
+
     DNAM getDNAM() {
 	return (DNAM) subRecords.get("DNAM");
     }
-    
+
     public int getPriority() {
 	return getDNAM().priority;
     }
-    
+
     public void setPriority(int priority) {
 	if (priority < 0) {
 	    priority = 0;
@@ -823,71 +823,71 @@ public class QUST extends MajorRecordNamed {
 	}
 	getDNAM().priority = (byte) priority;
     }
-    
+
     public void set(QuestFlags flag, boolean on) {
 	getDNAM().flags.set(flag.value, on);
     }
-    
+
     public boolean get(QuestFlags flag) {
 	return getDNAM().flags.get(flag.value);
     }
-    
+
     public void setQuestType(QuestType type) {
 	getDNAM().questType = type;
     }
-    
+
     public QuestType getQuestType() {
 	return getDNAM().questType;
     }
-    
+
     public String getShortName() {
 	return subRecords.getSubString("ENAM").print();
     }
-    
+
     public void setShortName(String shortName) {
 	subRecords.setSubString("ENAM", shortName);
     }
-    
+
     public String getObjectWindowFilter() {
 	return subRecords.getSubString("FLTR").print();
     }
-    
+
     public void setObjectWindowFilter(String name) {
 	subRecords.setSubString("FLTR", name);
     }
-    
+
     public ArrayList<QuestStage> getStages() {
 	return subRecords.getSubList("INDX").toPublic();
     }
-    
+
     public void clearStages() {
 	subRecords.getSubList("INDX").clear();
     }
-    
+
     public void addStage(QuestStage stage) {
 	subRecords.getSubList("INDX").add(stage);
     }
-    
+
     public ArrayList<QuestObjective> getObjectives() {
 	return subRecords.getSubList("QOBJ").toPublic();
     }
-    
+
     public void clearObjectives() {
 	subRecords.getSubList("QOBJ").clear();
     }
-    
+
     public void addObjective(QuestObjective objective) {
 	subRecords.getSubList("QOBJ").add(objective);
     }
-    
+
     public ArrayList<Alias> getAliases() {
 	return subRecords.getSubList("ALLS").toPublic();
     }
-    
+
     public void addAlias(Alias alias) {
 	subRecords.getSubList("ALLS").add(alias);
     }
-    
+
     public void clearAliases() {
 	subRecords.getSubList("ALLS").clear();
     }

@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import lev.LShrinkArray;
 import skyproc.exceptions.BadParameter;
@@ -51,14 +51,14 @@ abstract class MagicItem extends MajorRecordDescription {
 	    super();
 	    valid = false;
 	}
-	
+
 	@Override
 	SubRecord getNew(String type) {
 	    return new SPIT();
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 
 	    baseCost = in.extractInt(4);

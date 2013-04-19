@@ -6,8 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -43,7 +43,7 @@ class SubRGB extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	r = in.extractFloat();
 	g = in.extractFloat();

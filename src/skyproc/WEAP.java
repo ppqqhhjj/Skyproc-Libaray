@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -111,7 +111,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    wtype = WeaponType.values()[in.extractInt(1)];
 	    unknown1 = in.extract(3);
@@ -207,7 +207,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
@@ -262,7 +262,7 @@ public class WEAP extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    critDmg = in.extractInt(2);
 	    unknown0 = in.extract(2);

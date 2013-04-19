@@ -127,7 +127,6 @@ public class SUMMergerProgram implements SUM {
 
     @Override
     public void onStart() throws Exception {
-	SPGlobal.debugConsistencyImport = true;
 	SPGlobal.streamMode = false;
 	SPGlobal.mergeMode = true;
     }

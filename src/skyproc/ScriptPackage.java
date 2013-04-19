@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -69,7 +69,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	version = in.extractInt(2);
 	unknown = in.extractInt(2);

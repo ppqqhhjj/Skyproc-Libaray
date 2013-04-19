@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
@@ -21,13 +21,11 @@ import skyproc.exceptions.BadRecord;
 public abstract class MajorRecord extends Record implements Serializable {
 
     static final SubPrototype majorProto = new SubPrototype() {
-
 	@Override
 	protected void addRecords() {
 	    add(SubString.getNew("EDID", true));
 	}
     };
-
     SubRecords subRecords = new SubRecordsStream(majorProto);
     private FormID ID = new FormID();
     LFlags majorFlags = new LFlags(4);
@@ -42,10 +40,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     void originateFrom(Mod modToOriginateFrom, String edid) {
 	srcMod = modToOriginateFrom;
 	subRecords.setMajor(this);
-	setEdidNoConsistency(edid);
-	ID = modToOriginateFrom.getNextID(getEDID());
-	Consistency.addEntry(getEDID(), ID);
-	Consistency.newIDs.add(ID);
+	setEDID(edid);
 	modToOriginateFrom.addRecord(this);
     }
 
@@ -123,10 +118,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	System.arraycopy(revision, 0, out.revision, 0, revision.length);
 	System.arraycopy(version, 0, out.version, 0, version.length);
 	out.subRecords = new SubRecordsCopied(subRecords);
-	out.setEdidNoConsistency(edid);
-	out.setForm(modToOriginateFrom.getNextID(out.getEDID()));
-	Consistency.addEntry(out.getEDID(), out.getForm());
-	Consistency.newIDs.add(out.getForm());
+	out.setEDID(edid);
 	return out;
     }
 
@@ -140,7 +132,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 
 	majorFlags = new LFlags(in.extract(4));
@@ -164,7 +156,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	importSubRecords(in);
     }
 
-    void importSubRecords(LChannel in) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecords(LImport in) throws BadRecord, DataFormatException, BadParameter {
 	subRecords.importSubRecords(in, srcMod);
     }
 
@@ -260,21 +252,9 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @param edid The string to have the EDID set to.
      */
     final public void setEDID(String edid) {
-	setEdidNoConsistency(edid);
-	Consistency.addEntry(edid, this.getForm());
-    }
-
-    final void setEdidNoConsistency(String edid) {
-	edid = Consistency.getAvailableEDID(edidFilter(edid));
-	FormID oldFormID = Consistency.getOldForm(edid);
-	if (oldFormID != null) {
-	    setForm(oldFormID);
-	}
+	edid = Consistency.edidFilter(edid);
+	Consistency.syncIDwithEDID(edid, this);
 	subRecords.getSubString("EDID").setString(edid);
-    }
-
-    static String edidFilter(String edid) {
-	return edid.replaceAll(" ", "");
     }
 
     /**

@@ -6,7 +6,7 @@ package skyproc;
 
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
+import lev.LImport;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -125,7 +125,7 @@ public class GLOB extends MajorRecord {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	if (SPGlobal.logging()) {
 	    logSync("GLOB", "Constant: " + get(MajorFlags.RelatedToShields));

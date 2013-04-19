@@ -4,7 +4,7 @@
  */
 package skyproc;
 
-import lev.LChannel;
+import lev.LImport;
 import lev.LShrinkArray;
 
 /**
@@ -15,7 +15,7 @@ public class RecordShrinkArray extends LShrinkArray {
 
     int offset;
 
-    public RecordShrinkArray(final LChannel rhs, final int high) {
+    public RecordShrinkArray(final LImport rhs, final int high) {
 	super(rhs, high);
 	offset = (int) rhs.pos();
     }

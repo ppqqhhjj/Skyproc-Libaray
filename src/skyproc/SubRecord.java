@@ -6,7 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import lev.LExporter;
+import lev.LOutFile;
 
 /**
  * An abstract class outlining the functionality of subrecords, which are
@@ -68,7 +68,7 @@ public abstract class SubRecord extends Record {
     void fetchStringPointers (MajorRecord r) {
 	fetchStringPointers(r.srcMod);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -83,7 +83,7 @@ public abstract class SubRecord extends Record {
 	}
 	return subRecordEquals(other);
     }
-    
+
     boolean subRecordEquals(SubRecord subRecord) {
 	throw new UnsupportedOperationException("Equals functionality not yet supported for subrecord: " + this.getClass().getSimpleName());
     }

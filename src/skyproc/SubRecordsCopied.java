@@ -7,7 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.Ln;
 
 /**

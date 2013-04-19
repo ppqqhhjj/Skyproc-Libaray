@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -31,7 +31,7 @@ class ScriptProperty extends Record implements Serializable {
 	this.name.set(name);
     }
 
-    ScriptProperty(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    ScriptProperty(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod);
     }
 
@@ -117,7 +117,7 @@ class ScriptProperty extends Record implements Serializable {
     }
 
     @Override
-    final void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	name.set(in.extractString(in.extractInt(2)));
 	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
@@ -278,7 +278,7 @@ class ScriptProperty extends Record implements Serializable {
     // Data classes
     interface ScriptData {
 
-	void parseData(LChannel in, Mod srcMod);
+	void parseData(LImport in, Mod srcMod);
 
 	int getContentLength();
 
@@ -294,7 +294,7 @@ class ScriptProperty extends Record implements Serializable {
 	String data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    data = in.extractString(in.extractInt(2));
 	}
 
@@ -325,7 +325,7 @@ class ScriptProperty extends Record implements Serializable {
 	int data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    data = in.extractInt(4);
 	}
 
@@ -355,7 +355,7 @@ class ScriptProperty extends Record implements Serializable {
 	boolean data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    data = in.extractBool(1);
 	}
 
@@ -401,7 +401,7 @@ class ScriptProperty extends Record implements Serializable {
 	}
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    data = in.extract(4);
 	    id = new FormID();
 	    id.setInternal(in.extract(4));
@@ -434,7 +434,7 @@ class ScriptProperty extends Record implements Serializable {
 	float data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    data = in.extractFloat();
 	}
 
@@ -464,7 +464,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Integer> data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -505,7 +505,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<String> data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -552,7 +552,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<FormIDData> data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -595,7 +595,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Boolean> data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {
@@ -640,7 +640,7 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<Float> data;
 
 	@Override
-	public void parseData(LChannel in, Mod srcMod){
+	public void parseData(LImport in, Mod srcMod){
 	    int size = in.extractInt(4);
 	    data = new ArrayList<>(size);
 	    for (int i = 0; i < size; i++) {

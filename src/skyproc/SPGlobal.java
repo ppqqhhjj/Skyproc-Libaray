@@ -126,7 +126,8 @@ public class SPGlobal {
 	}
 	globalPatchOut = patch;
 	modsToSkip.add(globalPatchOut.getInfo());
-	Consistency.importConsistency();
+	Consistency.clear();
+	Consistency.importConsistency(true);
     }
 
     /**
@@ -583,16 +584,13 @@ public class SPGlobal {
 
 	System.setOut(new PrintStream(outToDebug, true));
     }
-    
+
     static void reset() {
 	SPDatabase.activePlugins.clear();
 	getDB().addedPlugins.clear();
 	getDB().modLookup.clear();
 	FormID.allIDs.clear();
-	Consistency.IDs.clear();
-	Consistency.edidToForm.clear();
-	Consistency.imported = false;
-	Consistency.newIDs.clear();
+	Consistency.clear();
     }
 
     /**
@@ -611,15 +609,6 @@ public class SPGlobal {
 	return pathToDebug;
     }
     // Debug Globals
-    /**
-     * This flag prints messages when records are tied to FormIDs from the last
-     * patch via EDID match.
-     */
-    public static boolean debugConsistencyTies = false;
-    /**
-     * This flag prints old FormIDs imported from the last patch.
-     */
-    public static boolean debugConsistencyImport = false;
     /**
      * Displays information about BSA importing
      */

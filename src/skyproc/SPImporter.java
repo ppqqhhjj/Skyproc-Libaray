@@ -574,7 +574,7 @@ public class SPImporter {
 
     static class GRUPIterator implements Iterator<RecordShrinkArray> {
 
-	LFileChannel input;
+	LInChannel input;
 	ArrayList<String> targets;
 	String loading;
 
@@ -582,7 +582,7 @@ public class SPImporter {
 	    targets = new ArrayList<>(0);
 	}
 
-	GRUPIterator(GRUP_TYPE[] grup_targets, LFileChannel input) {
+	GRUPIterator(GRUP_TYPE[] grup_targets, LInChannel input) {
 	    ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
 	    for (GRUP_TYPE g : new ArrayList<>(tmp)) {
 		if (GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
@@ -636,8 +636,8 @@ public class SPImporter {
 
 	String typeString;
 	ArrayList<String> grups;
-	LChannel input;
-	LFileChannel fileInput;
+	LImport input;
+	LInChannel fileInput;
 	LShrinkArray uncompressed = new LShrinkArray(new byte[0]);
 	String inputStr = "";
 	String majorRecordType = "";
@@ -763,7 +763,7 @@ public class SPImporter {
 	    }
 	    // If we have mods left, switch to it.
 	    if (activeMods.size() > 0) {
-		fileInput = new LFileChannel(SPGlobal.pathToData + activeMods.get(0).print());
+		fileInput = new LInChannel(SPGlobal.pathToData + activeMods.get(0).print());
 		activeMod = activeMods.get(0);
 		activeMods.remove(0);
 		return true;
@@ -778,7 +778,7 @@ public class SPImporter {
 	}
     }
 
-    static ByteBuffer extractHeaderInfo(LFileChannel in) {
+    static ByteBuffer extractHeaderInfo(LInChannel in) {
 	if (Ln.arrayToString(in.extractInts(0, 4)).equals("TES4")) {
 	    int size = Ln.arrayToInt(in.extractInts(0, 4)) + 24;  // +24 for TES4 extra info
 	    in.skip(-8); // To start of TES4 header
@@ -816,7 +816,7 @@ public class SPImporter {
 
 	    // Open file
 	    if (stringsFile.isFile()) {
-		LFileChannel istream = new LFileChannel(stringsFile);
+		LInChannel istream = new LInChannel(stringsFile);
 		// Read header
 		numRecords = istream.extractInt(0, 4);
 		recordsSize = numRecords * 8 + 8;
@@ -857,7 +857,7 @@ public class SPImporter {
 	return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + l + "." + file;
     }
 
-    static String scanToGRUPStart(LFileChannel in, ArrayList<String> target) throws java.io.IOException {
+    static String scanToGRUPStart(LInChannel in, ArrayList<String> target) throws java.io.IOException {
 	String type;
 	String intro;
 	int size;
@@ -882,11 +882,11 @@ public class SPImporter {
 	return "NULL";
     }
 
-    static RecordShrinkArray extractGRUPData(LFileChannel in) throws IOException {
+    static RecordShrinkArray extractGRUPData(LInChannel in) throws IOException {
 	return new RecordShrinkArray(in, getGRUPsize(in));
     }
 
-    static int getGRUPsize(LFileChannel in) {
+    static int getGRUPsize(LInChannel in) {
 	int size = Ln.arrayToInt(in.extractInts(4, 4));
 	if (SPGlobal.logging()) {
 	    SPGlobal.logSync(header, "Extract GRUP size: " + Ln.prettyPrintHex(size));

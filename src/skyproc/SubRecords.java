@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -213,13 +213,13 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
     }
 
-    void importSubRecords(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+    void importSubRecords(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	while (!in.isDone()) {
 	    importSubRecord(in, srcMod);
 	}
     }
 
-    void importSubRecord(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	SubRecord record = get(nextType);
 	if (record != null) {

@@ -4,7 +4,7 @@
  */
 package skyproc;
 
-import lev.LChannel;
+import lev.LImport;
 
 /**
  *
@@ -25,7 +25,7 @@ abstract class SubShellBulkNumber extends SubShell {
      * @return
      */
     @Override
-    public int getRecordLength(LChannel in) {
+    public int getRecordLength(LImport in) {
 	int size = 0;
 	for (int i = 0 ; i < numForced ; i++) {
 	    int newSize = super.getRecordLength(in);

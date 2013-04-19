@@ -7,7 +7,7 @@ package skyproc;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import lev.LChannel;
+import lev.LImport;
 import skyproc.exceptions.BadRecord;
 
 /**
@@ -29,7 +29,7 @@ class SubShellBulkType extends SubShell {
      * @return
      */
     @Override
-    public int getRecordLength(LChannel in) {
+    public int getRecordLength(LImport in) {
 	String first = getType();
 	int size = super.getRecordLength(in);
 	in.skip(size);

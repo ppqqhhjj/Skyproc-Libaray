@@ -4,8 +4,8 @@ package skyproc;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LFileChannel;
+import lev.LImport;
+import lev.LInChannel;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -82,10 +82,10 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
-    void importSubRecord(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void importSubRecord(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	if (contains(nextType)) {
-	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
+	    if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LInChannel)) {
 		String standardType = prototype.get(nextType).getType();
 		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();

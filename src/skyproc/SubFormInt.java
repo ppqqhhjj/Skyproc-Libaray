@@ -3,10 +3,10 @@ package skyproc;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.Ln;
 import lev.LShrinkArray;
-import lev.LChannel;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -35,7 +35,7 @@ public class SubFormInt extends SubFormData {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in, srcMod);
         num = Ln.arrayToInt(data);
     }
@@ -93,7 +93,7 @@ public class SubFormInt extends SubFormData {
 	if (!this.ID.equals(s.ID) || num != s.num) {
 	    return false;
 	}
-	
+
         return true;
     }
 }

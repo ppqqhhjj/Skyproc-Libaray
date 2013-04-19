@@ -5,7 +5,7 @@
 package skyproc;
 
 import java.util.zip.DataFormatException;
-import lev.LChannel;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -20,7 +20,7 @@ public class GRUPRecursive<T extends MajorRecord> extends GRUP<T> {
     }
 
     @Override
-    public MajorRecord extractMajor(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    public MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	MajorRecord m = super.extractMajor(in, srcMod);
 	if (m != null && !in.isDone() && "GRUP".equals(getNextType(in))) {
 	    if (SPGlobal.logging()) {

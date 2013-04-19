@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import lev.LFileChannel;
+import lev.LInChannel;
 import lev.Ln;
 
 /**
@@ -283,7 +283,7 @@ public class NiftyFunc {
 	    } else {
 		SPGlobal.log("Validate", "Target file does NOT exist: " + file);
 	    }
-	    LFileChannel input = new LFileChannel(testFilePath);
+	    LInChannel input = new LInChannel(testFilePath);
 
 	    correct = testHeaderLength(input);
 
@@ -363,7 +363,7 @@ public class NiftyFunc {
 	return correct;
     }
 
-    static boolean testHeaderLength(LFileChannel input) throws IOException {
+    static boolean testHeaderLength(LInChannel input) throws IOException {
 	// Check header
 	String inputStr;
 	boolean correct = true;

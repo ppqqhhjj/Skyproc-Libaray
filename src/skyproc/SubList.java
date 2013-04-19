@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.TreeSet;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -182,11 +182,11 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod, getNextType(in));
     }
 
-    void parseData(LChannel in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (nextType.equals(getType())) {
 	    T newRecord = (T) prototype.getNew(getType());
 	    newRecord.parseData(in, srcMod);
@@ -297,7 +297,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     @Override
-    public int getRecordLength(LChannel in) {
+    public int getRecordLength(LImport in) {
 	return prototype.getRecordLength(in);
     }
 

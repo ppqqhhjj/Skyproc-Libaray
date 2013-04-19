@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -36,12 +36,12 @@ public class SubListMulti<T extends SubRecord> extends SubList {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod, getNextType(in));
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (prototypes.containsKey(nextType)) {
 	    SubRecord newRecord = prototypes.get(nextType).getNew(nextType);
 	    newRecord.parseData(in, srcMod);

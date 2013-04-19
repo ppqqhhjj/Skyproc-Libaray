@@ -6,13 +6,13 @@ package skyproc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import lev.LExporter;
+import lev.LOutFile;
 
 /**
  *
  * @author Justin Swanson
  */
-class ModExporter extends LExporter {
+class ModExporter extends LOutFile {
 
     private Mod exportMod;
     private Mod srcMod;

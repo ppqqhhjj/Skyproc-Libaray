@@ -7,9 +7,9 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.LShrinkArray;
-import lev.LChannel;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -102,7 +102,7 @@ public class MagicEffectRef extends SubShellBulkType {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    magnitude = in.extractFloat();
 	    AOE = in.extractInt(4);

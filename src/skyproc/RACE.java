@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -250,7 +250,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    for (int i = 0; i < 7; i++) {
 		skillBoosts.add(ActorValue.values()[in.extractInt(1)]);
@@ -366,7 +366,7 @@ public class RACE extends MajorRecordDescription {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();

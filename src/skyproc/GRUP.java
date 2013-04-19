@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -75,7 +75,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	contained = in.extract(4);
 	grupType = in.extract(4); // What kind of GRUP data it has.
@@ -89,7 +89,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	}
     }
 
-    public MajorRecord extractMajor(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    public MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	if (logging()) {
 	    logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	}
@@ -372,7 +372,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     }
 
     @Override
-    public int getRecordLength(LChannel in) {
+    public int getRecordLength(LImport in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()));
     }
 }

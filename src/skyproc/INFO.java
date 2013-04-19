@@ -7,8 +7,8 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -78,7 +78,7 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    emotion = EmotionType.values()[in.extractInt(4)];
 	    emotionValue = in.extractInt(4);
@@ -113,7 +113,7 @@ public class INFO extends MajorRecord {
 	}
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    flags = new LFlags(2);
 	    flags.set(in.extract(2));
@@ -145,7 +145,7 @@ public class INFO extends MajorRecord {
 	boolean valid = false;
 
 	@Override
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    unknown = in.extract(1)[0];
 	    fragmentFlags.set(in.extract(1));
 	    fragmentFile.set(in.extractString(in.extractInt(2)));
@@ -200,7 +200,7 @@ public class INFO extends MajorRecord {
 	StringNonNull scriptName = new StringNonNull();
 	StringNonNull fragmentName = new StringNonNull();
 
-	void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    unknown = in.extract(1)[0];
 	    scriptName.set(in.extractString(in.extractInt(2)));
 	    fragmentName.set(in.extractString(in.extractInt(2)));

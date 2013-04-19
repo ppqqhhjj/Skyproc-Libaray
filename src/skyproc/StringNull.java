@@ -5,7 +5,7 @@
 package skyproc;
 
 import java.io.IOException;
-import lev.LExporter;
+import lev.LOutFile;
 
 /**
  *

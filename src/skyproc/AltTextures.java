@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.DataFormatException;
-import lev.LChannel;
-import lev.LExporter;
+import lev.LImport;
+import lev.LOutFile;
 import lev.LShrinkArray;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
@@ -41,7 +41,7 @@ public class AltTextures extends SubRecordTyped {
     }
 
     @Override
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	int numTextures = in.extractInt(4);
 	for (int i = 0; i < numTextures; i++) {
@@ -140,7 +140,7 @@ public class AltTextures extends SubRecordTyped {
 	    index = in.extractInt(4);
 	}
 
-	void export(LExporter out) throws IOException {
+	void export(LOutFile out) throws IOException {
 	    out.write(name.length());
 	    out.write(name);
 	    texture.export(out);

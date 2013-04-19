@@ -60,11 +60,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<DLBR> dialogBranches = new GRUP<>(new DLBR());
     GRUP<DLVW> dialogViews = new GRUP<>(new DLVW());
     GRUP<OTFT> outfits = new GRUP<>(new OTFT());
-    LFileChannel input;
+    LInChannel input;
     Language language = Language.English;
     Map<ModListing, Integer> masterMap = new HashMap<>();
     Map<SubStringPointer.Files, Map<Integer, Integer>> stringLocations = new EnumMap<>(SubStringPointer.Files.class);
-    Map<SubStringPointer.Files, LChannel> stringStreams = new EnumMap<>(SubStringPointer.Files.class);
+    Map<SubStringPointer.Files, LImport> stringStreams = new EnumMap<>(SubStringPointer.Files.class);
     private ArrayList<String> outStrings = new ArrayList<>();
     private ArrayList<String> outDLStrings = new ArrayList<>();
     private ArrayList<String> outILStrings = new ArrayList<>();
@@ -219,36 +219,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return f.exists();
     }
 
-    FormID getNextID(String edid) {
-	// If has an EDID match, grab old FormID
-	FormID oldFormID = Consistency.getOldForm(edid);
-	if (oldFormID != null) {
-	    return oldFormID;
-	} else {
-	    //Find next open FormID
-	    HEDR hedr = tes.getHEDR();
-	    FormID possibleID = new FormID(hedr.nextID++, getInfo());
-	    while (!Consistency.requestID(possibleID)) {
-		hedr.nextID++;
-		if (hedr.nextID > 0xFFFFFF) {
-		    if (!Consistency.cleaned) {
-			hedr.nextID = HEDR.firstAvailableID;
-			Consistency.cleanConsistency();
-			return getNextID(edid);
-		    } else {
-			SPGlobal.logError(getInfo().print(), "Ran out of available formids.");
-			JOptionPane.showMessageDialog(null, "<html>The output patch ran out of available FormIDs.<br>"
-				+ "Please contact Leviathan1753.</html>");
+    FormID getNextID() {
+	 return new FormID(tes.getHEDR().nextID++, getInfo());
+    }
 
-		    }
-		}
-		possibleID = new FormID(hedr.nextID++, getInfo());
-	    }
-	    if (SPGlobal.debugConsistencyTies && SPGlobal.logging()) {
-		SPGlobal.logSync(getName(), "Assigning new FormID " + possibleID + " for EDID " + edid);
-	    }
-	    return possibleID;
-	}
+    void resetNextIDcounter() {
+	tes.getHEDR().nextID = Mod.HEDR.firstAvailableID;
     }
 
     void mergeMasters(Mod in) {
@@ -272,7 +248,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     void closeStreams() {
 	input.close();
-	for (LChannel c : stringStreams.values()) {
+	for (LImport c : stringStreams.values()) {
 	    c.close();
 	}
     }
@@ -474,12 +450,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    void addStream(Map<SubStringPointer.Files, LChannel> streams, SubStringPointer.Files file) {
+    void addStream(Map<SubStringPointer.Files, LImport> streams, SubStringPointer.Files file) {
 	try {
 	    String stringPath = SPImporter.getStringFilePath(this, language, file);
 	    File stringFile = new File(SPGlobal.pathToData + stringPath);
 	    if (stringFile.isFile()) {
-		streams.put(file, new LFileChannel(stringFile));
+		streams.put(file, new LInChannel(stringFile));
 		return;
 	    } else if (BSA.hasBSA(getInfo())) {
 		BSA bsa = BSA.getBSA(getInfo());
@@ -828,9 +804,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	for (GRUP g : GRUPs.values()) {
 	    for (Object o : g.listRecords) {
 		MajorRecord m = (MajorRecord) o;
-		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "Export", "Exporting " + m);
-		}
 		if (edids.keySet().contains(m.getEDID())
 			&& (m.getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo)
 			|| edids.get(m.getEDID()).getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo))) {
@@ -924,7 +897,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	}
 	int outLength = stringLength + 8 * list.size() + 8;
-	LExporter out = new LExporter(genStringsPath(file));
+	LOutFile out = new LOutFile(genStringsPath(file));
 
 	out.write(list.size());
 	out.write(stringLength);
@@ -955,7 +928,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	tes.setAuthor(in);
     }
 
-    void parseData(String type, LChannel data) throws Exception {
+    void parseData(String type, LImport data) throws Exception {
 	GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
     }
 
@@ -1425,7 +1398,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    fluff1 = Ln.arrayToInt(in.extractInts(4));
@@ -1555,7 +1528,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 
 	@Override
-	final void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    version = in.extract(4);
 	    numRecords = in.extractInt(4);

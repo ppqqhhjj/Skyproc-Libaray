@@ -239,7 +239,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     final public void set(LVLFlag flag, boolean on) {
 	subRecords.setSubFlag("LVLF", flag.ordinal(), on);
     }
-    
+
     final public boolean contains(MajorRecord target) {
 	for (LeveledEntry entry : this) {
 	    if (entry.getForm().equals(target.getForm())) {
@@ -248,7 +248,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	}
 	return false;
     }
-    
+
     final public void replace(MajorRecord target, MajorRecord replacement) {
 	for (LeveledEntry entry : this) {
 	    if (entry.getForm().equals(target.getForm())) {

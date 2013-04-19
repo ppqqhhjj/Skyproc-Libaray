@@ -23,7 +23,7 @@ public abstract class Record implements Serializable {
     Record() {
     }
 
-    void parseData(LChannel in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+    void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	in.skip(getIdentifierLength() + getSizeLength());
     }
 
@@ -71,7 +71,7 @@ public abstract class Record implements Serializable {
 	throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    static String getNextType(LChannel in) throws BadRecord {
+    static String getNextType(LImport in) throws BadRecord {
 	return (Ln.arrayToString(in.getInts(0, 4)));
     }
 
@@ -87,18 +87,18 @@ public abstract class Record implements Serializable {
      * @param in
      * @return
      */
-    public int getRecordLength(LChannel in) {
+    public int getRecordLength(LImport in) {
 	return Ln.arrayToInt(in.getInts(getIdentifierLength(), getSizeLength()))
 		+ getSizeLength() + getIdentifierLength() + getFluffLength();
     }
 
-    LChannel extractRecordData(LChannel in) {
+    LImport extractRecordData(LImport in) {
 	return extractData(in, getRecordLength(in));
     }
 
-    LChannel extractData(LChannel in, int size) {
-	LChannel extracted;
-	if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LFileChannel)) {
+    LImport extractData(LImport in, int size) {
+	LImport extracted;
+	if (SPGlobal.streamMode && (in instanceof RecordShrinkArray || in instanceof LInChannel)) {
 	    extracted = new RecordShrinkArray(in, size);
 	} else {
 	    extracted = new LShrinkArray(in, size);

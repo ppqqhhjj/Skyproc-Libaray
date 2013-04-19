@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import lev.LExporter;
+import lev.LOutFile;
 import lev.Ln;
 
 /**
@@ -117,7 +117,7 @@ public class FormID implements Comparable, Serializable {
 	}
     }
 
-    void export(LExporter out) throws IOException {
+    void export(LOutFile out) throws IOException {
 	out.write(getInternal(true), 4);
     }
 
