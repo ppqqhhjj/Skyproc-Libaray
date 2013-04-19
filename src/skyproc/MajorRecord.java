@@ -37,11 +37,11 @@ public abstract class MajorRecord extends Record implements Serializable {
     MajorRecord() {
     }
 
-    void originateFrom(Mod modToOriginateFrom, String edid) {
-	srcMod = modToOriginateFrom;
+    void originateFromPatch(String edid) {
+	srcMod = SPGlobal.getGlobalPatch();
 	subRecords.setMajor(this);
 	setEDID(edid);
-	modToOriginateFrom.addRecord(this);
+	srcMod.addRecord(this);
     }
 
     /**
@@ -120,6 +120,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.subRecords = new SubRecordsCopied(subRecords);
 	out.setEDID(edid);
 	return out;
+    }
+
+    MajorRecord copy(String edid) {
+	return SPGlobal.getGlobalPatch().makeCopy(this, edid);
     }
 
     @Override

@@ -29,9 +29,9 @@ public class COBJ extends MajorRecord {
      * @param srcMod The mod to have the new COBJ originate from.
      * @param edid A unique EDID
      */
-    public COBJ (Mod srcMod, String edid) {
+    public COBJ (String edid) {
 	this();
-	originateFrom(srcMod, edid);
+	originateFromPatch(edid);
 	subRecords.getSubInt("NAM1").set(1);
     }
 

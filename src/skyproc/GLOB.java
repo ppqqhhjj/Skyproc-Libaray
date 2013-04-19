@@ -66,9 +66,9 @@ public class GLOB extends MajorRecord {
      * @param edid
      * @param type
      */
-    public GLOB(Mod modToOriginateFrom, String edid, GLOBType type) {
+    public GLOB(String edid, GLOBType type) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
 	setType(type);
     }
 
@@ -80,8 +80,8 @@ public class GLOB extends MajorRecord {
      * @param value
      * @param constant
      */
-    public GLOB(Mod modToOriginateFrom, String edid, GLOBType type, float value, Boolean constant) {
-	this(modToOriginateFrom, edid, type);
+    public GLOB(String edid, GLOBType type, float value, Boolean constant) {
+	this(edid, type);
 	setValue(value);
 	setConstant(constant);
     }

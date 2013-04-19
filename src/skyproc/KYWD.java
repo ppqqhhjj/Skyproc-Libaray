@@ -33,8 +33,8 @@ public class KYWD extends MajorRecord {
      * @param edid EDID to assign the record.  Make sure it's unique.
      * @param color Color to have the keyword highlight as.
      */
-    public KYWD (Mod modToOriginateFrom, String edid, int color) {
-	this(modToOriginateFrom, edid);
+    public KYWD (String edid, int color) {
+	this(edid);
 	subRecords.setSubData("CNAM", color);
     }
 
@@ -43,9 +43,9 @@ public class KYWD extends MajorRecord {
      * @param modToOriginateFrom
      * @param edid EDID to assign the record.  Make sure it's unique.
      */
-    public KYWD (Mod modToOriginateFrom, String edid) {
+    public KYWD (String edid) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
     }
 
     @Override

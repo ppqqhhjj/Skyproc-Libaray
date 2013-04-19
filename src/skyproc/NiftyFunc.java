@@ -24,7 +24,7 @@ import lev.Ln;
 public class NiftyFunc {
 
     static String[] validationSkip = { "DIAL" };
-    
+
     /**
      * A common way to attach scripts to NPCs that normally cannot have scripts
      * attached<br> (Any NPC that is referenced by a LVLN)<br> is to give a
@@ -43,12 +43,12 @@ public class NiftyFunc {
      * @return The generated SPEL record that can be attached to any RACE to
      * have it attach the desired script.
      */
-    public static SPEL genScriptAttachingSpel(Mod originateFrom, ScriptRef script, String uniqueID) {
+    public static SPEL genScriptAttachingSpel(ScriptRef script, String uniqueID) {
 	String name = "SP_" + uniqueID + "_" + script.name.data + "_attacher";
-	MGEF mgef = new MGEF(originateFrom, name + "_MGEF", name + "_MGEF");
+	MGEF mgef = new MGEF(name + "_MGEF", name + "_MGEF");
 	mgef.getScriptPackage().addScript(script);
 	mgef.set(MGEF.SpellEffectFlag.HideInUI, true);
-	SPEL spel = new SPEL(originateFrom, name + "_SPEL");
+	SPEL spel = new SPEL(name + "_SPEL");
 	spel.setSpellType(SPEL.SPELType.Ability);
 	spel.addMagicEffect(mgef);
 	return spel;
@@ -74,9 +74,9 @@ public class NiftyFunc {
      * @return A duplicate of the input race, with the only difference being it
      * has a script attachment racial spell.
      */
-    public static RACE genSafeScriptAttachingRace(Mod originateFrom, ScriptRef script, RACE raceToDup, String uniqueID) {
-	SPEL attachmentSpel = genScriptAttachingSpel(originateFrom, script, uniqueID);
-	RACE attachmentRace = (RACE) originateFrom.makeCopy(raceToDup);
+    public static RACE genSafeScriptAttachingRace(ScriptRef script, RACE raceToDup, String uniqueID) {
+	SPEL attachmentSpel = genScriptAttachingSpel(script, uniqueID);
+	RACE attachmentRace = (RACE) SPGlobal.getGlobalPatch().makeCopy(raceToDup);
 	attachmentRace.addSpell(attachmentSpel.getForm());
 	return attachmentRace;
     }
@@ -148,8 +148,8 @@ public class NiftyFunc {
      * @param script The script to add to the quest.
      * @return
      */
-    public static QUST makeScriptQuest(Mod originateFrom, ScriptRef script) {
-	QUST quest = new QUST(originateFrom, script.getName() + "_qust");
+    public static QUST makeScriptQuest(ScriptRef script) {
+	QUST quest = new QUST(script.getName() + "_qust");
 	quest.getScriptPackage().addScript(script);
 	quest.setName(script.getName() + " Quest");
 	return quest;
@@ -429,7 +429,7 @@ public class NiftyFunc {
     static public boolean startProcess(String... args) {
 	return startProcess(null, args);
     }
-    
+
     static public String trimToFour (String in) {
 	if (in.length() > 4) {
 	    return in.substring(0, 3);

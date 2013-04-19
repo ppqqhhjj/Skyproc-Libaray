@@ -128,13 +128,12 @@ public class SPEL extends MagicItem {
      * @param modToOriginateFrom
      * @param edid
      */
-    public SPEL(Mod modToOriginateFrom, String edid) {
+    public SPEL(String edid) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
 	SubForm ETYP = subRecords.getSubForm("ETYP");
 	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00});
-	ETYP.ID.standardize(modToOriginateFrom);
-
+	ETYP.ID.standardize(srcMod);
 	getSPIT().valid = true;
     }
 

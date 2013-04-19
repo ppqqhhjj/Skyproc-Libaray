@@ -33,9 +33,9 @@ public class FLST extends MajorRecord {
      * @param modToOriginateFrom
      * @param edid EDID to give the new record.  Make sure it is unique.
      */
-    public FLST (Mod modToOriginateFrom, String edid) {
+    public FLST (String edid) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
     }
 
     @Override

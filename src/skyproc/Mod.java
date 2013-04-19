@@ -1491,7 +1491,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	byte[] version;
 	int numRecords;
 	int nextID;
-	static int firstAvailableID = 3426;  // first available ID on empty CS plugins
+	static int firstAvailableID = 0xD62;  // first available ID on empty CS plugins
 
 	HEDR() {
 	    super();

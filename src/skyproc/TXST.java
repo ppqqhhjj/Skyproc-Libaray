@@ -41,9 +41,9 @@ public class TXST extends MajorRecord implements Iterable<String> {
      * @param srcMod The mod to originate from
      * @param edid The edid to give the new record (make it unique)
      */
-    public TXST(Mod srcMod, String edid) {
+    public TXST(String edid) {
 	this();
-	originateFrom(srcMod, edid);
+	originateFromPatch(edid);
 	subRecords.getSubData("OBND").setData(new byte[12]);
     }
 

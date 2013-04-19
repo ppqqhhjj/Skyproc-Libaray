@@ -445,9 +445,9 @@ public class MGEF extends MajorRecordDescription {
      * @param edid EDID to give the new record. Make sure it is unique.
      * @param name
      */
-    public MGEF(Mod modToOriginateFrom, String edid, String name) {
+    public MGEF(String edid, String name) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
 	this.setName(name);
     }
 

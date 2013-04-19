@@ -41,9 +41,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      * @param edid EDID to assign the record. Make sure it's unique.
      */
-    public LeveledRecord(Mod modToOriginateFrom, String edid) {
+    public LeveledRecord(String edid) {
 	this();
-	originateFrom(modToOriginateFrom, edid);
+	originateFromPatch(edid);
 	set(LVLFlag.CalcAllLevelsEqualOrBelowPC, true);
     }
 

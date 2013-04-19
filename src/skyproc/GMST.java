@@ -12195,9 +12195,9 @@ public class GMST extends MajorRecord {
      * @param setting
      * @param b
      */
-    public GMST(Mod modToOriginateFrom, BoolSetting setting, Boolean b) {
+    public GMST(BoolSetting setting, Boolean b) {
 	this();
-	originateFrom(modToOriginateFrom, setting.toString());
+	originateFromPatch(setting.toString());
 	setData(b);
     }
 
@@ -12207,9 +12207,9 @@ public class GMST extends MajorRecord {
      * @param setting
      * @param s
      */
-    public GMST(Mod modToOriginateFrom, StringSetting setting, String s) {
+    public GMST(StringSetting setting, String s) {
 	this();
-	originateFrom(modToOriginateFrom, setting.toString());
+	originateFromPatch(setting.toString());
 	setData(s);
     }
 
@@ -12219,9 +12219,9 @@ public class GMST extends MajorRecord {
      * @param setting
      * @param i
      */
-    public GMST(Mod modToOriginateFrom, IntSetting setting, int i) {
+    public GMST(IntSetting setting, int i) {
 	this();
-	originateFrom(modToOriginateFrom, setting.toString());
+	originateFromPatch(setting.toString());
 	setData(i);
     }
 
@@ -12231,9 +12231,9 @@ public class GMST extends MajorRecord {
      * @param setting
      * @param f
      */
-    public GMST(Mod modToOriginateFrom, FloatSetting setting, float f) {
+    public GMST(FloatSetting setting, float f) {
 	this();
-	originateFrom(modToOriginateFrom, setting.toString());
+	originateFromPatch(setting.toString());
 	setData(f);
     }
 

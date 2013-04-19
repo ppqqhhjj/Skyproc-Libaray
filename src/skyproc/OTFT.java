@@ -32,9 +32,9 @@ public class OTFT extends MajorRecord {
      * @param modToOriginateFrom
      * @param uniqueEDID
      */
-    public OTFT(Mod modToOriginateFrom, String uniqueEDID) {
+    public OTFT(String uniqueEDID) {
 	this();
-	originateFrom(modToOriginateFrom, uniqueEDID);
+	originateFromPatch(uniqueEDID);
     }
 
     @Override

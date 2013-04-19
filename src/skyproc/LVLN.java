@@ -37,8 +37,8 @@ public class LVLN extends LeveledRecord {
      * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      * @param edid EDID to assign the record.  Make sure it's unique.
      */
-    public LVLN(Mod modToOriginateFrom, String edid) {
-        super(modToOriginateFrom, edid);
+    public LVLN(String edid) {
+        super(edid);
 	subRecords.setPrototype(LVLNproto);
     }
 
