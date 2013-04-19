@@ -869,10 +869,10 @@ public class SUMGUI extends JFrame {
 	if (generatedPatch) {
 	    save.setStrings(SUMGUISettings.LastModlist, Ln.toUpper(SPGlobal.getDB().getModListDates()));
 	    save.setStrings(SUMGUISettings.LastMasterlist, Ln.toUpper(SPGlobal.getGlobalPatch().getMastersStrings()));
-	    save.curSettings.get(SUMGUISettings.CrashState).setTo(false);
-	    save.curSettings.get(SUMGUISettings.PrevVersion).setTo(NiftyFunc.versionToNum(hook.getVersion()));
+	    save.setBool(SUMGUISettings.CrashState, false);
+	    save.setInt(SUMGUISettings.PrevVersion, NiftyFunc.versionToNum(hook.getVersion()));
 	} else if (needsPatching) {
-	    save.curSettings.get(SUMGUISettings.CrashState).setTo(true);
+	    save.setBool(SUMGUISettings.CrashState, true);
 	}
 
 	if (singleton != null) {
