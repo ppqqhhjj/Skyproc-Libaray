@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
  * Enum containing different prespectives
@@ -11,11 +11,11 @@ package skyproc;
 public enum Perspective {
 
     /**
-     * 
+     *
      */
     FIRST_PERSON,
     /**
-     * 
+     *
      */
     THIRD_PERSON
 }

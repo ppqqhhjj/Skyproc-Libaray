@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
  * Enum representing the various skills associated with an NPC.

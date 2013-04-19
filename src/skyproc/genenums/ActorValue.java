@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -1044,7 +1044,7 @@ public enum ActorValue {
      */
     UNKNOWN;
 
-    static int value(ActorValue in) {
+    static public int value(ActorValue in) {
 	if (in == UNKNOWN) {
 	    return -1;
 	} else {
@@ -1052,7 +1052,7 @@ public enum ActorValue {
 	}
     }
 
-    static ActorValue value(int in) {
+    static public ActorValue value(int in) {
 	if (in < ActorValue.values().length - 2 && in >= 0) {
 	    return ActorValue.values()[in];
 	} else {

@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import skyproc.genenums.Gender;
+import skyproc.genenums.Perspective;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;

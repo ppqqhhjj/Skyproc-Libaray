@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import skyproc.genenums.FirstPersonFlags;
+import skyproc.genenums.ArmorType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;

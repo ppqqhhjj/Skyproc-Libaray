@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
  *
@@ -139,8 +139,8 @@ public enum FirstPersonFlags {
      */
     FX01,
     NONE;
-    
-    int getValue() {
+
+    public int getValue() {
 	switch(this) {
 	    case NONE:
 		return -1;
@@ -148,8 +148,8 @@ public enum FirstPersonFlags {
 		return ordinal();
 	}
     }
-    
-    static FirstPersonFlags getValue(int val) {
+
+    static public  FirstPersonFlags getValue(int val) {
 	if (-1 == val) {
 	    return NONE;
 	} else {

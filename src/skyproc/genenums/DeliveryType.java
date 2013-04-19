@@ -2,28 +2,32 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
- * 
+ * Ways that a spell can be delivered.
  * @author Justin Swanson
  */
-public enum SoundVolume {
+public enum DeliveryType {
+
     /**
      *
      */
-    Loud,
+    Self,
     /**
      *
      */
-    Normal,
+    Touch,
     /**
      *
      */
-    Silent,
+    Aimed,
     /**
      *
      */
-    VeryLoud
-    ;
+    TargetActor,
+    /**
+     *
+     */
+    TargetLocation
 }

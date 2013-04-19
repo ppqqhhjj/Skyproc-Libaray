@@ -1,5 +1,7 @@
 package skyproc;
 
+import skyproc.genenums.Skill;
+import skyproc.genenums.SoundVolume;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;

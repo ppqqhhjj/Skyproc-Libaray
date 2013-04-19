@@ -4,6 +4,10 @@
  */
 package skyproc;
 
+import skyproc.genenums.SoundVolume;
+import skyproc.genenums.DeliveryType;
+import skyproc.genenums.CastType;
+import skyproc.genenums.ActorValue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;

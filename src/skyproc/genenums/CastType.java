@@ -2,28 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
- *
+ * Different ways to cast something
  * @author Justin Swanson
  */
-public enum CastingSource {
+public enum CastType {
 
     /**
      *
      */
-    Left,
+    ConstantEffect,
     /**
      *
      */
-    Right,
+    FireAndForget,
     /**
      *
      */
-    Voice,
-    /**
-     *
-     */
-    Instant;
+    Concentration
 }

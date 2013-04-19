@@ -2,24 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package skyproc;
+package skyproc.genenums;
 
 /**
- * Different ways to cast something
+ * An enum holding the different possible armor types.
  * @author Justin Swanson
  */
-public enum CastType {
+public enum ArmorType {
 
     /**
      *
      */
-    ConstantEffect,
+    LIGHT,
     /**
      *
      */
-    FireAndForget,
+    HEAVY,
     /**
      *
      */
-    Concentration
+    CLOTHING
 }

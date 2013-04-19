@@ -4,6 +4,9 @@
  */
 package skyproc;
 
+import skyproc.genenums.Gender;
+import skyproc.genenums.FirstPersonFlags;
+import skyproc.genenums.ActorValue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;

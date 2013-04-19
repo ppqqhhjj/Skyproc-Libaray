@@ -4,6 +4,8 @@
  */
 package skyproc;
 
+import skyproc.genenums.FavorLevel;
+import skyproc.genenums.EmotionType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;

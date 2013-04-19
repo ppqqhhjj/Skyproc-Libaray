@@ -4,6 +4,11 @@
  */
 package skyproc;
 
+import skyproc.genenums.WardState;
+import skyproc.genenums.Gender;
+import skyproc.genenums.CrimeType;
+import skyproc.genenums.CastingSource;
+import skyproc.genenums.Axis;
 import java.util.HashMap;
 import java.util.Map;
 import skyproc.ConditionOption.Cond_Axis;
