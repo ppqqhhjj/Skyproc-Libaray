@@ -249,6 +249,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     // Get/set methods
     /**
      * Sets the EDID of the Major Record<br><br>
+     * ONLY works on new records you've created originating from the global patch. <br>
      *
      * NOTE: This will reassign the records formID if the new EDID matches an
      * EDID from the previous patch.
@@ -256,9 +257,11 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @param edid The string to have the EDID set to.
      */
     final public void setEDID(String edid) {
-	edid = Consistency.edidFilter(edid);
-	Consistency.syncIDwithEDID(edid, this);
-	subRecords.getSubString("EDID").setString(edid);
+	if (SPGlobal.getGlobalPatch().equals(srcMod)) {
+	    edid = Consistency.edidFilter(edid);
+	    Consistency.syncIDwithEDID(edid, this);
+	    subRecords.getSubString("EDID").setString(edid);
+	}
     }
 
     /**
