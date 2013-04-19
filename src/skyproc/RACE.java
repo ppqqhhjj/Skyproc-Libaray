@@ -36,7 +36,7 @@ public class RACE extends MajorRecordDescription {
 	@Override
 	protected void addRecords() {
 	    add(new SubData("INDX"));
-	    add(new SubData("HEAD"));
+	    add(new SubForm("HEAD"));
 	}
     };
     static final SubPrototype attackDataProto = new SubPrototype() {
@@ -159,7 +159,7 @@ public class RACE extends MajorRecordDescription {
 			    add(new SubList<>(new SubShell(new SubPrototype() {
 				@Override
 				protected void addRecords() {
-				    add(new SubData("TINC"));
+				    add(new SubForm("TINC"));
 				    add(new SubData("TINV"));
 				    add(new SubData("TIRS"));
 				}
