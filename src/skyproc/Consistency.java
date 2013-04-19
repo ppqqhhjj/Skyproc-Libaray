@@ -26,6 +26,7 @@ class Consistency {
     static boolean cleaned = false;
     static boolean automaticExport = true;
     static char[] badChars = {(char) 0x0D, (char) 0x0A};
+    static String debugFolder = "Consistency/";
 
     static FormID getOldForm(String edid) {
 	FormID id = storage.get(SPGlobal.getGlobalPatch().getInfo()).get(edid);
@@ -101,16 +102,12 @@ class Consistency {
     }
 
     static void importConsistency(boolean globalOnly) {
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Importing Consistency, Global Only: " + globalOnly);
-	}
 	try {
 	    getConsistencyFile();
 	    if (v2import(globalOnly)) {
 		return;
 	    }
 	    v1import(globalOnly);
-	    int wer = 23;
 	} catch (Exception ex) {
 	    SPGlobal.logException(ex);
 	    JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency information.<br><br>"
@@ -150,7 +147,7 @@ class Consistency {
 
     static void export() throws IOException {
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Exporting Consistency file.");
+	    SPGlobal.logMain(header, "Exporting Consistency file.");
 	}
 	pruneConflicts();
 	importConsistency(false);
@@ -196,26 +193,27 @@ class Consistency {
 
     static void pruneConflicts() {
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "====================================");
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "====== Pruning Conflicts ===========");
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "====================================");
+	    SPGlobal.newLog(debugFolder + "Conflict Pruning.txt");
+	    SPGlobal.log(header, "====================================");
+	    SPGlobal.log(header, "====== Pruning Conflicts ===========");
+	    SPGlobal.log(header, "====================================");
 	}
 	Mod global = SPGlobal.getGlobalPatch();
 	for (FormID id : conflicts.keySet()) {
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "------ Addressing " + id);
+		SPGlobal.log(header, "------ Addressing " + id);
 	    }
 	    ArrayList<String> edidConflicts = conflicts.get(id);
 	    ArrayList<String> found = new ArrayList<>(2);
 	    for (String edid : edidConflicts) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "| For EDID: " + edid);
+		    SPGlobal.log(header, "| For EDID: " + edid);
 		}
 		for (GRUP g : global.GRUPs.values()) {
 		    if (g.contains(edid)) {
 			found.add(edid);
 			if (SPGlobal.logging()) {
-			    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "|   Found!");
+			    SPGlobal.log(header, "|   Found!");
 			}
 			break;
 		    }
@@ -224,7 +222,7 @@ class Consistency {
 	    // If only one is being used, wipe the rest
 	    if (found.size() == 1) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "| Only one EDID is being used, pruning others.");
+		    SPGlobal.log(header, "| Only one EDID is being used, pruning others.");
 		}
 		edidConflicts.remove(found.get(0));
 		Map<String, FormID> edidMap = storage.get(global.getInfo());
@@ -233,7 +231,7 @@ class Consistency {
 		}
 	    }
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "-----------------------");
+		SPGlobal.log(header, "-----------------------");
 	    }
 	}
     }
@@ -244,7 +242,12 @@ class Consistency {
 	    return false;
 	}
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "Importing v2 consistency file.");
+	    if (globalOnly) {
+		SPGlobal.newLog(debugFolder + "Import - V2 - Only Global.txt");
+	    } else {
+		SPGlobal.newLog(debugFolder + "Import - V2 - Remaining.txt");
+	    }
+	    SPGlobal.log("v2Import", "Importing v2 consistency file.");
 	}
 	LInChannel in = new LInChannel(f);
 	in.skip(4);
@@ -261,9 +264,9 @@ class Consistency {
 	}
 	for (ModListing m : headerMap.keySet()) {
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "===========================");
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "== Importing " + m);
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "===========================");
+		SPGlobal.log("v2Import", "===========================");
+		SPGlobal.log("v2Import", "== Importing " + m);
+		SPGlobal.log("v2Import", "===========================");
 	    }
 	    in.pos(headerMap.get(m));
 	    int length = in.extractInt(0, 4);
@@ -274,9 +277,9 @@ class Consistency {
 		String FormStr = in.extractString(6);
 		FormID ID = new FormID(FormStr, m);
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "  | EDID: " + EDID);
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "  | Form: " + FormStr);
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v2Import", "  |============================");
+		    SPGlobal.log("v2Import", "  | EDID: " + EDID);
+		    SPGlobal.log("v2Import", "  | Form: " + FormStr);
+		    SPGlobal.log("v2Import", "  |============================");
 		}
 		insert(EDID, ID);
 	    }
@@ -305,7 +308,12 @@ class Consistency {
 	    return false;
 	}
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v1Import", "Importing v1 consistency file.");
+	    if (globalOnly) {
+		SPGlobal.newLog(debugFolder + "Import - V1 - Only Global.txt");
+	    } else {
+		SPGlobal.newLog(debugFolder + "Import - V1 - Remaining.txt");
+	    }
+	    SPGlobal.log("v1Import", "Importing v1 consistency file.");
 	}
 	BufferedReader in = new BufferedReader(new FileReader(f));
 	while (in.ready()) {
@@ -313,14 +321,14 @@ class Consistency {
 	    String form = in.readLine();
 
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v1Import", "Read Lines: " + form + "  " + EDID);
+		SPGlobal.log("v1Import", "Read Lines: " + form + "  " + EDID);
 	    }
 
 	    // Check to see if following line is actually a formid
 	    boolean fail = false;
 	    while (in.ready() && !form.toUpperCase().endsWith(".ESP") && !form.toUpperCase().endsWith(".ESM")) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "v1Import", "  Read fail line: " + form);
+		    SPGlobal.log("v1Import", "  Read fail line: " + form);
 		}
 		form = in.readLine();
 		fail = true;
@@ -335,7 +343,7 @@ class Consistency {
 	    if ((globalOnly && isGlobal) || (!globalOnly && !isGlobal)) {
 		insert(EDID, ID);
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, "Consistency Import", "  Inserting" + form + " with " + EDID);
+		    SPGlobal.log("Consistency Import", "  Inserting" + form + " with " + EDID);
 		}
 	    }
 	}

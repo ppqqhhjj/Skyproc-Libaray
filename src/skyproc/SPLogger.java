@@ -18,7 +18,7 @@ class SPLogger extends LLogger {
     public SPLogger (String in) {
         super(in);
         addSpecial(SpecialTypes.BLOCKED, "Blocked Records.txt");
-        addSpecial(PrivateTypes.CONSISTENCY, "Consistency.txt");
+        addSpecial(PrivateTypes.CONSISTENCY, Consistency.debugFolder + "Requests.txt");
     }
 
     /**
@@ -31,7 +31,7 @@ class SPLogger extends LLogger {
 	 */
 	BLOCKED;
     }
-    
+
     static enum PrivateTypes {
 	CONSISTENCY;
     }
