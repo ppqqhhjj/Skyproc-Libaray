@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import lev.Ln;
 import lev.debug.LDebug;
+import skyproc.gui.SUMGUI;
 
 /**
  * Global variables/settings of SkyProc.
@@ -325,6 +326,10 @@ public class SPGlobal {
      */
     static public void setNoModsAfter(boolean on) {
 	noModsAfter = on;
+    }
+
+    static public void setSUMerrorMessage(String message) {
+	SUMGUI.setErrorMessage(message);
     }
 
     /*

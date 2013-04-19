@@ -98,6 +98,7 @@ public class SUMGUI extends JFrame {
     static SUMGUISave save = new SUMGUISave();
     static Font SUMmainFont = LFonts.MyriadProBold(30);
     static Font SUMSmallFont = new Font("SansSerif", Font.PLAIN, 10);
+    static String errorMessage = "Please contact the author.";
 
     SUMGUI() {
 	super(hook.getName());
@@ -587,6 +588,10 @@ public class SUMGUI extends JFrame {
 	}
     }
 
+    static public void setErrorMessage(String message) {
+	errorMessage = message;
+    }
+
     int getFrameHeight() {
 	return this.getHeight() - 28;
     }
@@ -933,7 +938,7 @@ public class SUMGUI extends JFrame {
 			} catch (Exception ex) {
 			    // If something goes wrong, show an error message.
 			    SPGlobal.logException(ex);
-			    JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\nPlease contact the author.");
+			    JOptionPane.showMessageDialog(null, "There was an error exporting the custom patch.\n(" + ex.getMessage() + ")\n\n" + errorMessage);
 			    exitProgram(false, true);
 			}
 
@@ -956,7 +961,7 @@ public class SUMGUI extends JFrame {
 	    } catch (Exception e) {
 		System.err.println(e.toString());
 		SPGlobal.logException(e);
-		JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'  Check the debug logs.");
+		JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'\n\n" + errorMessage);
 
 		// if exception occurs
 		if (SPGlobal.logging()) {
