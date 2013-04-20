@@ -614,6 +614,7 @@ public class SPGlobal {
 	return pathToDebug;
     }
     // Debug Globals
+    public static boolean debugStream = true;
     /**
      * Displays information about BSA importing
      */

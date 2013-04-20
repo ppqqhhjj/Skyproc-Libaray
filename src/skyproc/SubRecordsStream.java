@@ -121,7 +121,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	    if (position != null) {
 		try {
 		    major.srcMod.input.pos(position.pos);
-		    if (SPGlobal.logging()) {
+		    if (SPGlobal.debugStream && SPGlobal.logging()) {
 			if (!major.equals(SPGlobal.lastStreamed)) {
 			    SPGlobal.logSync("Stream", "Streaming from " + major);
 			    SPGlobal.lastStreamed = major;

@@ -220,7 +220,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     FormID getNextID() {
-	 return new FormID(tes.getHEDR().nextID++, getInfo());
+	return new FormID(tes.getHEDR().nextID++, getInfo());
     }
 
     void resetNextIDcounter() {
@@ -414,7 +414,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void standardizeMasters() {
-	SPGlobal.logSync("f", getName());
 	for (GRUP g : GRUPs.values()) {
 	    g.standardizeMasters();
 	}
@@ -702,8 +701,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void export(File outPath) throws IOException, BadRecord {
-
 	SPGlobal.logMain("Mod Export", "Exporting " + this);
+	if (SPGlobal.logging()) {
+	    SPGlobal.newSyncLog("Export - " + this.getName() + ".txt");
+	    SPGlobal.sync(true);
+	}
 
 	ModExporter out = new ModExporter(outPath, this);
 
@@ -764,8 +766,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// Export Header
 	tes.setNumRecords(numRecords());
 	if (SPGlobal.logging()) {
-	    SPGlobal.newSyncLog("Export - " + this.getName() + ".txt");
-	    SPGlobal.sync(true);
 	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
 	    SPGlobal.logSync(this.getName(), "Masters: ");
 	    int i = 0;
@@ -1372,6 +1372,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubPrototype TES4proto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
