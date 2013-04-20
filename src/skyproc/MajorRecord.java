@@ -21,6 +21,7 @@ import skyproc.exceptions.BadRecord;
 public abstract class MajorRecord extends Record implements Serializable {
 
     static final SubPrototype majorProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(SubString.getNew("EDID", true));
@@ -249,8 +250,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     // Get/set methods
     /**
-     * Sets the EDID of the Major Record<br><br>
-     * ONLY works on new records you've created originating from the global patch. <br>
+     * Sets the EDID of the Major Record<br><br> ONLY works on new records
+     * you've created originating from the global patch. <br>
      *
      * NOTE: This will reassign the records formID if the new EDID matches an
      * EDID from the previous patch.

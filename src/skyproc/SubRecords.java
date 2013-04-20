@@ -102,9 +102,13 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     public void setSubData(String in, byte[] b) {
 	getSubData(in).setData(b);
     }
-
+    
     public void setSubData(String in, int i) {
 	getSubData(in).setData(i);
+    }
+    
+    public void setSubData(String in, int i, int size) {
+	getSubData(in).setData(size, size);
     }
 
     public SubFlag getSubFlag(String in) {

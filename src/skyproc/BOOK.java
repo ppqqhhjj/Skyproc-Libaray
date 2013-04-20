@@ -86,7 +86,7 @@ public class BOOK extends MajorRecordDescription {
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    add(SubString.getNew("MODL", true));
 	    add(new SubData("MODT"));

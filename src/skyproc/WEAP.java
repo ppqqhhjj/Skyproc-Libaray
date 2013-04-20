@@ -27,7 +27,7 @@ public class WEAP extends MajorRecordDescription {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    add(SubString.getNew("MODL", true));
 	    add(new SubData("MODT"));

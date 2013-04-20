@@ -25,7 +25,7 @@ public class ARMO extends MajorRecordDescription {
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage());
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    add(new SubForm("EITM"));
 	    add(SubString.getNew("MOD2", true));

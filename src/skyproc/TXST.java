@@ -19,7 +19,7 @@ public class TXST extends MajorRecord implements Iterable<String> {
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    add(SubString.getNew("TX00", true));
 	    add(SubString.getNew("TX01", true));
 	    add(SubString.getNew("TX02", true));
@@ -44,7 +44,6 @@ public class TXST extends MajorRecord implements Iterable<String> {
     public TXST(String edid) {
 	this();
 	originateFromPatch(edid);
-	subRecords.getSubData("OBND").setData(new byte[12]);
     }
 
     TXST() {

@@ -26,7 +26,7 @@ public class LIGH extends MajorRecordNamed {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    add(SubString.getNew("MODL", true));
 	    add(new SubData("MODT"));
 	    add(new AltTextures("MODS"));

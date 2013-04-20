@@ -42,7 +42,7 @@ public class MGEF extends MajorRecordDescription {
 	    remove("DESC");
 	    add(new SubForm("ESCE"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	}
     };
 

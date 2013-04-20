@@ -4,17 +4,15 @@
  */
 package skyproc;
 
-import skyproc.genenums.DeliveryType;
-import skyproc.genenums.CastType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
-import lev.LImport;
-import lev.LOutFile;
 import lev.LFlags;
-import lev.LShrinkArray;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
+import skyproc.genenums.CastType;
+import skyproc.genenums.DeliveryType;
 
 /**
  *
@@ -27,9 +25,7 @@ abstract class MagicItem extends MajorRecordDescription {
 
 	@Override
 	protected void addRecords() {
-	    SubData OBND = new SubData("OBND");
-	    OBND.initialize(12);
-	    add(OBND);
+	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    reposition("DESC");
 	    add(new SubList<>(new MagicEffectRef()));

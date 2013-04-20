@@ -18,8 +18,8 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 
 	@Override
 	protected void addRecords() {
-	    add(new SubData("OBND", 12));
-	    add(new SubData("LVLD", 1));
+	    add(new SubData("OBND", new byte[12]));
+	    add(new SubData("LVLD", new byte[1]));
 	    add(new SubFlag("LVLF", 1));
 	    add(new SubListCounted<>("LLCT", 1, new LeveledEntry()));
 	}
@@ -204,7 +204,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      */
     public void setChanceNone(final int in) throws BadParameter {
 	if (in >= 0 && in <= 100) {
-	    subRecords.setSubData("LVLD", in);
+	    subRecords.setSubData("LVLD", in, 1);
 	} else {
 	    throw new BadParameter("Chance none set outside range 0-100: " + in);
 	}

@@ -22,7 +22,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
-	    add(new SubData("OBND"));
+	    add(new SubData("OBND", new byte[12]));
 	    add(new ACBS());
 	    add(new SubList<>(new SubFormInt("SNAM")));
 	    add(new SubForm("INAM"));
