@@ -115,7 +115,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
 	MajorRecord out = (MajorRecord) this.getNew();
 	out.srcMod = modToOriginateFrom;
-	out.ID = new FormID(ID);
+	out.ID = new FormID();
 	out.majorFlags = new LFlags(majorFlags);
 	System.arraycopy(revision, 0, out.revision, 0, revision.length);
 	System.arraycopy(version, 0, out.version, 0, version.length);
