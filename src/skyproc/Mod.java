@@ -37,6 +37,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     GRUP<SPEL> spells = new GRUP<>(new SPEL());
     GRUP<ARMO> armors = new GRUP<>(new ARMO());
     GRUP<BOOK> books = new GRUP<>(new BOOK());
+    GRUP<CONT> containers = new GRUP<>(new CONT());
     GRUP<INGR> ingredients = new GRUP<>(new INGR());
     GRUP<MISC> miscObjects = new GRUP<>(new MISC());
     GRUP<ALCH> alchemy = new GRUP<>(new ALCH());
@@ -130,6 +131,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	GRUPs.put(spells.getContainedType(), spells);
 	GRUPs.put(armors.getContainedType(), armors);
 	GRUPs.put(books.getContainedType(), books);
+	GRUPs.put(containers.getContainedType(), containers);
 	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
 	GRUPs.put(ingredients.getContainedType(), ingredients);
 	miscObjects.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
@@ -1235,7 +1237,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Book records
+     * @return 
      */
     public GRUP<WTHR> getWeathers() {
 	return weathers;
@@ -1244,7 +1246,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Book records
+     * @return 
      */
     public GRUP<DIAL> getDialogs() {
 	return dialogs;
@@ -1253,7 +1255,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Book records
+     * @return 
      */
     public GRUP<DLBR> getDialogBranches() {
 	return dialogBranches;
@@ -1262,10 +1264,19 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return The GRUP containing Book records
+     * @return 
      */
     public GRUP<DLVW> getDialogViews() {
 	return dialogViews;
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return 
+     */
+    public GRUP<CONT> getContainers() {
+	return containers;
     }
 
     /**

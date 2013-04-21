@@ -104,6 +104,9 @@ public class RACE extends MajorRecordDescription {
 			protected void addRecords() {
 			    add(SubString.getNew("MODL", true));
 			    add(new SubData("MODT"));
+			    add(new SubData("MODB"));
+			    add(new AltTextures("MODS"));
+			    add(new SubData("MODD"));
 			}
 		    }), "MNAM", "FNAM"));
 		}

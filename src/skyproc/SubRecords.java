@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LImport;
-import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -169,6 +168,24 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 
     public SubShell getSubShell(String t) {
 	return (SubShell) get(t);
+    }
+    
+    public SubFormInt getSubFormInt(String t) {
+	return (SubFormInt) get(t);
+    }
+    
+    public void setSubFormInt(String t, FormID id, int val) {
+	SubFormInt s = getSubFormInt(t);
+	s.setForm(id);
+	s.setNum(val);
+    }
+    
+    public void setSubFormInt(String t, FormID id) {
+	getSubFormInt(t).setForm(id);
+    }
+    
+    public void setSubFormInt(String t, int val) {
+	getSubFormInt(t).setNum(val);
     }
 
     boolean isValid() {

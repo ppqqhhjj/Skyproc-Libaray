@@ -21,6 +21,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SPImporter {
 
     private static String header = "Importer";
+    private static String debugPath = "Mod Import/";
 
     /**
      * A placeholder constructor not meant to be called.<br> An SPImporter
@@ -411,7 +412,6 @@ public class SPImporter {
 	    return new HashSet<>(0);
 	}
 
-	SPGlobal.sync(true);
 	if (SPGlobal.logging()) {
 	    SPGlobal.logMain(header, "Starting import of targets: ");
 	    String grups = "";
@@ -426,7 +426,6 @@ public class SPImporter {
 
 	}
 	String header = "Import Mods";
-	String debugPath = "Mod Import/";
 
 	Set<Mod> outSet = new TreeSet<>();
 
@@ -436,9 +435,8 @@ public class SPImporter {
 	    String mod = mods.get(i).print();
 	    SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)));
 	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
-		SPGlobal.newSyncLog(debugPath + Integer.toString(i) + " - " + mod + ".txt");
 		try {
-		    outSet.add(importMod(new ModListing(mod), path, true, grup_targets));
+		    outSet.add(importMod(new ModListing(mod), i, path, true, grup_targets));
 		} catch (MissingMaster m) {
 		    throw m;
 		} catch (BadMod ex) {
@@ -459,10 +457,8 @@ public class SPImporter {
 	}
 
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(header, "Done Importing Mods.");
 	    SPGlobal.logMain(header, "Done Importing Mods.");
 	}
-	SPGlobal.sync(false);
 	return outSet;
     }
 
@@ -480,7 +476,7 @@ public class SPImporter {
      * has any error importing a mod at all.
      */
     static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
-	return importMod(listing, path, true, grup_targets);
+	return importMod(listing, 1000, path, true, grup_targets);
     }
 
     /**
@@ -500,9 +496,10 @@ public class SPImporter {
      * types = new GRUP_TYPE[grup_targets.size()]; types =
      * grup_targets.toArray(types); return importMod(listing, path, types); }
      */
-    static Mod importMod(ModListing listing, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
+    static Mod importMod(ModListing listing, int index, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
+	SPGlobal.sync(true);
 	try {
-
+	    SPGlobal.newSyncLog(debugPath + index + " - " + listing.print() + ".txt");
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
@@ -544,8 +541,9 @@ public class SPImporter {
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
 	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
+	} finally {
+	    SPGlobal.sync(false);
 	}
-
     }
 
     static public void checkMissingMasters(Mod plugin) throws MissingMaster {

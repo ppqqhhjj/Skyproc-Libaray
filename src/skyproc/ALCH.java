@@ -323,4 +323,22 @@ public class ALCH extends MagicItem {
     public FormID getEquipType() {
 	return subRecords.getSubForm("ETYP").getForm();
     }
+
+    /**
+     * @return List of the AltTextures applied.
+     */
+    public ArrayList<AltTextures.AltTexture> getAltTextures() {
+	return ((AltTextures) subRecords.get("MODS")).altTextures;
+    }
+
+    /**
+     *
+     * @param rhs Other MISC record.
+     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
+     * matching Alt Textures with the same name and TXST formID reference, in
+     * the same corresponding indices.
+     */
+    public boolean equalAltTextures(MISC rhs) {
+	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
+    }
 }

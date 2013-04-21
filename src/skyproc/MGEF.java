@@ -42,7 +42,7 @@ public class MGEF extends MajorRecordDescription {
 	    remove("DESC");
 	    add(new SubForm("ESCE"));
 	    add(new SubList<>(new Condition()));
-	    add(new SubData("OBND", new byte[12]));
+	    add(new SubData("OBND"));
 	}
     };
 
@@ -451,6 +451,7 @@ public class MGEF extends MajorRecordDescription {
      */
     public MGEF(String edid, String name) {
 	this();
+	subRecords.getSubData("OBND").initialize(12);
 	originateFromPatch(edid);
 	this.setName(name);
     }

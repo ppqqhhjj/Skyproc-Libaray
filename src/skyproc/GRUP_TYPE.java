@@ -52,6 +52,7 @@ public enum GRUP_TYPE {
      */
     ARMO,
     BOOK,
+    CONT,
     /**
      * Ingredients
      */

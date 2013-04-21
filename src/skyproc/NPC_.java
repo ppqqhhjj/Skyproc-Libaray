@@ -43,8 +43,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    add(new SubForm("OCOR"));
 	    add(new SubForm("ECOR"));
 	    add(new SubListCounted<>("PRKZ", 4, new SubFormInt("PRKR")));
-	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
-	    add(new COED());
+	    add(new SubListCounted<>("COCT", 4, new ItemListing()));
 	    add(new AIDT());
 	    add(new SubList<>(new SubForm("PKID")));
 	    add(new KeywordSet());
@@ -1418,8 +1417,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 		    this.setSleepingOutfit(otherNPC.getSleepingOutfit());
 		    this.setGearedUpWeapons(otherNPC.getGearedUpWeapons());
 		    this.clearItems();
-		    for (SubFormInt f : otherNPC.getItems()) {
-			this.addItem(f.getForm(), f.getNum());
+		    for (ItemListing f : otherNPC.getItems()) {
+			this.addItem(new ItemListing(f.getID(), f.getCount()));
 		    }
 		    break;
 		case USE_AI_PACKAGES:
@@ -1923,7 +1922,11 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return
      */
     public boolean addItem(FormID itemReference, int count) {
-	return subRecords.getSubList("CNTO").add(new SubFormInt("CNTO", itemReference, count));
+	return subRecords.getSubList("CNTO").add(new ItemListing(itemReference, count));
+    }
+    
+    public boolean addItem(ItemListing item) {
+	return subRecords.getSubList("CNTO").add(item);
     }
 
     /**
@@ -1932,7 +1935,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return
      */
     public boolean removeItem(FormID itemReference) {
-	return subRecords.getSubList("CNTO").remove(new SubFormInt("CNTO", itemReference, 1));
+	return subRecords.getSubList("CNTO").remove(new ItemListing(itemReference));
     }
 
     /**
@@ -1946,8 +1949,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      *
      * @return
      */
-    public ArrayList<SubFormInt> getItems() {
-	return SubList.subFormIntToPublic(subRecords.getSubList("CNTO"));
+    public ArrayList<ItemListing> getItems() {
+	return subRecords.getSubList("CNTO").toPublic();
     }
 
     /**

@@ -4,6 +4,14 @@
  */
 package skyproc;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.zip.DataFormatException;
+import lev.LFlags;
+import lev.LImport;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
+
 /**
  *
  * @author Justin Swanson
@@ -11,38 +19,77 @@ package skyproc;
 public class DestructionData extends SubShell {
 
     static SubPrototype destructionProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubData("DEST"));
-	    add(new SubList<>(new DSTD()));
-	    add(new SubData("DMDL"));
-	    add(new SubData("DMDT"));
-	    add(new SubData("DMDS"));
+	    add(new SubList<>(new SubShell(new SubPrototype() {
+
+		@Override
+		protected void addRecords() {
+		    add(new DSTD());
+		    add(SubString.getNew("DMDL", true));
+		    add(new AltTextures("DMDS"));
+		    add(new SubData("DSTF"));
+		}
+	    })));
 	}
     };
 
-    DestructionData() {
-	super(destructionProto);
-    }
+    static class DSTD extends SubRecordTyped {
 
-    static class DSTD extends SubShell {
-
-	static SubPrototype dstdProto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new SubData("DSTD"));
-		add(new SubData("DSTF"));
-	    }
-	};
+	byte healthPct = 0;
+	byte index = 0;
+	byte modelDmgStage = 0;
+	LFlags flags = new LFlags(1);
+	int selfDmgPerSec = 0;
+	FormID explosion = new FormID();
+	FormID debree = new FormID();
+	int debreeCount = 0;
 
 	DSTD() {
-	    super(dstdProto);
+	    super("DSTD");
+	}
+
+	@Override
+	void export(ModExporter out) throws IOException {
+	    super.export(out);
+	    out.write(healthPct);
+	    out.write(index);
+	    out.write(modelDmgStage);
+	    out.write(flags.export());
+	    out.write(selfDmgPerSec);
+	    explosion.export(out);
+	    debree.export(out);
+	    out.write(debreeCount);
+	}
+
+	@Override
+	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	    super.parseData(in, srcMod);
+	    healthPct = in.extract(1)[0];
+	    index = in.extract(1)[0];
+	    modelDmgStage = in.extract(1)[0];
+	    flags.set(in.extract(1));
+	    selfDmgPerSec = in.extractInt(4);
+	    explosion.setInternal(in.extract(4));
+	    debree.setInternal(in.extract(4));
+	    debreeCount = in.extractInt(4);
 	}
 
 	@Override
 	SubRecord getNew(String type) {
 	    return new DSTD();
 	}
+
+	@Override
+	int getContentLength(ModExporter out) {
+	    return 20;
+	}
+    }
+
+    DestructionData() {
+	super(destructionProto);
     }
 
     @Override

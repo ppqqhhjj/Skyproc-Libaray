@@ -21,7 +21,7 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.RACE};
+    static GRUP_TYPE[] types = {GRUP_TYPE.CONT};
 //    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
@@ -59,6 +59,7 @@ public class SkyProcTester {
     private static void validateAll() throws Exception {
 	String[] mods = {
 	    "Skyrim.esm",
+	    "Update.esm",
 	    "Dawnguard.esm",
 	    "Dragonborn.esm",
 	};
@@ -105,7 +106,7 @@ public class SkyProcTester {
 	    System.out.println("All FormIDs properly standardized.");
 	}
 
-	SPGlobal.reset();
+//	SPGlobal.reset();
 
 	return exportPass && idPass;
     }
@@ -118,7 +119,7 @@ public class SkyProcTester {
 	boolean passed = true;
 	Mod patch = new Mod(new ModListing("Test.esp"));
 	patch.setFlag(Mod.Mod_Flags.STRING_TABLED, false);
-	patch.addAsOverrides(SPGlobal.getDB(), type);
+	patch.addAsOverrides(SPGlobal.getDB().getMod(mod), type);
 	// Test to see if stream has been prematurely imported
 	if (SPGlobal.streamMode && type != GRUP_TYPE.NPC_) {
 	    GRUP g = patch.GRUPs.get(type);
