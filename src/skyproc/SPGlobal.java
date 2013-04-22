@@ -128,8 +128,6 @@ public class SPGlobal {
 	}
 	globalPatchOut = patch;
 	modsToSkip.add(globalPatchOut.getInfo());
-	Consistency.clear();
-	Consistency.importConsistency(true);
     }
 
     /**

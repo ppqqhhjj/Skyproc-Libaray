@@ -497,6 +497,9 @@ public class SPImporter {
      * grup_targets.toArray(types); return importMod(listing, path, types); }
      */
     static Mod importMod(ModListing listing, int index, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
+	if (!Consistency.isImported()) {
+	    Consistency.importConsistency(true);
+	}
 	SPGlobal.sync(true);
 	try {
 	    SPGlobal.newSyncLog(debugPath + index + " - " + listing.print() + ".txt");

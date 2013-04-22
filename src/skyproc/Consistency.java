@@ -25,6 +25,7 @@ class Consistency {
     static LMergeMap<FormID, String> conflicts = new LMergeMap<>(false);
     static boolean cleaned = false;
     static boolean automaticExport = true;
+    static boolean imported = false;
     static char[] badChars = {(char) 0x0D, (char) 0x0A};
     static String debugFolder = "Consistency/";
 
@@ -99,6 +100,7 @@ class Consistency {
 	storage.clear();
 	set.clear();
 	storage.put(SPGlobal.getGlobalPatch().getInfo(), new HashMap<String, FormID>());
+	imported = false;
     }
 
     static void importConsistency(boolean globalOnly) {
@@ -106,6 +108,7 @@ class Consistency {
 	    getConsistencyFile();
 	    v2import(globalOnly);
 	    v1import(globalOnly);
+	    imported = true;
 	} catch (Exception ex) {
 	    SPGlobal.logException(ex);
 	    JOptionPane.showMessageDialog(null, "<html>There was an error importing the consistency information.<br><br>"
@@ -238,6 +241,10 @@ class Consistency {
 		SPGlobal.log(header, "-----------------------");
 	    }
 	}
+    }
+
+    static boolean isImported() {
+	return imported;
     }
 
     static boolean v2import(boolean globalOnly) {
