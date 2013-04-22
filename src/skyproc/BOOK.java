@@ -107,11 +107,26 @@ public class BOOK extends MajorRecordDescription {
     };
 
     //Enums
+    /**
+     *
+     */
     public enum BookFlag {
 
+	/**
+	 *
+	 */
 	TeachesSkill,
+	/**
+	 *
+	 */
 	CantBeTaken,
+	/**
+	 *
+	 */
 	TeachesSpell,
+	/**
+	 *
+	 */
 	Read;
     }
 
@@ -232,50 +247,100 @@ public class BOOK extends MajorRecordDescription {
 	return (DATA) subRecords.get("DATA");
     }
 
+    /**
+     *
+     * @param gold
+     */
     public void setValue(int gold) {
 	getDATA().value = gold;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
 	return getDATA().value;
     }
 
+    /**
+     *
+     * @param weight
+     */
     public void setWeight(float weight) {
 	getDATA().weight = weight;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getWeight() {
 	return getDATA().weight;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(BookFlag flag, boolean on) {
 	getDATA().flags.set(flag.ordinal(), on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(BookFlag flag) {
 	return getDATA().flags.get(flag.ordinal());
     }
 
+    /**
+     *
+     * @param val
+     */
     public void setTeachesAV(ActorValue val) {
 	getDATA().teachesAV = val;
     }
 
+    /**
+     *
+     * @return
+     */
     public ActorValue getTeachesAV() {
 	return getDATA().teachesAV;
     }
 
+    /**
+     *
+     * @param spell
+     */
     public void setTeachesSpell(FormID spell) {
 	getDATA().teachesSpell = spell;
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getTeachesSpell() {
 	return getDATA().teachesSpell;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setInventoryArt(FormID id) {
 	subRecords.setSubForm("INAM", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getInventoryArt() {
 	return subRecords.getSubForm("INAM").getForm();
     }
@@ -290,10 +355,18 @@ public class BOOK extends MajorRecordDescription {
 	subRecords.setSubStringPointer("CNAM", description);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
 	return subRecords.getSubStringPointer("DESC").print();
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setText(String text) {
 	subRecords.setSubStringPointer("DESC", text);
     }

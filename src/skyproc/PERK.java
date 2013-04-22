@@ -263,10 +263,18 @@ public class PERK extends MajorRecordDescription {
 	subRecords.getSubList("CTDA").remove(c);
     }
 
+    /**
+     *
+     * @param perk
+     */
     public void setNextPerk(FormID perk) {
 	subRecords.setSubForm("NNAM", perk);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getNextPerk() {
 	return subRecords.getSubForm("NNAM").getForm();
     }

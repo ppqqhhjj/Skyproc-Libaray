@@ -62,7 +62,6 @@ public class GLOB extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param edid
      * @param type
      */
@@ -74,7 +73,6 @@ public class GLOB extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param edid
      * @param type
      * @param value

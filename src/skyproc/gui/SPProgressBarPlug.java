@@ -17,7 +17,9 @@ public class SPProgressBarPlug {
     }
 
     /**
-     * Adds a progress bar to the list of bars to be updated with SkyProc import/export data.
+     * Adds a progress bar to the list of bars to be updated with SkyProc
+     * import/export data.
+     *
      * @param progressBar
      */
     public static void addProgressBar(LProgressBarInterface progressBar) {
@@ -106,7 +108,7 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @param in
+     * @param in Value to set as the max unit value of the progress bar.
      */
     public static void setMax(int in) {
 	if (!paused()) {
@@ -118,8 +120,8 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @param in
-     * @param status
+     * @param in Value to set as the max unit value of the progress bar.
+     * @param status String to set as the status of the progress bar.
      */
     public static void setMax(int in, String status) {
 	if (!paused()) {
@@ -130,8 +132,7 @@ public class SPProgressBarPlug {
     }
 
     /**
-     *
-     * @param status
+     * @param status String to set as the status of the progress bar.
      */
     public static void setStatus(String status) {
 	if (!paused()) {
@@ -142,6 +143,8 @@ public class SPProgressBarPlug {
     }
 
     /**
+     * Updates the progress bar status text to display: <br> ([cur]/[max])
+     * [status]
      *
      * @param cur
      * @param max
@@ -155,6 +158,13 @@ public class SPProgressBarPlug {
 	}
     }
 
+    /**
+     *
+     * Updates the progress bar status text to display the current step in the
+     * form of: <br> ([cur]/[max]) [status]
+     *
+     * @param status
+     */
     public static void setStatusNumbered(String status) {
 	if (!paused()) {
 	    for (LProgressBarInterface p : bars) {
@@ -164,7 +174,7 @@ public class SPProgressBarPlug {
     }
 
     /**
-     *
+     * Increments the progress bar one unit.
      */
     public static void incrementBar() {
 	if (!paused()) {
@@ -175,7 +185,7 @@ public class SPProgressBarPlug {
     }
 
     /**
-     *
+     * Resets the progress bar to zero of max.
      */
     public static void reset() {
 	if (!paused()) {
@@ -187,7 +197,7 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @param in
+     * @param in value to set the progress bar at.
      */
     public static void setBar(int in) {
 	if (!paused()) {
@@ -199,7 +209,7 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @return
+     * @return Current value of the bar
      */
     public static int getBar() {
 	return bars.get(0).getBar();
@@ -207,14 +217,14 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @return
+     * @return Current max value of the bar
      */
     public static int getMax() {
 	return bars.get(0).getMax();
     }
 
     /**
-     *
+     * Block the progress bar from updating.
      * @param on
      */
     public static void pause(boolean on) {
@@ -225,14 +235,14 @@ public class SPProgressBarPlug {
 
     /**
      *
-     * @return
+     * @return Whether the progress bar is accepting updates.
      */
     public static boolean paused() {
 	return bars.get(0).paused();
     }
 
     /**
-     *
+     * Sets the current value to the max value (100%).
      */
     public static void done() {
 	for (LProgressBarInterface p : bars) {

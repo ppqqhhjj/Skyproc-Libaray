@@ -118,8 +118,17 @@ public class BodyTemplate extends SubShell {
 	}
     }
 
+    /**
+     *
+     */
     public enum BodyTemplateType {
+	/**
+	 *
+	 */
 	Normal ("BODT"),
+	/**
+	 *
+	 */
 	Biped ("BOD2");
 	String type;
 	BodyTemplateType (String in) {
@@ -138,6 +147,7 @@ public class BodyTemplate extends SubShell {
 
     /**
      *
+     * @param type
      * @param flag
      * @param on
      */
@@ -150,6 +160,7 @@ public class BodyTemplate extends SubShell {
 
     /**
      *
+     * @param type
      * @param part
      * @return
      */
@@ -184,6 +195,7 @@ public class BodyTemplate extends SubShell {
     /**
      *
      * @param type
+     * @param armorType  
      */
     public void setArmorType(BodyTemplateType type, ArmorType armorType) {
 	BodyTemplateMain main = getMain(type);
@@ -193,6 +205,7 @@ public class BodyTemplate extends SubShell {
 
     /**
      *
+     * @param type
      * @return
      */
     public ArmorType getArmorType(BodyTemplateType type) {

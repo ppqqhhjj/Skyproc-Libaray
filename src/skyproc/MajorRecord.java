@@ -68,6 +68,13 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return true;
     }
 
+    /**
+     * NOTE:  Not tested thoroughly.
+     * Generic function that will return true if two major records have the same
+     * subrecord content.
+     * @param other
+     * @return
+     */
     public boolean deepEquals(MajorRecord other) {
 	if (!other.getType().equals(getType())) {
 	    return false;

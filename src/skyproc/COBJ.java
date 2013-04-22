@@ -26,7 +26,6 @@ public class COBJ extends MajorRecord {
     // Common Functions
     /**
      * Creates a new COBJ record with CK default settings.
-     * @param srcMod The mod to have the new COBJ originate from.
      * @param edid A unique EDID
      */
     public COBJ (String edid) {

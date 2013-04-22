@@ -138,8 +138,15 @@ public enum FirstPersonFlags {
      *
      */
     FX01,
+    /**
+     *
+     */
     NONE;
 
+    /**
+     *
+     * @return
+     */
     public int getValue() {
 	switch(this) {
 	    case NONE:
@@ -149,6 +156,11 @@ public enum FirstPersonFlags {
 	}
     }
 
+    /**
+     *
+     * @param val
+     * @return
+     */
     static public  FirstPersonFlags getValue(int val) {
 	if (-1 == val) {
 	    return NONE;

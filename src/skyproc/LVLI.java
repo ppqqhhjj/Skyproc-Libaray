@@ -29,7 +29,6 @@ public class LVLI extends LeveledRecord {
 
     /**
      * Creates a new LVLI record with a FormID originating from the mod parameter.
-     * @param modToOriginateFrom Mod to mark the LVLI as originating from.
      * @param edid EDID to assign the record.  Make sure it's unique.
      */
     public LVLI(String edid) {

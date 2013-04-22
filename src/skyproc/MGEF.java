@@ -445,7 +445,6 @@ public class MGEF extends MajorRecordDescription {
     // Common Functions
     /**
      *
-     * @param modToOriginateFrom
      * @param edid EDID to give the new record. Make sure it is unique.
      * @param name
      */

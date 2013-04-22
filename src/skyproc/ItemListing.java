@@ -9,7 +9,7 @@ package skyproc;
  * @author Justin Swanson
  */
 public class ItemListing extends SubShell {
-    
+
     static SubPrototype itemListingProto = new SubPrototype(){
 
 	@Override
@@ -18,16 +18,25 @@ public class ItemListing extends SubShell {
 	    add(new SubData("COED"));
 	}
     };
-    
+
+    /**
+     *
+     * @param id
+     * @param count
+     */
     public ItemListing(FormID id, int count) {
 	this();
 	subRecords.setSubFormInt("CNTO", id, count);
     }
-    
+
+    /**
+     *
+     * @param id
+     */
     public ItemListing(FormID id) {
 	this(id, 1);
     }
-    
+
     ItemListing() {
 	super(itemListingProto);
     }
@@ -56,20 +65,36 @@ public class ItemListing extends SubShell {
     SubRecord getNew(String type) {
 	return new ItemListing();
     }
-    
+
     // Get/set
+    /**
+     *
+     * @return
+     */
     public FormID getForm() {
 	return subRecords.getSubFormInt("CNTO").getForm();
     }
-    
+
+    /**
+     *
+     * @param id
+     */
     public void setForm(FormID id) {
 	subRecords.setSubFormInt("CNTO", id);
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public int getCount() {
 	return subRecords.getSubFormInt("CNTO").getNum();
     }
-    
+
+    /**
+     *
+     * @param count
+     */
     public void setCount(int count) {
 	subRecords.setSubFormInt("CNTO", count);
     }

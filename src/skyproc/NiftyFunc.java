@@ -35,7 +35,6 @@ public class NiftyFunc {
      * to an NPCs race will affect ALL NPCs with that same race.<br> If you do
      * not want this, then consider using genSafeScriptAttachingRace().
      *
-     * @param originateFrom Mod to make the new records originate from.
      * @param script Script to have the SPEL attach
      * @param uniqueID A unique string to differentiate the records from any
      * other SkyProc user's setups.<br> (using your mod's name is usually
@@ -65,7 +64,6 @@ public class NiftyFunc {
      * original race. <br> It is a full duplicate and will retain any settings
      * of the original race.
      *
-     * @param originateFrom Mod to make the new records originate from.
      * @param script Script to have the SPEL attach
      * @param uniqueID A unique string to differentiate the records from any
      * other SkyProc user's setups.<br> (using your mod's name is usually
@@ -144,7 +142,6 @@ public class NiftyFunc {
      * Makes a new quest that starts immediately in-game, that has this script
      * attached to it.
      *
-     * @param originateFrom Mod the quest should originate from.
      * @param script The script to add to the quest.
      * @return
      */
@@ -430,6 +427,11 @@ public class NiftyFunc {
 	return startProcess(null, args);
     }
 
+    /**
+     * Trims or expands a string (with _) to have exactly four characters.
+     * @param in
+     * @return
+     */
     static public String trimToFour (String in) {
 	if (in.length() > 4) {
 	    return in.substring(0, 3);

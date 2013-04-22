@@ -34,7 +34,6 @@ public class LVLN extends LeveledRecord {
 
     /**
      * Creates a new LVLN record with a FormID originating from the mod parameter.
-     * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      * @param edid EDID to assign the record.  Make sure it's unique.
      */
     public LVLN(String edid) {

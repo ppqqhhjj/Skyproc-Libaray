@@ -65,38 +65,74 @@ public class DIAL extends MajorRecord {
     }
 
     // Get/Set
+    /**
+     *
+     * @param dialog
+     */
     public void setDialog(String dialog) {
 	subRecords.setSubStringPointer("FULL", dialog);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDialog() {
 	return subRecords.getSubStringPointer("FULL").print();
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setPriority(Float f) {
 	subRecords.setSubFloat("PNAM", f);
     }
 
+    /**
+     *
+     * @return
+     */
     public float getPriority() {
 	return subRecords.getSubFloat("PNAM").get();
     }
 
+    /**
+     *
+     * @param branch
+     */
     public void setBranch(FormID branch) {
 	subRecords.setSubForm("BNAM", branch);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getBranch() {
 	return subRecords.getSubForm("BNAM").getForm();
     }
 
+    /**
+     *
+     * @param quest
+     */
     public void setQuest(FormID quest) {
 	subRecords.setSubForm("QNAM", quest);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getQuest() {
 	return subRecords.getSubForm("QNAM").getForm();
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setSubTypeName(String name) {
 	if (name.length() < 4) {
 	    name = Ln.spaceRight(4, '_', name);
@@ -104,10 +140,18 @@ public class DIAL extends MajorRecord {
 	subRecords.setSubString("SNAM", name);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSubTypeName () {
 	return subRecords.getSubString("SNAM").print();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<INFO> getDialogTopicInfos() {
 	return grup.getRecords();
     }

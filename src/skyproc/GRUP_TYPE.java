@@ -51,7 +51,13 @@ public enum GRUP_TYPE {
      * Armors
      */
     ARMO,
+    /**
+     *
+     */
     BOOK,
+    /**
+     *
+     */
     CONT,
     /**
      * Ingredients
@@ -93,8 +99,17 @@ public enum GRUP_TYPE {
      *
      */
     LVLI,
+    /**
+     *
+     */
     WTHR,
+    /**
+     *
+     */
     DIAL,
+    /**
+     *
+     */
     INFO,
     /**
      * Image Spaces
@@ -128,7 +143,13 @@ public enum GRUP_TYPE {
      *
      */
     LGTM,
+    /**
+     *
+     */
     DLBR,
+    /**
+     *
+     */
     DLVW,
     /**
      *

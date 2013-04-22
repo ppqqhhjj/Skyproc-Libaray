@@ -38,7 +38,6 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      * Creates a new LVLN record with a FormID originating from the mod
      * parameter.
      *
-     * @param modToOriginateFrom Mod to mark the LVLN as originating from.
      * @param edid EDID to assign the record. Make sure it's unique.
      */
     public LeveledRecord(String edid) {
@@ -162,6 +161,10 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	subRecords.getSubList("LVLO").remove(i);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void removeFirstEntry(FormID id) {
 	ArrayList<LeveledEntry> list = getEntries();
 	for (int i = 0 ; i < list.size() ; i++) {
@@ -172,6 +175,10 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	}
     }
 
+    /**
+     *
+     * @param id
+     */
     public void removeAllEntries(FormID id) {
 	ArrayList<LeveledEntry> list = getEntries();
 	for (int i = 0 ; i < list.size() ; ) {
@@ -240,6 +247,11 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	subRecords.setSubFlag("LVLF", flag.ordinal(), on);
     }
 
+    /**
+     *
+     * @param target
+     * @return
+     */
     final public boolean contains(MajorRecord target) {
 	for (LeveledEntry entry : this) {
 	    if (entry.getForm().equals(target.getForm())) {
@@ -249,6 +261,12 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	return false;
     }
 
+    /**
+     *
+     * @param target Record to look for.
+     * @param replacement Record to replace with.
+     * @return Number of replacements executed.
+     */
     final public int replace(MajorRecord target, MajorRecord replacement) {
 	int out = 0;
 	FormID targetF = target.getForm();

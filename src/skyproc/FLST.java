@@ -30,7 +30,6 @@ public class FLST extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param edid EDID to give the new record.  Make sure it is unique.
      */
     public FLST (String edid) {
@@ -65,6 +64,10 @@ public class FLST extends MajorRecord {
 	subRecords.getSubList("LNAM").add(new SubForm("LNAM", entry));
     }
 
+    /**
+     *
+     * @param entries
+     */
     public void addAll(Collection<FormID> entries) {
 	for (FormID id : entries) {
 	    addFormEntry(id);

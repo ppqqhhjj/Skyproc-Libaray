@@ -275,6 +275,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return null;
     }
 
+    /**
+     *
+     * @param edid EDID to look in the mod for.
+     * @param grup_types Types of GRUPs to look in. (Optional - searches all if
+     * left blank)
+     * @return The Major Record with the query FormID, or null if not found.
+     */
     public MajorRecord getMajor(String edid, GRUP_TYPE... grup_types) {
 	if (edid != null) {
 	    for (GRUP_TYPE g : grup_types) {
@@ -1237,7 +1244,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return 
+     * @return
      */
     public GRUP<WTHR> getWeathers() {
 	return weathers;
@@ -1246,7 +1253,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return 
+     * @return
      */
     public GRUP<DIAL> getDialogs() {
 	return dialogs;
@@ -1255,7 +1262,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return 
+     * @return
      */
     public GRUP<DLBR> getDialogBranches() {
 	return dialogBranches;
@@ -1264,7 +1271,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return 
+     * @return
      */
     public GRUP<DLVW> getDialogViews() {
 	return dialogViews;
@@ -1273,7 +1280,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     /**
      *
      * @see GRUP
-     * @return 
+     * @return
      */
     public GRUP<CONT> getContainers() {
 	return containers;

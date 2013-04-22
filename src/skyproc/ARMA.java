@@ -411,6 +411,10 @@ public class ARMA extends MajorRecord {
 	return getDNAM().weaponAdjust;
     }
 
+    /**
+     *
+     * @return
+     */
     public BodyTemplate getBodyTemplate() {
 	return subRecords.getBodyTemplate();
     }

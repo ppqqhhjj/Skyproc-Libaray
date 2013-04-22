@@ -579,6 +579,11 @@ public class SUMGUI extends JFrame {
 	}
     }
 
+    /**
+     * Lets you set the message to display when an error occurs that causes the
+     * program to stop prematurely.
+     * @param message
+     */
     static public void setErrorMessage(String message) {
 	errorMessage = message;
     }

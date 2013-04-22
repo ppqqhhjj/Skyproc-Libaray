@@ -774,10 +774,22 @@ public class RACE extends MajorRecordDescription {
 	AvoidsRoads;
     }
 
+    /**
+     *
+     */
     public enum RaceFlags2 {
 
+	/**
+	 *
+	 */
 	UseAdvancedAvoidance(0),
+	/**
+	 *
+	 */
 	NonHostile(1),
+	/**
+	 *
+	 */
 	AllowMountedCombat(4);
 	int val;
 
@@ -1638,6 +1650,10 @@ public class RACE extends MajorRecordDescription {
 	return subRecords.getKeywords();
     }
 
+    /**
+     *
+     * @return
+     */
     public BodyTemplate getBodyTemplate() {
 	return subRecords.getBodyTemplate();
     }
@@ -1674,6 +1690,12 @@ public class RACE extends MajorRecordDescription {
 	return subRecords.getSubForm("NAM8").getForm();
     }
 
+    /**
+     *
+     * @param boostIndex
+     * @param skill
+     * @param value
+     */
     public void setSkillBoost(int boostIndex, ActorValue skill, int value) {
 	if (boostIndex < 7 && boostIndex >= 0) {
 	    getDATA().skillBoosts.set(boostIndex, skill);
@@ -1681,6 +1703,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param boostIndex
+     * @return
+     */
     public ActorValue getSkillBoostSkill(int boostIndex) {
 	if (boostIndex < 7 && boostIndex >= 0) {
 	    return getDATA().skillBoosts.get(boostIndex);
@@ -1689,6 +1716,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param boostIndex
+     * @return
+     */
     public int getSkillBoostValue(int boostIndex) {
 	if (boostIndex < 7 && boostIndex >= 0) {
 	    return getDATA().skillBoostValues.get(boostIndex);
@@ -1697,82 +1729,163 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param object
+     */
     public void setHeadBipedObject(FirstPersonFlags object) {
 	getDATA().headBipedObject = object;
     }
 
+    /**
+     *
+     * @return
+     */
     public FirstPersonFlags getHeadBipedObject() {
 	return getDATA().headBipedObject;
     }
 
+    /**
+     *
+     * @param object
+     */
     public void setHairBipedObject(FirstPersonFlags object) {
 	getDATA().hairBipedObject = object;
     }
 
+    /**
+     *
+     * @return
+     */
     public FirstPersonFlags getHairBipedObject() {
 	return getDATA().hairBipedObject;
     }
 
+    /**
+     *
+     * @param object
+     */
     public void setShieldBipedObject(FirstPersonFlags object) {
 	getDATA().shieldBipedObject = object;
     }
 
+    /**
+     *
+     * @return
+     */
     public FirstPersonFlags getShieldBipedObject() {
 	return getDATA().shieldBipedObject;
     }
 
+    /**
+     *
+     * @param object
+     */
     public void setBodyBipedObject(FirstPersonFlags object) {
 	getDATA().bodyBipedObject = object;
     }
 
+    /**
+     *
+     * @return
+     */
     public FirstPersonFlags getBodyBipedObject() {
 	return getDATA().bodyBipedObject;
     }
 
+    /**
+     *
+     * @param flag
+     * @param on
+     */
     public void set(RaceFlags2 flag, boolean on) {
 	getDATA().flags2.set(flag.val, on);
     }
 
+    /**
+     *
+     * @param flag
+     * @return
+     */
     public boolean get(RaceFlags2 flag) {
 	return getDATA().flags2.get(flag.val);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getMovementTypeNames() {
 	return SubList.subStringToPublic(subRecords.getSubList("MTNM"));
     }
 
+    /**
+     *
+     * @param name
+     */
     public void addMovementTypeName(String name) {
 	subRecords.getSubList("MTNM").add(new SubString("MTNM", NiftyFunc.trimToFour(name)));
     }
 
+    /**
+     *
+     */
     public void clearMovementTypeNames() {
 	subRecords.getSubList("MTNM").clear();
     }
 
+    /**
+     *
+     * @param name
+     */
     public void removeMovementTypeName(String name) {
 	subRecords.getSubList("MTNM").remove(new SubString("MTNM", NiftyFunc.trimToFour(name)));
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setFaceGenMainClamp(float in) {
 	subRecords.setSubFloat("PNAM", in);
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFaceGenMainClamp() {
 	return subRecords.getSubFloat("PNAM").get();
     }
 
+    /**
+     *
+     * @param in
+     */
     public void setFaceGenFaceClamp(float in) {
 	subRecords.setSubFloat("UNAM", in);
     }
 
+    /**
+     *
+     * @return
+     */
     public float getFaceGenFaceClamp() {
 	return subRecords.getSubFloat("UNAM").get();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setAttackRace(FormID id) {
 	subRecords.setSubForm("ATKR", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getAttackRace() {
 	return subRecords.getSubForm("ATKR").getForm();
     }
@@ -1802,6 +1915,11 @@ public class RACE extends MajorRecordDescription {
 	return newData;
     }
 
+    /**
+     *
+     * @param g
+     * @param id
+     */
     public void setDefaultFaceTexture(Gender g, FormID id) {
 	switch (g) {
 	    case FEMALE:
@@ -1812,6 +1930,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param g
+     * @return
+     */
     public FormID getDefaultFaceTexture(Gender g) {
 	switch (g) {
 	    case FEMALE:
@@ -1821,6 +1944,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param g
+     * @return
+     */
     public ArrayList<FormID> getFaceDetailsTextureSet(Gender g) {
 	switch (g) {
 	    case FEMALE:
@@ -1830,6 +1958,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param g
+     * @param id
+     */
     public void addFaceDetailsTexture(Gender g, FormID id) {
 	switch (g) {
 	    case FEMALE:
@@ -1840,6 +1973,11 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param g
+     * @param id
+     */
     public void removeFaceDetailsTexture(Gender g, FormID id) {
 	switch (g) {
 	    case FEMALE:
@@ -1850,6 +1988,10 @@ public class RACE extends MajorRecordDescription {
 	}
     }
 
+    /**
+     *
+     * @param g
+     */
     public void clearFaceDetailsTexture(Gender g) {
 	switch (g) {
 	    case FEMALE:

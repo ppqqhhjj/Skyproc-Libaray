@@ -78,6 +78,10 @@ public class ModListing extends SubRecord implements Comparable {
 	}
     }
 
+    /**
+     *
+     * @return
+     */
     public String printNoSuffix() {
 	return mast.print();
     }

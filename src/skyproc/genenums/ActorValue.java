@@ -1044,6 +1044,11 @@ public enum ActorValue {
      */
     UNKNOWN;
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     static public int value(ActorValue in) {
 	if (in == UNKNOWN) {
 	    return -1;
@@ -1052,6 +1057,11 @@ public enum ActorValue {
 	}
     }
 
+    /**
+     *
+     * @param in
+     * @return
+     */
     static public ActorValue value(int in) {
 	if (in < ActorValue.values().length - 2 && in >= 0) {
 	    return ActorValue.values()[in];

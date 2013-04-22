@@ -182,7 +182,6 @@ public class ARMO extends MajorRecordDescription {
      * perspective.
      *
      * @param gender Gender of the AltTexture set to query.
-     * @param perspective Perspective of the AltTexture set to query.
      * @return List of the AltTextures applied to the gender/perspective.
      */
     public ArrayList<AltTextures.AltTexture> getAltTextures(Gender gender) {
@@ -194,7 +193,6 @@ public class ARMO extends MajorRecordDescription {
      *
      * @param rhs Other ARMA record.
      * @param gender Gender of the pack to compare.
-     * @param perspective Perspective of the pack to compare
      * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
      * matching Alt Textures with the same name and TXST formID reference, in
      * the same corresponding indices.
@@ -206,7 +204,7 @@ public class ARMO extends MajorRecordDescription {
     /**
      *
      * @param path
-     * @param perspective
+     * @param g
      */
     public void setModel(String path, Gender g) {
 	switch (g) {
@@ -221,7 +219,7 @@ public class ARMO extends MajorRecordDescription {
 
     /**
      *
-     * @param perspective
+     * @param g
      * @return
      */
     public String getModel(Gender g) {
@@ -365,10 +363,18 @@ public class ARMO extends MajorRecordDescription {
 	return (float) (subRecords.getSubData("DNAM").toInt() / 100.0);
     }
 
+    /**
+     *
+     * @param rating
+     */
     public void setArmorRating(int rating) {
 	subRecords.setSubData("DNAM", rating);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getArmorRating() {
 	return subRecords.getSubData("DNAM").toInt();
     }
@@ -397,6 +403,10 @@ public class ARMO extends MajorRecordDescription {
 	return subRecords.getScripts();
     }
 
+    /**
+     *
+     * @return
+     */
     public BodyTemplate getBodyTemplate() {
 	return subRecords.getBodyTemplate();
     }

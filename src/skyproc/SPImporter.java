@@ -551,7 +551,7 @@ public class SPImporter {
 	}
     }
 
-    static public void checkMissingMasters(Mod plugin) throws MissingMaster {
+    static void checkMissingMasters(Mod plugin) throws MissingMaster {
 	ArrayList<ModListing> missingMasters = new ArrayList<>();
 	for (ModListing master : plugin.getMasters()) {
 	    if (SPGlobal.getDB().getMod(master) == null) {

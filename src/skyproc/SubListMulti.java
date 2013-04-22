@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubListMulti<T extends SubRecord> extends SubList {
+class SubListMulti<T extends SubRecord> extends SubList {
 
     Map<String, SubRecord> prototypes = new HashMap<>(2);
 

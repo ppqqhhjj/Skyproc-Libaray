@@ -33,6 +33,9 @@ public class SPMainMenuPanel extends JPanel {
      * Reference to the left column main menu panel.
      */
     protected LScrollPane menuScroll;
+    /**
+     *
+     */
     protected LPanel menuPanel = new LPanel(SUMGUI.leftDimensions);
     ArrayList<SPSettingPanel> panels = new ArrayList<>();
     SPSettingPanel welcome = null;

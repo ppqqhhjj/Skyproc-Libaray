@@ -38,7 +38,6 @@ public class TXST extends MajorRecord implements Iterable<String> {
     /**
      * Constructor to create a blank new TXST record.
      *
-     * @param srcMod The mod to originate from
      * @param edid The edid to give the new record (make it unique)
      */
     public TXST(String edid) {

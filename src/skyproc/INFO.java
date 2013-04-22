@@ -61,7 +61,7 @@ public class INFO extends MajorRecord {
 	}
     };
 
-    public static class TRDT extends SubRecordTyped {
+    static class TRDT extends SubRecordTyped {
 
 	EmotionType emotion = EmotionType.Neutral;
 	int emotionValue = 0;
@@ -98,7 +98,7 @@ public class INFO extends MajorRecord {
 	}
     }
 
-    public static class ENAM extends SubRecordTyped {
+    static class ENAM extends SubRecordTyped {
 
 	LFlags flags;
 	int hoursReset = 0;
@@ -220,6 +220,9 @@ public class INFO extends MajorRecord {
 	}
     }
 
+    /**
+     *
+     */
     public class Response extends SubShell {
 
 	Response() {
@@ -230,51 +233,99 @@ public class INFO extends MajorRecord {
 	    return (TRDT) subRecords.get("TRDT");
 	}
 
+	/**
+	 *
+	 * @param type
+	 */
 	public void setEmotionType(EmotionType type) {
 	    getTRDT().emotion = type;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public EmotionType getEmotionType() {
 	    return getTRDT().emotion;
 	}
 
+	/**
+	 *
+	 * @param val
+	 */
 	public void setEmotionValue(int val) {
 	    val %= 100;
 	    getTRDT().emotionValue = val;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getEmotionValue() {
 	    return getTRDT().emotionValue;
 	}
 
+	/**
+	 *
+	 * @param text
+	 */
 	public void setResponseText(String text) {
 	    subRecords.setSubStringPointer("NAM1", text);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getResponseText() {
 	    return subRecords.getSubStringPointer("NAM1").print();
 	}
 
+	/**
+	 *
+	 * @param text
+	 */
 	public void setActorNotes(String text) {
 	    subRecords.setSubStringPointer("NAM2", text);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getActorNotes() {
 	    return subRecords.getSubStringPointer("NAM2").print();
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	public void setIdleAnimSpeaker(FormID id) {
 	    subRecords.setSubForm("SNAM", id);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public FormID getIdleAnimSpeaker() {
 	    return subRecords.getSubForm("SNAM").getForm();
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	public void setIdleAnimListener(FormID id) {
 	    subRecords.setSubForm("LNAM", id);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public FormID getIdleAnimListener() {
 	    return subRecords.getSubForm("LNAM").getForm();
 	}
@@ -305,20 +356,62 @@ public class INFO extends MajorRecord {
     }
 
     // Enums
+    /**
+     *
+     */
     public enum ResponseFlag {
 
+	/**
+	 *
+	 */
 	Goodbye(0),
+	/**
+	 *
+	 */
 	Random(1),
+	/**
+	 *
+	 */
 	SayOnce(2),
+	/**
+	 *
+	 */
 	RandomEnd(5),
+	/**
+	 *
+	 */
 	InvisibleContinue(6),
+	/**
+	 *
+	 */
 	WalkAway(7),
+	/**
+	 *
+	 */
 	WalkAwayInvisbleInMenu(8),
+	/**
+	 *
+	 */
 	ForceSubtitle(9),
+	/**
+	 *
+	 */
 	CanMoveWhileGreeting(10),
+	/**
+	 *
+	 */
 	HasNoLipFile(11),
+	/**
+	 *
+	 */
 	RequiresPostProcessing(12),
+	/**
+	 *
+	 */
 	AudioOutputOverride(13),
+	/**
+	 *
+	 */
 	SpendsFavorPoints(14),;
 	int value;
 
@@ -356,68 +449,133 @@ public class INFO extends MajorRecord {
 	return (ENAM) subRecords.get("ENAM");
     }
 
+    /**
+     *
+     * @param res
+     * @param on
+     */
     public void set(ResponseFlag res, boolean on) {
 	getENAM().flags.set(res.value, on);
     }
 
+    /**
+     *
+     * @param res
+     * @return
+     */
     public boolean get(ResponseFlag res) {
 	return getENAM().flags.get(res.value);
     }
 
+    /**
+     *
+     * @param hours
+     */
     public void setResetTime(float hours) {
 	hours /= 24;
 	getENAM().hoursReset = (int) (hours * 65535);
     }
 
+    /**
+     *
+     * @return
+     */
     public float getResetTime() {
 	float tmp = ((float) getENAM().hoursReset) / 65535;
 	return tmp * 24;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setTopic(FormID id) {
 	subRecords.setSubForm("TPIC", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getTopic() {
 	return subRecords.getSubForm("TPIC").getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setPreviousINFO(FormID id) {
 	subRecords.setSubForm("PNAM", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getPreviousINFO() {
 	return subRecords.getSubForm("PNAM").getForm();
     }
 
+    /**
+     *
+     * @param lev
+     */
     public void setFavorLevel(FavorLevel lev) {
 	subRecords.setSubInt("CNAM", lev.ordinal());
     }
 
+    /**
+     *
+     * @return
+     */
     public FavorLevel getFavorLevel() {
 	return FavorLevel.values()[subRecords.getSubInt("CNAM").get()];
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getLinkTo() {
 	return SubList.subFormToPublic(subRecords.getSubList("TCLT"));
     }
 
+    /**
+     *
+     * @param id
+     */
     public void removeLinkTo(FormID id) {
 	subRecords.getSubList("TCLT").remove(new SubForm("TCLT", id));
     }
 
+    /**
+     *
+     * @param id
+     */
     public void addLinkTo(FormID id) {
 	subRecords.getSubList("TCLT").add(new SubForm("TCLT", id));
     }
 
+    /**
+     *
+     */
     public void clearLinkTo() {
 	subRecords.getSubList("TCLT").clear();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setResponseData(FormID id) {
 	subRecords.setSubForm("DNAM", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getResponseData() {
 	return subRecords.getSubForm("DNAM").getForm();
     }
@@ -446,38 +604,74 @@ public class INFO extends MajorRecord {
 	subRecords.getSubList("CTDA").remove(c);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Response> getResponses() {
 	return subRecords.getSubList("TRDT").toPublic();
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setPrompt(String text) {
 	subRecords.setSubStringPointer("RNAM", text);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPrompt() {
 	return subRecords.getSubStringPointer("RNAM").print();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setSpeaker(FormID id) {
 	subRecords.setSubForm("ANAM", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getSpeaker() {
 	return subRecords.getSubForm("ANAM").getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setWalkAwayTopic(FormID id) {
 	subRecords.setSubForm("TWAT", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getWalkAwayTopic () {
 	return subRecords.getSubForm("TWAT").getForm();
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setAudioOverride(FormID id) {
 	subRecords.setSubForm("ONAM", id);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getAudioOverride () {
 	return subRecords.getSubForm("ONAM").getForm();
     }

@@ -1924,7 +1924,12 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     public boolean addItem(FormID itemReference, int count) {
 	return subRecords.getSubList("CNTO").add(new ItemListing(itemReference, count));
     }
-    
+
+    /**
+     *
+     * @param item
+     * @return
+     */
     public boolean addItem(ItemListing item) {
 	return subRecords.getSubList("CNTO").add(item);
     }

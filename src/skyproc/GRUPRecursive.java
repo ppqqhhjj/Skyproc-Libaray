@@ -13,7 +13,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class GRUPRecursive<T extends MajorRecord> extends GRUP<T> {
+class GRUPRecursive<T extends MajorRecord> extends GRUP<T> {
 
     GRUPRecursive(T prototype) {
 	super(prototype);

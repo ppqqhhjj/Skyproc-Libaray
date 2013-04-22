@@ -29,7 +29,6 @@ public class OTFT extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param uniqueEDID
      */
     public OTFT(String uniqueEDID) {

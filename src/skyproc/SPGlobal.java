@@ -162,10 +162,20 @@ public class SPGlobal {
 	}
     }
 
+    /**
+     * Adds a mod to the white list.  Once a mod is on the white list, only
+     * white list mods will be imported by SkyProc.
+     * @param m
+     */
     public static void addModToWhiteList(ModListing m) {
 	modsWhiteList.add(m);
     }
 
+    /**
+     * Adds a mod to the white list.  Once a mod is on the white list, only
+     * white list mods will be imported by SkyProc.
+     * @param s
+     */
     public static void addModToWhiteList(String s) {
 	if (s.contains(".ESP") || s.contains(".ESM")) {
 	    addModToWhiteList(new ModListing(s));
@@ -312,8 +322,8 @@ public class SPGlobal {
 
     /**
      *
-     * @param on True if you want data to be streamed on demand; False if you want
-     * it to all be imported at once.
+     * @param on True if you want data to be streamed on demand; False if you
+     * want it to all be imported at once.
      */
     static public void setStreamMode(boolean on) {
 	streamMode = on;
@@ -321,12 +331,19 @@ public class SPGlobal {
 
     /**
      *
-     * @param on True if you want the patcher to ignore mods that come after it in the load order.
+     * @param on True if you want the patcher to ignore mods that come after it
+     * in the load order.
      */
     static public void setNoModsAfter(boolean on) {
 	noModsAfter = on;
     }
 
+    /**
+     * Lets you set the message to display when an error occurs that causes the
+     * program to stop prematurely.
+     *
+     * @param message
+     */
     static public void setSUMerrorMessage(String message) {
 	SUMGUI.setErrorMessage(message);
     }
@@ -334,7 +351,6 @@ public class SPGlobal {
     /*
      * Logging functions
      */
-
     /**
      * Initializes the Debug Logs in a "SkyProcDebug/" folder, and allows you to
      * print messages to them.<br> Do this step early in your program.
@@ -564,7 +580,6 @@ public class SPGlobal {
 	    createGlobalLog();
 	}
 	OutputStream outToDebug = new OutputStream() {
-
 	    @Override
 	    public void write(final int b) throws IOException {
 		if (b != 116) {
@@ -613,6 +628,9 @@ public class SPGlobal {
 	return pathToDebug;
     }
     // Debug Globals
+    /**
+     * Turns off messages about which record is currently being streamed.
+     */
     public static boolean debugStream = true;
     /**
      * Displays information about BSA importing

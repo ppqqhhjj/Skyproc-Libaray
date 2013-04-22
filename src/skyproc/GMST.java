@@ -12191,7 +12191,6 @@ public class GMST extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param setting
      * @param b
      */
@@ -12203,7 +12202,6 @@ public class GMST extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param setting
      * @param s
      */
@@ -12215,7 +12213,6 @@ public class GMST extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param setting
      * @param i
      */
@@ -12227,7 +12224,6 @@ public class GMST extends MajorRecord {
 
     /**
      *
-     * @param modToOriginateFrom
      * @param setting
      * @param f
      */

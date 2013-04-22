@@ -39,26 +39,49 @@ public class DLVW extends MajorRecord {
 	return Record.getTypeList("DLVW");
     }
 
+    /**
+     *
+     * @param quest
+     */
     public void setQuest(FormID quest) {
 	subRecords.setSubForm("QNAM", quest);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getQuest() {
 	return subRecords.getSubForm("QNAM").getForm();
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FormID> getBranches () {
 	return SubList.subFormToPublic(subRecords.getSubList("BNAM"));
     }
 
+    /**
+     *
+     * @param dialogBranch
+     */
     public void addBranch(FormID dialogBranch) {
 	subRecords.getSubList("BNAM").add(new SubForm("BNAM", dialogBranch));
     }
 
+    /**
+     *
+     * @param dialogBranch
+     */
     public void removeBranch(FormID dialogBranch) {
 	subRecords.getSubList("BNAM").remove(new SubForm("BNAM", dialogBranch));
     }
 
+    /**
+     *
+     */
     public void clearBranches() {
 	subRecords.getSubList("BNAM").clear();
     }

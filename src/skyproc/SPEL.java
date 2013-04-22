@@ -127,7 +127,6 @@ public class SPEL extends MagicItem {
     /**
      * Creates a new empty SPEL record that originates from the mod designated.<br>
      * Make sure the EDID you assign is unique.
-     * @param modToOriginateFrom
      * @param edid
      */
     public SPEL(String edid) {

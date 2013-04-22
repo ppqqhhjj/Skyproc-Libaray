@@ -89,7 +89,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	}
     }
 
-    public MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+    MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	if (logging()) {
 	    logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
 	}
@@ -261,13 +261,18 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 
     /**
      *
-     * @param id FormID to check check for containment.
+     * @param id FormID to look for.
      * @return Returns true if GRUP contains a record with id.
      */
     public boolean contains(FormID id) {
 	return mapRecords.containsKey(id);
     }
 
+    /**
+     *
+     * @param edid EDID to look for.
+     * @return Returns true if GRUP contains a record with edid.
+     */
     public boolean contains(String edid) {
 	return edidRecords.containsKey(edid);
     }
@@ -284,12 +289,17 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     /**
      *
      * @param id FormID to query the GRUP for.
-     * @return Major Record with FormID == id.
+     * @return Major Record with FormID equaling parameter. Null if one does not exist.
      */
     public MajorRecord get(FormID id) {
 	return mapRecords.get(id);
     }
 
+    /**
+     *
+     * @param edid EDID to query the GRUP for.
+     * @return Major Record with FormID equaling parameter. Null if one does not exist.
+     */
     public MajorRecord get(String edid) {
 	return edidRecords.get(edid);
     }

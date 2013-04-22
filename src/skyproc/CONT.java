@@ -93,6 +93,11 @@ public class CONT extends MajorRecordNamed {
 	return subRecords.getSubList("CNTO").add(new ItemListing(itemReference, count));
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     public boolean addItem(ItemListing item) {
 	return subRecords.getSubList("CNTO").add(item);
     }
@@ -121,6 +126,12 @@ public class CONT extends MajorRecordNamed {
 	return subRecords.getSubList("CNTO").toPublic();
     }
 
+    /**
+     *
+     * @param target
+     * @param replacement
+     * @return
+     */
     final public int replace(MajorRecord target, MajorRecord replacement) {
 	int out = 0;
 	FormID targetF = target.getForm();
@@ -134,18 +145,34 @@ public class CONT extends MajorRecordNamed {
 	return out;
     }
 
+    /**
+     *
+     * @param sound
+     */
     public void setOpenSound(FormID sound) {
 	subRecords.setSubForm("SNAM", sound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getOpenSound() {
 	return subRecords.getSubForm("SNAM").getForm();
     }
 
+    /**
+     *
+     * @param sound
+     */
     public void setCloseSound(FormID sound) {
 	subRecords.setSubForm("QNAM", sound);
     }
 
+    /**
+     *
+     * @return
+     */
     public FormID getCloseSound() {
 	return subRecords.getSubForm("QNAM").getForm();
     }
