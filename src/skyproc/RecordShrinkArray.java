@@ -8,28 +8,45 @@ import lev.LImport;
 import lev.LShrinkArray;
 
 /**
- *
+ * For use with DirtyParsingIterator to retrieve subrecord data.
+ * @see SPImporter
  * @author Justin Swanson
  */
-class RecordShrinkArray extends LShrinkArray {
+public class RecordShrinkArray extends LShrinkArray {
 
     int offset;
 
+    /**
+     *
+     * @param rhs
+     * @param high
+     */
     public RecordShrinkArray(final LImport rhs, final int high) {
 	super(rhs, high);
 	offset = (int) rhs.pos();
     }
 
+    /**
+     *
+     * @param rhs
+     */
     public RecordShrinkArray(LShrinkArray rhs) {
 	super(rhs);
 	offset = (int) rhs.pos();
     }
 
+    /**
+     *
+     */
     public RecordShrinkArray() {
 	super(new byte[0]);
 	offset = 0;
     }
 
+    /**
+     *
+     * @param in
+     */
     public RecordShrinkArray(byte[] in) {
 	super(in);
 	offset = 0;
@@ -45,6 +62,13 @@ class RecordShrinkArray extends LShrinkArray {
 	super.pos(in - offset);
     }
 
+    /**
+     * Extracts the next four bytes of data and interprets them as a FormID
+     * (regardless of whether it actually is), and standardizes it to the
+     * given mod.
+     * @param modToStandardizeTo
+     * @return
+     */
     public FormID extractFormID(Mod modToStandardizeTo) {
 	FormID out = new FormID();
 	if (!isDone()) {
@@ -57,6 +81,13 @@ class RecordShrinkArray extends LShrinkArray {
 	return out;
     }
 
+    /**
+     * Extracts the next four bytes of data and interprets them as a FormID
+     * (regardless of whether it actually is), and standardizes it to the
+     * given mod.
+     * @param modToStandardizeTo
+     * @return
+     */
     public FormID extractFormID(ModListing modToStandardizeTo) {
 	Mod mod = SPGlobal.getDB().getMod(modToStandardizeTo);
 	if (mod == null) {
@@ -65,6 +96,15 @@ class RecordShrinkArray extends LShrinkArray {
 	return extractFormID(mod);
     }
 
+    /**
+     * Scans to the typestring, skips the length bytes (2),
+     * and extracts 4 bytes of data interprets them as a FormID
+     * (regardless of whether it actually is), and standardizes it to the
+     * given mod.
+     * @param type
+     * @param modToStandardizeTo
+     * @return
+     */
     public FormID extractFormID(String type, Mod modToStandardizeTo) {
 	extractUntil(type);
 	if (!isDone()) {
@@ -73,6 +113,15 @@ class RecordShrinkArray extends LShrinkArray {
 	return extractFormID(modToStandardizeTo);
     }
 
+    /**
+     * Scans to the typestring, skips the length bytes (2),
+     * and extracts 4 bytes of data interprets them as a FormID
+     * (regardless of whether it actually is), and standardizes it to the
+     * given mod.
+     * @param type
+     * @param modToStandardizeTo
+     * @return
+     */
     public FormID extractFormID(String type, ModListing modToStandardizeTo) {
 	Mod mod = SPGlobal.getDB().getMod(modToStandardizeTo);
 	if (mod == null) {

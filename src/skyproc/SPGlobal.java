@@ -163,8 +163,65 @@ public class SPGlobal {
     }
 
     /**
-     * Adds a mod to the white list.  Once a mod is on the white list, only
-     * white list mods will be imported by SkyProc.
+     *
+     * @param m
+     * @return
+     */
+    public static boolean isModToSkip(ModListing m) {
+	return modsToSkip.contains(m) || isModToSkip(m.print());
+    }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public static boolean isModToSkip(String name) {
+	return Ln.hasAnyKeywords(name, modsToSkipStr);
+    }
+
+    /**
+     *
+     * @param m
+     * @return
+     */
+    public static boolean isWhiteListed(ModListing m) {
+	return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
+		|| modsWhiteList.contains(m) || isWhiteListed(m.print());
+    }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public static boolean isWhiteListed(String name) {
+	return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
+		|| Ln.hasAnyKeywords(name, modsWhiteListStr);
+    }
+
+    /**
+     * True if not blacklisted and if white listed (if there are any white listings)
+     * @param m
+     * @return
+     */
+    public static boolean shouldImport(ModListing m) {
+	return !SPGlobal.isModToSkip(m) && SPGlobal.isWhiteListed(m);
+    }
+
+    /**
+     * True if not blacklisted and if white listed (if there are any white listings)
+     * @param name
+     * @return
+     */
+    public static boolean shouldImport(String name) {
+	return !SPGlobal.isModToSkip(name) && SPGlobal.isWhiteListed(name);
+    }
+
+    /**
+     * Adds a mod to the white list. Once a mod is on the white list, only white
+     * list mods will be imported by SkyProc.
+     *
      * @param m
      */
     public static void addModToWhiteList(ModListing m) {
@@ -172,8 +229,9 @@ public class SPGlobal {
     }
 
     /**
-     * Adds a mod to the white list.  Once a mod is on the white list, only
-     * white list mods will be imported by SkyProc.
+     * Adds a mod to the white list. Once a mod is on the white list, only white
+     * list mods will be imported by SkyProc.
+     *
      * @param s
      */
     public static void addModToWhiteList(String s) {

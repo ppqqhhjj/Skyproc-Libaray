@@ -7,6 +7,7 @@ package skyproc;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.exceptions.BadMod;
@@ -24,6 +25,7 @@ public class SkyProcTester {
 //    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
     static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
+    static ArrayList<GRUP_TYPE> skip = new ArrayList<>(Arrays.asList(new GRUP_TYPE[]{GRUP_TYPE.BOOK}));
 
     /**
      * @param test
@@ -50,6 +52,7 @@ public class SkyProcTester {
 	    }
 	    gui.finished();
 	} catch (Exception e) {
+	System.out.println("EXCEPTION THROWN");
 	    gui.finished();
 	    SPGlobal.logException(e);
 	}
@@ -59,7 +62,6 @@ public class SkyProcTester {
     private static void validateAll() throws Exception {
 	String[] mods = {
 	    "Skyrim.esm",
-	    "Update.esm",
 	    "Dawnguard.esm",
 	    "Dragonborn.esm",};
 	SPGlobal.checkMissingMasters = false;
@@ -68,6 +70,7 @@ public class SkyProcTester {
 		break;
 	    }
 	}
+	System.out.println("TESTING COMPLETE");
     }
 
     private static boolean validate(ModListing mod) throws Exception {
@@ -82,7 +85,7 @@ public class SkyProcTester {
 	boolean exportPass = true;
 	boolean idPass = true;
 	for (GRUP_TYPE g : types) {
-	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
+	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g) && !skip.contains(g)) {
 		SPImporter.importMod(mod, SPGlobal.pathToData, g);
 		if (!test(g, mod)) {
 		    SPProgressBarPlug.setStatus("FAILED: " + g);
@@ -97,11 +100,11 @@ public class SkyProcTester {
 			return false;
 		    }
 		}
-		System.out.println("All FormIDs properly standardized.");
+		SPGlobal.reset();
 	    }
-	    SPGlobal.reset();
 	}
 
+	SPGlobal.reset();
 	return exportPass && idPass;
     }
 

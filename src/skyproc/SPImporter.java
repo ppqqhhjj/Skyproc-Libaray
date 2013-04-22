@@ -104,11 +104,8 @@ public class SPImporter {
 			if (SPGlobal.noModsAfter && nextMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
 			    SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
 			    break;
-			} else if (!SPGlobal.modsToSkip.contains(nextMod)
-				&& !Ln.hasAnyKeywords(line, SPGlobal.modsToSkipStr)
-				&& ((SPGlobal.modsWhiteList.isEmpty() && SPGlobal.modsWhiteListStr.isEmpty())
-				|| SPGlobal.modsWhiteList.contains(nextMod)
-				|| Ln.hasAnyKeywords(line, SPGlobal.modsWhiteListStr))) {
+			} else if (SPGlobal.shouldImport(nextMod)
+				&& SPGlobal.shouldImport(line)) {
 			    if (pluginName.isFile()) {
 				if (Ln.indexOfIgnoreCase(lines, line) == -1) {
 				    SPGlobal.logSync(header, "Adding mod: " + line);
@@ -219,6 +216,7 @@ public class SPImporter {
      *
      * @return A set of Mods with all their data imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importAllMods() throws MissingMaster {
 	return importAllMods(GRUP_TYPE.values());
@@ -236,6 +234,7 @@ public class SPImporter {
      * you wish to import.
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) throws MissingMaster {
 	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
@@ -253,6 +252,7 @@ public class SPImporter {
      * import
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
@@ -276,6 +276,7 @@ public class SPImporter {
      * @return A set of Mods with all their data imported and ready to be
      * manipulated.
      * @throws IOException
+     * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods() throws IOException, MissingMaster {
 	return importActiveMods(GRUP_TYPE.values());
@@ -298,6 +299,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      * @throws IOException
+     * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException, MissingMaster {
 	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
@@ -320,6 +322,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      * @throws IOException
+     * @throws MissingMaster 
      */
     static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException, MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
@@ -338,6 +341,7 @@ public class SPImporter {
      * you wish to import.
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) throws MissingMaster {
 	return importMods(mods, SPGlobal.pathToData, grup_targets);
@@ -355,6 +359,7 @@ public class SPImporter {
      * import
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
@@ -372,6 +377,7 @@ public class SPImporter {
      * @param mods ModListings to look for and import from the data folder.
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods) throws MissingMaster {
 	return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
@@ -388,6 +394,7 @@ public class SPImporter {
      * @param path Path from patch location to where to load mods from.
      * @return A set of Mods with all GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, String path) throws MissingMaster {
 	return importMods(mods, path, GRUP_TYPE.values());
@@ -404,6 +411,7 @@ public class SPImporter {
      * you wish to import.
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
+     * @throws MissingMaster
      */
     static public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) throws MissingMaster {
 
@@ -474,6 +482,7 @@ public class SPImporter {
      * manipulated.
      * @throws BadMod If SkyProc runs into any unexpected data structures, or
      * has any error importing a mod at all.
+     * @throws MissingMaster
      */
     static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	return importMod(listing, 1000, path, true, grup_targets);
@@ -554,7 +563,7 @@ public class SPImporter {
     static void checkMissingMasters(Mod plugin) throws MissingMaster {
 	ArrayList<ModListing> missingMasters = new ArrayList<>();
 	for (ModListing master : plugin.getMasters()) {
-	    if (SPGlobal.getDB().getMod(master) == null) {
+	    if (SPGlobal.getDB().getMod(master) == null && SPGlobal.shouldImport(master)) {
 		missingMasters.add(master);
 	    }
 	}
@@ -567,10 +576,27 @@ public class SPImporter {
 	}
     }
 
+    /**
+     * A rudimentary mod data Iterator that returns data of subrecords matching typestring.
+     * Will parse all active mods.
+     * NOTE:  Not for general use and not heavily tested.  Use at your own risk.
+     * @param typeString
+     * @param grups
+     * @return
+     */
     static public DirtyParsingIterator getSubRecordsInGRUPs(String typeString, String... grups) {
 	return new DirtyParsingIterator(typeString, grups);
     }
 
+    /**
+     *
+     * A rudimentary mod data Iterator that returns data of subrecords matching typestring.
+     * NOTE:  Not for general use and not heavily tested.  Use at your own risk.
+     * @param targetMod
+     * @param typeString
+     * @param grups
+     * @return
+     */
     static public DirtyParsingIterator getSubRecordsInGRUPs(ModListing targetMod, String typeString, String... grups) {
 	return new DirtyParsingIterator(targetMod, typeString, grups);
     }
@@ -635,6 +661,10 @@ public class SPImporter {
 	}
     }
 
+    /**
+     * A rudimentary parser/iterator that returns data of subrecords with the desired
+     * typestring.
+     */
     public static class DirtyParsingIterator implements Iterator<RecordShrinkArray> {
 
 	String typeString;
@@ -671,6 +701,10 @@ public class SPImporter {
 	    grups = new ArrayList<>(Arrays.asList(grupTypes));
 	}
 
+	/**
+	 *
+	 * @return Current mod being imported from.
+	 */
 	public ModListing activeMod() {
 	    return activeMod;
 	}
