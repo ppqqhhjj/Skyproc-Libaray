@@ -174,7 +174,6 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -184,7 +183,6 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
-
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -497,7 +495,6 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -543,7 +540,6 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -933,7 +929,6 @@ public class SUMprogram implements SUM {
     void runBOSS(ArrayList<PatcherLink> activeLinks) {
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
 	    SwingUtilities.invokeLater(new Runnable() {
-
 		@Override
 		public void run() {
 		    SUMGUI.progress.setStatusNumbered("Running BOSS");
@@ -1015,6 +1010,10 @@ public class SUMprogram implements SUM {
 	    } else if (runJarPatcher(link)) {
 		SPGlobal.logMain("Run Changes", "Successfully ran jar: " + link.path);
 	    } else {
+		int response = JOptionPane.showConfirmDialog(null, "Failed to properly run " + link.getName() + ".  Continue patching?", "Error", JOptionPane.YES_NO_OPTION);
+		if (response == JOptionPane.NO_OPTION) {
+		    SUMGUI.exitProgram(false, true);
+		}
 		SPGlobal.logMain("Run Changes", "UNsuccessfully ran jar: " + link.path);
 	    }
 	}

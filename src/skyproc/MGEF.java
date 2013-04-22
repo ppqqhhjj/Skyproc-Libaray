@@ -451,7 +451,6 @@ public class MGEF extends MajorRecordDescription {
     public MGEF(String edid, String name) {
 	this();
 	originateFromPatch(edid);
-	subRecords.getSubData("OBND").initialize(12);
 	this.setName(name);
     }
 
