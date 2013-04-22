@@ -41,7 +41,7 @@ public class ItemListing extends SubShell {
 	    return false;
 	}
 	final ItemListing other = (ItemListing) obj;
-	if (!getID().equals(other.getID())) {
+	if (!getForm().equals(other.getForm())) {
 	    return false;
 	}
 	return true;
@@ -49,17 +49,20 @@ public class ItemListing extends SubShell {
 
     @Override
     public int hashCode() {
-	return getID().hashCode();
+	return getForm().hashCode();
+    }
+
+    @Override
+    SubRecord getNew(String type) {
+	return new ItemListing();
     }
     
-    
-    
     // Get/set
-    public FormID getID() {
+    public FormID getForm() {
 	return subRecords.getSubFormInt("CNTO").getForm();
     }
     
-    public void setID(FormID id) {
+    public void setForm(FormID id) {
 	subRecords.setSubFormInt("CNTO", id);
     }
     

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Justin Swanson
  */
 public class CONT extends MajorRecordNamed {
-    
+
     // Static prototypes and definitions
     static final SubPrototype CONTprototype = new SubPrototype(MajorRecordNamed.namedProto) {
 
@@ -47,7 +47,7 @@ public class CONT extends MajorRecordNamed {
     ArrayList<String> getTypes() {
 	return Record.getTypeList("CONT");
     }
-    
+
     // Get/Set
 
     /**
@@ -92,7 +92,7 @@ public class CONT extends MajorRecordNamed {
     public boolean addItem(FormID itemReference, int count) {
 	return subRecords.getSubList("CNTO").add(new ItemListing(itemReference, count));
     }
-    
+
     public boolean addItem(ItemListing item) {
 	return subRecords.getSubList("CNTO").add(item);
     }
@@ -120,19 +120,32 @@ public class CONT extends MajorRecordNamed {
     public ArrayList<ItemListing> getItems() {
 	return subRecords.getSubList("CNTO").toPublic();
     }
-    
+
+    final public int replace(MajorRecord target, MajorRecord replacement) {
+	int out = 0;
+	FormID targetF = target.getForm();
+	FormID replaceF = replacement.getForm();
+	for (ItemListing item : getItems()) {
+	    if (item.getForm().equals(targetF)) {
+		out++;
+		item.setForm(replaceF);
+	    }
+	}
+	return out;
+    }
+
     public void setOpenSound(FormID sound) {
 	subRecords.setSubForm("SNAM", sound);
     }
-    
+
     public FormID getOpenSound() {
 	return subRecords.getSubForm("SNAM").getForm();
     }
-    
+
     public void setCloseSound(FormID sound) {
 	subRecords.setSubForm("QNAM", sound);
     }
-    
+
     public FormID getCloseSound() {
 	return subRecords.getSubForm("QNAM").getForm();
     }

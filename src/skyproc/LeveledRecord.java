@@ -251,10 +251,12 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 
     final public int replace(MajorRecord target, MajorRecord replacement) {
 	int out = 0;
+	FormID targetF = target.getForm();
+	FormID replaceF = replacement.getForm();
 	for (LeveledEntry entry : this) {
-	    if (entry.getForm().equals(target.getForm())) {
+	    if (entry.getForm().equals(targetF)) {
 		out++;
-		entry.setForm(replacement.getForm());
+		entry.setForm(replaceF);
 	    }
 	}
 	return out;

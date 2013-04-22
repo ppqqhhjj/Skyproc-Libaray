@@ -1418,7 +1418,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 		    this.setGearedUpWeapons(otherNPC.getGearedUpWeapons());
 		    this.clearItems();
 		    for (ItemListing f : otherNPC.getItems()) {
-			this.addItem(new ItemListing(f.getID(), f.getCount()));
+			this.addItem(new ItemListing(f.getForm(), f.getCount()));
 		    }
 		    break;
 		case USE_AI_PACKAGES:

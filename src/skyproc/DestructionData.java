@@ -78,6 +78,14 @@ public class DestructionData extends SubShell {
 	}
 
 	@Override
+	ArrayList<FormID> allFormIDs() {
+	    ArrayList<FormID> out = new ArrayList<>(2);
+	    out.add(explosion);
+	    out.add(debree);
+	    return out;
+	}
+
+	@Override
 	SubRecord getNew(String type) {
 	    return new DSTD();
 	}

@@ -21,8 +21,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.CONT};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.PROJ};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
 
     /**
@@ -61,8 +61,8 @@ public class SkyProcTester {
 	    "Skyrim.esm",
 	    "Update.esm",
 	    "Dawnguard.esm",
-	    "Dragonborn.esm",
-	};
+	    "Dragonborn.esm",};
+	SPGlobal.checkMissingMasters = false;
 	for (String mod : mods) {
 	    if (!validate(new ModListing(mod))) {
 		break;
@@ -75,38 +75,32 @@ public class SkyProcTester {
 	SubStringPointer.shortNull = false;
 
 	FormID.allIDs.clear();
-	SPImporter.importMod(mod, SPGlobal.pathToData, types);
 
 	SPProgressBarPlug.reset();
 	SPProgressBarPlug.setMax(types.length);
 
 	boolean exportPass = true;
+	boolean idPass = true;
 	for (GRUP_TYPE g : types) {
 	    if (!GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
+		SPImporter.importMod(mod, SPGlobal.pathToData, g);
 		if (!test(g, mod)) {
 		    SPProgressBarPlug.setStatus("FAILED: " + g);
 		    exportPass = false;
 		    break;
 		}
 		SPProgressBarPlug.setStatus("Validating DONE");
+		for (FormID id : FormID.allIDs) {
+		    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id)) {
+			System.out.println("A bad id: " + id);
+			System.out.println("Some FormIDs were unstandardized!!");
+			return false;
+		    }
+		}
+		System.out.println("All FormIDs properly standardized.");
 	    }
+	    SPGlobal.reset();
 	}
-
-	boolean idPass = true;
-	for (FormID id : FormID.allIDs) {
-	    if (!id.isNull() && id.getMaster() == null && !badIDs.contains(id)) {
-		System.out.println("A bad id: " + id);
-		idPass = false;
-		break;
-	    }
-	}
-	if (!idPass) {
-	    System.out.println("Some FormIDs were unstandardized!!");
-	} else {
-	    System.out.println("All FormIDs properly standardized.");
-	}
-
-//	SPGlobal.reset();
 
 	return exportPass && idPass;
     }

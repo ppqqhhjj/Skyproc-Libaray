@@ -14,7 +14,7 @@ import skyproc.exceptions.BadRecord;
  * SubRecord that has a FormID followed by an integer.
  * @author Justin Swanson
  */
-public class SubFormInt extends SubFormData {
+public class SubFormInt extends SubForm {
 
     int num;
 
@@ -30,14 +30,14 @@ public class SubFormInt extends SubFormData {
 
     @Override
     void export(ModExporter out) throws IOException {
-	data = Ln.toByteArray(num, 4);
 	super.export(out);
+	out.write(num);
     }
 
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
         super.parseData(in, srcMod);
-        num = Ln.arrayToInt(data);
+        num = in.extractInt(4);
     }
 
     @Override

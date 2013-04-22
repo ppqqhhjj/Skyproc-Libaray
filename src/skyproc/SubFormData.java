@@ -59,9 +59,6 @@ class SubFormData extends SubForm {
 
     public void setData(byte[] in) {
 	data = in;
-	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " data: " + Ln.printHex(in, false, true));
-	}
     }
 
     @Override

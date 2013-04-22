@@ -24,9 +24,6 @@ class SubForm extends SubRecordTyped {
     FormID ID = new FormID();
 
     void setForm(byte[] in) throws BadParameter {
-	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " FormID: " + Ln.printHex(in, false, true));
-	}
 	ID.setInternal(in);
     }
 

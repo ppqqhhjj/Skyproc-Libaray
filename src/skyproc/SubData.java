@@ -50,9 +50,6 @@ class SubData extends SubRecordTyped {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	setData(in.extractAllBytes());
-	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + print());
-	}
     }
 
     @Override

@@ -503,7 +503,9 @@ public class SPImporter {
 	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
-	    checkMissingMasters(plugin);
+	    if (SPGlobal.checkMissingMasters) {
+		checkMissingMasters(plugin);
+	    }
 	    plugin.input = input;
 	    if (SPGlobal.streamMode) {
 		plugin.input = input;
