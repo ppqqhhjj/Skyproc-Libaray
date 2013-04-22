@@ -30,8 +30,7 @@ class Consistency {
     static String debugFolder = "Consistency/";
 
     static FormID getOldForm(String edid) {
-	FormID id = storage.get(SPGlobal.getGlobalPatch().getInfo()).get(edid);
-	return id;
+	return storage.get(SPGlobal.getGlobalPatch().getInfo()).get(edid);
     }
 
     static boolean requestID(FormID id) {
@@ -99,12 +98,14 @@ class Consistency {
     static void clear() {
 	storage.clear();
 	set.clear();
-	storage.put(SPGlobal.getGlobalPatch().getInfo(), new HashMap<String, FormID>());
 	imported = false;
     }
 
     static void importConsistency(boolean globalOnly) {
 	try {
+	    if (!imported) {
+		storage.put(SPGlobal.getGlobalPatch().getInfo(), new HashMap<String, FormID>());
+	    }
 	    getConsistencyFile();
 	    v2import(globalOnly);
 	    v1import(globalOnly);
