@@ -174,6 +174,7 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -183,6 +184,7 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
+
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -495,6 +497,7 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -540,6 +543,7 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -853,6 +857,7 @@ public class SUMprogram implements SUM {
 	// Setup
 	ArrayList<PatcherLink> activeLinks = getActiveLinks();
 	setupProgress(activeLinks);
+	checkMemAllocation();
 
 	// BOSS and sorting
 	setupLinksForBOSS(activeLinks);
@@ -865,6 +870,25 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.progress.done();
 	SUMGUI.exitProgram(true, true);
+    }
+
+    void checkMemAllocation() {
+	File f = new File("Files/MemTester.jar");
+	if (f.exists()) {
+	    ArrayList<String> args = new ArrayList<>();
+	    args.add("java");
+	    args.add("-jar");
+	    args.add("-Xms200m");
+	    args.add("-Xmx" + SUMsave.getInt(SUMSettings.MAX_MEM) + "m");
+	    args.add(f.getPath());
+	    boolean pass = NiftyFunc.startProcess(new File(f.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
+	    if (!pass) {
+		JOptionPane.showMessageDialog(null, "Could not allocate " + SUMsave.getInt(SUMSettings.MAX_MEM) 
+			+ " megabytes from the OS.  Lower the amount and try again.");
+		SPGlobal.logMain("Run Changes", "Mem allocation test failed.");
+		SUMGUI.exitProgram(false, true);
+	    }
+	}
     }
 
     void setupProgress(ArrayList<PatcherLink> activeLinks) {
@@ -929,6 +953,7 @@ public class SUMprogram implements SUM {
     void runBOSS(ArrayList<PatcherLink> activeLinks) {
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
 	    SwingUtilities.invokeLater(new Runnable() {
+
 		@Override
 		public void run() {
 		    SUMGUI.progress.setStatusNumbered("Running BOSS");
