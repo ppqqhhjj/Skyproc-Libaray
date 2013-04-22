@@ -881,7 +881,7 @@ public class SUMprogram implements SUM {
 	    args.add("-Xms200m");
 	    args.add("-Xmx" + SUMsave.getInt(SUMSettings.MAX_MEM) + "m");
 	    args.add(f.getPath());
-	    boolean pass = NiftyFunc.startProcess(new File(f.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
+	    boolean pass = NiftyFunc.startProcess(null, args.toArray(new String[0]));
 	    if (!pass) {
 		JOptionPane.showMessageDialog(null, "Could not allocate " + SUMsave.getInt(SUMSettings.MAX_MEM) 
 			+ " megabytes from the OS.  Lower the amount and try again.");
