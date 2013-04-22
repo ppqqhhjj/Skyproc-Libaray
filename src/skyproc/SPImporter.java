@@ -157,10 +157,10 @@ public class SPImporter {
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();
 	    for (File f : files) {
-		String name = f.getName();
-		if (name.contains(".esp") || name.contains(".esm")) {
-		    if (!SPGlobal.modsToSkip.contains(new ModListing(name))) {
-			out.add(name);
+		String name = f.getName().toUpperCase();
+		if (name.contains(".ESP") || name.contains(".ESM")) {
+		    if (!SPGlobal.modsToSkip.contains(new ModListing(f.getName()))) {
+			out.add(f.getName());
 		    } else if (SPGlobal.logging()) {
 			SPGlobal.logSync(header, "Mod was on the list to skip: " + name);
 		    }
@@ -177,7 +177,7 @@ public class SPImporter {
 	ArrayList<String> esps = new ArrayList<>();
 
 	for (String line : lines) {
-	    if (line.contains(".esm")) {
+	    if (line.toUpperCase().contains(".ESM")) {
 		esms.add(line);
 	    } else {
 		esps.add(line);
@@ -322,7 +322,7 @@ public class SPImporter {
      * @return A set of Mods with specified GRUPs imported and ready to be
      * manipulated.
      * @throws IOException
-     * @throws MissingMaster 
+     * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException, MissingMaster {
 	GRUP_TYPE[] tmp = new GRUP_TYPE[0];

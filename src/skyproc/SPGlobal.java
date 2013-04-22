@@ -155,6 +155,7 @@ public class SPGlobal {
      * @param s
      */
     public static void addModToSkip(String s) {
+	s = s.toUpperCase();
 	if (s.contains(".ESP") || s.contains(".ESM")) {
 	    addModToSkip(new ModListing(s));
 	} else {
