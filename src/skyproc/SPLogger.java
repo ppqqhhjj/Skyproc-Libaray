@@ -1,6 +1,7 @@
 package skyproc;
 
 import lev.debug.LLogger;
+import skyproc.Consistency.LogTypes;
 
 /**
  * An extended Levnifty LLogger object that also has a BLOCKED logstream as a place
@@ -18,7 +19,8 @@ class SPLogger extends LLogger {
     public SPLogger (String in) {
         super(in);
         addSpecial(SpecialTypes.BLOCKED, "Blocked Records.txt");
-        addSpecial(PrivateTypes.CONSISTENCY, Consistency.debugFolder + "Requests.txt");
+        addSpecial(Consistency.LogTypes.CONSISTENCY, Consistency.debugFolder + "Requests.txt");
+        addSpecial(BSA.LogTypes.BSA, "BSA.txt");
     }
 
     /**
@@ -30,9 +32,5 @@ class SPLogger extends LLogger {
 	 * A logstream used for logging which records have been skipped/blockec.
 	 */
 	BLOCKED;
-    }
-
-    static enum PrivateTypes {
-	CONSISTENCY;
     }
 }

@@ -59,12 +59,12 @@ public class BSA {
 	fileNameLength = in.extractInt(0, 4);
 	fileFlags = new LFlags(in.extract(0, 4));
 	if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-	    SPGlobal.log(header, "Imported " + filePath);
-	    SPGlobal.log(header, "Offset " + offset + ", archiveFlags: " + archiveFlags);
-	    SPGlobal.log(header, "hasDirectoryNames: " + archiveFlags.get(0) + ", hasFileNames: " + archiveFlags.get(1) + ", compressed: " + archiveFlags.get(2));
-	    SPGlobal.log(header, "FolderCount: " + Ln.prettyPrintHex(folderCount) + ", FileCount: " + Ln.prettyPrintHex(fileCount));
-	    SPGlobal.log(header, "totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
-	    SPGlobal.log(header, "fileFlags: " + fileFlags.toString());
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "Imported " + filePath);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "Offset " + offset + ", archiveFlags: " + archiveFlags);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "hasDirectoryNames: " + archiveFlags.get(0) + ", hasFileNames: " + archiveFlags.get(1) + ", compressed: " + archiveFlags.get(2));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "FolderCount: " + Ln.prettyPrintHex(folderCount) + ", FileCount: " + Ln.prettyPrintHex(fileCount));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "fileFlags: " + fileFlags.toString());
 	}
 	if (load) {
 	    loadFolders();
@@ -105,7 +105,7 @@ public class BSA {
 		in.skip(1);
 		folders.put(folderName.toUpperCase(), files);
 		if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-		    SPGlobal.log(header, "Loaded folder: " + folderName);
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded folder: " + folderName);
 		}
 		for (int j = 0; j < count; j++) {
 		    BSAFileRef f = new BSAFileRef();
@@ -116,16 +116,16 @@ public class BSA {
 		    fileName = fileNames.extractString();
 		    files.put(fileName.toUpperCase(), f);
 		    if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-			SPGlobal.log(header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
+			SPGlobal.logSpecial(LogTypes.BSA, header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
 			fileCounter++;
 		    }
 		}
 	    }
 	    if (SPGlobal.logging()) {
 		if (SPGlobal.debugBSAimport) {
-		    SPGlobal.log(header, "Loaded " + fileCounter + " files.");
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded " + fileCounter + " files.");
 		}
-		SPGlobal.log(header, "Loaded BSA: " + getFilePath());
+		SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded BSA: " + getFilePath());
 	    }
 	} catch (Exception e) {
 	    SPGlobal.logException(e);
@@ -244,7 +244,7 @@ public class BSA {
     static public LShrinkArray getUsedFile(String filePath) throws IOException, DataFormatException {
 	File outsideBSA = new File(SPGlobal.pathToData + filePath);
 	if (outsideBSA.isFile()) {
-	    SPGlobal.log(header, "  Nif " + outsideBSA.getPath() + " loaded from loose files.");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "  Nif " + outsideBSA.getPath() + " loaded from loose files.");
 	    return new LShrinkArray(outsideBSA);
 	} else {
 	    Iterator<BSA> bsas = BSA.iterator();
@@ -257,7 +257,7 @@ public class BSA {
 	    }
 	    if (bsa != null) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "  Nif " + filePath + " loaded from BSA " + bsa.getFilePath());
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "  Nif " + filePath + " loaded from BSA " + bsa.getFilePath());
 		}
 		return bsa.getFile(filePath);
 	    }
@@ -270,7 +270,7 @@ public class BSA {
 	    return;
 	}
 	if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "Loading in active plugin BSA headers.");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "Loading in active plugin BSA headers.");
 	}
 	try {
 	    ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
@@ -300,7 +300,7 @@ public class BSA {
 		File ini = SPGlobal.getSkyrimINI();
 
 		if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "Loading in BSA list from Skyrim.ini: " + ini);
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loading in BSA list from Skyrim.ini: " + ini);
 		}
 		LInChannel input = new LInChannel(ini);
 
@@ -373,11 +373,11 @@ public class BSA {
 	    }
 
 	    if (SPGlobal.logging()) {
-		SPGlobal.log(header, "BSA resource load order: ");
+		SPGlobal.logSpecial(LogTypes.BSA, header, "BSA resource load order: ");
 		for (String s : resources) {
-		    SPGlobal.log(header, "  " + s);
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "  " + s);
 		}
-		SPGlobal.log(header, "Loading in their headers.");
+		SPGlobal.logSpecial(LogTypes.BSA, header, "Loading in their headers.");
 	    }
 
 	    resourceLoadOrder = new ArrayList<>(resources.size());
@@ -386,7 +386,7 @@ public class BSA {
 		if (bsaPath.exists()) {
 		    try {
 			if (SPGlobal.logging()) {
-			    SPGlobal.log(header, "Loading: " + bsaPath);
+			    SPGlobal.logSpecial(LogTypes.BSA, header, "Loading: " + bsaPath);
 			}
 			BSA bsa = new BSA(bsaPath, false);
 			resourceLoadOrder.add(bsa);
@@ -394,7 +394,7 @@ public class BSA {
 			SPGlobal.logException(ex);
 		    }
 		} else if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "  BSA skipped because it didn't exist: " + bsaPath);
 		}
 	    }
 
@@ -405,7 +405,7 @@ public class BSA {
 
     static ArrayList<String> processINIline(String in) {
 	if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "Processing line: " + in);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "Processing line: " + in);
 	}
 	ArrayList<String> out = new ArrayList<>();
 	int index = in.indexOf("=");
@@ -638,7 +638,7 @@ public class BSA {
 	}
 
 	if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "  BSA skipped because it didn't exist: " + bsaPath);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "  BSA skipped because it didn't exist: " + bsaPath);
 	}
 	return null;
     }
@@ -762,4 +762,12 @@ public class BSA {
 	 */
 	CTL
     }
+    
+    public static enum LogTypes {
+	/**
+	 * A logstream used for logging which records have been skipped/blockec.
+	 */
+	BSA;
+    }
+    
 }

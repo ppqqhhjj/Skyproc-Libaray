@@ -304,10 +304,10 @@ public class SPGlobal {
 	}
 
 	if (!ini.exists()) {
-	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
+	    SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
 	    ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
 	} else if (SPGlobal.logging()) {
-	    SPGlobal.log(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
+	    SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
 	}
 	return ini;
     }

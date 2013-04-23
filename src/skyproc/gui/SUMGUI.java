@@ -833,7 +833,7 @@ public class SUMGUI extends JFrame {
     }
 
     static void closingGUIwindow() {
-	SPGlobal.log(header, "Window Closing.");
+	SPGlobal.logMain(header, "Window Closing.");
 	if (justSettings) {
 	    exitProgram(false, true);
 	}

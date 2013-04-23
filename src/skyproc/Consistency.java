@@ -46,7 +46,7 @@ class Consistency {
 	if (saved != null) {
 	    // If have an ID on record
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Assigning FormID " + saved + " for EDID " + edid);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "Assigning FormID " + saved + " for EDID " + edid);
 	    }
 	    m.setForm(saved);
 	} else if (m.getForm().isNull()) {
@@ -55,7 +55,7 @@ class Consistency {
 	    Consistency.insert(edid, freshID);
 	    m.setForm(freshID);
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Assigning FRESH FormID " + freshID + " for EDID " + edid);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "Assigning FRESH FormID " + freshID + " for EDID " + edid);
 	    }
 	}
     }
@@ -140,9 +140,9 @@ class Consistency {
 		conflicts.put(id, EDID);
 		conflicts.put(id, offendingEDID);
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>> Duplicate FormID warning.  ID: " + id + "  EDID: " + EDID + " and EDID2: " + offendingEDID);
-		    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "!!!>>> Duplicate FormID warning.  ID: " + id + "  EDID: " + EDID + " and EDID2: " + offendingEDID);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		}
 	    }
 	    modEDIDlist.put(EDID, id);
@@ -192,7 +192,7 @@ class Consistency {
 	    out.close();
 	} catch (IOException ex) {
 	    SPGlobal.logException(ex);
-	    SPGlobal.logSpecial(SPLogger.PrivateTypes.CONSISTENCY, header, "Error exporting Consistency file.");
+	    SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "Error exporting Consistency file.");
 	    JOptionPane.showMessageDialog(null, "<html>There was an error exporting the consistency information.<br><br>"
 		    + "This means your savegame has a good chance of having mismatched records the next<br>"
 		    + "time you run the patcher.</html>");
@@ -254,12 +254,14 @@ class Consistency {
 	    return false;
 	}
 	if (SPGlobal.logging()) {
+	    String name;
 	    if (globalOnly) {
-		SPGlobal.newLog(debugFolder + "Import - V2 - Only Global.txt");
+		name = debugFolder + "Import - V2 - Only Global.txt";
 	    } else {
-		SPGlobal.newLog(debugFolder + "Import - V2 - Remaining.txt");
+		name = debugFolder + "Import - V2 - Remaining.txt";
 	    }
-	    SPGlobal.log("v2Import", "Importing v2 consistency file.");
+	    SPGlobal.newSpecialLog(LogTypes.CONSISTENCY_IMPORT, name);
+	    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "Importing v2 consistency file.");
 	}
 	LInChannel in = new LInChannel(f);
 	in.skip(4);
@@ -276,9 +278,9 @@ class Consistency {
 	}
 	for (ModListing m : headerMap.keySet()) {
 	    if (SPGlobal.logging()) {
-		SPGlobal.log("v2Import", "===========================");
-		SPGlobal.log("v2Import", "== Importing " + m);
-		SPGlobal.log("v2Import", "===========================");
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "===========================");
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "== Importing " + m);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "===========================");
 	    }
 	    in.pos(headerMap.get(m));
 	    int length = in.extractInt(0, 4);
@@ -289,9 +291,9 @@ class Consistency {
 		String FormStr = in.extractString(6);
 		FormID ID = new FormID(FormStr, m);
 		if (SPGlobal.logging()) {
-		    SPGlobal.log("v2Import", "  | EDID: " + EDID);
-		    SPGlobal.log("v2Import", "  | Form: " + FormStr);
-		    SPGlobal.log("v2Import", "  |============================");
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "  | EDID: " + EDID);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "  | Form: " + FormStr);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v2Import", "  |============================");
 		}
 		insert(EDID, ID);
 	    }
@@ -320,12 +322,14 @@ class Consistency {
 	    return false;
 	}
 	if (SPGlobal.logging()) {
+	    String name;
 	    if (globalOnly) {
-		SPGlobal.newLog(debugFolder + "Import - V1 - Only Global.txt");
+		name = debugFolder + "Import - V1 - Only Global.txt";
 	    } else {
-		SPGlobal.newLog(debugFolder + "Import - V1 - Remaining.txt");
+		name = debugFolder + "Import - V1 - Remaining.txt";
 	    }
-	    SPGlobal.log("v1Import", "Importing v1 consistency file.");
+	    SPGlobal.newSpecialLog(LogTypes.CONSISTENCY_IMPORT, name);
+	    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v1Import", "Importing v1 consistency file.");
 	}
 	BufferedReader in = new BufferedReader(new FileReader(f));
 	while (in.ready()) {
@@ -336,7 +340,7 @@ class Consistency {
 	    boolean fail = false;
 	    while (in.ready() && !form.toUpperCase().endsWith(".ESP") && !form.toUpperCase().endsWith(".ESM")) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.log("v1Import", "  Read fail line: " + form);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "v1Import", "  Read fail line: " + form);
 		}
 		form = in.readLine();
 		fail = true;
@@ -350,11 +354,17 @@ class Consistency {
 	    boolean isGlobal = ID.getMaster().equals(SPGlobal.getGlobalPatch().getInfo());
 	    if ((globalOnly && isGlobal) || (!globalOnly && !isGlobal)) {
 		if (insert(EDID, ID) && SPGlobal.logging()) {
-		    SPGlobal.log("Consistency Import", "  Inserting " + form + " with " + EDID);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Consistency Import", "  Inserting " + form + " with " + EDID);
 		}
 	    }
 	}
 	in.close();
 	return true;
+    }
+
+    static enum LogTypes {
+	CONSISTENCY,
+	CONSISTENCY_IMPORT,
+	;
     }
 }
