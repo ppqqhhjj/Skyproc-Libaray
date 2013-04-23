@@ -123,9 +123,6 @@ class SubRecordsStream extends SubRecordsDerived {
 		    major.srcMod.input.pos(position.pos);
 		    if (SPGlobal.debugStream && SPGlobal.logging()) {
 			if (!major.equals(SPGlobal.lastStreamed)) {
-			    if (major.getEDID().equals("DremoraBoots")) {
-				int wer = 23;
-			    }
 			    SPGlobal.logSync("Stream", "Streaming from " + major);
 			    SPGlobal.lastStreamed = major;
 			}

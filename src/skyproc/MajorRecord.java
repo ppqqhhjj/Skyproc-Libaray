@@ -161,7 +161,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    logSync(getTypes().toString(), "Decompressed");
 	}
 
-	if ("EDID".equals(getNextType(in))) {
+	if (!in.isDone() && "EDID".equals(getNextType(in))) {
 	    SubString EDID = subRecords.getSubString("EDID");
 	    EDID.parseData(EDID.extractRecordData(in), srcMod);
 	}
