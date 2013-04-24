@@ -22,7 +22,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 
     byte[] contained;
     byte[] grupType = new byte[4];
-    byte[] dateStamp = {0x13, (byte) 0x6F, 0, 0};
+    byte[] dateStamp = new byte[4];
     byte[] version = new byte[4];
     ArrayList<T> listRecords = new ArrayList<>();
     Map<FormID, T> mapRecords = new HashMap<>();
@@ -106,7 +106,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	    } else if (logging()) {
 		logMod(srcMod, toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
 	    }
-	    
+
 	    return item;
 	} catch (java.nio.BufferUnderflowException e) {
 	    SPGlobal.logException(e);

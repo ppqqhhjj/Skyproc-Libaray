@@ -25,42 +25,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
     TES4 tes = new TES4();
     ModListing modInfo;
     Map<GRUP_TYPE, GRUP> GRUPs = new EnumMap<>(GRUP_TYPE.class);
-    GRUP<GMST> gameSettings = new GRUP<>(new GMST());
-    GRUP<KYWD> keywords = new GRUP<>(new KYWD());
-    GRUP<TXST> textures = new GRUP<>(new TXST());
-    GRUP<GLOB> globals = new GRUP<>(new GLOB());
-    GRUP<FACT> factions = new GRUP<>(new FACT());
-    GRUP<HDPT> headParts = new GRUP<>(new HDPT());
-    GRUP<RACE> races = new GRUP<>(new RACE());
-    GRUP<MGEF> magicEffects = new GRUP<>(new MGEF());
-    GRUP<ENCH> enchantments = new GRUP<>(new ENCH());
-    GRUP<SPEL> spells = new GRUP<>(new SPEL());
-    GRUP<ARMO> armors = new GRUP<>(new ARMO());
-    GRUP<BOOK> books = new GRUP<>(new BOOK());
-    GRUP<CONT> containers = new GRUP<>(new CONT());
-    GRUP<INGR> ingredients = new GRUP<>(new INGR());
-    GRUP<MISC> miscObjects = new GRUP<>(new MISC());
-    GRUP<ALCH> alchemy = new GRUP<>(new ALCH());
-    GRUP<COBJ> constructibleObjects = new GRUP<>(new COBJ());
-    GRUP<PROJ> projectiles = new GRUP<>(new PROJ());
-    GRUP<WEAP> weapons = new GRUP<>(new WEAP());
-    GRUP<AMMO> ammo = new GRUP<>(new AMMO());
-    GRUP<NPC_> NPCs = new GRUP<>(new NPC_());
-    GRUP<LVLN> leveledCreatures = new GRUP<>(new LVLN());
-    GRUP<LVLI> leveledItems = new GRUP<>(new LVLI());
-    GRUP<WTHR> weathers = new GRUP<>(new WTHR());
-    GRUPRecursive<DIAL> dialogs = new GRUPRecursive<>(new DIAL());
-    GRUP<QUST> quests = new GRUP<>(new QUST());
-    GRUP<IMGS> imageSpaces = new GRUP<>(new IMGS());
-    GRUP<FLST> formLists = new GRUP<>(new FLST());
-    GRUP<PERK> perks = new GRUP<>(new PERK());
-    GRUP<AVIF> actorValues = new GRUP<>(new AVIF());
-    GRUP<ARMA> armatures = new GRUP<>(new ARMA());
-    GRUP<ECZN> encounterZones = new GRUP<>(new ECZN());
-    GRUP<LGTM> lightingTemplates = new GRUP<>(new LGTM());
-    GRUP<DLBR> dialogBranches = new GRUP<>(new DLBR());
-    GRUP<DLVW> dialogViews = new GRUP<>(new DLVW());
-    GRUP<OTFT> outfits = new GRUP<>(new OTFT());
     LInChannel input;
     Language language = Language.English;
     Map<ModListing, Integer> masterMap = new HashMap<>();
@@ -109,6 +73,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
+    void addGRUP(MajorRecord r) {
+	GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUP(r));
+    }
+
+    void addGRUPrecursive(MajorRecord r) {
+	GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUPRecursive(r));
+    }
+
     final void init(ModListing info) {
 	this.modInfo = info;
 	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
@@ -116,52 +88,43 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	stringLocations.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
 	stringLocations.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
 	stringLocations.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
-	GRUPs.put(gameSettings.getContainedType(), gameSettings);
-	GRUPs.put(keywords.getContainedType(), keywords);
-	GRUPs.put(textures.getContainedType(), textures);
-	GRUPs.put(globals.getContainedType(), globals);
-	factions.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
-	GRUPs.put(factions.getContainedType(), factions);
-	headParts.dateStamp = new byte[]{(byte) 0x18, (byte) 0x51, 3, 0};
-	GRUPs.put(headParts.getContainedType(), headParts);
-	GRUPs.put(races.getContainedType(), races);
-	GRUPs.put(magicEffects.getContainedType(), magicEffects);
-	enchantments.dateStamp = new byte[]{(byte) 0x12, (byte) 0x4A, (byte) 0x20, 0};
-	GRUPs.put(enchantments.getContainedType(), enchantments);
-	GRUPs.put(spells.getContainedType(), spells);
-	GRUPs.put(armors.getContainedType(), armors);
-	GRUPs.put(books.getContainedType(), books);
-	GRUPs.put(containers.getContainedType(), containers);
-	ingredients.dateStamp = new byte[]{1, (byte) 0x4C, (byte) 0x2F, 0};
-	GRUPs.put(ingredients.getContainedType(), ingredients);
-	miscObjects.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
-	GRUPs.put(miscObjects.getContainedType(), miscObjects);
-	alchemy.dateStamp = new byte[]{3, (byte) 0x3D, 2, 0};
-	GRUPs.put(alchemy.getContainedType(), alchemy);
-	GRUPs.put(constructibleObjects.getContainedType(), constructibleObjects);
-	GRUPs.put(projectiles.getContainedType(), projectiles);
-	GRUPs.put(weapons.getContainedType(), weapons);
-	ammo.dateStamp = new byte[]{(byte) 0x0E, (byte) 0x4D, (byte) 0x2B, 0};
-	GRUPs.put(ammo.getContainedType(), ammo);
-	GRUPs.put(NPCs.getContainedType(), NPCs);
-	GRUPs.put(leveledCreatures.getContainedType(), leveledCreatures);
-	leveledItems.dateStamp = new byte[]{(byte) 0x1E, (byte) 0x4C, (byte) 0x23, 0};
-	GRUPs.put(leveledItems.getContainedType(), leveledItems);
-	GRUPs.put(weathers.getContainedType(), weathers);
-	GRUPs.put(dialogs.getContainedType(), dialogs);
-	GRUPs.put(quests.getContainedType(), quests);
-	GRUPs.put(imageSpaces.getContainedType(), imageSpaces);
-	GRUPs.put(formLists.getContainedType(), formLists);
-	GRUPs.put(perks.getContainedType(), perks);
-	actorValues.dateStamp = new byte[]{(byte) 0x1B, (byte) 0x4D, (byte) 0x2B, 0};
-	GRUPs.put(actorValues.getContainedType(), actorValues);
-	GRUPs.put(armatures.getContainedType(), armatures);
-	GRUPs.put(encounterZones.getContainedType(), encounterZones);
-	outfits.dateStamp = new byte[]{(byte) 0x17, (byte) 0x4E, (byte) 0x23, 0};
-	GRUPs.put(lightingTemplates.getContainedType(), lightingTemplates);
-	GRUPs.put(dialogBranches.getContainedType(), dialogBranches);
-	GRUPs.put(dialogViews.getContainedType(), dialogViews);
-	GRUPs.put(outfits.getContainedType(), outfits);
+	addGRUP(new GMST());
+	addGRUP(new KYWD());
+	addGRUP(new TXST());
+	addGRUP(new GLOB());
+	addGRUP(new FACT());
+	addGRUP(new HDPT());
+	addGRUP(new RACE());
+	addGRUP(new MGEF());
+	addGRUP(new ENCH());
+	addGRUP(new SPEL());
+	addGRUP(new ARMO());
+	addGRUP(new BOOK());
+	addGRUP(new CONT());
+	addGRUP(new INGR());
+	addGRUP(new MISC());
+	addGRUP(new ALCH());
+	addGRUP(new COBJ());
+	addGRUP(new PROJ());
+	addGRUP(new WEAP());
+	addGRUP(new AMMO());
+	addGRUP(new NPC_());
+	addGRUP(new LVLN());
+	addGRUP(new LVLI());
+	addGRUP(new WTHR());
+	addGRUPrecursive(new DIAL());
+	addGRUP(new QUST());
+	addGRUP(new IMGS());
+	addGRUP(new FLST());
+	addGRUP(new PERK());
+	addGRUP(new VTYP());
+	addGRUP(new AVIF());
+	addGRUP(new ARMA());
+	addGRUP(new ECZN());
+	addGRUP(new LGTM());
+	addGRUP(new DLBR());
+	addGRUP(new DLVW());
+	addGRUP(new OTFT());
     }
 
     /**
@@ -977,7 +940,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Leveled List records.
      */
     public GRUP<LVLN> getLeveledCreatures() {
-	return leveledCreatures;
+	return GRUPs.get(GRUP_TYPE.LVLN);
     }
 
     /**
@@ -986,7 +949,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing NPC records.
      */
     public GRUP<NPC_> getNPCs() {
-	return NPCs;
+	return GRUPs.get(GRUP_TYPE.NPC_);
     }
 
     /**
@@ -995,7 +958,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Image Space records.
      */
     public GRUP<IMGS> getImageSpaces() {
-	return imageSpaces;
+	return GRUPs.get(GRUP_TYPE.IMGS);
     }
 
     /**
@@ -1004,7 +967,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Perk records.
      */
     public GRUP<PERK> getPerks() {
-	return perks;
+	return GRUPs.get(GRUP_TYPE.PERK);
     }
 
     /**
@@ -1013,7 +976,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Spell records.
      */
     public GRUP<SPEL> getSpells() {
-	return spells;
+	return GRUPs.get(GRUP_TYPE.SPEL);
     }
 
     /**
@@ -1022,7 +985,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Race records
      */
     public GRUP<RACE> getRaces() {
-	return races;
+	return GRUPs.get(GRUP_TYPE.RACE);
     }
 
     /**
@@ -1031,7 +994,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armor records
      */
     public GRUP<ARMO> getArmors() {
-	return armors;
+	return GRUPs.get(GRUP_TYPE.ARMO);
     }
 
     /**
@@ -1040,7 +1003,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armature records
      */
     public GRUP<ARMA> getArmatures() {
-	return armatures;
+	return GRUPs.get(GRUP_TYPE.ARMA);
     }
 
     /**
@@ -1049,7 +1012,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Texture records
      */
     public GRUP<TXST> getTextureSets() {
-	return textures;
+	return GRUPs.get(GRUP_TYPE.TXST);
     }
 
     /**
@@ -1058,7 +1021,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Weapon records
      */
     public GRUP<WEAP> getWeapons() {
-	return weapons;
+	return GRUPs.get(GRUP_TYPE.WEAP);
     }
 
     /**
@@ -1067,7 +1030,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Keyword records
      */
     public GRUP<KYWD> getKeywords() {
-	return keywords;
+	return GRUPs.get(GRUP_TYPE.KYWD);
     }
 
     /**
@@ -1076,7 +1039,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Keyword records
      */
     public GRUP<FLST> getFormLists() {
-	return formLists;
+	return GRUPs.get(GRUP_TYPE.FLST);
     }
 
     /**
@@ -1085,7 +1048,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Magic Effect records
      */
     public GRUP<MGEF> getMagicEffects() {
-	return magicEffects;
+	return GRUPs.get(GRUP_TYPE.MGEF);
     }
 
     /**
@@ -1094,7 +1057,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Alchemy records
      */
     public GRUP<ALCH> getAlchemy() {
-	return alchemy;
+	return GRUPs.get(GRUP_TYPE.ALCH);
     }
 
     /**
@@ -1103,7 +1066,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Ingredient records
      */
     public GRUP<INGR> getIngredients() {
-	return ingredients;
+	return GRUPs.get(GRUP_TYPE.INGR);
     }
 
     /**
@@ -1112,7 +1075,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Ammo records
      */
     public GRUP<AMMO> getAmmo() {
-	return ammo;
+	return GRUPs.get(GRUP_TYPE.AMMO);
     }
 
     /**
@@ -1121,7 +1084,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Faction records
      */
     public GRUP<FACT> getFactions() {
-	return factions;
+	return GRUPs.get(GRUP_TYPE.FACT);
     }
 
     /**
@@ -1130,7 +1093,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Game Setting records
      */
     public GRUP<GMST> getGameSettings() {
-	return gameSettings;
+	return GRUPs.get(GRUP_TYPE.GMST);
     }
 
     /**
@@ -1139,7 +1102,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Enchantments records
      */
     public GRUP<ENCH> getEnchantments() {
-	return enchantments;
+	return GRUPs.get(GRUP_TYPE.ENCH);
     }
 
     /**
@@ -1148,7 +1111,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Leveled Items records
      */
     public GRUP<LVLI> getLeveledItems() {
-	return leveledItems;
+	return GRUPs.get(GRUP_TYPE.LVLI);
     }
 
     /**
@@ -1157,7 +1120,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing ActorValue records
      */
     public GRUP<AVIF> getActorValues() {
-	return actorValues;
+	return GRUPs.get(GRUP_TYPE.AVIF);
     }
 
     /**
@@ -1166,7 +1129,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Encounter Zone records
      */
     public GRUP<ECZN> getEncounterZones() {
-	return encounterZones;
+	return GRUPs.get(GRUP_TYPE.ECZN);
     }
 
     /**
@@ -1175,7 +1138,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Global records
      */
     public GRUP<GLOB> getGlobals() {
-	return globals;
+	return GRUPs.get(GRUP_TYPE.GLOB);
     }
 
     /**
@@ -1184,7 +1147,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Constructible Object records
      */
     public GRUP<COBJ> getConstructibleObjects() {
-	return constructibleObjects;
+	return GRUPs.get(GRUP_TYPE.COBJ);
     }
 
     /**
@@ -1193,7 +1156,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Misc Object records
      */
     public GRUP<MISC> getMiscObjects() {
-	return miscObjects;
+	return GRUPs.get(GRUP_TYPE.MISC);
     }
 
     /**
@@ -1202,7 +1165,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing outfit records
      */
     public GRUP<OTFT> getOutfits() {
-	return outfits;
+	return GRUPs.get(GRUP_TYPE.OTFT);
     }
 
     /**
@@ -1211,7 +1174,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing head part records
      */
     public GRUP<HDPT> getHeadParts() {
-	return headParts;
+	return GRUPs.get(GRUP_TYPE.HDPT);
     }
 
     /**
@@ -1220,7 +1183,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing projectile records
      */
     public GRUP<PROJ> getProjectiles() {
-	return projectiles;
+	return GRUPs.get(GRUP_TYPE.PROJ);
     }
 
     /**
@@ -1229,7 +1192,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing lighting template records
      */
     public GRUP<LGTM> getLightingTemplates() {
-	return lightingTemplates;
+	return GRUPs.get(GRUP_TYPE.LGTM);
     }
 
     /**
@@ -1238,7 +1201,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Book records
      */
     public GRUP<BOOK> getBooks() {
-	return books;
+	return GRUPs.get(GRUP_TYPE.BOOK);
     }
 
     /**
@@ -1247,7 +1210,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<WTHR> getWeathers() {
-	return weathers;
+	return GRUPs.get(GRUP_TYPE.WTHR);
     }
 
     /**
@@ -1256,7 +1219,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DIAL> getDialogs() {
-	return dialogs;
+	return GRUPs.get(GRUP_TYPE.DIAL);
     }
 
     /**
@@ -1265,7 +1228,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DLBR> getDialogBranches() {
-	return dialogBranches;
+	return GRUPs.get(GRUP_TYPE.DLBR);
     }
 
     /**
@@ -1274,7 +1237,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DLVW> getDialogViews() {
-	return dialogViews;
+	return GRUPs.get(GRUP_TYPE.DLVW);
     }
 
     /**
@@ -1283,7 +1246,16 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<CONT> getContainers() {
-	return containers;
+	return GRUPs.get(GRUP_TYPE.CONT);
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return
+     */
+    public GRUP<VTYP> getVoiceTypes() {
+	return GRUPs.get(GRUP_TYPE.VTYP);
     }
 
     /**
@@ -1390,7 +1362,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
 	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
 	static final SubPrototype TES4proto = new SubPrototype() {
-
 	    @Override
 	    protected void addRecords() {
 		add(new HEDR());
