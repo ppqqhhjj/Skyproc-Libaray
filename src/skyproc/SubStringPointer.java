@@ -67,7 +67,7 @@ class SubStringPointer extends SubRecordTyped {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in, srcMod);
 	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
+	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
 	}
     }
 
@@ -101,7 +101,7 @@ class SubStringPointer extends SubRecordTyped {
 		    }
 
 		    if (logging() && SPGlobal.debugStringPairing) {
-			logSync("", file + " pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
+			logMod(srcMod, "", file + " pointer " + Ln.printHex(data.getData(), true, false) + " set to : " + print());
 		    }
 
 		} else {
@@ -114,7 +114,7 @@ class SubStringPointer extends SubRecordTyped {
 			    }
 			}
 			if (!nullPtr) {
-			    logSync("", file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
+			    logMod(srcMod, "", file + " pointer " + Ln.printHex(data.getData(), true, false) + " COULD NOT BE PAIRED");
 			}
 		    }
 		    data.setData(0, 1); // Invalidate data to stop export

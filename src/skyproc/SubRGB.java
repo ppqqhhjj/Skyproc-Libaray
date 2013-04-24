@@ -49,7 +49,7 @@ class SubRGB extends SubRecordTyped {
 	g = in.extractFloat();
 	b = in.extractFloat();
 	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + print());
+	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }
 

@@ -511,10 +511,9 @@ public class SPImporter {
 	}
 	SPGlobal.sync(true);
 	try {
-	    SPGlobal.newSyncLog(debugPath + index + " - " + listing.print() + ".txt");
-	    SPGlobal.logSync(header, "Opening filestream to mod: " + listing.print());
 	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
 	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
+	    SPGlobal.logMod(plugin, header, "Opened filestream to mod: " + listing.print());
 	    if (SPGlobal.checkMissingMasters) {
 		checkMissingMasters(plugin);
 	    }
@@ -532,7 +531,7 @@ public class SPImporter {
 	    while (iter.hasNext()) {
 		String result = iter.loading();
 		SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
-		SPGlobal.logSync(header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
+		SPGlobal.logMod(plugin, header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
 		plugin.parseData(result, iter.next());
 		SPGlobal.flush();
 	    }
@@ -827,7 +826,7 @@ public class SPImporter {
     static void importStringLocations(Mod mod) {
 	String header = "Importing Strings";
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(header, "Importing Strings");
+	    SPGlobal.logMod(mod, header, "Importing Strings");
 	}
 	for (Files f : SubStringPointer.Files.values()) {
 	    try {
@@ -886,7 +885,7 @@ public class SPImporter {
 	if (in == null) {
 	    SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
 	} else {
-	    SPGlobal.logSync(header, "Loaded " + file + " from language: " + plugin.language);
+	    SPGlobal.logMod(plugin, header, "Loaded " + file + " from language: " + plugin.language);
 	}
     }
 
@@ -925,9 +924,6 @@ public class SPImporter {
 
     static int getGRUPsize(LInChannel in) {
 	int size = Ln.arrayToInt(in.extractInts(4, 4));
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(header, "Extract GRUP size: " + Ln.prettyPrintHex(size));
-	}
 	in.skip(-8); // Back to start of GRUP
 	return size;
     }

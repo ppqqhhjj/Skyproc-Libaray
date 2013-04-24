@@ -152,6 +152,10 @@ public abstract class Record implements Serializable {
     void log(String header, String... log) {
 	SPGlobal.log(header, log);
     }
+    
+    static void logMod(Mod srcMod, String header, String ... data) {
+	SPGlobal.logMod(srcMod, header, data);
+    }
 
     void newLog(String fileName) {
 	SPGlobal.newLog(fileName);

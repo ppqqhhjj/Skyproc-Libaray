@@ -49,7 +49,7 @@ public class AltTextures extends SubRecordTyped {
 	    AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)));
 	    altTextures.add(newText);
 	    if (logging()) {
-		logSync("", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
+		logMod(srcMod, "", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
 	    }
 	}
     }

@@ -53,7 +53,7 @@ public class LVLN extends LeveledRecord {
     @Override
     public String print() {
         super.print();
-        logSync(getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag("LVLF").print());
+        logMod(srcMod, getTypes().toString(), "Chance none: " + getChanceNone() + ", Flags: " + subRecords.getSubFlag("LVLF").print());
         for (LeveledEntry entry : getEntries()) {
             entry.toString();
         }

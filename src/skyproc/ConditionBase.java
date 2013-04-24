@@ -85,9 +85,9 @@ class ConditionBase extends SubRecord {
 	padding = in.extract(2);
 
 	if (SPGlobal.logging()) {
-	    logSync("", "New Condition.  Function: " + option.script.toString() + ", index: " + option.index);
-	    logSync("", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(Condition.CondFlag.UseGlobal));
-	    logSync("", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat);
+	    logMod(srcMod, "", "New Condition.  Function: " + option.script.toString() + ", index: " + option.index);
+	    logMod(srcMod, "", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(Condition.CondFlag.UseGlobal));
+	    logMod(srcMod, "", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat);
 	}
 
 	option.parseData(in, srcMod);

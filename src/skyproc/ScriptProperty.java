@@ -122,7 +122,7 @@ class ScriptProperty extends Record implements Serializable {
 	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
 	if (logging()) {
-	    logSync("VMAD", "    Property " + name + " with type " + type + ", unknown: " + unknown);
+	    logMod(srcMod, "VMAD", "    Property " + name + " with type " + type + ", unknown: " + unknown);
 	}
 	switch (type) {
 	    case FormID:
@@ -157,7 +157,7 @@ class ScriptProperty extends Record implements Serializable {
 		break;
 	    default:
 		if (logging()) {
-		    logSync("VMAD", "    Importing property with UNKNOWN TYPE!");
+		    logMod(srcMod, "VMAD", "    Importing property with UNKNOWN TYPE!");
 		    logError("VMAD", "    Importing property with UNKNOWN TYPE!");
 		}
 		in.extractInts(1000);  // break extraction to exclude NPC from database
@@ -166,7 +166,7 @@ class ScriptProperty extends Record implements Serializable {
 	    data.parseData(in, srcMod);
 	}
 	if (logging()) {
-	    logSync("VMAD", "      Data: " + data.print());
+	    logMod(srcMod, "VMAD", "      Data: " + data.print());
 	}
     }
 

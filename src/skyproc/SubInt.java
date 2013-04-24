@@ -54,7 +54,7 @@ class SubInt extends SubRecordTyped {
 	super.parseData(in, srcMod);
 	data = in.extractInt(length);
 	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + print());
+	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }
 

@@ -61,7 +61,7 @@ public class MISC extends MajorRecordNamed {
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	    if (SPGlobal.logging()) {
-		logSync("", "Setting DATA:    Weight: " + weight);
+		logMod(srcMod, "", "Setting DATA:    Weight: " + weight);
 	    }
 	}
 

@@ -32,7 +32,7 @@ class SubFlag extends SubRecordTyped {
 	super.parseData(in, srcMod);
 	flags.set(in.getAllBytes());
 	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + print());
+	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }
 

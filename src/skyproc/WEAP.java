@@ -135,13 +135,13 @@ public class WEAP extends MajorRecordDescription {
 	    unknown8 = in.extract(4);
 	    stagger = in.extractFloat();
 	    if (logging()) {
-		logSync("", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
-		logSync("", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
-		logSync("", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
-		logSync("", "stagger: " + stagger + ", Bound: " + get(WeaponFlag.BoundWeapon) + ", Cant Drop: " + get(WeaponFlag.CantDrop));
-		logSync("", "Hide Backpack: " + get(WeaponFlag.HideBackpack) + ", Ignore Normal Weapon Resistance: " + get(WeaponFlag.IgnoresNormalWeaponResistance) + ", Minor Crime: " + get(WeaponFlag.MinorCrime));
-		logSync("", "NPCs Use Ammo: " + get(WeaponFlag.NPCsUseAmmo) + ", No jam after reload: " + get(WeaponFlag.NoJamAfterReload) + ", Non Hostile: " + get(WeaponFlag.NonHostile));
-		logSync("", "Non Playable: " + get(WeaponFlag.NonPlayable) + ", Not used in normal combat: " + get(WeaponFlag.NotUsedInNormalCombat) + ", Player Only: " + get(WeaponFlag.PlayerOnly));
+		logMod(srcMod, "", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
+		logMod(srcMod, "", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
+		logMod(srcMod, "", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
+		logMod(srcMod, "", "stagger: " + stagger + ", Bound: " + get(WeaponFlag.BoundWeapon) + ", Cant Drop: " + get(WeaponFlag.CantDrop));
+		logMod(srcMod, "", "Hide Backpack: " + get(WeaponFlag.HideBackpack) + ", Ignore Normal Weapon Resistance: " + get(WeaponFlag.IgnoresNormalWeaponResistance) + ", Minor Crime: " + get(WeaponFlag.MinorCrime));
+		logMod(srcMod, "", "NPCs Use Ammo: " + get(WeaponFlag.NPCsUseAmmo) + ", No jam after reload: " + get(WeaponFlag.NoJamAfterReload) + ", Non Hostile: " + get(WeaponFlag.NonHostile));
+		logMod(srcMod, "", "Non Playable: " + get(WeaponFlag.NonPlayable) + ", Not used in normal combat: " + get(WeaponFlag.NotUsedInNormalCombat) + ", Player Only: " + get(WeaponFlag.PlayerOnly));
 	    }
 	}
 
@@ -213,7 +213,7 @@ public class WEAP extends MajorRecordDescription {
 	    weight = in.extractFloat();
 	    damage = in.extractInt(2);
 	    if (logging()) {
-		logSync("", "Value: " + value + ", weight: " + weight + ", damage: " + damage);
+		logMod(srcMod, "", "Value: " + value + ", weight: " + weight + ", damage: " + damage);
 	    }
 	}
 
@@ -271,7 +271,7 @@ public class WEAP extends MajorRecordDescription {
 	    unknown = in.extract(3);
 	    critEffect.setInternal(in.extract(4));
 	    if (logging()) {
-		logSync("", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
+		logMod(srcMod, "", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
 	    }
 	}
 

@@ -91,7 +91,7 @@ public class ARMA extends MajorRecord {
 	    unknown2 = in.extract(1);
 	    weaponAdjust = in.extractFloat();
 	    if (logging()) {
-		logSync("", "M-Priority: " + malePriority + ", F-Priority: " + femalePriority + ", DetectionValue: " + detectionSoundValue + ", weaponAdjust: " + weaponAdjust);
+		logMod(srcMod, "", "M-Priority: " + malePriority + ", F-Priority: " + femalePriority + ", DetectionValue: " + detectionSoundValue + ", weaponAdjust: " + weaponAdjust);
 	    }
 	}
 

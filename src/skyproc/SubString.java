@@ -41,7 +41,7 @@ class SubString extends SubRecordTyped {
 	super.parseData(in, srcMod);
 	string = Ln.arrayToString(in.extractInts(in.available() - 1));
 	if (logging()) {
-	    logSync(getType().toString(), "Setting " + toString() + " to " + print());
+	    logMod(srcMod, getType().toString(), "Setting " + toString() + " to " + print());
 	}
     }
 

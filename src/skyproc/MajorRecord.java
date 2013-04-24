@@ -158,7 +158,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	if (get(MajorFlags.Compressed)) {
 	    set(MajorFlags.Compressed, false);
 	    in = in.correctForCompression();
-	    logSync(getTypes().toString(), "Decompressed");
+	    logMod(srcMod, getTypes().toString(), "Decompressed");
 	}
 
 	if (!in.isDone() && "EDID".equals(getNextType(in))) {
@@ -194,7 +194,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String print() {
-	logSync(getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + getEDID());
+	logMod(srcMod, getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + getEDID());
 	return "";
     }
 
@@ -228,9 +228,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.setSourceMajor(this);
 	super.export(out);
 	if (isValid()) {
-	    if (logging() && SPGlobal.debugExportSummary) {
-		logSync(toString(), "Exporting: " + ID.getArrayStr(true) + ID.getMaster().print() + ", with total length: " + Ln.prettyPrintHex(getTotalLength(out)));
-	    }
 	    out.write(majorFlags.export(), 4);
 	    ID.export(out);
 	    out.write(revision, 4);
@@ -324,7 +321,7 @@ public abstract class MajorRecord extends Record implements Serializable {
     void setForm(byte[] in) throws BadParameter {
 	ID.setInternal(in);
 	if (logging()) {
-	    logSync(toString(), "Setting FormID: " + ID.getArrayStr(true));
+	    logMod(srcMod, toString(), "Setting FormID: " + ID.getArrayStr(true));
 	}
     }
 

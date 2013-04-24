@@ -38,7 +38,7 @@ class SubFloat extends SubRecordTyped {
 	super.parseData(in, srcMod);
 	data = in.extractFloat();
 	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " to : " + print());
+	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }
 

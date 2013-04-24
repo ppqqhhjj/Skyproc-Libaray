@@ -101,11 +101,11 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     public void setSubData(String in, byte[] b) {
 	getSubData(in).setData(b);
     }
-    
+
     public void setSubData(String in, int i) {
 	getSubData(in).setData(i);
     }
-    
+
     public void setSubData(String in, int i, int size) {
 	getSubData(in).setData(size, size);
     }
@@ -169,21 +169,21 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     public SubShell getSubShell(String t) {
 	return (SubShell) get(t);
     }
-    
+
     public SubFormInt getSubFormInt(String t) {
 	return (SubFormInt) get(t);
     }
-    
+
     public void setSubFormInt(String t, FormID id, int val) {
 	SubFormInt s = getSubFormInt(t);
 	s.setForm(id);
 	s.setNum(val);
     }
-    
+
     public void setSubFormInt(String t, FormID id) {
 	getSubFormInt(t).setForm(id);
     }
-    
+
     public void setSubFormInt(String t, int val) {
 	getSubFormInt(t).setNum(val);
     }
@@ -206,32 +206,32 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	return false;
     }
 
-    void printSummary() {
-	if (SPGlobal.logging() && SPGlobal.debugSubrecordSummary) {
-	    String header = "Summary: ";
-	    String data = "";
-	    int counter = 0;
-	    ArrayList<String> printedTypes = new ArrayList<>();
-	    for (String type : getTypes()) {
-		SubRecord s = map.get(type);
-		if (s != null && s.isValid() && !printedTypes.contains(type)) {
-		    data = data + type + " ";
-		    if (s instanceof SubList) {
-			data = data + "(" + ((SubList) s).size() + ") ";
-		    }
-		    printedTypes.addAll(s.getTypes());
-		    if (counter++ == 12) {
-			SPGlobal.logSync("Subrecords", header + data);
-			header = "-------- ";
-			data = "";
-			counter = 0;
-		    }
+    ArrayList<String> summaryLines() {
+	ArrayList<String> out = new ArrayList<>();
+	String header = "Summary: ";
+	String data = "";
+	int counter = 0;
+	ArrayList<String> printedTypes = new ArrayList<>();
+	for (String type : getTypes()) {
+	    SubRecord s = map.get(type);
+	    if (s != null && s.isValid() && !printedTypes.contains(type)) {
+		data = data + type + " ";
+		if (s instanceof SubList) {
+		    data = data + "(" + ((SubList) s).size() + ") ";
+		}
+		printedTypes.addAll(s.getTypes());
+		if (counter++ == 12) {
+		    out.add(header + data);
+		    header = "-------- ";
+		    data = "";
+		    counter = 0;
 		}
 	    }
-	    if (counter > 0) {
-		SPGlobal.logSync("Subrecords", header + data);
-	    }
 	}
+	if (counter > 0) {
+	    out.add(header + data);
+	}
+	return out;
     }
 
     void importSubRecords(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
@@ -301,5 +301,4 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	}
 	return !lhs.hasNext() && !rhs.hasNext();
     }
-
 }

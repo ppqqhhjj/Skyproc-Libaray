@@ -94,7 +94,7 @@ public class ARMO extends MajorRecordDescription {
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	    if (logging()) {
-		logSync("", "Value: " + value + ", weight " + weight);
+		logMod(srcMod, "", "Value: " + value + ", weight " + weight);
 	    }
 	}
 

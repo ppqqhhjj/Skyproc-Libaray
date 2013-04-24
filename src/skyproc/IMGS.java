@@ -67,11 +67,11 @@ public class IMGS extends MajorRecord {
 	    eyeAdaptStrength = in.extractFloat();
 
 	    if (logging()) {
-		logSync("", "HNAM record: ");
-		logSync("", "  " + "Eye Adapt Speed: " + eyeAdaptSpeed + ", Bloom Radius: " + bloomRadius);
-		logSync("", "  " + "Bloom Threshold: " + bloomThreshold + ", Bloom Scale: " + bloomScale + ", Target Lum #1: " + targetLum1);
-		logSync("", "  " + "Target Lum #2: " + targetLum2 + ", Sunlight Scale: " + sunlightScale);
-		logSync("", "  " + "Sky Scale: " + skyScale + ", Eye Adapt Strength: " + eyeAdaptStrength);
+		logMod(srcMod, "", "HNAM record: ");
+		logMod(srcMod, "", "  " + "Eye Adapt Speed: " + eyeAdaptSpeed + ", Bloom Radius: " + bloomRadius);
+		logMod(srcMod, "", "  " + "Bloom Threshold: " + bloomThreshold + ", Bloom Scale: " + bloomScale + ", Target Lum #1: " + targetLum1);
+		logMod(srcMod, "", "  " + "Target Lum #2: " + targetLum2 + ", Sunlight Scale: " + sunlightScale);
+		logMod(srcMod, "", "  " + "Sky Scale: " + skyScale + ", Eye Adapt Strength: " + eyeAdaptStrength);
 	    }
 
 	    valid = true;
@@ -139,8 +139,8 @@ public class IMGS extends MajorRecord {
 	    contrast = in.extractFloat();
 
 	    if (logging()) {
-		logSync("", "CNAM record: ");
-		logSync("", "  " + "Saturation: " + saturation + ", Brightness: " + brightness + ", Contrast: " + contrast);
+		logMod(srcMod, "", "CNAM record: ");
+		logMod(srcMod, "", "  " + "Saturation: " + saturation + ", Brightness: " + brightness + ", Contrast: " + contrast);
 	    }
 
 	    valid = true;
@@ -204,9 +204,9 @@ public class IMGS extends MajorRecord {
 	    blue = in.extractFloat();
 
 	    if (logging()) {
-		logSync("", "TNAM record: RWX Format");
-		logSync("", "  " + "Red: " + red + ", Green: " + green);
-		logSync("", "  " + "Blue: " + blue + ", Alpha: " + alpha);
+		logMod(srcMod, "", "TNAM record: RWX Format");
+		logMod(srcMod, "", "  " + "Red: " + red + ", Green: " + green);
+		logMod(srcMod, "", "  " + "Blue: " + blue + ", Alpha: " + alpha);
 	    }
 
 	    valid = true;

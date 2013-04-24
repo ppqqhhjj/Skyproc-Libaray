@@ -175,50 +175,44 @@ public class MGEF extends MajorRecordDescription {
 	    vol = SoundVolume.values()[in.extractInt(4)];
 	    scriptAIDataScore = in.extractFloat();
 	    scriptAIDataDelayTime = in.extractFloat();
-	    print();
-	}
-
-	@Override
-	public String print() {
 	    if (SPGlobal.logging()) {
-		logSync("", "DATA:");
-		logSync("", "  Flags: " + flags);
-		logSync("", "  Base Cost: " + baseCost);
-		logSync("", "  Related ID: " + relatedID);
-		logSync("", "  skillType: " + skillType);
-		logSync("", "  resistanceAV: " + resistanceAV);
-		logSync("", "  Light: " + lightID);
-		logSync("", "  Taper Weight: " + taperWeight);
-		logSync("", "  Hit Shader: " + hitShader);
-		logSync("", "  Enchant Shader: " + enchantShader);
-		logSync("", "  Skill Level: " + skillLevel);
-		logSync("", "  Area: " + area);
-		logSync("", "  Casting Time: " + castingTime);
-		logSync("", "  Taper Curve: " + taperCurve);
-		logSync("", "  Taper Duration: " + taperDuration);
-		logSync("", "  second AV weight: " + secondAVWeight);
-		logSync("", "  Effect Type: " + effectType);
-		logSync("", "  Primary AV: " + primaryAV);
-		logSync("", "  Projectile : " + projectileID);
-		logSync("", "  Explosion: " + explosionID);
-		logSync("", "  Cast Type: " + castType);
-		logSync("", "  Delivery Type: " + deliveryType);
-		logSync("", "  Second AV: " + secondAV);
-		logSync("", "  Casting Art: " + castingArt);
-		logSync("", "  Hit Effect Art: " + hitEffectArt);
-		logSync("", "  Impact Data: " + impactData);
-		logSync("", "  Skill Usage Mult: " + skillUsageMult);
-		logSync("", "  Dual Cast ID: " + dualCastID);
-		logSync("", "  Dual Cast Scale: " + dualCastScale);
-		logSync("", "  Enchant Art: " + enchantArtID);
-		logSync("", "  Equip Ability: " + equipAbility);
-		logSync("", "  Image Space Mod ID: " + imageSpaceModID);
-		logSync("", "  Perk: " + perkID);
-		logSync("", "  Volume: " + vol);
-		logSync("", "  Script AI Data Score: " + scriptAIDataScore);
-		logSync("", "  Script AI Data Delay Time: " + scriptAIDataDelayTime);
+		logMod(srcMod, "", "DATA:");
+		logMod(srcMod, "", "  Flags: " + flags);
+		logMod(srcMod, "", "  Base Cost: " + baseCost);
+		logMod(srcMod, "", "  Related ID: " + relatedID);
+		logMod(srcMod, "", "  skillType: " + skillType);
+		logMod(srcMod, "", "  resistanceAV: " + resistanceAV);
+		logMod(srcMod, "", "  Light: " + lightID);
+		logMod(srcMod, "", "  Taper Weight: " + taperWeight);
+		logMod(srcMod, "", "  Hit Shader: " + hitShader);
+		logMod(srcMod, "", "  Enchant Shader: " + enchantShader);
+		logMod(srcMod, "", "  Skill Level: " + skillLevel);
+		logMod(srcMod, "", "  Area: " + area);
+		logMod(srcMod, "", "  Casting Time: " + castingTime);
+		logMod(srcMod, "", "  Taper Curve: " + taperCurve);
+		logMod(srcMod, "", "  Taper Duration: " + taperDuration);
+		logMod(srcMod, "", "  second AV weight: " + secondAVWeight);
+		logMod(srcMod, "", "  Effect Type: " + effectType);
+		logMod(srcMod, "", "  Primary AV: " + primaryAV);
+		logMod(srcMod, "", "  Projectile : " + projectileID);
+		logMod(srcMod, "", "  Explosion: " + explosionID);
+		logMod(srcMod, "", "  Cast Type: " + castType);
+		logMod(srcMod, "", "  Delivery Type: " + deliveryType);
+		logMod(srcMod, "", "  Second AV: " + secondAV);
+		logMod(srcMod, "", "  Casting Art: " + castingArt);
+		logMod(srcMod, "", "  Hit Effect Art: " + hitEffectArt);
+		logMod(srcMod, "", "  Impact Data: " + impactData);
+		logMod(srcMod, "", "  Skill Usage Mult: " + skillUsageMult);
+		logMod(srcMod, "", "  Dual Cast ID: " + dualCastID);
+		logMod(srcMod, "", "  Dual Cast Scale: " + dualCastScale);
+		logMod(srcMod, "", "  Enchant Art: " + enchantArtID);
+		logMod(srcMod, "", "  Equip Ability: " + equipAbility);
+		logMod(srcMod, "", "  Image Space Mod ID: " + imageSpaceModID);
+		logMod(srcMod, "", "  Perk: " + perkID);
+		logMod(srcMod, "", "  Volume: " + vol);
+		logMod(srcMod, "", "  Script AI Data Score: " + scriptAIDataScore);
+		logMod(srcMod, "", "  Script AI Data Delay Time: " + scriptAIDataDelayTime);
 	    }
-	    return "";
 	}
 
 	@Override

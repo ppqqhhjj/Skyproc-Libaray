@@ -1,6 +1,5 @@
 package skyproc;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
@@ -82,6 +81,33 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     @Override
+    void importSubRecords(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+	while (!in.isDone()) {
+	    importSubRecord(in, srcMod);
+	}
+	// Print compressed summary
+	int counter = 0;
+	String print = "";
+	if (SPGlobal.logging()) {
+	    for (String type : getTypes()) {
+		RecordLocation r = pos.get(type);
+		if (r != null) {
+		    print += type + " [" + r.pos + "](" + r.num + ") ";
+		    counter++;
+		    if (counter == 5) {
+			SPGlobal.logMod(srcMod, "", print);
+			print = "";
+			counter = 0;
+		    }
+		}
+	    }
+	    if (counter > 0) {
+		SPGlobal.logMod(srcMod, "Stream", print);
+	    }
+	}
+    }
+
+    @Override
     void importSubRecord(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String nextType = Record.getNextType(in);
 	if (contains(nextType)) {
@@ -90,9 +116,6 @@ class SubRecordsStream extends SubRecordsDerived {
 		if (!pos.containsKey(standardType)) {
 		    long position = in.pos();
 		    pos.put(standardType, new RecordLocation(position));
-		    if (SPGlobal.logging()) {
-			SPGlobal.logSync(nextType.toString(), nextType.toString() + " is at position: " + Ln.printHex(position));
-		    }
 		} else {
 		    pos.get(standardType).num++;
 		}
@@ -123,7 +146,7 @@ class SubRecordsStream extends SubRecordsDerived {
 		    major.srcMod.input.pos(position.pos);
 		    if (SPGlobal.debugStream && SPGlobal.logging()) {
 			if (!major.equals(SPGlobal.lastStreamed)) {
-			    SPGlobal.logSync("Stream", "Streaming from " + major);
+			    SPGlobal.logMod(major.srcMod, "Stream", "Streaming from " + major);
 			    SPGlobal.lastStreamed = major;
 			}
 		    }

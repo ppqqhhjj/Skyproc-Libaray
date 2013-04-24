@@ -61,10 +61,10 @@ public class ECZN extends MajorRecord {
 		maxLevel = in.extractInt(1);
 	    }
 	    if (logging()) {
-		logSync("", "DATA record: ");
-		logSync("", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
-		logSync("", "  " + "Required Rank: " + rank + ", Minimum Level: " + minLevel);
-		logSync("", "  " + "Max Level: " + maxLevel + ", Flags: " + flags);
+		logMod(srcMod, "", "DATA record: ");
+		logMod(srcMod, "", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
+		logMod(srcMod, "", "  " + "Required Rank: " + rank + ", Minimum Level: " + minLevel);
+		logMod(srcMod, "", "  " + "Max Level: " + maxLevel + ", Flags: " + flags);
 	    }
 
 	    valid = true;

@@ -70,10 +70,10 @@ abstract class MagicItem extends MajorRecordDescription {
 	    perkType.setInternal(in.extract(4));
 
 	    if (logging()) {
-		logSync("", "SPIT record: ");
-		logSync("", "  " + "Base Spell Cost: " + baseCost + ", flags: " + flags
+		logMod(srcMod, "", "SPIT record: ");
+		logMod(srcMod, "", "  " + "Base Spell Cost: " + baseCost + ", flags: " + flags
 			+ ", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);
-		logSync("", "  " + "cast type: " + castType + ", targetType: " + targetType
+		logMod(srcMod, "", "  " + "cast type: " + castType + ", targetType: " + targetType
 			+ ", Cast Duration: " + castDuration
 			+ ", Spell Range: " + range + ", Perk for Spell: " + perkType);
 	    }

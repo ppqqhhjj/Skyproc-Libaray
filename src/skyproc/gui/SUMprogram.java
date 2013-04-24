@@ -144,7 +144,6 @@ public class SUMprogram implements SUM {
     void openDebug() {
 	SPGlobal.createGlobalLog();
 	SPGlobal.debugModMerge = false;
-	SPGlobal.debugExportSummary = false;
 	SPGlobal.debugBSAimport = false;
 	SPGlobal.debugNIFimport = false;
 	LDebug.timeElapsed = true;
@@ -883,7 +882,7 @@ public class SUMprogram implements SUM {
 	    args.add(f.getPath());
 	    boolean pass = NiftyFunc.startProcess(null, args.toArray(new String[0]));
 	    if (!pass) {
-		JOptionPane.showMessageDialog(null, "Could not allocate " + SUMsave.getInt(SUMSettings.MAX_MEM) 
+		JOptionPane.showMessageDialog(null, "Could not allocate " + SUMsave.getInt(SUMSettings.MAX_MEM)
 			+ " megabytes from the OS.  Lower the amount and try again.");
 		SPGlobal.logMain("Run Changes", "Mem allocation test failed.");
 		SUMGUI.exitProgram(false, true);

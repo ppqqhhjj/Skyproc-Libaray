@@ -83,7 +83,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
 	this(info, true);
-	SPGlobal.logSync("MOD", "Parsing header");
+	SPGlobal.logMod(this, "MOD", "Parsing header");
 	if (!headerInfo.hasRemaining()) {
 	    throw new BadMod(info.print() + " did not have a TES4 header.");
 	}
@@ -400,17 +400,17 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	SPGlobal.newSyncLog("Mod Export/" + getName() + ".txt");
 
 	if (!getMastersStrings().isEmpty()) {
-	    SPGlobal.logSync(getName(), "=======================================================================");
-	    SPGlobal.logSync(getName(), "======================= Printing Mod Masters ==========================");
-	    SPGlobal.logSync(getName(), "=======================================================================");
+	    SPGlobal.logMod(this, getName(), "=======================================================================");
+	    SPGlobal.logMod(this, getName(), "======================= Printing Mod Masters ==========================");
+	    SPGlobal.logMod(this, getName(), "=======================================================================");
 	    for (String s : getMastersStrings()) {
-		SPGlobal.logSync(getName(), s);
+		SPGlobal.logMod(this, getName(), s);
 	    }
 	}
 	for (GRUP g : GRUPs.values()) {
 	    g.toString();
 	}
-	SPGlobal.logSync(getName(), "------------------------  DONE PRINTING -------------------------------");
+	SPGlobal.logMod(this, getName(), "------------------------  DONE PRINTING -------------------------------");
     }
 
     /**
@@ -476,10 +476,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    }
 
 	    if (SPGlobal.logging()) {
-		SPGlobal.logSync(getName(), "No strings file for " + file);
+		SPGlobal.logMod(this, getName(), "No strings file for " + file);
 	    }
 	} catch (IOException | DataFormatException ex) {
-	    SPGlobal.logSync(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
+	    SPGlobal.logMod(this, getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
 	}
     }
 
@@ -775,11 +775,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// Export Header
 	tes.setNumRecords(numRecords());
 	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
-	    SPGlobal.logSync(this.getName(), "Masters: ");
+	    SPGlobal.logMod(this, this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
+	    SPGlobal.logMod(this, this.getName(), "Masters: ");
 	    int i = 0;
 	    for (String s : this.getMastersStrings()) {
-		SPGlobal.logSync(this.getName(), "   " + Ln.printHex(i++) + "  " + s);
+		SPGlobal.logMod(this, this.getName(), "   " + Ln.printHex(i++) + "  " + s);
 	    }
 	}
 

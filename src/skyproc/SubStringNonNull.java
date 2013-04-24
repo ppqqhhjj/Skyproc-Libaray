@@ -27,7 +27,7 @@ public class SubStringNonNull extends SubString {
 	in.skip(getIdentifierLength() + getSizeLength());
 	string = Ln.arrayToString(in.extractInts(in.available()));
 	if (logging()) {
-	    logSync(getType().toString(), "Setting " + toString() + " to " + print());
+	    logMod(srcMod, getType().toString(), "Setting " + toString() + " to " + print());
 	}
     }
 

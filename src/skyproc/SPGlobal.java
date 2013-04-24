@@ -334,15 +334,15 @@ public class SPGlobal {
 			    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
 		} else {
-		    SPGlobal.logSync(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
+		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
 		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
-		    SPGlobal.logSync(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
+		    SPGlobal.logMain(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
 		    appDataFolder = appDataFolder + "\\Local Settings\\Application Data";
-		    SPGlobal.logSync(header, "path now reads: ", appDataFolder);
+		    SPGlobal.logMain(header, "path now reads: ", appDataFolder);
 		}
 	    }
 	    appDataFolder += "\\Skyrim";
-	    SPGlobal.logSync(header, SPGlobal.gameName + " App data thought to be found at: ", appDataFolder);
+	    SPGlobal.logMain(header, SPGlobal.gameName + " App data thought to be found at: ", appDataFolder);
 	}
 	return appDataFolder;
     }
@@ -358,7 +358,7 @@ public class SPGlobal {
 	String pluginsFile = getSkyrimAppData() + "\\plugins.txt";
 	File pluginListPath = new File(pluginsFile);
 	if (!pluginListPath.exists()) {
-	    SPGlobal.logSync(header, SPGlobal.gameName + " Plugin file location wrong. Locating manually.");
+	    SPGlobal.logMain(header, SPGlobal.gameName + " Plugin file location wrong. Locating manually.");
 	    pluginsFile = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
 		    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
 	}
@@ -585,6 +585,10 @@ public class SPGlobal {
 	}
     }
 
+    static void logMod(Mod m, String h, String ... data) {
+	log.logMod(m, h, data);
+    }
+
     static void newSyncLog(String fileName) {
 	if (log != null) {
 	    SPGlobal.log.newSyncLog(fileName);
@@ -709,16 +713,4 @@ public class SPGlobal {
      * sync log<br>
      */
     public static boolean debugModMerge = false;
-    // SubRecords
-    /**
-     * Print short summary of imported subrecords after each major record is
-     * imported.<br> Prints to the sync log<br>
-     */
-    public static boolean debugSubrecordSummary = true;
-    // Exporting
-    /**
-     * Print short export messages to confirm with records are exporting.<br>
-     * Prints to the sync log<br>
-     */
-    public static boolean debugExportSummary = true;
 }

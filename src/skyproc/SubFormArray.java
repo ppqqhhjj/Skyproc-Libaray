@@ -51,7 +51,11 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 	int size = IDs.size();
 	if (size != 0) {
 	    for (int i = 0; i < size; i++) {
-		setIth(i, in.extract(4));
+		byte[] ith = in.extract(4);
+		setIth(i, ith);
+		if (logging()) {
+		    logMod(srcMod, toString(), "Setting " + toString() + " FormID[" + i + "]: " + Ln.printHex(ith, false, true));
+		}
 	    }
 	} else {
 	    while (!in.isDone()) {
@@ -63,9 +67,6 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     }
 
     void setIth(int i, byte[] in) {
-	if (logging()) {
-	    logSync(toString(), "Setting " + toString() + " FormID[" + i + "]: " + Ln.printHex(in, false, true));
-	}
 	IDs.get(i).setInternal(in);
     }
 

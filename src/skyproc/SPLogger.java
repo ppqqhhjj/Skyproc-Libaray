@@ -1,7 +1,10 @@
 package skyproc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import lev.debug.LDebug;
 import lev.debug.LLogger;
-import skyproc.Consistency.LogTypes;
 
 /**
  * An extended Levnifty LLogger object that also has a BLOCKED logstream as a place
@@ -10,6 +13,16 @@ import skyproc.Consistency.LogTypes;
  * @author Justin Swanson
  */
 class SPLogger extends LLogger {
+
+    Map<Mod, LDebug> modImports = new HashMap<>();
+    int modNum = 0;
+
+    @Override
+    public ArrayList<LDebug> allDebugs() {
+	ArrayList out = super.allDebugs();
+	out.addAll(modImports.values());
+	return out;
+    }
 
     /**
      * Creates a new LLogger object with the debug path specified.  If the folder
@@ -32,5 +45,14 @@ class SPLogger extends LLogger {
 	 * A logstream used for logging which records have been skipped/blockec.
 	 */
 	BLOCKED;
+    }
+
+    public void logMod(Mod srcMod, String header, String ... data) {
+	LDebug log = modImports.get(srcMod);
+	if (log == null) {
+	    log = new LDebug(debugPath + "Mod Import/" + modNum++ + " - " + srcMod.getName() + ".txt", 40);
+	    modImports.put(srcMod, log);
+	}
+	log.w(header, data);
     }
 }

@@ -51,7 +51,7 @@ public class ScriptRef extends Record implements Iterable<String> {
 	unknown = in.extractInt(1);
 	int propertyCount = in.extractInt(2);
 	if (logging()) {
-	    logSync("VMAD", "  Script " + name.toString() + " with " + propertyCount + " properties. Unknown: " + unknown);
+	    logMod(srcMod, "VMAD", "  Script " + name.toString() + " with " + propertyCount + " properties. Unknown: " + unknown);
 	}
 	for (int i = 0; i < propertyCount; i++) {
 	    properties.add(new ScriptProperty(in, srcMod));

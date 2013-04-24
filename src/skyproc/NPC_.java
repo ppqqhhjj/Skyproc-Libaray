@@ -362,14 +362,14 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    gearedUpWeapons = in.extractInt(1);
 	    fluff2 = in.extract(3);
 	    if (logging()) {
-		logSync("", "DNAM record: ");
+		logMod(srcMod, "", "DNAM record: ");
 		String temp;
 		for (Skill s : Skill.values()) {
 		    temp = " BASE:" + getSkillBase(s) + ", MOD:" + getSkillMod(s);
-		    logSync("", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
+		    logMod(srcMod, "", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
 		}
-		logSync("", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
-		logSync("", "  " + "Far Away Distance: " + farAwayDistance + ", Geared Up weapons: " + gearedUpWeapons);
+		logMod(srcMod, "", "  " + "Health: " + health + ", Magicka: " + magicka + ", Stamina: " + stamina);
+		logMod(srcMod, "", "  " + "Far Away Distance: " + farAwayDistance + ", Geared Up weapons: " + gearedUpWeapons);
 	    }
 	}
 
@@ -430,10 +430,10 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    healthOffset = in.extractInt(2);
 	    bleedout = in.extractInt(2);
 	    if (logging()) {
-		logSync("", "ACBS record: ");
-		logSync("", "  " + "Base Spell Points: " + magickaOffset + ", Base Fatigue: " + fatigueOffset);
-		logSync("", "  " + "Level: " + level + ", Min Calculated Level: " + minCalcLevel + ", Max Calculated Level: " + maxCalcLevel);
-		logSync("", "  " + "Speed Multiplier: " + speed + ", Disposition Base: " + dispositionBase);
+		logMod(srcMod, "", "ACBS record: ");
+		logMod(srcMod, "", "  " + "Base Spell Points: " + magickaOffset + ", Base Fatigue: " + fatigueOffset);
+		logMod(srcMod, "", "  " + "Level: " + level + ", Min Calculated Level: " + minCalcLevel + ", Max Calculated Level: " + maxCalcLevel);
+		logMod(srcMod, "", "  " + "Speed Multiplier: " + speed + ", Disposition Base: " + dispositionBase);
 	    }
 	}
 
@@ -507,10 +507,10 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    aggroWarnAttack = in.extractInt(4);
 	    aggroAttack = in.extractInt(4);
 	    if (logging()) {
-		logSync("", "AIDT record: ");
-		logSync("", "  Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
-		logSync("", "  Assistance: " + assistance + ", Mood: " + mood + ", AggroRadiusBehavior: " + aggroRadiusBehavior);
-		logSync("", "  Aggro Attack: " + aggroAttack + ", Aggro Warn: " + aggroWarn + ", Aggro Warn/Attack: " + aggroWarnAttack);
+		logMod(srcMod, "", "AIDT record: ");
+		logMod(srcMod, "", "  Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
+		logMod(srcMod, "", "  Assistance: " + assistance + ", Mood: " + mood + ", AggroRadiusBehavior: " + aggroRadiusBehavior);
+		logMod(srcMod, "", "  Aggro Attack: " + aggroAttack + ", Aggro Warn: " + aggroWarn + ", Aggro Warn/Attack: " + aggroWarnAttack);
 	    }
 	}
 

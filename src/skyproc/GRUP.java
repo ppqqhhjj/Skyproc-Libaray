@@ -85,13 +85,13 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	    extractMajor(in, srcMod);
 	}
 	if (logging()) {
-	    logSync(toString(), "Data exhausted");
+	    logMod(srcMod, toString(), "Data exhausted");
 	}
     }
 
     MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	if (logging()) {
-	    logSync(toString(), "============== Extracting Next " + getContainedType() + " =============");
+	    logMod(srcMod, toString(), "============== Extracting Next " + getContainedType() + " =============");
 	}
 	T item = (T) prototype.getNew();
 	item.srcMod = srcMod;
@@ -104,12 +104,9 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	    if (item.isValid()) {
 		addRecord(item);
 	    } else if (logging()) {
-		logSync(toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
+		logMod(srcMod, toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
 	    }
-
-	    if (logging()) {
-		logSync(toString(), "=============== DONE ==============");
-	    }
+	    
 	    return item;
 	} catch (java.nio.BufferUnderflowException e) {
 	    SPGlobal.logException(e);
@@ -134,9 +131,6 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     @Override
     public String print() {
 	if (!isEmpty()) {
-	    logSync(toString(), "=======================================================================");
-	    logSync(toString(), "========================= Printing " + getContainedType().toString() + "s =============================");
-	    logSync(toString(), "=======================================================================");
 	    for (T t : mapRecords.values()) {
 		t.toString();
 	    }
@@ -219,10 +213,10 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     void handleBadRecord(MajorRecord r, String reason) {
 	if (logging()) {
 	    if (r.isValid()) {
-		logSync(toString(), "Caught a bad record: " + r + ", reason: " + reason);
+		logMod(r.srcMod, toString(), "Caught a bad record: " + r + ", reason: " + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r + " from " + r.srcMod + ", reason: " + reason);
 	    } else {
-		logSync(toString(), "Caught a bad record, reason:" + reason);
+		logMod(r.srcMod, toString(), "Caught a bad record, reason:" + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record, reason:" + reason);
 	    }
 	}
