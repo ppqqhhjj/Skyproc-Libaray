@@ -68,7 +68,7 @@ public class DLVW extends MajorRecord {
      * @param dialogBranch
      */
     public void addBranch(FormID dialogBranch) {
-	subRecords.getSubList("BNAM").add(new SubForm("BNAM", dialogBranch));
+	subRecords.getSubList("BNAM").add(dialogBranch);
     }
 
     /**
@@ -76,7 +76,7 @@ public class DLVW extends MajorRecord {
      * @param dialogBranch
      */
     public void removeBranch(FormID dialogBranch) {
-	subRecords.getSubList("BNAM").remove(new SubForm("BNAM", dialogBranch));
+	subRecords.getSubList("BNAM").remove(dialogBranch);
     }
 
     /**

@@ -180,14 +180,10 @@ public class AVIF extends MajorRecordDescription {
 	 * @param index
 	 */
 	public void addPointer(int index) {
-	    SubInt cnam = new SubInt("CNAM");
-	    cnam.set(index);
-	    subRecords.getSubList("CNAM").add(cnam);
+	    subRecords.getSubList("CNAM").add(index);
 	}
 
 	/**
-	 * @deprecated modifying the ArrayList will now directly
-	 * affect the record.
 	 * @param ref
 	 */
 	public void addPointer(PerkReference ref) {

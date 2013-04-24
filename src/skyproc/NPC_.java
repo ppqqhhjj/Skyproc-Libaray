@@ -1894,7 +1894,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return True if spell was added.
      */
     public boolean addSpell(FormID spellReference) {
-	return subRecords.getSubList("SPLO").add(new SubForm("SPLO", spellReference));
+	return subRecords.getSubList("SPLO").add(spellReference);
     }
 
     /**
@@ -1906,7 +1906,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return True if spell was removed.
      */
     public boolean removeSpell(FormID spellReference) {
-	return subRecords.getSubList("SPLO").remove(new SubForm("SPLO", spellReference));
+	return subRecords.getSubList("SPLO").remove(spellReference);
     }
 
     /**
@@ -1967,7 +1967,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return True if AI package was added.
      */
     public boolean addAIPackage(FormID aiPackageReference) {
-	return subRecords.getSubList("PKID").add(new SubForm("PKID", aiPackageReference));
+	return subRecords.getSubList("PKID").add(aiPackageReference);
     }
 
     /**
@@ -1976,7 +1976,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @return True if AI package was removed.
      */
     public boolean removeAIPackage(FormID aiPackageReference) {
-	return subRecords.getSubList("PKID").remove(new SubForm("PKID", aiPackageReference));
+	return subRecords.getSubList("PKID").remove(aiPackageReference);
     }
 
     /**
@@ -2754,7 +2754,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @param pnam
      */
     public void addHeadPart(FormID pnam) {
-	subRecords.getSubList("PNAM").add(new SubForm("PNAM", pnam));
+	subRecords.getSubList("PNAM").add(pnam);
     }
 
     /**
@@ -2762,7 +2762,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * @param pnam
      */
     public void removeHeadPart(FormID pnam) {
-	subRecords.getSubList("PNAM").remove(new SubForm("PNAM", pnam));
+	subRecords.getSubList("PNAM").remove(pnam);
     }
 
     /**

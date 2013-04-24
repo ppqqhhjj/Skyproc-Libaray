@@ -546,7 +546,7 @@ public class INFO extends MajorRecord {
      * @param id
      */
     public void removeLinkTo(FormID id) {
-	subRecords.getSubList("TCLT").remove(new SubForm("TCLT", id));
+	subRecords.getSubList("TCLT").remove(id);
     }
 
     /**
@@ -554,7 +554,7 @@ public class INFO extends MajorRecord {
      * @param id
      */
     public void addLinkTo(FormID id) {
-	subRecords.getSubList("TCLT").add(new SubForm("TCLT", id));
+	subRecords.getSubList("TCLT").add(id);
     }
 
     /**

@@ -1824,7 +1824,7 @@ public class RACE extends MajorRecordDescription {
      * @param name
      */
     public void addMovementTypeName(String name) {
-	subRecords.getSubList("MTNM").add(new SubString("MTNM", NiftyFunc.trimToFour(name)));
+	subRecords.getSubList("MTNM").add(NiftyFunc.trimToFour(name));
     }
 
     /**
@@ -1839,7 +1839,7 @@ public class RACE extends MajorRecordDescription {
      * @param name
      */
     public void removeMovementTypeName(String name) {
-	subRecords.getSubList("MTNM").remove(new SubString("MTNM", NiftyFunc.trimToFour(name)));
+	subRecords.getSubList("MTNM").remove(NiftyFunc.trimToFour(name));
     }
 
     /**

@@ -81,7 +81,7 @@ public class HDPT extends MajorRecordNamed {
      * @param id
      */
     public void addHeadPart(FormID id) {
-	subRecords.getSubList("HNAM").add(new SubForm("HNAM", id));
+	subRecords.getSubList("HNAM").add(id);
     }
 
     /**
@@ -89,7 +89,7 @@ public class HDPT extends MajorRecordNamed {
      * @param id
      */
     public void removeHeadPart(FormID id) {
-	subRecords.getSubList("HNAM").remove(new SubForm("HNAM", id));
+	subRecords.getSubList("HNAM").remove(id);
     }
 
     /**

@@ -303,7 +303,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void addAdditionalRace(FormID addRace) {
-	subRecords.getSubList("MODL").add(new SubForm("MODL", addRace));
+	subRecords.getSubList("MODL").add(addRace);
     }
 
     /**
@@ -311,7 +311,7 @@ public class ARMA extends MajorRecord {
      * @param addRace
      */
     public void removeAdditionalRace(FormID addRace) {
-	subRecords.getSubList("MODL").remove(new SubForm("MODL", addRace));
+	subRecords.getSubList("MODL").remove(addRace);
     }
 
     /**

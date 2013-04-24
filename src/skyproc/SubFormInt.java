@@ -133,29 +133,37 @@ public class SubFormInt extends SubRecordTyped {
 	return num;
     }
 
+    /**
+     * Takes the FormID into the equals calculations
+     *
+     * @param obj Another SubFormRecord
+     * @return
+     */
     @Override
-    public int hashCode() {
-        int hash = super.hashCode();
-        hash = 79 * hash + this.num;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null) {
-            return false;
-        }
-        if (!(o instanceof SubFormInt)) {
-            return false;
-        }
-        SubFormInt s = (SubFormInt) o;
-	if (!this.ID.equals(s.ID) || num != s.num) {
+    public boolean equals(Object obj) {
+	if (obj == null) {
 	    return false;
 	}
-
-        return true;
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubFormInt other = (SubFormInt) obj;
+	if (this.ID != other.ID && (this.ID == null || !this.ID.equals(other.ID))) {
+	    return false;
+	}
+	return true;
     }
+
+    /**
+     * Takes the FormID into the hashcode calculations
+     *
+     * @return
+     */
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 29 * hash + (this.ID != null ? this.ID.hashCode() : 0);
+	return hash;
+    }
+
 }

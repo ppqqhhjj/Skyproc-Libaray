@@ -89,11 +89,7 @@ class SubList<S extends SubRecord<T>, T> extends SubRecord<ArrayList<S>> impleme
     }
 
     public boolean remove(T item) {
-	if (collection.contains(item)) {
-	    return true;
-	} else {
-	    return false;
-	}
+	return collection.remove(item);
     }
 
     /**

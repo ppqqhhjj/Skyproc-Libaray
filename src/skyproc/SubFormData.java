@@ -64,29 +64,6 @@ class SubFormData extends SubRecordTyped {
     }
 
     @Override
-    public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final SubFormData other = (SubFormData) obj;
-	if (!ID.equals(other.ID)
-		|| !Arrays.equals(this.data, other.data)) {
-	    return false;
-	}
-	return true;
-    }
-
-    @Override
-    public int hashCode() {
-	int hash = super.hashCode();
-	hash = 61 * hash + Arrays.hashCode(this.data);
-	return hash;
-    }
-    
-    @Override
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>(1);
 	out.add(ID);
@@ -142,4 +119,38 @@ class SubFormData extends SubRecordTyped {
     public FormID getForm() {
 	return ID;
     }
+    
+    /**
+     * Takes the FormID into the equals calculations
+     *
+     * @param obj Another SubFormRecord
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final SubFormData other = (SubFormData) obj;
+	if (this.ID != other.ID && (this.ID == null || !this.ID.equals(other.ID))) {
+	    return false;
+	}
+	return true;
+    }
+
+    /**
+     * Takes the FormID into the hashcode calculations
+     *
+     * @return
+     */
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 29 * hash + (this.ID != null ? this.ID.hashCode() : 0);
+	return hash;
+    }
+
 }

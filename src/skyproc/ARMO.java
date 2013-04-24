@@ -140,7 +140,7 @@ public class ARMO extends MajorRecordDescription {
      * @param id Adds an ARMA record to the MODL list.
      */
     public void addArmature(FormID id) {
-	subRecords.getSubList("MODL").add(new SubForm("MODL", id));
+	subRecords.getSubList("MODL").add(id);
     }
 
     /**
@@ -148,7 +148,7 @@ public class ARMO extends MajorRecordDescription {
      * @param id Removes an ARMA record from the MODL list if it exists.
      */
     public void removeArmature(FormID id) {
-	subRecords.getSubList("MODL").remove(new SubForm("MODL", id));
+	subRecords.getSubList("MODL").remove(id);
     }
 
     /**
