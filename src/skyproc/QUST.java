@@ -21,6 +21,7 @@ public class QUST extends MajorRecordNamed {
 
     // Static prototypes and definitions
     static final SubPrototype ALSTALLSproto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(SubString.getNew("ALID", true));
@@ -57,6 +58,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasLocationProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALLS"));
@@ -64,6 +66,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype aliasReferenceProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("ALST"));
@@ -72,6 +75,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questLogEntryProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubFlag("QSDT", 1));
@@ -84,6 +88,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questStageProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new INDX());
@@ -91,6 +96,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questTargetProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new QuestTargetData());
@@ -98,6 +104,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype questObjectiveProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new SubInt("QOBJ", 2));
@@ -107,6 +114,7 @@ public class QUST extends MajorRecordNamed {
 	}
     };
     static final SubPrototype QUSTproto = new SubPrototype(MajorRecordNamed.namedProto) {
+
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
@@ -117,6 +125,7 @@ public class QUST extends MajorRecordNamed {
 	    add(SubString.getNew("FLTR", true));
 	    add(new SubList<>(new Condition()));
 	    add(new SubShellBulkType(new SubPrototype() {
+
 		@Override
 		protected void addRecords() {
 		    add(new SubData("NEXT"));
@@ -308,7 +317,6 @@ public class QUST extends MajorRecordNamed {
 	public void setUniqueActor(FormID id) {
 	    subRecords.setSubForm("ALUA", id);
 	}
-
     }
 
     static class DNAM extends SubRecord {
@@ -457,7 +465,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param entry
 	 */
 	public void addLogEntry(QuestLogEntry entry) {
@@ -509,7 +518,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void addCondition(Condition c) {
@@ -517,7 +527,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void removeCondition(Condition c) {
@@ -623,14 +634,16 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 */
 	public void clearTargets() {
 	    subRecords.getSubList("QSTA").clear();
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param target
 	 */
 	public void addTarget(QuestTarget target) {
@@ -730,7 +743,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void addCondition(Condition c) {
@@ -738,7 +752,8 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void removeCondition(Condition c) {
@@ -801,10 +816,11 @@ public class QUST extends MajorRecordNamed {
      *
      */
     public enum QuestFlags {
+
 	/**
 	 *
 	 */
-	StartGameEnabled (0),
+	StartGameEnabled(0),
 	/**
 	 *
 	 */
@@ -825,8 +841,8 @@ public class QUST extends MajorRecordNamed {
 	 *
 	 */
 	WarnOnAliasFillFailure(6);
-
 	int value;
+
 	QuestFlags(int val) {
 	    value = val;
 	}
@@ -836,6 +852,7 @@ public class QUST extends MajorRecordNamed {
      *
      */
     public enum QuestType {
+
 	/**
 	 *
 	 */
@@ -916,7 +933,6 @@ public class QUST extends MajorRecordNamed {
     }
 
     // Get Set Functions
-
     /**
      *
      * @return
@@ -934,7 +950,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void addCondition(Condition c) {
@@ -942,7 +958,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void removeCondition(Condition c) {
@@ -950,7 +966,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated Duplicate accessor
      * @return
      */
     public ArrayList<QuestStage> getQuestStages() {
@@ -958,7 +974,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param stage
      */
     public void addQuestStage(QuestStage stage) {
@@ -1065,14 +1081,14 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearStages() {
 	subRecords.getSubList("INDX").clear();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param stage
      */
     public void addStage(QuestStage stage) {
@@ -1088,14 +1104,14 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearObjectives() {
 	subRecords.getSubList("QOBJ").clear();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param objective
      */
     public void addObjective(QuestObjective objective) {
@@ -1111,7 +1127,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param alias
      */
     public void addAlias(Alias alias) {
@@ -1119,7 +1135,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearAliases() {
 	subRecords.getSubList("ALLS").clear();

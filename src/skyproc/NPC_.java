@@ -19,6 +19,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 
     // Static prototypes and definitions
     static final SubPrototype NPC_proto = new SubPrototype(MajorRecordNamed.namedProto) {
+
 	@Override
 	protected void addRecords() {
 	    after(new ScriptPackage(), "EDID");
@@ -81,6 +82,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     public static class SoundPackage extends SubShell implements Serializable {
 
 	static SubPrototype soundPackageProto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new SubInt("CSDT"));
@@ -132,7 +134,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param pair
 	 */
 	public void addSoundPair(SoundPair pair) {
@@ -146,6 +149,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     public static class SoundPair extends SubShell {
 
 	static SubPrototype soundPairProto = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new SubForm("CSDI"));
@@ -219,6 +223,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     public static class TintLayer extends SubShell implements Serializable {
 
 	static SubPrototype tintPrototype = new SubPrototype() {
+
 	    @Override
 	    protected void addRecords() {
 		add(new SubInt("TINI", 2));
@@ -1927,7 +1932,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param item
      * @return
      */
@@ -1936,7 +1941,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
      * @return
      */
@@ -1945,7 +1950,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearItems() {
 	subRecords.getSubList("CNTO").clear();
@@ -2609,7 +2614,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param tinting
      * @return
      */
@@ -2618,7 +2623,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param tinting
      * @return
      */
@@ -2627,7 +2632,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearTinting() {
 	subRecords.getSubList("TINI").clear();
@@ -2642,7 +2647,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param sounds
      * @return
      */
@@ -2651,7 +2656,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param sounds
      * @return
      */
@@ -2660,7 +2665,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearSoundPackages() {
 	subRecords.getSubList("CSDT").clear();

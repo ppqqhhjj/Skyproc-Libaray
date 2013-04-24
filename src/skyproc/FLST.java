@@ -57,29 +57,27 @@ public class FLST extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param entry FormID to add to the list.
      */
     public void addFormEntry(FormID entry) {
-	subRecords.getSubList("LNAM").add(new SubForm("LNAM", entry));
+	subRecords.getSubList("LNAM").add(entry);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param entries
      */
     public void addAll(Collection<FormID> entries) {
-	for (FormID id : entries) {
-	    addFormEntry(id);
-	}
+	subRecords.getSubList("LNAM").addAll(entries);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param entry FormID to remove (if it exists).
      */
     public void removeFormEntry(FormID entry) {
-	subRecords.getSubList("LNAM").remove(new SubForm("LNAM", entry));
+	subRecords.getSubList("LNAM").remove(entry);
     }
 
     /**
@@ -91,14 +89,17 @@ public class FLST extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param entry
      * @param i
      */
     public void addFormEntryAtIndex(FormID entry, int i) {
-	subRecords.getSubList("LNAM").addAtIndex(new SubForm("LNAM", entry), i);
+	subRecords.getSubList("LNAM").addAtIndex(entry, i);
     }
 
+    /**
+     * @deprecated modifying the ArrayList will now directly affect the record.
+     */
     public void clearEntries() {
 	subRecords.getSubList("LNAM").clear();
     }

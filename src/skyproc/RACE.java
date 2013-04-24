@@ -888,23 +888,23 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param spell
      */
     public void addSpell(FormID spell) {
-	subRecords.getSubList("SPLO").add(new SubForm("SPLO", spell));
+	subRecords.getSubList("SPLO").add(spell);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param spell
      */
     public void removeSpell(FormID spell) {
-	subRecords.getSubList("SPLO").remove(new SubForm("SPLO", spell));
+	subRecords.getSubList("SPLO").remove(spell);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearSpells() {
 	subRecords.getSubList("SPLO").clear();
@@ -1401,7 +1401,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearAttackData() {
 	subRecords.getSubList("ATKD").clear();
@@ -1416,7 +1416,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param data
      */
     public void addAttackData(AttackData data) {
@@ -1424,7 +1424,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param data
      */
     public void removeAttackData(AttackData data) {
@@ -1620,23 +1620,23 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param in
      */
     public void addEquipSlot(FormID in) {
-	subRecords.getSubList("QNAM").add(new SubForm("QNAM", in));
+	subRecords.getSubList("QNAM").add(in);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param in
      */
     public void removeEquipSlot(FormID in) {
-	subRecords.getSubList("QNAM").remove(new SubForm("QNAM", in));
+	subRecords.getSubList("QNAM").remove(in);
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearEquipSlots() {
 	subRecords.getSubList("QNAM").clear();
@@ -1959,7 +1959,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param g
      * @param id
      */
@@ -1974,7 +1974,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param g
      * @param id
      */
@@ -1989,7 +1989,7 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param g
      */
     public void clearFaceDetailsTexture(Gender g) {

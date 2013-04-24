@@ -67,7 +67,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void addCondition(Condition c) {
@@ -75,7 +75,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void removeCondition(Condition c) {

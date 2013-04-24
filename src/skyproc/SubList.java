@@ -194,6 +194,10 @@ class SubList<S extends SubRecord<T>, T> extends SubRecord<ArrayList<S>> impleme
 	return translate().iterator();
     }
 
+    public void addAll(Collection<T> items) {
+	collection.addAll(items);
+    }
+    
     @Override
     ArrayList<FormID> allFormIDs() {
 	if (prototype.getClass().equals(SubForm.class)) {

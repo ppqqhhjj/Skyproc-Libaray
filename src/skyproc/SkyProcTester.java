@@ -52,7 +52,7 @@ public class SkyProcTester {
 	    }
 	    gui.finished();
 	} catch (Exception e) {
-	System.out.println("EXCEPTION THROWN");
+	    System.out.println("EXCEPTION THROWN");
 	    gui.finished();
 	    SPGlobal.logException(e);
 	}
@@ -120,10 +120,12 @@ public class SkyProcTester {
 	// Test to see if stream has been prematurely imported
 	if (SPGlobal.streamMode && type != GRUP_TYPE.NPC_) {
 	    GRUP g = patch.GRUPs.get(type);
-	    MajorRecord m = (MajorRecord) g.listRecords.get(0);
-	    if (m.subRecords.map.size() > 2) {
-		System.out.println("Premature streaming occured: " + m);
-		return false;
+	    if (!g.listRecords.isEmpty()) {
+		MajorRecord m = (MajorRecord) g.listRecords.get(0);
+		if (m.subRecords.map.size() > 2) {
+		    System.out.println("Premature streaming occured: " + m);
+		    return false;
+		}
 	    }
 	}
 	// Remove known bad ids

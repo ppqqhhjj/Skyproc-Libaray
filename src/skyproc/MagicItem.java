@@ -18,7 +18,7 @@ import skyproc.genenums.DeliveryType;
  *
  * @author Justin Swanson
  */
-abstract class MagicItem extends MajorRecordDescription {
+public abstract class MagicItem extends MajorRecordDescription {
 
     // Static prototypes and definitions
     static final SubPrototype magicItemProto = new SubPrototype(MajorRecordDescription.descProto) {

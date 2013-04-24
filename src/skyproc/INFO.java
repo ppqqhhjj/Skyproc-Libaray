@@ -22,6 +22,7 @@ import skyproc.exceptions.BadRecord;
 public class INFO extends MajorRecord {
 
     static final SubPrototype responseProto = new SubPrototype() {
+
 	@Override
 	protected void addRecords() {
 	    add(new TRDT());
@@ -34,6 +35,7 @@ public class INFO extends MajorRecord {
 	}
     };
     static final SubPrototype INFOprototype = new SubPrototype(MajorRecord.majorProto) {
+
 	@Override
 	protected void addRecords() {
 	    add(new ScriptPackage(new ScriptFragments()));
@@ -46,6 +48,7 @@ public class INFO extends MajorRecord {
 	    add(new SubForm("DNAM"));
 	    add(new SubList<>(new Condition()));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
+
 		@Override
 		protected void addRecords() {
 		    add(new SubData("SCHR"));
@@ -339,7 +342,8 @@ public class INFO extends MajorRecord {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void addCondition(Condition c) {
@@ -347,7 +351,8 @@ public class INFO extends MajorRecord {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly affect the
+	 * record.
 	 * @param c
 	 */
 	public void removeCondition(Condition c) {
@@ -589,7 +594,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void addCondition(Condition c) {
@@ -597,7 +602,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void removeCondition(Condition c) {
@@ -656,7 +661,7 @@ public class INFO extends MajorRecord {
      *
      * @return
      */
-    public FormID getWalkAwayTopic () {
+    public FormID getWalkAwayTopic() {
 	return subRecords.getSubForm("TWAT").getForm();
     }
 
@@ -672,7 +677,7 @@ public class INFO extends MajorRecord {
      *
      * @return
      */
-    public FormID getAudioOverride () {
+    public FormID getAudioOverride() {
 	return subRecords.getSubForm("ONAM").getForm();
     }
 }

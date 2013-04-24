@@ -245,7 +245,6 @@ public class AVIF extends MajorRecordDescription {
      * @return
      */
     public ArrayList<PerkReference> getPerkReferences() {
-	SubList out = subRecords.getSubList("PNAM");
-	return out.collection;
+	return subRecords.getSubList("PNAM").toPublic();
     }
 }

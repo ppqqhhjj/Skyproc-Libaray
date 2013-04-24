@@ -83,8 +83,9 @@ public class CONT extends MajorRecordNamed {
     public boolean equalAltTextures(MISC rhs) {
 	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
     }
+    
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
      * @param count
      * @return
@@ -94,7 +95,7 @@ public class CONT extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param item
      * @return
      */
@@ -103,7 +104,7 @@ public class CONT extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
      * @return
      */
@@ -112,7 +113,7 @@ public class CONT extends MajorRecordNamed {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearItems() {
 	subRecords.getSubList("CNTO").clear();

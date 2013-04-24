@@ -1070,7 +1070,7 @@ public class MGEF extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void addCondition(Condition c) {
@@ -1078,7 +1078,7 @@ public class MGEF extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param c
      */
     public void removeCondition(Condition c) {

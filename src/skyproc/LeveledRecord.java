@@ -75,7 +75,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     }
 
     /**
-     *
+     * 
      */
     public void clearEntries() {
 	subRecords.getSubList("LVLO").clear();
@@ -92,6 +92,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     /**
      * Returns all non-leveled list entries, with leveled list entries recursively
      *  replaced with their contents.
+     * NOTE: Making additions/removals to this list will not actually affect the record.
      * @return
      */
     public ArrayList<LeveledEntry> getFlattenedEntries() {
