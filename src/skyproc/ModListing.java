@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class ModListing extends SubRecord implements Comparable {
+public class ModListing extends SubRecord<ModListing> implements Comparable {
 
     private final static ArrayList<String> type = new ArrayList<>(Arrays.asList(new String[]{"MAST", "DATA"}));
     static ModListing skyrim = new ModListing("Skyrim.esm");

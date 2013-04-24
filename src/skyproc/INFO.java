@@ -538,11 +538,11 @@ public class INFO extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getLinkTo() {
-	return SubList.subFormToPublic(subRecords.getSubList("TCLT"));
+	return subRecords.getSubList("TCLT").toPublic();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param id
      */
     public void removeLinkTo(FormID id) {
@@ -550,7 +550,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param id
      */
     public void addLinkTo(FormID id) {
@@ -558,7 +558,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearLinkTo() {
 	subRecords.getSubList("TCLT").clear();

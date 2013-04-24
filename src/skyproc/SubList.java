@@ -5,13 +5,9 @@
 package skyproc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LImport;
-import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -20,28 +16,29 @@ import skyproc.exceptions.BadRecord;
  * A specialized collection of subrecords. Think of it as a special SkyProc
  * ArrayList used for subrecords.
  *
- * @param <T> The type of subrecord the group contains.
+ * @param S The type of subrecord the group contains.
  * @author Justin Swanson
  */
-class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
+class SubList<S extends SubRecord<T>, T> extends SubRecord<ArrayList<S>> implements Iterable<S> {
 
     ArrayList<T> collection = new ArrayList<>();
-    T prototype;
+    S prototype;
+    S last;
     boolean unique = false;
 
-    SubList(T prototype_) {
+    SubList(S prototype_) {
 	super();
 	prototype = prototype_;
     }
 
-    SubList(T prototype_, boolean unique) {
+    SubList(S prototype_, boolean unique) {
 	this(prototype_);
 	setUnique(unique);
     }
 
     SubList(SubList rhs) {
 	super();
-	prototype = (T) rhs.prototype;
+	prototype = (S) rhs.prototype;
 	unique = rhs.unique;
 	collection.addAll(rhs.collection);
     }
@@ -56,11 +53,6 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	return !collection.isEmpty();
     }
 
-    /**
-     *
-     * @param s Record to check for containment.
-     * @return True if an equal() record exists within the SubRecordList.
-     */
     public boolean contains(T s) {
 	return collection.contains(s);
     }
@@ -74,16 +66,6 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	return collection.get(i);
     }
 
-    /**
-     * Adds an item to the list. Some groups allow duplicate items, some do not,
-     * depending on the internal specifications and context. This function
-     * returns true if the item was successfully added to list, or false if an
-     * equal one already existed, and the group did not allow duplicates.
-     *
-     * @param item Item to add to the list.
-     * @return true if the item was added to the list. False if an equal item
-     * already existed in the list, and duplicates were not allowed.
-     */
     public boolean add(T item) {
 	if (allow(item)) {
 	    collection.add(item);
@@ -94,7 +76,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     }
 
     boolean allow(T item) {
-	return !unique || !collection.contains(item);
+	return !unique || !contains(item);
     }
 
     public boolean addAtIndex(T item, int i) {
@@ -106,14 +88,8 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	}
     }
 
-    /**
-     *
-     * @param item Item to remove from the list.
-     * @return True if an item was removed.
-     */
     public boolean remove(T item) {
 	if (collection.contains(item)) {
-	    collection.remove(item);
 	    return true;
 	} else {
 	    return false;
@@ -170,17 +146,6 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 	collection = in;
     }
 
-    /**
-     * This function will add all records given to the list using add().
-     *
-     * @param in ArrayList of records to add in.
-     */
-    public void addRecordsTo(ArrayList<T> in) {
-	for (T t : collection) {
-	    collection.add(t);
-	}
-    }
-
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	parseData(in, srcMod, getNextType(in));
@@ -188,11 +153,12 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     void parseData(LImport in, Mod srcMod, String nextType) throws BadRecord, DataFormatException, BadParameter {
 	if (nextType.equals(getType())) {
-	    T newRecord = (T) prototype.getNew(getType());
+	    S newRecord = (S) prototype.getNew(getType());
+	    last = newRecord;
 	    newRecord.parseData(in, srcMod);
-	    add(newRecord);
+	    add(newRecord.translate());
 	} else {
-	    get(size() - 1).parseData(in, srcMod);
+	    last.parseData(in, srcMod);
 	}
     }
 
@@ -204,8 +170,8 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     @Override
     int getContentLength(ModExporter out) {
 	int length = 0;
-	for (SubRecord r : collection) {
-	    length += r.getTotalLength(out);
+	for (S s : translate()) {
+	    length += s.getTotalLength(out);
 	}
 	return length;
     }
@@ -213,51 +179,10 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     @Override
     void export(ModExporter out) throws IOException {
 	if (isValid()) {
-	    Iterator<T> iter = iterator();
-	    while (iter.hasNext()) {
-		iter.next().export(out);
+	    for (S s : translate()) {
+		s.export(out);
 	    }
 	}
-    }
-
-    static ArrayList<FormID> subFormToPublic(SubList<SubForm> in) {
-	ArrayList<FormID> out = new ArrayList<>(in.size());
-	for (SubForm s : in) {
-	    out.add(s.ID);
-	}
-	return out;
-    }
-
-    static ArrayList<SubFormInt> subFormIntToPublic(SubList<SubFormInt> in) {
-	ArrayList<SubFormInt> out = new ArrayList<>(in.size());
-	for (SubFormInt s : in) {
-	    out.add(s);
-	}
-	return out;
-    }
-
-    static ArrayList<Integer> subIntToPublic(SubList<SubInt> in) {
-	ArrayList<Integer> out = new ArrayList<>(in.size());
-	for (SubInt s : in) {
-	    out.add(s.get());
-	}
-	return out;
-    }
-
-    static ArrayList<String> subStringToPublic(SubList<SubString> in) {
-	ArrayList<String> out = new ArrayList<>(in.size());
-	for (SubString s : in) {
-	    out.add(s.string);
-	}
-	return out;
-    }
-
-    static ArrayList<byte[]> subDataToPublic(SubList<SubData> in) {
-	ArrayList<byte[]> out = new ArrayList<>(in.size());
-	for (SubData s : in) {
-	    out.add(s.data);
-	}
-	return out;
     }
 
     ArrayList<T> toPublic() {
@@ -269,14 +194,17 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
      * @return An iterator of all records in the SubRecordList.
      */
     @Override
-    public Iterator<T> iterator() {
-	return collection.listIterator();
+    public Iterator<S> iterator() {
+	return translate().iterator();
     }
 
     @Override
     ArrayList<FormID> allFormIDs() {
+	if (prototype.getClass().equals(SubForm.class)) {
+	    return (ArrayList<FormID>) collection;
+	}
 	ArrayList<FormID> out = new ArrayList<>();
-	for (T item : collection) {
+	for (S item : translate()) {
 	    out.addAll(item.allFormIDs());
 	}
 	return out;
@@ -284,7 +212,7 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
 
     @Override
     void fetchStringPointers(Mod srcMod) {
-	for (SubRecord s : collection) {
+	for (SubRecord s : translate()) {
 	    s.fetchStringPointers(srcMod);
 	}
     }
@@ -319,5 +247,23 @@ class SubList<T extends SubRecord> extends SubRecord implements Iterable<T> {
     @Override
     ArrayList<String> getTypes() {
 	return prototype.getTypes();
+    }
+
+    @Override
+    ArrayList<S> translate() {
+	T trans = prototype.translate();
+	if (trans != null && prototype.getClass().equals(trans.getClass())) {
+	    return (ArrayList<S>) collection;
+	}
+	ArrayList<S> out = new ArrayList<>(collection.size());
+	for (T t : collection) {
+	    out.add((S) prototype.translate(t));
+	}
+	return out;
+    }
+
+    @Override
+    SubRecord<ArrayList<S>> translate(ArrayList<S> in) {
+	throw new UnsupportedOperationException("Not supported yet.");
     }
 }

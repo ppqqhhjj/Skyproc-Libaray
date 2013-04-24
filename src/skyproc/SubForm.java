@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LImport;
-import lev.LOutFile;
-import lev.LShrinkArray;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -19,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubForm extends SubRecordTyped {
+class SubForm extends SubRecordTyped<FormID> {
 
     FormID ID = new FormID();
 
@@ -174,5 +171,15 @@ class SubForm extends SubRecordTyped {
 	ArrayList<FormID> out = new ArrayList<>(1);
 	out.add(ID);
 	return out;
+    }
+
+    @Override
+    FormID translate() {
+	return ID;
+    }
+
+    @Override
+    SubRecord<FormID> translate(FormID in) {
+	return new SubForm(getType(), in);
     }
 }

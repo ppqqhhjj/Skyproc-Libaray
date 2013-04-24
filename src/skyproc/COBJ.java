@@ -83,7 +83,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
      * @param count
      * @return
@@ -93,7 +93,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
      * @return
      */
@@ -102,7 +102,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearIngredients() {
 	subRecords.getSubList("CNTO").clear();
@@ -113,7 +113,7 @@ public class COBJ extends MajorRecord {
      * @return
      */
     public ArrayList<SubFormInt> getIngredients() {
-	return SubList.subFormIntToPublic(subRecords.getSubList("CNTO"));
+	return subRecords.getSubList("CNTO").toPublic();
     }
 
     /**

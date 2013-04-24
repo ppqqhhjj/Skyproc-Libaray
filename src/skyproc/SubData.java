@@ -18,7 +18,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubData extends SubRecordTyped {
+class SubData extends SubRecordTyped<byte[]> {
 
     byte[] data;
 
@@ -134,4 +134,15 @@ class SubData extends SubRecordTyped {
 	byte[] b = (byte[]) o;
 	return (Arrays.equals(this.data, b));
     }
+
+    @Override
+    byte[] translate() {
+	return data;
+    }
+
+    @Override
+    SubRecord<byte[]> translate(byte[] in) {
+	return new SubData(getType(), in);
+    }
+
 }

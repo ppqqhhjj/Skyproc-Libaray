@@ -16,7 +16,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubString extends SubRecordTyped {
+class SubString extends SubRecordTyped<String> {
 
     static SubString getNew(String type, boolean nullterminated) {
 	if (nullterminated) {
@@ -115,4 +115,17 @@ class SubString extends SubRecordTyped {
 	hash = 29 * hash + (this.string != null ? this.string.toUpperCase().hashCode() : 0);
 	return hash;
     }
+
+    @Override
+    String translate() {
+	return string;
+    }
+
+    @Override
+    SubRecord<String> translate(String in) {
+	SubString out = (SubString) getNew(getType());
+	out.string = in;
+	return out;
+    }
+
 }

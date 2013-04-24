@@ -14,13 +14,13 @@ import lev.LOutFile;
  *
  * @author Justin Swanson
  */
-public abstract class SubRecord extends Record {
+public abstract class SubRecord<T> extends Record {
 
     @Override
     public String print() {
 	return "No " + getType().toString();
     }
-    
+
     @Override
     public String toString() {
 	return getType().toString() + "[" + getClass().getSimpleName() + "]";
@@ -67,6 +67,14 @@ public abstract class SubRecord extends Record {
 
     void fetchStringPointers (MajorRecord r) {
 	fetchStringPointers(r.srcMod);
+    }
+
+    T translate() {
+	return (T) this;
+    }
+
+    SubRecord<T> translate(T in) {
+	return this;
     }
 
     @Override

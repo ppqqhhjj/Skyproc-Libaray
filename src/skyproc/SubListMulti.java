@@ -45,9 +45,10 @@ class SubListMulti<T extends SubRecord> extends SubList {
 	if (prototypes.containsKey(nextType)) {
 	    SubRecord newRecord = prototypes.get(nextType).getNew(nextType);
 	    newRecord.parseData(in, srcMod);
+	    last = newRecord;
 	    add(newRecord);
 	} else {
-	    get(size() - 1).parseData(in, srcMod);
+	    last.parseData(in, srcMod);
 	}
     }
 

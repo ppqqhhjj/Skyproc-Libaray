@@ -53,7 +53,7 @@ public class FLST extends MajorRecord {
      * @return List of all the FormIDs in the Form list.
      */
     public ArrayList<FormID> getFormIDEntries() {
-	return SubList.subFormToPublic(subRecords.getSubList("LNAM"));
+	return subRecords.getSubList("LNAM").toPublic();
     }
 
     /**
@@ -97,5 +97,9 @@ public class FLST extends MajorRecord {
      */
     public void addFormEntryAtIndex(FormID entry, int i) {
 	subRecords.getSubList("LNAM").addAtIndex(new SubForm("LNAM", entry), i);
+    }
+
+    public void clearEntries() {
+	subRecords.getSubList("LNAM").clear();
     }
 }

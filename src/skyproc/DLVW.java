@@ -60,11 +60,11 @@ public class DLVW extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getBranches () {
-	return SubList.subFormToPublic(subRecords.getSubList("BNAM"));
+	return subRecords.getSubList("BNAM").toPublic();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param dialogBranch
      */
     public void addBranch(FormID dialogBranch) {
@@ -72,7 +72,7 @@ public class DLVW extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param dialogBranch
      */
     public void removeBranch(FormID dialogBranch) {
@@ -80,7 +80,7 @@ public class DLVW extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearBranches() {
 	subRecords.getSubList("BNAM").clear();

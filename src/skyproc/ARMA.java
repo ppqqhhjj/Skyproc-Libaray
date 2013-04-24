@@ -299,7 +299,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param addRace
      */
     public void addAdditionalRace(FormID addRace) {
@@ -307,7 +307,7 @@ public class ARMA extends MajorRecord {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param addRace
      */
     public void removeAdditionalRace(FormID addRace) {
@@ -319,11 +319,11 @@ public class ARMA extends MajorRecord {
      * @return
      */
     public ArrayList<FormID> getAdditionalRaces() {
-	return SubList.subFormToPublic(subRecords.getSubList("MODL"));
+	return subRecords.getSubList("MODL").toPublic();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearAdditionalRaces() {
 	subRecords.getSubList("MODL").clear();

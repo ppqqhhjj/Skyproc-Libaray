@@ -5,10 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
-import lev.LImport;
-import lev.LOutFile;
 import lev.LFlags;
-import lev.Ln;
+import lev.LImport;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 

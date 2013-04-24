@@ -12,11 +12,11 @@ import java.util.TreeSet;
  *
  * @author Justin Swanson
  */
-class SubListSorted<T extends SubRecord> extends SubList<T> {
+class SubListSorted<S extends SubRecord<T>, T> extends SubList<S, T> {
 
     TreeSet<T> sorter = new TreeSet<>();
 
-    SubListSorted(T prototype_) {
+    SubListSorted(S prototype_) {
         super(prototype_);
     }
 
@@ -32,13 +32,13 @@ class SubListSorted<T extends SubRecord> extends SubList<T> {
 
     @Override
     public T get(int i) {
-        return (T)sorter.toArray()[i];
+        return (T) sorter.toArray()[i];
     }
 
     @Override
     public boolean add(T item) {
         sorter.add(item);
-        return super.add(item);
+	return super.add(item);
     }
 
     @Override
@@ -60,12 +60,6 @@ class SubListSorted<T extends SubRecord> extends SubList<T> {
     }
 
     @Override
-    public void addRecordsTo(ArrayList<T> in) {
-        super.addRecordsTo(in);
-        sorter.addAll(in);
-    }
-
-    @Override
     public void setRecordsTo(ArrayList<T> in) {
         super.setRecordsTo(in);
         sorter.clear();
@@ -73,11 +67,15 @@ class SubListSorted<T extends SubRecord> extends SubList<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
-        return sorter.iterator();
+    ArrayList<S> translate() {
+	ArrayList<S> out = new ArrayList<>(sorter.size());
+	for (T t : sorter) {
+	    out.add((S) prototype.translate(t));
+	}
+	return out;
     }
 
-    public Iterator<T> unsortedIterator() {
-	return super.iterator();
+    public Iterator<S> unsortedIterator() {
+	return super.translate().iterator();
     }
 }

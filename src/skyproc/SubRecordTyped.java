@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Justin Swanson
  */
-public abstract class SubRecordTyped extends SubRecord {
+public abstract class SubRecordTyped<T> extends SubRecord<T> {
 
     ArrayList<String> types;
 

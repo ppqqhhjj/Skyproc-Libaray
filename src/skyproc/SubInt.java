@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubInt extends SubRecordTyped {
+class SubInt extends SubRecordTyped<Integer> {
 
     private Integer data;
     int length = 4;
@@ -41,11 +41,11 @@ class SubInt extends SubRecordTyped {
 	return length;
     }
 
-    public void set (int in) {
+    public void set(int in) {
 	data = in;
     }
 
-    public int get () {
+    public int get() {
 	return data;
     }
 
@@ -100,5 +100,17 @@ class SubInt extends SubRecordTyped {
 	int hash = 7;
 	hash = 71 * hash + Objects.hashCode(this.data);
 	return hash;
+    }
+
+    @Override
+    Integer translate() {
+	return data;
+    }
+
+    @Override
+    SubRecord<Integer> translate(Integer in) {
+	SubInt out = (SubInt) getNew(getType());
+	out.set(in);
+	return out;
     }
 }

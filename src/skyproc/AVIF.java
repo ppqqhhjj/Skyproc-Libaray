@@ -163,18 +163,20 @@ public class AVIF extends MajorRecordDescription {
 	 * @return
 	 */
 	public ArrayList<Integer> getPointers() {
-	    return SubList.subIntToPublic(subRecords.getSubList("CNAM"));
+	    return subRecords.getSubList("CNAM").toPublic();
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly
+	 * affect the record.
 	 */
 	public void clearPointers() {
 	    subRecords.getSubList("CNAM").clear();
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly
+	 * affect the record.
 	 * @param index
 	 */
 	public void addPointer(int index) {
@@ -184,7 +186,8 @@ public class AVIF extends MajorRecordDescription {
 	}
 
 	/**
-	 *
+	 * @deprecated modifying the ArrayList will now directly
+	 * affect the record.
 	 * @param ref
 	 */
 	public void addPointer(PerkReference ref) {

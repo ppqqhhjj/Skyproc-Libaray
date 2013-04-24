@@ -884,7 +884,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArrayList<FormID> getSpells() {
-	return SubList.subFormToPublic(subRecords.getSubList("SPLO"));
+	return subRecords.getSubList("SPLO").toPublic();
     }
 
     /**
@@ -1616,7 +1616,7 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArrayList<FormID> getEquipSlots() {
-	return SubList.subFormToPublic(subRecords.getSubList("QNAM"));
+	return subRecords.getSubList("QNAM").toPublic();
     }
 
     /**
@@ -1816,11 +1816,11 @@ public class RACE extends MajorRecordDescription {
      * @return
      */
     public ArrayList<String> getMovementTypeNames() {
-	return SubList.subStringToPublic(subRecords.getSubList("MTNM"));
+	return subRecords.getSubList("MTNM").toPublic();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param name
      */
     public void addMovementTypeName(String name) {
@@ -1828,14 +1828,14 @@ public class RACE extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      */
     public void clearMovementTypeNames() {
 	subRecords.getSubList("MTNM").clear();
     }
 
     /**
-     *
+     * @deprecated modifying the ArrayList will now directly affect the record.
      * @param name
      */
     public void removeMovementTypeName(String name) {
@@ -1890,7 +1890,7 @@ public class RACE extends MajorRecordDescription {
 	return subRecords.getSubForm("ATKR").getForm();
     }
 
-    SubList<SubShell> getHeadData() {
+    SubList<SubShell, SubShell> getHeadData() {
 	return subRecords.getSubList("NAM0");
     }
 
@@ -1903,7 +1903,7 @@ public class RACE extends MajorRecordDescription {
 	    default:
 		genderType = "FNAM";
 	}
-	SubList<SubShell> data = getHeadData();
+	SubList<SubShell, SubShell> data = getHeadData();
 	for (SubShell s : data) {
 	    if (s.subRecords.containsStrict(genderType)) {
 		return s;
@@ -1952,9 +1952,9 @@ public class RACE extends MajorRecordDescription {
     public ArrayList<FormID> getFaceDetailsTextureSet(Gender g) {
 	switch (g) {
 	    case FEMALE:
-		return SubList.subFormToPublic(getHeadData(g).subRecords.getSubList("FTSF"));
+		return getHeadData(g).subRecords.getSubList("FTSF").toPublic();
 	    default:
-		return SubList.subFormToPublic(getHeadData(g).subRecords.getSubList("FTSM"));
+		return getHeadData(g).subRecords.getSubList("FTSM").toPublic();
 	}
     }
 

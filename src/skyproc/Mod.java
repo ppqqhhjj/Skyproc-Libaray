@@ -1430,7 +1430,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    subRecords.getSubList("MAST").clear();
 	}
 
-	SubList<ModListing> getMasters() {
+	SubList<ModListing, ModListing> getMasters() {
 	    return subRecords.getSubList("MAST");
 	}
 
@@ -1476,7 +1476,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
     }
 
-    static class HEDR extends SubRecord {
+    static class HEDR extends SubRecord<HEDR> {
 
 	byte[] version;
 	int numRecords;

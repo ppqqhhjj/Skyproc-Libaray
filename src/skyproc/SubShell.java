@@ -17,7 +17,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubShell extends SubRecord {
+class SubShell extends SubRecord<SubShell> {
 
     SubRecordsDerived subRecords;
 
