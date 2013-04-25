@@ -16,9 +16,7 @@ public class HDPT extends MajorRecordNamed {
     static final SubPrototype HDPTproto = new SubPrototype(MajorRecordNamed.namedProto) {
 	@Override
 	protected void addRecords() {
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new AltTextures("MODS"));
+	    add(new Model());
 	    add(new SubData("DATA"));
 	    add(new SubInt("PNAM"));
 	    add(new SubList<>(new SubForm("HNAM")));
@@ -53,19 +51,19 @@ public class HDPT extends MajorRecordNamed {
 
     // Get/Set
     /**
-     *
+     * @deprecated use getModelData()
      * @param path
      */
     public void setModel(String path) {
-	subRecords.setSubString("MODL", path);
+	subRecords.getModel().setFileName(path);
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString("MODL").print();
+	return subRecords.getModel().getFileName();
     }
 
     /**
@@ -132,20 +130,14 @@ public class HDPT extends MajorRecordNamed {
     }
 
     /**
+     * @deprecated use getModelData()
      * @return List of the AltTextures applied.
      */
     public ArrayList<AltTextures.AltTexture> getAltTextures() {
-	return ((AltTextures) subRecords.get("MODS")).altTextures;
+	return subRecords.getModel().getAltTextures();
     }
 
-    /**
-     *
-     * @param rhs Other MISC record.
-     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
-     * matching Alt Textures with the same name and TXST formID reference, in
-     * the same corresponding indices.
-     */
-    public boolean equalAltTextures(MISC rhs) {
-	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 }

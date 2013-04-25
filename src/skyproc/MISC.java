@@ -27,9 +27,7 @@ public class MISC extends MajorRecordNamed {
 	    after(new ScriptPackage(), "EDID");
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new AltTextures("MODS"));
+	    add(new Model());
 	    add(SubString.getNew("ICON", true));
 	    add(new SubForm("YNAM"));
 	    add(new SubForm("ZNAM"));
@@ -97,21 +95,20 @@ public class MISC extends MajorRecordNamed {
 	return new MISC();
     }
 
-    // Get/Set
     /**
-     *
-     * @return
-     */
-    public String getModel() {
-	return subRecords.getSubString("MODL").print();
-    }
-
-    /**
-     *
+     * @deprecated use getModelData()
      * @param path
      */
     public void setModel(String path) {
-	subRecords.getSubString("MODL").setString(path);
+	subRecords.getModel().setFileName(path);
+    }
+
+    /**
+     * @deprecated use getModelData()
+     * @return
+     */
+    public String getModel() {
+	return subRecords.getModel().getFileName();
     }
 
     DATA getDATA() {
@@ -167,21 +164,15 @@ public class MISC extends MajorRecordNamed {
     }
 
     /**
+     * @deprecated use getModelData()
      * @return List of the AltTextures applied.
      */
-    public ArrayList<AltTexture> getAltTextures() {
-	return ((AltTextures) subRecords.get("MODS")).altTextures;
+    public ArrayList<AltTextures.AltTexture> getAltTextures() {
+	return subRecords.getModel().getAltTextures();
     }
 
-    /**
-     *
-     * @param rhs Other MISC record.
-     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
-     * matching Alt Textures with the same name and TXST formID reference, in
-     * the same corresponding indices.
-     */
-    public boolean equalAltTextures(MISC rhs) {
-	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 
     /**

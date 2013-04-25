@@ -26,9 +26,7 @@ public class PROJ extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new SubData("MODS"));
+	    add(new Model());
 	    add(new DestructionData());
 	    add(new DATA());
 	    add(SubString.getNew("NAM1", true));
@@ -281,19 +279,19 @@ public class PROJ extends MajorRecordNamed {
 
     //Get/Set
     /**
-     *
-     * @param filename
+     * @deprecated use getModelData()
+     * @param path
      */
-    public void setModel(String filename) {
-	subRecords.setSubString("MODL", filename);
+    public void setModel(String path) {
+	subRecords.getModel().setFileName(path);
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString("MODL").print();
+	return subRecords.getModel().getFileName();
     }
 
     /**
@@ -686,5 +684,9 @@ public class PROJ extends MajorRecordNamed {
      */
     public FormID getDecalData() {
 	return getDATA().decalData;
+    }
+    
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 }

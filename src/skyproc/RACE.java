@@ -78,16 +78,15 @@ public class RACE extends MajorRecordDescription {
 		    add(new SubData("NAM1"));
 		    forceExport("NAM1");
 
-		    SubMarkerSet EGT = new SubMarkerSet(new SubShell(new SubPrototype() {
+		    SubMarkerSet BodyData = new SubMarkerSet(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
 			    add(new SubData("INDX"));
-			    add(SubString.getNew("MODL", true));
-			    add(new SubData("MODT"));
+			    add(new Model());
 			}
 		    }), "MNAM", "FNAM");
-		    EGT.forceMarkers = true;
-		    add(EGT);
+		    BodyData.forceMarkers = true;
+		    add(BodyData);
 		}
 	    }, false));
 	    add(new SubFormArray("HNAM", 0));
@@ -102,11 +101,7 @@ public class RACE extends MajorRecordDescription {
 		    add(new SubMarkerSet(new SubShell(new SubPrototype() {
 			@Override
 			protected void addRecords() {
-			    add(SubString.getNew("MODL", true));
-			    add(new SubData("MODT"));
-			    add(new SubData("MODB"));
-			    add(new AltTextures("MODS"));
-			    add(new SubData("MODD"));
+			    add(new Model());
 			}
 		    }), "MNAM", "FNAM"));
 		}
@@ -1549,66 +1544,70 @@ public class RACE extends MajorRecordDescription {
 	subRecords.getSubList("NAM0").clear();
     }
 
-    SubMarkerSet<SubShell> getEGT() {
+    SubMarkerSet<SubShell> getBodyData() {
 	return subRecords.getSubShell("NAM1").subRecords.getSubMarker("INDX");
     }
 
-    SubShell getEGTmodel(Gender gender) {
+    SubShell getBodyData(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return getEGT().set.get("MNAM");
+		return getBodyData().set.get("MNAM");
 	    default:
-		return getEGT().set.get("FNAM");
+		return getBodyData().set.get("FNAM");
 	}
     }
 
     /**
-     *
+     * @deprecated If needed, request update from Leviathan
      * @param gender
      * @return
      */
     public String getLightingModels(Gender gender) {
-	return getEGTmodel(gender).subRecords.getSubString("MODL").print();
+	return getBodyData(gender).subRecords.getModel().getFileName();
     }
 
     /**
-     *
+     * @deprecated If needed, request update from Leviathan
      * @param gender
      * @param s
      */
     public void setLightingModels(Gender gender, String s) {
-	getEGTmodel(gender).subRecords.setSubString("MODL", s);
+	getBodyData(gender).subRecords.getModel().setFileName(s);
     }
 
-    SubMarkerSet<SubShell> getHKX() {
+    SubMarkerSet<SubShell> getBehaviorGraph() {
 	return subRecords.getSubShell("NAM3").subRecords.getSubMarker("MODL");
     }
 
-    SubShell getHKXmodel(Gender gender) {
+    SubShell getBehaviorGraph(Gender gender) {
 	switch (gender) {
 	    case MALE:
-		return getHKX().set.get("MNAM");
+		return getBehaviorGraph().set.get("MNAM");
 	    default:
-		return getHKX().set.get("FNAM");
+		return getBehaviorGraph().set.get("FNAM");
 	}
     }
 
     /**
-     *
+     * @deprecated use getPhysicsModel()
      * @param gender
      * @return
      */
     public String getPhysicsModels(Gender gender) {
-	return getHKXmodel(gender).subRecords.getSubString("MODL").print();
+	return getPhysicsModel(gender).getFileName();
     }
 
     /**
-     *
+     * @deprecated use getPhysicsModel()
      * @param gender
      * @param s
      */
     public void setPhysicsModels(Gender gender, String s) {
-	getHKXmodel(gender).subRecords.setSubString("MODL", s);
+	getPhysicsModel(gender).setFileName(s);
+    }
+
+    public Model getPhysicsModel(Gender gender) {
+	return getBehaviorGraph(gender).subRecords.getModel();
     }
 
     /**

@@ -15,8 +15,7 @@ public class LVLN extends LeveledRecord {
 	@Override
 	protected void addRecords() {
 	    remove("FULL");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
+	    add(new Model());
 	}
     };
 
@@ -67,18 +66,22 @@ public class LVLN extends LeveledRecord {
 
     // Get/set
     /**
-     *
+     * @deprecated use getModelData()
      * @return Model path associated with the LVLN.
      */
     public String getModelPath() {
-        return subRecords.getSubString("MODL").print();
+        return subRecords.getModel().getFileName();
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @param in String to set the LVLN model path to.
      */
     public void setModelPath(String in) {
-        subRecords.setSubString("MODL", in);
+        subRecords.getModel().setFileName(in);
+    }
+    
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 }

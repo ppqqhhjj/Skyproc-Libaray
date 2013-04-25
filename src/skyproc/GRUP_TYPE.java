@@ -79,6 +79,7 @@ public enum GRUP_TYPE {
      * Projectile
      */
     PROJ,
+    STAT,
     /**
      * Weapons
      */

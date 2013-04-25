@@ -26,10 +26,7 @@ public class ALCH extends MagicItem {
 	@Override
 	protected void addRecords() {
 	    remove("DESC");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new AltTextures("MODS"));
-	    add(new SubData("MODS"));
+	    add(new Model());
 	    add(new SubForm("YNAM"));
 	    add(new SubForm("ZNAM"));
 	    add(new SubFloat("DATA"));
@@ -143,19 +140,19 @@ public class ALCH extends MagicItem {
 
     // Get / set
     /**
-     *
+     * @deprecated use getModelData()
      * @param groundModel
      */
     public void setModel(String groundModel) {
-	subRecords.setSubString("MODL", groundModel);
+	subRecords.getModel().setFileName(groundModel);
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString("MODL").print();
+	return subRecords.getModel().getFileName();
     }
 
     /**
@@ -325,20 +322,14 @@ public class ALCH extends MagicItem {
     }
 
     /**
+     * @deprecated use getModelData()
      * @return List of the AltTextures applied.
      */
     public ArrayList<AltTextures.AltTexture> getAltTextures() {
-	return ((AltTextures) subRecords.get("MODS")).altTextures;
+	return subRecords.getModel().getAltTextures();
     }
 
-    /**
-     *
-     * @param rhs Other MISC record.
-     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
-     * matching Alt Textures with the same name and TXST formID reference, in
-     * the same corresponding indices.
-     */
-    public boolean equalAltTextures(MISC rhs) {
-	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 }

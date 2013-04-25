@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.zip.DataFormatException;
-import javax.swing.JOptionPane;
 import lev.*;
 import skyproc.SPGlobal.Language;
 import skyproc.SubStringPointer.Files;
@@ -106,6 +105,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	addGRUP(new ALCH());
 	addGRUP(new COBJ());
 	addGRUP(new PROJ());
+	addGRUP(new STAT());
 	addGRUP(new WEAP());
 	addGRUP(new AMMO());
 	addGRUP(new NPC_());
@@ -1256,6 +1256,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public GRUP<VTYP> getVoiceTypes() {
 	return GRUPs.get(GRUP_TYPE.VTYP);
+    }
+
+    /**
+     *
+     * @see GRUP
+     * @return
+     */
+    public GRUP<STAT> getStatics() {
+	return GRUPs.get(GRUP_TYPE.STAT);
     }
 
     /**

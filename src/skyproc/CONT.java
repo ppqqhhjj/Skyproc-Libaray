@@ -20,10 +20,7 @@ public class CONT extends MajorRecordNamed {
 	    add(new ScriptPackage());
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new AltTextures("MODS"));
-	    add(new SubData("MODD"));
+	    add(new Model());
 	    add(new SubListCounted<>("COCT", 4, new ItemListing()));
 	    add(new DestructionData());
 	    add(new SubData("DATA"));
@@ -51,39 +48,29 @@ public class CONT extends MajorRecordNamed {
     // Get/Set
 
     /**
-     *
+     * @deprecated use getModelData()
      * @param path
      */
     public void setModel(String path) {
-	subRecords.setSubString("MODL", path);
+	subRecords.getModel().setFileName(path);
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @return
      */
     public String getModel() {
-	return subRecords.getSubString("MODL").print();
+	return subRecords.getModel().getFileName();
     }
 
     /**
+     * @deprecated use getModelData()
      * @return List of the AltTextures applied.
      */
     public ArrayList<AltTextures.AltTexture> getAltTextures() {
-	return ((AltTextures) subRecords.get("MODS")).altTextures;
+	return subRecords.getModel().getAltTextures();
     }
 
-    /**
-     *
-     * @param rhs Other MISC record.
-     * @return true if:<br> Both sets are empty.<br> or <br> Each set contains
-     * matching Alt Textures with the same name and TXST formID reference, in
-     * the same corresponding indices.
-     */
-    public boolean equalAltTextures(MISC rhs) {
-	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
-    }
-    
     /**
      * @deprecated modifying the ArrayList will now directly affect the record.
      * @param itemReference
@@ -176,5 +163,9 @@ public class CONT extends MajorRecordNamed {
      */
     public FormID getCloseSound() {
 	return subRecords.getSubForm("QNAM").getForm();
+    }
+    
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 }

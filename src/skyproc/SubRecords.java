@@ -188,6 +188,10 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	getSubFormInt(t).setNum(val);
     }
 
+    public Model getModel() {
+	return (Model) get("MODL");
+    }
+
     boolean isValid() {
 	for (SubRecord s : this) {
 	    if (!s.isValid()) {

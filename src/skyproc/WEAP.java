@@ -29,12 +29,9 @@ public class WEAP extends MajorRecordDescription {
 	    after(new ScriptPackage(), "EDID");
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
-	    add(SubString.getNew("MODL", true));
-	    add(new SubData("MODT"));
-	    add(new AltTextures("MODS"));
+	    add(new Model());
 	    add(new SubForm("EITM"));
 	    add(new SubData("EAMT"));
-	    add(new SubData("MODB"));
 	    add(new SubForm("ETYP"));
 	    add(new SubForm("BIDS"));
 	    add(new SubForm("BAMT"));
@@ -559,19 +556,19 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @param filename
      */
     public void setModelFilename(String filename) {
-	subRecords.setSubString("MODL", filename);
+	subRecords.getModel().setFileName(filename);
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @return
      */
     public String getModelFilename() {
-	return subRecords.getSubString("MODL").print();
+	return subRecords.getModel().getFileName();
     }
 
     /**
@@ -897,16 +894,19 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     *
-     * @return
+     * @deprecated use getModelData()
+     * @return List of the AltTextures applied.
      */
     public ArrayList<AltTextures.AltTexture> getAltTextures() {
-	AltTextures t = (AltTextures) subRecords.get("MODS");
-	return t.altTextures;
+	return subRecords.getModel().getAltTextures();
+    }
+
+    public Model getModelData() {
+	return subRecords.getModel();
     }
 
     /**
-     *
+     * @deprecated use getModelData()
      * @param rhs
      * @return
      */

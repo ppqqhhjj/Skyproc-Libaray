@@ -441,4 +441,19 @@ public class NiftyFunc {
 	    return in;
 	}
     }
+    
+    static public int replaceAll(ArrayList<FormID> src, FormID target, FormID ... with) {
+	ArrayList<FormID> tmp = new ArrayList<>(src);
+	int numChanges = 0;
+	for (int i = tmp.size() - 1 ; i >= 0 ; i--) {
+	    if (tmp.get(i).equals(target)) {
+		numChanges++;
+		src.remove(i);
+		for (FormID id : with) {
+		    src.add(i, id);
+		}
+	    }
+	}
+	return numChanges;
+    }
 }
