@@ -73,6 +73,11 @@ public class STAT extends MajorRecord {
 	super();
 	subRecords.setPrototype(STATprototype);
     }
+    
+    public STAT(String edid) {
+	this();
+	originateFromPatch(edid);
+    }
 
     @Override
     ArrayList<String> getTypes() {

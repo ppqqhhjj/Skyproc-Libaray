@@ -913,4 +913,12 @@ public class WEAP extends MajorRecordDescription {
     public boolean equalAltTextures(WEAP rhs) {
 	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
     }
+    
+    public FormID getFirstPersonModel() {
+	return subRecords.getSubForm("WNAM").getForm();
+    }
+    
+    public void setFirstPersonModel(FormID id) {
+	subRecords.setSubForm("WNAM", id);
+    }
 }
