@@ -31,7 +31,7 @@ public class WEAP extends MajorRecordDescription {
 	    reposition("FULL");
 	    add(new Model());
 	    add(new SubForm("EITM"));
-	    add(new SubData("EAMT"));
+	    add(new SubInt("EAMT", 2));
 	    add(new SubForm("ETYP"));
 	    add(new SubForm("BIDS"));
 	    add(new SubForm("BAMT"));
@@ -496,7 +496,7 @@ public class WEAP extends MajorRecordDescription {
      * @param amount
      */
     public void setEnchantmentCharge(int amount) {
-	subRecords.getSubData("EAMT").setDataAbs(amount, 2, 2);
+	subRecords.setSubInt("EAMT", amount);
     }
 
     /**
@@ -504,7 +504,7 @@ public class WEAP extends MajorRecordDescription {
      * @return
      */
     public int getEnchantmentCharge() {
-	return subRecords.getSubData("EAMT").toInt();
+	return subRecords.getSubInt("EAMT").get();
     }
 
     /**

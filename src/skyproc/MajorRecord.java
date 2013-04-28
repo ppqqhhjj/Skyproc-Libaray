@@ -3,6 +3,7 @@ package skyproc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LFlags;
@@ -119,6 +120,8 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
 	MajorRecord out = (MajorRecord) this.getNew();
+	out.formVersion = this.formVersion;
+	out.version = Arrays.copyOf(this.version, this.version.length);
 	out.srcMod = modToOriginateFrom;
 	out.ID = new FormID();
 	out.majorFlags = new LFlags(majorFlags);
