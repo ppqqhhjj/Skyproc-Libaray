@@ -112,7 +112,7 @@ public class SUMMergerProgram implements SUM {
     }
 
     /**
-     * 
+     *
      * @return
      */
     @Override
@@ -145,8 +145,7 @@ public class SUMMergerProgram implements SUM {
 	}
 
 	// Import SUM patches
-	SPImporter importer = new SPImporter();
-	importer.importMods(SUMpatches);
+	SPImporter.importMods(SUMpatches);
 	Mod source = new Mod("MergerTemporary", false);
 	source.addAsOverrides(SPGlobal.getDB());
 
@@ -165,13 +164,17 @@ public class SUMMergerProgram implements SUM {
 	}
 
 	// Replace all formID references to new IDs
-	ArrayList<FormID> allFormIDs = SPGlobal.getGlobalPatch().allFormIDs();
-	for (FormID id : allFormIDs) {
-	    FormID newID = origToNew.get(id);
-	    if (newID != null) {
-		id.form = newID.form;
-		id.master = newID.master;
-	    } 
+	for (GRUP<MajorRecord> g : SPGlobal.getGlobalPatch()) {
+	    for (MajorRecord m : g.getRecords()) {
+		ArrayList<FormID> allFormIDs = m.allFormIDs();
+		for (FormID id : allFormIDs) {
+		    FormID newID = origToNew.get(id);
+		    if (newID != null) {
+			id.form = newID.form;
+			id.master = newID.master;
+		    }
+		}
+	    }
 	}
 
 	// Remove SkyProc patches from master list and delete their files

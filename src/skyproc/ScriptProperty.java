@@ -112,6 +112,11 @@ class ScriptProperty extends Record implements Serializable {
 	ArrayList<FormID> out = new ArrayList<>();
 	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
 	    out.add(((FormIDData) data).id);
+	} else if (getPropertyType().equals(ScriptPropertyType.FormIDArr)) {
+	    FormArrayData arr = (FormArrayData) data;
+	    for (FormIDData id : arr.data) {
+		out.add(id.id);
+	    }
 	}
 	return out;
     }

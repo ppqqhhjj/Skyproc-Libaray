@@ -1055,7 +1055,7 @@ public class SUMprogram implements SUM {
 	args.add("-NOMODSAFTER");
 	args.add("-LANGUAGE");
 	args.add("-" + Language.values()[SUMsave.getInt(SUMSettings.LANGUAGE)]);
-	if (forceAllPatches.isSelected()) {
+	if (forceAllPatches.isSelected() || SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
 	    args.add("-FORCE");
 	}
 	args.add("-PROGRESSLOCATION");
