@@ -145,6 +145,7 @@ public class SUMMergerProgram implements SUM {
 	}
 
 	// Import SUM patches
+	SPGlobal.checkMissingMasters = false;
 	SPImporter.importMods(SUMpatches);
 	Mod source = new Mod("MergerTemporary", false);
 	source.addAsOverrides(SPGlobal.getDB());

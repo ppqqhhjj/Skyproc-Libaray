@@ -963,19 +963,20 @@ public class SUMprogram implements SUM {
 	    SPGlobal.logMain("BOSS", "Looking for BOSS.");
 	    int response = JOptionPane.YES_OPTION;
 	    String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
-	    File bossExe;
+	    File bossExe = new File(".");;
 	    if (bossPath != null) {
 		bossExe = new File(bossPath + "\\BOSS.exe");
-	    } else {
+	    }
+	    if (!bossExe.isFile()) {
 		try {
 		    bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
 		} catch (IOException ex) {
-		    bossExe = new File(".");
+		    SPGlobal.logException(ex);
 		}
 	    }
 
 	    // Run BOSS
-	    if (bossExe != null && bossExe.isFile()) {
+	    if (bossExe.isFile()) {
 		SPGlobal.logMain("BOSS", "Running BOSS.");
 		if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
 		    SPGlobal.logMain("BOSS", "BOSS complete.");
