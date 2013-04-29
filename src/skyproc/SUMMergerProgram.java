@@ -137,6 +137,8 @@ public class SUMMergerProgram implements SUM {
 
     @Override
     public void runChangesToPatch() throws Exception {
+	Mod patch = SPGlobal.getGlobalPatch();
+
 	// Get SUM patch names
 	ArrayList<String> SUMpatchStrings = Ln.loadFileToStrings(SUMprogram.getSUMPatchList(), false);
 	ArrayList<ModListing> SUMpatches = new ArrayList<>(SUMpatchStrings.size());
@@ -155,17 +157,17 @@ public class SUMMergerProgram implements SUM {
 	    for (MajorRecord m : g.getRecords()) {
 		if (SUMpatches.contains(m.getFormMaster())) {
 		    // If record was created by SkyProc, make it originate from merger
-		    MajorRecord copy = SPGlobal.getGlobalPatch().makeCopy(m, m.getEDID());
+		    MajorRecord copy = patch.makeCopy(m, m.getEDID());
 		    origToNew.put(m.getForm(), copy.getForm());
 		} else {
 		    // If non-skyproc override record, just add it
-		    SPGlobal.getGlobalPatch().addRecord(m);
+		    patch.addRecord(m);
 		}
 	    }
 	}
 
 	// Replace all formID references to new IDs
-	for (GRUP<MajorRecord> g : SPGlobal.getGlobalPatch()) {
+	for (GRUP<MajorRecord> g : patch) {
 	    for (MajorRecord m : g.getRecords()) {
 		ArrayList<FormID> allFormIDs = m.allFormIDs();
 		for (FormID id : allFormIDs) {
@@ -180,10 +182,10 @@ public class SUMMergerProgram implements SUM {
 
 	// Remove SkyProc patches from master list and delete their files
 	for (Mod m : SPGlobal.getDB()) {
-	    SPGlobal.getGlobalPatch().tes.getMasters().remove(m.getInfo());
+	    patch.tes.getMasters().remove(m.getInfo());
 	    File modFile = new File(SPGlobal.pathToData + m.getName());
 	    if (modFile.exists()) {
-		modFile.delete();
+//		modFile.delete();
 	    }
 	}
     }

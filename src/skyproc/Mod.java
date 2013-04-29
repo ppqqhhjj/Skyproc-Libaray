@@ -738,11 +738,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	// Export Header
 	tes.setNumRecords(numRecords());
 	if (SPGlobal.logging()) {
-	    SPGlobal.logMod(this, this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
-	    SPGlobal.logMod(this, this.getName(), "Masters: ");
+	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
+	    SPGlobal.logSync(this.getName(), "Masters: ");
 	    int i = 0;
 	    for (String s : this.getMastersStrings()) {
-		SPGlobal.logMod(this, this.getName(), "   " + Ln.printHex(i++) + "  " + s);
+		SPGlobal.logSync(this.getName(), "   " + Ln.printHex(i++) + "  " + s);
 	    }
 	}
 
