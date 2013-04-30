@@ -14,7 +14,7 @@ public class COBJ extends MajorRecord {
 	@Override
 	protected void addRecords() {
 	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
-	    add(new SubData("COED"));
+	    add(new Owner());
 	    add(new SubList<>(new Condition()));
 	    add(new SubForm("CNAM"));
 	    add(new SubForm("BNAM"));

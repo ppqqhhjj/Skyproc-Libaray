@@ -132,7 +132,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return out;
     }
 
-    MajorRecord copy(String edid) {
+    public MajorRecord copy(String edid) {
 	return SPGlobal.getGlobalPatch().makeCopy(this, edid);
     }
 

@@ -17,12 +17,12 @@ import skyproc.exceptions.BadRecord;
  * @author Justin Swanson
  */
 public class LeveledEntry extends SubShell {
-
+    
     static final SubPrototype LVLOproto = new SubPrototype() {
 	@Override
 	protected void addRecords() {
 	    add(new LVLOin());
-	    add(new COED());
+	    add(new Owner());
 	}
     };
 
@@ -99,64 +99,6 @@ public class LeveledEntry extends SubShell {
 	@Override
 	ArrayList<String> getTypes() {
 	    return Record.getTypeList("LVLO");
-	}
-    }
-
-    static class COED extends SubRecord {
-
-	FormID owner = new FormID();
-	int reqRank;
-	byte[] fluff;
-	boolean valid = false;
-
-	COED() {
-	    super();
-	}
-
-	@Override
-	SubRecord getNew(String type) {
-	    return new COED();
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList<>(1);
-	    out.add(owner);
-	    return out;
-	}
-
-	@Override
-	void export(ModExporter out) throws IOException {
-	    super.export(out);
-	    if (isValid()) {
-		owner.export(out);
-		out.write(reqRank);
-		out.write(fluff, 4);
-	    }
-	}
-
-	@Override
-	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in, srcMod);
-	    owner.setInternal(in.extract(4));
-	    reqRank = in.extractInt(4);
-	    fluff = in.extract(4);
-	    valid = true;
-	}
-
-	@Override
-	boolean isValid() {
-	    return valid;
-	}
-
-	@Override
-	int getContentLength(ModExporter out) {
-	    return 12;
-	}
-
-	@Override
-	ArrayList<String> getTypes() {
-	    return Record.getTypeList("COED");
 	}
     }
 

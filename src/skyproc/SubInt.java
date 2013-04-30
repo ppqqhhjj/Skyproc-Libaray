@@ -19,7 +19,7 @@ import skyproc.exceptions.BadRecord;
  */
 class SubInt extends SubRecordTyped<Integer> {
 
-    private Integer data = 0;
+    private Integer data;
     int length = 4;
 
     SubInt(String type) {

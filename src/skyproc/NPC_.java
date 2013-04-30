@@ -783,63 +783,6 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	}
     }
 
-    static class COED extends SubRecord implements Serializable {
-
-	FormID f1 = new FormID();
-	FormID f2 = new FormID();
-	float f = 0;
-	boolean valid = false;
-
-	COED() {
-	    super();
-	}
-
-	@Override
-	void export(ModExporter out) throws IOException {
-	    super.export(out);
-	    f1.export(out);
-	    f2.export(out);
-	    out.write(f);
-	}
-
-	@Override
-	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
-	    super.parseData(in, srcMod);
-	    f1.setInternal(in.extract(4));
-	    f2.setInternal(in.extract(4));
-	    f = in.extractFloat();
-	    valid = true;
-	}
-
-	@Override
-	SubRecord getNew(String type) {
-	    return new COED();
-	}
-
-	@Override
-	boolean isValid() {
-	    return valid;
-	}
-
-	@Override
-	int getContentLength(ModExporter out) {
-	    return 12;
-	}
-
-	@Override
-	ArrayList<FormID> allFormIDs() {
-	    ArrayList<FormID> out = new ArrayList(2);
-	    out.add(f1);
-	    out.add(f2);
-	    return out;
-	}
-
-	@Override
-	ArrayList<String> getTypes() {
-	    return Record.getTypeList("COED");
-	}
-    }
-
     // Enums
     /**
      * Enum representing the various stats of the NPC

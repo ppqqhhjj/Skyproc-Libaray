@@ -88,16 +88,14 @@ public class ScriptPackage extends SubRecord implements Serializable {
     @Override
     void export(ModExporter out) throws IOException {
 	super.export(out);
-	if (isValid()) {
-	    out.write(version, 2);
-	    out.write(unknown, 2);
-	    out.write(scripts.size(), 2);
-	    for (ScriptRef s : scripts) {
-		s.export(out);
-	    }
-	    if (fragments != null) {
-		fragments.export(out);
-	    }
+	out.write(version, 2);
+	out.write(unknown, 2);
+	out.write(scripts.size(), 2);
+	for (ScriptRef s : scripts) {
+	    s.export(out);
+	}
+	if (fragments != null) {
+	    fragments.export(out);
 	}
     }
 

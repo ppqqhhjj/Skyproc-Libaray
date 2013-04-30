@@ -147,7 +147,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the Nth master
      */
     public ModListing getNthMaster(int i) {
-	if (tes.getMasters().size() > i) {
+	if (tes.getMasters().size() > i && i >= 0) {
 	    return tes.getMasters().get(i);
 	} else {
 	    return getInfo();

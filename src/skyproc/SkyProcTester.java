@@ -22,8 +22,8 @@ import skyproc.gui.SPProgressBarPlug;
 public class SkyProcTester {
 
     static ArrayList<FormID> badIDs;
-    static GRUP_TYPE[] types = {GRUP_TYPE.STAT};
-//    static GRUP_TYPE[] types = GRUP_TYPE.values();
+//    static GRUP_TYPE[] types = {GRUP_TYPE.QUST};
+    static GRUP_TYPE[] types = GRUP_TYPE.values();
     static boolean streaming = false;
     static ArrayList<GRUP_TYPE> skip = new ArrayList<>(Arrays.asList(new GRUP_TYPE[]{GRUP_TYPE.BOOK}));
 

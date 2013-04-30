@@ -777,6 +777,87 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
+    static class ScriptFragments extends SubRecord {
+
+	byte unknown = 0;
+	StringNonNull fragmentFile = new StringNonNull();
+	ArrayList<ScriptFragment> fragments = new ArrayList<>();
+	boolean valid = false;
+
+	@Override
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(1)[0];
+	    int count = in.extractInt(2);
+	    fragmentFile.set(in.extractString(in.extractInt(2)));
+	    for (int i = 0 ; i < count ; i++) {
+		ScriptFragment frag = new ScriptFragment();
+		frag.parseData(in, srcMod);
+		fragments.add(frag);
+	    }
+	    valid = true;
+	}
+
+	@Override
+	void export(ModExporter out) throws IOException {
+	    if (!valid) {
+		return;
+	    }
+	    out.write(unknown, 1);
+	    out.write(fragments.size(), 2);
+	    fragmentFile.export(out);
+	    for (ScriptFragment frag : fragments) {
+//		frag.export(out);
+	    }
+	}
+
+	@Override
+	int getContentLength(ModExporter out) {
+	    if (!valid) {
+		return 0;
+	    }
+	    int len = 3;
+	    len += fragmentFile.getTotalLength(out);
+	    for (ScriptFragment frag : fragments) {
+		len += frag.getContentLength(out);
+	    }
+	    return len;
+	}
+
+	@Override
+	SubRecord getNew(String type) {
+	    return new ScriptFragments();
+	}
+
+	@Override
+	ArrayList<String> getTypes() {
+	    throw new UnsupportedOperationException("Not supported yet.");
+	}
+    }
+
+    static class ScriptFragment {
+
+	byte[] unknown = new byte[9];
+	StringNonNull scriptName = new StringNonNull();
+	StringNonNull fragmentName = new StringNonNull();
+
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    unknown = in.extract(9);
+	    scriptName.set(in.extractString(in.extractInt(2)));
+	    fragmentName.set(in.extractString(in.extractInt(2)));
+	}
+
+	void export(ModExporter out) throws IOException {
+	    out.write(unknown);
+	    scriptName.export(out);
+	    fragmentName.export(out);
+	}
+
+	int getContentLength(ModExporter out) {
+	    return 9 + scriptName.getTotalLength(out)
+		    + fragmentName.getTotalLength(out);
+	}
+    }
+
     // Enums
     /**
      *
