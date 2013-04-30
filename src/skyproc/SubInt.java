@@ -46,6 +46,9 @@ class SubInt extends SubRecordTyped<Integer> {
     }
 
     public int get() {
+	if (data == null) {
+	    data = 0;
+	}
 	return data;
     }
 

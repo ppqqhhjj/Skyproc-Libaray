@@ -4,8 +4,9 @@
  */
 package skyproc;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.IOException;
+import java.util.*;
+import lev.Ln;
 import skyproc.exceptions.BadParameter;
 
 /**
@@ -14,7 +15,7 @@ import skyproc.exceptions.BadParameter;
  */
 abstract public class LeveledRecord extends MajorRecord implements Iterable<LeveledEntry> {
 
-    static final SubPrototype LeveledProto = new SubPrototype(MajorRecord.majorProto){
+    static final SubPrototype LeveledProto = new SubPrototype(MajorRecord.majorProto) {
 
 	@Override
 	protected void addRecords() {
@@ -68,14 +69,14 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	 *
 	 */
 	CalcForEachItemInCount,
-        /**
+	/**
 	 *
 	 */
-        UseAll;
+	UseAll;
     }
 
     /**
-     * 
+     *
      */
     public void clearEntries() {
 	subRecords.getSubList("LVLO").clear();
@@ -90,9 +91,10 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     }
 
     /**
-     * Returns all non-leveled list entries, with leveled list entries recursively
-     *  replaced with their contents.
-     * NOTE: Making additions/removals to this list will not actually affect the record.
+     * Returns all non-leveled list entries, with leveled list entries
+     * recursively replaced with their contents. NOTE: Making additions/removals
+     * to this list will not actually affect the record.
+     *
      * @return
      */
     public ArrayList<LeveledEntry> getFlattenedEntries() {
@@ -100,7 +102,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	for (LeveledEntry entry : getEntries()) {
 	    MajorRecord o = SPDatabase.getMajor(entry.getForm());
 	    if (o instanceof LeveledRecord) {
-		out.addAll(((LeveledRecord)o).getFlattenedEntries());
+		out.addAll(((LeveledRecord) o).getFlattenedEntries());
 	    } else {
 		out.add(entry);
 	    }
@@ -168,7 +170,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      */
     public void removeFirstEntry(FormID id) {
 	ArrayList<LeveledEntry> list = getEntries();
-	for (int i = 0 ; i < list.size() ; i++) {
+	for (int i = 0; i < list.size(); i++) {
 	    if (list.get(i).getForm().equals(id)) {
 		list.remove(i);
 		break;
@@ -182,11 +184,26 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      */
     public void removeAllEntries(FormID id) {
 	ArrayList<LeveledEntry> list = getEntries();
-	for (int i = 0 ; i < list.size() ; ) {
+	for (int i = 0; i < list.size();) {
 	    if (list.get(i).getForm().equals(id)) {
 		list.remove(i);
 	    } else {
 		i++;
+	    }
+	}
+    }
+
+    public void reduce() {
+	LListSummary sum = new LListSummary(this);
+	sum.reduce();
+	setTo(sum);
+    }
+
+    void setTo(LListSummary sum) {
+	this.clearEntries();
+	for (LListEntry e : sum.entries) {
+	    for (int i = 0; i < e.numEntries; i++) {
+		this.addEntry(e.id, e.level, e.count);
 	    }
 	}
     }
@@ -279,5 +296,147 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	    }
 	}
 	return out;
+    }
+
+    // Large LList splitting
+    static class LListEntry {
+
+	FormID id;
+	int level;
+	int count;
+	int numEntries = 1;
+
+	LListEntry(LeveledEntry e) {
+	    id = e.getForm();
+	    level = e.getLevel();
+	    count = e.getCount();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final LListEntry other = (LListEntry) obj;
+	    if (!Objects.equals(this.id, other.id)) {
+		return false;
+	    }
+	    if (this.level != other.level) {
+		return false;
+	    }
+	    if (this.count != other.count) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    hash = 47 * hash + Objects.hashCode(this.id);
+	    hash = 47 * hash + this.level;
+	    hash = 47 * hash + this.count;
+	    return hash;
+	}
+    }
+
+    static class LListSummary {
+
+	ArrayList<LListEntry> entries = new ArrayList<>();
+
+	LListSummary(LeveledRecord in) {
+	    this(in.getEntries());
+	}
+
+	LListSummary(Collection<LeveledEntry> in) {
+	    for (LeveledEntry e : in) {
+		LListEntry trans = new LListEntry(e);
+		int existing = entries.indexOf(trans);
+		if (existing != -1) {
+		    entries.get(existing).numEntries++;
+		} else {
+		    entries.add(trans);
+		}
+	    }
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final LListSummary other = (LListSummary) obj;
+	    if (entries.size() != other.entries.size()) {
+		return false;
+	    }
+	    for (LListEntry entry : other.entries) {
+		if (!entries.contains(entry)) {
+		    return false;
+		}
+	    }
+	    return true;
+	}
+
+	public void reduce() {
+	    int[] divs = new int[entries.size()];
+	    for (int i = 0; i < divs.length; i++) {
+		divs[i] = entries.get(i).numEntries;
+	    }
+	    int reduc = Ln.gcd(divs);
+	    for (LListEntry e : entries) {
+		e.numEntries /= reduc;
+	    }
+	}
+
+	public LListEntry oneEntry() {
+	    if (entries.size() == 1) {
+		return entries.get(0);
+	    }
+	    return null;
+	}
+    }
+
+    public void splitEntries() {
+	reduce();
+
+	if (numEntries() <= 255) {
+	    return;
+	}
+
+	// Create Summaries
+	int numSplits = (int) (numEntries() / 255.0 + 1);
+	int numPerSplit = numEntries() / numSplits;
+	ArrayList<LeveledEntry> list = getEntries();
+	ArrayList<LListSummary> sums = new ArrayList<>(numSplits);
+	for (int i = 0; i < numSplits; i++) {
+	    int index = i * numPerSplit;
+	    int max = index + numPerSplit;
+	    if (max > list.size()) {
+		max = list.size();
+	    }
+	    LListSummary sum = new LListSummary(list.subList(index, max));
+	    sum.reduce();
+	    sums.add(sum);
+	}
+
+	this.clearEntries();
+	// Make sub Llists
+	for (int i = 0; i < sums.size(); i++) {
+	    LListSummary s = sums.get(i);
+	    LListEntry e = s.oneEntry();
+	    if (e == null) {
+		LeveledRecord copy = (LeveledRecord) this.copy(getEDID() + "_" + i);
+		copy.setTo(s);
+		this.addEntry(copy.getForm(), 1, 1);
+	    } else {
+		addEntry(e.id, e.level, e.count);
+	    }
+	}
     }
 }
