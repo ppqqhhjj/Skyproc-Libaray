@@ -173,7 +173,6 @@ public class SUMprogram implements SUM {
 
 	SUMGUI.open(this, new String[0]);
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		SUMGUI.patchNeededLabel.setText("");
@@ -183,7 +182,6 @@ public class SUMprogram implements SUM {
 		forceAllPatches.setLocation(SUMGUI.rightDimensions.x + 10, SUMGUI.cancelPatch.getY() + SUMGUI.cancelPatch.getHeight() / 2 - forceAllPatches.getHeight() / 2);
 		forceAllPatches.setOffset(-4);
 		forceAllPatches.addMouseListener(new MouseListener() {
-
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		    }
@@ -496,7 +494,6 @@ public class SUMprogram implements SUM {
 	    setting = new LImagePane(collapsedSetting);
 	    setting.setLocation(SUMGUI.middleDimensions.width - 10 - setting.getWidth(), using.getHeight() / 2 - setting.getHeight() / 2);
 	    setting.addMouseListener(new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    ArrayList<String> args = new ArrayList<>();
@@ -542,7 +539,6 @@ public class SUMprogram implements SUM {
 
 	    // Tie to help
 	    MouseListener updateHelp = new MouseListener() {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -844,6 +840,7 @@ public class SUMprogram implements SUM {
      */
     @Override
     public void onStart() {
+	SUMGUI.boss = false;
     }
 
     /**
@@ -860,7 +857,7 @@ public class SUMprogram implements SUM {
 
 	// BOSS and sorting
 	setupLinksForBOSS(activeLinks);
-	runBOSS(activeLinks);
+	runBOSS();
 	sortLinks(activeLinks);
 
 	runEachPatcher(activeLinks);
@@ -913,84 +910,34 @@ public class SUMprogram implements SUM {
     }
 
     void setupLinksForBOSS(ArrayList<PatcherLink> activeLinks) throws IOException, BadRecord {
-	ArrayList<ModListing> activeMods = SPImporter.getActiveModList();
-	ArrayList<Mod> nonExistantPatchers = new ArrayList<>();
+	ArrayList<Mod> active = new ArrayList<>();
 	for (PatcherLink link : activeLinks) {
-	    Mod patcherMod = link.hook.getExportPatch();
-	    if (!activeMods.contains(patcherMod.getInfo())) {
-		nonExistantPatchers.add(patcherMod);
-	    }
+	    active.add(link.hook.getExportPatch());
 	}
 
-	//Read in plugins.txt
-	ArrayList<String> pluginsLines = Ln.loadFileToStrings(SPGlobal.getPluginsTxt(), false);
-
-	// Handle non-existant patchers
-	for (Mod newPatcher : nonExistantPatchers) {
-	    // Export tmp patch as a placeholder
-	    BufferedWriter placeholder = new BufferedWriter(new FileWriter(SPGlobal.pathToData + newPatcher.getName()));
-	    placeholder.close();
-	    // Add listing to plugins.txt
-	    pluginsLines.add(newPatcher.getName());
-	}
+	NiftyFunc.setupMissingPatchFiles(active);
 
 	// Remove inactive links
+	ArrayList<Mod> inactive = new ArrayList<>();
 	for (PatcherLink link : links) {
 	    if (!activeLinks.contains(link)) {
-		Ln.removeIgnoreCase(pluginsLines, link.getPatchName());
+		inactive.add(link.hook.getExportPatch());
 	    }
 	}
 
-	// Write out new plugins.txt
-	BufferedWriter pluginsOut = new BufferedWriter(new FileWriter(SPGlobal.getPluginsTxt()));
-	for (String line : pluginsLines) {
-	    pluginsOut.write(line + "\n");
+	// Handle SUM.esp
+	if (SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
+	    active.add(getExportPatch());
+	} else {
+	    inactive.add(getExportPatch());
 	}
-	pluginsOut.close();
+
+	NiftyFunc.modifyPluginsTxt(active, inactive);
     }
 
-    void runBOSS(ArrayList<PatcherLink> activeLinks) {
+    void runBOSS() {
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
-	    SwingUtilities.invokeLater(new Runnable() {
-
-		@Override
-		public void run() {
-		    SUMGUI.progress.setStatusNumbered("Running BOSS");
-		}
-	    });
-
-	    // Find BOSS
-	    SPGlobal.logMain("BOSS", "Looking for BOSS.");
-	    int response = JOptionPane.YES_OPTION;
-	    String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
-	    File bossExe = new File(".");;
-	    if (bossPath != null) {
-		bossExe = new File(bossPath + "\\BOSS.exe");
-	    }
-	    if (!bossExe.isFile()) {
-		try {
-		    bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
-		} catch (IOException ex) {
-		    SPGlobal.logException(ex);
-		}
-	    }
-
-	    // Run BOSS
-	    if (bossExe.isFile()) {
-		SPGlobal.logMain("BOSS", "Running BOSS.");
-		if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
-		    SPGlobal.logMain("BOSS", "BOSS complete.");
-		    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
-		}
-	    } else {
-		SPGlobal.logMain("BOSS", "BOSS could not be found.");
-		response = JOptionPane.showConfirmDialog(null, "BOSS could not be located.\n"
-			+ "It is highly recommended you download BOSS so that it can be used.\n\n"
-			+ "Do you want to continue patching without BOSS?", "Cannot locate BOSS", JOptionPane.YES_NO_OPTION);
-	    }
-	    if (response == JOptionPane.NO_OPTION) {
-		SUMGUI.exitProgram(false, true);
-	    }
+	    NiftyFunc.runBOSS(true);
 	    SUMGUI.progress.incrementBar();
 	}
     }
@@ -1063,6 +1010,7 @@ public class SUMprogram implements SUM {
 	args.add("-" + (SUMGUI.progress.getX() + SUMGUI.progress.getWidth() + 10));
 	args.add("-" + SUMGUI.progress.getY());
 	args.add("-SUMBLOCK");
+	args.add("-NOBOSS");
 	boolean ret = NiftyFunc.startProcess(new File(link.path.getParentFile().getPath() + "\\"), args.toArray(new String[0]));
 	SUMGUI.progress.incrementBar();
 	return ret;

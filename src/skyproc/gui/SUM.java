@@ -130,7 +130,7 @@ public interface SUM {
      */
     public boolean needsPatching();
     /**
-     * 
+     *
      * @return A description of your patcher for display in SUM.
      */
     public String description();

@@ -89,6 +89,7 @@ public class SUMGUI extends JFrame {
     static boolean needsPatching = false;
     static boolean justPatching = false;
     static boolean justSettings = false;
+    static boolean boss = true;
     static LCheckBox forcePatch;
     static LImagePane skyProcLogo;
     static JTextArea statusUpdate;
@@ -487,7 +488,7 @@ public class SUMGUI extends JFrame {
 	justPatching = arguments.contains("-GENPATCH");
 
 	// Exclude mods after the patch?
-	SPGlobal.setNoModsAfter(arguments.contains("-NOMODSAFTER"));
+	SPGlobal.setNoModsAfter(!arguments.contains("-MODSAFTER"));
 
 	// Progress Bar Location
 	int index = arguments.indexOf("-PROGRESSLOCATION");
@@ -523,6 +524,8 @@ public class SUMGUI extends JFrame {
 	}
 
 	SPGlobal.setStreamMode(!arguments.contains("-NOSTREAM"));
+
+	boss = !arguments.contains("-NOBOSS");
 
 	if (SPGlobal.logging()) {
 	    if (justPatching) {
@@ -902,6 +905,11 @@ public class SUMGUI extends JFrame {
 	    SPGlobal.logMain("START IMPORT THREAD", "Starting of process thread.");
 	    try {
 		if (!imported) {
+		    if (boss) {
+			NiftyFunc.setupMissingPatchFiles(SPGlobal.getGlobalPatch());
+			NiftyFunc.modifyPluginsTxt(SPGlobal.getGlobalPatch());
+			NiftyFunc.runBOSS(true);
+		    }
 		    SPImporter.importActiveMods(hook.importRequests());
 		    imported();
 		    imported = true;

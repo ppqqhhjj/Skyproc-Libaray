@@ -4,8 +4,10 @@
  */
 package skyproc;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,8 +15,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import lev.LInChannel;
 import lev.Ln;
+import skyproc.gui.SUMGUI;
 
 /**
  * A class to hold many common/useful functions.
@@ -23,7 +27,7 @@ import lev.Ln;
  */
 public class NiftyFunc {
 
-    static String[] validationSkip = { "DIAL" };
+    static String[] validationSkip = {"DIAL"};
 
     /**
      * A common way to attach scripts to NPCs that normally cannot have scripts
@@ -429,10 +433,11 @@ public class NiftyFunc {
 
     /**
      * Trims or expands a string (with _) to have exactly four characters.
+     *
      * @param in
      * @return
      */
-    static public String trimToFour (String in) {
+    static public String trimToFour(String in) {
 	if (in.length() > 4) {
 	    return in.substring(0, 3);
 	} else if (in.length() < 4) {
@@ -441,11 +446,11 @@ public class NiftyFunc {
 	    return in;
 	}
     }
-    
-    static public int replaceAll(ArrayList<FormID> src, FormID target, FormID ... with) {
+
+    static public int replaceAll(ArrayList<FormID> src, FormID target, FormID... with) {
 	ArrayList<FormID> tmp = new ArrayList<>(src);
 	int numChanges = 0;
-	for (int i = tmp.size() - 1 ; i >= 0 ; i--) {
+	for (int i = tmp.size() - 1; i >= 0; i--) {
 	    if (tmp.get(i).equals(target)) {
 		numChanges++;
 		src.remove(i);
@@ -455,5 +460,102 @@ public class NiftyFunc {
 	    }
 	}
 	return numChanges;
+    }
+
+    public static void setupMissingPatchFiles(ArrayList<Mod> mods) throws IOException {
+	setupMissingPatchFiles(mods.toArray(new Mod[0]));
+    }
+
+    public static void setupMissingPatchFiles(Mod... mods) throws IOException {
+	// Handle non-existant patchers
+	for (Mod newPatcher : mods) {
+	    File path = new File(SPGlobal.pathToData + newPatcher.getName());
+	    // Export tmp patch as a placeholder
+	    if (!path.isFile()) {
+		BufferedWriter placeholder = new BufferedWriter(new FileWriter(SPGlobal.pathToData + newPatcher.getName()));
+		placeholder.close();
+	    }
+	}
+    }
+
+    public static void modifyPluginsTxt(ArrayList<Mod> add, ArrayList<Mod> remove) throws IOException {
+	//Read in plugins.txt
+	ArrayList<String> pluginsLines = Ln.loadFileToStrings(SPGlobal.getPluginsTxt(), false);
+
+	// Remove unwanted mods
+	if (remove != null) {
+	    for (Mod r : remove) {
+		Ln.removeIgnoreCase(pluginsLines, r.getName());
+	    }
+	}
+
+	// Find missing lines on plugins.txt
+	if (add != null) {
+	    for (Mod newPatcher : add) {
+		if (!Ln.containsEqualsIgnoreCase(pluginsLines, newPatcher.getName())) {
+		    // Add listing to plugins.txt
+		    pluginsLines.add(newPatcher.getName());
+		}
+	    }
+	}
+	
+	// Write out new plugins.txt
+	BufferedWriter pluginsOut = new BufferedWriter(new FileWriter(SPGlobal.getPluginsTxt()));
+	for (String line : pluginsLines) {
+	    pluginsOut.write(line + "\n");
+	}
+
+	pluginsOut.close();
+    }
+
+    public static void modifyPluginsTxt(Mod add) throws IOException {
+	ArrayList<Mod> addL = new ArrayList<>(1);
+	addL.add(add);
+	modifyPluginsTxt(addL, null);
+    }
+
+    public static void runBOSS(boolean errorMessages) {
+	SwingUtilities.invokeLater(new Runnable() {
+	    @Override
+	    public void run() {
+		SUMGUI.progress.setStatusNumbered("Running BOSS");
+	    }
+	});
+	// Find BOSS
+	SPGlobal.logMain("BOSS", "Looking for BOSS.");
+	int response = JOptionPane.YES_OPTION;
+	String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
+	File bossExe = new File(".");;
+	if (bossPath != null) {
+	    bossExe = new File(bossPath + "\\BOSS.exe");
+	}
+	if (!bossExe.isFile()) {
+	    try {
+		bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+	    }
+	}
+
+	// Run BOSS
+	if (bossExe.isFile()) {
+	    SPGlobal.logMain("BOSS", "Running BOSS.");
+	    if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
+		SPGlobal.logMain("BOSS", "BOSS failed to run.");
+		if (errorMessages) {
+		    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
+		}
+	    }
+	} else if (errorMessages) {
+	    SPGlobal.logMain("BOSS", "BOSS could not be found.");
+	    response = JOptionPane.showConfirmDialog(null, "BOSS could not be located.\n"
+		    + "It is highly recommended you download BOSS so that it can be used.\n\n"
+		    + "Do you want to continue patching without BOSS?", "Cannot locate BOSS", JOptionPane.YES_NO_OPTION);
+	}
+	if (response == JOptionPane.NO_OPTION) {
+	    SPGlobal.logMain("BOSS", "Exiting program due to BOSS failure.");
+	    SUMGUI.exitProgram(false, true);
+	}
+	SPGlobal.logMain("BOSS", "BOSS complete.");
     }
 }

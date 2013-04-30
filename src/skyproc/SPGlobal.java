@@ -23,7 +23,7 @@ public class SPGlobal {
     static boolean streamMode = true;
     static boolean deleteAfterExport = true;
     static boolean mergeMode = false;
-    static boolean noModsAfter = false;
+    static boolean noModsAfter = true;
     static boolean checkMissingMasters = true;
     static MajorRecord lastStreamed;
     /*

@@ -181,12 +181,18 @@ public class SUMMergerProgram implements SUM {
 	}
 
 	// Remove SkyProc patches from master list and delete their files
+	ArrayList<Mod> add = new ArrayList<>(1);
+	add.add(SPGlobal.getGlobalPatch());
+	ArrayList<Mod> remove = new ArrayList<>();
 	for (Mod m : SPGlobal.getDB()) {
 	    patch.tes.getMasters().remove(m.getInfo());
 	    File modFile = new File(SPGlobal.pathToData + m.getName());
 	    if (modFile.exists()) {
-//		modFile.delete();
+		modFile.delete();
 	    }
+	    remove.add(m);
 	}
+	remove.remove(SPGlobal.getGlobalPatch());
+	NiftyFunc.modifyPluginsTxt(add, remove);
     }
 }
