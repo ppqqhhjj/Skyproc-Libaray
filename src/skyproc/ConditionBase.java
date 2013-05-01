@@ -6,6 +6,8 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LImport;
 import lev.LFlags;
@@ -130,5 +132,58 @@ class ConditionBase extends SubRecord {
     @Override
     ArrayList<String> getTypes() {
 	return Record.getTypeList("CTDA");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final ConditionBase other = (ConditionBase) obj;
+	if (this.operator != other.operator) {
+	    return false;
+	}
+	if (!Objects.equals(this.flags, other.flags)) {
+	    return false;
+	}
+	if (!Arrays.equals(this.fluff, other.fluff)) {
+	    return false;
+	}
+	if (!Objects.equals(this.comparisonValueForm, other.comparisonValueForm)) {
+	    return false;
+	}
+	if (Float.floatToIntBits(this.comparisonValueFloat) != Float.floatToIntBits(other.comparisonValueFloat)) {
+	    return false;
+	}
+	if (!Arrays.equals(this.padding, other.padding)) {
+	    return false;
+	}
+	
+	// Ptr equals.  Lazy because depreciated with new SubList accessor API
+	if (option != other.option) {  
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 3;
+	hash = 97 * hash + (this.operator != null ? this.operator.hashCode() : 0);
+	hash = 97 * hash + Objects.hashCode(this.flags);
+	hash = 97 * hash + Arrays.hashCode(this.fluff);
+	hash = 97 * hash + Objects.hashCode(this.comparisonValueForm);
+	hash = 97 * hash + Float.floatToIntBits(this.comparisonValueFloat);
+	hash = 97 * hash + Arrays.hashCode(this.padding);
+	hash = 97 * hash + Objects.hashCode(this.option);
+	return hash;
+    }
+
+    @Override
+    boolean subRecordEquals(SubRecord subRecord) {
+	return equals(subRecord);
     }
 }
