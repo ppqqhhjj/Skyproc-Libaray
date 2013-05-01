@@ -536,9 +536,6 @@ public class SPImporter {
 		SPGlobal.flush();
 	    }
 
-	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Fetching Strings");
-	    plugin.fetchStringPointers();
-
 	    if (addtoDb) {
 		SPGlobal.getDB().add(plugin);
 	    }

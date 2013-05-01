@@ -245,10 +245,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	}
     }
 
-    void fetchStringPointers() throws IOException {
-	subRecords.fetchStringPointers(srcMod);
-    }
-
     // Get/set methods
     /**
      * Sets the EDID of the Major Record<br><br> ONLY works on new records

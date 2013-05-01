@@ -166,12 +166,6 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	return out;
     }
 
-    void fetchStringPointers() throws IOException {
-	for (MajorRecord r : listRecords) {
-	    r.fetchStringPointers();
-	}
-    }
-
     /**
      *
      * @return The number of contained records.

@@ -106,6 +106,9 @@ class Consistency {
 	    if (!imported) {
 		storage.put(SPGlobal.getGlobalPatch().getInfo(), new HashMap<String, FormID>());
 	    }
+	    if (SPGlobal.testing) {
+		return;
+	    }
 	    getConsistencyFile();
 	    v2import(globalOnly);
 	    v1import(globalOnly);
@@ -156,6 +159,9 @@ class Consistency {
     static void export() throws IOException {
 	if (SPGlobal.logging()) {
 	    SPGlobal.logMain(header, "Exporting Consistency file.");
+	}
+	if (SPGlobal.testing) {
+	    return;
 	}
 	pruneConflicts();
 	importConsistency(false);
@@ -363,8 +369,8 @@ class Consistency {
     }
 
     static enum LogTypes {
+
 	CONSISTENCY,
-	CONSISTENCY_IMPORT,
-	;
+	CONSISTENCY_IMPORT,;
     }
 }

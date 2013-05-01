@@ -211,13 +211,6 @@ class SubList<S extends SubRecord<T>, T> extends SubRecord<ArrayList<S>> impleme
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod) {
-	for (SubRecord s : translate()) {
-	    s.fetchStringPointers(srcMod);
-	}
-    }
-
-    @Override
     public int hashCode() {
 	int hash = 7;
 	hash = 89 * hash + Objects.hashCode(this.collection);

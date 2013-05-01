@@ -77,11 +77,6 @@ public class GMST extends MajorRecord {
 	}
 
 	@Override
-	void fetchStringPointers(Mod srcMod) {
-	    DATAs.fetchStringPointers(srcMod);
-	}
-
-	@Override
 	ArrayList<String> getTypes() {
 	    return Record.getTypeList("DATA");
 	}
@@ -12249,7 +12244,6 @@ public class GMST extends MajorRecord {
 	updateDATAtype();
 	super.importSubRecords(in);
 	((SubRecordsStream) subRecords).loadFromPosition(data);
-	data.fetchStringPointers(srcMod);
     }
 
     @Override

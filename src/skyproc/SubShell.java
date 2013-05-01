@@ -61,11 +61,6 @@ class SubShell extends SubRecord<SubShell> {
     }
 
     @Override
-    void fetchStringPointers(Mod srcMod) {
-	subRecords.fetchStringPointers(srcMod);
-    }
-
-    @Override
     ArrayList<String> getTypes() {
 	return subRecords.getTypes();
     }

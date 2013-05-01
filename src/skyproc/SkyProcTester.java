@@ -61,9 +61,10 @@ public class SkyProcTester {
 
     private static void validateAll() throws Exception {
 	String[] mods = {
-	    "Skyrim.esm",
+//	    "Skyrim.esm",
 	    "Dawnguard.esm",
-	    "Dragonborn.esm",};
+//	    "Dragonborn.esm",
+	};
 	SPGlobal.checkMissingMasters = false;
 	for (String mod : mods) {
 	    if (!validate(new ModListing(mod))) {

@@ -401,12 +401,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	return out;
     }
 
-    void fetchStringPointers() throws IOException {
-	for (GRUP g : GRUPs.values()) {
-	    g.fetchStringPointers();
-	}
-    }
-
     void openStringStreams() {
 	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
 	    for (Files f : SubStringPointer.Files.values()) {
@@ -1543,10 +1537,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(ModExporter out) {
 	    return 12;
-	}
-
-	@Override
-	void fetchStringPointers(MajorRecord r) {
 	}
 
 	@Override

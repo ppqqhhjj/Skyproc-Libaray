@@ -56,7 +56,6 @@ class SubRecordsStream extends SubRecordsDerived {
 		SPGlobal.logException(ex);
 		return s;
 	    }
-	    standardize(s);
 	}
 	return s;
     }
@@ -67,10 +66,6 @@ class SubRecordsStream extends SubRecordsDerived {
 	if (pos.containsKey(in)) {
 	    pos.remove(in);
 	}
-    }
-
-    void standardize(SubRecord record) {
-	record.fetchStringPointers(major);
     }
 
     @Override
@@ -122,7 +117,6 @@ class SubRecordsStream extends SubRecordsDerived {
 	    } else {
 		SubRecord record = getSilent(nextType);
 		record.parseData(record.extractRecordData(in), srcMod);
-		standardize(record);
 	    }
 	} else {
 	    throw new BadRecord(getTypes().get(0).toString() + " doesn't know what to do with a " + nextType.toString() + " record.");

@@ -66,12 +66,12 @@ class SubStringPointer extends SubRecordTyped {
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	data.parseData(in, srcMod);
+	fetchStringPointers(srcMod);
 	if (logging()) {
-	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()));
+	    logMod(srcMod, getType(), "Setting " + toString() + " to : " + Ln.arrayToString(data.getData()) + " - " + toString());
 	}
     }
 
-    @Override
     void fetchStringPointers(Mod srcMod) {
 	if (srcMod.isFlag(Mod_Flags.STRING_TABLED)) {
 	    Map<SubStringPointer.Files, LImport> streams = srcMod.stringStreams;

@@ -52,13 +52,6 @@ public abstract class SubRecord<T> extends Record {
 	return new ArrayList<>(0);
     }
 
-    void fetchStringPointers(Mod srcMod) {
-    }
-
-    void fetchStringPointers (MajorRecord r) {
-	fetchStringPointers(r.srcMod);
-    }
-
     T translate() {
 	return (T) this;
     }
