@@ -12,6 +12,8 @@ import skyproc.genenums.Axis;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import lev.LImport;
 import lev.LOutFile;
 import skyproc.Condition.RunOnType;
@@ -180,6 +182,31 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!super.equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID other = (Cond_FormID) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 97 * hash + Objects.hashCode(this.p1);
+	    return hash;
+	}
     }
 
     public static class Cond_Axis extends ConditionOption {
@@ -221,6 +248,31 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Axis other = (Cond_Axis) obj;
+	    if (this.axis != other.axis) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 71 * hash + (this.axis != null ? this.axis.hashCode() : 0);
+	    return hash;
 	}
     }
 
@@ -274,6 +326,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_CastingSource other = (Cond_FormID_CastingSource) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (this.source != other.source) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 89 * hash + Objects.hashCode(this.p1);
+	    hash = 89 * hash + (this.source != null ? this.source.hashCode() : 0);
+	    return hash;
+	}
     }
 
     public static class Cond_CastingSource_FormID extends ConditionOption {
@@ -326,6 +407,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_CastingSource_FormID other = (Cond_CastingSource_FormID) obj;
+	    if (this.source != other.source) {
+		return false;
+	    }
+	    if (!Objects.equals(this.p2, other.p2)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 67 * hash + (this.source != null ? this.source.hashCode() : 0);
+	    hash = 67 * hash + Objects.hashCode(this.p2);
+	    return hash;
+	}
     }
 
     public static class Cond_FormID_Int extends ConditionOption {
@@ -377,6 +487,35 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_Int other = (Cond_FormID_Int) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (this.p2 != other.p2) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 59 * hash + Objects.hashCode(this.p1);
+	    hash = 59 * hash + this.p2;
+	    return hash;
 	}
     }
 
@@ -432,6 +571,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_FormID other = (Cond_FormID_FormID) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (!Objects.equals(this.p2, other.p2)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 37 * hash + Objects.hashCode(this.p1);
+	    hash = 37 * hash + Objects.hashCode(this.p2);
+	    return hash;
+	}
     }
 
     public static class Cond_Gender extends ConditionOption {
@@ -474,6 +642,31 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Gender other = (Cond_Gender) obj;
+	    if (this.g != other.g) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 53 * hash + (this.g != null ? this.g.hashCode() : 0);
+	    return hash;
+	}
     }
 
     public static class Cond_CastingSource extends ConditionOption {
@@ -515,6 +708,31 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_CastingSource other = (Cond_CastingSource) obj;
+	    if (this.source != other.source) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 23 * hash + (this.source != null ? this.source.hashCode() : 0);
+	    return hash;
 	}
     }
 
@@ -580,6 +798,39 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return p3;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Int_FormID_Int other = (Cond_Int_FormID_Int) obj;
+	    if (this.p1 != other.p1) {
+		return false;
+	    }
+	    if (!Objects.equals(this.p2, other.p2)) {
+		return false;
+	    }
+	    if (this.p3 != other.p3) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 41 * hash + this.p1;
+	    hash = 41 * hash + Objects.hashCode(this.p2);
+	    hash = 41 * hash + this.p3;
+	    return hash;
+	}
     }
 
     public static class Cond_Int_FormID extends ConditionOption {
@@ -632,6 +883,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Int_FormID other = (Cond_Int_FormID) obj;
+	    if (this.p1 != other.p1) {
+		return false;
+	    }
+	    if (!Objects.equals(this.p2, other.p2)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 11 * hash + this.p1;
+	    hash = 11 * hash + Objects.hashCode(this.p2);
+	    return hash;
+	}
     }
 
     public static class Cond_WardState extends ConditionOption {
@@ -674,6 +954,31 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_WardState other = (Cond_WardState) obj;
+	    if (this.state != other.state) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 37 * hash + (this.state != null ? this.state.hashCode() : 0);
+	    return hash;
+	}
     }
 
     public static class Cond_Int extends ConditionOption {
@@ -715,6 +1020,31 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Int other = (Cond_Int) obj;
+	    if (this.p1 != other.p1) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 29 * hash + this.p1;
+	    return hash;
 	}
     }
 
@@ -767,6 +1097,35 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_String other = (Cond_FormID_String) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (!Arrays.equals(this.p2, other.p2)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 97 * hash + Objects.hashCode(this.p1);
+	    hash = 97 * hash + Arrays.hashCode(this.p2);
+	    return hash;
 	}
     }
 
@@ -821,6 +1180,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_Axis other = (Cond_FormID_Axis) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (this.a != other.a) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 37 * hash + Objects.hashCode(this.p1);
+	    hash = 37 * hash + (this.a != null ? this.a.hashCode() : 0);
+	    return hash;
+	}
     }
 
     public static class Cond_FormID_CrimeType extends ConditionOption {
@@ -872,6 +1260,35 @@ class ConditionOption implements Serializable {
 	@Override
 	public Object getParam3() {
 	    return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_CrimeType other = (Cond_FormID_CrimeType) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (this.c != other.c) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 23 * hash + Objects.hashCode(this.p1);
+	    hash = 23 * hash + (this.c != null ? this.c.hashCode() : 0);
+	    return hash;
 	}
     }
 
@@ -925,6 +1342,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_FormID_Float other = (Cond_FormID_Float) obj;
+	    if (!Objects.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    if (Float.floatToIntBits(this.f) != Float.floatToIntBits(other.f)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 59 * hash + Objects.hashCode(this.p1);
+	    hash = 59 * hash + Float.floatToIntBits(this.f);
+	    return hash;
+	}
     }
 
     public static class Cond_Int_Int extends ConditionOption {
@@ -969,6 +1415,35 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_Int_Int other = (Cond_Int_Int) obj;
+	    if (this.i1 != other.i1) {
+		return false;
+	    }
+	    if (this.i2 != other.i2) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 79 * hash + this.i1;
+	    hash = 79 * hash + this.i2;
+	    return hash;
+	}
     }
 
     public static class Cond_String extends ConditionOption {
@@ -1006,5 +1481,68 @@ class ConditionOption implements Serializable {
 	public Object getParam3() {
 	    return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (!equals(obj)) {
+		return false;
+	    }
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final Cond_String other = (Cond_String) obj;
+	    if (!Arrays.equals(this.p1, other.p1)) {
+		return false;
+	    }
+	    return true;
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = super.hashCode();
+	    hash = 41 * hash + Arrays.hashCode(this.p1);
+	    return hash;
+	}
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final ConditionOption other = (ConditionOption) obj;
+	if (this.index != other.index) {
+	    return false;
+	}
+	if (this.script != other.script) {
+	    return false;
+	}
+	if (this.runType != other.runType) {
+	    return false;
+	}
+	if (!Objects.equals(this.reference, other.reference)) {
+	    return false;
+	}
+	if (!Arrays.equals(this.p3placeholder, other.p3placeholder)) {
+	    return false;
+	}
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 97 * hash + this.index;
+	hash = 97 * hash + (this.script != null ? this.script.hashCode() : 0);
+	hash = 97 * hash + (this.runType != null ? this.runType.hashCode() : 0);
+	hash = 97 * hash + Objects.hashCode(this.reference);
+	hash = 97 * hash + Arrays.hashCode(this.p3placeholder);
+	return hash;
     }
 }

@@ -161,9 +161,7 @@ class ConditionBase extends SubRecord {
 	if (!Arrays.equals(this.padding, other.padding)) {
 	    return false;
 	}
-	
-	// Ptr equals.  Lazy because depreciated with new SubList accessor API
-	if (option != other.option) {  
+	if (!option.equals(other.option)) {  
 	    return false;
 	}
 	return true;
