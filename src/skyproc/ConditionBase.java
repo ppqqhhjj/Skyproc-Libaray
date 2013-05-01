@@ -50,6 +50,7 @@ class ConditionBase extends SubRecord {
 	//Value
 	if (get(Condition.CondFlag.UseGlobal)) {
 	    // This FormID is flipped, so it's an odd export.
+	    comparisonValueForm.adjustMasterIndex(out.getExportMod());
 	    out.write(comparisonValueForm.get());
 	} else {
 	    out.write(comparisonValueFloat);
@@ -78,6 +79,7 @@ class ConditionBase extends SubRecord {
 	    // Use public set here, because for some reason, this FormID is flipped
 	    comparisonValueForm = new FormID();
 	    comparisonValueForm.set(in.extract(4));
+	    comparisonValueForm.standardize(srcMod);
 	} else {
 	    comparisonValueFloat = in.extractFloat();
 	}

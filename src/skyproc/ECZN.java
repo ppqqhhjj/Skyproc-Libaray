@@ -52,8 +52,8 @@ public class ECZN extends MajorRecord {
 	final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 
-	    owner.setInternal(in.extract(4));
-	    location.setInternal(in.extract(4));
+	    owner.parseData(in, srcMod);
+	    location.parseData(in, srcMod);
 	    if (!in.isDone()) {
 		rank = in.extractInt(1);
 		minLevel = in.extractInt(1);

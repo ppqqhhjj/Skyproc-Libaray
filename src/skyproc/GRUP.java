@@ -243,12 +243,6 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	return listRecords;
     }
 
-    void standardizeMasters() {
-	for (T item : listRecords) {
-	    item.standardizeMaster();
-	}
-    }
-
     void addRecord(Object item) {
 	addRecord((T) item);
     }

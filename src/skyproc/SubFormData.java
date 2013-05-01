@@ -34,7 +34,7 @@ class SubFormData extends SubRecordTyped {
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
-	ID.setInternal(in.extract(4));
+	ID.parseData(in, srcMod);
 	setData(in.extract(4));
     }
 
@@ -70,10 +70,6 @@ class SubFormData extends SubRecordTyped {
 	return out;
     }
 
-    void setForm(byte[] in) throws BadParameter {
-	ID.setInternal(in);
-    }
-
     void copyForm(FormID in) {
 	ID = new FormID(in);
     }
@@ -84,10 +80,6 @@ class SubFormData extends SubRecordTyped {
      */
     public void setForm(FormID id) {
 	ID = id;
-    }
-
-    byte[] getFormArray(Boolean master) {
-	return ID.getInternal(master);
     }
 
     /**

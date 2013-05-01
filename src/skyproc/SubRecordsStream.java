@@ -70,7 +70,6 @@ class SubRecordsStream extends SubRecordsDerived {
     }
 
     void standardize(SubRecord record) {
-	record.standardize(major);
 	record.fetchStringPointers(major);
     }
 

@@ -8,8 +8,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.zip.DataFormatException;
+import lev.LImport;
 import lev.LOutFile;
 import lev.Ln;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  * This class represents a FormID that distinguishes one record from another.
@@ -107,7 +111,7 @@ public class FormID implements Comparable, Serializable {
 	setInternal(Ln.reverse(id));
     }
 
-    final void setInternal(byte[] id) {
+    private final void setInternal(byte[] id) {
 	form = id;
 	if (id.length > 4) {
 	    form = Arrays.copyOfRange(form, 0, 3);
@@ -116,9 +120,20 @@ public class FormID implements Comparable, Serializable {
 	    System.arraycopy(id, 0, form, 0, id.length);
 	}
     }
+    
+    final void setInternal(byte[] id, Mod srcMod) {
+	setInternal(id);
+	standardize(srcMod);
+    }
 
-    void export(LOutFile out) throws IOException {
+    void export(ModExporter out) throws IOException {
+	standardize(out.getSourceMod());
+	adjustMasterIndex(out.getExportMod());
 	out.write(getInternal(true), 4);
+    }
+    
+    void parseData(LImport in, Mod srcMod) {
+	setInternal(in.extract(4), srcMod);
     }
 
     String getArrayStr(Boolean masterIndex) {
@@ -188,23 +203,22 @@ public class FormID implements Comparable, Serializable {
 	    return "NULL";
 	}
     }
+    static byte[] test = {(byte) 0xD3, (byte) 0x5F, 1, 2};
 
     void standardize(Mod srcMod) {
-	if (isValid()) {
-	    if (master == null) {
-		master = srcMod.getNthMaster(form[3]);
-	    }
-	    adjustMasterIndex(srcMod);
+	if (master == null) {
+	    master = srcMod.getNthMaster(form[3]);
 	}
     }
 
-    private void adjustMasterIndex(Mod srcMod) {
+    void adjustMasterIndex(Mod srcMod) {
 	form[3] = (byte) srcMod.getMasterIndex(master);
     }
 
     /**
      * Parses a string like "023abeSkyrim.esm" and returns:<br>
      * ["023abe"]["Skyrim.esm"]
+     *
      * @param s
      * @return
      */
@@ -224,7 +238,9 @@ public class FormID implements Comparable, Serializable {
     }
 
     /**
-     * Expects something like ["023abe"]["Skyrim.esm"] and returns a FormID object.
+     * Expects something like ["023abe"]["Skyrim.esm"] and returns a FormID
+     * object.
+     *
      * @param s String array of length 2. First index must be length 6.
      * @return A FormID object representing the array, or NULL if malformed.
      */
@@ -241,7 +257,7 @@ public class FormID implements Comparable, Serializable {
     }
 
     Boolean isStandardized() {
-	return (isValid() && master != null);
+	return master != null;
     }
 
     int getContentLength() {

@@ -64,9 +64,9 @@ public class ALCH extends MagicItem {
 	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    flags.set(in.extract(4));
-	    addiction.setInternal(in.extract(4));
+	    addiction.parseData(in, srcMod);
 	    addictionChance = in.extract(4);
-	    useSound.setInternal(in.extract(4));
+	    useSound.parseData(in, srcMod);
 	}
 
 	@Override

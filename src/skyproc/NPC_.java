@@ -593,12 +593,12 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    super.parseData(in, srcMod);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();
-	    attackSpell.setInternal(in.extract(4));
+	    attackSpell.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    attackAngle = in.extractFloat();
 	    strikeAngle = in.extractFloat();
 	    stagger = in.extractFloat();
-	    attackType.setInternal(in.extract(4));
+	    attackType.parseData(in, srcMod);
 	    knockdown = in.extractFloat();
 	    recovery = in.extractFloat();
 	    staminaMult = in.extractFloat();

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import lev.LImport;
-import lev.LOutFile;
 import skyproc.Condition.RunOnType;
 
 /**
@@ -82,7 +81,7 @@ class ConditionOption implements Serializable {
 	return out;
     }
 
-    public void export(LOutFile out) throws IOException {
+    public void export(ModExporter out) throws IOException {
 	exportParam1(out);
 	out.write(runType.ordinal());
 	reference.export(out);
@@ -92,7 +91,7 @@ class ConditionOption implements Serializable {
     public void parseData(LImport in, Mod srcMod) {
 	parseParam1(in, srcMod);
 	runType = RunOnType.values()[in.extractInt(4)];
-	reference.setInternal(in.extract(4));
+	reference.parseData(in, srcMod);
 	parseParam3(in, srcMod);
 	if (SPGlobal.logging()) {
 	    SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Run Type: " + runType + ", Reference: " + reference);
@@ -105,12 +104,12 @@ class ConditionOption implements Serializable {
 	return out;
     }
 
-    public void exportParam1(LOutFile out) throws IOException {
+    public void exportParam1(ModExporter out) throws IOException {
 	out.write(0);
 	out.write(0);
     }
 
-    public void exportParam3(LOutFile out) throws IOException {
+    public void exportParam3(ModExporter out) throws IOException {
 	out.write(p3placeholder);
     }
 
@@ -154,14 +153,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(0);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    in.skip(4);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1);
@@ -221,7 +220,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(axis.toString(), 4);
 	    out.write(0);
 	}
@@ -298,14 +297,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(source.ordinal());
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    source = CastingSource.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Casting Source: " + source);
@@ -379,7 +378,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(source.ordinal());
 	    p2.export(out);
 	}
@@ -387,7 +386,7 @@ class ConditionOption implements Serializable {
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
 	    source = CastingSource.values()[in.extractInt(4)];
-	    p2.setInternal(in.extract(4));
+	    p2.parseData(in, srcMod);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Casting Source: " + source + ", FormID: " + p2);
 	    }
@@ -460,14 +459,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(p2);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    p2 = in.extractInt(4);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Int: " + p2);
@@ -543,15 +542,15 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    p2.export(out);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
-	    p2.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
+	    p2.parseData(in, srcMod);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID 1: " + p1 + ", FormID 2: " + p2);
 	    }
@@ -614,7 +613,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(g.ordinal());
 	    out.write(0);
 	}
@@ -681,7 +680,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(source.ordinal());
 	    out.write(0);
 	}
@@ -760,20 +759,20 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(p1);
 	    p2.export(out);
 	}
 
 	@Override
-	public void exportParam3(LOutFile out) throws IOException {
+	public void exportParam3(ModExporter out) throws IOException {
 	    out.write(p3);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1 = in.extractInt(4);
-	    p2.setInternal(in.extract(4));
+	    p2.parseData(in, srcMod);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int 1: " + p1 + ", FormID: " + p1 + ", Int 2: " + p3);
 	    }
@@ -855,7 +854,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(p1);
 	    p2.export(out);
 	}
@@ -863,7 +862,7 @@ class ConditionOption implements Serializable {
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1 = in.extractInt(4);
-	    p2.setInternal(in.extract(4));
+	    p2.parseData(in, srcMod);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int: " + p1 + ", FormID: " + p2);
 	    }
@@ -926,7 +925,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(state.ordinal());
 	    out.write(0);
 	}
@@ -993,7 +992,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(p1);
 	    out.write(0);
 	}
@@ -1070,14 +1069,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(p2);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    p2 = in.extract(4);
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1);
@@ -1151,14 +1150,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(a.toString(), 4);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
 	    if (SPGlobal.logging()) {
@@ -1233,14 +1232,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(c.ordinal());
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    c = CrimeType.values()[in.extractInt(4)];
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Crime Type: " + c);
@@ -1314,14 +1313,14 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    p1.export(out);
 	    out.write(f);
 	}
 
 	@Override
 	public void parseParam1(LImport in, Mod srcMod){
-	    p1.setInternal(in.extract(4));
+	    p1.parseData(in, srcMod);
 	    f = in.extractFloat();
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Float: " + f);
@@ -1387,7 +1386,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(i1);
 	    out.write(i2);
 	}
@@ -1458,7 +1457,7 @@ class ConditionOption implements Serializable {
 	}
 
 	@Override
-	public void exportParam1(LOutFile out) throws IOException {
+	public void exportParam1(ModExporter out) throws IOException {
 	    out.write(p1);
 	}
 

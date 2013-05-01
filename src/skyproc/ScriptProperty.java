@@ -102,12 +102,6 @@ class ScriptProperty extends Record implements Serializable {
 	data = tmp;
     }
 
-    void standardizeMasters(Mod srcMod) {
-	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
-	    ((FormIDData) data).id.standardize(srcMod);
-	}
-    }
-
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	if (getPropertyType().equals(ScriptPropertyType.FormID)) {
@@ -409,7 +403,7 @@ class ScriptProperty extends Record implements Serializable {
 	public void parseData(LImport in, Mod srcMod){
 	    data = in.extract(4);
 	    id = new FormID();
-	    id.setInternal(in.extract(4));
+	    id.parseData(in, srcMod);
 	}
 
 	@Override

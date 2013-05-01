@@ -67,7 +67,7 @@ public abstract class MagicItem extends MajorRecordDescription {
 	    targetType = DeliveryType.values()[in.extractInt(4)];
 	    castDuration = in.extractFloat();
 	    range = in.extractFloat();
-	    perkType.setInternal(in.extract(4));
+	    perkType.parseData(in, srcMod);
 
 	    if (logging()) {
 		logMod(srcMod, "", "SPIT record: ");

@@ -384,13 +384,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public String toString() {
 	return getName();
     }
-
-    void standardizeMasters() {
-	for (GRUP g : GRUPs.values()) {
-	    g.standardizeMasters();
-	}
-    }
-
+    
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> tmp = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -727,12 +721,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	}
 	SPProgressBarPlug.incrementBar();
 
-	// Sort masters to match load order and restandardize
+	// Sort masters to match load order
 	sortMasters();
-	SPProgressBarPlug.setStatusNumbered("Standardizing FormIDs");
-	for (FormID id : allForms) {
-	    id.standardize(this);
-	}
 	SPProgressBarPlug.incrementBar();
 
 	// Export Header
@@ -1553,10 +1543,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	@Override
 	int getContentLength(ModExporter out) {
 	    return 12;
-	}
-
-	@Override
-	void standardize(MajorRecord r) {
 	}
 
 	@Override

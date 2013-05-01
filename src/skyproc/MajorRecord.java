@@ -150,8 +150,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	super.parseData(in, srcMod);
 
 	majorFlags = new LFlags(in.extract(4));
-	setForm(in.extract(4));
-	ID.standardize(srcMod);
+	ID.parseData(in, srcMod);
 	revision = in.extract(4);
 	formVersion = in.extractInt(2);
 	version = in.extract(2);
@@ -167,6 +166,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in), srcMod);
 	}
 
+	if (getEDID().equals("SprigganMatronRace")) {
+	    int wer = 23;
+	}
+	
 	importSubRecords(in);
     }
 
@@ -179,13 +182,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	out.add(ID);
 	out.addAll(subRecords.allFormIDs());
 	return out;
-    }
-
-    void standardizeMaster() {
-	ArrayList<FormID> set = allFormIDs();
-	for (FormID id : set) {
-	    id.standardize(srcMod);
-	}
     }
 
     /**
@@ -317,13 +313,6 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public ModListing getFormMaster() {
 	return ID.getMaster();
-    }
-
-    void setForm(byte[] in) throws BadParameter {
-	ID.setInternal(in);
-	if (logging()) {
-	    logMod(srcMod, toString(), "Setting FormID: " + ID.getArrayStr(true));
-	}
     }
 
     /**

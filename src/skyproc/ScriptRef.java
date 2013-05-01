@@ -68,12 +68,6 @@ public class ScriptRef extends Record implements Iterable<String> {
 	}
     }
 
-    void standardizeMasters(Mod srcMod) {
-	for (ScriptProperty s : properties) {
-	    s.standardizeMasters(srcMod);
-	}
-    }
-
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> out = new ArrayList<>();
 	for (ScriptProperty s : properties) {

@@ -116,25 +116,25 @@ public class PROJ extends MajorRecordNamed {
 	    gravity = in.extractFloat();
 	    speed = in.extractFloat();
 	    range = in.extractFloat();   //16
-	    light.setInternal(in.extract(4));
-	    muzzleLight.setInternal(in.extract(4));
+	    light.parseData(in, srcMod);
+	    muzzleLight.parseData(in, srcMod);
 	    tracerChance = in.extractFloat();
 	    proximity = in.extractFloat();  //32
 	    timer = in.extractFloat();
-	    explosionType.setInternal(in.extract(4));
-	    sound.setInternal(in.extract(4));
+	    explosionType.parseData(in, srcMod);
+	    sound.parseData(in, srcMod);
 	    muzzleFlashDuration = in.extractFloat();  //48
 	    fadeDuration = in.extractFloat();
 	    impactForce = in.extractFloat();
-	    explosionSound.setInternal(in.extract(4));
-	    disableSound.setInternal(in.extract(4));  //64
-	    defaultWeaponSource.setInternal(in.extract(4));
+	    explosionSound.parseData(in, srcMod);
+	    disableSound.parseData(in, srcMod);  //64
+	    defaultWeaponSource.parseData(in, srcMod);
 	    coneSpread = in.extractFloat();
 	    collisionRadius = in.extractFloat();
 	    lifetime = in.extractFloat(); // 80
 	    relaunchInterval = in.extractFloat();
 	    if (!in.isDone()) {
-		decalData.setInternal(in.extract(4));
+		decalData.parseData(in, srcMod);
 	    }
 	    if (!in.isDone()) {
 		collisionLayer = in.extract(4);  // 92

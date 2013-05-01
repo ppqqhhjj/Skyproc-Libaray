@@ -46,7 +46,7 @@ public class AltTextures extends SubRecordTyped {
 	int numTextures = in.extractInt(4);
 	for (int i = 0; i < numTextures; i++) {
 	    int strLength = Ln.arrayToInt(in.getInts(0, 4));
-	    AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)));
+	    AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)), srcMod);
 	    altTextures.add(newText);
 	    if (logging()) {
 		logMod(srcMod, "", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
@@ -129,26 +129,22 @@ public class AltTextures extends SubRecordTyped {
 	    this.index = index;
 	}
 
-	AltTexture(LShrinkArray in) {
-	    parseData(in);
+	AltTexture(LShrinkArray in, Mod srcMod) {
+	    parseData(in, srcMod);
 	}
 
-	final void parseData(LShrinkArray in) {
+	final void parseData(LShrinkArray in, Mod srcMod) {
 	    int strLength = in.extractInt(4);
 	    name = in.extractString(strLength);
-	    texture.setInternal(in.extract(4));
+	    texture.parseData(in, srcMod);
 	    index = in.extractInt(4);
 	}
 
-	void export(LOutFile out) throws IOException {
+	void export(ModExporter out) throws IOException {
 	    out.write(name.length());
 	    out.write(name);
 	    texture.export(out);
 	    out.write(index);
-	}
-
-	void standardizeMasters(Mod srcMod) {
-	    texture.standardize(srcMod);
 	}
 
 	int getTotalLength() {

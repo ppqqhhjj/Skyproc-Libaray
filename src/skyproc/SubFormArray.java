@@ -37,10 +37,8 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     @Override
     void export(ModExporter out) throws IOException {
 	super.export(out);
-	if (isValid()) {
-	    for (FormID ID : IDs) {
-		out.write(ID.getInternal(true), 4);
-	    }
+	for (FormID ID : IDs) {
+	    ID.export(out);
 	}
     }
 
@@ -50,23 +48,21 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 	int size = IDs.size();
 	if (size != 0) {
 	    for (int i = 0; i < size; i++) {
-		byte[] ith = in.extract(4);
-		setIth(i, ith);
+		IDs.get(i).parseData(in, srcMod);
 		if (logging()) {
-		    logMod(srcMod, toString(), "Setting " + toString() + " FormID[" + i + "]: " + Ln.printHex(ith, false, true));
+		    logMod(srcMod, toString(), "Setting " + toString() + " FormID[" + i + "]: " + IDs.get(i));
 		}
 	    }
 	} else {
 	    while (!in.isDone()) {
 		FormID id = new FormID();
-		id.setInternal(in.extract(4));
+		id.parseData(in, srcMod);
 		add(id);
 	    }
 	}
     }
 
     void setIth(int i, byte[] in) {
-	IDs.get(i).setInternal(in);
     }
 
     int size() {

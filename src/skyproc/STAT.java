@@ -47,7 +47,7 @@ public class STAT extends MajorRecord {
 	void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
 	    super.parseData(in, srcMod);
 	    angle = in.extractFloat();
-	    id.setInternal(in.extract(4));
+	    id.parseData(in, srcMod);
 	}
 
 	@Override

@@ -371,12 +371,12 @@ public class RACE extends MajorRecordDescription {
 	    super.parseData(in, srcMod);
 	    damageMult = in.extractFloat();
 	    attackChance = in.extractFloat();
-	    attackSpell.setInternal(in.extract(4));
+	    attackSpell.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    attackAngle = in.extractFloat();
 	    strikeAngle = in.extractFloat();
 	    stagger = in.extractFloat();
-	    attackType.setInternal(in.extract(4));
+	    attackType.parseData(in, srcMod);
 	    knockDown = in.extractFloat();
 	    recoveryTime = in.extractFloat();
 	    fatigueMult = in.extractFloat();

@@ -52,7 +52,7 @@ public class BOOK extends MajorRecordDescription {
 	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    if (flags.get(BookFlag.TeachesSpell.ordinal())) {
-		teachesSpell.setInternal(in.extract(4));
+		teachesSpell.parseData(in, srcMod);
 	    } else {
 		teachesAV = ActorValue.value(in.extractInt(4));
 	    }

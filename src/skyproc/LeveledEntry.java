@@ -92,7 +92,7 @@ public class LeveledEntry extends SubShell {
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    level = in.extractInt(4);
-	    entry.setInternal(in.extract(4));
+	    entry.parseData(in, srcMod);
 	    count = in.extractInt(4);
 	}
 

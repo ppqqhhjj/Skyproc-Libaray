@@ -72,8 +72,8 @@ public class DestructionData extends SubShell {
 	    modelDmgStage = in.extract(1)[0];
 	    flags.set(in.extract(1));
 	    selfDmgPerSec = in.extractInt(4);
-	    explosion.setInternal(in.extract(4));
-	    debree.setInternal(in.extract(4));
+	    explosion.parseData(in, srcMod);
+	    debree.parseData(in, srcMod);
 	    debreeCount = in.extractInt(4);
 	}
 

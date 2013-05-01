@@ -139,14 +139,14 @@ public class MGEF extends MajorRecordDescription {
 	    super.parseData(in, srcMod);
 	    flags.set(in.extract(4));
 	    baseCost = in.extractFloat();
-	    relatedID.setInternal(in.extract(4));
+	    relatedID.parseData(in, srcMod);
 	    skillType = ActorValue.value(in.extractInt(4));
 	    resistanceAV = ActorValue.value(in.extractInt(4));
 	    unknown = in.extract(4);
-	    lightID.setInternal(in.extract(4));
+	    lightID.parseData(in, srcMod);
 	    taperWeight = in.extractFloat();
-	    hitShader.setInternal(in.extract(4));
-	    enchantShader.setInternal(in.extract(4));
+	    hitShader.parseData(in, srcMod);
+	    enchantShader.parseData(in, srcMod);
 	    skillLevel = in.extractInt(4);
 	    area = in.extractInt(4);
 	    castingTime = in.extractFloat();
@@ -155,23 +155,23 @@ public class MGEF extends MajorRecordDescription {
 	    secondAVWeight = in.extractFloat();
 	    effectType = in.extractInt(4);
 	    primaryAV = ActorValue.value(in.extractInt(4));
-	    projectileID.setInternal(in.extract(4));
-	    explosionID.setInternal(in.extract(4));
+	    projectileID.parseData(in, srcMod);
+	    explosionID.parseData(in, srcMod);
 	    castType = CastType.values()[in.extractInt(4)];
 	    deliveryType = DeliveryType.values()[in.extractInt(4)];
 	    secondAV = ActorValue.value(in.extractInt(4));
-	    castingArt.setInternal(in.extract(4));
-	    hitEffectArt.setInternal(in.extract(4));
-	    impactData.setInternal(in.extract(4));
+	    castingArt.parseData(in, srcMod);
+	    hitEffectArt.parseData(in, srcMod);
+	    impactData.parseData(in, srcMod);
 	    skillUsageMult = in.extractFloat();
-	    dualCastID.setInternal(in.extract(4));
+	    dualCastID.parseData(in, srcMod);
 	    dualCastScale = in.extractFloat();
-	    enchantArtID.setInternal(in.extract(4));
+	    enchantArtID.parseData(in, srcMod);
 	    nullData = in.extractInt(4);
 	    nullData2 = in.extractInt(4);
-	    equipAbility.setInternal(in.extract(4));
-	    imageSpaceModID.setInternal(in.extract(4));
-	    perkID.setInternal(in.extract(4));
+	    equipAbility.parseData(in, srcMod);
+	    imageSpaceModID.parseData(in, srcMod);
+	    perkID.parseData(in, srcMod);
 	    vol = SoundVolume.values()[in.extractInt(4)];
 	    scriptAIDataScore = in.extractFloat();
 	    scriptAIDataDelayTime = in.extractFloat();
@@ -279,7 +279,7 @@ public class MGEF extends MajorRecordDescription {
 	    while (!in.isDone()) {
 		SNDD.Sound sound = new SNDD.Sound();
 		sound.sound = SoundData.values()[in.extractInt(4)];
-		sound.soundID.setInternal(in.extract(4));
+		sound.soundID.parseData(in, srcMod);
 		sounds.add(sound);
 	    }
 	}

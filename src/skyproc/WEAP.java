@@ -266,7 +266,7 @@ public class WEAP extends MajorRecordDescription {
 	    critMult = in.extractFloat();
 	    onDeath = in.extractInt(1);
 	    unknown = in.extract(3);
-	    critEffect.setInternal(in.extract(4));
+	    critEffect.parseData(in, srcMod);
 	    if (logging()) {
 		logMod(srcMod, "", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
 	    }

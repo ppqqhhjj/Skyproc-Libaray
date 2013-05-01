@@ -52,16 +52,6 @@ public abstract class SubRecord<T> extends Record {
 	return new ArrayList<>(0);
     }
 
-    void standardize(Mod srcMod) {
-	for (FormID id : allFormIDs()) {
-	    id.standardize(srcMod);
-	}
-    }
-
-    void standardize(MajorRecord r) {
-	standardize(r.srcMod);
-    }
-
     void fetchStringPointers(Mod srcMod) {
     }
 

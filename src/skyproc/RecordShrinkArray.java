@@ -75,8 +75,7 @@ public class RecordShrinkArray extends LShrinkArray {
 	    byte[] extract = extract(4);
 	    byte[] copy = new byte[4];
 	    System.arraycopy(extract, 0, copy, 0, copy.length);
-	    out.setInternal(copy);
-	    out.standardize(modToStandardizeTo);
+	    out.setInternal(copy, modToStandardizeTo);
 	}
 	return out;
     }

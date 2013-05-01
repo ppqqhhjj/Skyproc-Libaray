@@ -757,9 +757,7 @@ public class SPImporter {
 		    // Uncompress if compressed
 		    int size = input.extractInt(4);
 		    LFlags flags = new LFlags(input.extract(4));
-		    FormID id = new FormID();
-		    id.setInternal(input.extract(4));
-//		    System.out.println(inputStr + " major record with ID: " + id);
+		    input.extract(4); //FormID
 		    input.skip(8);
 
 		    if (inputStr.equals("NAVM")) {

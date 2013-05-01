@@ -76,9 +76,9 @@ public class ENCH extends MagicItem {
 	    targetType = DeliveryType.values()[in.extractInt(4)];
 	    enchantType = EnchantType.value(in.extractInt(4));
 	    chargeTime = in.extractFloat();
-	    baseEnchantment.setInternal(in.extract(4));
+	    baseEnchantment.parseData(in, srcMod);
 	    if (!in.isDone()) {
-		wornRestrictions.setInternal(in.extract(4));
+		wornRestrictions.parseData(in, srcMod);
 	    } else {
 		old = true;
 	    }

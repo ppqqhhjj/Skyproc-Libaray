@@ -59,10 +59,9 @@ class Owner extends SubRecordTyped {
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
-	owner.setInternal(in.extract(4));
-	byte[] b = in.extract(4);
-	reqRank = Ln.arrayToInt(b);
-	global.setInternal(b);
+	owner.parseData(in, srcMod);
+	global.parseData(in, srcMod);
+	reqRank = Ln.arrayToInt(global.form);
 	itemCondition = in.extractFloat();
     }
 
