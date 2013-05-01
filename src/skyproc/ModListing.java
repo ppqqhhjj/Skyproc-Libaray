@@ -25,6 +25,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
 
     SubString mast = SubString.getNew("MAST", true);
     boolean master = false;
+    int strHash = 0;
 
     /**
      * ModListing objects are used to uniquely identify mods via name and master
@@ -62,6 +63,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
 	    in = in.substring(0, upper.indexOf(".ES"));
 	}
 	mast.setString(in);
+	strHash = 259 + this.mast.hashUpperCaseCode();
     }
 
     /**
@@ -168,8 +170,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
      */
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 37 * hash + (this.mast != null ? this.mast.hashUpperCaseCode() : 0);
+	int hash = strHash; 
 	hash = 37 * hash + (this.master ? 1 : 0);
 	return hash;
     }
