@@ -6,11 +6,9 @@ package skyproc;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 import javax.swing.JOptionPane;
-import lev.LInChannel;
-import lev.LMergeMap;
-import lev.LOutChannel;
-import lev.LShrinkArray;
+import lev.*;
 
 /**
  *
@@ -18,9 +16,8 @@ import lev.LShrinkArray;
  */
 class Consistency {
 
-    static ConsistencyVersion consistency = new ConsistencyV2();
+    static ConsistencyVersion consistency = new ConsistencyV3();
     static String header = "Consistency";
-    static LMergeMap<FormID, String> conflicts = new LMergeMap<>(false);
     static private boolean cleaned = false;
     static boolean automaticExport = true;
     static boolean imported = false;
@@ -124,50 +121,6 @@ class Consistency {
 	consistency.export();
     }
 
-    static void pruneConflicts() {
-	if (SPGlobal.logging()) {
-	    SPGlobal.newLog(debugFolder + "Conflict Pruning.txt");
-	    SPGlobal.log(header, "====================================");
-	    SPGlobal.log(header, "====== Pruning Conflicts ===========");
-	    SPGlobal.log(header, "====================================");
-	}
-	Mod global = SPGlobal.getGlobalPatch();
-	for (FormID id : conflicts.keySet()) {
-	    if (SPGlobal.logging()) {
-		SPGlobal.log(header, "------ Addressing " + id);
-	    }
-	    ArrayList<String> edidConflicts = conflicts.get(id);
-	    ArrayList<String> found = new ArrayList<>(2);
-	    for (String edid : edidConflicts) {
-		if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "| For EDID: " + edid);
-		}
-		for (GRUP g : global.GRUPs.values()) {
-		    if (g.contains(edid)) {
-			found.add(edid);
-			if (SPGlobal.logging()) {
-			    SPGlobal.log(header, "|   Found!");
-			}
-			break;
-		    }
-		}
-	    }
-	    // If only one is being used, wipe the rest
-	    if (found.size() == 1) {
-		if (SPGlobal.logging()) {
-		    SPGlobal.log(header, "| Only one EDID is being used, pruning others.");
-		}
-		edidConflicts.remove(found.get(0));
-		for (String unusedEDID : edidConflicts) {
-		    consistency.remove(unusedEDID);
-		}
-	    }
-	    if (SPGlobal.logging()) {
-		SPGlobal.log(header, "-----------------------");
-	    }
-	}
-    }
-
     static boolean isImported() {
 	return imported;
     }
@@ -181,10 +134,13 @@ class Consistency {
     abstract static class ConsistencyVersion {
 
 	Set<FormID> set = new HashSet<>();
+	LMergeMap<FormID, String> conflicts = new LMergeMap<>(false);
 
 	abstract FormID getOldForm(String edid);
 
-	abstract boolean requestID(FormID id);
+	boolean requestID(FormID id) {
+	    return !set.contains(id);
+	}
 
 	abstract String getConsistencyFile() throws IOException;
 
@@ -194,42 +150,8 @@ class Consistency {
 
 	abstract boolean insert(String EDID, FormID id);
 
-	abstract void export() throws IOException;
+	boolean insert(String EDID, FormID id, Map<String, FormID> modEDIDlist) {
 
-	abstract void remove(String edid);
-
-	abstract boolean importConsistency(boolean globalOnly) throws IOException;
-    }
-
-    static class ConsistencyV2 extends ConsistencyVersion {
-
-	Map<ModListing, Map<String, FormID>> storage = new HashMap<>();
-
-	FormID getOldForm(String edid) {
-	    return storage.get(SPGlobal.getGlobalPatch().getInfo()).get(edid);
-	}
-
-	boolean requestID(FormID id) {
-	    return !set.contains(id);
-	}
-
-	@Override
-	String getConsistencyFile() throws FileNotFoundException, IOException {
-	    File myDocs = SPGlobal.getSkyProcDocuments();
-	    return myDocs.getPath() + "\\Consistency";
-	}
-
-	void clear() {
-	    super.clear();
-	    storage.clear();
-	}
-
-	boolean insert(String EDID, FormID id) {
-	    Map<String, FormID> modEDIDlist = storage.get(id.master);
-	    if (modEDIDlist == null) {
-		modEDIDlist = new HashMap<>();
-		storage.put(id.master, modEDIDlist);
-	    }
 	    // If EDID is already logged, skip it.
 	    if (!modEDIDlist.containsKey(EDID)) {
 		if (set.contains(id)) {
@@ -257,6 +179,89 @@ class Consistency {
 	    }
 	}
 
+	abstract void export() throws IOException;
+
+	abstract void remove(String edid);
+
+	abstract boolean importConsistency(boolean globalOnly) throws IOException;
+
+	void pruneConflicts() {
+	    if (SPGlobal.logging()) {
+		SPGlobal.newLog(debugFolder + "Conflict Pruning.txt");
+		SPGlobal.log(header, "====================================");
+		SPGlobal.log(header, "====== Pruning Conflicts ===========");
+		SPGlobal.log(header, "====================================");
+	    }
+	    Mod global = SPGlobal.getGlobalPatch();
+	    for (FormID id : conflicts.keySet()) {
+		if (SPGlobal.logging()) {
+		    SPGlobal.log(header, "------ Addressing " + id);
+		}
+		ArrayList<String> edidConflicts = conflicts.get(id);
+		ArrayList<String> found = new ArrayList<>(2);
+		for (String edid : edidConflicts) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.log(header, "| For EDID: " + edid);
+		    }
+		    for (GRUP g : global.GRUPs.values()) {
+			if (g.contains(edid)) {
+			    found.add(edid);
+			    if (SPGlobal.logging()) {
+				SPGlobal.log(header, "|   Found!");
+			    }
+			    break;
+			}
+		    }
+		}
+		// If only one is being used, wipe the rest
+		if (found.size() == 1) {
+		    if (SPGlobal.logging()) {
+			SPGlobal.log(header, "| Only one EDID is being used, pruning others.");
+		    }
+		    edidConflicts.remove(found.get(0));
+		    for (String unusedEDID : edidConflicts) {
+			consistency.remove(unusedEDID);
+		    }
+		}
+		if (SPGlobal.logging()) {
+		    SPGlobal.log(header, "-----------------------");
+		}
+	    }
+	}
+    }
+
+    static class ConsistencyV2 extends ConsistencyVersion {
+
+	Map<ModListing, Map<String, FormID>> storage = new HashMap<>();
+
+	@Override
+	FormID getOldForm(String edid) {
+	    return storage.get(SPGlobal.getGlobalPatch().getInfo()).get(edid);
+	}
+
+	@Override
+	String getConsistencyFile() throws FileNotFoundException, IOException {
+	    File myDocs = SPGlobal.getSkyProcDocuments();
+	    return myDocs.getPath() + "\\Consistency";
+	}
+
+	@Override
+	void clear() {
+	    super.clear();
+	    storage.clear();
+	}
+
+	@Override
+	boolean insert(String EDID, FormID id) {
+	    Map<String, FormID> modEDIDlist = storage.get(id.master);
+	    if (modEDIDlist == null) {
+		modEDIDlist = new HashMap<>();
+		storage.put(id.master, modEDIDlist);
+	    }
+	    return insert(EDID, id, modEDIDlist);
+	}
+
+	@Override
 	void export() throws IOException {
 	    if (SPGlobal.logging()) {
 		SPGlobal.logMain(header, "Exporting Consistency file.");
@@ -308,7 +313,7 @@ class Consistency {
 
 	@Override
 	void remove(String edid) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    storage.get(SPGlobal.getGlobalPatch().getInfo()).remove(edid);
 	}
 
 	@Override
@@ -433,39 +438,111 @@ class Consistency {
 
     static class ConsistencyV3 extends ConsistencyVersion {
 
-	@Override
-	FormID getOldForm(String edid) {
-	    throw new UnsupportedOperationException("Not supported yet.");
-	}
+	Map<String, FormID> storage = new TreeMap<>();
 
 	@Override
-	boolean requestID(FormID id) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	FormID getOldForm(String edid) {
+	    return storage.get(edid);
 	}
 
 	@Override
 	String getConsistencyFile() throws IOException {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    File myDocs = SPGlobal.getSkyProcDocuments();
+	    return myDocs.getPath() + "\\ConsistencyV3\\" + SPGlobal.getGlobalPatch().getName() + "_Consistency";
 	}
 
 	@Override
 	boolean insert(String EDID, FormID id) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    return insert(EDID, id, storage);
 	}
 
 	@Override
 	void export() throws IOException {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    if (SPGlobal.logging()) {
+		SPGlobal.logMain(header, "Exporting Consistency file.");
+	    }
+	    if (SPGlobal.testing) {
+		return;
+	    }
+	    pruneConflicts();
+	    try {
+		getConsistencyFile();
+		File tmp = new File(getConsistencyFile() + "Tmp");
+		LOutChannel out = new LOutChannel(tmp);
+		//Header
+		out.write("SPC3");
+		for (String edid : storage.keySet()) {
+		    out.write(edid.length(), 2);
+		    out.write(edid);
+		    out.write(storage.get(edid).getInternal(true));
+		}
+		out.close();
+		File f = new File(getConsistencyFile());
+		if (f.isFile()) {
+		    f.delete();
+		}
+		tmp.renameTo(f);
+		out.close();
+	    } catch (IOException ex) {
+		SPGlobal.logException(ex);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY, header, "Error exporting Consistency file.");
+		JOptionPane.showMessageDialog(null, "<html>There was an error exporting the consistency information.<br><br>"
+			+ "This means your savegame has a good chance of having mismatched records the next<br>"
+			+ "time you run the patcher.</html>");
+	    }
 	}
 
 	@Override
 	void remove(String edid) {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    storage.remove(edid);
 	}
 
 	@Override
 	boolean importConsistency(boolean globalOnly) throws IOException {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    File f = new File(getConsistencyFile());
+	    if (!f.isFile()) {
+		upgrade();
+		return false;
+	    }
+	    if (SPGlobal.logging()) {
+		String name = debugFolder + "Import - V3.txt";
+		SPGlobal.newSpecialLog(LogTypes.CONSISTENCY_IMPORT, name);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Import", "Importing v3 consistency file.");
+	    }
+	    Mod global = SPGlobal.getGlobalPatch();
+	    LInChannel in = new LInChannel(f);
+	    in.skip(4);
+	    LShrinkArray arr = new LShrinkArray(in.extractAllBytes());
+	    while (!arr.isDone()) {
+		int edidLen = arr.extractInt(2);
+		String EDID = arr.extractString(edidLen);
+		byte[] bytes = arr.extract(4);
+		FormID ID = new FormID();
+		ID.setInternal(bytes, global);
+		if (SPGlobal.logging()) {
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Import", "  | EDID: " + EDID);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Import", "  | Form: " + ID);
+		    SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Import", "  |============================");
+		}
+		insert(EDID, ID);
+	    }
+	    in.close();
+	    upgrade();
+	    return true;
+	}
+
+	void upgrade() throws IOException {
+	    ConsistencyV2 v2 = new ConsistencyV2();
+	    v2.importConsistency(true);
+	    Map<String, FormID> map = v2.storage.get(SPGlobal.getGlobalPatch().getInfo());
+	    if (SPGlobal.logging()) {
+		String name = debugFolder + "Import - V3.txt";
+		SPGlobal.newSpecialLog(LogTypes.CONSISTENCY_IMPORT, name);
+		SPGlobal.logSpecial(LogTypes.CONSISTENCY_IMPORT, "Import", "Upgrading from v2 consistency.");
+	    }
+	    for (Entry<String, FormID> entry : map.entrySet()) {
+		insert(entry.getKey(), entry.getValue());
+	    }
 	}
     }
 }

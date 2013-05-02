@@ -111,11 +111,11 @@ public class FormID implements Comparable, Serializable {
 	setInternal(Ln.reverse(id));
     }
 
-    private final void setInternal(byte[] id) {
+    private void setInternal(byte[] id) {
 	form = id;
 	if (id.length > 4) {
 	    form = Arrays.copyOfRange(form, 0, 3);
-	} else if (id.length < 3) {
+	} else if (id.length < 4) {
 	    form = new byte[4];
 	    System.arraycopy(id, 0, form, 0, id.length);
 	}
@@ -203,7 +203,6 @@ public class FormID implements Comparable, Serializable {
 	    return "NULL";
 	}
     }
-    static byte[] test = {(byte) 0xD3, (byte) 0x5F, 1, 2};
 
     void standardize(Mod srcMod) {
 	if (master == null) {
