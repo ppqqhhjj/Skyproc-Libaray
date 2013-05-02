@@ -130,22 +130,41 @@ public abstract class MagicItem extends MajorRecordDescription {
     }
 
     // Get/Set
+    /**
+     * 
+     * @return
+     */
     public ArrayList<MagicEffectRef> getMagicEffects() {
 	return subRecords.getSubList("EFID").toPublic();
     }
 
+    /**
+     * 
+     * @param magicEffect
+     */
     public void removeMagicEffect(MagicEffectRef magicEffect) {
 	subRecords.getSubList("EFID").remove(magicEffect);
     }
 
+    /**
+     * 
+     * @param magicEffect
+     */
     public void addMagicEffect(MagicEffectRef magicEffect) {
 	subRecords.getSubList("EFID").add(magicEffect);
     }
 
+    /**
+     * 
+     * @param magicEffect
+     */
     public void addMagicEffect(MGEF magicEffect) {
 	subRecords.getSubList("EFID").add(new MagicEffectRef(magicEffect.getForm()));
     }
 
+    /**
+     * 
+     */
     public void clearMagicEffects() {
 	subRecords.getSubList("EFID").clear();
     }

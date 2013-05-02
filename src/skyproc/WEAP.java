@@ -901,6 +901,10 @@ public class WEAP extends MajorRecordDescription {
 	return subRecords.getModel().getAltTextures();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }
@@ -914,10 +918,18 @@ public class WEAP extends MajorRecordDescription {
 	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
     }
     
+    /**
+     * 
+     * @return
+     */
     public FormID getFirstPersonModel() {
 	return subRecords.getSubForm("WNAM").getForm();
     }
     
+    /**
+     * 
+     * @param id
+     */
     public void setFirstPersonModel(FormID id) {
 	subRecords.setSubForm("WNAM", id);
     }

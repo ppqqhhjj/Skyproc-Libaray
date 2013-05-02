@@ -8,9 +8,10 @@ import java.util.ArrayList;
 
 /**
  *
+ * @param <T> 
  * @author Justin Swanson
  */
-public abstract class SubRecordTyped<T> extends SubRecord<T> {
+abstract class SubRecordTyped<T> extends SubRecord<T> {
 
     ArrayList<String> types;
 

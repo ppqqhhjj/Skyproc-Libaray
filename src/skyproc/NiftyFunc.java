@@ -447,6 +447,13 @@ public class NiftyFunc {
 	}
     }
 
+    /**
+     * Replaces formIDs in arraylist.
+     * @param src Target arraylist to look in
+     * @param target FormID to replace
+     * @param with FormIDs to substitute in place of target
+     * @return Number of targets replaced
+     */
     static public int replaceAll(ArrayList<FormID> src, FormID target, FormID... with) {
 	ArrayList<FormID> tmp = new ArrayList<>(src);
 	int numChanges = 0;
@@ -462,10 +469,20 @@ public class NiftyFunc {
 	return numChanges;
     }
 
+    /**
+     * Creates empty files for non existent mods.
+     * @param mods
+     * @throws IOException
+     */
     public static void setupMissingPatchFiles(ArrayList<Mod> mods) throws IOException {
 	setupMissingPatchFiles(mods.toArray(new Mod[0]));
     }
 
+    /**
+     * Creates empty files for non existent mods.
+     * @param mods
+     * @throws IOException
+     */
     public static void setupMissingPatchFiles(Mod... mods) throws IOException {
 	// Handle non-existant patchers
 	for (Mod newPatcher : mods) {
@@ -478,6 +495,12 @@ public class NiftyFunc {
 	}
     }
 
+    /**
+     * Adds and removes desired mods from the plugins list.
+     * @param add Mods to add if they don't already exist on the list
+     * @param remove Mods to remove if they do exist.
+     * @throws IOException
+     */
     public static void modifyPluginsTxt(ArrayList<Mod> add, ArrayList<Mod> remove) throws IOException {
 	//Read in plugins.txt
 	ArrayList<String> pluginsLines = Ln.loadFileToStrings(SPGlobal.getPluginsTxt(), false);
@@ -508,12 +531,21 @@ public class NiftyFunc {
 	pluginsOut.close();
     }
 
+    /**
+     * Adds a mod to the plugins list if it doesn't exist.
+     * @param add 
+     * @throws IOException
+     */
     public static void modifyPluginsTxt(Mod add) throws IOException {
 	ArrayList<Mod> addL = new ArrayList<>(1);
 	addL.add(add);
 	modifyPluginsTxt(addL, null);
     }
 
+    /**
+     * Runs BOSS and sorts the load order.  Does not update BOSS before running it.
+     * @param errorMessages
+     */
     public static void runBOSS(boolean errorMessages) {
 	SwingUtilities.invokeLater(new Runnable() {
 	    @Override

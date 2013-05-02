@@ -14,7 +14,7 @@ import lev.LOutFile;
  *
  * @author Justin Swanson
  */
-public abstract class SubRecord<T> extends Record {
+abstract class SubRecord<T> extends Record {
 
     @Override
     public String print() {

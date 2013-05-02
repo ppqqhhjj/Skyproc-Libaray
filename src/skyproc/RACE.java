@@ -1606,6 +1606,11 @@ public class RACE extends MajorRecordDescription {
 	getPhysicsModel(gender).setFileName(s);
     }
 
+    /**
+     * 
+     * @param gender
+     * @return
+     */
     public Model getPhysicsModel(Gender gender) {
 	return getBehaviorGraph(gender).subRecords.getModel();
     }

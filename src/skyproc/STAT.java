@@ -74,6 +74,10 @@ public class STAT extends MajorRecord {
 	subRecords.setPrototype(STATprototype);
     }
     
+    /**
+     * 
+     * @param edid
+     */
     public STAT(String edid) {
 	this();
 	originateFromPatch(edid);
@@ -89,6 +93,10 @@ public class STAT extends MajorRecord {
 	return new STAT();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }
@@ -97,18 +105,34 @@ public class STAT extends MajorRecord {
 	return (DNAM) subRecords.get("DNAM");
     }
     
+    /**
+     * 
+     * @return
+     */
     public float getMaxAngle() {
 	return getDNAM().angle;
     }
     
+    /**
+     * 
+     * @param angle
+     */
     public void setMaxAngle(float angle) {
 	getDNAM().angle = angle;
     }
     
+    /**
+     * 
+     * @param id
+     */
     public void setMaterial(FormID id) {
 	getDNAM().id = id;
     }
     
+    /**
+     * 
+     * @return
+     */
     public FormID getMaterial() {
 	return getDNAM().id;
     }

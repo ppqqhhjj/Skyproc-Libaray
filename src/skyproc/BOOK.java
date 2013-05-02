@@ -377,6 +377,10 @@ public class BOOK extends MajorRecordDescription {
 	return subRecords.getModel().getAltTextures();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

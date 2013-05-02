@@ -763,6 +763,9 @@ public class BSA {
 	CTL
     }
     
+    /**
+     * 
+     */
     public static enum LogTypes {
 	/**
 	 * A logstream used for logging which records have been skipped/blockec.

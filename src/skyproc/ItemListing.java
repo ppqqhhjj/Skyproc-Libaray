@@ -41,6 +41,11 @@ public class ItemListing extends SubShell {
 	super(itemListingProto);
     }
 
+    /**
+     * 
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 	if (obj == null) {
@@ -56,6 +61,10 @@ public class ItemListing extends SubShell {
 	return true;
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public int hashCode() {
 	return getForm().hashCode();

@@ -329,6 +329,10 @@ public class ALCH extends MagicItem {
 	return subRecords.getModel().getAltTextures();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

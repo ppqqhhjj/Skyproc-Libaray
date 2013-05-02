@@ -20,8 +20,17 @@ public class VTYP extends MajorRecord {
     };
 
     // Enums
+    /**
+     * 
+     */
     public enum VoiceTypeFlag {
+	/**
+	 * 
+	 */
 	AllowDefaultDialogue,
+	/**
+	 * 
+	 */
 	Female,
     }
 
@@ -31,6 +40,10 @@ public class VTYP extends MajorRecord {
 	subRecords.setPrototype(VTYPprototype);
     }
 
+    /**
+     * 
+     * @param edid
+     */
     public VTYP (String edid) {
 	this();
 	originateFromPatch(edid);
@@ -52,10 +65,20 @@ public class VTYP extends MajorRecord {
     }
 
     // Get/Set
+    /**
+     * 
+     * @param flag
+     * @param on
+     */
     public void set(VoiceTypeFlag flag, boolean on) {
 	subRecords.setSubFlag("DNAM", flag.ordinal(), on);
     }
 
+    /**
+     * 
+     * @param flag
+     * @return
+     */
     public boolean get(VoiceTypeFlag flag) {
 	return subRecords.getSubFlag("DNAM").is(flag.ordinal());
     }

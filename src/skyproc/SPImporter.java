@@ -705,12 +705,20 @@ public class SPImporter {
 	    return activeMod;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public boolean hasNext() {
 	    grabNext();
 	    return next != null;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public RecordShrinkArray next() {
 	    return next;
@@ -804,6 +812,9 @@ public class SPImporter {
 	    return false;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void remove() {
 	}

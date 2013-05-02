@@ -258,6 +258,10 @@ public class AMMO extends MajorRecordDescription {
 	return subRecords.getModel().getAltTextures();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

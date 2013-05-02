@@ -193,6 +193,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	}
     }
 
+    /**
+     * 
+     */
     public void reduce() {
 	LListSummary sum = new LListSummary(this);
 	sum.reduce();
@@ -402,6 +405,9 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	}
     }
 
+    /**
+     * 
+     */
     public void splitEntries() {
 	reduce();
 

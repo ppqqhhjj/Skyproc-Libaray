@@ -132,6 +132,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 	return out;
     }
 
+    /**
+     * Creates a copy of the record originating from the global patch.
+     * @param edid A unique EDID
+     * @return
+     */
     public MajorRecord copy(String edid) {
 	return SPGlobal.getGlobalPatch().makeCopy(this, edid);
     }

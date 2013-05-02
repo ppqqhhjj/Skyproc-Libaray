@@ -15,7 +15,7 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-public class SubRGBshort extends SubRecordTyped {
+class SubRGBshort extends SubRecordTyped {
 
     short r;
     short g;

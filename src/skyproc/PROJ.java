@@ -686,6 +686,10 @@ public class PROJ extends MajorRecordNamed {
 	return getDATA().decalData;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

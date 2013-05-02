@@ -81,6 +81,10 @@ public class LVLN extends LeveledRecord {
         subRecords.getModel().setFileName(in);
     }
     
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

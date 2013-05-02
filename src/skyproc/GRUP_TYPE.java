@@ -79,6 +79,9 @@ public enum GRUP_TYPE {
      * Projectile
      */
     PROJ,
+    /**
+     * 
+     */
     STAT,
     /**
      * Weapons
@@ -128,6 +131,9 @@ public enum GRUP_TYPE {
      * Perks
      */
     PERK,
+    /**
+     * 
+     */
     VTYP,
     /**
      *

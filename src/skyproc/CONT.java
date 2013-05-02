@@ -165,6 +165,10 @@ public class CONT extends MajorRecordNamed {
 	return subRecords.getSubForm("QNAM").getForm();
     }
     
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }

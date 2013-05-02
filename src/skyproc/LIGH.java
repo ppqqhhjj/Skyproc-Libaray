@@ -534,6 +534,10 @@ public class LIGH extends MajorRecordNamed {
 	return subRecords.getModel().getAltTextures();
     }
 
+    /**
+     * 
+     * @return
+     */
     public Model getModelData() {
 	return subRecords.getModel();
     }
