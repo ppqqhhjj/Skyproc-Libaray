@@ -557,7 +557,7 @@ public class NiftyFunc {
 	SPGlobal.logMain("BOSS", "Looking for BOSS.");
 	int response = JOptionPane.YES_OPTION;
 	String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
-	File bossExe = new File(".");;
+	File bossExe = new File(".");
 	if (bossPath != null) {
 	    bossExe = new File(bossPath + "\\BOSS.exe");
 	}

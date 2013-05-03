@@ -194,7 +194,8 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     }
 
     /**
-     * 
+     * Reduces a Leveled List to have the least entries possible while
+     * maintaining the spawning probabilities.
      */
     public void reduce() {
 	LListSummary sum = new LListSummary(this);
@@ -406,7 +407,8 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     }
 
     /**
-     * 
+     * Reduces leveled list, and then splits it into smaller sub lists if larger
+     * than 255 (the max Skyrim can actually handle).
      */
     public void splitEntries() {
 	reduce();

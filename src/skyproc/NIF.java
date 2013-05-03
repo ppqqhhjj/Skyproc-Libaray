@@ -390,6 +390,15 @@ public class NIF {
 
 	return out;
     }
+    
+    public ArrayList<TextureSet> extractTextureSets() {
+	Map<Integer, LPair<String, ArrayList<String>>> data = extractTextures();
+	ArrayList<TextureSet> out = new ArrayList<>(data.size());
+	for (Integer i : data.keySet()) {
+	    out.add(new TextureSet(i, data.get(i)));
+	}
+	return out;
+    }
 
     /**
      *
@@ -404,5 +413,29 @@ public class NIF {
 	    maps.add(n.data.extractString(n.data.extractInt(4)));
 	}
 	return maps;
+    }
+    
+    public class TextureSet {
+	int index;
+	String name;
+	ArrayList<String> textures;
+	
+	TextureSet(Integer i, LPair<String, ArrayList<String>> data) {
+	    index = i;
+	    name = data.a;
+	    textures = data.b;
+	}
+
+	public int getIndex() {
+	    return index;
+	}
+
+	public String getName() {
+	    return name;
+	}
+
+	public ArrayList<String> getTextures() {
+	    return textures;
+	}
     }
 }
