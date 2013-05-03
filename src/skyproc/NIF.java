@@ -356,7 +356,8 @@ public class NIF {
 
     /**
      *
-     * @return A map with node index numbers as key, and Pairs of Node Name + List of textures as value.
+     * @return A map with node index numbers as key, and Pairs of Node Name +
+     * List of textures as value.
      */
     public Map<Integer, LPair<String, ArrayList<String>>> extractTextures() {
 	Map<Integer, LPair<String, ArrayList<String>>> out = new HashMap<>();
@@ -390,7 +391,7 @@ public class NIF {
 
 	return out;
     }
-    
+
     public ArrayList<TextureSet> extractTextureSets() {
 	Map<Integer, LPair<String, ArrayList<String>>> data = extractTextures();
 	ArrayList<TextureSet> out = new ArrayList<>(data.size());
@@ -414,16 +415,27 @@ public class NIF {
 	}
 	return maps;
     }
-    
-    public class TextureSet {
+
+    public static class TextureSet {
+
 	int index;
 	String name;
 	ArrayList<String> textures;
-	
-	TextureSet(Integer i, LPair<String, ArrayList<String>> data) {
+
+	public TextureSet(Integer i, LPair<String, ArrayList<String>> data) {
+	    this(i, data.a, data.b);
+	}
+
+	public TextureSet(Integer i, String name, ArrayList<String> tex) {
 	    index = i;
-	    name = data.a;
-	    textures = data.b;
+	    this.name = name;
+	    textures = tex;
+	}
+
+	public TextureSet(TextureSet rhs) {
+	    index = rhs.index;
+	    name = rhs.name;
+	    textures = new ArrayList<>(rhs.textures);
 	}
 
 	public int getIndex() {

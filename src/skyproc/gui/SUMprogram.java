@@ -4,11 +4,7 @@
  */
 package skyproc.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -16,12 +12,9 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import lev.Ln;
-import lev.debug.LDebug;
 import lev.gui.*;
 import skyproc.SPGlobal.Language;
 import skyproc.*;
@@ -80,10 +73,6 @@ public class SUMprogram implements SUM {
 	ArrayList<String> argsList = new ArrayList<>();
 	for (String s : args) {
 	    argsList.add(s.toUpperCase());
-	}
-	if (argsList.contains("-VMAD")) {
-	    SkyProcTester.runTests(4);
-	    return false;
 	}
 	if (argsList.contains("-TESTCOPY")) {
 	    SkyProcTester.runTests(3);

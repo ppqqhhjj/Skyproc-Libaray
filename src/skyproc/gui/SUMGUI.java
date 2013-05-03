@@ -390,9 +390,6 @@ public class SUMGUI extends JFrame {
 			    singleton = hook.openCustomMenu();
 			} else {
 			    singleton = new SUMGUI();
-			    if (justSettings) {
-				switchToSettingsMode();
-			    }
 			}
 			if (hook.hasStandardMenu()) {
 			    SPMainMenuPanel menu = hook.getStandardMenu();
@@ -400,6 +397,9 @@ public class SUMGUI extends JFrame {
 				menu.setVersion(hook.getVersion());
 			    }
 			    singleton.add(menu);
+			    if (justSettings) {
+				switchToSettingsMode();
+			    }
 			}
 
 			progress.moveToCorrectLocation();
