@@ -449,6 +449,7 @@ public class NiftyFunc {
 
     /**
      * Replaces formIDs in arraylist.
+     *
      * @param src Target arraylist to look in
      * @param target FormID to replace
      * @param with FormIDs to substitute in place of target
@@ -471,6 +472,7 @@ public class NiftyFunc {
 
     /**
      * Creates empty files for non existent mods.
+     *
      * @param mods
      * @throws IOException
      */
@@ -480,6 +482,7 @@ public class NiftyFunc {
 
     /**
      * Creates empty files for non existent mods.
+     *
      * @param mods
      * @throws IOException
      */
@@ -497,6 +500,7 @@ public class NiftyFunc {
 
     /**
      * Adds and removes desired mods from the plugins list.
+     *
      * @param add Mods to add if they don't already exist on the list
      * @param remove Mods to remove if they do exist.
      * @throws IOException
@@ -521,7 +525,7 @@ public class NiftyFunc {
 		}
 	    }
 	}
-	
+
 	// Write out new plugins.txt
 	BufferedWriter pluginsOut = new BufferedWriter(new FileWriter(SPGlobal.getPluginsTxt()));
 	for (String line : pluginsLines) {
@@ -533,7 +537,8 @@ public class NiftyFunc {
 
     /**
      * Adds a mod to the plugins list if it doesn't exist.
-     * @param add 
+     *
+     * @param add
      * @throws IOException
      */
     public static void modifyPluginsTxt(Mod add) throws IOException {
@@ -543,11 +548,14 @@ public class NiftyFunc {
     }
 
     /**
-     * Runs BOSS and sorts the load order.  Does not update BOSS before running it.
+     * Runs BOSS and sorts the load order. Does not update BOSS before running
+     * it.
+     *
      * @param errorMessages
      */
     public static void runBOSS(boolean errorMessages) {
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		SUMGUI.progress.setStatusNumbered("Running BOSS");
@@ -589,5 +597,26 @@ public class NiftyFunc {
 	    SUMGUI.exitProgram(false, true);
 	}
 	SPGlobal.logMain("BOSS", "BOSS complete.");
+    }
+    public static Map<FormID, MajorRecord> deepSubrecordCopyDB = new HashMap<>();
+
+    public static ArrayList<MajorRecord> deepCopySubRecords(MajorRecord in, ModListing targetMod) {
+	ArrayList<MajorRecord> out = new ArrayList<>();
+	for (FormID id : in.allFormIDs()) {
+	    if (!id.getMaster().equals(targetMod)) {
+		continue;
+	    }
+	    MajorRecord m = SPDatabase.getMajor(id);
+	    if (m != null) {
+		MajorRecord copy = deepSubrecordCopyDB.get(id);
+		if (copy == null) {
+		    copy = m.copy(m.getEDID() + "_deepCopy");
+		    deepSubrecordCopyDB.put(id, copy);
+		}
+		id.setTo(copy.getForm());
+		out.add(copy);
+	    }
+	}
+	return out;
     }
 }

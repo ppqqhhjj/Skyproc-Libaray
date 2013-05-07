@@ -449,5 +449,10 @@ public class NIF {
 	public ArrayList<String> getTextures() {
 	    return textures;
 	}
+
+	@Override
+	public String toString() {
+	    return name;
+	}
     }
 }

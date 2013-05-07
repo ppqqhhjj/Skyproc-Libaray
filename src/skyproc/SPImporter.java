@@ -555,6 +555,10 @@ public class SPImporter {
 	    SPGlobal.sync(false);
 	}
     }
+    
+    public static Mod importMod(ModListing listing, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
+	return importMod(listing, SPGlobal.pathToData, grup_targets);
+    }
 
     static void checkMissingMasters(Mod plugin) throws MissingMaster {
 	ArrayList<ModListing> missingMasters = new ArrayList<>();

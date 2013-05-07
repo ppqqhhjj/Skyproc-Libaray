@@ -196,9 +196,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	for (ModListing m : in.tes.getMasters()) {
 	    addMaster(m);
 	}
-	if (!in.equals(SPGlobal.getGlobalPatch())) {
-	    addMaster(in.modInfo);
-	}
+//	if (!in.equals(SPGlobal.getGlobalPatch())) {
+//	    addMaster(in.modInfo);
+//	}
 	if (in.getInfo().equals(ModListing.skyrim)) {
 	    addMaster(ModListing.update);
 	}
@@ -228,10 +228,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
 	if (query != null && query.getMaster() != null) {
 	    for (GRUP_TYPE g : grup_types) {
-		GRUP grup = GRUPs.get(g);
-		MajorRecord mr = (MajorRecord) grup.get(query);
-		if (mr != null) {
-		    return mr;
+		if (!GRUP_TYPE.internal(g)) {
+		    GRUP grup = GRUPs.get(g);
+		    MajorRecord mr = (MajorRecord) grup.get(query);
+		    if (mr != null) {
+			return mr;
+		    }
 		}
 	    }
 	}
@@ -278,7 +280,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The copied record.
      */
     MajorRecord makeCopy(MajorRecord m) {
-	mergeMasters(SPGlobal.getDB().modLookup.get(m.getFormMaster()));
 	m = m.copyOf(this);
 	GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
 	return m;
@@ -301,13 +302,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
 	if (m == null || newEDID == null) {
 	    return null;
-	}
-	if (!m.getFormMaster().equals(SPGlobal.getGlobalPatch().getInfo())) {
-	    Mod mod = SPGlobal.getDB().modLookup.get(m.getFormMaster());
-	    if (mod == null) {
-		SPGlobal.logError("Make Copy", "Major Record " + m + " was from an unknown mod with a form master: " + m.getFormMaster());
-	    }
-	    mergeMasters(mod);
 	}
 	m = m.copyOf(this, newEDID);
 	GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
@@ -384,7 +378,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public String toString() {
 	return getName();
     }
-    
+
     ArrayList<FormID> allFormIDs() {
 	ArrayList<FormID> tmp = new ArrayList<>();
 	for (GRUP g : GRUPs.values()) {
@@ -503,7 +497,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 		grup_types = GRUP_TYPE.values();
 	    }
 	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_types));
-	    mergeMasters(rhs);
 	    for (GRUP_TYPE t : grups) {
 		GRUP g = GRUPs.get(t);
 		if (g != null) {

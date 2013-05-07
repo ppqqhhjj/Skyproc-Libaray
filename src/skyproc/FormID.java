@@ -110,6 +110,11 @@ public class FormID implements Comparable, Serializable {
     final void set(byte[] id) {
 	setInternal(Ln.reverse(id));
     }
+    
+    void setTo(FormID id) {
+	form = id.form;
+	master = id.master;
+    }
 
     private void setInternal(byte[] id) {
 	form = id;
