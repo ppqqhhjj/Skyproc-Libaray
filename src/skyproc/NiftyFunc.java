@@ -603,15 +603,20 @@ public class NiftyFunc {
     public static ArrayList<MajorRecord> deepCopySubRecords(MajorRecord in, ModListing targetMod) {
 	ArrayList<MajorRecord> out = new ArrayList<>();
 	for (FormID id : in.allFormIDs()) {
-	    if (!id.getMaster().equals(targetMod)) {
-		continue;
-	    }
 	    MajorRecord m = SPDatabase.getMajor(id);
-	    if (m != null) {
+	    if (m != null
+		    && (id.getMaster().equals(targetMod) // From target mod
+		    || !SPDatabase.getMod(id.getMaster()).contains(id) // Or missing "insert"
+		    )) {
 		MajorRecord copy = deepSubrecordCopyDB.get(id);
 		if (copy == null) {
-		    copy = m.copy(m.getEDID() + "_deepCopy");
+		    String edid = m.getEDID();
+		    if (!m.getType().equals("KYWD") && !m.getType().equals("GMST")) {
+			edid += "_deepCopy";
+		    }
+		    copy = m.copy(edid);
 		    deepSubrecordCopyDB.put(id, copy);
+		    deepCopySubRecords(copy, targetMod);
 		}
 		id.setTo(copy.getForm());
 		out.add(copy);

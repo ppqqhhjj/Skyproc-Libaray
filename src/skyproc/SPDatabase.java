@@ -21,8 +21,8 @@ public class SPDatabase implements Iterable<Mod> {
      * Delimiter used in separating modname from date in storage files.
      */
     static public final String dateDelim = "<--DATE-->";
-    ArrayList<ModListing> addedPlugins = new ArrayList<>();
-    Map<ModListing, Mod> modLookup = new TreeMap<>();
+    static ArrayList<ModListing> addedPlugins = new ArrayList<>();
+    static Map<ModListing, Mod> modLookup = new TreeMap<>();
 
     /**
      * Creates a new SPDatabase container to load mods into.
@@ -30,7 +30,7 @@ public class SPDatabase implements Iterable<Mod> {
     SPDatabase() {
     }
 
-    void clear() {
+    static void clear() {
 	activePlugins.clear();
 	addedPlugins.clear();
 	modLookup.clear();
@@ -43,7 +43,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param listing ModListing object to query for.
      * @return Mod's index in the load order.
      */
-    public int modIndex(ModListing listing) {
+    static public int modIndex(ModListing listing) {
 	int counter = 0;
 	for (Mod m : modLookup.values()) {
 	    if (m.getName().equalsIgnoreCase(listing.print())) {
@@ -59,7 +59,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param listing ModListing object to query for.
      * @return Mod matching the ModListing query.
      */
-    public Mod getMod(ModListing listing) {
+    static public Mod getMod(ModListing listing) {
 	if (listing.equals(SPGlobal.getGlobalPatch().getInfo())) {
 	    return SPGlobal.getGlobalPatch();
 	}
@@ -71,7 +71,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param listing ModListing object to query for.
      * @return True if database contains a matching Mod.
      */
-    public boolean hasMod(ModListing listing) {
+    static public boolean hasMod(ModListing listing) {
 	return modLookup.containsKey(listing);
     }
 
@@ -79,7 +79,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @param listing ModListing to remove.
      */
-    public void removeMod(ModListing listing) {
+    static public void removeMod(ModListing listing) {
 	addedPlugins.remove(listing);
 	modLookup.remove(listing);
     }
@@ -90,7 +90,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param index
      * @return
      */
-    public Mod getMod(int index) {
+    static public Mod getMod(int index) {
 	return modLookup.get(addedPlugins.get(index));
     }
 
@@ -99,7 +99,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return All mod listings including ones on the load order + ones created
      * while patching.
      */
-    public ArrayList<ModListing> getMods() {
+    static public ArrayList<ModListing> getMods() {
 	return new ArrayList<>(addedPlugins);
     }
 
@@ -107,7 +107,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @return All mod listings that appear on the load order.
      */
-    public ArrayList<ModListing> getImportedModListings() {
+    static public ArrayList<ModListing> getImportedModListings() {
 	ArrayList<Mod> mods = new ArrayList<>(getImportedMods());
 	ArrayList<ModListing> out = new ArrayList<>(mods.size());
 	for (Mod m : mods) {
@@ -120,7 +120,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @return
      */
-    public ArrayList<Mod> getImportedMods() {
+    static public ArrayList<Mod> getImportedMods() {
 	ArrayList<Mod> out = new ArrayList<>(activePlugins.size());
 	for (ModListing m : activePlugins) {
 	    Mod mod = SPGlobal.getDB().getMod(m);
@@ -138,7 +138,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param path
      * @throws IOException
      */
-    public void exportModList(String path) throws IOException {
+    static public void exportModList(String path) throws IOException {
 	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
 	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));
 	for (String s : getModListDates()) {
@@ -158,7 +158,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @return ArrayList of mod names + date modified data separated by the date delimiter.
      */
-    public ArrayList<String> getModListDates() {
+    static public ArrayList<String> getModListDates() {
 	ArrayList<String> out = new ArrayList<>();
 	try {
 	    for (ModListing m : SPImporter.getActiveModList()) {
@@ -175,7 +175,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @return the number of mods
      */
-    public int numMods() {
+    static public int numMods() {
 	return addedPlugins.size();
     }
 
@@ -200,7 +200,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param database Database to query
      * @return True if FormID exists in the database.
      */
-    static public boolean queryMajor(FormID query, SPDatabase database) {
+    static boolean queryMajor(FormID query, SPDatabase database) {
 	return queryMajor(query, database, GRUP_TYPE.values());
     }
 
@@ -225,7 +225,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param grup_types GRUPs to look in.
      * @return True if FormID exists in the database.
      */
-    static public boolean queryMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
+    static boolean queryMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
 	return getMajor(query, database, grup_types) != null;
     }
 
@@ -250,7 +250,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @return The first MajorRecord that matches, or MajorRecord.NULL if none
      * were found.
      */
-    static public MajorRecord getMajor(FormID query, SPDatabase database) {
+    static MajorRecord getMajor(FormID query, SPDatabase database) {
 	return getMajor(query, database, GRUP_TYPE.values());
     }
 
@@ -278,7 +278,7 @@ public class SPDatabase implements Iterable<Mod> {
      * @param grup_types GRUPs to look in.
      * @return The first MajorRecord that matches, or null if none were found.
      */
-    static public MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
+    static MajorRecord getMajor(FormID query, SPDatabase database, GRUP_TYPE... grup_types) {
 	if (query != null && query.getMaster() != null) {
 	    Iterator<Mod> revOrder = database.reverseIter();
 	    while (revOrder.hasNext()) {
@@ -298,7 +298,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @param m Mod to add to the database.
      */
-    public void add(Mod m) {
+    static public void add(Mod m) {
 	removeMod(m.getInfo());
 	addedPlugins.add(m.getInfo());
 	modLookup.put(m.getInfo(), m);
@@ -310,7 +310,7 @@ public class SPDatabase implements Iterable<Mod> {
      *
      * @param modSet Set of mods to add into the database.
      */
-    public void add(Set<Mod> modSet) {
+    static public void add(Set<Mod> modSet) {
 	for (Mod m : modSet) {
 	    add(m);
 	}

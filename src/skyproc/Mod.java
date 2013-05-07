@@ -192,18 +192,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	tes.getHEDR().nextID = Mod.HEDR.firstAvailableID;
     }
 
-    void mergeMasters(Mod in) {
-	for (ModListing m : in.tes.getMasters()) {
-	    addMaster(m);
-	}
-//	if (!in.equals(SPGlobal.getGlobalPatch())) {
-//	    addMaster(in.modInfo);
-//	}
-	if (in.getInfo().equals(ModListing.skyrim)) {
-	    addMaster(ModListing.update);
-	}
-    }
-
     void addMaster(ModListing input) {
 	if (!getInfo().equals(input)) {
 	    masterMap.clear();
