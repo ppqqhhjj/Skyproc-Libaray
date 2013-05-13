@@ -924,6 +924,7 @@ public class SUMprogram implements SUM {
 
     void runBOSS() {
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
+	    SUMGUI.bossWarning();
 	    NiftyFunc.runBOSS(true);
 	    SUMGUI.progress.incrementBar();
 	}

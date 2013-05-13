@@ -916,6 +916,7 @@ public class SUMGUI extends JFrame {
 	    try {
 		if (!imported) {
 		    if (boss) {
+			bossWarning();
 			NiftyFunc.setupMissingPatchFiles(SPGlobal.getGlobalPatch());
 			NiftyFunc.modifyPluginsTxt(SPGlobal.getGlobalPatch());
 			NiftyFunc.runBOSS(true);
@@ -1005,6 +1006,25 @@ public class SUMGUI extends JFrame {
 	} else {
 	    if (r != null) {
 		parserRunnable.afterImporting.add(r);
+	    }
+	}
+    }
+
+    static void bossWarning() {
+	if (save.getBool(SUMGUISettings.BOSSWarning)) {
+	    String message = "<html>This patcher is going to run BOSS first to standardize ordering.<br><br>"
+		    + "To turn BOSS execution off, download <a href=\"http://skyrim.nexusmods.com/mods/29865\">SUM</a> and adjust its settings.<br>"
+		    + "However, running BOSS is recommended.  "
+		    + "<a href=\"http://afterimagemetal.com/SkyProc/SUM%20Readme.html#BOSS\">Read this article why.</a><br><br>"
+		    + "Do you want to continue patching?</html>";
+	    int response = JOptionPane.showConfirmDialog(null, Lg.getQuickHTMLPane(message), "Running BOSS", JOptionPane.YES_NO_OPTION);
+	    if (response == JOptionPane.YES_OPTION) {
+		response = JOptionPane.showConfirmDialog(null, "Do you want to see this warning next time?", "Running BOSS", JOptionPane.YES_NO_OPTION);
+		if (response == JOptionPane.NO_OPTION) {
+		    save.setBool(SUMGUISettings.BOSSWarning, false);
+		}
+	    } else {
+		SUMGUI.exitProgram(false, true);
 	    }
 	}
     }
@@ -1158,7 +1178,8 @@ public class SUMGUI extends JFrame {
 	LastMasterlist,
 	LastModlist,
 	PrevVersion,
-	CrashState;
+	CrashState,
+	BOSSWarning;
     }
 
     static class SUMGUISave extends LSaveFile {
@@ -1173,6 +1194,7 @@ public class SUMGUI extends JFrame {
 	    Add(SUMGUISettings.LastMasterlist, new ArrayList<String>(), false);
 	    Add(SUMGUISettings.LastModlist, new ArrayList<String>(), false);
 	    Add(SUMGUISettings.CrashState, false, false);
+	    Add(SUMGUISettings.BOSSWarning, true, false);
 	}
 
 	@Override
