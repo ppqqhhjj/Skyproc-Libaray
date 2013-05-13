@@ -114,6 +114,7 @@ public class SUMGUI extends JFrame {
 	SUMGUI.helpPanel.setHeaderFont(SUMmainFont.deriveFont(Font.PLAIN, 25));
 	SUMGUI.helpPanel.setXOffsets(23, 35);
 	addWindowListener(new WindowListener() {
+
 	    @Override
 	    public void windowClosed(WindowEvent arg0) {
 	    }
@@ -165,6 +166,7 @@ public class SUMGUI extends JFrame {
 	    startPatch = new LButton("Patch");
 	    startPatch.setLocation(backgroundPanel.getWidth() - startPatch.getWidth() - 5, 5);
 	    startPatch.addActionListener(new ActionListener() {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    if (SPGlobal.logging()) {
@@ -174,6 +176,7 @@ public class SUMGUI extends JFrame {
 		}
 	    });
 	    startPatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -204,6 +207,7 @@ public class SUMGUI extends JFrame {
 	    cancelPatch = new LButton("Cancel");
 	    cancelPatch.setLocation(startPatch.getX() - cancelPatch.getWidth() - 5, 5);
 	    cancelPatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -236,6 +240,7 @@ public class SUMGUI extends JFrame {
 		}
 	    });
 	    cancelPatch.addActionListener(new ActionListener() {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    if (SPGlobal.logging()) {
@@ -250,6 +255,7 @@ public class SUMGUI extends JFrame {
 	    forcePatch.setLocation(rightDimensions.x + 10, cancelPatch.getY() + cancelPatch.getHeight() / 2 - forcePatch.getHeight() / 2);
 	    forcePatch.setOffset(-4);
 	    forcePatch.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
@@ -284,6 +290,7 @@ public class SUMGUI extends JFrame {
 	    backgroundPanel.add(patchNeededLabel);
 
 	    progress.addWindowListener(new WindowListener() {
+
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 		}
@@ -366,6 +373,7 @@ public class SUMGUI extends JFrame {
 
 	SUMGUI.hook = hook;
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		if (singleton == null) {
@@ -544,6 +552,7 @@ public class SUMGUI extends JFrame {
 	try {
 	    final LImagePane backToSUM = new LImagePane(SUMprogram.class.getResource("BackToSUMdark.png"));
 	    backToSUM.addMouseListener(new MouseListener() {
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		    exitProgram(false, true);
@@ -585,6 +594,7 @@ public class SUMGUI extends JFrame {
     /**
      * Lets you set the message to display when an error occurs that causes the
      * program to stop prematurely.
+     *
      * @param message
      */
     static public void setErrorMessage(String message) {
@@ -962,7 +972,7 @@ public class SUMGUI extends JFrame {
 		JOptionPane.showMessageDialog(null, m.toString() + "\n\n Please activate and try again.");
 		exitProgram(false, true);
 
-	    } catch (Exception e) {
+	    } catch (Throwable e) {
 		System.err.println(e.toString());
 		SPGlobal.logException(e);
 		JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e + "'\n\n" + errorMessage);

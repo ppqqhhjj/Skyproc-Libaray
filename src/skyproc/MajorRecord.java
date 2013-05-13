@@ -171,10 +171,6 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    EDID.parseData(EDID.extractRecordData(in), srcMod);
 	}
 
-	if (getEDID().equals("SprigganMatronRace")) {
-	    int wer = 23;
-	}
-	
 	importSubRecords(in);
     }
 

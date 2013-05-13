@@ -6,6 +6,7 @@ package skyproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LImport;
 import skyproc.exceptions.BadParameter;
@@ -66,6 +67,37 @@ public class STAT extends MajorRecord {
 	int getContentLength(ModExporter out) {
 	    return 8;
 	}
+
+	@Override
+	boolean subRecordEquals(SubRecord subRecord) {
+	    return equals(subRecord);
+	}
+
+	@Override
+	public int hashCode() {
+	    int hash = 5;
+	    hash = 31 * hash + Float.floatToIntBits(this.angle);
+	    hash = 31 * hash + Objects.hashCode(this.id);
+	    return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+		return false;
+	    }
+	    if (getClass() != obj.getClass()) {
+		return false;
+	    }
+	    final DNAM other = (DNAM) obj;
+	    if (Float.floatToIntBits(this.angle) != Float.floatToIntBits(other.angle)) {
+		return false;
+	    }
+	    if (!Objects.equals(this.id, other.id)) {
+		return false;
+	    }
+	    return true;
+	}
     }
 
     // Common Functions
@@ -73,9 +105,9 @@ public class STAT extends MajorRecord {
 	super();
 	subRecords.setPrototype(STATprototype);
     }
-    
+
     /**
-     * 
+     *
      * @param edid
      */
     public STAT(String edid) {
@@ -94,43 +126,43 @@ public class STAT extends MajorRecord {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Model getModelData() {
 	return subRecords.getModel();
     }
-    
+
     DNAM getDNAM() {
 	return (DNAM) subRecords.get("DNAM");
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public float getMaxAngle() {
 	return getDNAM().angle;
     }
-    
+
     /**
-     * 
+     *
      * @param angle
      */
     public void setMaxAngle(float angle) {
 	getDNAM().angle = angle;
     }
-    
+
     /**
-     * 
+     *
      * @param id
      */
     public void setMaterial(FormID id) {
 	getDNAM().id = id;
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public FormID getMaterial() {

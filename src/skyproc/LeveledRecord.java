@@ -16,7 +16,6 @@ import skyproc.exceptions.BadParameter;
 abstract public class LeveledRecord extends MajorRecord implements Iterable<LeveledEntry> {
 
     static final SubPrototype LeveledProto = new SubPrototype(MajorRecord.majorProto) {
-
 	@Override
 	protected void addRecords() {
 	    add(new SubData("OBND", new byte[12]));
@@ -393,8 +392,10 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 		divs[i] = entries.get(i).numEntries;
 	    }
 	    int reduc = Ln.gcd(divs);
-	    for (LListEntry e : entries) {
-		e.numEntries /= reduc;
+	    if (reduc != 1) {
+		for (LListEntry e : entries) {
+		    e.numEntries /= reduc;
+		}
 	    }
 	}
 

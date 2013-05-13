@@ -294,7 +294,8 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
 	Iterator<SubRecord> rhs = other.iterator();
 	while (lhs.hasNext() && rhs.hasNext()) {
 	    SubRecord lhsNext = lhs.next();
-	    if (!"EDID".equals(lhsNext.getType()) && !lhsNext.equals(rhs.next())) {
+	    SubRecord rhsNext = rhs.next();
+	    if (!"EDID".equals(lhsNext.getType()) && !lhsNext.equals(rhsNext)) {
 		return false;
 	    }
 	}

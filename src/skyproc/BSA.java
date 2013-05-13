@@ -59,12 +59,14 @@ public class BSA {
 	fileNameLength = in.extractInt(0, 4);
 	fileFlags = new LFlags(in.extract(0, 4));
 	if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "Imported " + filePath);
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "Offset " + offset + ", archiveFlags: " + archiveFlags);
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "hasDirectoryNames: " + archiveFlags.get(0) + ", hasFileNames: " + archiveFlags.get(1) + ", compressed: " + archiveFlags.get(2));
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "FolderCount: " + Ln.prettyPrintHex(folderCount) + ", FileCount: " + Ln.prettyPrintHex(fileCount));
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "fileFlags: " + fileFlags.toString());
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "|==================>");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| Imported " + filePath);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| Offset " + offset + ", archiveFlags: " + archiveFlags);
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| hasDirectoryNames: " + archiveFlags.get(0) + ", hasFileNames: " + archiveFlags.get(1) + ", compressed: " + archiveFlags.get(2));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| FolderCount: " + Ln.prettyPrintHex(folderCount) + ", FileCount: " + Ln.prettyPrintHex(fileCount));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| totalFolderNameLength: " + Ln.prettyPrintHex(folderNameLength) + ", totalFileNameLength: " + Ln.prettyPrintHex(fileNameLength));
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "| fileFlags: " + fileFlags.toString());
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "|==================>");
 	}
 	if (load) {
 	    loadFolders();
@@ -87,6 +89,11 @@ public class BSA {
 	    return;
 	}
 	loaded = true;
+	if (SPGlobal.logging()) {
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "|============================================");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "|============  Loading " + this + " ============");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "|============================================");
+	}
 	try {
 	    String fileName, folderName;
 	    int fileCounter = 0;
@@ -115,7 +122,7 @@ public class BSA {
 		    f.dataOffset = in.extractLong(0, 4);
 		    fileName = fileNames.extractString();
 		    files.put(fileName.toUpperCase(), f);
-		    if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
+		    if (SPGlobal.logging()) {
 			SPGlobal.logSpecial(LogTypes.BSA, header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
 			fileCounter++;
 		    }
@@ -156,16 +163,19 @@ public class BSA {
 	if ((ref = getFileRef(filePath)) != null) {
 	    in.pos(getFileLocation(ref));
 	    LShrinkArray out = new LShrinkArray(in.extract(0, ref.size));
-	    boolean compressed = archiveFlags.get(2);
-	    if (ref.flippedCompression) {
-		compressed = !compressed;
-	    }
-	    if (compressed) {
+	    trimName(out);
+	    if (isCompressed(ref)) {
 		out = out.correctForCompression();
 	    }
 	    return out;
 	}
 	return new LShrinkArray(new byte[0]);
+    }
+    
+    void trimName(LShrinkArray out) {
+	if (is(BSAFlag.NamesInFileData)) {
+	    out.skip(out.extractInt(1));
+	}
     }
 
     long getFileLocation(BSAFileRef ref) {
@@ -244,7 +254,7 @@ public class BSA {
     static public LShrinkArray getUsedFile(String filePath) throws IOException, DataFormatException {
 	File outsideBSA = new File(SPGlobal.pathToData + filePath);
 	if (outsideBSA.isFile()) {
-	    SPGlobal.logSpecial(LogTypes.BSA, header, "  Nif " + outsideBSA.getPath() + " loaded from loose files.");
+	    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded from loose files: " + outsideBSA.getPath());
 	    return new LShrinkArray(outsideBSA);
 	} else {
 	    Iterator<BSA> bsas = BSA.iterator();
@@ -257,7 +267,7 @@ public class BSA {
 	    }
 	    if (bsa != null) {
 		if (SPGlobal.logging()) {
-		    SPGlobal.logSpecial(LogTypes.BSA, header, "  Nif " + filePath + " loaded from BSA " + bsa.getFilePath());
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded from BSA " + bsa.getFilePath() + ": " + filePath);
 		}
 		return bsa.getFile(filePath);
 	    }
@@ -773,4 +783,27 @@ public class BSA {
 	BSA;
     }
     
+    public enum BSAFlag {
+	DirectoriesHaveNames (0),
+	FilesHaveNames (1),
+	Compressed (2),
+	NamesInFileData(8);
+	
+	int value;
+	BSAFlag (int val) {
+	    value = val;
+	}
+    }
+    
+    public boolean is(BSAFlag flag) {
+	return archiveFlags.get(flag.value);
+    }
+    
+    boolean isCompressed(BSAFileRef ref) {
+	boolean compressed = is(BSAFlag.Compressed);
+	if (ref.flippedCompression) {
+	    compressed = !compressed;
+	}
+	return compressed;
+    }
 }

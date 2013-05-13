@@ -893,6 +893,22 @@ public class WEAP extends MajorRecordDescription {
 	return subRecords.getSubForm("CNAM").getForm();
     }
 
+    public boolean isTemplated() {
+	return !FormID.NULL.equals(getTemplate());
+    }
+
+    public WEAP getTemplateTop () {
+	if (!isTemplated()) {
+	    return this;
+	} else {
+	    WEAP template = (WEAP) SPDatabase.getMajor(getTemplate(), GRUP_TYPE.WEAP);
+	    if (template != null) {
+		return template.getTemplateTop();
+	    }
+	}
+	return null;
+    }
+
     /**
      * @deprecated use getModelData()
      * @return List of the AltTextures applied.
@@ -902,7 +918,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Model getModelData() {
@@ -917,17 +933,17 @@ public class WEAP extends MajorRecordDescription {
     public boolean equalAltTextures(WEAP rhs) {
 	return AltTextures.equal(getAltTextures(), rhs.getAltTextures());
     }
-    
+
     /**
-     * 
+     *
      * @return
      */
     public FormID getFirstPersonModel() {
 	return subRecords.getSubForm("WNAM").getForm();
     }
-    
+
     /**
-     * 
+     *
      * @param id
      */
     public void setFirstPersonModel(FormID id) {

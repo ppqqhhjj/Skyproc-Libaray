@@ -28,6 +28,8 @@ import skyproc.gui.SUMGUI;
 public class NiftyFunc {
 
     static String[] validationSkip = {"DIAL"};
+    static String recordLengths = "Record Lengths";
+    static Map<FormID, MajorRecord> deepSubrecordCopyDB = new HashMap<>();
 
     /**
      * A common way to attach scripts to NPCs that normally cannot have scripts
@@ -239,7 +241,6 @@ public class NiftyFunc {
 	}
 	return out;
     }
-    static String recordLengths = "Record Lengths";
 
     /**
      * Reads in the file and confirms that all GRUPs and Major Records have
@@ -555,7 +556,6 @@ public class NiftyFunc {
      */
     public static void runBOSS(boolean errorMessages) {
 	SwingUtilities.invokeLater(new Runnable() {
-
 	    @Override
 	    public void run() {
 		SUMGUI.progress.setStatusNumbered("Running BOSS");
@@ -578,7 +578,7 @@ public class NiftyFunc {
 	}
 
 	// Run BOSS
-	if (bossExe.isFile()) {
+	if (bossExe != null && bossExe.isFile()) {
 	    SPGlobal.logMain("BOSS", "Running BOSS.");
 	    if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
 		SPGlobal.logMain("BOSS", "BOSS failed to run.");
@@ -598,11 +598,12 @@ public class NiftyFunc {
 	}
 	SPGlobal.logMain("BOSS", "BOSS complete.");
     }
-    public static Map<FormID, MajorRecord> deepSubrecordCopyDB = new HashMap<>();
 
     public static ArrayList<MajorRecord> deepCopySubRecords(MajorRecord in, ModListing targetMod) {
 	ArrayList<MajorRecord> out = new ArrayList<>();
-	for (FormID id : in.allFormIDs()) {
+	ArrayList<FormID> allIDs = in.allFormIDs();
+	allIDs.remove(in.getForm());
+	for (FormID id : allIDs) {
 	    MajorRecord m = SPDatabase.getMajor(id);
 	    if (m != null
 		    && (id.getMaster().equals(targetMod) // From target mod
@@ -623,5 +624,21 @@ public class NiftyFunc {
 	    }
 	}
 	return out;
+    }
+
+    public static MajorRecord mergeDuplicate(MajorRecord in) {
+	GRUP_TYPE g = GRUP_TYPE.valueOf(in.getType());
+	ArrayList<MajorRecord> grup = new ArrayList<>(SPGlobal.getGlobalPatch().getGRUPs().get(g).getRecords());
+	grup.remove(in);
+	for (MajorRecord existing : grup) {
+	    if (in.deepEquals(existing)) {
+		SPGlobal.getGlobalPatch().remove(in.getForm());
+		if (SPGlobal.logging()) {
+		    SPGlobal.log("NiftyFunc", in + " duplicate of " + existing);
+		}
+		return existing;
+	    }
+	}
+	return in;
     }
 }
