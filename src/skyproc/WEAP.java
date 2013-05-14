@@ -893,10 +893,21 @@ public class WEAP extends MajorRecordDescription {
 	return subRecords.getSubForm("CNAM").getForm();
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean isTemplated() {
 	return !FormID.NULL.equals(getTemplate());
     }
 
+    /**
+     * Returns the top of the Weapon Template "chain" and returns the top 
+     * (the one without any template).
+     * Only returns null if a template formID is found, but no record exists with
+     *  that formid.
+     * @return
+     */
     public WEAP getTemplateTop () {
 	if (!isTemplated()) {
 	    return this;

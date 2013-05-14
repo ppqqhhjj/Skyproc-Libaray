@@ -63,6 +63,10 @@ public abstract class Record implements Serializable {
 	return out;
     }
 
+    /**
+     * 
+     * @return The type string associated with record.
+     */
     public String getType() {
 	return getTypes().get(0);
     }

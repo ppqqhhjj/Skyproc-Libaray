@@ -503,7 +503,7 @@ public class SPImporter {
      * public Mod importMod(ModListing listing, String path,
      * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_static Type[]
      * types = new GRUP_TYPE[grup_targets.size()]; types =
-     * grup_targets.toArray(types); return importMod(listing, path, types); }
+     * grup_targets.toArray(types); return importMod(listing, path, types); 
      */
     static Mod importMod(ModListing listing, int index, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	if (!Consistency.isImported()) {
@@ -556,6 +556,23 @@ public class SPImporter {
 	}
     }
     
+    /**
+     * Looks for a mod matching the ModListing inside the given path. If
+     * properly located, it imports only GRUPS specified input the parameter.
+     *
+     * @param listing Mod name and suffix to look for.
+     * @param grup_targets An ArrayList of GRUP targets that you wish to import.
+     * @return A mod with the specified GRUPs imported and ready to be
+     * manipulated.
+     * @throws BadMod If SkyProc runs into any unexpected data structures, or
+     * has any error importing a mod at all.
+     *
+     * public Mod importMod(ModListing listing, String path,
+     * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_static Type[]
+     * types = new GRUP_TYPE[grup_targets.size()]; types =
+     * grup_targets.toArray(types); return importMod(listing, path, types);
+     * @throws MissingMaster  
+     */
     public static Mod importMod(ModListing listing, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	return importMod(listing, SPGlobal.pathToData, grup_targets);
     }

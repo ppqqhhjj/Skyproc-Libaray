@@ -392,6 +392,10 @@ public class NIF {
 	return out;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<TextureSet> extractTextureSets() {
 	Map<Integer, LPair<String, ArrayList<String>>> data = extractTextures();
 	ArrayList<TextureSet> out = new ArrayList<>(data.size());
@@ -416,40 +420,74 @@ public class NIF {
 	return maps;
     }
 
+    /**
+     * Represents a set of textures on a node of a nif file.
+     */
     public static class TextureSet {
 
 	int index;
 	String name;
 	ArrayList<String> textures;
 
+	/**
+	 * 
+	 * @param i
+	 * @param data
+	 */
 	public TextureSet(Integer i, LPair<String, ArrayList<String>> data) {
 	    this(i, data.a, data.b);
 	}
 
+	/**
+	 * 
+	 * @param i
+	 * @param name
+	 * @param tex
+	 */
 	public TextureSet(Integer i, String name, ArrayList<String> tex) {
 	    index = i;
 	    this.name = name;
 	    textures = tex;
 	}
 
+	/**
+	 * 
+	 * @param rhs
+	 */
 	public TextureSet(TextureSet rhs) {
 	    index = rhs.index;
 	    name = rhs.name;
 	    textures = new ArrayList<>(rhs.textures);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getIndex() {
 	    return index;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getName() {
 	    return name;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<String> getTextures() {
 	    return textures;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public String toString() {
 	    return name;

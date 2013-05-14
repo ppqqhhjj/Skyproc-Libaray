@@ -805,11 +805,26 @@ public class BSA {
 	BSA;
     }
 
+    /**
+     * 
+     */
     public enum BSAFlag {
 
+	/**
+	 * 
+	 */
 	DirectoriesHaveNames(0),
+	/**
+	 * 
+	 */
 	FilesHaveNames(1),
+	/**
+	 * 
+	 */
 	Compressed(2),
+	/**
+	 * 
+	 */
 	NamesInFileData(8);
 	int value;
 
@@ -818,6 +833,11 @@ public class BSA {
 	}
     }
 
+    /**
+     * 
+     * @param flag
+     * @return
+     */
     public boolean is(BSAFlag flag) {
 	return archiveFlags.get(flag.value);
     }

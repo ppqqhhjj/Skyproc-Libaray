@@ -599,6 +599,13 @@ public class NiftyFunc {
 	SPGlobal.logMain("BOSS", "BOSS complete.");
     }
 
+    /**
+     * Copies each major record from the target mod that is referenced in the major record.
+     * This makes the major record "self contained" from the target mod.
+     * @param in
+     * @param targetMod
+     * @return
+     */
     public static ArrayList<MajorRecord> deepCopySubRecords(MajorRecord in, ModListing targetMod) {
 	ArrayList<MajorRecord> out = new ArrayList<>();
 	ArrayList<FormID> allIDs = in.allFormIDs();
@@ -626,6 +633,16 @@ public class NiftyFunc {
 	return out;
     }
 
+    /**
+     * Checks global path for duplicate record.  If none is found, in is returned. 
+     * If a duplicate is found, in is removed from the global patch and the 
+     * duplicate is returned.<br><br>
+     * 
+     * deepEquals is used to determine if two records are equal.
+     * 
+     * @param in Major Record to check for duplicates.
+     * @return A record from global patch that is unique. 
+     */
     public static MajorRecord mergeDuplicate(MajorRecord in) {
 	GRUP_TYPE g = GRUP_TYPE.valueOf(in.getType());
 	ArrayList<MajorRecord> grup = new ArrayList<>(SPGlobal.getGlobalPatch().getGRUPs().get(g).getRecords());
