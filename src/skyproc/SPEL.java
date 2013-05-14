@@ -133,7 +133,8 @@ public class SPEL extends MagicItem {
 	this();
 	originateFromPatch(edid);
 	SubForm ETYP = subRecords.getSubForm("ETYP");
-	ETYP.getForm().setInternal(new byte[]{(byte) 0x44, (byte) 0x3F, (byte) 0x01, (byte) 0x00}, srcMod);
+	FormID id = new FormID("013F44Skyrim.esm");
+	ETYP.setForm(id);
 	getSPIT().valid = true;
     }
 
