@@ -37,7 +37,7 @@ public class BSA {
     LFlags fileFlags;
     boolean loaded = false;
     boolean bad = false;
-    Map<String, Map<String, BSAFileRef>> folders;
+    Map<String, BSAFolder> folders;
     LInChannel in = new LInChannel();
 
     BSA(File file, boolean load) throws FileNotFoundException, IOException, BadParameter {
@@ -95,33 +95,33 @@ public class BSA {
 	    SPGlobal.logSpecial(LogTypes.BSA, header, "|============================================");
 	}
 	try {
-	    String fileName, folderName;
+	    String fileName;
 	    int fileCounter = 0;
 	    in.pos(offset);
 	    LShrinkArray folderData = new LShrinkArray(in.extract(0, folderCount * 16));
-	    in.pos(folderNameLength + fileCount * 16 + folderCount * 17 + offset);
+	    posAtFilenames();
 	    LShrinkArray fileNames = new LShrinkArray(in.extract(0, fileNameLength));
 	    for (int i = 0; i < folderCount; i++) {
+		BSAFolder folder = new BSAFolder();
 		folderData.skip(8); // Skip Hash
-		int count = folderData.extractInt(4);
-		Map<String, BSAFileRef> files = new HashMap<>(count);
-		int fileRecordOffset = folderData.extractInt(4);
-
-		in.pos(fileRecordOffset - fileNameLength);
-		folderName = in.extractString(0, in.read() - 1) + "\\";
+		folder.setFileCount(folderData.extractInt(4));
+		folder.dataPos = folderData.extractInt(4);
+		posAtFolder(folder);
+		folder.name = in.extractString(0, in.read() - 1) + "\\";
+		folder.name = folder.name.toUpperCase();
 		in.skip(1);
-		folders.put(folderName.toUpperCase(), files);
+		folders.put(folder.name, folder);
 		if (SPGlobal.debugBSAimport && SPGlobal.logging()) {
-		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded folder: " + folderName);
+		    SPGlobal.logSpecial(LogTypes.BSA, header, "Loaded folder: " + folder.name);
 		}
-		for (int j = 0; j < count; j++) {
+		for (int j = 0; j < folder.fileCount; j++) {
 		    BSAFileRef f = new BSAFileRef();
 		    f.size = in.extractInt(8, 3); // Skip Hash
 		    LFlags sizeFlag = new LFlags(in.extract(1));
 		    f.flippedCompression = sizeFlag.get(6);
 		    f.dataOffset = in.extractLong(0, 4);
 		    fileName = fileNames.extractString();
-		    files.put(fileName.toUpperCase(), f);
+		    folder.files.put(fileName.toUpperCase(), f);
 		    if (SPGlobal.logging()) {
 			SPGlobal.logSpecial(LogTypes.BSA, header, "  " + fileName + ", size: " + Ln.prettyPrintHex(f.size) + ", offset: " + Ln.prettyPrintHex(f.dataOffset));
 			fileCounter++;
@@ -139,6 +139,14 @@ public class BSA {
 	    SPGlobal.logError("BSA", "Skipped BSA " + this);
 	    bad = true;
 	}
+    }
+
+    void posAtFilenames() {
+	in.pos(folderNameLength + fileCount * 16 + folderCount * 17 + offset);
+    }
+
+    void posAtFolder(BSAFolder folder) {
+	in.pos(folder.dataPos - fileNameLength);
     }
 
     /**
@@ -171,7 +179,7 @@ public class BSA {
 	}
 	return new LShrinkArray(new byte[0]);
     }
-    
+
     void trimName(LShrinkArray out) {
 	if (is(BSAFlag.NamesInFileData)) {
 	    out.skip(out.extractInt(1));
@@ -435,12 +443,13 @@ public class BSA {
     BSAFileRef getFileRef(String filePath) {
 	filePath = filePath.toUpperCase();
 	int index = filePath.lastIndexOf('\\');
-	String folder = filePath.substring(0, index + 1);
-	if (hasFolder(folder)) {
+	String folderPath = filePath.substring(0, index + 1);
+	BSAFolder folder = folders.get(folderPath);
+	if (folder != null) {
 	    String file = filePath.substring(index + 1);
-	    Map<String, BSAFileRef> files = folders.get(folder);
-	    if (files.containsKey(file)) {
-		return files.get(file);
+	    BSAFileRef ref = folder.files.get(file);
+	    if (ref != null) {
+		return ref;
 	    }
 	}
 	return null;
@@ -501,11 +510,10 @@ public class BSA {
      */
     public Map<String, ArrayList<String>> getFiles() {
 	Map<String, ArrayList<String>> out = new HashMap<>(folders.size());
-	for (String folder : folders.keySet()) {
-	    out.put(folder, new ArrayList<String>(folders.get(folder).values().size()));
-	    for (String file : folders.get(folder).keySet()) {
-		out.get(folder).add(file);
-	    }
+	for (BSAFolder folder : folders.values()) {
+	    ArrayList<String> list = new ArrayList<>(folder.files.values().size());
+	    out.put(folder.name, list);
+	    list.addAll(folder.files.keySet());
 	}
 	return out;
     }
@@ -524,8 +532,8 @@ public class BSA {
      */
     public int numFiles() {
 	int out = 0;
-	for (Map m : folders.values()) {
-	    out += m.size();
+	for (BSAFolder folder : folders.values()) {
+	    out += folder.fileCount;
 	}
 	return out;
     }
@@ -551,8 +559,8 @@ public class BSA {
 
     boolean manualContains(FileType[] fileTypes) {
 	loadFolders();
-	for (String folder : folders.keySet()) {
-	    for (String file : folders.get(folder).keySet()) {
+	for (BSAFolder folder : folders.values()) {
+	    for (String file : folder.files.keySet()) {
 		for (FileType type : fileTypes) {
 		    if (file.endsWith(type.toString())) {
 			return true;
@@ -721,6 +729,19 @@ public class BSA {
 	long dataOffset;
     }
 
+    static class BSAFolder {
+
+	String name;
+	long dataPos;
+	private int fileCount;
+	Map<String, BSAFileRef> files = new HashMap<>();
+
+	void setFileCount(int fileCount) {
+	    this.fileCount = fileCount;
+	    files = new HashMap<>(fileCount);
+	}
+    }
+
     /**
      *
      * @return
@@ -772,33 +793,35 @@ public class BSA {
 	 */
 	CTL
     }
-    
+
     /**
-     * 
+     *
      */
     public static enum LogTypes {
+
 	/**
 	 * A logstream used for logging which records have been skipped/blockec.
 	 */
 	BSA;
     }
-    
+
     public enum BSAFlag {
-	DirectoriesHaveNames (0),
-	FilesHaveNames (1),
-	Compressed (2),
+
+	DirectoriesHaveNames(0),
+	FilesHaveNames(1),
+	Compressed(2),
 	NamesInFileData(8);
-	
 	int value;
-	BSAFlag (int val) {
+
+	BSAFlag(int val) {
 	    value = val;
 	}
     }
-    
+
     public boolean is(BSAFlag flag) {
 	return archiveFlags.get(flag.value);
     }
-    
+
     boolean isCompressed(BSAFileRef ref) {
 	boolean compressed = is(BSAFlag.Compressed);
 	if (ref.flippedCompression) {
