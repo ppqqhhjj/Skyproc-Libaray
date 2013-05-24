@@ -88,6 +88,15 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
     public ArrayList<LeveledEntry> getEntries() {
 	return subRecords.getSubList("LVLO").toPublic();
     }
+    
+    public ArrayList<FormID> getEntryForms() {
+	ArrayList<LeveledEntry> entries = getEntries();
+	ArrayList<FormID> out = new ArrayList<>(entries.size());
+	for (LeveledEntry e : entries) {
+	    out.add(e.getForm());
+	}
+	return out;
+    }
 
     /**
      * Returns all non-leveled list entries, with leveled list entries

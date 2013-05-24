@@ -471,6 +471,41 @@ public class NiftyFunc {
 	return numChanges;
     }
 
+    static public int replaceAll(ArrayList<FormID> src, FormID target, ArrayList<FormID> with) {
+	return replaceAll(src, target, with.toArray(new FormID[0]));
+    }
+
+    static public Map<FormID, Integer> replaceIDs(ArrayList<FormID> src, Map<FormID, FormID> replacements) {
+	Map<FormID, Integer> out = new HashMap<>(replacements.size());
+	for (FormID id : replacements.keySet()) {
+	    out.put(id, 0);
+	}
+	for (FormID id : src) {
+	    FormID replace = replacements.get(id);
+	    if (replace != null) {
+		out.put(replace, out.get(replace) + 1);
+		id.setTo(id);
+	    }
+	}
+	return out;
+    }
+
+    static public Map<FormID, Integer> replaceMajors(ArrayList<FormID> src, Map<FormID, MajorRecord> replacements) {
+	Map<FormID, Integer> out = new HashMap<>(replacements.size());
+	for (FormID id : replacements.keySet()) {
+	    out.put(id, new Integer(0));
+	}
+	for (FormID id : src) {
+	    MajorRecord replace = replacements.get(id);
+	    if (replace != null) {
+		Integer i = out.get(id);
+		out.put(id, i + 1);
+		id.setTo(id);
+	    }
+	}
+	return out;
+    }
+
     /**
      * Creates empty files for non existent mods.
      *
@@ -556,6 +591,7 @@ public class NiftyFunc {
      */
     public static void runBOSS(boolean errorMessages) {
 	SwingUtilities.invokeLater(new Runnable() {
+
 	    @Override
 	    public void run() {
 		SUMGUI.progress.setStatusNumbered("Running BOSS");
@@ -600,8 +636,10 @@ public class NiftyFunc {
     }
 
     /**
-     * Copies each major record from the target mod that is referenced in the major record.
-     * This makes the major record "self contained" from the target mod.
+     * Copies each major record from the target mod that is referenced in the
+     * major record. This makes the major record "self contained" from the
+     * target mod.
+     *
      * @param in
      * @param targetMod
      * @return
@@ -634,14 +672,14 @@ public class NiftyFunc {
     }
 
     /**
-     * Checks global path for duplicate record.  If none is found, in is returned. 
-     * If a duplicate is found, in is removed from the global patch and the 
-     * duplicate is returned.<br><br>
-     * 
+     * Checks global path for duplicate record. If none is found, in is
+     * returned. If a duplicate is found, in is removed from the global patch
+     * and the duplicate is returned.<br><br>
+     *
      * deepEquals is used to determine if two records are equal.
-     * 
+     *
      * @param in Major Record to check for duplicates.
-     * @return A record from global patch that is unique. 
+     * @return A record from global patch that is unique.
      */
     public static MajorRecord mergeDuplicate(MajorRecord in) {
 	GRUP_TYPE g = GRUP_TYPE.valueOf(in.getType());

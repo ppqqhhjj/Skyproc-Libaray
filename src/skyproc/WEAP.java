@@ -40,6 +40,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(SubString.getNew("NNAM", true));
 	    add(new SubForm("INAM"));
 	    add(new SubForm("WNAM"));
+	    add(new SubList<>(new SubData("ENAM")));
 	    add(new SubForm("SNAM"));
 	    add(new SubForm("XNAM"));
 	    add(new SubForm("TNAM"));
@@ -894,7 +895,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public boolean isTemplated() {
@@ -902,7 +903,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     * Returns the top of the Weapon Template "chain" and returns the top 
+     * Returns the top of the Weapon Template "chain" and returns the top
      * (the one without any template).
      * Only returns null if a template formID is found, but no record exists with
      *  that formid.

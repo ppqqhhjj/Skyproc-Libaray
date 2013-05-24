@@ -1906,7 +1906,16 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     public ArrayList<ItemListing> getItems() {
 	return subRecords.getSubList("CNTO").toPublic();
     }
-
+    
+    public ArrayList<FormID> getItemForms() {
+	ArrayList<ItemListing> items = getItems();
+	ArrayList<FormID> out = new ArrayList<>(items.size());
+	for (ItemListing item : items) {
+	    out.add(item.getForm());
+	}
+	return out;
+    }
+    
     /**
      * Adds an AI package with the FormID to the NPC.
      *

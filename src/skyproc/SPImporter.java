@@ -503,7 +503,7 @@ public class SPImporter {
      * public Mod importMod(ModListing listing, String path,
      * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_static Type[]
      * types = new GRUP_TYPE[grup_targets.size()]; types =
-     * grup_targets.toArray(types); return importMod(listing, path, types); 
+     * grup_targets.toArray(types); return importMod(listing, path, types);
      */
     static Mod importMod(ModListing listing, int index, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	if (!Consistency.isImported()) {
@@ -555,7 +555,7 @@ public class SPImporter {
 	    SPGlobal.sync(false);
 	}
     }
-    
+
     /**
      * Looks for a mod matching the ModListing inside the given path. If
      * properly located, it imports only GRUPS specified input the parameter.
@@ -571,7 +571,7 @@ public class SPImporter {
      * ArrayList<GRUP_TYPE> grup_targets) throws BadMod { GRUP_static Type[]
      * types = new GRUP_TYPE[grup_targets.size()]; types =
      * grup_targets.toArray(types); return importMod(listing, path, types);
-     * @throws MissingMaster  
+     * @throws MissingMaster
      */
     public static Mod importMod(ModListing listing, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
 	return importMod(listing, SPGlobal.pathToData, grup_targets);
@@ -727,7 +727,7 @@ public class SPImporter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -737,7 +737,7 @@ public class SPImporter {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -834,7 +834,7 @@ public class SPImporter {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public void remove() {
