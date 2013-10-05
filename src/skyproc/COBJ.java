@@ -67,7 +67,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void addCondition(Condition c) {
@@ -75,7 +75,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void removeCondition(Condition c) {
@@ -83,7 +83,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param itemReference
      * @param count
      * @return
@@ -93,7 +93,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param itemReference
      * @return
      */
@@ -102,7 +102,7 @@ public class COBJ extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearIngredients() {
 	subRecords.getSubList("CNTO").clear();

@@ -1031,7 +1031,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void addCondition(Condition c) {
@@ -1039,7 +1039,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void removeCondition(Condition c) {
@@ -1055,7 +1055,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param stage
      */
     public void addQuestStage(QuestStage stage) {
@@ -1162,14 +1162,14 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearStages() {
 	subRecords.getSubList("INDX").clear();
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param stage
      */
     public void addStage(QuestStage stage) {
@@ -1185,14 +1185,14 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearObjectives() {
 	subRecords.getSubList("QOBJ").clear();
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param objective
      */
     public void addObjective(QuestObjective objective) {
@@ -1208,7 +1208,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param alias
      */
     public void addAlias(Alias alias) {
@@ -1216,7 +1216,7 @@ public class QUST extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearAliases() {
 	subRecords.getSubList("ALLS").clear();

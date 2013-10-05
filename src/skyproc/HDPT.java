@@ -75,7 +75,7 @@ public class HDPT extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id
      */
     public void addHeadPart(FormID id) {
@@ -83,7 +83,7 @@ public class HDPT extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id
      */
     public void removeHeadPart(FormID id) {
@@ -91,7 +91,7 @@ public class HDPT extends MajorRecordNamed {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearHeadParts() {
 	subRecords.getSubList("HNAM").clear();

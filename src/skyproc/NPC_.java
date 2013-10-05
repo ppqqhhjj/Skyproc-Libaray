@@ -1479,7 +1479,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param factionRef FormID of the faction to add the NPC into.
      * @param rank Rank within the faction to set the NPC at.
      * @return True if faction was added.
@@ -1489,7 +1489,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param factionRef FormID matching the FactionRef record to remove.
      * @return True if faction was removed.
      */
@@ -1498,7 +1498,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearFactions() {
 	subRecords.getSubList("SNAM").clear();
@@ -1513,7 +1513,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param perkRef
      * @param rank
      */
@@ -1522,7 +1522,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param perkRef
      * @return
      */
@@ -1531,7 +1531,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearPerks() {
 	subRecords.getSubList("PRKR").clear();
@@ -1837,7 +1837,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param spellReference FormID of the spell to give to the NPC.
      * @return True if spell was added.
      */
@@ -1849,7 +1849,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
      * Removes a spell from the NPC. If a spell with this FormID does not exist,
      * this spell does nothing.
      *
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param spellReference FormID of the spell to remove from the NPC
      * @return True if spell was removed.
      */
@@ -1858,7 +1858,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearSpells() {
 	subRecords.getSubList("SPLO").clear();
@@ -1875,7 +1875,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param item
      * @return
      */
@@ -1884,7 +1884,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param itemReference
      * @return
      */
@@ -1893,7 +1893,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearItems() {
 	subRecords.getSubList("CNTO").clear();
@@ -1919,7 +1919,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     /**
      * Adds an AI package with the FormID to the NPC.
      *
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param aiPackageReference
      * @return True if AI package was added.
      */
@@ -1928,7 +1928,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param aiPackageReference
      * @return True if AI package was removed.
      */
@@ -1945,7 +1945,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearAIPackages() {
 	subRecords.getSubList("PKID").clear();
@@ -2566,7 +2566,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param tinting
      * @return
      */
@@ -2575,7 +2575,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param tinting
      * @return
      */
@@ -2584,7 +2584,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearTinting() {
 	subRecords.getSubList("TINI").clear();
@@ -2599,7 +2599,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param sounds
      * @return
      */
@@ -2608,7 +2608,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param sounds
      * @return
      */
@@ -2617,7 +2617,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearSoundPackages() {
 	subRecords.getSubList("CSDT").clear();
@@ -2707,7 +2707,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param pnam
      */
     public void addHeadPart(FormID pnam) {
@@ -2715,7 +2715,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param pnam
      */
     public void removeHeadPart(FormID pnam) {
@@ -2723,7 +2723,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearHeadParts() {
 	subRecords.getSubList("PNAM").clear();

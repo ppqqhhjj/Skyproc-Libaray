@@ -136,7 +136,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id Adds an ARMA record to the MODL list.
      */
     public void addArmature(FormID id) {
@@ -144,7 +144,7 @@ public class ARMO extends MajorRecordDescription {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id Removes an ARMA record from the MODL list if it exists.
      */
     public void removeArmature(FormID id) {

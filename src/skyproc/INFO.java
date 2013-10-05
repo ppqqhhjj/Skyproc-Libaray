@@ -547,7 +547,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id
      */
     public void removeLinkTo(FormID id) {
@@ -555,7 +555,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param id
      */
     public void addLinkTo(FormID id) {
@@ -563,7 +563,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      */
     public void clearLinkTo() {
 	subRecords.getSubList("TCLT").clear();
@@ -594,7 +594,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void addCondition(Condition c) {
@@ -602,7 +602,7 @@ public class INFO extends MajorRecord {
     }
 
     /**
-     * @deprecated modifying the ArrayList will now directly affect the record.
+     * 
      * @param c
      */
     public void removeCondition(Condition c) {

@@ -3,3 +3,12 @@
 /nbproject/private/
 /SkyProcStarter/nbproject/private/
 /SkyProcStarter/build/
+SkyProcDebug/=--Debug Overview--=.txt
+SkyProcDebug/Asynchronous log.txt
+SkyProcDebug/Blocked Records.txt
+SkyProcDebug/Consistency.txt
+Files/BlockList.txt
+Files/Savefile
+Files/SUM.esp.bak
+Files/SUMsave
+store/skyproc.jar
