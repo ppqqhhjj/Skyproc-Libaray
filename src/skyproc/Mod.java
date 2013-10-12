@@ -97,6 +97,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	addGRUP(new MGEF());
 	addGRUP(new ENCH());
 	addGRUP(new SPEL());
+        addGRUP(new SCRL());
 	addGRUP(new ARMO());
 	addGRUP(new BOOK());
 	addGRUP(new CONT());

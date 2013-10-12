@@ -32,42 +32,6 @@ public class SPEL extends MagicItem {
     /**
      *
      */
-    public enum SPELFlag {
-
-	/**
-	 *
-	 */
-	ManualCostCalculation(0),
-	/**
-	 *
-	 */
-	PCStartSpell(17),
-	/**
-	 *
-	 */
-	AreaEffectIgnoresLOS(19),
-	/**
-	 *
-	 */
-	IgnoreResistance(20),
-	/**
-	 *
-	 */
-	NoAbsorbOrReflect(21),
-	/**
-	 *
-	 */
-	NoDualCastModification(23);
-	int value;
-
-	SPELFlag(int valuein) {
-	    value = valuein;
-	}
-    }
-
-    /**
-     *
-     */
     public enum SPELType {
 
 	/**

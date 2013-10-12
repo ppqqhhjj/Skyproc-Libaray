@@ -47,6 +47,7 @@ public enum GRUP_TYPE {
      * Spells
      */
     SPEL,
+    SCRL,
     /**
      * Armors
      */
