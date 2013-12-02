@@ -35,6 +35,8 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubForm("ETYP"));
 	    add(new SubForm("BIDS"));
 	    add(new SubForm("BAMT"));
+            add(new SubForm("YNAM"));
+            add(new SubForm("ZNAM"));
 	    add(new KeywordSet());
 	    reposition("DESC");
 	    add(SubString.getNew("NNAM", true));
@@ -43,6 +45,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubList<>(new SubData("ENAM")));
 	    add(new SubForm("SNAM"));
 	    add(new SubForm("XNAM"));
+            add(new SubForm("NAM7"));
 	    add(new SubForm("TNAM"));
 	    add(new SubForm("UNAM"));
 	    add(new SubForm("NAM9"));
