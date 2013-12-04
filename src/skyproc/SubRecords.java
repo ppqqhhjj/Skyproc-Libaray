@@ -164,7 +164,11 @@ abstract class SubRecords implements Serializable, Iterable<SubRecord> {
     }
 
     public BodyTemplate getBodyTemplate() {
-	return (BodyTemplate) get("BODT");
+        BodyTemplate b = (BodyTemplate) get("BODT");
+        if (b == null){
+            b = (BodyTemplate) get("BOD2");
+        }
+	return b;
     }
 
     public SubShell getSubShell(String t) {

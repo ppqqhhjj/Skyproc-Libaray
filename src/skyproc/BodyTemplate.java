@@ -138,8 +138,12 @@ public class BodyTemplate extends SubShell {
         }
     }
 
-    BodyTemplateMain getMain(BodyTemplateType type) {
-        return (BodyTemplateMain) subRecords.get(type.type);
+    BodyTemplateMain getMain() {
+        BodyTemplateMain b = (BodyTemplateMain) subRecords.get("BODT");
+        if (! (b.isValid()) ) {
+            b = (BodyTemplateMain) subRecords.get("BOD2");
+        }
+        return b ;
     }
 
     @Override
@@ -154,7 +158,7 @@ public class BodyTemplate extends SubShell {
      * @param on
      */
     public void set(BodyTemplateType type, FirstPersonFlags flag, boolean on) {
-        BodyTemplateMain main = getMain(type);
+        BodyTemplateMain main = getMain();
         if (flag == FirstPersonFlags.NONE) {
             main.bodyParts.clear();
         } else {
@@ -171,7 +175,7 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public boolean get(BodyTemplateType type, FirstPersonFlags part) {
-        BodyTemplateMain main = getMain(type);
+        BodyTemplateMain main = getMain();
         main.valid = true;
         if (part == FirstPersonFlags.NONE) {
             return main.bodyParts.isZeros();
@@ -186,7 +190,7 @@ public class BodyTemplate extends SubShell {
      * @param on
      */
     public void set(GeneralFlags flag, boolean on) {
-        BodyTemplateMain main = getMain(BodyTemplateType.Normal);
+        BodyTemplateMain main = getMain();
         main.valid = true;
         main.flags.set(flag.value, on);
     }
@@ -197,7 +201,7 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public boolean get(GeneralFlags flag) {
-        BodyTemplateMain main = getMain(BodyTemplateType.Normal);
+        BodyTemplateMain main = getMain();
         main.valid = true;
         return main.flags.get(flag.value);
     }
@@ -208,7 +212,7 @@ public class BodyTemplate extends SubShell {
      * @param armorType
      */
     public void setArmorType(BodyTemplateType type, ArmorType armorType) {
-        BodyTemplateMain main = getMain(type);
+        BodyTemplateMain main = getMain();
         main.valid = true;
         main.armorType = armorType;
     }
@@ -219,7 +223,7 @@ public class BodyTemplate extends SubShell {
      * @return
      */
     public ArmorType getArmorType(BodyTemplateType type) {
-        BodyTemplateMain main = getMain(type);
+        BodyTemplateMain main = getMain();
         main.valid = true;
         return main.armorType;
     }
