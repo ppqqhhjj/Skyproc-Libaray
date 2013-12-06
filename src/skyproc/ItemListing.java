@@ -15,7 +15,7 @@ public class ItemListing extends SubShell {
 	@Override
 	protected void addRecords() {
 	    add(new SubFormInt("CNTO"));
-	    add(new SubData("COED"));
+	    add(new Owner());
 	}
     };
 
