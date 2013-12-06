@@ -40,8 +40,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
 	    add(new ATKD());
 	    add(SubString.getNew("ATKE", true));
 	    add(new SubForm("SPOR"));
+            add(new SubForm("OCOR"));
 	    add(new SubForm("GWOR"));
-	    add(new SubForm("OCOR"));
 	    add(new SubForm("ECOR"));
 	    add(new SubListCounted<>("PRKZ", 4, new SubFormInt("PRKR")));
 	    add(new SubListCounted<>("COCT", 4, new ItemListing()));

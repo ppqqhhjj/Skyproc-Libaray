@@ -4,7 +4,13 @@
  */
 package skyproc;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.zip.DataFormatException;
+import lev.LFlags;
+import lev.LImport;
+import skyproc.exceptions.BadParameter;
+import skyproc.exceptions.BadRecord;
 
 /**
  *
@@ -17,7 +23,7 @@ public class HDPT extends MajorRecordNamed {
 	@Override
 	protected void addRecords() {
 	    add(new Model());
-	    add(new SubData("DATA"));
+	    add(new HDPT_Flags("DATA"));
 	    add(new SubInt("PNAM"));
 	    add(new SubList<>(new SubForm("HNAM")));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
@@ -31,6 +37,41 @@ public class HDPT extends MajorRecordNamed {
 	    add(new SubForm("TNAM"));
 	    add(new SubForm("RNAM"));
 	}
+    };
+    
+    static class HDPT_Flags extends SubRecordTyped {
+        LFlags flags = new LFlags(1);
+
+        HDPT_Flags(String type) {
+            super(type);
+        }
+        
+        @Override
+        void export(ModExporter out) throws IOException {
+            super.export(out);
+            out.write(flags.export(), 1);
+        }
+
+        @Override
+        void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+            super.parseData(in, srcMod);
+            flags = new LFlags(in.extract(1));
+        }
+
+        @Override
+        SubRecord getNew(String type) {
+            return new HDPT_Flags(type);
+        }
+
+        @Override
+        boolean isValid() {
+            return true;
+        }
+
+        @Override
+        int getContentLength(ModExporter out) {
+            return 1;
+        }
     };
 
     // Common Functions
@@ -143,5 +184,24 @@ public class HDPT extends MajorRecordNamed {
      */
     public Model getModelData() {
 	return subRecords.getModel();
+    }
+    
+    /**
+     * @param flag HeadPartFlag to check
+     * @return value of flag
+     */
+    public boolean getHeadPartFlag(skyproc.genenums.HeadPartFlags flag){
+        HDPT_Flags h = (HDPT_Flags) subRecords.get("DATA");
+        return h.flags.get(flag.ordinal());
+    }
+    
+    /**
+     * @param flag HeadPartFlag to set
+     * @param on
+     *  value of flag
+     */
+    public void setHeadPartFlag(skyproc.genenums.HeadPartFlags flag, boolean on){
+        HDPT_Flags h = (HDPT_Flags) subRecords.get("DATA");
+        h.flags.set(flag.ordinal(), on);
     }
 }
