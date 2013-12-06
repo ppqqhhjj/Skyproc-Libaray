@@ -181,4 +181,12 @@ public class CONT extends MajorRecordNamed {
     public Model getModelData() {
 	return subRecords.getModel();
     }
+    
+    /**
+     * 
+     * @return ScriptPackage of the CONT
+     */
+    public ScriptPackage getScriptPackage() {
+        return subRecords.getScripts();
+    }
 }
