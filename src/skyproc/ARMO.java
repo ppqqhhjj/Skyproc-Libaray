@@ -71,7 +71,7 @@ public class ARMO extends MajorRecordDescription {
     Record getNew() {
 	return new ARMO();
     }
-
+    
     static class DATA extends SubRecord {
 
 	int value;
@@ -383,7 +383,12 @@ public class ARMO extends MajorRecordDescription {
      * @param template
      */
     public void setTemplate(FormID template) {
+        if (template.isNull()){
+            FormID oldTemplate = subRecords.getSubForm("TNAM").getForm();
+            // for templated fields copy values
+        }
 	subRecords.setSubForm("TNAM", template);
+        
     }
 
     /**
@@ -408,5 +413,13 @@ public class ARMO extends MajorRecordDescription {
      */
     public BodyTemplate getBodyTemplate() {
 	return subRecords.getBodyTemplate();
+    }
+    
+    /**
+     *
+     * @return true if TNAM is not null
+     */
+    public boolean isTemplated() {
+	return !getTemplate().isNull();
     }
 }

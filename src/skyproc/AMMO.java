@@ -104,7 +104,11 @@ public class AMMO extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	VanishesWhenNotInFlight;
+	VanishesWhenNotInFlight,
+        /*
+         *
+         */
+        NonBolt;
     }
 
     // Common Functions
