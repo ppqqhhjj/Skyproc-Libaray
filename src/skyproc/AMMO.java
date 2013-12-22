@@ -38,7 +38,7 @@ public class AMMO extends MajorRecordDescription {
     static final class DATA extends SubRecord {
 
 	FormID projectile = new FormID();
-	LFlags flags = new LFlags(4);
+	LFlags flags = new LFlags(1);
 	float damage = 0;
 	int value = 0;
 
@@ -104,7 +104,7 @@ public class AMMO extends MajorRecordDescription {
 	/**
 	 *
 	 */
-	VanishesWhenNotInFlight,
+	//VanishesWhenNotInFlight,
         /*
          *
          */
