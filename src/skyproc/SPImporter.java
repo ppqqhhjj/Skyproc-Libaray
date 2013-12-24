@@ -39,18 +39,18 @@ public class SPImporter {
      * do input the background.
      */
     static public void runBackgroundImport() {
-	(new Thread(new StartImportThread())).start();
+        (new Thread(new StartImportThread())).start();
     }
 
     private static class StartImportThread implements Runnable {
 
-	@Override
-	public void run() {
-	}
+        @Override
+        public void run() {
+        }
 
-	public void main(String args[]) {
-	    (new Thread(new StartImportThread())).start();
-	}
+        public void main(String args[]) {
+            (new Thread(new StartImportThread())).start();
+        }
     }
 
     /**
@@ -70,73 +70,73 @@ public class SPImporter {
      * @throws java.io.IOException
      */
     static public ArrayList<ModListing> getActiveModList() throws java.io.IOException {
-	if (SPDatabase.activePlugins.isEmpty()) {
-	    SPGlobal.sync(true);
-	    SPGlobal.newSyncLog("Get Active Mod List.txt");
-	    String header = "IMPORT MODS";
-	    BufferedReader ModFile;
-	    String dataFolder = SPGlobal.getPluginsTxt();
+        if (SPDatabase.activePlugins.isEmpty()) {
+            SPGlobal.sync(true);
+            SPGlobal.newSyncLog("Get Active Mod List.txt");
+            String header = "IMPORT MODS";
+            BufferedReader ModFile;
+            String dataFolder = SPGlobal.getPluginsTxt();
 
-	    //Open Plugin file
-	    ModFile = new BufferedReader(new FileReader(dataFolder));
+            //Open Plugin file
+            ModFile = new BufferedReader(new FileReader(dataFolder));
 
-	    try {
-		String line = ModFile.readLine();
-		ArrayList<String> lines = new ArrayList<>();
-		SPGlobal.logSync(header, "Loading in Active Plugins");
-		File pluginName;
+            try {
+                String line = ModFile.readLine();
+                ArrayList<String> lines = new ArrayList<>();
+                SPGlobal.logSync(header, "Loading in Active Plugins");
+                File pluginName;
 
-		//If Skyrim, add Skyrim.esm and Update.esm, as they
-		//are automatically removed from the list, and assumed
-		if (SPGlobal.gameName.equals("Skyrim")) {
-		    lines.add("Skyrim.esm");
-		    lines.add("Update.esm");
-		}
+                //If Skyrim, add Skyrim.esm and Update.esm, as they
+                //are automatically removed from the list, and assumed
+                if (SPGlobal.gameName.equals("Skyrim")) {
+                    lines.add("Skyrim.esm");
+                    lines.add("Update.esm");
+                }
 
-		while (line != null) {
-		    if (line.indexOf("#") >= 0) {
-			line = line.substring(0, line.indexOf("#"));
-		    }
-		    line = line.trim();
-		    if (!line.equals("")) {
-			pluginName = new File(SPGlobal.pathToData + line);
-			ModListing nextMod = new ModListing(line);
-			if (SPGlobal.noModsAfter && nextMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
-			    SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
-			    break;
-			} else if (SPGlobal.shouldImport(nextMod)
-				&& SPGlobal.shouldImport(line)) {
-			    if (pluginName.isFile()) {
-				if (Ln.indexOfIgnoreCase(lines, line) == -1) {
-				    SPGlobal.logSync(header, "Adding mod: " + line);
-				    lines.add(line);
-				} else if (SPGlobal.logging()) {
-				    SPGlobal.logSync(header, "Mod was already added: ", line);
-				}
-			    } else if (SPGlobal.logging()) {
-				SPGlobal.logSync(header, "Mod didn't exist: ", line);
-			    }
-			} else if (SPGlobal.logging()) {
-			    SPGlobal.logSync(header, "Mod was on the list to skip: " + line);
-			}
-		    }
-		    line = ModFile.readLine();
-		}
+                while (line != null) {
+                    if (line.indexOf("#") >= 0) {
+                        line = line.substring(0, line.indexOf("#"));
+                    }
+                    line = line.trim();
+                    if (!line.equals("")) {
+                        pluginName = new File(SPGlobal.pathToData + line);
+                        ModListing nextMod = new ModListing(line);
+                        if (SPGlobal.noModsAfter && nextMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
+                            SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
+                            break;
+                        } else if (SPGlobal.shouldImport(nextMod)
+                                && SPGlobal.shouldImport(line)) {
+                            if (pluginName.isFile()) {
+                                if (Ln.indexOfIgnoreCase(lines, line) == -1) {
+                                    SPGlobal.logSync(header, "Adding mod: " + line);
+                                    lines.add(line);
+                                } else if (SPGlobal.logging()) {
+                                    SPGlobal.logSync(header, "Mod was already added: ", line);
+                                }
+                            } else if (SPGlobal.logging()) {
+                                SPGlobal.logSync(header, "Mod didn't exist: ", line);
+                            }
+                        } else if (SPGlobal.logging()) {
+                            SPGlobal.logSync(header, "Mod was on the list to skip: " + line);
+                        }
+                    }
+                    line = ModFile.readLine();
+                }
 
-		SPGlobal.sync(false);
-		SPDatabase.activePlugins = sortModListings(lines);
+                SPGlobal.sync(false);
+                SPDatabase.activePlugins = sortModListings(lines);
 
-	    } catch (java.io.FileNotFoundException e) {
-		SPGlobal.logException(e);
-		SPGlobal.sync(false);
-		throw e;
-	    } catch (java.io.IOException e) {
-		SPGlobal.logException(e);
-		SPGlobal.sync(false);
-		throw e;
-	    }
-	}
-	return SPDatabase.activePlugins;
+            } catch (java.io.FileNotFoundException e) {
+                SPGlobal.logException(e);
+                SPGlobal.sync(false);
+                throw e;
+            } catch (java.io.IOException e) {
+                SPGlobal.logException(e);
+                SPGlobal.sync(false);
+                throw e;
+            }
+        }
+        return SPDatabase.activePlugins;
     }
 
     /**
@@ -151,59 +151,75 @@ public class SPImporter {
      * folder.
      */
     static public ArrayList<ModListing> getModList() {
-	SPGlobal.newSyncLog("Get All Present Mod List.txt");
-	File directory = new File(SPGlobal.pathToData);
-	ArrayList<String> out = new ArrayList<>();
-	if (directory.isDirectory()) {
-	    File[] files = directory.listFiles();
-	    for (File f : files) {
-		String name = f.getName().toUpperCase();
-		if (name.contains(".ESP") || name.contains(".ESM")) {
-		    if (!SPGlobal.modsToSkip.contains(new ModListing(f.getName()))) {
-			out.add(f.getName());
-		    } else if (SPGlobal.logging()) {
-			SPGlobal.logSync(header, "Mod was on the list to skip: " + name);
-		    }
-		}
-	    }
-	}
-	return sortModListings(out);
+        SPGlobal.newSyncLog("Get All Present Mod List.txt");
+        File directory = new File(SPGlobal.pathToData);
+        ArrayList<String> out = new ArrayList<>();
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            for (File f : files) {
+                String name = f.getName().toUpperCase();
+                if (name.contains(".ESP") || name.contains(".ESM")) {
+                    if (!SPGlobal.modsToSkip.contains(new ModListing(f.getName()))) {
+                        out.add(f.getName());
+                    } else if (SPGlobal.logging()) {
+                        SPGlobal.logSync(header, "Mod was on the list to skip: " + name);
+                    }
+                }
+            }
+        }
+        return sortModListings(out);
     }
 
     static ArrayList<ModListing> sortModListings(ArrayList<String> lines) {
-	SPGlobal.sync(true);
-	//Read it input
-	ArrayList<String> esms = new ArrayList<>();
-	ArrayList<String> esps = new ArrayList<>();
+        SPGlobal.sync(true);
+        //Read it input
+        ArrayList<String> esms = new ArrayList<>();
+        ArrayList<String> esps = new ArrayList<>();
 
-	for (String line : lines) {
-	    if (line.toUpperCase().contains(".ESM")) {
-		esms.add(line);
-	    } else {
-		esps.add(line);
-	    }
-	}
+        for (String line : lines) {
+            try {
+                RecordFileChannel input = new RecordFileChannel(SPGlobal.pathToData + line);
+                ModListing tempListing = new ModListing (line);
+                Mod plugin = new Mod(tempListing, extractHeaderInfo(input));
+                if(plugin.isFlag(Mod.Mod_Flags.MASTER)){
+                    esms.add(line);
+                } else {
+                    esps.add(line);
+                }
+            } catch (Exception e) {
+                if (SPGlobal.logging()) {
+                    SPGlobal.logSync(header, "Could not read mod file: " + lines + "\nSorting based on extension.");
+                }
+                if (line.toUpperCase().contains(".ESM")) {
+                    esms.add(line);
+                } else {
+                    esps.add(line);
+                }
+            }
 
-	SPGlobal.flush();
+        }
 
-	ArrayList<ModListing> listing = new ArrayList<>();
-	for (String m : esms) {
-	    listing.add(new ModListing(m));
-	}
-	for (String m : esps) {
-	    listing.add(new ModListing(m));
-	}
+        SPGlobal.flush();
 
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(header, "=========  Final sorted load order : ==========");
-	    int counter = 0;
-	    for (ModListing m : listing) {
-		SPGlobal.logSync(header, Ln.prettyPrintHex(counter++) + " Name: " + m.print());
-	    }
-	}
+        ArrayList<ModListing> listing = new ArrayList<>();
+        for (String m : esms) {
+            listing.add(new ModListing(m));
+            //false master check
+        }
+        for (String m : esps) {
+            listing.add(new ModListing(m));
+        }
 
-	SPGlobal.sync(false);
-	return listing;
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(header, "=========  Final sorted load order : ==========");
+            int counter = 0;
+            for (ModListing m : listing) {
+                SPGlobal.logSync(header, Ln.prettyPrintHex(counter++) + " Name: " + m.print());
+            }
+        }
+
+        SPGlobal.sync(false);
+        return listing;
     }
 
     /**
@@ -219,7 +235,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importAllMods() throws MissingMaster {
-	return importAllMods(GRUP_TYPE.values());
+        return importAllMods(GRUP_TYPE.values());
     }
 
     /**
@@ -237,7 +253,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importAllMods(GRUP_TYPE... grup_targets) throws MissingMaster {
-	return importMods(getModList(), SPGlobal.pathToData, grup_targets);
+        return importMods(getModList(), SPGlobal.pathToData, grup_targets);
     }
 
     /**
@@ -255,8 +271,8 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importAllMods(ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
-	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
-	return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
+        GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+        return importMods(getModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -279,7 +295,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods() throws IOException, MissingMaster {
-	return importActiveMods(GRUP_TYPE.values());
+        return importActiveMods(GRUP_TYPE.values());
     }
 
     /**
@@ -302,7 +318,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods(GRUP_TYPE... grup_targets) throws IOException, MissingMaster {
-	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
+        return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets);
     }
 
     /**
@@ -325,8 +341,8 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importActiveMods(ArrayList<GRUP_TYPE> grup_targets) throws IOException, MissingMaster {
-	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
-	return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
+        GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+        return importMods(getActiveModList(), SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -344,7 +360,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, GRUP_TYPE... grup_targets) throws MissingMaster {
-	return importMods(mods, SPGlobal.pathToData, grup_targets);
+        return importMods(mods, SPGlobal.pathToData, grup_targets);
     }
 
     /**
@@ -362,8 +378,8 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, ArrayList<GRUP_TYPE> grup_targets) throws MissingMaster {
-	GRUP_TYPE[] tmp = new GRUP_TYPE[0];
-	return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
+        GRUP_TYPE[] tmp = new GRUP_TYPE[0];
+        return importMods(mods, SPGlobal.pathToData, grup_targets.toArray(tmp));
     }
 
     /**
@@ -380,7 +396,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods) throws MissingMaster {
-	return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
+        return importMods(mods, SPGlobal.pathToData, GRUP_TYPE.values());
     }
 
     /**
@@ -397,7 +413,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Set<Mod> importMods(ArrayList<ModListing> mods, String path) throws MissingMaster {
-	return importMods(mods, path, GRUP_TYPE.values());
+        return importMods(mods, path, GRUP_TYPE.values());
     }
 
     /**
@@ -415,59 +431,59 @@ public class SPImporter {
      */
     static public Set<Mod> importMods(final ArrayList<ModListing> mods, String path, GRUP_TYPE... grup_targets) throws MissingMaster {
 
-	if (grup_targets.length == 0) {
-	    SPGlobal.logMain(header, "Skipping import because requests were empty.");
-	    return new HashSet<>(0);
-	}
+        if (grup_targets.length == 0) {
+            SPGlobal.logMain(header, "Skipping import because requests were empty.");
+            return new HashSet<>(0);
+        }
 
-	if (SPGlobal.logging()) {
-	    SPGlobal.logMain(header, "Starting import of targets: ");
-	    String grups = "";
-	    for (GRUP_TYPE g : grup_targets) {
-		grups += "   " + g.toString() + " ";
-	    }
-	    SPGlobal.logMain(header, grups);
-	    SPGlobal.logMain(header, "In mods: ");
-	    for (ModListing m : mods) {
-		SPGlobal.logMain(header, "   " + m.print());
-	    }
+        if (SPGlobal.logging()) {
+            SPGlobal.logMain(header, "Starting import of targets: ");
+            String grups = "";
+            for (GRUP_TYPE g : grup_targets) {
+                grups += "   " + g.toString() + " ";
+            }
+            SPGlobal.logMain(header, grups);
+            SPGlobal.logMain(header, "In mods: ");
+            for (ModListing m : mods) {
+                SPGlobal.logMain(header, "   " + m.print());
+            }
 
-	}
-	String header = "Import Mods";
+        }
+        String header = "Import Mods";
 
-	Set<Mod> outSet = new TreeSet<>();
+        Set<Mod> outSet = new TreeSet<>();
 
-	SPProgressBarPlug.setMax(mods.size(), "Importing plugins.");
+        SPProgressBarPlug.setMax(mods.size(), "Importing plugins.");
 
-	for (int i = 0; i < mods.size(); i++) {
-	    String mod = mods.get(i).print();
-	    SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)));
-	    if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
-		try {
-		    outSet.add(importMod(new ModListing(mod), i, path, true, grup_targets));
-		} catch (MissingMaster m) {
-		    throw m;
-		} catch (BadMod ex) {
-		    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
-		    SPGlobal.logError(header, "  " + ex.toString());
-		} catch (Exception e) {
-		    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
-		    SPGlobal.logError(header, "  Message: " + e);
-		    SPGlobal.logError(header, "  Stack: ");
-		    for (StackTraceElement s : e.getStackTrace()) {
-			SPGlobal.logError(header, "  " + s.toString());
-		    }
-		}
-	    } else {
-		SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)) + ": Skipped!");
-	    }
-	    SPProgressBarPlug.incrementBar();
-	}
+        for (int i = 0; i < mods.size(); i++) {
+            String mod = mods.get(i).print();
+            SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)));
+            if (!SPGlobal.modsToSkip.contains(new ModListing(mod))) {
+                try {
+                    outSet.add(importMod(new ModListing(mod), i, path, true, grup_targets));
+                } catch (MissingMaster m) {
+                    throw m;
+                } catch (BadMod ex) {
+                    SPGlobal.logError(header, "Skipping a bad mod: " + mod);
+                    SPGlobal.logError(header, "  " + ex.toString());
+                } catch (Exception e) {
+                    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
+                    SPGlobal.logError(header, "  Message: " + e);
+                    SPGlobal.logError(header, "  Stack: ");
+                    for (StackTraceElement s : e.getStackTrace()) {
+                        SPGlobal.logError(header, "  " + s.toString());
+                    }
+                }
+            } else {
+                SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)) + ": Skipped!");
+            }
+            SPProgressBarPlug.incrementBar();
+        }
 
-	if (SPGlobal.logging()) {
-	    SPGlobal.logMain(header, "Done Importing Mods.");
-	}
-	return outSet;
+        if (SPGlobal.logging()) {
+            SPGlobal.logMain(header, "Done Importing Mods.");
+        }
+        return outSet;
     }
 
     /**
@@ -485,7 +501,7 @@ public class SPImporter {
      * @throws MissingMaster
      */
     static public Mod importMod(ModListing listing, String path, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
-	return importMod(listing, 1000, path, true, grup_targets);
+        return importMod(listing, 1000, path, true, grup_targets);
     }
 
     /**
@@ -506,54 +522,54 @@ public class SPImporter {
      * grup_targets.toArray(types); return importMod(listing, path, types);
      */
     static Mod importMod(ModListing listing, int index, String path, Boolean addtoDb, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
-	if (!Consistency.isImported()) {
-	    Consistency.importConsistency(true);
-	}
-	SPGlobal.sync(true);
-	try {
-	    RecordFileChannel input = new RecordFileChannel(path + listing.print());
-	    Mod plugin = new Mod(listing, extractHeaderInfo(input));
-	    SPGlobal.logMod(plugin, header, "Opened filestream to mod: " + listing.print());
-	    if (SPGlobal.checkMissingMasters) {
-		checkMissingMasters(plugin);
-	    }
-	    plugin.input = input;
-	    if (SPGlobal.streamMode) {
-		plugin.input = input;
-	    }
+        if (!Consistency.isImported()) {
+            Consistency.importConsistency(true);
+        }
+        SPGlobal.sync(true);
+        try {
+            RecordFileChannel input = new RecordFileChannel(path + listing.print());
+            Mod plugin = new Mod(listing, extractHeaderInfo(input));
+            SPGlobal.logMod(plugin, header, "Opened filestream to mod: " + listing.print());
+            if (SPGlobal.checkMissingMasters) {
+                checkMissingMasters(plugin);
+            }
+            plugin.input = input;
+            if (SPGlobal.streamMode) {
+                plugin.input = input;
+            }
 
-	    if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
-		importStringLocations(plugin);
-		plugin.openStringStreams();
-	    }
+            if (plugin.isFlag(Mod.Mod_Flags.STRING_TABLED)) {
+                importStringLocations(plugin);
+                plugin.openStringStreams();
+            }
 
-	    GRUPIterator iter = new GRUPIterator(grup_targets, input);
-	    while (iter.hasNext()) {
-		String result = iter.loading();
-		SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
-		SPGlobal.logMod(plugin, header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
-		plugin.parseData(result, iter.next());
-		SPGlobal.flush();
-	    }
+            GRUPIterator iter = new GRUPIterator(grup_targets, input);
+            while (iter.hasNext()) {
+                String result = iter.loading();
+                SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
+                SPGlobal.logMod(plugin, header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
+                plugin.parseData(result, iter.next());
+                SPGlobal.flush();
+            }
 
-	    if (addtoDb) {
-		SPGlobal.getDB().add(plugin);
-	    }
+            if (addtoDb) {
+                SPGlobal.getDB().add(plugin);
+            }
 
-	    if (!SPGlobal.streamMode) {
-		input.close();
-	    }
-	    SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
+            if (!SPGlobal.streamMode) {
+                input.close();
+            }
+            SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
 
-	    return plugin;
-	} catch (MissingMaster m) {
-	    throw m;
-	} catch (Exception e) {
-	    SPGlobal.logException(e);
-	    throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
-	} finally {
-	    SPGlobal.sync(false);
-	}
+            return plugin;
+        } catch (MissingMaster m) {
+            throw m;
+        } catch (Exception e) {
+            SPGlobal.logException(e);
+            throw new BadMod("Ran into an exception, check SPGlobal.logs for more details.");
+        } finally {
+            SPGlobal.sync(false);
+        }
     }
 
     /**
@@ -574,388 +590,391 @@ public class SPImporter {
      * @throws MissingMaster
      */
     public static Mod importMod(ModListing listing, GRUP_TYPE... grup_targets) throws BadMod, MissingMaster {
-	return importMod(listing, SPGlobal.pathToData, grup_targets);
+        return importMod(listing, SPGlobal.pathToData, grup_targets);
     }
 
     static void checkMissingMasters(Mod plugin) throws MissingMaster {
-	ArrayList<ModListing> missingMasters = new ArrayList<>();
-	for (ModListing master : plugin.getMasters()) {
-	    if (SPGlobal.getDB().getMod(master) == null && SPGlobal.shouldImport(master)) {
-		missingMasters.add(master);
-	    }
-	}
-	if (!missingMasters.isEmpty()) {
-	    String error = "\n" + plugin.toString() + " has some missing masters:";
-	    for (ModListing m : missingMasters) {
-		error += "\n  - " + m.toString();
-	    }
-	    throw new MissingMaster(error);
-	}
+        ArrayList<ModListing> missingMasters = new ArrayList<>();
+        for (ModListing master : plugin.getMasters()) {
+            if (SPGlobal.getDB().getMod(master) == null && SPGlobal.shouldImport(master)) {
+                missingMasters.add(master);
+            }
+        }
+        if (!missingMasters.isEmpty()) {
+            String error = "\n" + plugin.toString() + " has some missing masters:";
+            for (ModListing m : missingMasters) {
+                error += "\n  - " + m.toString();
+            }
+            throw new MissingMaster(error);
+        }
     }
 
     /**
-     * A rudimentary mod data Iterator that returns data of subrecords matching typestring.
-     * Will parse all active mods.
-     * NOTE:  Not for general use and not heavily tested.  Use at your own risk.
+     * A rudimentary mod data Iterator that returns data of subrecords matching
+     * typestring. Will parse all active mods. NOTE: Not for general use and not
+     * heavily tested. Use at your own risk.
+     *
      * @param typeString
      * @param grups
      * @return
      */
     static public DirtyParsingIterator getSubRecordsInGRUPs(String typeString, String... grups) {
-	return new DirtyParsingIterator(typeString, grups);
+        return new DirtyParsingIterator(typeString, grups);
     }
 
     /**
      *
-     * A rudimentary mod data Iterator that returns data of subrecords matching typestring.
-     * NOTE:  Not for general use and not heavily tested.  Use at your own risk.
+     * A rudimentary mod data Iterator that returns data of subrecords matching
+     * typestring. NOTE: Not for general use and not heavily tested. Use at your
+     * own risk.
+     *
      * @param targetMod
      * @param typeString
      * @param grups
      * @return
      */
     static public DirtyParsingIterator getSubRecordsInGRUPs(ModListing targetMod, String typeString, String... grups) {
-	return new DirtyParsingIterator(targetMod, typeString, grups);
+        return new DirtyParsingIterator(targetMod, typeString, grups);
     }
 
     static class GRUPIterator implements Iterator<RecordShrinkArray> {
 
-	LInChannel input;
-	ArrayList<String> targets;
-	String loading;
+        LInChannel input;
+        ArrayList<String> targets;
+        String loading;
 
-	GRUPIterator() {
-	    targets = new ArrayList<>(0);
-	}
+        GRUPIterator() {
+            targets = new ArrayList<>(0);
+        }
 
-	GRUPIterator(GRUP_TYPE[] grup_targets, LInChannel input) {
-	    ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
-	    for (GRUP_TYPE g : new ArrayList<>(tmp)) {
-		if (GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
-		    tmp.remove(g);
-		}
-	    }
-	    targets = new ArrayList<>(tmp.size());
-	    for (GRUP_TYPE g : tmp) {
-		targets.add(g.toString());
-	    }
-	    this.input = input;
-	}
+        GRUPIterator(GRUP_TYPE[] grup_targets, LInChannel input) {
+            ArrayList<GRUP_TYPE> tmp = new ArrayList<>(Arrays.asList(grup_targets));
+            for (GRUP_TYPE g : new ArrayList<>(tmp)) {
+                if (GRUP_TYPE.unfinished(g) && !GRUP_TYPE.internal(g)) {
+                    tmp.remove(g);
+                }
+            }
+            targets = new ArrayList<>(tmp.size());
+            for (GRUP_TYPE g : tmp) {
+                targets.add(g.toString());
+            }
+            this.input = input;
+        }
 
-	@Override
-	public boolean hasNext() {
-	    if (targets.isEmpty()) {
-		return false;
-	    }
-	    try {
-		loading = scanToGRUPStart(input, targets);
-		targets.remove(loading);
-		return !"NULL".equals(loading);
-	    } catch (IOException ex) {
-		SPGlobal.logException(ex);
-		return false;
-	    }
-	}
+        @Override
+        public boolean hasNext() {
+            if (targets.isEmpty()) {
+                return false;
+            }
+            try {
+                loading = scanToGRUPStart(input, targets);
+                targets.remove(loading);
+                return !"NULL".equals(loading);
+            } catch (IOException ex) {
+                SPGlobal.logException(ex);
+                return false;
+            }
+        }
 
-	@Override
-	public RecordShrinkArray next() {
-	    RecordShrinkArray out;
-	    try {
-		out = extractGRUPData(input);
-	    } catch (IOException ex) {
-		SPGlobal.logException(ex);
-		out = new RecordShrinkArray();
-	    }
-	    return out;
-	}
+        @Override
+        public RecordShrinkArray next() {
+            RecordShrinkArray out;
+            try {
+                out = extractGRUPData(input);
+            } catch (IOException ex) {
+                SPGlobal.logException(ex);
+                out = new RecordShrinkArray();
+            }
+            return out;
+        }
 
-	public String loading() {
-	    return loading;
-	}
+        public String loading() {
+            return loading;
+        }
 
-	@Override
-	public void remove() {
-	}
+        @Override
+        public void remove() {
+        }
     }
 
     /**
-     * A rudimentary parser/iterator that returns data of subrecords with the desired
-     * typestring.
+     * A rudimentary parser/iterator that returns data of subrecords with the
+     * desired typestring.
      */
     public static class DirtyParsingIterator implements Iterator<RecordShrinkArray> {
 
-	String typeString;
-	ArrayList<String> grups;
-	LImport input;
-	LInChannel fileInput;
-	LShrinkArray uncompressed = new LShrinkArray(new byte[0]);
-	String inputStr = "";
-	String majorRecordType = "";
-	RecordShrinkArray next;
-	ArrayList<ModListing> activeMods;
-	ModListing activeMod;
+        String typeString;
+        ArrayList<String> grups;
+        LImport input;
+        LInChannel fileInput;
+        LShrinkArray uncompressed = new LShrinkArray(new byte[0]);
+        String inputStr = "";
+        String majorRecordType = "";
+        RecordShrinkArray next;
+        ArrayList<ModListing> activeMods;
+        ModListing activeMod;
 
-	DirtyParsingIterator(String typeString, String[] grups) {
-	    init(typeString, grups);
-	    try {
-		activeMods = SPImporter.getActiveModList();
-	    } catch (IOException ex) {
-		activeMods = new ArrayList<>();
-		SPGlobal.logException(ex);
-	    }
-	    switchToNextMod();
-	}
+        DirtyParsingIterator(String typeString, String[] grups) {
+            init(typeString, grups);
+            try {
+                activeMods = SPImporter.getActiveModList();
+            } catch (IOException ex) {
+                activeMods = new ArrayList<>();
+                SPGlobal.logException(ex);
+            }
+            switchToNextMod();
+        }
 
-	DirtyParsingIterator(ModListing mod, String typeString, String[] grups) {
-	    init(typeString, grups);
-	    activeMods = new ArrayList<>();
-	    activeMods.add(mod);
-	    switchToNextMod();
-	}
+        DirtyParsingIterator(ModListing mod, String typeString, String[] grups) {
+            init(typeString, grups);
+            activeMods = new ArrayList<>();
+            activeMods.add(mod);
+            switchToNextMod();
+        }
 
-	void init(String typeString, String[] grupTypes) {
-	    this.typeString = typeString;
-	    grups = new ArrayList<>(Arrays.asList(grupTypes));
-	}
+        void init(String typeString, String[] grupTypes) {
+            this.typeString = typeString;
+            grups = new ArrayList<>(Arrays.asList(grupTypes));
+        }
 
-	/**
-	 *
-	 * @return Current mod being imported from.
-	 */
-	public ModListing activeMod() {
-	    return activeMod;
-	}
+        /**
+         *
+         * @return Current mod being imported from.
+         */
+        public ModListing activeMod() {
+            return activeMod;
+        }
 
-	/**
-	 *
-	 * @return
-	 */
-	@Override
-	public boolean hasNext() {
-	    grabNext();
-	    return next != null;
-	}
+        /**
+         *
+         * @return
+         */
+        @Override
+        public boolean hasNext() {
+            grabNext();
+            return next != null;
+        }
 
-	/**
-	 *
-	 * @return
-	 */
-	@Override
-	public RecordShrinkArray next() {
-	    return next;
-	}
+        /**
+         *
+         * @return
+         */
+        @Override
+        public RecordShrinkArray next() {
+            return next;
+        }
 
-	void grabNext() {
+        void grabNext() {
 
-	    while (fileInput.available() >= 4 || uncompressed.available() >= 4) {
-		if (uncompressed.available() >= 4) {
-		    input = uncompressed;
-		} else {
-		    input = fileInput;
-		}
-		inputStr = input.extractString(0, 4);
-		if ("TES4".equals(inputStr)) {
-		    input.skip(input.extractInt(4) + 16);
-		} else if ("GRUP".equals(inputStr)) {
-		    int size = input.extractInt(4);
-		    String tmpMajorType = input.extractString(0, 4);
-		    if (grups.contains(tmpMajorType)) {
-			input.skip(12);
-			majorRecordType = tmpMajorType;
-		    } else if (!tmpMajorType.matches("[a-zA-Z0-9_]*")) {
-			input.skip(12);
-		    } else {
-			input.skip(size - 12);
-		    }
+            while (fileInput.available() >= 4 || uncompressed.available() >= 4) {
+                if (uncompressed.available() >= 4) {
+                    input = uncompressed;
+                } else {
+                    input = fileInput;
+                }
+                inputStr = input.extractString(0, 4);
+                if ("TES4".equals(inputStr)) {
+                    input.skip(input.extractInt(4) + 16);
+                } else if ("GRUP".equals(inputStr)) {
+                    int size = input.extractInt(4);
+                    String tmpMajorType = input.extractString(0, 4);
+                    if (grups.contains(tmpMajorType)) {
+                        input.skip(12);
+                        majorRecordType = tmpMajorType;
+                    } else if (!tmpMajorType.matches("[a-zA-Z0-9_]*")) {
+                        input.skip(12);
+                    } else {
+                        input.skip(size - 12);
+                    }
 //		    System.out.println("Passed GRUP");
-		} else if (majorRecordType.equals(inputStr)
-			|| "REFR".equals(inputStr)
-			|| "ACHR".equals(inputStr)
-			|| "LAND".equals(inputStr)
-			|| "NAVM".equals(inputStr)
-			|| "NVNM".equals(inputStr)) {
-		    // If major record is target type
-		    if (typeString.equals(inputStr)) {
-			next = new RecordShrinkArray(input.extract(input.extractInt(4) + 16));
-			return;
-		    }
+                } else if (majorRecordType.equals(inputStr)
+                        || "REFR".equals(inputStr)
+                        || "ACHR".equals(inputStr)
+                        || "LAND".equals(inputStr)
+                        || "NAVM".equals(inputStr)
+                        || "NVNM".equals(inputStr)) {
+                    // If major record is target type
+                    if (typeString.equals(inputStr)) {
+                        next = new RecordShrinkArray(input.extract(input.extractInt(4) + 16));
+                        return;
+                    }
 
-		    // Uncompress if compressed
-		    int size = input.extractInt(4);
-		    LFlags flags = new LFlags(input.extract(4));
-		    input.extract(4); //FormID
-		    input.skip(8);
+                    // Uncompress if compressed
+                    int size = input.extractInt(4);
+                    LFlags flags = new LFlags(input.extract(4));
+                    input.extract(4); //FormID
+                    input.skip(8);
 
-		    if (inputStr.equals("NAVM")) {
-			input.skip(size);
+                    if (inputStr.equals("NAVM")) {
+                        input.skip(size);
 //			System.out.println("Skipping size:  " + size);
-			continue;
-		    }
+                        continue;
+                    }
 
-		    if (flags.get(MajorFlags.Compressed.value)) {
-			uncompressed = new LShrinkArray(input.extract(size));
-			try {
-			    uncompressed = uncompressed.correctForCompression();
-			} catch (DataFormatException ex) {
-			    SPGlobal.logException(ex);
-			}
-		    }
+                    if (flags.get(MajorFlags.Compressed.value)) {
+                        uncompressed = new LShrinkArray(input.extract(size));
+                        try {
+                            uncompressed = uncompressed.correctForCompression();
+                        } catch (DataFormatException ex) {
+                            SPGlobal.logException(ex);
+                        }
+                    }
 
-		} else if (typeString.equals(inputStr)) {
-		    // Found target type
-		    next = new RecordShrinkArray(input.extract(input.extractInt(2)));
-		    return;
-		} else {
-		    // Skip Subrecord
+                } else if (typeString.equals(inputStr)) {
+                    // Found target type
+                    next = new RecordShrinkArray(input.extract(input.extractInt(2)));
+                    return;
+                } else {
+                    // Skip Subrecord
 //		    System.out.println(inputStr + " sub record");
-		    input.skip(input.extractInt(2));
-		}
-	    }
+                    input.skip(input.extractInt(2));
+                }
+            }
 
-	    if (switchToNextMod()) {
-		grabNext();
-	    }
-	}
+            if (switchToNextMod()) {
+                grabNext();
+            }
+        }
 
-	boolean switchToNextMod() {
-	    if (fileInput != null) {
-		fileInput.close();
-	    }
-	    // If we have mods left, switch to it.
-	    if (activeMods.size() > 0) {
-		fileInput = new LInChannel(SPGlobal.pathToData + activeMods.get(0).print());
-		activeMod = activeMods.get(0);
-		activeMods.remove(0);
-		return true;
-	    } else {
-		next = null;
-	    }
-	    return false;
-	}
+        boolean switchToNextMod() {
+            if (fileInput != null) {
+                fileInput.close();
+            }
+            // If we have mods left, switch to it.
+            if (activeMods.size() > 0) {
+                fileInput = new LInChannel(SPGlobal.pathToData + activeMods.get(0).print());
+                activeMod = activeMods.get(0);
+                activeMods.remove(0);
+                return true;
+            } else {
+                next = null;
+            }
+            return false;
+        }
 
-	/**
-	 *
-	 */
-	@Override
-	public void remove() {
-	}
+        /**
+         *
+         */
+        @Override
+        public void remove() {
+        }
     }
 
     static ByteBuffer extractHeaderInfo(LInChannel in) {
-	if (Ln.arrayToString(in.extractInts(0, 4)).equals("TES4")) {
-	    int size = Ln.arrayToInt(in.extractInts(0, 4)) + 24;  // +24 for TES4 extra info
-	    in.skip(-8); // To start of TES4 header
-	    return in.extractByteBuffer(0, size);
-	}
-	return ByteBuffer.allocate(0);
+        if (Ln.arrayToString(in.extractInts(0, 4)).equals("TES4")) {
+            int size = Ln.arrayToInt(in.extractInts(0, 4)) + 24;  // +24 for TES4 extra info
+            in.skip(-8); // To start of TES4 header
+            return in.extractByteBuffer(0, size);
+        }
+        return ByteBuffer.allocate(0);
     }
 
     static void importStringLocations(Mod mod) {
-	String header = "Importing Strings";
-	if (SPGlobal.logging()) {
-	    SPGlobal.logMod(mod, header, "Importing Strings");
-	}
-	for (Files f : SubStringPointer.Files.values()) {
-	    try {
-		importStringLocations(mod, f);
-	    } catch (Exception e) {
-		SPGlobal.logError(header, "Error Importing Strings " + f + ": " + e);
-	    }
-	}
+        String header = "Importing Strings";
+        if (SPGlobal.logging()) {
+            SPGlobal.logMod(mod, header, "Importing Strings");
+        }
+        for (Files f : SubStringPointer.Files.values()) {
+            try {
+                importStringLocations(mod, f);
+            } catch (Exception e) {
+                SPGlobal.logError(header, "Error Importing Strings " + f + ": " + e);
+            }
+        }
     }
 
     static void importStringLocations(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException, DataFormatException {
 
-	ArrayList<Language> languageList = new ArrayList<>();
-	languageList.add(SPGlobal.language);
-	languageList.addAll(Arrays.asList(Language.values()));
-	LShrinkArray in = null;
-	int numRecords = 0;
-	int recordsSize = 0;
+        ArrayList<Language> languageList = new ArrayList<>();
+        languageList.add(SPGlobal.language);
+        languageList.addAll(Arrays.asList(Language.values()));
+        LShrinkArray in = null;
+        int numRecords = 0;
+        int recordsSize = 0;
 
-	for (Language l : languageList) {
-	    String strings = getStringFilePath(plugin, l, file);
-	    File stringsFile = new File(SPGlobal.pathToData + strings);
+        for (Language l : languageList) {
+            String strings = getStringFilePath(plugin, l, file);
+            File stringsFile = new File(SPGlobal.pathToData + strings);
 
-	    // Open file
-	    if (stringsFile.isFile()) {
-		LInChannel istream = new LInChannel(stringsFile);
-		// Read header
-		numRecords = istream.extractInt(0, 4);
-		recordsSize = numRecords * 8 + 8;
-		in = new LShrinkArray(istream.extractByteBuffer(4, recordsSize));
-	    } else if (BSA.hasBSA(plugin)) {
-		//In BSA
-		BSA bsa = BSA.getBSA(plugin);
-		bsa.loadFolders();
-		if (!bsa.hasFile(strings)) {
-		    continue;
-		}
-		in = bsa.getFile(strings);
-		numRecords = in.extractInt(4);
-		recordsSize = numRecords * 8 + 8;
-		//Skip bytes 4-8
-		in.skip(4);
-	    }
+            // Open file
+            if (stringsFile.isFile()) {
+                LInChannel istream = new LInChannel(stringsFile);
+                // Read header
+                numRecords = istream.extractInt(0, 4);
+                recordsSize = numRecords * 8 + 8;
+                in = new LShrinkArray(istream.extractByteBuffer(4, recordsSize));
+            } else if (BSA.hasBSA(plugin)) {
+                //In BSA
+                BSA bsa = BSA.getBSA(plugin);
+                bsa.loadFolders();
+                if (!bsa.hasFile(strings)) {
+                    continue;
+                }
+                in = bsa.getFile(strings);
+                numRecords = in.extractInt(4);
+                recordsSize = numRecords * 8 + 8;
+                //Skip bytes 4-8
+                in.skip(4);
+            }
 
-	    // Found strings, read entry pairs
-	    if (in != null) {
-		plugin.language = l;
-		for (int i = 0; i < numRecords; i++) {
-		    plugin.stringLocations.get(file).put(in.extractInt(4),
-			    in.extractInt(4) + recordsSize);
-		}
-		break;
-	    }
-	}
+            // Found strings, read entry pairs
+            if (in != null) {
+                plugin.language = l;
+                for (int i = 0; i < numRecords; i++) {
+                    plugin.stringLocations.get(file).put(in.extractInt(4),
+                            in.extractInt(4) + recordsSize);
+                }
+                break;
+            }
+        }
 
-	if (in == null) {
-	    SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
-	} else {
-	    SPGlobal.logMod(plugin, header, "Loaded " + file + " from language: " + plugin.language);
-	}
+        if (in == null) {
+            SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
+        } else {
+            SPGlobal.logMod(plugin, header, "Loaded " + file + " from language: " + plugin.language);
+        }
     }
 
     static String getStringFilePath(Mod plugin, Language l, SubStringPointer.Files file) {
-	return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + l + "." + file;
+        return "Strings\\" + plugin.getName().substring(0, plugin.getName().indexOf(".es")) + "_" + l + "." + file;
     }
 
     static String scanToGRUPStart(LInChannel in, ArrayList<String> target) throws java.io.IOException {
-	String type;
-	String intro;
-	int size;
+        String type;
+        String intro;
+        int size;
 
-	while (in.available() >= 12) {
-	    intro = Ln.arrayToString(in.getBytes(0, 4));
-	    if ("TES4".equals(intro)) {
-		extractHeaderInfo(in);
-	    }
-	    size = Ln.arrayToInt(in.extractInts(4, 4));
-	    type = Ln.arrayToString(in.extractInts(0, 4));
-	    for (String t : target) {
-		if (t.equals(type)) {
-		    in.skip(-12); // Go to start of GRUP
-		    return type;
-		}
-	    }
-	    // else skip GRUP
-	    in.skip(size - 12);  // -12 for parts already read input
-	}
+        while (in.available() >= 12) {
+            intro = Ln.arrayToString(in.getBytes(0, 4));
+            if ("TES4".equals(intro)) {
+                extractHeaderInfo(in);
+            }
+            size = Ln.arrayToInt(in.extractInts(4, 4));
+            type = Ln.arrayToString(in.extractInts(0, 4));
+            for (String t : target) {
+                if (t.equals(type)) {
+                    in.skip(-12); // Go to start of GRUP
+                    return type;
+                }
+            }
+            // else skip GRUP
+            in.skip(size - 12);  // -12 for parts already read input
+        }
 
-	return "NULL";
+        return "NULL";
     }
 
     static RecordShrinkArray extractGRUPData(LInChannel in) throws IOException {
-	return new RecordShrinkArray(in, getGRUPsize(in));
+        return new RecordShrinkArray(in, getGRUPsize(in));
     }
 
     static int getGRUPsize(LInChannel in) {
-	int size = Ln.arrayToInt(in.extractInts(4, 4));
-	in.skip(-8); // Back to start of GRUP
-	return size;
+        int size = Ln.arrayToInt(in.extractInts(4, 4));
+        in.skip(-8); // Back to start of GRUP
+        return size;
     }
 
     static private String genStatus(ModListing mod) {
-	return "Importing " + mod.print();
+        return "Importing " + mod.print();
     }
 }

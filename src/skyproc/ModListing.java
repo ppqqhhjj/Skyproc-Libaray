@@ -25,6 +25,8 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
 
     SubString mast = SubString.getNew("MAST", true);
     boolean master = false;
+    boolean falseMaster = false;
+
     int strHash = 0;
 
     /**
@@ -37,6 +39,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
     public ModListing(String name, Boolean master) {
 	this(name);
 	this.master = master;
+        this.falseMaster = false;
     }
 
     /**
@@ -73,7 +76,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
      */
     @Override
     public String print() {
-	if (master) {
+	if (master && !falseMaster) {
 	    return printNoSuffix() + ".esm";
 	} else {
 	    return printNoSuffix() + ".esp";
@@ -247,5 +250,13 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
     @Override
     ArrayList<String> getTypes() {
 	return type;
+    }
+    
+    public boolean isFalseMaster() {
+        return falseMaster;
+    }
+
+    public void setFalseMaster(boolean falseMaster) {
+        this.falseMaster = falseMaster;
     }
 }

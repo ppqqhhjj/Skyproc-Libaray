@@ -51,6 +51,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
 	    throw new BadMod(info.print() + " did not have a TES4 header.");
 	}
 	tes.parseData(headerInfo, this);
+        if(tes.flags.get(Mod_Flags.MASTER.value)&& (!info.getMasterTag())) {
+            info.setFalseMaster(true);
+        }
     }
 
     Mod(ModListing info, boolean temp) {
