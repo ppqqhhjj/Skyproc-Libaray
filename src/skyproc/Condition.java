@@ -1168,7 +1168,7 @@ public class Condition extends SubShell {
 	/**
 	 *
 	 */
-	GetBaseActorValue(277),
+	//GetBaseActorValue(277),
 	/**
 	 *
 	 */
@@ -1740,6 +1740,10 @@ public class Condition extends SubShell {
 	/**
 	 *
 	 */
+        GetBaseActorValue(277),
+        /*
+         * 
+         */
 	IsInCombat(289),
 	/**
 	 *
