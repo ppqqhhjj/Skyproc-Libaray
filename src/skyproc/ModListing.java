@@ -25,6 +25,7 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
 
     SubString mast = SubString.getNew("MAST", true);
     boolean master = false;
+    // hack to allow esp files with the master flag set in their header
     boolean falseMaster = false;
 
     int strHash = 0;
@@ -194,10 +195,10 @@ public class ModListing extends SubRecord<ModListing> implements Comparable {
 	if (equals(rhs)) {
 	    return 0;
 	}
-	if (master && !rhs.master) {
+	if ((master || falseMaster) && !(rhs.master || rhs.falseMaster)) {
 	    return -1;
 	}
-	if (!master && rhs.master) {
+	if (!(master || falseMaster) && (rhs.master || rhs.falseMaster)) {
 	    return 1;
 	}
 	if (SPGlobal.getGlobalPatch() != null) {

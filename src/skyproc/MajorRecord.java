@@ -203,7 +203,11 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     @Override
     int getContentLength(ModExporter out) {
-	return subRecords.length(out);
+        if (this.get(MajorFlags.Deleted)) {
+            return 0;
+        } else {
+            return subRecords.length(out);
+        }
     }
 
     @Override
@@ -232,7 +236,9 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(formVersion, 2);
 	    out.write(version, 2);
 
-	    subRecords.export(out);
+            if (!this.get(MajorFlags.Deleted)){
+                subRecords.export(out);
+            }
 	    if (SPGlobal.deleteAfterExport) {
 		// Save EDID for record validation tests
 		SubRecord edid = subRecords.get("EDID");

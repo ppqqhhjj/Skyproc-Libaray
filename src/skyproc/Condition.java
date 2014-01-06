@@ -344,15 +344,15 @@ public class Condition extends SubShell {
 	/**
 	 *
 	 */
-	UseGlobal(3),
+	UseGlobal(2),
 	/**
 	 *
 	 */
-	UsePackData(4),
+	UsePackData(3),
 	/**
 	 *
 	 */
-	SwapSubjectAndTarget(5);
+	SwapSubjectAndTarget(4);
 	int value;
 
 	CondFlag(int value) {

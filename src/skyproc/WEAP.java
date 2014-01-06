@@ -30,6 +30,8 @@ public class WEAP extends MajorRecordDescription {
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    add(new Model());
+            add(new SubString("ICON"));
+            add(new SubString("MICO"));
 	    add(new SubForm("EITM"));
 	    add(new SubInt("EAMT", 2));
 	    add(new SubForm("ETYP"));

@@ -3,19 +3,6 @@
 /nbproject/private/
 /SkyProcStarter/nbproject/private/
 /SkyProcStarter/build/
-SkyProcDebug/=--Debug Overview--=.txt
-SkyProcDebug/Asynchronous log.txt
-SkyProcDebug/Blocked Records.txt
-SkyProcDebug/Consistency.txt
-Files/BlockList.txt
-Files/Savefile
-Files/SUM.esp.bak
-Files/SUMsave
-store/skyproc.jar
-SkyProcDebug/Mod Import/0 - Skyrim.esm.txt
-SkyProcDebug/Mod Import/1 - Update.esm.txt
-SkyProcDebug/Mod Import/2 - Dawnguard.esm.txt
-SkyProcDebug/Mod Import/3 - Dragonborn.esm.txt
-SkyProcDebug/Export - Test.esp.txt
-SkyProcDebug/BSA.txt
-SkyProcDebug/Consistency/Requests.txt
+/Files/
+/SkyProcDebug/
+/store/

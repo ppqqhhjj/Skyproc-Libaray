@@ -36,6 +36,7 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubData("MO4T"));
 	    add(new AltTextures("MO4S"));
 	    add(SubString.getNew("ICO2", true));
+            add(SubString.getNew("MIC2", true));
 	    add(new BodyTemplate());
 	    add(new DestructionData());
 	    add(new SubForm("YNAM"));
