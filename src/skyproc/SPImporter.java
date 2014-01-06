@@ -179,9 +179,9 @@ public class SPImporter {
         for (String line : lines) {
             try {
                 RecordFileChannel input = new RecordFileChannel(SPGlobal.pathToData + line);
-                ModListing tempListing = new ModListing (line);
+                ModListing tempListing = new ModListing(line);
                 Mod plugin = new Mod(tempListing, extractHeaderInfo(input));
-                if(plugin.isFlag(Mod.Mod_Flags.MASTER)){
+                if (plugin.isFlag(Mod.Mod_Flags.MASTER)) {
                     esms.add(line);
                 } else {
                     esps.add(line);
@@ -596,7 +596,14 @@ public class SPImporter {
     static void checkMissingMasters(Mod plugin) throws MissingMaster {
         ArrayList<ModListing> missingMasters = new ArrayList<>();
         for (ModListing master : plugin.getMasters()) {
-            if (SPGlobal.getDB().getMod(master) == null && SPGlobal.shouldImport(master)) {
+            try {
+                RecordFileChannel input = new RecordFileChannel(SPGlobal.pathToData + master.print());
+                ModListing tempListing = new ModListing(master.print());
+                Mod masterMod = new Mod(tempListing, extractHeaderInfo(input));
+                if (SPGlobal.getDB().getMod(tempListing) == null && SPGlobal.shouldImport(master)) {
+                    missingMasters.add(master);
+                }
+            } catch (Exception exception) {
                 missingMasters.add(master);
             }
         }
