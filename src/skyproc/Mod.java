@@ -1235,6 +1235,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public GRUP<STAT> getStatics() {
 	return GRUPs.get(GRUP_TYPE.STAT);
     }
+    
+    /**
+     *
+     * @see GRUP
+     * @return the GRUP containing scroll records
+     */
+    public GRUP<SCRL> getScrolls() {
+	return GRUPs.get(GRUP_TYPE.SCRL);
+    }
 
     /**
      *

@@ -26,6 +26,7 @@ public class SPGlobal {
     static boolean noModsAfter = true;
     static boolean checkMissingMasters = true;
     static MajorRecord lastStreamed;
+    
     /*
      * Customizable Strings
      */
@@ -713,4 +714,11 @@ public class SPGlobal {
      * sync log<br>
      */
     public static boolean debugModMerge = false;
+    
+    /*
+     * Toggle to force to processing exactly like vanilla files for validation.
+     * Switches MajorRecord with flag DELETED to print full contents.
+     * Needed because TesVEdit now removes all subrecords of DELETED majorRecords.
+     */
+    public static boolean forceValidateMode = false;
 }

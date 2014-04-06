@@ -21,6 +21,7 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	    add(new SubData("OBND", new byte[12]));
 	    add(new SubData("LVLD", new byte[1]));
 	    add(new SubFlag("LVLF", 1));
+            add(new SubForm("LVLG"));
 	    add(new SubListCounted<>("LLCT", 1, new LeveledEntry()));
 	}
     };
@@ -275,6 +276,23 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
      */
     final public void set(LVLFlag flag, boolean on) {
 	subRecords.setSubFlag("LVLF", flag.ordinal(), on);
+    }
+    
+    /**
+     * s
+     * @return
+     */
+    public FormID getGlobalForm() {
+        return subRecords.getSubForm("LVLG").getForm();
+    }
+
+    // Get/Set
+    /**
+     *
+     * @param id
+     */
+    public void setGlobalForm(FormID id) {
+        subRecords.setSubForm("LVLG", id);
     }
 
     /**

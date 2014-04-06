@@ -4,7 +4,7 @@
     <description>Builds, tests, and runs the project SkyProcStarter.</description>
     <import file="nbproject/build-impl.xml"/>
 
-    <target name="SkyProc-dist" description="Builds a jar for distribution." depends="jar">
+    <target name="SkyProc-dist" description="Builds a jar for distribution." depends="jar, package-sources">
 
         <!-- Change the value of this property to be the name of your JAR,
              minus the .jar extension. It should not have spaces.
@@ -35,10 +35,14 @@
 	<zip destfile="${store.jar}">
 	    <zipfileset src="${store.dir}/temp_final.jar"
             excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+            <fileset dir="dist/src"></fileset>
 	</zip>
 
 	<delete file="${store.dir}/temp_final.jar"/>
 
+    </target>
+    <target description="bundle sources in a zip" name="package-sources">
+        <zip basedir="src" destfile="dist/src/${ant.project.name}-sources.zip"/>
     </target>
 
 </project>

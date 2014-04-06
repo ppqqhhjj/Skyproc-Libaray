@@ -43,6 +43,12 @@ public class SCRL extends MagicItem {
 	subRecords.setPrototype(SCRLproto);
     }
     
+    public SCRL(String edid){
+        super();
+        subRecords.setPrototype(SCRLproto);
+        originateFromPatch(edid);
+    }
+    
     @Override
     ArrayList<String> getTypes() {
         return Record.getTypeList("SCRL");

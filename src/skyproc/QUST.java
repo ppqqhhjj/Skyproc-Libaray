@@ -26,35 +26,48 @@ public class QUST extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(SubString.getNew("ALID", true));
 	    add(new SubFlag("FNAM", 4));
-	    add(new SubForm("ALUA"));
-	    add(new SubForm("ALCO"));
-	    add(new SubList<>(new SubForm("ALEQ")));
-	    add(SubString.getNew("ALFE", false));
-	    add(new SubForm("ALFL"));
+            add(new SubInt("ALFI"));
+            // start fill types. Going by xEdit
+            add(new SubForm("ALFL"));
 	    add(new SubForm("ALFR"));
-	    add(new SubInt("ALFA"));
-	    add(new SubForm("ALRT"));
-	    add(new SubInt("ALFD"));
-	    add(new SubList<>(new Condition()));
-	    add(new SubData("ALCA"));
-	    add(new SubInt("ALCL"));
-	    add(new SubInt("ALEA"));
-	    add(new SubInt("ALNA"));
+            add(new SubForm("ALUA"));
+            
+            // Location Alias Reference
+            add(new SubInt("ALFA"));
+            add(new SubForm("KNAM"));
+            add(new SubForm("ALRT"));
+            
+            // External Alias Reference
+            add(new SubForm("ALEQ"));
+            add(new SubInt("ALEA"));
+            
+            // Create Reference to Object
+            add(new SubForm("ALCO"));
+            add(new SubData("ALCA"));
+            add(new SubInt("ALCL"));
+            
+            // Find Matching Reference Near Alias
+            add(new SubInt("ALNA"));
 	    add(new SubInt("ALNT"));
-	    add(new SubForm("VTCK"));
-	    add(new SubData("ALED"));
-	    add(new SubForm("ALDN"));
-	    add(new SubList<>(new SubForm("ALFC")));
-	    add(new SubList<>(new SubInt("ALFI")));
-	    add(new SubList<>(new SubForm("ALPC")));
-	    add(new SubList<>(new SubForm("ALSP")));
+            
+            // Find Matching Reference From Event
+            add(SubString.getNew("ALFE", false));
+            add(new SubInt("ALFD"));
+            
+            // end fill types
+	    add(new SubList<>(new Condition()));
+            add(new KeywordSet());
 	    add(new SubListCounted<>("COCT", 4, new SubFormInt("CNTO")));
-	    add(new SubForm("SPOR"));
+            add(new SubForm("SPOR"));
+            add(new SubForm("OCOR"));
+            add(new SubForm("GWOR"));
 	    add(new SubForm("ECOR"));
-	    add(new SubForm("KNAM"));
-	    add(new KeywordSet());
-	    add(new SubInt("NAM0"));
-	    add(new SubInt("QTGL"));
+	    add(new SubForm("ALDN"));
+            add(new SubList<>(new SubForm("ALSP")));
+	    add(new SubList<>(new SubForm("ALFC")));
+	    add(new SubList<>(new SubForm("ALPC")));
+	    add(new SubForm("VTCK"));
+            add(new SubData("ALED"));
 	}
     };
     static final SubPrototype aliasLocationProto = new SubPrototype() {
@@ -109,7 +122,7 @@ public class QUST extends MajorRecordNamed {
 	protected void addRecords() {
 	    add(new SubInt("QOBJ", 2));
 	    add(new SubData("FNAM"));
-	    add(new SubStringPointer("NNAM", SubStringPointer.Files.DLSTRINGS));
+	    add(new SubStringPointer("NNAM", SubStringPointer.Files.STRINGS));
 	    add(new SubList<>(new QuestTarget()));
 	}
     };
@@ -117,7 +130,7 @@ public class QUST extends MajorRecordNamed {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), "EDID");
+	    after(new ScriptPackage(new QUSTScriptFragments()), "EDID");
 	    reposition("FULL");
 	    add(new DNAM());
 	    add(SubString.getNew("ENAM", false));
@@ -777,22 +790,29 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
-    static class ScriptFragments extends SubRecord {
+    static class QUSTScriptFragments extends SubRecord {
 
 	byte unknown = 0;
 	StringNonNull fragmentFile = new StringNonNull();
-	ArrayList<ScriptFragment> fragments = new ArrayList<>();
+	ArrayList<QUSTScriptFragment> questFragments = new ArrayList<>();
+        ArrayList<AliasScriptFragment> aliasFragments = new ArrayList<>();
 	boolean valid = false;
 
 	@Override
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    unknown = in.extract(1)[0];
-	    int count = in.extractInt(2);
+	    int fragmentCount = in.extractInt(2);
 	    fragmentFile.set(in.extractString(in.extractInt(2)));
-	    for (int i = 0 ; i < count ; i++) {
-		ScriptFragment frag = new ScriptFragment();
+	    for (int i = 0 ; i < fragmentCount ; i++) {
+		QUSTScriptFragment frag = new QUSTScriptFragment();
 		frag.parseData(in, srcMod);
-		fragments.add(frag);
+		questFragments.add(frag);
+	    }
+            int aliasCount = in.extractInt(2);
+            for (int i = 0 ; i < aliasCount ; i++) {
+		AliasScriptFragment frag = new AliasScriptFragment();
+		frag.parseData(in, srcMod);
+		aliasFragments.add(frag);
 	    }
 	    valid = true;
 	}
@@ -803,10 +823,14 @@ public class QUST extends MajorRecordNamed {
 		return;
 	    }
 	    out.write(unknown, 1);
-	    out.write(fragments.size(), 2);
+	    out.write(questFragments.size(), 2);
 	    fragmentFile.export(out);
-	    for (ScriptFragment frag : fragments) {
-//		frag.export(out);
+	    for (QUSTScriptFragment frag : questFragments) {
+		frag.export(out);
+	    }
+            out.write(aliasFragments.size(), 2);
+            for (AliasScriptFragment frag : aliasFragments) {
+		frag.export(out);
 	    }
 	}
 
@@ -817,7 +841,11 @@ public class QUST extends MajorRecordNamed {
 	    }
 	    int len = 3;
 	    len += fragmentFile.getTotalLength(out);
-	    for (ScriptFragment frag : fragments) {
+	    for (QUSTScriptFragment frag : questFragments) {
+		len += frag.getContentLength(out);
+	    }
+            len += 2;
+            for (AliasScriptFragment frag : aliasFragments) {
 		len += frag.getContentLength(out);
 	    }
 	    return len;
@@ -825,7 +853,7 @@ public class QUST extends MajorRecordNamed {
 
 	@Override
 	SubRecord getNew(String type) {
-	    return new ScriptFragments();
+	    return new QUSTScriptFragments();
 	}
 
 	@Override
@@ -834,20 +862,29 @@ public class QUST extends MajorRecordNamed {
 	}
     }
 
-    static class ScriptFragment {
+    static class QUSTScriptFragment {
 
-	byte[] unknown = new byte[9];
+        int questStage;
+        int unknown1;
+        int questStageIndex;
+        int unknown2;
 	StringNonNull scriptName = new StringNonNull();
 	StringNonNull fragmentName = new StringNonNull();
 
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
-	    unknown = in.extract(9);
+	    questStage = in.extractInt(2);
+            unknown1 = in.extractInt(2);
+            questStageIndex = in.extractInt(4);
+            unknown2 = in.extractInt(1);
 	    scriptName.set(in.extractString(in.extractInt(2)));
 	    fragmentName.set(in.extractString(in.extractInt(2)));
 	}
 
 	void export(ModExporter out) throws IOException {
-	    out.write(unknown);
+	    out.write(questStage);
+            out.write(unknown1);
+            out.write(questStageIndex);
+            out.write(unknown2);
 	    scriptName.export(out);
 	    fragmentName.export(out);
 	}
@@ -855,6 +892,42 @@ public class QUST extends MajorRecordNamed {
 	int getContentLength(ModExporter out) {
 	    return 9 + scriptName.getTotalLength(out)
 		    + fragmentName.getTotalLength(out);
+	}
+    }
+    
+    static class AliasScriptFragment {
+
+	byte[] object = new byte[8]; // VMAD property object. Need adjusting for formID etc
+	int version; // int16
+        int format; // int16
+        int scriptCount; // uint16
+        ArrayList<ScriptRef> scripts = new ArrayList<>(); // scriptCount of VMAD scripts section
+
+	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
+	    object = in.extract(8);
+	    version = in.extractInt(2);
+            scriptCount = in.extractInt(2);
+            for (int i = 0; i < scriptCount; i++) {
+                scripts.add(new ScriptRef(in, srcMod));
+            }
+	}
+
+	void export(ModExporter out) throws IOException {
+	    out.write(object);
+	    out.write(version, 2);
+            out.write(format, 2);
+            out.write(scripts.size(), 2);
+            for (ScriptRef s : scripts){
+                s.export(out);
+            }
+	}
+
+	int getContentLength(ModExporter out) {
+            int size = 0;
+            for (ScriptRef s : scripts) {
+                size += s.getTotalLength(out);
+            }
+	    return 14 + size;
 	}
     }
 

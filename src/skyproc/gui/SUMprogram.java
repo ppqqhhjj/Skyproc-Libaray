@@ -75,14 +75,17 @@ public class SUMprogram implements SUM {
 	    argsList.add(s.toUpperCase());
 	}
 	if (argsList.contains("-TESTCOPY")) {
+            SPGlobal.forceValidateMode = true;
 	    SkyProcTester.runTests(3);
 	    return false;
 	}
 	if (argsList.contains("-TESTIMPORT")) {
+            SPGlobal.forceValidateMode = true;
 	    SkyProcTester.runTests(2);
 	    return false;
 	}
 	if (argsList.contains("-TEST")) {
+            SPGlobal.forceValidateMode = true;
 	    SkyProcTester.runTests(1);
 	    return false;
 	}

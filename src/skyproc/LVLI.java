@@ -17,7 +17,7 @@ public class LVLI extends LeveledRecord {
 
 	@Override
 	protected void addRecords() {
-	    before(new SubForm("LVLG"), "LVLO");
+//	    before(new SubForm("LVLG"), "LVLO");  // moved to LeveledRecord to support tesedit added LVLG in LVLN
 	}
     };
 
@@ -44,23 +44,6 @@ public class LVLI extends LeveledRecord {
     @Override
     Record getNew() {
 	return new LVLI();
-    }
-
-    // Get/Set
-    /**
-     *
-     * @param id
-     */
-    public void setGlobalForm (FormID id) {
-	subRecords.setSubForm("LVLG", id);
-    }
-
-    /**
-     * s
-     * @return
-     */
-    public FormID getGlobalForm () {
-	return subRecords.getSubForm("LVLG").getForm();
     }
 
 }

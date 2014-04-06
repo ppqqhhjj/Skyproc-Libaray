@@ -203,7 +203,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     @Override
     int getContentLength(ModExporter out) {
-        if (this.get(MajorFlags.Deleted)) {
+        if (this.get(MajorFlags.Deleted) && !SPGlobal.forceValidateMode) {
             return 0;
         } else {
             return subRecords.length(out);
@@ -236,7 +236,7 @@ public abstract class MajorRecord extends Record implements Serializable {
 	    out.write(formVersion, 2);
 	    out.write(version, 2);
 
-            if (!this.get(MajorFlags.Deleted)){
+            if (!this.get(MajorFlags.Deleted) && !SPGlobal.forceValidateMode){
                 subRecords.export(out);
             }
 	    if (SPGlobal.deleteAfterExport) {
