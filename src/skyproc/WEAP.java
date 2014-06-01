@@ -34,6 +34,7 @@ public class WEAP extends MajorRecordDescription {
             add(new SubString("MICO"));
 	    add(new SubForm("EITM"));
 	    add(new SubInt("EAMT", 2));
+            add(new DestructionData());
 	    add(new SubForm("ETYP"));
 	    add(new SubForm("BIDS"));
 	    add(new SubForm("BAMT"));

@@ -29,6 +29,7 @@ public class AMMO extends MajorRecordDescription {
 	    add(new Model());
             add(new SubString("ICON"));
             add(new SubString("MICO"));
+            add(new DestructionData());
 	    add(new SubForm("YNAM"));
 	    add(new SubForm("ZNAM"));
 	    reposition("DESC");

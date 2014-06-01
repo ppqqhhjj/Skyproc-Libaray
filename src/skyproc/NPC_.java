@@ -30,9 +30,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             add(new SubForm("TPLT"));
             add(new SubForm("RNAM"));
             add(new SubListCounted<>("SPCT", 4, new SubForm("SPLO")));
-            add(new SubData("DEST"));
-            add(new SubData("DSTD"));
-            add(new SubData("DSTF"));
+            add(new DestructionData());
             add(new SubForm("WNAM"));
             add(new SubForm("ANAM"));
             add(new SubForm("ATKR"));

@@ -28,10 +28,12 @@ public class ARMO extends MajorRecordDescription {
 	    add(new SubData("OBND", new byte[12]));
 	    reposition("FULL");
 	    add(new SubForm("EITM"));
+            add(new SubInt("EAMT", 2));
 	    add(SubString.getNew("MOD2", true));
 	    add(new SubData("MO2T"));
 	    add(new AltTextures("MO2S"));
 	    add(SubString.getNew("ICON", true));
+            add(SubString.getNew("MICO", true));
 	    add(SubString.getNew("MOD4", true));
 	    add(new SubData("MO4T"));
 	    add(new AltTextures("MO4S"));
