@@ -40,95 +40,95 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param info ModListing object containing name and master flag.
      */
     public Mod(ModListing info) {
-	init(info);
-	SPGlobal.getDB().add(this);
+        init(info);
+        SPGlobal.getDB().add(this);
     }
 
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
-	this(info, true);
-	SPGlobal.logMod(this, "MOD", "Parsing header");
-	if (!headerInfo.hasRemaining()) {
-	    throw new BadMod(info.print() + " did not have a TES4 header.");
-	}
-	tes.parseData(headerInfo, this);
-        if(tes.flags.get(Mod_Flags.MASTER.value)&& (!info.getMasterTag())) {
+        this(info, true);
+        SPGlobal.logMod(this, "MOD", "Parsing header");
+        if (!headerInfo.hasRemaining()) {
+            throw new BadMod(info.print() + " did not have a TES4 header.");
+        }
+        tes.parseData(headerInfo, this);
+        if (tes.flags.get(Mod_Flags.MASTER.value) && (!info.getMasterTag())) {
             info.setFalseMaster(true);
         }
     }
 
     Mod(ModListing info, boolean temp) {
-	init(info);
+        init(info);
     }
 
     void deleteStringsFiles() {
-	File STRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
-	File DLSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
-	File ILSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
-	if (STRINGS.exists()) {
-	    STRINGS.delete();
-	}
-	if (DLSTRINGS.exists()) {
-	    DLSTRINGS.delete();
-	}
-	if (ILSTRINGS.exists()) {
-	    ILSTRINGS.delete();
-	}
+        File STRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+        File DLSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+        File ILSTRINGS = new File(genStringsPath(SubStringPointer.Files.STRINGS));
+        if (STRINGS.exists()) {
+            STRINGS.delete();
+        }
+        if (DLSTRINGS.exists()) {
+            DLSTRINGS.delete();
+        }
+        if (ILSTRINGS.exists()) {
+            ILSTRINGS.delete();
+        }
     }
 
     void addGRUP(MajorRecord r) {
-	GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUP(r));
+        GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUP(r));
     }
 
     void addGRUPrecursive(MajorRecord r) {
-	GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUPRecursive(r));
+        GRUPs.put(GRUP_TYPE.valueOf(r.getType()), new GRUPRecursive(r));
     }
 
     final void init(ModListing info) {
-	this.modInfo = info;
-	this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
-	this.setFlag(Mod_Flags.STRING_TABLED, false);
-	stringLocations.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
-	stringLocations.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
-	stringLocations.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
-	addGRUP(new GMST());
-	addGRUP(new KYWD());
-	addGRUP(new TXST());
-	addGRUP(new GLOB());
-	addGRUP(new FACT());
-	addGRUP(new HDPT());
-	addGRUP(new RACE());
-	addGRUP(new MGEF());
-	addGRUP(new ENCH());
-	addGRUP(new SPEL());
+        this.modInfo = info;
+        this.setFlag(Mod_Flags.MASTER, info.getMasterTag());
+        this.setFlag(Mod_Flags.STRING_TABLED, false);
+        stringLocations.put(SubStringPointer.Files.STRINGS, new TreeMap<Integer, Integer>());
+        stringLocations.put(SubStringPointer.Files.DLSTRINGS, new TreeMap<Integer, Integer>());
+        stringLocations.put(SubStringPointer.Files.ILSTRINGS, new TreeMap<Integer, Integer>());
+        addGRUP(new GMST());
+        addGRUP(new KYWD());
+        addGRUP(new TXST());
+        addGRUP(new GLOB());
+        addGRUP(new FACT());
+        addGRUP(new HDPT());
+        addGRUP(new RACE());
+        addGRUP(new MGEF());
+        addGRUP(new ENCH());
+        addGRUP(new SPEL());
         addGRUP(new SCRL());
-	addGRUP(new ARMO());
-	addGRUP(new BOOK());
-	addGRUP(new CONT());
-	addGRUP(new INGR());
-	addGRUP(new MISC());
-	addGRUP(new ALCH());
-	addGRUP(new COBJ());
-	addGRUP(new PROJ());
-	addGRUP(new STAT());
-	addGRUP(new WEAP());
-	addGRUP(new AMMO());
-	addGRUP(new NPC_());
-	addGRUP(new LVLN());
-	addGRUP(new LVLI());
-	addGRUP(new WTHR());
-	addGRUPrecursive(new DIAL());
-	addGRUP(new QUST());
-	addGRUP(new IMGS());
-	addGRUP(new FLST());
-	addGRUP(new PERK());
-	addGRUP(new VTYP());
-	addGRUP(new AVIF());
-	addGRUP(new ARMA());
-	addGRUP(new ECZN());
-	addGRUP(new LGTM());
-	addGRUP(new DLBR());
-	addGRUP(new DLVW());
-	addGRUP(new OTFT());
+        addGRUP(new ARMO());
+        addGRUP(new BOOK());
+        addGRUP(new CONT());
+        addGRUP(new INGR());
+        addGRUP(new MISC());
+        addGRUP(new ALCH());
+        addGRUP(new COBJ());
+        addGRUP(new PROJ());
+        addGRUP(new STAT());
+        addGRUP(new WEAP());
+        addGRUP(new AMMO());
+        addGRUP(new NPC_());
+        addGRUP(new LVLN());
+        addGRUP(new LVLI());
+        addGRUP(new WTHR());
+        addGRUPrecursive(new DIAL());
+        addGRUP(new QUST());
+        addGRUP(new IMGS());
+        addGRUP(new FLST());
+        addGRUP(new PERK());
+        addGRUP(new VTYP());
+        addGRUP(new AVIF());
+        addGRUP(new ARMA());
+        addGRUP(new ECZN());
+        addGRUP(new LGTM());
+        addGRUP(new DLBR());
+        addGRUP(new DLVW());
+        addGRUP(new OTFT());
     }
 
     /**
@@ -139,7 +139,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * to the modname as appropriate)
      */
     public Mod(String name, Boolean master) {
-	this(new ModListing(name, master));
+        this(new ModListing(name, master));
     }
 
     /**
@@ -151,11 +151,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the Nth master
      */
     public ModListing getNthMaster(int i) {
-	if (tes.getMasters().size() > i && i >= 0) {
-	    return tes.getMasters().get(i);
-	} else {
-	    return getInfo();
-	}
+        if (tes.getMasters().size() > i && i >= 0) {
+            return tes.getMasters().get(i);
+        } else {
+            return getInfo();
+        }
     }
 
     /**
@@ -163,7 +163,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The number of masters in the mod.
      */
     public int numMasters() {
-	return tes.getMasters().size();
+        return tes.getMasters().size();
     }
 
     /**
@@ -171,12 +171,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return True if no GRUP in the mod has any records.
      */
     public boolean isEmpty() {
-	for (GRUP g : GRUPs.values()) {
-	    if (g.numRecords() > 0) {
-		return false;
-	    }
-	}
-	return true;
+        for (GRUP g : GRUPs.values()) {
+            if (g.numRecords() > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -184,30 +184,30 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return True if the esp file exists for this mod in the data folder.
      */
     public boolean exists() {
-	File f = new File(SPGlobal.pathToData + getInfo().print());
-	return f.exists();
+        File f = new File(SPGlobal.pathToData + getInfo().print());
+        return f.exists();
     }
 
     FormID getNextID() {
-	return new FormID(tes.getHEDR().nextID++, getInfo());
+        return new FormID(tes.getHEDR().nextID++, getInfo());
     }
 
     void resetNextIDcounter() {
-	tes.getHEDR().nextID = Mod.HEDR.firstAvailableID;
+        tes.getHEDR().nextID = Mod.HEDR.firstAvailableID;
     }
 
     void addMaster(ModListing input) {
-	if (!getInfo().equals(input)) {
-	    masterMap.clear();
-	    tes.addMaster(input);
-	}
+        if (!getInfo().equals(input)) {
+            masterMap.clear();
+            tes.addMaster(input);
+        }
     }
 
     void closeStreams() {
-	input.close();
-	for (LImport c : stringStreams.values()) {
-	    c.close();
-	}
+        input.close();
+        for (LImport c : stringStreams.values()) {
+            c.close();
+        }
     }
 
     /**
@@ -218,18 +218,23 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The Major Record with the query FormID, or null if not found.
      */
     public MajorRecord getMajor(FormID query, GRUP_TYPE... grup_types) {
-	if (query != null && query.getMaster() != null) {
-	    for (GRUP_TYPE g : grup_types) {
-		if (!GRUP_TYPE.internal(g)) {
-		    GRUP grup = GRUPs.get(g);
-		    MajorRecord mr = (MajorRecord) grup.get(query);
-		    if (mr != null) {
-			return mr;
-		    }
-		}
-	    }
-	}
-	return null;
+        if (query != null && query.getMaster() != null) {
+            if (grup_types.length == 0) {
+                grup_types = GRUPs.keySet().toArray(new GRUP_TYPE[0]);
+            }
+            for (GRUP_TYPE g : grup_types) {
+                if (!GRUP_TYPE.internal(g)) {
+                    GRUP grup = GRUPs.get(g);
+                    if (grup != null) {
+                        MajorRecord mr = (MajorRecord) grup.get(query);
+                        if (mr != null) {
+                            return mr;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -240,16 +245,21 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The Major Record with the query FormID, or null if not found.
      */
     public MajorRecord getMajor(String edid, GRUP_TYPE... grup_types) {
-	if (edid != null) {
-	    for (GRUP_TYPE g : grup_types) {
-		GRUP grup = GRUPs.get(g);
-		MajorRecord mr = (MajorRecord) grup.get(edid);
-		if (mr != null) {
-		    return mr;
-		}
-	    }
-	}
-	return null;
+        if (edid != null) {
+            if (grup_types.length == 0) {
+                grup_types = GRUPs.keySet().toArray(new GRUP_TYPE[0]);
+            }
+            for (GRUP_TYPE g : grup_types) {
+                GRUP grup = GRUPs.get(g);
+                if (grup != null) {
+                MajorRecord mr = (MajorRecord) grup.get(edid);
+                if (mr != null) {
+                    return mr;
+                }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -272,9 +282,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The copied record.
      */
     MajorRecord makeCopy(MajorRecord m) {
-	m = m.copyOf(this);
-	GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
-	return m;
+        m = m.copyOf(this);
+        GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
+        return m;
     }
 
     /**
@@ -292,12 +302,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The copied record, or null if either parameter is null.
      */
     public MajorRecord makeCopy(MajorRecord m, String newEDID) {
-	if (m == null || newEDID == null) {
-	    return null;
-	}
-	m = m.copyOf(this, newEDID);
-	GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
-	return m;
+        if (m == null || newEDID == null) {
+            return null;
+        }
+        m = m.copyOf(this, newEDID);
+        GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
+        return m;
     }
 
     /**
@@ -308,12 +318,12 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return ArrayList of duplicated Major Records.
      */
     public ArrayList<MajorRecord> makeCopy(GRUP g) {
-	ArrayList<MajorRecord> out = new ArrayList<>();
-	for (Object o : g) {
-	    MajorRecord m = (MajorRecord) o;
-	    out.add(makeCopy(m));
-	}
-	return out;
+        ArrayList<MajorRecord> out = new ArrayList<>();
+        for (Object o : g) {
+            MajorRecord m = (MajorRecord) o;
+            out.add(makeCopy(m));
+        }
+        return out;
     }
 
     /**
@@ -321,13 +331,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return An arraylist containing the GRUP_TYPEs of non-empty GRUPs.
      */
     public ArrayList<GRUP_TYPE> getContainedTypes() {
-	ArrayList<GRUP_TYPE> out = new ArrayList<>();
-	for (GRUP g : GRUPs.values()) {
-	    if (!g.isEmpty()) {
-		out.add(g.getContainedType());
-	    }
-	}
-	return out;
+        ArrayList<GRUP_TYPE> out = new ArrayList<>();
+        for (GRUP g : GRUPs.values()) {
+            if (!g.isEmpty()) {
+                out.add(g.getContainedType());
+            }
+        }
+        return out;
     }
 
     /**
@@ -338,7 +348,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param m Major Record to add as an override.
      */
     public void addRecord(MajorRecord m) {
-	GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
+        GRUPs.get(GRUP_TYPE.valueOf(m.getType())).addRecord(m);
     }
 
     /**
@@ -346,20 +356,20 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public void print() {
 
-	SPGlobal.newSyncLog("Mod Export/" + getName() + ".txt");
+        SPGlobal.newSyncLog("Mod Export/" + getName() + ".txt");
 
-	if (!getMastersStrings().isEmpty()) {
-	    SPGlobal.logMod(this, getName(), "=======================================================================");
-	    SPGlobal.logMod(this, getName(), "======================= Printing Mod Masters ==========================");
-	    SPGlobal.logMod(this, getName(), "=======================================================================");
-	    for (String s : getMastersStrings()) {
-		SPGlobal.logMod(this, getName(), s);
-	    }
-	}
-	for (GRUP g : GRUPs.values()) {
-	    g.toString();
-	}
-	SPGlobal.logMod(this, getName(), "------------------------  DONE PRINTING -------------------------------");
+        if (!getMastersStrings().isEmpty()) {
+            SPGlobal.logMod(this, getName(), "=======================================================================");
+            SPGlobal.logMod(this, getName(), "======================= Printing Mod Masters ==========================");
+            SPGlobal.logMod(this, getName(), "=======================================================================");
+            for (String s : getMastersStrings()) {
+                SPGlobal.logMod(this, getName(), s);
+            }
+        }
+        for (GRUP g : GRUPs.values()) {
+            g.toString();
+        }
+        SPGlobal.logMod(this, getName(), "------------------------  DONE PRINTING -------------------------------");
     }
 
     /**
@@ -368,56 +378,56 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     @Override
     public String toString() {
-	return getName();
+        return getName();
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> tmp = new ArrayList<>();
-	for (GRUP g : GRUPs.values()) {
-	    tmp.addAll(g.allFormIDs());
-	}
-	ArrayList<FormID> out = new ArrayList<>(tmp.size());
-	for (FormID id : tmp) {
-	    if (id != null) {
-		out.add(id);
-	    } else {
-		SPGlobal.logError(this.toString(), "AllFormIDs return null formid reference.");
-	    }
-	}
-	return out;
+        ArrayList<FormID> tmp = new ArrayList<>();
+        for (GRUP g : GRUPs.values()) {
+            tmp.addAll(g.allFormIDs());
+        }
+        ArrayList<FormID> out = new ArrayList<>(tmp.size());
+        for (FormID id : tmp) {
+            if (id != null) {
+                out.add(id);
+            } else {
+                SPGlobal.logError(this.toString(), "AllFormIDs return null formid reference.");
+            }
+        }
+        return out;
     }
 
     void openStringStreams() {
-	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
-	    for (Files f : SubStringPointer.Files.values()) {
-		addStream(stringStreams, f);
-	    }
-	}
+        if (this.isFlag(Mod_Flags.STRING_TABLED)) {
+            for (Files f : SubStringPointer.Files.values()) {
+                addStream(stringStreams, f);
+            }
+        }
     }
 
     void addStream(Map<SubStringPointer.Files, LImport> streams, SubStringPointer.Files file) {
-	try {
-	    String stringPath = SPImporter.getStringFilePath(this, language, file);
-	    File stringFile = new File(SPGlobal.pathToData + stringPath);
-	    if (stringFile.isFile()) {
-		streams.put(file, new LInChannel(stringFile));
-		return;
-	    } else if (BSA.hasBSA(getInfo())) {
-		BSA bsa = BSA.getBSA(getInfo());
-		if (bsa.hasFile(stringPath)) {
-		    LByteChannel stream = new LByteChannel();
-		    stream.openStream(bsa.getFile(stringPath));
-		    streams.put(file, stream);
-		}
-		return;
-	    }
+        try {
+            String stringPath = SPImporter.getStringFilePath(this, language, file);
+            File stringFile = new File(SPGlobal.pathToData + stringPath);
+            if (stringFile.isFile()) {
+                streams.put(file, new LInChannel(stringFile));
+                return;
+            } else if (BSA.hasBSA(getInfo())) {
+                BSA bsa = BSA.getBSA(getInfo());
+                if (bsa.hasFile(stringPath)) {
+                    LByteChannel stream = new LByteChannel();
+                    stream.openStream(bsa.getFile(stringPath));
+                    streams.put(file, stream);
+                }
+                return;
+            }
 
-	    if (SPGlobal.logging()) {
-		SPGlobal.logMod(this, getName(), "No strings file for " + file);
-	    }
-	} catch (IOException | DataFormatException ex) {
-	    SPGlobal.logMod(this, getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
-	}
+            if (SPGlobal.logging()) {
+                SPGlobal.logMod(this, getName(), "No strings file for " + file);
+            }
+        } catch (IOException | DataFormatException ex) {
+            SPGlobal.logMod(this, getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
+        }
     }
 
     /**
@@ -426,11 +436,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The names of all the masters of the mod.
      */
     public ArrayList<String> getMastersStrings() {
-	ArrayList<String> out = new ArrayList<>();
-	for (ModListing m : tes.getMasters()) {
-	    out.add(m.print());
-	}
-	return out;
+        ArrayList<String> out = new ArrayList<>();
+        for (ModListing m : tes.getMasters()) {
+            out.add(m.print());
+        }
+        return out;
     }
 
     /**
@@ -441,11 +451,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListings of all the masters of the mod.
      */
     public ArrayList<ModListing> getMasters() {
-	ArrayList<ModListing> out = new ArrayList<>();
-	for (ModListing m : tes.getMasters()) {
-	    out.add(m);
-	}
-	return out;
+        ArrayList<ModListing> out = new ArrayList<>();
+        for (ModListing m : tes.getMasters()) {
+            out.add(m);
+        }
+        return out;
     }
 
     /**
@@ -453,7 +463,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return the Map of GRUPs contained in the record.
      */
     public Map<GRUP_TYPE, GRUP> getGRUPs() {
-	return GRUPs;
+        return GRUPs;
     }
 
     /**
@@ -463,13 +473,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param grup_type Any amount of GRUPs to keep, separated by commas
      */
     public void keep(GRUP_TYPE... grup_type) {
-	ArrayList<GRUP_TYPE> grups = new ArrayList<>();
-	grups.addAll(Arrays.asList(grup_type));
-	for (GRUP g : GRUPs.values()) {
-	    if (!grups.contains(g.getContainedType())) {
-		g.clear();
-	    }
-	}
+        ArrayList<GRUP_TYPE> grups = new ArrayList<>();
+        grups.addAll(Arrays.asList(grup_type));
+        for (GRUP g : GRUPs.values()) {
+            if (!grups.contains(g.getContainedType())) {
+                g.clear();
+            }
+        }
     }
 
     /**
@@ -484,18 +494,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Mod rhs, GRUP_TYPE... grup_types) {
-	if (!this.equals(rhs)) {
-	    if (grup_types.length == 0) {
-		grup_types = GRUP_TYPE.values();
-	    }
-	    ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_types));
-	    for (GRUP_TYPE t : grups) {
-		GRUP g = GRUPs.get(t);
-		if (g != null) {
-		    g.merge(rhs.GRUPs.get(t));
-		}
-	    }
-	}
+        if (!this.equals(rhs)) {
+            if (grup_types.length == 0) {
+                grup_types = GRUPs.keySet().toArray(new GRUP_TYPE[0]);
+            }
+            ArrayList<GRUP_TYPE> grups = new ArrayList<>(Arrays.asList(grup_types));
+            for (GRUP_TYPE t : grups) {
+                GRUP g = GRUPs.get(t);
+                if (g != null) {
+                    g.merge(rhs.GRUPs.get(t));
+                }
+            }
+        }
     }
 
     /**
@@ -510,9 +520,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(ArrayList<Mod> in, GRUP_TYPE... grup_types) {
-	for (Mod m : in) {
-	    addAsOverrides(m, grup_types);
-	}
+        for (Mod m : in) {
+            addAsOverrides(m, grup_types);
+        }
     }
 
     /**
@@ -528,9 +538,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(Collection<Mod> in, GRUP_TYPE... grup_types) {
-	for (Mod m : in) {
-	    addAsOverrides(m, grup_types);
-	}
+        for (Mod m : in) {
+            addAsOverrides(m, grup_types);
+        }
     }
 
     /**
@@ -545,7 +555,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(SPDatabase db, GRUP_TYPE... grup_types) {
-	addAsOverrides(db.modLookup.values(), grup_types);
+        addAsOverrides(db.modLookup.values(), grup_types);
     }
 
     /**
@@ -553,13 +563,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The number of records contained in all the GRUPs in the mod.
      */
     public int numRecords() {
-	int sum = 0;
-	for (GRUP g : GRUPs.values()) {
-	    if (g.numRecords() != 0) {
-		sum += g.numRecords() + 1;
-	    }
-	}
-	return sum;
+        int sum = 0;
+        for (GRUP g : GRUPs.values()) {
+            if (g.numRecords() != 0) {
+                sum += g.numRecords() + 1;
+            }
+        }
+        return sum;
     }
 
     /**
@@ -567,11 +577,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return All Major Records from the mod.
      */
     public ArrayList<MajorRecord> getRecords() {
-	ArrayList<MajorRecord> out = new ArrayList<>();
-	for (GRUP g : GRUPs.values()) {
-	    out.addAll(g.getRecords());
-	}
-	return out;
+        ArrayList<MajorRecord> out = new ArrayList<>();
+        for (GRUP g : GRUPs.values()) {
+            out.addAll(g.getRecords());
+        }
+        return out;
     }
 
     /**
@@ -580,29 +590,29 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return True if mod contains parameter id.
      */
     public boolean contains(FormID id) {
-	for (GRUP g : GRUPs.values()) {
-	    if (g.contains(id)) {
-		return true;
-	    }
-	}
-	return false;
+        for (GRUP g : GRUPs.values()) {
+            if (g.contains(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     int getMasterIndex(ModListing in) {
-	Integer out = masterMap.get(in);
-	if (out != null) {
-	    return out;
-	} else {
-	    ArrayList<ModListing> masters = getMasters();
-	    int i;
-	    for (i = 0; i < masters.size(); i++) {
-		if (masters.get(i).equals(in)) {
-		    return i;
-		}
-	    }
-	    masterMap.put(in, i);
-	    return i;
-	}
+        Integer out = masterMap.get(in);
+        if (out != null) {
+            return out;
+        } else {
+            ArrayList<ModListing> masters = getMasters();
+            int i;
+            for (i = 0; i < masters.size(); i++) {
+                if (masters.get(i).equals(in)) {
+                    return i;
+                }
+            }
+            masterMap.put(in, i);
+            return i;
+        }
     }
 
     /**
@@ -616,7 +626,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * investigation and elimination of duplicate EDIDs.
      */
     public void export() throws IOException, BadRecord {
-	export(SPGlobal.pathToData);
+        export(SPGlobal.pathToData);
     }
 
     /**
@@ -630,156 +640,155 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * investigation and elimination of duplicate EDIDs.
      */
     public void export(String path) throws IOException, BadRecord {
-	File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");
-	if (tmp.isFile()) {
-	    tmp.delete();
-	}
-	File dest = new File(path + getName());
-	File backup = new File(SPGlobal.pathToInternalFiles + getName() + ".bak");
-	if (backup.isFile()) {
-	    backup.delete();
-	}
-	export(tmp);
+        File tmp = new File(SPGlobal.pathToInternalFiles + "tmp.esp");
+        if (tmp.isFile()) {
+            tmp.delete();
+        }
+        File dest = new File(path + getName());
+        File backup = new File(SPGlobal.pathToInternalFiles + getName() + ".bak");
+        if (backup.isFile()) {
+            backup.delete();
+        }
+        export(tmp);
 
-	Ln.moveFile(dest, backup, false);
-	Ln.moveFile(tmp, dest, false);
+        Ln.moveFile(dest, backup, false);
+        Ln.moveFile(tmp, dest, false);
     }
 
     void export(File outPath) throws IOException, BadRecord {
-	SPGlobal.logMain("Mod Export", "Exporting " + this);
-	if (SPGlobal.logging()) {
-	    SPGlobal.newSyncLog("Export - " + this.getName() + ".txt");
-	    SPGlobal.sync(true);
-	}
+        SPGlobal.logMain("Mod Export", "Exporting " + this);
+        if (SPGlobal.logging()) {
+            SPGlobal.newSyncLog("Export - " + this.getName() + ".txt");
+            SPGlobal.sync(true);
+        }
 
-	ModExporter out = new ModExporter(outPath, this);
+        ModExporter out = new ModExporter(outPath, this);
 
-	ArrayList<GRUP> exportGRUPs = new ArrayList<>();
+        ArrayList<GRUP> exportGRUPs = new ArrayList<>();
 
-	// Progress Bar Setup
-	for (GRUP g : GRUPs.values()) {
-	    if (!g.isEmpty()) {
-		exportGRUPs.add(g);
-	    }
-	}
-	SPProgressBarPlug.reset();
-	SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + this);
-	ArrayList<FormID> allForms = allFormIDs();
+        // Progress Bar Setup
+        for (GRUP g : GRUPs.values()) {
+            if (!g.isEmpty()) {
+                exportGRUPs.add(g);
+            }
+        }
+        SPProgressBarPlug.reset();
+        SPProgressBarPlug.setMax(exportGRUPs.size() + 6, "Exporting " + this);
+        ArrayList<FormID> allForms = allFormIDs();
 
-	// Add all mods that contained any of the FormIDs used.
-	SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
-	Set<ModListing> addedMods = new HashSet<>();
-	for (FormID ID : allForms) {
-	    if (!ID.isNull()) {
-		ModListing master = ID.getMaster();
-		if (!addedMods.contains(master)) {
-		    addMaster(master);
-		    addedMods.add(master);
-		}
-	    }
-	}
-	SPProgressBarPlug.incrementBar();
+        // Add all mods that contained any of the FormIDs used.
+        SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
+        Set<ModListing> addedMods = new HashSet<>();
+        for (FormID ID : allForms) {
+            if (!ID.isNull()) {
+                ModListing master = ID.getMaster();
+                if (!addedMods.contains(master)) {
+                    addMaster(master);
+                    addedMods.add(master);
+                }
+            }
+        }
+        SPProgressBarPlug.incrementBar();
 
 	// Go through each record, and add all mods that reference that record
-	// Just to symbolize that they "had part" in the patch
-	// And help encourage repatching when mods are removed.
-	SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
-	if (!SPGlobal.mergeMode) {
-	    for (GRUP<MajorRecord> g : this) {
-		for (MajorRecord major : g) {
-		    FormID id = major.getForm();
-		    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
-			if (mod.contains(id) && !addedMods.contains(mod.getInfo())
-				&& !mod.equals(SPGlobal.getGlobalPatch())) {
-			    addMaster(mod.getInfo());
-			    addedMods.add(mod.getInfo());
-			}
-		    }
-		}
-	    }
-	}
-	SPProgressBarPlug.incrementBar();
+        // Just to symbolize that they "had part" in the patch
+        // And help encourage repatching when mods are removed.
+        SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
+        if (!SPGlobal.mergeMode) {
+            for (GRUP<MajorRecord> g : this) {
+                for (MajorRecord major : g) {
+                    FormID id = major.getForm();
+                    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
+                        if (mod.contains(id) && !addedMods.contains(mod.getInfo())
+                                && !mod.equals(SPGlobal.getGlobalPatch())) {
+                            addMaster(mod.getInfo());
+                            addedMods.add(mod.getInfo());
+                        }
+                    }
+                }
+            }
+        }
+        SPProgressBarPlug.incrementBar();
 
-	// Sort masters to match load order
-	sortMasters();
-	SPProgressBarPlug.incrementBar();
+        // Sort masters to match load order
+        sortMasters();
+        SPProgressBarPlug.incrementBar();
 
-	// Export Header
-	tes.setNumRecords(numRecords());
-	if (SPGlobal.logging()) {
-	    SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
-	    SPGlobal.logSync(this.getName(), "Masters: ");
-	    int i = 0;
-	    for (String s : this.getMastersStrings()) {
-		SPGlobal.logSync(this.getName(), "   " + Ln.printHex(i++) + "  " + s);
-	    }
-	}
+        // Export Header
+        tes.setNumRecords(numRecords());
+        if (SPGlobal.logging()) {
+            SPGlobal.logSync(this.getName(), "Exporting " + tes.getHEDR().numRecords + " records.");
+            SPGlobal.logSync(this.getName(), "Masters: ");
+            int i = 0;
+            for (String s : this.getMastersStrings()) {
+                SPGlobal.logSync(this.getName(), "   " + Ln.printHex(i++) + "  " + s);
+            }
+        }
 
-	tes.export(out);
+        tes.export(out);
 
-	// Export GRUPs
-	for (GRUP g : exportGRUPs) {
-	    SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": " + g.getContainedType());
-	    g.export(out);
-	    SPProgressBarPlug.incrementBar();
-	}
+        // Export GRUPs
+        for (GRUP g : exportGRUPs) {
+            SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": " + g.getContainedType());
+            g.export(out);
+            SPProgressBarPlug.incrementBar();
+        }
 
-	// Export or clean up STRINGS files
-	if (this.isFlag(Mod_Flags.STRING_TABLED)) {
-	    SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": STRINGS files");
-	    exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
-	    exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
-	    exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
-	    SPProgressBarPlug.incrementBar();
-	} else {
-	    deleteStringsFiles();
-	}
-	out.close();
+        // Export or clean up STRINGS files
+        if (this.isFlag(Mod_Flags.STRING_TABLED)) {
+            SPProgressBarPlug.setStatusNumbered("Exporting " + this + ": STRINGS files");
+            exportStringsFile(outStrings, SubStringPointer.Files.STRINGS);
+            exportStringsFile(outDLStrings, SubStringPointer.Files.DLSTRINGS);
+            exportStringsFile(outILStrings, SubStringPointer.Files.ILSTRINGS);
+            SPProgressBarPlug.incrementBar();
+        } else {
+            deleteStringsFiles();
+        }
+        out.close();
 
+        // Check if any duplicate EDIDS or FormIDS
+        SPProgressBarPlug.setStatusNumbered("Checking for Duplicates");
+        Map<String, MajorRecord> edids = new HashMap<>();
+        Set<FormID> IDs = new HashSet<>();
+        boolean bad = false;
+        for (GRUP g : GRUPs.values()) {
+            for (Object o : g.listRecords) {
+                MajorRecord m = (MajorRecord) o;
+                if (edids.keySet().contains(m.getEDID())
+                        && (m.getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo)
+                        || edids.get(m.getEDID()).getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo))) {
+                    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
+                    SPGlobal.logError("EDID Check", "    With: " + edids.get(m.getEDID()));
+                    bad = true;
+                } else {
+                    edids.put(m.getEDID(), m);
+                }
+                if (IDs.contains(m.getForm())) {
+                    SPGlobal.logError("FormID Check", "Error! Duplicate FormID " + m);
+                    bad = true;
+                } else {
+                    IDs.add(m.getForm());
+                }
+            }
+        }
+        SPProgressBarPlug.incrementBar();
+        if (bad) {
+            throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
+        }
 
-	// Check if any duplicate EDIDS or FormIDS
-	SPProgressBarPlug.setStatusNumbered("Checking for Duplicates");
-	Map<String, MajorRecord> edids = new HashMap<>();
-	Set<FormID> IDs = new HashSet<>();
-	boolean bad = false;
-	for (GRUP g : GRUPs.values()) {
-	    for (Object o : g.listRecords) {
-		MajorRecord m = (MajorRecord) o;
-		if (edids.keySet().contains(m.getEDID())
-			&& (m.getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo)
-			|| edids.get(m.getEDID()).getFormMaster().equals(SPGlobal.getGlobalPatch().modInfo))) {
-		    SPGlobal.logError("EDID Check", "Error! Duplicate EDID " + m);
-		    SPGlobal.logError("EDID Check", "    With: " + edids.get(m.getEDID()));
-		    bad = true;
-		} else {
-		    edids.put(m.getEDID(), m);
-		}
-		if (IDs.contains(m.getForm())) {
-		    SPGlobal.logError("FormID Check", "Error! Duplicate FormID " + m);
-		    bad = true;
-		} else {
-		    IDs.add(m.getForm());
-		}
-	    }
-	}
-	SPProgressBarPlug.incrementBar();
-	if (bad) {
-	    throw new BadRecord("Duplicate EDIDs or FormIDs.  Check logs for a listing.");
-	}
+        SPProgressBarPlug.setStatusNumbered("Validating Record Lengths");
+        // Validate all record lengths are correct
+        if (!NiftyFunc.validateRecordLengths(outPath, 1)) {
+            SPGlobal.logError("Record Length Check", "Record lengths were off.");
+            throw new BadRecord("Record lengths are off.");
+        }
+        SPProgressBarPlug.incrementBar();
 
-	SPProgressBarPlug.setStatusNumbered("Validating Record Lengths");
-	// Validate all record lengths are correct
-	if (!NiftyFunc.validateRecordLengths(outPath, 1)) {
-	    SPGlobal.logError("Record Length Check", "Record lengths were off.");
-	    throw new BadRecord("Record lengths are off.");
-	}
-	SPProgressBarPlug.incrementBar();
-
-	SPProgressBarPlug.setStatusNumbered("Exporting Consistency File");
-	if (Consistency.automaticExport) {
-	    Consistency.export();
-	}
-	SPProgressBarPlug.incrementBar();
+        SPProgressBarPlug.setStatusNumbered("Exporting Consistency File");
+        if (Consistency.automaticExport) {
+            Consistency.export();
+        }
+        SPProgressBarPlug.incrementBar();
     }
 
     /**
@@ -790,74 +799,74 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @throws IOException
      */
     public void exportMasterList(String path) throws IOException {
-	File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
-	BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));
-	for (ModListing m : this.getMasters()) {
-	    writer.write(m.toString() + "\n");
-	}
-	writer.close();
+        File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));
+        for (ModListing m : this.getMasters()) {
+            writer.write(m.toString() + "\n");
+        }
+        writer.close();
 
-	File masterList = new File(path);
-	if (masterList.isFile()) {
-	    masterList.delete();
-	}
+        File masterList = new File(path);
+        if (masterList.isFile()) {
+            masterList.delete();
+        }
 
-	Ln.moveFile(masterListTmp, masterList, false);
+        Ln.moveFile(masterListTmp, masterList, false);
     }
 
     int addOutString(String in, SubStringPointer.Files file) {
-	switch (file) {
-	    case DLSTRINGS:
-		return addOutString(in, outDLStrings);
-	    case ILSTRINGS:
-		return addOutString(in, outILStrings);
-	    default:
-		return addOutString(in, outStrings);
-	}
+        switch (file) {
+            case DLSTRINGS:
+                return addOutString(in, outDLStrings);
+            case ILSTRINGS:
+                return addOutString(in, outILStrings);
+            default:
+                return addOutString(in, outStrings);
+        }
     }
 
     int addOutString(String in, ArrayList<String> list) {
-	if (!list.contains(in)) {
-	    list.add(in);
-	}
-	return list.indexOf(in) + 1;  // To prevent indexing starting at 0
+        if (!list.contains(in)) {
+            list.add(in);
+        }
+        return list.indexOf(in) + 1;  // To prevent indexing starting at 0
     }
 
     String genStringsPath(SubStringPointer.Files file) {
-	return SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file;
+        return SPGlobal.pathToData + "Strings/" + getNameNoSuffix() + "_" + SPGlobal.language + "." + file;
     }
 
     void sortMasters() {
-	tes.getMasters().sort();
+        tes.getMasters().sort();
     }
 
     void exportStringsFile(ArrayList<String> list, SubStringPointer.Files file) throws FileNotFoundException, IOException {
-	int stringLength = 0;
-	for (String s : list) {
-	    stringLength += s.length() + 1;
+        int stringLength = 0;
+        for (String s : list) {
+            stringLength += s.length() + 1;
 
-	}
-	int outLength = stringLength + 8 * list.size() + 8;
-	LOutFile out = new LOutFile(genStringsPath(file));
+        }
+        int outLength = stringLength + 8 * list.size() + 8;
+        LOutFile out = new LOutFile(genStringsPath(file));
 
-	out.write(list.size());
-	out.write(stringLength);
+        out.write(list.size());
+        out.write(stringLength);
 
-	int i = 1;  // To prevent indexing starting at 0
-	int offset = 0;
-	for (String s : list) {
-	    out.write(i++);
-	    out.write(offset);
-	    offset += s.length() + 1;
-	}
+        int i = 1;  // To prevent indexing starting at 0
+        int offset = 0;
+        for (String s : list) {
+            out.write(i++);
+            out.write(offset);
+            offset += s.length() + 1;
+        }
 
-	for (String s : list) {
-	    out.write(s);
-	    out.write(0, 1);  // Null terminator
-	}
+        for (String s : list) {
+            out.write(s);
+            out.write(0, 1);  // Null terminator
+        }
 
-	list.clear();
-	out.close();
+        list.clear();
+        out.close();
     }
 
     /**
@@ -866,11 +875,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param in Your name here.
      */
     public void setAuthor(String in) {
-	tes.setAuthor(in);
+        tes.setAuthor(in);
     }
 
     void parseData(String type, LImport data) throws Exception {
-	GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
+        GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
     }
 
     /**
@@ -883,7 +892,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return True if the given flag is on in the mod.
      */
     public boolean isFlag(Mod_Flags flag) {
-	return tes.flags.get(flag.value);
+        return tes.flags.get(flag.value);
     }
 
     /**
@@ -896,10 +905,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param on What to set the flag to.
      */
     public final void setFlag(Mod_Flags flag, boolean on) {
-	tes.flags.set(flag.value, on);
-	if (flag == Mod_Flags.MASTER) {
-	    getInfo().setMasterTag(on);
-	}
+        tes.flags.set(flag.value, on);
+        if (flag == Mod_Flags.MASTER) {
+            getInfo().setMasterTag(on);
+        }
     }
 
     // Get Set
@@ -909,7 +918,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Leveled List records.
      */
     public GRUP<LVLN> getLeveledCreatures() {
-	return GRUPs.get(GRUP_TYPE.LVLN);
+        return GRUPs.get(GRUP_TYPE.LVLN);
     }
 
     /**
@@ -918,7 +927,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing NPC records.
      */
     public GRUP<NPC_> getNPCs() {
-	return GRUPs.get(GRUP_TYPE.NPC_);
+        return GRUPs.get(GRUP_TYPE.NPC_);
     }
 
     /**
@@ -927,7 +936,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Image Space records.
      */
     public GRUP<IMGS> getImageSpaces() {
-	return GRUPs.get(GRUP_TYPE.IMGS);
+        return GRUPs.get(GRUP_TYPE.IMGS);
     }
 
     /**
@@ -936,7 +945,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Perk records.
      */
     public GRUP<PERK> getPerks() {
-	return GRUPs.get(GRUP_TYPE.PERK);
+        return GRUPs.get(GRUP_TYPE.PERK);
     }
 
     /**
@@ -945,7 +954,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Spell records.
      */
     public GRUP<SPEL> getSpells() {
-	return GRUPs.get(GRUP_TYPE.SPEL);
+        return GRUPs.get(GRUP_TYPE.SPEL);
     }
 
     /**
@@ -954,7 +963,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Race records
      */
     public GRUP<RACE> getRaces() {
-	return GRUPs.get(GRUP_TYPE.RACE);
+        return GRUPs.get(GRUP_TYPE.RACE);
     }
 
     /**
@@ -963,7 +972,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armor records
      */
     public GRUP<ARMO> getArmors() {
-	return GRUPs.get(GRUP_TYPE.ARMO);
+        return GRUPs.get(GRUP_TYPE.ARMO);
     }
 
     /**
@@ -972,7 +981,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Armature records
      */
     public GRUP<ARMA> getArmatures() {
-	return GRUPs.get(GRUP_TYPE.ARMA);
+        return GRUPs.get(GRUP_TYPE.ARMA);
     }
 
     /**
@@ -981,7 +990,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Texture records
      */
     public GRUP<TXST> getTextureSets() {
-	return GRUPs.get(GRUP_TYPE.TXST);
+        return GRUPs.get(GRUP_TYPE.TXST);
     }
 
     /**
@@ -990,7 +999,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Weapon records
      */
     public GRUP<WEAP> getWeapons() {
-	return GRUPs.get(GRUP_TYPE.WEAP);
+        return GRUPs.get(GRUP_TYPE.WEAP);
     }
 
     /**
@@ -999,7 +1008,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Keyword records
      */
     public GRUP<KYWD> getKeywords() {
-	return GRUPs.get(GRUP_TYPE.KYWD);
+        return GRUPs.get(GRUP_TYPE.KYWD);
     }
 
     /**
@@ -1008,7 +1017,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Keyword records
      */
     public GRUP<FLST> getFormLists() {
-	return GRUPs.get(GRUP_TYPE.FLST);
+        return GRUPs.get(GRUP_TYPE.FLST);
     }
 
     /**
@@ -1017,7 +1026,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Magic Effect records
      */
     public GRUP<MGEF> getMagicEffects() {
-	return GRUPs.get(GRUP_TYPE.MGEF);
+        return GRUPs.get(GRUP_TYPE.MGEF);
     }
 
     /**
@@ -1026,7 +1035,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Alchemy records
      */
     public GRUP<ALCH> getAlchemy() {
-	return GRUPs.get(GRUP_TYPE.ALCH);
+        return GRUPs.get(GRUP_TYPE.ALCH);
     }
 
     /**
@@ -1035,7 +1044,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Ingredient records
      */
     public GRUP<INGR> getIngredients() {
-	return GRUPs.get(GRUP_TYPE.INGR);
+        return GRUPs.get(GRUP_TYPE.INGR);
     }
 
     /**
@@ -1044,7 +1053,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Ammo records
      */
     public GRUP<AMMO> getAmmo() {
-	return GRUPs.get(GRUP_TYPE.AMMO);
+        return GRUPs.get(GRUP_TYPE.AMMO);
     }
 
     /**
@@ -1053,7 +1062,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Faction records
      */
     public GRUP<FACT> getFactions() {
-	return GRUPs.get(GRUP_TYPE.FACT);
+        return GRUPs.get(GRUP_TYPE.FACT);
     }
 
     /**
@@ -1062,7 +1071,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Game Setting records
      */
     public GRUP<GMST> getGameSettings() {
-	return GRUPs.get(GRUP_TYPE.GMST);
+        return GRUPs.get(GRUP_TYPE.GMST);
     }
 
     /**
@@ -1071,7 +1080,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Enchantments records
      */
     public GRUP<ENCH> getEnchantments() {
-	return GRUPs.get(GRUP_TYPE.ENCH);
+        return GRUPs.get(GRUP_TYPE.ENCH);
     }
 
     /**
@@ -1080,7 +1089,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Leveled Items records
      */
     public GRUP<LVLI> getLeveledItems() {
-	return GRUPs.get(GRUP_TYPE.LVLI);
+        return GRUPs.get(GRUP_TYPE.LVLI);
     }
 
     /**
@@ -1089,7 +1098,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing ActorValue records
      */
     public GRUP<AVIF> getActorValues() {
-	return GRUPs.get(GRUP_TYPE.AVIF);
+        return GRUPs.get(GRUP_TYPE.AVIF);
     }
 
     /**
@@ -1098,7 +1107,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Encounter Zone records
      */
     public GRUP<ECZN> getEncounterZones() {
-	return GRUPs.get(GRUP_TYPE.ECZN);
+        return GRUPs.get(GRUP_TYPE.ECZN);
     }
 
     /**
@@ -1107,7 +1116,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Global records
      */
     public GRUP<GLOB> getGlobals() {
-	return GRUPs.get(GRUP_TYPE.GLOB);
+        return GRUPs.get(GRUP_TYPE.GLOB);
     }
 
     /**
@@ -1116,7 +1125,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Constructible Object records
      */
     public GRUP<COBJ> getConstructibleObjects() {
-	return GRUPs.get(GRUP_TYPE.COBJ);
+        return GRUPs.get(GRUP_TYPE.COBJ);
     }
 
     /**
@@ -1125,7 +1134,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Misc Object records
      */
     public GRUP<MISC> getMiscObjects() {
-	return GRUPs.get(GRUP_TYPE.MISC);
+        return GRUPs.get(GRUP_TYPE.MISC);
     }
 
     /**
@@ -1134,7 +1143,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing outfit records
      */
     public GRUP<OTFT> getOutfits() {
-	return GRUPs.get(GRUP_TYPE.OTFT);
+        return GRUPs.get(GRUP_TYPE.OTFT);
     }
 
     /**
@@ -1143,7 +1152,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing head part records
      */
     public GRUP<HDPT> getHeadParts() {
-	return GRUPs.get(GRUP_TYPE.HDPT);
+        return GRUPs.get(GRUP_TYPE.HDPT);
     }
 
     /**
@@ -1152,7 +1161,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing projectile records
      */
     public GRUP<PROJ> getProjectiles() {
-	return GRUPs.get(GRUP_TYPE.PROJ);
+        return GRUPs.get(GRUP_TYPE.PROJ);
     }
 
     /**
@@ -1161,7 +1170,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing lighting template records
      */
     public GRUP<LGTM> getLightingTemplates() {
-	return GRUPs.get(GRUP_TYPE.LGTM);
+        return GRUPs.get(GRUP_TYPE.LGTM);
     }
 
     /**
@@ -1170,7 +1179,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The GRUP containing Book records
      */
     public GRUP<BOOK> getBooks() {
-	return GRUPs.get(GRUP_TYPE.BOOK);
+        return GRUPs.get(GRUP_TYPE.BOOK);
     }
 
     /**
@@ -1179,7 +1188,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<WTHR> getWeathers() {
-	return GRUPs.get(GRUP_TYPE.WTHR);
+        return GRUPs.get(GRUP_TYPE.WTHR);
     }
 
     /**
@@ -1188,7 +1197,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DIAL> getDialogs() {
-	return GRUPs.get(GRUP_TYPE.DIAL);
+        return GRUPs.get(GRUP_TYPE.DIAL);
     }
 
     /**
@@ -1197,7 +1206,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DLBR> getDialogBranches() {
-	return GRUPs.get(GRUP_TYPE.DLBR);
+        return GRUPs.get(GRUP_TYPE.DLBR);
     }
 
     /**
@@ -1206,7 +1215,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<DLVW> getDialogViews() {
-	return GRUPs.get(GRUP_TYPE.DLVW);
+        return GRUPs.get(GRUP_TYPE.DLVW);
     }
 
     /**
@@ -1215,7 +1224,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<CONT> getContainers() {
-	return GRUPs.get(GRUP_TYPE.CONT);
+        return GRUPs.get(GRUP_TYPE.CONT);
     }
 
     /**
@@ -1224,7 +1233,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<VTYP> getVoiceTypes() {
-	return GRUPs.get(GRUP_TYPE.VTYP);
+        return GRUPs.get(GRUP_TYPE.VTYP);
     }
 
     /**
@@ -1233,16 +1242,16 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return
      */
     public GRUP<STAT> getStatics() {
-	return GRUPs.get(GRUP_TYPE.STAT);
+        return GRUPs.get(GRUP_TYPE.STAT);
     }
-    
+
     /**
      *
      * @see GRUP
      * @return the GRUP containing scroll records
      */
     public GRUP<SCRL> getScrolls() {
-	return GRUPs.get(GRUP_TYPE.SCRL);
+        return GRUPs.get(GRUP_TYPE.SCRL);
     }
 
     /**
@@ -1250,7 +1259,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The name of the mod (including suffix)
      */
     public String getName() {
-	return modInfo.print();
+        return modInfo.print();
     }
 
     /**
@@ -1259,7 +1268,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The ModListing object associated with the mod.
      */
     public ModListing getInfo() {
-	return modInfo;
+        return modInfo;
     }
 
     /**
@@ -1267,7 +1276,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @return The name of the mod (without suffix)
      */
     public String getNameNoSuffix() {
-	return getName().substring(0, getName().indexOf(".es"));
+        return getName().substring(0, getName().indexOf(".es"));
     }
 
     /**
@@ -1280,8 +1289,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     @Override
     public int compareTo(Object o) {
-	Mod rhs = (Mod) o;
-	return this.getInfo().compareTo(rhs.getInfo());
+        Mod rhs = (Mod) o;
+        return this.getInfo().compareTo(rhs.getInfo());
     }
 
     /**
@@ -1294,20 +1303,20 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     @Override
     public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (obj instanceof ModListing) {
-	    return getInfo().equals(obj);
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final Mod other = (Mod) obj;
-	if (!this.getName().equalsIgnoreCase(other.getName())) {
-	    return false;
-	}
-	return true;
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof ModListing) {
+            return getInfo().equals(obj);
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Mod other = (Mod) obj;
+        if (!this.getName().equalsIgnoreCase(other.getName())) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1315,11 +1324,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param id
      */
     public void remove(FormID id) {
-	for (GRUP g : GRUPs.values()) {
-	    if (g.contains(id)) {
-		g.removeRecord(id);
-	    }
-	}
+        for (GRUP g : GRUPs.values()) {
+            if (g.contains(id)) {
+                g.removeRecord(id);
+            }
+        }
     }
 
     /**
@@ -1330,9 +1339,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     @Override
     public int hashCode() {
-	int hash = 5;
-	hash = 97 * hash + (this.modInfo != null ? this.modInfo.hashCode() : 0);
-	return hash;
+        int hash = 5;
+        hash = 97 * hash + (this.modInfo != null ? this.modInfo.hashCode() : 0);
+        return hash;
     }
 
     /**
@@ -1341,202 +1350,202 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     @Override
     public Iterator<GRUP> iterator() {
-	return GRUPs.values().iterator();
+        return GRUPs.values().iterator();
     }
 
     // Internal Classes
     static class TES4 extends Record {
 
-	private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
-	static final SubPrototype TES4proto = new SubPrototype() {
-	    @Override
-	    protected void addRecords() {
-		add(new HEDR());
-		add(SubString.getNew("CNAM", true));
-		add(new SubList<>(new ModListing(), true));
-		add(SubString.getNew("SNAM", true));
-		add(new SubData("INTV"));
-		add(new SubData("ONAM"));
-		add(new SubData("INCC"));
-	    }
-	};
-	SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
-	private LFlags flags = new LFlags(4);
-	private int fluff1 = 0;
-	private int fluff2 = 0;
-	private int fluff3 = 0;
+        private final static byte[] defaultINTV = Ln.parseHexString("C5 26 01 00", 4);
+        static final SubPrototype TES4proto = new SubPrototype() {
+            @Override
+            protected void addRecords() {
+                add(new HEDR());
+                add(SubString.getNew("CNAM", true));
+                add(new SubList<>(new ModListing(), true));
+                add(SubString.getNew("SNAM", true));
+                add(new SubData("INTV"));
+                add(new SubData("ONAM"));
+                add(new SubData("INCC"));
+            }
+        };
+        SubRecordsDerived subRecords = new SubRecordsDerived(TES4proto);
+        private LFlags flags = new LFlags(4);
+        private int fluff1 = 0;
+        private int fluff2 = 0;
+        private int fluff3 = 0;
 
-	TES4() {
-	}
+        TES4() {
+        }
 
-	TES4(LShrinkArray in) throws Exception {
-	    this();
-	    parseData(in, null);
-	}
+        TES4(LShrinkArray in) throws Exception {
+            this();
+            parseData(in, null);
+        }
 
-	@Override
-	final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in, srcMod);
-	    flags.set(in.extract(4));
-	    fluff1 = Ln.arrayToInt(in.extractInts(4));
-	    fluff2 = Ln.arrayToInt(in.extractInts(4));
-	    fluff3 = Ln.arrayToInt(in.extractInts(4));
-	    subRecords.importSubRecords(in, srcMod);
-	}
+        @Override
+        final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+            super.parseData(in, srcMod);
+            flags.set(in.extract(4));
+            fluff1 = Ln.arrayToInt(in.extractInts(4));
+            fluff2 = Ln.arrayToInt(in.extractInts(4));
+            fluff3 = Ln.arrayToInt(in.extractInts(4));
+            subRecords.importSubRecords(in, srcMod);
+        }
 
-	@Override
-	boolean isValid() {
-	    return true;
-	}
+        @Override
+        boolean isValid() {
+            return true;
+        }
 
-	@Override
-	public String toString() {
-	    return "HEDR";
-	}
+        @Override
+        public String toString() {
+            return "HEDR";
+        }
 
-	@Override
-	ArrayList<String> getTypes() {
-	    return Record.getTypeList("TES4");
-	}
+        @Override
+        ArrayList<String> getTypes() {
+            return Record.getTypeList("TES4");
+        }
 
-	@Override
-	void export(ModExporter out) throws IOException {
-	    super.export(out);
-	    out.write(flags.export(), 4);
-	    out.write(fluff1);
-	    out.write(fluff2);
-	    out.write(fluff3);
-	    subRecords.export(out);
-	}
+        @Override
+        void export(ModExporter out) throws IOException {
+            super.export(out);
+            out.write(flags.export(), 4);
+            out.write(fluff1);
+            out.write(fluff2);
+            out.write(fluff3);
+            subRecords.export(out);
+        }
 
-	void addMaster(ModListing mod) {
-	    subRecords.getSubList("MAST").add(mod);
-	}
+        void addMaster(ModListing mod) {
+            subRecords.getSubList("MAST").add(mod);
+        }
 
-	void clearMasters() {
-	    subRecords.getSubList("MAST").clear();
-	}
+        void clearMasters() {
+            subRecords.getSubList("MAST").clear();
+        }
 
-	SubList<ModListing, ModListing> getMasters() {
-	    return subRecords.getSubList("MAST");
-	}
+        SubList<ModListing, ModListing> getMasters() {
+            return subRecords.getSubList("MAST");
+        }
 
-	void setAuthor(String in) {
-	    subRecords.getSubString("CNAM").setString(in);
-	}
+        void setAuthor(String in) {
+            subRecords.getSubString("CNAM").setString(in);
+        }
 
-	@Override
-	int getFluffLength() {
-	    return 16;
-	}
+        @Override
+        int getFluffLength() {
+            return 16;
+        }
 
-	@Override
-	int getContentLength(ModExporter out) {
-	    return subRecords.length(out);
-	}
+        @Override
+        int getContentLength(ModExporter out) {
+            return subRecords.length(out);
+        }
 
-	@Override
-	int getSizeLength() {
-	    return 4;
-	}
+        @Override
+        int getSizeLength() {
+            return 4;
+        }
 
-	void setNumRecords(int num) {
-	    getHEDR().setRecords(num);
-	}
+        void setNumRecords(int num) {
+            getHEDR().setRecords(num);
+        }
 
-	HEDR getHEDR() {
-	    return (HEDR) subRecords.get("HEDR");
-	}
+        HEDR getHEDR() {
+            return (HEDR) subRecords.get("HEDR");
+        }
 
-	int getNumRecords() {
-	    return getHEDR().numRecords;
-	}
+        int getNumRecords() {
+            return getHEDR().numRecords;
+        }
 
-	@Override
-	Record getNew() {
-	    return new TES4();
-	}
+        @Override
+        Record getNew() {
+            return new TES4();
+        }
 
-	@Override
-	public String print() {
-	    return toString();
-	}
+        @Override
+        public String print() {
+            return toString();
+        }
     }
 
     static class HEDR extends SubRecord<HEDR> {
 
-	byte[] version;
-	int numRecords;
-	int nextID;
-	static int firstAvailableID = 0xD62;  // first available ID on empty CS plugins
+        byte[] version;
+        int numRecords;
+        int nextID;
+        static int firstAvailableID = 0xD62;  // first available ID on empty CS plugins
 
-	HEDR() {
-	    super();
-	    clear();
-	}
+        HEDR() {
+            super();
+            clear();
+        }
 
-	HEDR(LShrinkArray in) throws Exception {
-	    this();
-	    parseData(in, null);
-	}
+        HEDR(LShrinkArray in) throws Exception {
+            this();
+            parseData(in, null);
+        }
 
-	void setRecords(int num) {
-	    numRecords = num;
-	}
+        void setRecords(int num) {
+            numRecords = num;
+        }
 
-	int numRecords() {
-	    return numRecords;
-	}
+        int numRecords() {
+            return numRecords;
+        }
 
-	void addRecords(int num) {
-	    setRecords(numRecords() + num);
-	}
+        void addRecords(int num) {
+            setRecords(numRecords() + num);
+        }
 
-	int nextID() {
-	    return nextID++;
-	}
+        int nextID() {
+            return nextID++;
+        }
 
-	@Override
-	void export(ModExporter out) throws IOException {
-	    super.export(out);
-	    out.write(version);
-	    out.write(numRecords);
-	    out.write(nextID);
-	}
+        @Override
+        void export(ModExporter out) throws IOException {
+            super.export(out);
+            out.write(version);
+            out.write(numRecords);
+            out.write(nextID);
+        }
 
-	@Override
-	final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
-	    super.parseData(in, srcMod);
-	    version = in.extract(4);
-	    numRecords = in.extractInt(4);
-	    nextID = in.extractInt(4);
-	}
+        @Override
+        final void parseData(LImport in, Mod srcMod) throws BadRecord, BadParameter, DataFormatException {
+            super.parseData(in, srcMod);
+            version = in.extract(4);
+            numRecords = in.extractInt(4);
+            nextID = in.extractInt(4);
+        }
 
-	@Override
-	SubRecord getNew(String type) {
-	    return new HEDR();
-	}
+        @Override
+        SubRecord getNew(String type) {
+            return new HEDR();
+        }
 
-	final public void clear() {
-	    version = Ln.parseHexString("D7 A3 70 3F", 4);
-	    numRecords = 0;
-	    nextID = firstAvailableID;
-	}
+        final public void clear() {
+            version = Ln.parseHexString("D7 A3 70 3F", 4);
+            numRecords = 0;
+            nextID = firstAvailableID;
+        }
 
-	@Override
-	boolean isValid() {
-	    return true;
-	}
+        @Override
+        boolean isValid() {
+            return true;
+        }
 
-	@Override
-	int getContentLength(ModExporter out) {
-	    return 12;
-	}
+        @Override
+        int getContentLength(ModExporter out) {
+            return 12;
+        }
 
-	@Override
-	ArrayList<String> getTypes() {
-	    return Record.getTypeList("HEDR");
-	}
+        @Override
+        ArrayList<String> getTypes() {
+            return Record.getTypeList("HEDR");
+        }
     }
 
     /**
@@ -1544,27 +1553,27 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public enum Mod_Flags {
 
-	/**
-	 * Master flag determines whether a mod is labeled as a master plugin
-	 * and receives a ".esm" suffix.
-	 */
-	MASTER(0),
-	/**
-	 * String Tabled flag determines whether names and descriptions are
-	 * stored inside the mod itself, or in external STRINGS files. <br><br>
-	 *
-	 * In general, it is suggested to disable this flag for most patches, as
-	 * the only benefit of external STRINGS files is easy multi-language
-	 * support. Skyproc can offer this same multilanguage support without
-	 * external STRINGS files. See SPGlobal.language for more information.
-	 *
-	 * @see SPGlobal
-	 */
-	STRING_TABLED(7);
-	int value;
+        /**
+         * Master flag determines whether a mod is labeled as a master plugin
+         * and receives a ".esm" suffix.
+         */
+        MASTER(0),
+        /**
+         * String Tabled flag determines whether names and descriptions are
+         * stored inside the mod itself, or in external STRINGS files. <br><br>
+         *
+         * In general, it is suggested to disable this flag for most patches, as
+         * the only benefit of external STRINGS files is easy multi-language
+         * support. Skyproc can offer this same multilanguage support without
+         * external STRINGS files. See SPGlobal.language for more information.
+         *
+         * @see SPGlobal
+         */
+        STRING_TABLED(7);
+        int value;
 
-	private Mod_Flags(int in) {
-	    value = in;
-	}
+        private Mod_Flags(int in) {
+            value = in;
+        }
     };
 }

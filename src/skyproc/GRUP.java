@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LImport;
-import lev.LOutFile;
 import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
@@ -185,7 +184,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	if (mapRecords.containsKey(id)) {
 	    listRecords.remove(mapRecords.get(id));
 	    MajorRecord r = mapRecords.get(id);
-	    edidRecords.remove(r.getEDID());
+	    edidRecords.remove(r.getEDID().toUpperCase());
 	    mapRecords.remove(id);
 	    return true;
 	} else {
@@ -225,7 +224,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     public void addRecord(T item) {
 	removeRecord(item);
 	mapRecords.put(item.getForm(), item);
-	edidRecords.put(item.getEDID(), item);
+	edidRecords.put(item.getEDID().toUpperCase(), item);
 	listRecords.add(item);
     }
 
@@ -256,7 +255,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
      * @return Returns true if GRUP contains a record with edid.
      */
     public boolean contains(String edid) {
-	return edidRecords.containsKey(edid);
+	return edidRecords.containsKey(edid.toUpperCase());
     }
 
     /**
@@ -283,7 +282,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
      * @return Major Record with FormID equaling parameter. Null if one does not exist.
      */
     public MajorRecord get(String edid) {
-	return edidRecords.get(edid);
+	return edidRecords.get(edid.toUpperCase());
     }
 
     /**
