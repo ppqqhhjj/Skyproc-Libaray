@@ -14,6 +14,11 @@ import lev.LShrinkArray;
  */
 public class RecordShrinkArray extends LShrinkArray {
 
+    @Override
+    public String toString() {
+        return "RecordShrinkArray{" + "offset=" + offset + '}' ;
+    }
+
     int offset;
 
     /**

@@ -46,6 +46,9 @@ public class INFO extends MajorRecord {
 	    add(new SubInt("CNAM", 1));
 	    add(new SubList<>(new SubForm("TCLT")));
 	    add(new SubForm("DNAM"));
+            
+            add(new SubList<>(new SubShellBulkType(responseProto, false)));
+            
 	    add(new SubList<>(new Condition()));
 	    add(new SubList<>(new SubShell(new SubPrototype() {
 
@@ -56,7 +59,7 @@ public class INFO extends MajorRecord {
 		    add(new SubData("NEXT"));
 		}
 	    })));
-	    add(new SubList<>(new SubShellBulkType(responseProto, false)));
+	    
 	    add(new SubStringPointer("RNAM", SubStringPointer.Files.STRINGS));
 	    add(new SubForm("ANAM"));
 	    add(new SubForm("TWAT"));
