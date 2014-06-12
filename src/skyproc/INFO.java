@@ -30,7 +30,7 @@ public class INFO extends MajorRecord {
 	    add(new SubString("NAM2"));
 	    add(new SubData("NAM3"));
 	    add(new SubForm("SNAM"));
-	    add(new SubList<>(new Condition()));
+//	    add(new SubList<>(new Condition()));
 	    add(new SubForm("LNAM"));
 	}
     };
@@ -340,27 +340,28 @@ public class INFO extends MajorRecord {
 	 *
 	 * @return
 	 */
-	public ArrayList<Condition> getConditions() {
-	    return subRecords.getSubList("CTDA").toPublic();
-	}
+//	public ArrayList<Condition> getConditions() {
+//	    return subRecords.getSubList("CTDA").toPublic();
+//	}
 
 	/**
 	 * @deprecated modifying the ArrayList will now directly affect the
 	 * record.
 	 * @param c
 	 */
-	public void addCondition(Condition c) {
-	    subRecords.getSubList("CTDA").add(c);
-	}
+//	public void addCondition(Condition c) {
+//	    subRecords.getSubList("CTDA").add(c);
+//	}
 
 	/**
 	 * @deprecated modifying the ArrayList will now directly affect the
 	 * record.
 	 * @param c
 	 */
-	public void removeCondition(Condition c) {
-	    subRecords.getSubList("CTDA").remove(c);
-	}
+//	public void removeCondition(Condition c) {
+//            throw
+//	    subRecords.getSubList("CTDA").remove(c);
+//	}
     }
 
     // Enums
