@@ -153,4 +153,23 @@ public class LeveledEntry extends SubShell {
     public FormID getForm() {
 	return getEntry().entry;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public float getItemCondition() {
+        Owner own = (Owner) subRecords.get("COED");
+        return own.getItemCondition();
+    }
+
+    /**
+     *
+     * @param itemCondition
+     */
+    public void setItemCondition(float itemCondition) {
+        Owner own = (Owner) subRecords.get("COED");
+        own.setItemCondition(itemCondition);
+    }
+
 }

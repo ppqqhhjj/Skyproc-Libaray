@@ -74,4 +74,13 @@ class Owner extends SubRecordTyped {
     int getContentLength(ModExporter out) {
 	return 12;
     }
+    
+    float getItemCondition() {
+        return itemCondition;
+    }
+
+    void setItemCondition(float itemCondition) {
+        this.itemCondition = itemCondition;
+    }
+
 }
