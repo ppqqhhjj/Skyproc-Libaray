@@ -429,7 +429,7 @@ public class ARMO extends MajorRecordDescription {
      *
      * @return BAMT FormID
      */
-    public FormID GetAlternateBlockMaterial() {
+    public FormID getAlternateBlockMaterial() {
         return subRecords.getSubForm("BAMT").getForm();
     }
     
@@ -437,14 +437,14 @@ public class ARMO extends MajorRecordDescription {
      * 
      * @param materialFormID 
      */
-    public void SetAlternateBlockMaterial(FormID materialFormID) {
+    public void setAlternateBlockMaterial(FormID materialFormID) {
         subRecords.setSubForm("BAMT", materialFormID);
     }
     
     /**
      * Changes BODT to BOD2 if present and sets armor to non-playable if needed
      */
-    public void UpdateBodyTemplate(){
+    public void updateBodyTemplate(){
         getBodyTemplate().makeBod2(this);
     }
 }
