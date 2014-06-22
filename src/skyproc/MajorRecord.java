@@ -21,10 +21,10 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     static final SubPrototype majorProto = new SubPrototype() {
 
-	@Override
-	protected void addRecords() {
-	    add(SubString.getNew("EDID", true));
-	}
+        @Override
+        protected void addRecords() {
+            add(SubString.getNew("EDID", true));
+        }
     };
     SubRecords subRecords = new SubRecordsStream(majorProto);
     private FormID ID = new FormID();
@@ -38,10 +38,10 @@ public abstract class MajorRecord extends Record implements Serializable {
     }
 
     void originateFromPatch(String edid) {
-	srcMod = SPGlobal.getGlobalPatch();
-	subRecords.setMajor(this);
-	setEDID(edid);
-	srcMod.addRecord(this);
+        srcMod = SPGlobal.getGlobalPatch();
+        subRecords.setMajor(this);
+        setEDID(edid);
+        srcMod.addRecord(this);
     }
 
     /**
@@ -51,37 +51,37 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final MajorRecord other = (MajorRecord) obj;
-	if (!other.getType().equals(getType())) {
-	    return false;
-	}
-	if (!ID.equals(other.ID)) {
-	    return false;
-	}
-	return true;
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MajorRecord other = (MajorRecord) obj;
+        if (!other.getType().equals(getType())) {
+            return false;
+        }
+        if (!ID.equals(other.ID)) {
+            return false;
+        }
+        return true;
     }
 
     /**
-     * NOTE:  Not tested thoroughly.
-     * Generic function that will return true if two major records have the same
-     * subrecord content.
+     * NOTE: Not tested thoroughly. Generic function that will return true if
+     * two major records have the same subrecord content.
+     *
      * @param other
      * @return
      */
     public boolean deepEquals(MajorRecord other) {
-	if (!other.getType().equals(getType())) {
-	    return false;
-	}
-	if (!subRecords.equals(other.subRecords)) {
-	    return false;
-	}
-	return true;
+        if (!other.getType().equals(getType())) {
+            return false;
+        }
+        if (!subRecords.equals(other.subRecords)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -90,9 +90,9 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public int hashCode() {
-	int hash = 3;
-	hash = 37 * hash + Objects.hashCode(this.ID);
-	return hash;
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.ID);
+        return hash;
     }
 
     /**
@@ -101,88 +101,90 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String toString() {
-	String out = "[" + getType().toString() + " | ";
-	if (ID.isStandardized()) {
-	    out += getFormStr();
-	} else if (isValid()) {
-	    out += getFormArrayStr(true);
-	}
-	SubString EDID = subRecords.getSubString("EDID");
-	if (EDID.isValid()) {
-	    out += " | " + EDID.print();
-	}
-	return out + "]";
+        String out = "[" + getType().toString() + " | ";
+        if (ID.isStandardized()) {
+            out += getFormStr();
+        } else if (isValid()) {
+            out += getFormArrayStr(true);
+        }
+        SubString EDID = subRecords.getSubString("EDID");
+        if (EDID.isValid()) {
+            out += " | " + EDID.print();
+        }
+        return out + "]";
     }
 
     MajorRecord copyOf(Mod modToOriginateFrom) {
-	return copyOf(modToOriginateFrom, this.getEDID() + "_DUP");
+        return copyOf(modToOriginateFrom, this.getEDID() + "_DUP");
     }
 
     MajorRecord copyOf(Mod modToOriginateFrom, String edid) {
-	MajorRecord out = (MajorRecord) this.getNew();
-	out.formVersion = this.formVersion;
-	out.version = Arrays.copyOf(this.version, this.version.length);
-	out.srcMod = modToOriginateFrom;
-	out.ID = new FormID();
-	out.majorFlags = new LFlags(majorFlags);
-	System.arraycopy(revision, 0, out.revision, 0, revision.length);
-	System.arraycopy(version, 0, out.version, 0, version.length);
-	out.subRecords = new SubRecordsCopied(subRecords);
-	out.setEDID(edid);
-	return out;
+        MajorRecord out = (MajorRecord) this.getNew();
+        out.formVersion = this.formVersion;
+        out.version = Arrays.copyOf(this.version, this.version.length);
+        out.srcMod = modToOriginateFrom;
+        out.ID = new FormID();
+        out.majorFlags = new LFlags(majorFlags);
+        System.arraycopy(revision, 0, out.revision, 0, revision.length);
+        System.arraycopy(version, 0, out.version, 0, version.length);
+        out.subRecords = new SubRecordsCopied(subRecords);
+        out.setEDID(edid);
+        modToOriginateFrom.addRecord(out);
+        return out;
     }
 
     /**
      * Creates a copy of the record originating from the global patch.
+     *
      * @param edid A unique EDID
      * @return
      */
     public MajorRecord copy(String edid) {
-	return SPGlobal.getGlobalPatch().makeCopy(this, edid);
+        return SPGlobal.getGlobalPatch().makeCopy(this, edid);
     }
 
     @Override
     boolean isValid() {
-	if (ID == null) {
-	    return false;
-	} else {
-	    return ID.isValid();
-	}
+        if (ID == null) {
+            return false;
+        } else {
+            return ID.isValid();
+        }
     }
 
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
-	super.parseData(in, srcMod);
+        super.parseData(in, srcMod);
 
-	majorFlags = new LFlags(in.extract(4));
-	ID.parseData(in, srcMod);
-	revision = in.extract(4);
-	formVersion = in.extractInt(2);
-	version = in.extract(2);
+        majorFlags = new LFlags(in.extract(4));
+        ID.parseData(in, srcMod);
+        revision = in.extract(4);
+        formVersion = in.extractInt(2);
+        version = in.extract(2);
 
-	if (get(MajorFlags.Compressed)) {
-	    set(MajorFlags.Compressed, false);
-	    in = in.correctForCompression();
-	    logMod(srcMod, getTypes().toString(), "Decompressed");
-	}
+        if (get(MajorFlags.Compressed)) {
+            set(MajorFlags.Compressed, false);
+            in = in.correctForCompression();
+            logMod(srcMod, getTypes().toString(), "Decompressed");
+        }
 
-	if (!in.isDone() && "EDID".equals(getNextType(in))) {
-	    SubString EDID = subRecords.getSubString("EDID");
-	    EDID.parseData(EDID.extractRecordData(in), srcMod);
-	}
+        if (!in.isDone() && "EDID".equals(getNextType(in))) {
+            SubString EDID = subRecords.getSubString("EDID");
+            EDID.parseData(EDID.extractRecordData(in), srcMod);
+        }
 
-	importSubRecords(in);
+        importSubRecords(in);
     }
 
     void importSubRecords(LImport in) throws BadRecord, DataFormatException, BadParameter {
-	subRecords.importSubRecords(in, srcMod);
+        subRecords.importSubRecords(in, srcMod);
     }
 
     ArrayList<FormID> allFormIDs() {
-	ArrayList<FormID> out = new ArrayList<>();
-	out.add(ID);
-	out.addAll(subRecords.allFormIDs());
-	return out;
+        ArrayList<FormID> out = new ArrayList<>();
+        out.add(ID);
+        out.addAll(subRecords.allFormIDs());
+        return out;
     }
 
     /**
@@ -192,13 +194,13 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     @Override
     public String print() {
-	logMod(srcMod, getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + getEDID());
-	return "";
+        logMod(srcMod, getTypes().toString(), "Form ID: " + getFormStr() + ", EDID: " + getEDID());
+        return "";
     }
 
     @Override
     int getFluffLength() {
-	return 16;
+        return 16;
     }
 
     @Override
@@ -212,44 +214,44 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     @Override
     int getTotalLength(ModExporter out) {
-	int len = super.getTotalLength(out);
-	if (shouldExportGRUP()) {
-	    len += getGRUPAppend().getTotalLength(out);
-	}
-	return len;
+        int len = super.getTotalLength(out);
+        if (shouldExportGRUP()) {
+            len += getGRUPAppend().getTotalLength(out);
+        }
+        return len;
     }
 
     @Override
     int getSizeLength() {
-	return 4;
+        return 4;
     }
 
     @Override
     void export(ModExporter out) throws IOException {
-	out.setSourceMod(srcMod);
-	out.setSourceMajor(this);
-	super.export(out);
-	if (isValid()) {
-	    out.write(majorFlags.export(), 4);
-	    ID.export(out);
-	    out.write(revision, 4);
-	    out.write(formVersion, 2);
-	    out.write(version, 2);
+        out.setSourceMod(srcMod);
+        out.setSourceMajor(this);
+        super.export(out);
+        if (isValid()) {
+            out.write(majorFlags.export(), 4);
+            ID.export(out);
+            out.write(revision, 4);
+            out.write(formVersion, 2);
+            out.write(version, 2);
 
-            if (!this.get(MajorFlags.Deleted) && !SPGlobal.forceValidateMode){
+            if (!this.get(MajorFlags.Deleted) || SPGlobal.forceValidateMode) {
                 subRecords.export(out);
             }
-	    if (SPGlobal.deleteAfterExport) {
-		// Save EDID for record validation tests
-		SubRecord edid = subRecords.get("EDID");
-		subRecords = new SubRecordsDerived(subRecords.getPrototype());
-		subRecords.add(edid);
-	    }
+            if (SPGlobal.deleteAfterExport) {
+                // Save EDID for record validation tests
+                SubRecord edid = subRecords.get("EDID");
+                subRecords = new SubRecordsDerived(subRecords.getPrototype());
+                subRecords.add(edid);
+            }
 
-	    if (shouldExportGRUP()) {
-		getGRUPAppend().export(out);
-	    }
-	}
+            if (shouldExportGRUP()) {
+                getGRUPAppend().export(out);
+            }
+        }
     }
 
     // Get/set methods
@@ -263,11 +265,11 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @param edid The string to have the EDID set to.
      */
     final public void setEDID(String edid) {
-	if (SPGlobal.getGlobalPatch().equals(srcMod)) {
-	    edid = Consistency.edidFilter(edid);
-	    Consistency.syncIDwithEDID(edid, this);
-	    subRecords.getSubString("EDID").setString(edid);
-	}
+        if (SPGlobal.getGlobalPatch().equals(srcMod)) {
+            edid = Consistency.edidFilter(edid);
+            Consistency.syncIDwithEDID(edid, this);
+            subRecords.getSubString("EDID").setString(edid);
+        }
     }
 
     /**
@@ -275,7 +277,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The current EDID string.
      */
     final public String getEDID() {
-	return subRecords.getSubString("EDID").print();
+        return subRecords.getSubString("EDID").print();
     }
 
     /**
@@ -285,7 +287,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @param in The FormID to assign to this Major Record.
      */
     public void setForm(FormID in) {
-	ID = in;
+        ID = in;
     }
 
     /**
@@ -295,7 +297,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The FormID object of the Major Record.
      */
     public FormID getForm() {
-	return ID;
+        return ID;
     }
 
     /**
@@ -303,11 +305,11 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The FormID string of the Major Record.
      */
     public String getFormStr() {
-	return ID.getFormStr();
+        return ID.getFormStr();
     }
 
     String getFormArrayStr(Boolean master) {
-	return ID.getArrayStr(master);
+        return ID.getArrayStr(master);
     }
 
     /**
@@ -315,7 +317,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return The name of the mod from which this Major Record originates.
      */
     public ModListing getFormMaster() {
-	return ID.getMaster();
+        return ID.getMaster();
     }
 
     /**
@@ -323,51 +325,155 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public enum MajorFlags {
 
-	/**
-	 *
-	 */
-	Deleted(5),
-	/**
-	 *
-	 */
-	RelatedToShields(6),
-	/**
-	 *
-	 */
-	HiddenFromLocalMap(9),
-	/**
-	 *
-	 */
-	QuestItemPersistentRef(10),
-	/**
-	 *
-	 */
-	InitiallyDisabled(11),
-	/**
-	 *
-	 */
-	Ignored(12),
-	/**
-	 *
-	 */
-	VisibleWhenDistant(15),
-	/**
-	 *
-	 */
-	DangerousOffLimits(17),
-	/**
-	 *
-	 */
-	Compressed(18),
-	/**
-	 *
-	 */
-	CantWait(19);
-	int value;
+        /**
+         * TES4: is esm
+         */
+        ESM(0),
+        /**
+         *
+         */
+        Unknown2(1),
+        /**
+         * ARMO: non-playable
+         */
+        NonPlayable(2),
+        /**
+         *
+         */
+        Unknown4(3),
+        /**
+         *
+         */
+        Unknown5(4),
+        /**
+         * Record is deleted; User Deleted Record, a dirty edit
+         */
+        Deleted(5),
+        /**
+         * ACTI: Has Tree LOD 
+         * REGN: Border Region 
+         * STAT: Has Tree LOD 
+         * REFR: Hidden From Local Map
+         */
+        RelatedToShields(6),
+        /**
+         * TES4: Localized
+         * PHZD: Turn Off Fire
+         * SHOU: Treat Spells as Powers
+         * STAT: Add-on LOD Object
+         */
+        Localized(7),
+        /**
+         * ACTI: Must Update Anims
+         * REFR: Inaccessible
+         * REFR for LIGH: Doesn't light water
+         */
+        Inaccessible(8),
+        /**
+         * ACTI: Local Map - Turns Flag Off, therefore it is Hidden
+         * REFR: MotionBlurCastsShadows
+         */
+        HiddenFromLocalMap(9),
+        /**
+         * LSCR: Displays in Main Menu
+         */
+        QuestItemPersistentRef(10),
+        /**
+         *
+         */
+        InitiallyDisabled(11),
+        /**
+         *
+         */
+        Ignored(12),
+        /**
+         *
+         */
+        ActorChanged(13),
+        /**
+         *
+         */
+        Unknown15(14),
+        /**
+         * STAT: Has Distant LOD
+         */
+        VisibleWhenDistant(15),
+        /**
+         * ACTI: Random Animation Start
+         * REFR light: Never fades
+         */
+        RandomAnimationStart(16),
+        /**
+         * ACTI: Dangerous
+         * REFR light: Doesn't light landscape
+         * SLGM: Can hold NPC's soul
+         * STAT: Use High-Detail LOD Texture
+         */
+        DangerousOffLimits(17),
+        /**
+         *
+         */
+        Compressed(18),
+        /**
+         * STAT: Has Currents
+         */
+        CantWait(19),
+        /**
+        * ACTI: Ignore Object Interaction
+        */
+        IgnoreObjectInteraction(20),
+        /**
+         * 
+         */
+        UsedinMemoryChangedForm(21),
+        /**
+         * 
+         */
+        Unknown23(22),
+        /**
+         * ACTI: Is Marker
+         */
+        IsMarker(23),
+        /*
+         * 
+         */
+        Unknown25(24),
+        /**
+         * ACTI: Obstacle
+         * REFR: No AI Acquire
+         */
+        Obstacle(25),
+        /**
+         * ACTI: Filter
+         */
+        NavMeshFilter(26),
+        /**
+         * ACTI: Bounding Box
+         */
+        NavMeshBoundingBox(27),
+        /**
+         * STAT: Show in World Map 
+         */
+        MustExitToTalk(28),
+        /**
+         * ACTI: Child Can Use
+         * REFR: Don't Havok Settle
+         */
+        ChildCanUse(29),
+        /**
+         * ACTI: GROUND
+         * REFR: NoRespawn
+         */
+        NavMeshGround(30),
+        /**
+         * REFR: MultiBound
+         */
+        MultiBound(31);
+        int value;
 
-	MajorFlags(int value) {
-	    this.value = value;
-	}
+        MajorFlags(int value) {
+            this.value = value;
+        }
     }
 
     /**
@@ -376,7 +482,7 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @param on
      */
     public void set(MajorFlags flag, Boolean on) {
-	majorFlags.set(flag.value, on);
+        majorFlags.set(flag.value, on);
     }
 
     /**
@@ -385,14 +491,14 @@ public abstract class MajorRecord extends Record implements Serializable {
      * @return
      */
     public boolean get(MajorFlags flag) {
-	return majorFlags.get(flag.value);
+        return majorFlags.get(flag.value);
     }
 
     GRUP getGRUPAppend() {
-	return null;
+        return null;
     }
 
     boolean shouldExportGRUP() {
-	return false;
+        return false;
     }
 }

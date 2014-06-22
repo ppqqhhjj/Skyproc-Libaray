@@ -130,7 +130,7 @@ public class QUST extends MajorRecordNamed {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(new QUSTScriptFragments()), "EDID");
+	    after(new ScriptPackage(), "EDID"); //new QUSTScriptFragments()), "EDID");
 	    reposition("FULL");
 	    add(new DNAM());
 	    add(SubString.getNew("ENAM", false));
