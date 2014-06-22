@@ -227,4 +227,23 @@ public class BodyTemplate extends SubShell {
         main.valid = true;
         return main.armorType;
     }
+    
+    void makeBod2(MajorRecord owner) {
+        BodyTemplateMain main = getMain();
+        if(main.isBODT()){
+            if (main.flags.get(GeneralFlags.NonPlayable.value)){
+                owner.set(MajorRecord.MajorFlags.NonPlayable, true);
+            }
+            BodyTemplateMain bod2 = (BodyTemplateMain) subRecords.get("BOD2");
+            bod2.bodyParts = main.bodyParts;
+            bod2.armorType = main.armorType;
+            if(bod2.armorType == null){
+                bod2.armorType = ArmorType.CLOTHING;
+            }
+            bod2.valid = main.valid;
+            subRecords.remove("BODT");
+            subRecords.add(new BodyTemplateMain("BODT") );
+        }
+    }
+
 }

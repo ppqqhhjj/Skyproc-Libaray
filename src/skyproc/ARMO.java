@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 import lev.LImport;
-import lev.LOutFile;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -424,5 +423,28 @@ public class ARMO extends MajorRecordDescription {
      */
     public boolean isTemplated() {
 	return !getTemplate().isNull();
+    }
+    
+    /**
+     *
+     * @return BAMT FormID
+     */
+    public FormID GetAlternateBlockMaterial() {
+        return subRecords.getSubForm("BAMT").getForm();
+    }
+    
+    /**
+     * 
+     * @param materialFormID 
+     */
+    public void SetAlternateBlockMaterial(FormID materialFormID) {
+        subRecords.setSubForm("BAMT", materialFormID);
+    }
+    
+    /**
+     * Changes BODT to BOD2 if present and sets armor to non-playable if needed
+     */
+    public void UpdateBodyTemplate(){
+        getBodyTemplate().makeBod2(this);
     }
 }
