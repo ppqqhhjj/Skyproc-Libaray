@@ -13,6 +13,8 @@ import lev.LOutFile;
 import lev.LFlags;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
+import skyproc.genenums.Skill;
+import skyproc.genenums.SoundVolume;
 
 /**
  * Weapon Records
@@ -56,7 +58,7 @@ public class WEAP extends MajorRecordDescription {
 	    add(new DATA());
 	    add(new DNAM());
 	    add(new CRDT());
-	    add(new SubData("VNAM"));
+	    add(new SubInt("VNAM", 4));
 	    add(new SubForm("CNAM"));
 	}
     };
@@ -78,7 +80,8 @@ public class WEAP extends MajorRecordDescription {
 	byte[] unknown5;
 	LFlags flags2 = new LFlags(4);
 	byte[] unknown6;
-	LFlags flags3 = new LFlags(4);
+	//LFlags flags3 = new LFlags(4);
+        int skill;
 	byte[] unknown7;
 	byte[] resist;
 	byte[] unknown8;
@@ -107,7 +110,8 @@ public class WEAP extends MajorRecordDescription {
 	    out.write(unknown5, 4);
 	    out.write(flags2.export());
 	    out.write(unknown6, 24);
-	    out.write(flags3.export());
+	    //out.write(flags3.export());
+            out.write(skill, 4);
 	    out.write(unknown7, 16);
 	    out.write(resist, 4);
 	    out.write(unknown8, 4);
@@ -133,7 +137,8 @@ public class WEAP extends MajorRecordDescription {
 	    unknown5 = in.extract(4);
 	    flags2.set(in.extract(4));
 	    unknown6 = in.extract(24);
-	    flags3.set(in.extract(4));
+//	    flags3.set(in.extract(4));
+            skill = in.extractInt(4);
 	    unknown7 = in.extract(16);
 	    resist = in.extract(4);
 	    unknown8 = in.extract(4);
@@ -190,6 +195,14 @@ public class WEAP extends MajorRecordDescription {
 	ArrayList<String> getTypes() {
 	    return Record.getTypeList("DNAM");
 	}
+        
+        public Skill getSkill(){
+            return Skill.value(skill);
+        }
+        
+        public void setSkill(Skill skill) {
+            this.skill = Skill.value(skill);
+        }
     }
 
     static final class DATA extends SubRecord {
@@ -611,7 +624,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     *
+     * Field TNAM - Attack Fail Sound
      * @param id
      */
     public void setSwingSound(FormID id) {
@@ -619,7 +632,7 @@ public class WEAP extends MajorRecordDescription {
     }
 
     /**
-     *
+     * Field TNAM - Attack Fail Sound
      * @return
      */
     public FormID getSwingSound() {
@@ -882,6 +895,38 @@ public class WEAP extends MajorRecordDescription {
      */
     public boolean get(WeaponFlag flag) {
 	return getDNAM().get(flag);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public Skill getSkill(){
+        return getDNAM().getSkill();
+    }
+    
+    /**
+     *
+     * @param skill
+     */
+    public void setSkill(Skill skill){
+        getDNAM().setSkill(skill);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public SoundVolume getDetectionSoundLevel() {
+        return SoundVolume.values()[subRecords.getSubInt("VNAM").get()];
+    }
+    
+    /**
+     *
+     * @param level
+     */
+    public void setDetectionSoundLevel(SoundVolume level){
+        subRecords.setSubInt("VNAM", level.ordinal());
     }
 
     /**

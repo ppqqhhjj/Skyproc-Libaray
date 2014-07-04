@@ -333,19 +333,19 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
         }
 
         int getSkillBase(Skill in) {
-            return skills[in.ordinal()];
+            return skills[Skill.NPC_Value(in)];
         }
 
         int getSkillMod(Skill in) {
-            return skills[in.ordinal() + 18];
+            return skills[Skill.NPC_Value(in) + 18];
         }
 
         void setSkillBase(Skill in, int to) {
-            skills[in.ordinal()] = (byte) to;
+            skills[Skill.NPC_Value(in)] = (byte) to;
         }
 
         void setSkillMod(Skill in, int to) {
-            skills[in.ordinal() + 18] = (byte) to;
+            skills[Skill.NPC_Value(in) + 18] = (byte) to;
         }
 
         @Override
@@ -362,7 +362,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             if (logging()) {
                 logMod(srcMod, "", "DNAM record: ");
                 String temp;
-                for (Skill s : Skill.values()) {
+                for (Skill s : Skill.NPC_Skills()) {
                     temp = " BASE:" + getSkillBase(s) + ", MOD:" + getSkillMod(s);
                     logMod(srcMod, "", "  " + s.toString() + Ln.spaceLeft(false, 15 - s.toString().length() + temp.length(), ' ', temp));
                 }
@@ -1350,7 +1350,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
                     getACBS().healthOffset = otherNPC.getACBS().healthOffset;
                     getACBS().magickaOffset = otherNPC.getACBS().magickaOffset;
                     getACBS().fatigueOffset = otherNPC.getACBS().fatigueOffset;
-                    for (Skill s : Skill.values()) {
+                    for (Skill s : Skill.NPC_Skills()) {
                         this.set(s, otherNPC.get(s));
                         this.setMod(s, otherNPC.getMod(s));
                     }

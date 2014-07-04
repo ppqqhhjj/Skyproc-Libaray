@@ -10,6 +10,12 @@ package skyproc.genenums;
 public enum Skill {
     // DO NOT change the order of these.
 
+    Unknown1,
+    Unknown2,
+    Unknown3,
+    Unknown4,
+    Unknown5,
+    Unknown6,
     /**
      * One-handed skill of the NPC.
      */
@@ -81,5 +87,69 @@ public enum Skill {
     /**
      * Enchanting skill of the NPC.
      */
-    ENCHANTING
+    ENCHANTING,
+    /**
+     * None placeholder.
+     */
+    NONE;
+    
+    /**
+     *
+     * @param in
+     * @return
+     */
+    static public int value(Skill in) {
+	if (in == NONE) {
+	    return -1;
+	} else {
+	    return in.ordinal();
+	}
+    }
+    
+    /**
+     *
+     * @param in
+     * @return
+     */
+    static public Skill value(int in) {
+	if (in < Skill.values().length - 2 && in >= 0) {
+	    return Skill.values()[in];
+	} else {
+	    return NONE;
+	}
+    }
+    
+    /**
+     *
+     * @param in
+     * @return
+     */
+    static public int NPC_Value(Skill in) {
+	if ((in.ordinal() > Skill.Unknown6.ordinal()) && (in.ordinal() < Skill.NONE.ordinal())) {
+	    return in.ordinal();
+	} else {
+	    throw new IndexOutOfBoundsException("Skill " + in.name() + " is not an NPC_ DNAM entry");
+	}
+    }
+    
+    /**
+     *
+     * @param in
+     * @return
+     */
+    static public Skill NPC_Value(int in) {
+	if ((in >= 0) && (in < 18)) {
+	    return Skill.values()[in+Skill.Unknown6.ordinal()];
+	} else {
+	    throw new IndexOutOfBoundsException(in + " is not an index of a skill in NPC_ DNAM");
+	}
+    }
+    
+    static public Skill[] NPC_Skills(){
+        Skill[] values = Skill.values();
+        int len = Skill.ENCHANTING.ordinal() - Skill.ONEHANDED.ordinal();
+        Skill[] ret = new Skill[(len)];
+        System.arraycopy(values, Skill.ONEHANDED.ordinal(), ret, 0, (Skill.ENCHANTING.ordinal() - Skill.ONEHANDED.ordinal()));
+        return ret;
+    }
 }
