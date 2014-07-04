@@ -126,7 +126,7 @@ public enum Skill {
      */
     static public int NPC_Value(Skill in) {
 	if ((in.ordinal() > Skill.Unknown6.ordinal()) && (in.ordinal() < Skill.NONE.ordinal())) {
-	    return in.ordinal();
+	    return in.ordinal() - Skill.ONEHANDED.ordinal();
 	} else {
 	    throw new IndexOutOfBoundsException("Skill " + in.name() + " is not an NPC_ DNAM entry");
 	}
@@ -139,7 +139,7 @@ public enum Skill {
      */
     static public Skill NPC_Value(int in) {
 	if ((in >= 0) && (in < 18)) {
-	    return Skill.values()[in+Skill.Unknown6.ordinal()];
+	    return Skill.values()[in+Skill.ONEHANDED.ordinal()];
 	} else {
 	    throw new IndexOutOfBoundsException(in + " is not an index of a skill in NPC_ DNAM");
 	}
@@ -147,9 +147,9 @@ public enum Skill {
     
     static public Skill[] NPC_Skills(){
         Skill[] values = Skill.values();
-        int len = Skill.ENCHANTING.ordinal() - Skill.ONEHANDED.ordinal();
+        int len = Skill.NONE.ordinal() - Skill.ONEHANDED.ordinal();
         Skill[] ret = new Skill[(len)];
-        System.arraycopy(values, Skill.ONEHANDED.ordinal(), ret, 0, (Skill.ENCHANTING.ordinal() - Skill.ONEHANDED.ordinal()));
+        System.arraycopy(values, Skill.ONEHANDED.ordinal(), ret, 0, (Skill.NONE.ordinal() - Skill.ONEHANDED.ordinal()));
         return ret;
     }
 }
