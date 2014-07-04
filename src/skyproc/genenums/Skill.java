@@ -112,7 +112,7 @@ public enum Skill {
      * @return
      */
     static public Skill value(int in) {
-	if (in < Skill.values().length - 2 && in >= 0) {
+	if (in < Skill.NONE.ordinal() && in >= 0) {
 	    return Skill.values()[in];
 	} else {
 	    return NONE;
