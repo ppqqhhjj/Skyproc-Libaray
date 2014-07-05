@@ -533,7 +533,8 @@ public class SUMGUI extends JFrame {
 
 	SPGlobal.setStreamMode(!arguments.contains("-NOSTREAM"));
 
-	boss = !arguments.contains("-NOBOSS");
+//	boss = !arguments.contains("-NOBOSS");
+        boss = arguments.contains("-BOSS");
 
 	if (SPGlobal.logging()) {
 	    if (justPatching) {

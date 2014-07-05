@@ -122,7 +122,7 @@ public class WEAP extends MajorRecordDescription {
 	    out.write(unknown6, 12);
 	    //out.write(flags3.export());
             out.write(skill, 4);
-	    out.write(unknown7, 16);
+	    out.write(unknown7, 8);
 	    out.write(resist, 4);
 	    out.write(unknown8, 4);
 	    out.write(stagger);
