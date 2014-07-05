@@ -154,7 +154,7 @@ public class WEAP extends MajorRecordDescription {
 	    unknown6 = in.extract(12);
 //	    flags3.set(in.extract(4));
             skill = in.extractInt(4);
-	    unknown7 = in.extract(16);
+	    unknown7 = in.extract(8);
 	    resist = in.extract(4);
 	    unknown8 = in.extract(4);
 	    stagger = in.extractFloat();
