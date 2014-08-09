@@ -1027,4 +1027,36 @@ public class WEAP extends MajorRecordDescription {
     public void setFirstPersonModel(FormID id) {
 	subRecords.setSubForm("WNAM", id);
     }
+    
+    /**
+     *
+     * @return 
+     */
+    public FormID getBlockBashImpactDataSet() {
+        return subRecords.getSubForm("BIDS").getForm();
+    }
+    
+    /**
+     *
+     * @param id
+     */
+    public void setBlockBashImpactDataSet(FormID id) {
+        subRecords.setSubForm("BIDS", id);
+    }
+    
+    /**
+     *
+     * @return 
+     */
+    public FormID getAlternateBlockMaterial() {
+        return subRecords.getSubForm("BAMT").getForm();
+    }
+    
+    /**
+     *
+     * @param id
+     */
+    public void setAlternateBlockMaterial(FormID id) {
+        subRecords.setSubForm("BAMT", id);
+    }
 }
