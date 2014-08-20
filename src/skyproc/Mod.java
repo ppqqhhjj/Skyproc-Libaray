@@ -929,6 +929,15 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public GRUP<NPC_> getNPCs() {
         return GRUPs.get(GRUP_TYPE.NPC_);
     }
+    
+    /**
+     * 
+     * @see GRUP
+     * @return The GRUP containing Quest records.
+     */
+    public GRUP<QUST> getQuests() {
+        return GRUPs.get(GRUP_TYPE.QUST);
+    }
 
     /**
      *
