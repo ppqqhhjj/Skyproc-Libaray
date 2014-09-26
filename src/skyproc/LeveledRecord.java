@@ -72,7 +72,11 @@ abstract public class LeveledRecord extends MajorRecord implements Iterable<Leve
 	/**
 	 *
 	 */
-	UseAll;
+	UseAll,
+        /**
+         * 
+         */
+        SpecialLoot;
     }
 
     /**
