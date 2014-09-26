@@ -49,14 +49,14 @@ public class NiftyFunc {
      * have it attach the desired script.
      */
     public static SPEL genScriptAttachingSpel(ScriptRef script, String uniqueID) {
-	String name = "SP_" + uniqueID + "_" + script.name.data + "_attacher";
-	MGEF mgef = new MGEF(name + "_MGEF", name + "_MGEF");
-	mgef.getScriptPackage().addScript(script);
-	mgef.set(MGEF.SpellEffectFlag.HideInUI, true);
-	SPEL spel = new SPEL(name + "_SPEL");
-	spel.setSpellType(SPEL.SPELType.Ability);
-	spel.addMagicEffect(mgef);
-	return spel;
+        String name = "SP_" + uniqueID + "_" + script.name.data + "_attacher";
+        MGEF mgef = new MGEF(name + "_MGEF", name + "_MGEF");
+        mgef.getScriptPackage().addScript(script);
+        mgef.set(MGEF.SpellEffectFlag.HideInUI, true);
+        SPEL spel = new SPEL(name + "_SPEL");
+        spel.setSpellType(SPEL.SPELType.Ability);
+        spel.addMagicEffect(mgef);
+        return spel;
     }
 
     /**
@@ -79,10 +79,10 @@ public class NiftyFunc {
      * has a script attachment racial spell.
      */
     public static RACE genSafeScriptAttachingRace(ScriptRef script, RACE raceToDup, String uniqueID) {
-	SPEL attachmentSpel = genScriptAttachingSpel(script, uniqueID);
-	RACE attachmentRace = (RACE) SPGlobal.getGlobalPatch().makeCopy(raceToDup);
-	attachmentRace.addSpell(attachmentSpel.getForm());
-	return attachmentRace;
+        SPEL attachmentSpel = genScriptAttachingSpel(script, uniqueID);
+        RACE attachmentRace = (RACE) SPGlobal.getGlobalPatch().makeCopy(raceToDup);
+        attachmentRace.addSpell(attachmentSpel.getForm());
+        return attachmentRace;
     }
 
     /**
@@ -95,7 +95,7 @@ public class NiftyFunc {
      * @return LVLN that it is templated to, or null.
      */
     public static LVLN isTemplatedToLList(FormID npc, NPC_.TemplateFlag... templateFlagsToCheck) {
-	return isTemplatedToLList(npc, templateFlagsToCheck, 0);
+        return isTemplatedToLList(npc, templateFlagsToCheck, 0);
     }
 
     /**
@@ -108,40 +108,40 @@ public class NiftyFunc {
      * @return LVLN that it is templated to, or null.
      */
     public static LVLN isTemplatedToLList(NPC_ npc, NPC_.TemplateFlag... templateFlagsToCheck) {
-	return isTemplatedToLList(npc.getForm(), templateFlagsToCheck);
+        return isTemplatedToLList(npc.getForm(), templateFlagsToCheck);
     }
 
     static LVLN isTemplatedToLList(FormID npc, NPC_.TemplateFlag[] templateFlagsToCheck, int depth) {
-	if (depth > 100) {
-	    return null; // avoid circular template overflows
-	}
+        if (depth > 100) {
+            return null; // avoid circular template overflows
+        }
 
-	if (templateFlagsToCheck.length == 0) {
-	    templateFlagsToCheck = NPC_.TemplateFlag.values();
-	}
+        if (templateFlagsToCheck.length == 0) {
+            templateFlagsToCheck = NPC_.TemplateFlag.values();
+        }
 
-	NPC_ npcSrc = (NPC_) SPDatabase.getMajor(npc, GRUP_TYPE.NPC_);
+        NPC_ npcSrc = (NPC_) SPDatabase.getMajor(npc, GRUP_TYPE.NPC_);
 
-	if (npcSrc != null && !npcSrc.getTemplate().equals(FormID.NULL)) {
-	    boolean hasTargetTemplate = false;
-	    for (NPC_.TemplateFlag flag : templateFlagsToCheck) {
-		if (npcSrc.get(flag)) {
-		    hasTargetTemplate = true;
-		    break;
-		}
-	    }
-	    if (!hasTargetTemplate) {
-		return null;
-	    }
+        if (npcSrc != null && !npcSrc.getTemplate().equals(FormID.NULL)) {
+            boolean hasTargetTemplate = false;
+            for (NPC_.TemplateFlag flag : templateFlagsToCheck) {
+                if (npcSrc.get(flag)) {
+                    hasTargetTemplate = true;
+                    break;
+                }
+            }
+            if (!hasTargetTemplate) {
+                return null;
+            }
 
-	    NPC_ templateN = (NPC_) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.NPC_);
-	    if (templateN != null) { // If template is an NPC, recursively chain the check
-		return isTemplatedToLList(templateN.getForm(), templateFlagsToCheck, depth + 1);
-	    } else {
-		return (LVLN) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.LVLN);
-	    }
-	}
-	return null;
+            NPC_ templateN = (NPC_) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.NPC_);
+            if (templateN != null) { // If template is an NPC, recursively chain the check
+                return isTemplatedToLList(templateN.getForm(), templateFlagsToCheck, depth + 1);
+            } else {
+                return (LVLN) SPDatabase.getMajor(npcSrc.getTemplate(), GRUP_TYPE.LVLN);
+            }
+        }
+        return null;
     }
 
     /**
@@ -152,10 +152,10 @@ public class NiftyFunc {
      * @return
      */
     public static QUST makeScriptQuest(ScriptRef script) {
-	QUST quest = new QUST(script.getName() + "_qust");
-	quest.getScriptPackage().addScript(script);
-	quest.setName(script.getName() + " Quest");
-	return quest;
+        QUST quest = new QUST(script.getName() + "_qust");
+        quest.getScriptPackage().addScript(script);
+        quest.setName(script.getName() + " Quest");
+        return quest;
     }
 
     /**
@@ -175,28 +175,28 @@ public class NiftyFunc {
      * @throws InterruptedException
      */
     public static void allocateMoreMemory(String startingMem, String maxMem, String jarPath, String... args) throws IOException, InterruptedException {
-	String[] argsInternal = new String[args.length + 5];
-	argsInternal[0] = "java";
-	argsInternal[1] = "-jar";
-	argsInternal[2] = "-Xms" + startingMem;
-	argsInternal[3] = "-Xmx" + maxMem;
-	argsInternal[4] = jarPath;
-	for (int i = 5; i < args.length + 5; i++) {
-	    argsInternal[i] = args[i - 5];
-	}
-	ProcessBuilder proc = new ProcessBuilder(argsInternal);
-	Process start = proc.start();
-	InputStream shellIn = start.getInputStream();
-	int exitStatus = start.waitFor();
-	String response = Ln.convertStreamToStr(shellIn);
-	if (exitStatus != 0) {
-	    JOptionPane.showMessageDialog(null, "Error allocating " + maxMem + " of memory:\n"
-		    + response
-		    + "\nMemory defaulted to lowest levels.  Please lower your\n"
-		    + "allocated memory in Other Settings and start the program again.");
-	} else {
-	    System.exit(0);
-	}
+        String[] argsInternal = new String[args.length + 5];
+        argsInternal[0] = "java";
+        argsInternal[1] = "-jar";
+        argsInternal[2] = "-Xms" + startingMem;
+        argsInternal[3] = "-Xmx" + maxMem;
+        argsInternal[4] = jarPath;
+        for (int i = 5; i < args.length + 5; i++) {
+            argsInternal[i] = args[i - 5];
+        }
+        ProcessBuilder proc = new ProcessBuilder(argsInternal);
+        Process start = proc.start();
+        InputStream shellIn = start.getInputStream();
+        int exitStatus = start.waitFor();
+        String response = Ln.convertStreamToStr(shellIn);
+        if (exitStatus != 0) {
+            JOptionPane.showMessageDialog(null, "Error allocating " + maxMem + " of memory:\n"
+                    + response
+                    + "\nMemory defaulted to lowest levels.  Please lower your\n"
+                    + "allocated memory in Other Settings and start the program again.");
+        } else {
+            System.exit(0);
+        }
     }
 
     /**
@@ -206,10 +206,10 @@ public class NiftyFunc {
      * @return
      */
     public static String EDIDtrimmer(String origEDID) {
-	origEDID = origEDID.replaceAll(" ", "");
-	origEDID = origEDID.replaceAll(":", "_");
-	origEDID = origEDID.replaceAll("-", "_");
-	return origEDID;
+        origEDID = origEDID.replaceAll(" ", "");
+        origEDID = origEDID.replaceAll(":", "_");
+        origEDID = origEDID.replaceAll("-", "_");
+        return origEDID;
     }
 
     /**
@@ -220,26 +220,26 @@ public class NiftyFunc {
      * @return
      */
     public static int versionToNum(String version) {
-	String tmp = "";
-	for (int i = 0; i < version.length(); i++) {
-	    if (Character.isDigit(version.charAt(i))
-		    || version.charAt(i) == '.') {
-		tmp += version.charAt(i);
-	    } else {
-		break;
-	    }
-	}
-	version = tmp;
-	String[] split = version.split("\\.");
-	int out = 0;
-	for (int i = 0; i < split.length && i < 4; i++) {
-	    int next = Integer.valueOf(split[i]) * 1000000;
-	    if (i != 0) {
-		next /= Math.pow(100, i);
-	    }
-	    out += next;
-	}
-	return out;
+        String tmp = "";
+        for (int i = 0; i < version.length(); i++) {
+            if (Character.isDigit(version.charAt(i))
+                    || version.charAt(i) == '.') {
+                tmp += version.charAt(i);
+            } else {
+                break;
+            }
+        }
+        version = tmp;
+        String[] split = version.split("\\.");
+        int out = 0;
+        for (int i = 0; i < split.length && i < 4; i++) {
+            int next = Integer.valueOf(split[i]) * 1000000;
+            if (i != 0) {
+                next /= Math.pow(100, i);
+            }
+            out += next;
+        }
+        return out;
     }
 
     /**
@@ -257,7 +257,7 @@ public class NiftyFunc {
      * @return True if the file had correct record lengths.
      */
     public static boolean validateRecordLengths(File testFile, int numErrorsToPrint) {
-	return validateRecordLengths(testFile.getPath(), numErrorsToPrint);
+        return validateRecordLengths(testFile.getPath(), numErrorsToPrint);
     }
 
     /**
@@ -275,118 +275,123 @@ public class NiftyFunc {
      * @return True if the file had correct record lengths.
      */
     public static boolean validateRecordLengths(String testFilePath, int numErrorsToPrint) {
-	boolean correct = true;
-	int numErrors = 0;
-	ArrayList<String> skip = new ArrayList<>(Arrays.asList(validationSkip));
-	try {
-	    File file = new File(testFilePath);
-	    if (file.isFile()) {
-		SPGlobal.log("Validate", "Target file exists: " + file);
-	    } else {
-		SPGlobal.log("Validate", "Target file does NOT exist: " + file);
-	    }
-	    LInChannel input = new LInChannel(testFilePath);
+        boolean correct = true;
+        int numErrors = 0;
+        ArrayList<String> skip = new ArrayList<>(Arrays.asList(validationSkip));
+        try {
+            File file = new File(testFilePath);
+            if (file.isFile()) {
+                SPGlobal.log("Validate", "Target file exists: " + file);
+            } else {
+                SPGlobal.log("Validate", "Target file does NOT exist: " + file);
+            }
+            LInChannel input = new LInChannel(testFilePath);
 
-	    correct = testHeaderLength(input);
+            correct = testHeaderLength(input);
 
-	    String inputStr;
-	    //Test GRUPs
-	    String majorRecordType = "NULL";
-	    int grupLength = 0;
-	    long grupPos = input.pos();
-	    int length;
-	    long start = 0;
-	    String EDID = "";
-	    Map<Integer, String> formids = new HashMap<>();
-	    Map<Integer, String> dupIds = new HashMap<>();
-	    while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
+            String inputStr;
+            //Test GRUPs
+            String majorRecordType = "NULL";
+            int grupLength = 0;
+            long grupPos = input.pos();
+            int length;
+            long start = 0;
+            String EDID = "";
+            Map<Integer, String> formids = new HashMap<>();
+            Map<Integer, String> dupIds = new HashMap<>();
+            while (input.available() >= 4 && (numErrors < numErrorsToPrint || numErrorsToPrint == 0)) {
 
-		inputStr = input.extractString(0, 4);
-		if (inputStr.equals("GRUP")) {
-		    long inputPos = input.pos();
-		    if (inputPos - grupPos - 4 != grupLength) {
-			SPGlobal.logError(recordLengths, "GRUP " + majorRecordType + " is wrong. (" + Ln.prettyPrintHex(grupPos) + ")");
-			numErrors++;
-			correct = false;
-		    }
-		    grupPos = input.pos() - 4;
-		    grupLength = input.extractInt(0, 4);
-		    majorRecordType = input.extractString(0, 4);
-		    if (skip.contains(majorRecordType)) {
-			input.skip(grupLength - 12);
-		    } else {
-			input.skip(12);
-		    }
-		} else if (inputStr.equals(majorRecordType)) {
-		    start = input.pos() - 4;
-		    length = input.extractInt(0, 4);
-		    input.skip(4);
-		    int formID = input.extractInt(4);
-		    input.skip(8);
-		    int edidLength = input.extractInt(4, 2);
-		    EDID = input.extractString(0, edidLength - 1);
-		    input.skip(length - 6 - EDID.length());
-		    if (formids.containsKey(formID)) {
-			dupIds.put(formID, EDID);
-		    } else {
-			formids.put(formID, EDID);
-		    }
-		} else {
-		    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
-		    numErrors++;
-		    correct = false;
-		}
-	    }
+                inputStr = input.extractString(0, 4);
+                if (inputStr.equals("GRUP")) {
+                    long inputPos = input.pos();
+                    if (inputPos - grupPos - 4 != grupLength) {
+                        SPGlobal.logError(recordLengths, "GRUP " + majorRecordType + " is wrong. (" + Ln.prettyPrintHex(grupPos) + ")");
+                        numErrors++;
+                        correct = false;
+                    }
+                    grupPos = input.pos() - 4;
+                    grupLength = input.extractInt(0, 4);
+                    majorRecordType = input.extractString(0, 4);
+                    if (skip.contains(majorRecordType)) {
+                        input.skip(grupLength - 12);
+                    } else {
+                        input.skip(12);
+                    }
+                } else if (inputStr.equals(majorRecordType)) {
+                    start = input.pos() - 4;
+                    length = input.extractInt(0, 4);
+                    input.skip(4);
+                    int formID = input.extractInt(4);
+                    input.skip(8); 
+                    String subRecordType = input.extractString(0, 4);
+                    if (subRecordType.equalsIgnoreCase("EDID")) {
+                        int edidLength = input.extractInt(0, 2);
+                        EDID = input.extractString(0, edidLength - 1);
+                        input.skip(length - 6 - EDID.length()); // 4 from subrecord type 'EDID' + 2 from length of EDID subrecord
+                        if (formids.containsKey(formID)) {
+                            dupIds.put(formID, EDID);
+                        } else {
+                            formids.put(formID, EDID);
+                        }
+                    } else {
+                        EDID = "No EDID subrecord";
+                        input.skip(length - 4); // 4 from subrecord type
+                    }
+                } else {
+                    SPGlobal.logError(recordLengths, "Major Record: " + majorRecordType + " | " + EDID + " is wrong. (" + Ln.prettyPrintHex(start) + ")");
+                    numErrors++;
+                    correct = false;
+                }
+            }
 
-	    if (!dupIds.isEmpty()) {
-		SPGlobal.logError(recordLengths, "Duplicate FormIDs: ");
-		for (int id : dupIds.keySet()) {
-		    SPGlobal.logError(recordLengths, Ln.printHex(id) + ", EDIDS: " + dupIds.get(id) + ", and " + formids.get(id));
-		}
-		correct = false;
-	    }
+            if (!dupIds.isEmpty()) {
+                SPGlobal.logError(recordLengths, "Duplicate FormIDs: ");
+                for (int id : dupIds.keySet()) {
+                    SPGlobal.logError(recordLengths, Ln.printHex(id) + ", EDIDS: " + dupIds.get(id) + ", and " + formids.get(id));
+                }
+                correct = false;
+            }
 
-	    input.close();
+            input.close();
 
-	} catch (FileNotFoundException ex) {
-	    SPGlobal.logError(recordLengths, "File could not be found.");
-	    SPGlobal.logException(ex);
-	} catch (IOException ex) {
-	    SPGlobal.logError(recordLengths, "File I/O error.");
-	    SPGlobal.logException(ex);
-	}
+        } catch (FileNotFoundException ex) {
+            SPGlobal.logError(recordLengths, "File could not be found.");
+            SPGlobal.logException(ex);
+        } catch (IOException ex) {
+            SPGlobal.logError(recordLengths, "File I/O error.");
+            SPGlobal.logException(ex);
+        }
 
-
-	if (correct) {
-	    SPGlobal.log(recordLengths, "Validated.");
-	} else {
-	    SPGlobal.logError(recordLengths, "NOT Validated.");
-	}
-	return correct;
+        if (correct) {
+            SPGlobal.log(recordLengths, "Validated.");
+        } else {
+            SPGlobal.logError(recordLengths, "NOT Validated.");
+        }
+        return correct;
     }
 
     static boolean testHeaderLength(LInChannel input) throws IOException {
-	// Check header
-	String inputStr;
-	boolean correct = true;
-	int length = input.extractInt(4, 4);
-	input.skip(length + 16);
-	if (input.available() > 0) {
-	    // Next should be a GRUP
-	    inputStr = input.extractString(0, 4);
-	    if (!"GRUP".equals(inputStr)) {
-		SPGlobal.logError("Mod Header", "Header length is wrong.");
-		correct = false;
-	    }
-	    input.skip(-4);
-	} else if (input.available() < 0) {
-	    SPGlobal.logError("Mod Header", "Header length is wrong.");
-	    correct = false;
-	} else {
-	    SPGlobal.logError("Mod Header", "File header was correct, but there were no GRUPS.  Validated.");
-	    return true;
-	}
-	return correct;
+        // Check header
+        String inputStr;
+        boolean correct = true;
+        int length = input.extractInt(4, 4);
+        input.skip(length + 16);
+        if (input.available() > 0) {
+            // Next should be a GRUP
+            inputStr = input.extractString(0, 4);
+            if (!"GRUP".equals(inputStr)) {
+                SPGlobal.logError("Mod Header", "Header length is wrong.");
+                correct = false;
+            }
+            input.skip(-4);
+        } else if (input.available() < 0) {
+            SPGlobal.logError("Mod Header", "Header length is wrong.");
+            correct = false;
+        } else {
+            SPGlobal.logError("Mod Header", "File header was correct, but there were no GRUPS.  Validated.");
+            return true;
+        }
+        return correct;
     }
 
     /**
@@ -398,28 +403,28 @@ public class NiftyFunc {
      * @return
      */
     static public boolean startProcess(File directory, String... args) {
-	try {
-	    ProcessBuilder proc = new ProcessBuilder(args);
-	    if (directory != null) {
-		proc.directory(directory);
-	    }
-	    Process start = proc.start();
-	    InputStream shellIn = start.getInputStream();
-	    int exitStatus = start.waitFor();
-	    String response = Ln.convertStreamToStr(shellIn);
-	    if (exitStatus != 0) {
-		String tmp = "";
-		for (String arg : args) {
-		    tmp += " " + arg;
-		}
-		SPGlobal.logError("StartProcess", "Process with args " + tmp + " Failed to run: " + response);
-		return false;
-	    }
-	} catch (IOException | InterruptedException ex) {
-	    SPGlobal.logException(ex);
-	    return false;
-	}
-	return true;
+        try {
+            ProcessBuilder proc = new ProcessBuilder(args);
+            if (directory != null) {
+                proc.directory(directory);
+            }
+            Process start = proc.start();
+            InputStream shellIn = start.getInputStream();
+            int exitStatus = start.waitFor();
+            String response = Ln.convertStreamToStr(shellIn);
+            if (exitStatus != 0) {
+                String tmp = "";
+                for (String arg : args) {
+                    tmp += " " + arg;
+                }
+                SPGlobal.logError("StartProcess", "Process with args " + tmp + " Failed to run: " + response);
+                return false;
+            }
+        } catch (IOException | InterruptedException ex) {
+            SPGlobal.logException(ex);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -429,7 +434,7 @@ public class NiftyFunc {
      * @return
      */
     static public boolean startProcess(String... args) {
-	return startProcess(null, args);
+        return startProcess(null, args);
     }
 
     /**
@@ -439,13 +444,13 @@ public class NiftyFunc {
      * @return
      */
     static public String trimToFour(String in) {
-	if (in.length() > 4) {
-	    return in.substring(0, 3);
-	} else if (in.length() < 4) {
-	    return Ln.spaceRight(4, '_', in);
-	} else {
-	    return in;
-	}
+        if (in.length() > 4) {
+            return in.substring(0, 3);
+        } else if (in.length() < 4) {
+            return Ln.spaceRight(4, '_', in);
+        } else {
+            return in;
+        }
     }
 
     /**
@@ -457,53 +462,53 @@ public class NiftyFunc {
      * @return Number of targets replaced
      */
     static public int replaceAll(ArrayList<FormID> src, FormID target, FormID... with) {
-	ArrayList<FormID> tmp = new ArrayList<>(src);
-	int numChanges = 0;
-	for (int i = tmp.size() - 1; i >= 0; i--) {
-	    if (tmp.get(i).equals(target)) {
-		numChanges++;
-		src.remove(i);
-		for (FormID id : with) {
-		    src.add(i, id);
-		}
-	    }
-	}
-	return numChanges;
+        ArrayList<FormID> tmp = new ArrayList<>(src);
+        int numChanges = 0;
+        for (int i = tmp.size() - 1; i >= 0; i--) {
+            if (tmp.get(i).equals(target)) {
+                numChanges++;
+                src.remove(i);
+                for (FormID id : with) {
+                    src.add(i, id);
+                }
+            }
+        }
+        return numChanges;
     }
 
     static public int replaceAll(ArrayList<FormID> src, FormID target, ArrayList<FormID> with) {
-	return replaceAll(src, target, with.toArray(new FormID[0]));
+        return replaceAll(src, target, with.toArray(new FormID[0]));
     }
 
     static public Map<FormID, Integer> replaceIDs(ArrayList<FormID> src, Map<FormID, FormID> replacements) {
-	Map<FormID, Integer> out = new HashMap<>(replacements.size());
-	for (FormID id : replacements.keySet()) {
-	    out.put(id, 0);
-	}
-	for (FormID id : src) {
-	    FormID replace = replacements.get(id);
-	    if (replace != null) {
-		out.put(replace, out.get(replace) + 1);
-		id.setTo(id);
-	    }
-	}
-	return out;
+        Map<FormID, Integer> out = new HashMap<>(replacements.size());
+        for (FormID id : replacements.keySet()) {
+            out.put(id, 0);
+        }
+        for (FormID id : src) {
+            FormID replace = replacements.get(id);
+            if (replace != null) {
+                out.put(replace, out.get(replace) + 1);
+                id.setTo(id);
+            }
+        }
+        return out;
     }
 
     static public Map<FormID, Integer> replaceMajors(ArrayList<FormID> src, Map<FormID, MajorRecord> replacements) {
-	Map<FormID, Integer> out = new HashMap<>(replacements.size());
-	for (FormID id : replacements.keySet()) {
-	    out.put(id, new Integer(0));
-	}
-	for (FormID id : src) {
-	    MajorRecord replace = replacements.get(id);
-	    if (replace != null) {
-		Integer i = out.get(id);
-		out.put(id, i + 1);
-		id.setTo(id);
-	    }
-	}
-	return out;
+        Map<FormID, Integer> out = new HashMap<>(replacements.size());
+        for (FormID id : replacements.keySet()) {
+            out.put(id, new Integer(0));
+        }
+        for (FormID id : src) {
+            MajorRecord replace = replacements.get(id);
+            if (replace != null) {
+                Integer i = out.get(id);
+                out.put(id, i + 1);
+                id.setTo(id);
+            }
+        }
+        return out;
     }
 
     /**
@@ -513,7 +518,7 @@ public class NiftyFunc {
      * @throws IOException
      */
     public static void setupMissingPatchFiles(ArrayList<Mod> mods) throws IOException {
-	setupMissingPatchFiles(mods.toArray(new Mod[0]));
+        setupMissingPatchFiles(mods.toArray(new Mod[0]));
     }
 
     /**
@@ -523,15 +528,15 @@ public class NiftyFunc {
      * @throws IOException
      */
     public static void setupMissingPatchFiles(Mod... mods) throws IOException {
-	// Handle non-existant patchers
-	for (Mod newPatcher : mods) {
-	    File path = new File(SPGlobal.pathToData + newPatcher.getName());
-	    // Export tmp patch as a placeholder
-	    if (!path.isFile()) {
-		BufferedWriter placeholder = new BufferedWriter(new FileWriter(SPGlobal.pathToData + newPatcher.getName()));
-		placeholder.close();
-	    }
-	}
+        // Handle non-existant patchers
+        for (Mod newPatcher : mods) {
+            File path = new File(SPGlobal.pathToData + newPatcher.getName());
+            // Export tmp patch as a placeholder
+            if (!path.isFile()) {
+                BufferedWriter placeholder = new BufferedWriter(new FileWriter(SPGlobal.pathToData + newPatcher.getName()));
+                placeholder.close();
+            }
+        }
     }
 
     /**
@@ -542,33 +547,33 @@ public class NiftyFunc {
      * @throws IOException
      */
     public static void modifyPluginsTxt(ArrayList<Mod> add, ArrayList<Mod> remove) throws IOException {
-	//Read in plugins.txt
-	ArrayList<String> pluginsLines = Ln.loadFileToStrings(SPGlobal.getPluginsTxt(), false);
+        //Read in plugins.txt
+        ArrayList<String> pluginsLines = Ln.loadFileToStrings(SPGlobal.getPluginsTxt(), false);
 
-	// Remove unwanted mods
-	if (remove != null) {
-	    for (Mod r : remove) {
-		Ln.removeIgnoreCase(pluginsLines, r.getName());
-	    }
-	}
+        // Remove unwanted mods
+        if (remove != null) {
+            for (Mod r : remove) {
+                Ln.removeIgnoreCase(pluginsLines, r.getName());
+            }
+        }
 
-	// Find missing lines on plugins.txt
-	if (add != null) {
-	    for (Mod newPatcher : add) {
-		if (!Ln.containsEqualsIgnoreCase(pluginsLines, newPatcher.getName())) {
-		    // Add listing to plugins.txt
-		    pluginsLines.add(newPatcher.getName());
-		}
-	    }
-	}
+        // Find missing lines on plugins.txt
+        if (add != null) {
+            for (Mod newPatcher : add) {
+                if (!Ln.containsEqualsIgnoreCase(pluginsLines, newPatcher.getName())) {
+                    // Add listing to plugins.txt
+                    pluginsLines.add(newPatcher.getName());
+                }
+            }
+        }
 
-	// Write out new plugins.txt
-	BufferedWriter pluginsOut = new BufferedWriter(new FileWriter(SPGlobal.getPluginsTxt()));
-	for (String line : pluginsLines) {
-	    pluginsOut.write(line + "\n");
-	}
+        // Write out new plugins.txt
+        BufferedWriter pluginsOut = new BufferedWriter(new FileWriter(SPGlobal.getPluginsTxt()));
+        for (String line : pluginsLines) {
+            pluginsOut.write(line + "\n");
+        }
 
-	pluginsOut.close();
+        pluginsOut.close();
     }
 
     /**
@@ -578,9 +583,9 @@ public class NiftyFunc {
      * @throws IOException
      */
     public static void modifyPluginsTxt(Mod add) throws IOException {
-	ArrayList<Mod> addL = new ArrayList<>(1);
-	addL.add(add);
-	modifyPluginsTxt(addL, null);
+        ArrayList<Mod> addL = new ArrayList<>(1);
+        addL.add(add);
+        modifyPluginsTxt(addL, null);
     }
 
     /**
@@ -590,49 +595,49 @@ public class NiftyFunc {
      * @param errorMessages
      */
     public static void runBOSS(boolean errorMessages) {
-	SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
 
-	    @Override
-	    public void run() {
-		SUMGUI.progress.setStatusNumbered("Running BOSS");
-	    }
-	});
-	// Find BOSS
-	SPGlobal.logMain("BOSS", "Looking for BOSS.");
-	int response = JOptionPane.YES_OPTION;
-	String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
-	File bossExe = new File(".");
-	if (bossPath != null) {
-	    bossExe = new File(bossPath + "\\BOSS.exe");
-	}
-	if (!bossExe.isFile()) {
-	    try {
-		bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
-	    } catch (IOException ex) {
-		SPGlobal.logException(ex);
-	    }
-	}
+            @Override
+            public void run() {
+                SUMGUI.progress.setStatusNumbered("Running BOSS");
+            }
+        });
+        // Find BOSS
+        SPGlobal.logMain("BOSS", "Looking for BOSS.");
+        int response = JOptionPane.YES_OPTION;
+        String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
+        File bossExe = new File(".");
+        if (bossPath != null) {
+            bossExe = new File(bossPath + "\\BOSS.exe");
+        }
+        if (!bossExe.isFile()) {
+            try {
+                bossExe = Ln.manualFindFile("BOSS.exe", new File(SPGlobal.pathToInternalFiles + "BOSS location"));
+            } catch (IOException ex) {
+                SPGlobal.logException(ex);
+            }
+        }
 
-	// Run BOSS
-	if (bossExe != null && bossExe.isFile()) {
-	    SPGlobal.logMain("BOSS", "Running BOSS.");
-	    if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
-		SPGlobal.logMain("BOSS", "BOSS failed to run.");
-		if (errorMessages) {
-		    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
-		}
-	    }
-	} else if (errorMessages) {
-	    SPGlobal.logMain("BOSS", "BOSS could not be found.");
-	    response = JOptionPane.showConfirmDialog(null, "BOSS could not be located.\n"
-		    + "It is highly recommended you download BOSS so that it can be used.\n\n"
-		    + "Do you want to continue patching without BOSS?", "Cannot locate BOSS", JOptionPane.YES_NO_OPTION);
-	}
-	if (response == JOptionPane.NO_OPTION) {
-	    SPGlobal.logMain("BOSS", "Exiting program due to BOSS failure.");
-	    SUMGUI.exitProgram(false, true);
-	}
-	SPGlobal.logMain("BOSS", "BOSS complete.");
+        // Run BOSS
+        if (bossExe != null && bossExe.isFile()) {
+            SPGlobal.logMain("BOSS", "Running BOSS.");
+            if (!NiftyFunc.startProcess(bossExe.getParentFile(), new String[]{bossExe.getPath(), "-s", "-U", "-g", "Skyrim"})) {
+                SPGlobal.logMain("BOSS", "BOSS failed to run.");
+                if (errorMessages) {
+                    response = JOptionPane.showConfirmDialog(null, "BOSS failed to run. Do you want to continue?", "BOSS failed", JOptionPane.YES_NO_OPTION);
+                }
+            }
+        } else if (errorMessages) {
+            SPGlobal.logMain("BOSS", "BOSS could not be found.");
+            response = JOptionPane.showConfirmDialog(null, "BOSS could not be located.\n"
+                    + "It is highly recommended you download BOSS so that it can be used.\n\n"
+                    + "Do you want to continue patching without BOSS?", "Cannot locate BOSS", JOptionPane.YES_NO_OPTION);
+        }
+        if (response == JOptionPane.NO_OPTION) {
+            SPGlobal.logMain("BOSS", "Exiting program due to BOSS failure.");
+            SUMGUI.exitProgram(false, true);
+        }
+        SPGlobal.logMain("BOSS", "BOSS complete.");
     }
 
     /**
@@ -645,30 +650,30 @@ public class NiftyFunc {
      * @return
      */
     public static ArrayList<MajorRecord> deepCopySubRecords(MajorRecord in, ModListing targetMod) {
-	ArrayList<MajorRecord> out = new ArrayList<>();
-	ArrayList<FormID> allIDs = in.allFormIDs();
-	allIDs.remove(in.getForm());
-	for (FormID id : allIDs) {
-	    MajorRecord m = SPDatabase.getMajor(id);
-	    if (m != null
-		    && (id.getMaster().equals(targetMod) // From target mod
-		    || !SPDatabase.getMod(id.getMaster()).contains(id) // Or missing "insert"
-		    )) {
-		MajorRecord copy = deepSubrecordCopyDB.get(id);
-		if (copy == null) {
-		    String edid = m.getEDID();
-		    if (!m.getType().equals("KYWD") && !m.getType().equals("GMST")) {
-			edid += "_deepCopy";
-		    }
-		    copy = m.copy(edid);
-		    deepSubrecordCopyDB.put(id, copy);
-		    deepCopySubRecords(copy, targetMod);
-		}
-		id.setTo(copy.getForm());
-		out.add(copy);
-	    }
-	}
-	return out;
+        ArrayList<MajorRecord> out = new ArrayList<>();
+        ArrayList<FormID> allIDs = in.allFormIDs();
+        allIDs.remove(in.getForm());
+        for (FormID id : allIDs) {
+            MajorRecord m = SPDatabase.getMajor(id);
+            if (m != null
+                    && (id.getMaster().equals(targetMod) // From target mod
+                    || !SPDatabase.getMod(id.getMaster()).contains(id) // Or missing "insert"
+                    )) {
+                MajorRecord copy = deepSubrecordCopyDB.get(id);
+                if (copy == null) {
+                    String edid = m.getEDID();
+                    if (!m.getType().equals("KYWD") && !m.getType().equals("GMST")) {
+                        edid += "_deepCopy";
+                    }
+                    copy = m.copy(edid);
+                    deepSubrecordCopyDB.put(id, copy);
+                    deepCopySubRecords(copy, targetMod);
+                }
+                id.setTo(copy.getForm());
+                out.add(copy);
+            }
+        }
+        return out;
     }
 
     /**
@@ -682,18 +687,18 @@ public class NiftyFunc {
      * @return A record from global patch that is unique.
      */
     public static MajorRecord mergeDuplicate(MajorRecord in) {
-	GRUP_TYPE g = GRUP_TYPE.valueOf(in.getType());
-	ArrayList<MajorRecord> grup = new ArrayList<>(SPGlobal.getGlobalPatch().getGRUPs().get(g).getRecords());
-	grup.remove(in);
-	for (MajorRecord existing : grup) {
-	    if (in.deepEquals(existing)) {
-		SPGlobal.getGlobalPatch().remove(in.getForm());
-		if (SPGlobal.logging()) {
-		    SPGlobal.log("NiftyFunc", in + " duplicate of " + existing);
-		}
-		return existing;
-	    }
-	}
-	return in;
+        GRUP_TYPE g = GRUP_TYPE.valueOf(in.getType());
+        ArrayList<MajorRecord> grup = new ArrayList<>(SPGlobal.getGlobalPatch().getGRUPs().get(g).getRecords());
+        grup.remove(in);
+        for (MajorRecord existing : grup) {
+            if (in.deepEquals(existing)) {
+                SPGlobal.getGlobalPatch().remove(in.getForm());
+                if (SPGlobal.logging()) {
+                    SPGlobal.log("NiftyFunc", in + " duplicate of " + existing);
+                }
+                return existing;
+            }
+        }
+        return in;
     }
 }
