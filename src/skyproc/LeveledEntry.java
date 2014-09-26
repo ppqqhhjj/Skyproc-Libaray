@@ -156,7 +156,7 @@ public class LeveledEntry extends SubShell {
     
     /**
      *
-     * @return
+     * @return condition of the entry, 1.0 is 100% health and 1.1 = 110%
      */
     public float getItemCondition() {
         Owner own = (Owner) subRecords.get("COED");
@@ -165,7 +165,7 @@ public class LeveledEntry extends SubShell {
 
     /**
      *
-     * @param itemCondition
+     * @param itemCondition the health of the item where 1.0 = 100% and 1.1 = 110%
      */
     public void setItemCondition(float itemCondition) {
         Owner own = (Owner) subRecords.get("COED");
