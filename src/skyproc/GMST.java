@@ -12194,6 +12194,17 @@ public class GMST extends MajorRecord {
 	originateFromPatch(setting.toString());
 	setData(b);
     }
+    
+    /**
+     *
+     * @param setting
+     * @param b
+     */
+    public GMST(String setting, Boolean b) {
+        this();
+	originateFromPatch(setting);
+	setData(b);
+    }
 
     /**
      *
@@ -12209,6 +12220,17 @@ public class GMST extends MajorRecord {
     /**
      *
      * @param setting
+     * @param s
+     */
+    public GMST(String setting, String s) {
+	this();
+	originateFromPatch(setting);
+	setData(s);
+    }
+    
+    /**
+     *
+     * @param setting
      * @param i
      */
     public GMST(IntSetting setting, int i) {
@@ -12220,11 +12242,33 @@ public class GMST extends MajorRecord {
     /**
      *
      * @param setting
+     * @param i
+     */
+    public GMST(String setting, int i) {
+	this();
+	originateFromPatch(setting);
+	setData(i);
+    }
+    
+    /**
+     *
+     * @param setting
      * @param f
      */
     public GMST(FloatSetting setting, float f) {
 	this();
 	originateFromPatch(setting.toString());
+	setData(f);
+    }
+    
+    /**
+     *
+     * @param setting
+     * @param f
+     */
+    public GMST(String setting, float f) {
+	this();
+	originateFromPatch(setting);
 	setData(f);
     }
 
@@ -12269,10 +12313,13 @@ public class GMST extends MajorRecord {
 	}
 	switch (getEDID().charAt(0)) {
 	    case 'b':
+            case 'B':
 		return GMSTType.Bool;
 	    case 'i':
+            case 'I':
 		return GMSTType.Int;
 	    case 'f':
+            case 'F':
 		return GMSTType.Float;
 	    case 's':
 	    case 'S':
