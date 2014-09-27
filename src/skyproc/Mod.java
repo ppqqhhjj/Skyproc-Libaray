@@ -893,7 +893,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @param in the description.
      */
     public void setDescription(String in) {
-        tes.setAuthor(in);
+        tes.setDescription(in);
     }
     
     /**

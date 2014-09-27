@@ -160,7 +160,8 @@ public class LeveledEntry extends SubShell {
      */
     public float getItemCondition() {
         Owner own = (Owner) subRecords.get("COED");
-        return own.getItemCondition();
+        float cond = own.getItemCondition();
+        return (cond == 0.0f ? 1.0f : cond );
     }
 
     /**
