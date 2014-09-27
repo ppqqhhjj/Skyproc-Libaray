@@ -877,7 +877,34 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public void setAuthor(String in) {
         tes.setAuthor(in);
     }
+    
+    /**
+     * Sets the author name of the mod.
+     *
+     * @return The author of the mod
+     */
+    public String getAuthor() {
+        return tes.getAuthor();
+    }
 
+    /**
+     * Sets the description of the mod.
+     *
+     * @param in the description.
+     */
+    public void setDescription(String in) {
+        tes.setAuthor(in);
+    }
+    
+    /**
+     * Sets the description of the mod.
+     *
+     * @return The description of the mod
+     */
+    public String getDescription() {
+        return tes.getDescription();
+    }
+    
     void parseData(String type, LImport data) throws Exception {
         GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
     }
@@ -1441,6 +1468,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
         void setAuthor(String in) {
             subRecords.getSubString("CNAM").setString(in);
+        }
+        
+        String getAuthor() {
+            return subRecords.getSubString("CNAM").print();
+        }
+        
+        void setDescription(String in){
+            subRecords.getSubString("SNAM").setString(in);
+        }
+        
+        String getDescription(){
+            return subRecords.getSubString("SNAM").print();
         }
 
         @Override
