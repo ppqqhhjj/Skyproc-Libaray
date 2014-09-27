@@ -67,7 +67,8 @@ class Owner extends SubRecordTyped {
 
     @Override
     boolean isValid() {
-	return !owner.isNull();
+        // valid if it has an owner, or it has a global, or it has modified health
+	return (!owner.isNull() || (!isNPCOwner() && !global.isNull() ) || itemCondition != 0.0  );
     }
 
     @Override
