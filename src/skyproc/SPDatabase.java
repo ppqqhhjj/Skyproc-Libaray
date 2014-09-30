@@ -123,7 +123,7 @@ public class SPDatabase implements Iterable<Mod> {
     static public ArrayList<Mod> getImportedMods() {
 	ArrayList<Mod> out = new ArrayList<>(activePlugins.size());
 	for (ModListing m : activePlugins) {
-	    Mod mod = SPGlobal.getDB().getMod(m);
+	    Mod mod = SPDatabase.getMod(m);
 	    if (mod != null) {
 		out.add(mod);
 	    }
@@ -140,11 +140,11 @@ public class SPDatabase implements Iterable<Mod> {
      */
     static public void exportModList(String path) throws IOException {
 	File modListTmp = new File(SPGlobal.pathToInternalFiles + "Last Modlist Temp.txt");
-	BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp));
-	for (String s : getModListDates()) {
-	    writer.write(s);
-	}
-	writer.close();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(modListTmp))) {
+            for (String s : getModListDates()) {
+                writer.write(s);
+            }
+        }
 
 	File modList = new File(path);
 	if (modList.isFile()) {
@@ -165,7 +165,7 @@ public class SPDatabase implements Iterable<Mod> {
 		File modFile = new File(SPGlobal.pathToData + m.toString());
 		out.add(m.toString() + dateDelim + modFile.lastModified());
 	    }
-	} catch (Exception e) {
+	} catch (IOException e) {
 	}
 	return out;
     }

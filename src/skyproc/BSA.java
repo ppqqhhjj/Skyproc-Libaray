@@ -347,7 +347,7 @@ public class BSA {
                     line1 = true;
                     resources.addAll(0, processINIline(line));
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 SPGlobal.logException(e);
             }
 
@@ -519,11 +519,7 @@ public class BSA {
      */
     public boolean hasFolder(String folderPath) {
         filePath = filePath.toUpperCase();
-        if (folders.containsKey(folderPath)) {
-            return true;
-        } else {
-            return false;
-        }
+        return folders.containsKey(folderPath);
     }
 
     /**
@@ -735,10 +731,7 @@ public class BSA {
             return false;
         }
         final BSA other = (BSA) obj;
-        if (!Objects.equals(this.filePath, other.filePath)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.filePath, other.filePath);
     }
 
     /**

@@ -670,8 +670,8 @@ public class SPGlobal {
 
     static void reset() {
 	SPDatabase.activePlugins.clear();
-	getDB().addedPlugins.clear();
-	getDB().modLookup.clear();
+	SPDatabase.addedPlugins.clear();
+	SPDatabase.modLookup.clear();
 	FormID.allIDs.clear();
 	Consistency.clear();
     }

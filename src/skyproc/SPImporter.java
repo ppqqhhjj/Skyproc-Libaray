@@ -466,14 +466,14 @@ public class SPImporter {
                 } catch (BadMod ex) {
                     SPGlobal.logError(header, "Skipping a bad mod: " + mod);
                     SPGlobal.logError(header, "  " + ex.toString());
-                } catch (Exception e) {
-                    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
-                    SPGlobal.logError(header, "  Message: " + e);
-                    SPGlobal.logError(header, "  Stack: ");
-                    for (StackTraceElement s : e.getStackTrace()) {
-                        SPGlobal.logError(header, "  " + s.toString());
-                    }
-                }
+                } //catch (Exception e) {
+//                    SPGlobal.logError(header, "Exception occured while importing mod : " + mod);
+//                    SPGlobal.logError(header, "  Message: " + e);
+//                    SPGlobal.logError(header, "  Stack: ");
+//                    for (StackTraceElement s : e.getStackTrace()) {
+//                        SPGlobal.logError(header, "  " + s.toString());
+//                    }
+//                }
             } else {
                 SPProgressBarPlug.setStatusNumbered(genStatus(mods.get(i)) + ": Skipped!");
             }
@@ -553,7 +553,7 @@ public class SPImporter {
             }
 
             if (addtoDb) {
-                SPGlobal.getDB().add(plugin);
+                SPDatabase.add(plugin);
             }
 
             if (!SPGlobal.streamMode) {
@@ -600,7 +600,7 @@ public class SPImporter {
                 RecordFileChannel input = new RecordFileChannel(SPGlobal.pathToData + master.print());
                 ModListing tempListing = new ModListing(master.print());
                 Mod masterMod = new Mod(tempListing, extractHeaderInfo(input));
-                if (SPGlobal.getDB().getMod(tempListing) == null && SPGlobal.shouldImport(master)) {
+                if (SPDatabase.getMod(tempListing) == null && SPGlobal.shouldImport(master)) {
                     missingMasters.add(master);
                 }
             } catch (Exception exception) {
@@ -884,7 +884,7 @@ public class SPImporter {
         for (Files f : SubStringPointer.Files.values()) {
             try {
                 importStringLocations(mod, f);
-            } catch (Exception e) {
+            } catch (IOException | DataFormatException e) {
                 SPGlobal.logError(header, "Error Importing Strings " + f + ": " + e);
             }
         }
@@ -922,7 +922,7 @@ public class SPImporter {
                 recordsSize = numRecords * 8 + 8;
                 //Skip bytes 4-8
                 in.skip(4);
-            }
+            } // check for ini BSA with file?
 
             // Found strings, read entry pairs
             if (in != null) {
