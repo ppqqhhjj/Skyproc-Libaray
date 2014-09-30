@@ -26,6 +26,7 @@ public class BSA {
     static ArrayList<BSA> resourceLoadOrder;
     static Map<ModListing, BSA> pluginLoadOrder = new TreeMap<>();
     static boolean pluginsLoaded = false;
+    static boolean overlapDeleted = false;
     static String header = "BSA";
     String filePath;
     int offset;
@@ -621,10 +622,7 @@ public class BSA {
      * @param types Types to load in.
      * @return List of all BSA files that contain any of the filetypes.
      */
-    public static ArrayList<BSA> loadInBSAs(FileType... types) {
-        loadResourceLoadOrder();
-        loadPluginLoadOrder();
-        deleteOverlap();
+    public static ArrayList<BSA> loadInBSAs(FileType... types) {        
         ArrayList<BSA> out = new ArrayList<>();
         Iterator<BSA> bsas = iterator();
         while (bsas.hasNext()) {
@@ -643,9 +641,14 @@ public class BSA {
     }
 
     static void deleteOverlap() {
+        if (!overlapDeleted) {
+            return;
+        }
         for (BSA b : pluginLoadOrder.values()) {
             resourceLoadOrder.remove(b);
         }
+        overlapDeleted = true;
+
     }
 
     static Iterator<BSA> iterator() {
@@ -653,6 +656,10 @@ public class BSA {
     }
 
     static ArrayList<BSA> getBSAs() {
+        loadResourceLoadOrder();
+        loadPluginLoadOrder();
+        deleteOverlap();
+        
         ArrayList<BSA> order = new ArrayList<>(resourceLoadOrder.size() + pluginLoadOrder.size());
         order.addAll(resourceLoadOrder);
         order.addAll(pluginLoadOrder.values());
@@ -815,7 +822,19 @@ public class BSA {
         /**
          *
          */
-        CTL
+        CTL,
+        /**
+         *
+         */
+        STRINGS,
+        /**
+         *
+         */
+        ILSTRINGS,
+        /**
+         *
+         */
+        DILSTRINGS
     }
 
     /**
