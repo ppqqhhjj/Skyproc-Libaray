@@ -333,7 +333,10 @@ public class SPGlobal {
 		    SPGlobal.logError(header, "Can't locate local app data folder.");
 		    appDataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
 			    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
+                    SPGlobal.logMain(header, "Plugin.txt returned: ", appDataFolder, "     Shaving off the \\Plugins.txt.");
 		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
+                    // remove \\Skyrim so it can be added again below. Yep
+                    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
 		} else {
 		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
 		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
