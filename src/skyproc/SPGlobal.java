@@ -1,6 +1,7 @@
 package skyproc;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import lev.Ln;
 import lev.debug.LDebug;
@@ -326,7 +327,14 @@ public class SPGlobal {
 	    // If XP
 	    if (appDataFolder == null) {
 		SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
-		appDataFolder = System.getenv("APPDATA");
+//		appDataFolder = System.getenv("APPDATA");
+                // get registry appdata local from registry
+                try {
+                    appDataFolder = WinRegistry.WinRegistry.readString(WinRegistry.WinRegistry.HKEY_CURRENT_USER, 
+                            "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Local AppData");
+                } catch (        IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
+                    SPGlobal.logError(header, "Can't read from registry.\n"+ ex);
+                }
 
 		// If Messed Up
 		if (appDataFolder == null) {
@@ -338,11 +346,11 @@ public class SPGlobal {
                     // remove \\Skyrim so it can be added again below. Yep
                     appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
 		} else {
-		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
-		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
-		    SPGlobal.logMain(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
-		    appDataFolder = appDataFolder + "\\Local Settings\\Application Data";
-		    SPGlobal.logMain(header, "path now reads: ", appDataFolder);
+//		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
+//                    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
+//		    SPGlobal.logMain(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
+//		    appDataFolder = appDataFolder + "\\Local Settings\\Application Data";
+		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder);
 		}
 	    }
 	    appDataFolder += "\\Skyrim";
