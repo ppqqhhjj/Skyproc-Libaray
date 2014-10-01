@@ -665,6 +665,20 @@ public class BSA {
         order.addAll(pluginLoadOrder.values());
         return order;
     }
+    
+    static ArrayList<BSA> getResourceBSAa(){
+        loadResourceLoadOrder();
+        ArrayList<BSA> resources = new ArrayList<>(resourceLoadOrder.size());
+        resources.addAll(resourceLoadOrder);
+        return resources;
+    }
+    
+    static ArrayList<BSA> getPluginBSAs(){
+        loadPluginLoadOrder();
+        ArrayList<BSA> resources = new ArrayList<>(pluginLoadOrder.size());
+        resources.addAll(pluginLoadOrder.values());
+        return resources;
+    }
 
     /**
      * Returns BSA object associated with modlisting, or null if there is none.
@@ -822,19 +836,7 @@ public class BSA {
         /**
          *
          */
-        CTL,
-        /**
-         *
-         */
-        STRINGS,
-        /**
-         *
-         */
-        ILSTRINGS,
-        /**
-         *
-         */
-        DILSTRINGS
+        CTL
     }
 
     /**

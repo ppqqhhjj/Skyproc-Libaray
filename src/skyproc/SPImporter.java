@@ -22,7 +22,6 @@ public class SPImporter {
 
     private static String header = "Importer";
     private static String debugPath = "Mod Import/";
-    private static Map<SubStringPointer.Files, ArrayList<BSA>> stringsBSAs = new HashMap<>();
 
     /**
      * A placeholder constructor not meant to be called.<br> An SPImporter
@@ -892,11 +891,6 @@ public class SPImporter {
     }
 
     static void importStringLocations(Mod plugin, SubStringPointer.Files file) throws FileNotFoundException, IOException, DataFormatException {
-        ArrayList<BSA> stringBSAs = stringsBSAs.get(file);
-        if (stringBSAs == null) {
-            stringBSAs = BSA.loadInBSAs(BSA.FileType.valueOf(file.name()));
-            stringsBSAs.put(file, stringBSAs);
-        }
         ArrayList<Language> languageList = new ArrayList<>();
         languageList.add(SPGlobal.language);
         languageList.addAll(Arrays.asList(Language.values()));
@@ -916,22 +910,24 @@ public class SPImporter {
                 numRecords = istream.extractInt(0, 4);
                 recordsSize = numRecords * 8 + 8;
                 in = new LShrinkArray(istream.extractByteBuffer(4, recordsSize));
-            } else if (BSA.hasBSA(plugin)) {
-                //In the plugin's BSA
-                BSA bsa = BSA.getBSA(plugin);
-                if (bsa != null) {
-                    bsa.loadFolders();
-                    if (bsa.hasFile(strings)) {
-
-                        in = bsa.getFile(strings);
-                        numRecords = in.extractInt(4);
-                        recordsSize = numRecords * 8 + 8;
-                        //Skip bytes 4-8
-                        in.skip(4);
-                    }
-                }
-            } else { // check for any BSA with strings file
-                for (BSA theBSA : stringBSAs) {
+//            } else if (BSA.hasBSA(plugin)) {
+//                //In the plugin's BSA
+//                BSA bsa = BSA.getBSA(plugin);
+//                if (bsa != null) {
+//                    bsa.loadFolders();
+//                    if (bsa.hasFile(strings)) {
+//
+//                        in = bsa.getFile(strings);
+//                        numRecords = in.extractInt(4);
+//                        recordsSize = numRecords * 8 + 8;
+//                        //Skip bytes 4-8
+//                        in.skip(4);
+//                    }
+//                }
+            } else {
+                //check for plugin loaded BSA has strings file
+                for (BSA theBSA : BSA.getPluginBSAs()) {
+                    theBSA.loadFolders();
                     if (!theBSA.hasFile(strings)) {
                         continue;
                     }
@@ -940,6 +936,22 @@ public class SPImporter {
                     recordsSize = numRecords * 8 + 8;
                     //Skip bytes 4-8
                     in.skip(4);
+                    break;
+                }
+                if (in == null) {
+                    // check for resource loaded BSA with strings file
+                    for (BSA theBSA : BSA.getResourceBSAa()) {
+                        theBSA.loadFolders();
+                        if (!theBSA.hasFile(strings)) {
+                            continue;
+                        }
+                        in = theBSA.getFile(strings);
+                        numRecords = in.extractInt(4);
+                        recordsSize = numRecords * 8 + 8;
+                        //Skip bytes 4-8
+                        in.skip(4);
+                        break;
+                    }
                 }
             }
             // Found strings, read entry pairs
