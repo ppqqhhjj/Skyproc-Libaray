@@ -7,6 +7,7 @@ package skyproc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
+import lev.LByteChannel;
 import lev.LImport;
 import lev.LOutFile;
 import lev.LFlags;
@@ -130,7 +131,7 @@ public class QUST extends MajorRecordNamed {
 
 	@Override
 	protected void addRecords() {
-	    after(new ScriptPackage(), "EDID"); //new QUSTScriptFragments()), "EDID");
+	    after(new ScriptPackage(new QUSTScriptFragments()), "EDID");
 	    reposition("FULL");
 	    add(new DNAM());
 	    add(SubString.getNew("ENAM", false));
@@ -839,12 +840,12 @@ public class QUST extends MajorRecordNamed {
 	    if (!valid) {
 		return 0;
 	    }
-	    int len = 3;
+	    int len = 3; // unknown + fragment count
 	    len += fragmentFile.getTotalLength(out);
 	    for (QUSTScriptFragment frag : questFragments) {
 		len += frag.getContentLength(out);
 	    }
-            len += 2;
+            len += 2; // alias count
             for (AliasScriptFragment frag : aliasFragments) {
 		len += frag.getContentLength(out);
 	    }
@@ -881,10 +882,10 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	void export(ModExporter out) throws IOException {
-	    out.write(questStage);
-            out.write(unknown1);
+	    out.write(questStage, 2);
+            out.write(unknown1, 2);
             out.write(questStageIndex);
-            out.write(unknown2);
+            out.write(unknown2, 1);
 	    scriptName.export(out);
 	    fragmentName.export(out);
 	}
@@ -898,6 +899,9 @@ public class QUST extends MajorRecordNamed {
     static class AliasScriptFragment {
 
 	byte[] object = new byte[8]; // VMAD property object. Need adjusting for formID etc
+        FormID object_FormID = FormID.NULL;
+        int object_alias = -1;
+        byte[] object_unused = new byte[2];
 	int version; // int16
         int format; // int16
         int scriptCount; // uint16
@@ -906,6 +910,21 @@ public class QUST extends MajorRecordNamed {
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    object = in.extract(8);
 	    version = in.extractInt(2);
+            format = in.extractInt(2);
+            LByteChannel objectChannel = new LByteChannel(object);
+            if(format == 1){
+                object_FormID = new FormID();
+                object_FormID.parseData(objectChannel, srcMod);
+                object_alias = objectChannel.extractInt(2);
+                object_unused = objectChannel.extract(2);
+            } else if (format == 2) {
+                object_unused = objectChannel.extract(2);
+                object_alias = objectChannel.extractInt(2);
+                object_FormID = new FormID();
+                object_FormID.parseData(objectChannel, srcMod);
+            } else {
+                throw new UnsupportedOperationException("Unsupported VMAD Object format: " + format);
+            }
             scriptCount = in.extractInt(2);
             for (int i = 0; i < scriptCount; i++) {
                 scripts.add(new ScriptRef(in, srcMod));
@@ -913,7 +932,16 @@ public class QUST extends MajorRecordNamed {
 	}
 
 	void export(ModExporter out) throws IOException {
-	    out.write(object);
+//	    out.write(object);
+            if (format == 1){
+                object_FormID.export(out);
+                out.write(object_alias, 2);
+                out.write(object_unused);
+            } else if (format == 2){
+                out.write(object_unused);
+                out.write(object_alias, 2);
+                object_FormID.export(out);
+            }
 	    out.write(version, 2);
             out.write(format, 2);
             out.write(scripts.size(), 2);
