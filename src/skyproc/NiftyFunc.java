@@ -19,6 +19,8 @@ import javax.swing.SwingUtilities;
 import lev.LInChannel;
 import lev.Ln;
 import skyproc.gui.SUMGUI;
+import com.sun.jna.platform.win32.Advapi32Util;
+import static com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE;
 
 /**
  * A class to hold many common/useful functions.
@@ -322,7 +324,7 @@ public class NiftyFunc {
                     length = input.extractInt(0, 4);
                     input.skip(4);
                     int formID = input.extractInt(4);
-                    input.skip(8); 
+                    input.skip(8);
                     String subRecordType = input.extractString(0, 4);
                     if (subRecordType.equalsIgnoreCase("EDID")) {
                         int edidLength = input.extractInt(0, 2);
@@ -605,7 +607,23 @@ public class NiftyFunc {
         // Find BOSS
         SPGlobal.logMain("BOSS", "Looking for BOSS.");
         int response = JOptionPane.YES_OPTION;
-        String bossPath = WinRegistry.WinRegistry.getRegistryEntry("BOSS", "Installed Path");
+
+        // removed winRegistry hack library so moved check here
+        boolean is64bit;
+        if (System.getProperty("os.name").contains("Windows")) {
+            is64bit = (System.getenv("ProgramFiles(x86)") != null);
+        } else {
+            is64bit = (System.getProperty("os.arch").indexOf("64") != -1);
+        }
+        String bossReg;
+        if (!is64bit) {
+            bossReg = "Software\\Boss";
+        } else {
+            bossReg = "Software\\Wow6432NodeBoss\\Boss";
+        }
+        String bossPath = Advapi32Util.registryGetStringValue(
+                HKEY_LOCAL_MACHINE, bossReg, "Installed Path");
+
         File bossExe = new File(".");
         if (bossPath != null) {
             bossExe = new File(bossPath + "\\BOSS.exe");

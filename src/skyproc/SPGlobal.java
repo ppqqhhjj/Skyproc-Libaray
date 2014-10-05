@@ -1,11 +1,12 @@
 package skyproc;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.gui.SUMGUI;
+import com.sun.jna.platform.win32.Advapi32Util;
+import static com.sun.jna.platform.win32.WinReg.HKEY_CURRENT_USER;
 
 /**
  * Global variables/settings of SkyProc.
@@ -329,13 +330,10 @@ public class SPGlobal {
 		SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
 //		appDataFolder = System.getenv("APPDATA");
                 // get registry appdata local from registry
-                try {
-                    appDataFolder = WinRegistry.WinRegistry.readString(WinRegistry.WinRegistry.HKEY_CURRENT_USER, 
-                            "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Local AppData");
-                } catch (        IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
-                    SPGlobal.logError(header, "Can't read from registry.\n"+ ex);
-                }
-
+               
+                appDataFolder = Advapi32Util.registryGetStringValue(
+                        HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Local AppData");
+                
 		// If Messed Up
 		if (appDataFolder == null) {
 		    SPGlobal.logError(header, "Can't locate local app data folder.");
