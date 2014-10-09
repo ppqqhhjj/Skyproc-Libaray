@@ -535,6 +535,10 @@ public class SUMGUI extends JFrame {
 
 //	boss = !arguments.contains("-NOBOSS");
         boss = arguments.contains("-BOSS");
+        
+        if (arguments.contains("-ALLMODSASMASTERS")){
+            SPGlobal.setAllModsAsMasters(true);
+        }
 
 	if (SPGlobal.logging()) {
 	    if (justPatching) {

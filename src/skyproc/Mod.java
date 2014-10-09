@@ -252,10 +252,10 @@ public class Mod implements Comparable, Iterable<GRUP> {
             for (GRUP_TYPE g : grup_types) {
                 GRUP grup = GRUPs.get(g);
                 if (grup != null) {
-                MajorRecord mr = (MajorRecord) grup.get(edid);
-                if (mr != null) {
-                    return mr;
-                }
+                    MajorRecord mr = (MajorRecord) grup.get(edid);
+                    if (mr != null) {
+                        return mr;
+                    }
                 }
             }
         }
@@ -678,31 +678,38 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
         // Add all mods that contained any of the FormIDs used.
         SPProgressBarPlug.setStatusNumbered("Adding Masters From Records");
-        Set<ModListing> addedMods = new HashSet<>();
-        for (FormID ID : allForms) {
-            if (!ID.isNull()) {
-                ModListing master = ID.getMaster();
-                if (!addedMods.contains(master)) {
-                    addMaster(master);
-                    addedMods.add(master);
+        if (SPGlobal.getAllModsAsMasters()) {
+            ArrayList<ModListing> addedMods = SPImporter.getActiveModList();
+            for (ModListing m : addedMods) {
+                addMaster(m);
+            }
+        } else {
+            Set<ModListing> addedMods = new HashSet<>();
+            for (FormID ID : allForms) {
+                if (!ID.isNull()) {
+                    ModListing master = ID.getMaster();
+                    if (!addedMods.contains(master)) {
+                        addMaster(master);
+                        addedMods.add(master);
+                    }
                 }
             }
-        }
-        SPProgressBarPlug.incrementBar();
+            SPProgressBarPlug.incrementBar();
 
 	// Go through each record, and add all mods that reference that record
-        // Just to symbolize that they "had part" in the patch
-        // And help encourage repatching when mods are removed.
-        SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
-        if (!SPGlobal.mergeMode) {
-            for (GRUP<MajorRecord> g : this) {
-                for (MajorRecord major : g) {
-                    FormID id = major.getForm();
-                    for (Mod mod : SPGlobal.getDB().getImportedMods()) {
-                        if (mod.contains(id) && !addedMods.contains(mod.getInfo())
-                                && !mod.equals(SPGlobal.getGlobalPatch())) {
-                            addMaster(mod.getInfo());
-                            addedMods.add(mod.getInfo());
+            // Just to symbolize that they "had part" in the patch
+            // And help encourage repatching when mods are removed.
+            SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
+            if (!SPGlobal.mergeMode) {
+                for (GRUP<MajorRecord> g : this) {
+                    for (MajorRecord major : g) {
+                        FormID id = major.getForm();
+                        for (Mod mod : SPGlobal.getDB().getImportedMods()) {
+                            if (mod.contains(id) && !addedMods.contains(mod.getInfo())
+                                    && !mod.equals(SPGlobal.getGlobalPatch())) {
+                                addMaster(mod.getInfo());
+                                addedMods.add(mod.getInfo());
+                            }
                         }
                     }
                 }
@@ -877,7 +884,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public void setAuthor(String in) {
         tes.setAuthor(in);
     }
-    
+
     /**
      * Sets the author name of the mod.
      *
@@ -895,7 +902,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public void setDescription(String in) {
         tes.setDescription(in);
     }
-    
+
     /**
      * Sets the description of the mod.
      *
@@ -904,7 +911,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public String getDescription() {
         return tes.getDescription();
     }
-    
+
     void parseData(String type, LImport data) throws Exception {
         GRUPs.get(GRUP_TYPE.valueOf(type)).parseData(data, this);
     }
@@ -956,9 +963,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
     public GRUP<NPC_> getNPCs() {
         return GRUPs.get(GRUP_TYPE.NPC_);
     }
-    
+
     /**
-     * 
+     *
      * @see GRUP
      * @return The GRUP containing Quest records.
      */
@@ -1469,16 +1476,16 @@ public class Mod implements Comparable, Iterable<GRUP> {
         void setAuthor(String in) {
             subRecords.getSubString("CNAM").setString(in);
         }
-        
+
         String getAuthor() {
             return subRecords.getSubString("CNAM").print();
         }
-        
-        void setDescription(String in){
+
+        void setDescription(String in) {
             subRecords.getSubString("SNAM").setString(in);
         }
-        
-        String getDescription(){
+
+        String getDescription() {
             return subRecords.getSubString("SNAM").print();
         }
 

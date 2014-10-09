@@ -724,4 +724,15 @@ public class SPGlobal {
      * Needed because TesVEdit now removes all subrecords of DELETED majorRecords.
      */
     public static boolean forceValidateMode = false;
+    
+    private static boolean allModsAsMasters = false;
+    
+    public static boolean getAllModsAsMasters(){
+        return allModsAsMasters;
+    }
+    
+    public static void setAllModsAsMasters(boolean b){
+        allModsAsMasters = b;
+    }
+    
 }
