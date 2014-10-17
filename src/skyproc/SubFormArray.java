@@ -141,4 +141,8 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 	hash = 17 * hash + (this.IDs != null ? this.IDs.hashCode() : 0);
 	return hash;
     }
+    
+    public boolean contains(FormID form){
+        return IDs.contains(form);
+    }
 }
