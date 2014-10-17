@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.zip.DataFormatException;
 import lev.LImport;
 import lev.LInChannel;
-import lev.Ln;
 import skyproc.exceptions.BadParameter;
 import skyproc.exceptions.BadRecord;
 
@@ -52,7 +51,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	    s = createFromPrototype(in);
 	    try {
 		loadFromPosition(s);
-	    } catch (Exception ex) {
+	    } catch (BadRecord | BadParameter | DataFormatException ex) {
 		SPGlobal.logException(ex);
 		return s;
 	    }
@@ -147,7 +146,7 @@ class SubRecordsStream extends SubRecordsDerived {
 			s.parseData(s.extractRecordData(major.srcMod.input), major.srcMod);
 		    }
 		    pos.remove(s.getType());
-		} catch (Exception e) {
+		} catch (BadRecord | BadParameter | DataFormatException e) {
 		    SPGlobal.logError("Stream Error", "Error streaming subrecord type " + s.getType() + " from " + major);
 		    throw e;
 		}

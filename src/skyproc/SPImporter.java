@@ -188,7 +188,7 @@ public class SPImporter {
                 }
             } catch (Exception e) {
                 if (SPGlobal.logging()) {
-                    SPGlobal.logSync(header, "Could not read mod file: " + lines + "\nSorting based on extension.");
+                    SPGlobal.logSync(header, "Could not read mod file: " + line + ", Sorting based on extension.");
                 }
                 if (line.toUpperCase().contains(".ESM")) {
                     esms.add(line);

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.*;
 import skyproc.SPGlobal.Language;
+import static skyproc.SPImporter.extractHeaderInfo;
 import skyproc.SubStringPointer.Files;
 import skyproc.exceptions.BadMod;
 import skyproc.exceptions.BadParameter;
@@ -41,7 +42,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public Mod(ModListing info) {
         init(info);
-        SPGlobal.getDB().add(this);
+        SPDatabase.add(this);
     }
 
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
@@ -555,7 +556,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * Leave this empty if you want all GRUPs merged.
      */
     public void addAsOverrides(SPDatabase db, GRUP_TYPE... grup_types) {
-        addAsOverrides(db.modLookup.values(), grup_types);
+        addAsOverrides(SPDatabase.modLookup.values(), grup_types);
     }
 
     /**
@@ -696,7 +697,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
             }
             SPProgressBarPlug.incrementBar();
 
-	// Go through each record, and add all mods that reference that record
+            // Go through each record, and add all mods that reference that record
             // Just to symbolize that they "had part" in the patch
             // And help encourage repatching when mods are removed.
             SPProgressBarPlug.setStatusNumbered("Adding Masters From Contributors");
@@ -704,7 +705,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
                 for (GRUP<MajorRecord> g : this) {
                     for (MajorRecord major : g) {
                         FormID id = major.getForm();
-                        for (Mod mod : SPGlobal.getDB().getImportedMods()) {
+                        for (Mod mod : SPDatabase.getImportedMods()) {
                             if (mod.contains(id) && !addedMods.contains(mod.getInfo())
                                     && !mod.equals(SPGlobal.getGlobalPatch())) {
                                 addMaster(mod.getInfo());
@@ -807,11 +808,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
      */
     public void exportMasterList(String path) throws IOException {
         File masterListTmp = new File(SPGlobal.pathToInternalFiles + "Last Masterlist Temp.txt");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp));
-        for (ModListing m : this.getMasters()) {
-            writer.write(m.toString() + "\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(masterListTmp))) {
+            for (ModListing m : this.getMasters()) {
+                writer.write(m.toString() + "\n");
+            }
         }
-        writer.close();
 
         File masterList = new File(path);
         if (masterList.isFile()) {
@@ -844,7 +845,20 @@ public class Mod implements Comparable, Iterable<GRUP> {
     }
 
     void sortMasters() {
-        tes.getMasters().sort();
+        SubList<ModListing, ModListing> sublist = tes.getMasters();
+        for (ModListing m : sublist.collection) {
+            if (!(m.master || m.falseMaster)) {
+                try {
+                    RecordFileChannel inputChannel = new RecordFileChannel(SPGlobal.pathToData + m.print());
+                    Mod plugin = new Mod(m, extractHeaderInfo(inputChannel)); // sets false master flag for the ModListing
+                } catch (Exception e) {
+                    if (SPGlobal.logging()) {
+                        SPGlobal.logSync("Sort Masters", "Could not read mod file: " + m.print() + ", Sorting based on extension.");
+                    }
+                }
+            }
+        }
+        sublist.sort();
     }
 
     void exportStringsFile(ArrayList<String> list, SubStringPointer.Files file) throws FileNotFoundException, IOException {
@@ -1356,10 +1370,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
             return false;
         }
         final Mod other = (Mod) obj;
-        if (!this.getName().equalsIgnoreCase(other.getName())) {
-            return false;
-        }
-        return true;
+        return this.getName().equalsIgnoreCase(other.getName());
     }
 
     /**
