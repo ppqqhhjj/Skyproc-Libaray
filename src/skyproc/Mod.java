@@ -1418,8 +1418,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
                 add(SubString.getNew("CNAM", true));
                 add(new SubList<>(new ModListing(), true));
                 add(SubString.getNew("SNAM", true));
+                add(new SubFormArray("ONAM", 0));
+                add(new SubData("SCRN"));
                 add(new SubData("INTV"));
-                add(new SubData("ONAM"));
                 add(new SubData("INCC"));
             }
         };
