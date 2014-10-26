@@ -417,15 +417,15 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
         final void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
             super.parseData(in, srcMod);
             ACBSflags.set(in.extract(4));
-            magickaOffset = in.extractInt(2);
-            fatigueOffset = in.extractInt(2);
+            magickaOffset = in.extractIntSigned(2);
+            fatigueOffset = in.extractIntSigned(2);
             level = in.extractInt(2);
             minCalcLevel = in.extractInt(2);
             maxCalcLevel = in.extractInt(2);
             speed = in.extractInt(2);
             dispositionBase = in.extractInt(2);
             templateFlags.set(in.extract(2));
-            healthOffset = in.extractInt(2);
+            healthOffset = in.extractIntSigned(2);
             bleedout = in.extractInt(2);
             if (logging()) {
                 logMod(srcMod, "", "ACBS record: ");
