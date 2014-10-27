@@ -222,7 +222,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
                 add(new SubInt("TINI", 2));
                 add(new SubRGBshort("TINC"));
                 add(new SubFloat("TINV"));
-                add(new SubInt("TIAS", 2));
+                add(new SubIntSigned("TIAS", 2));
             }
         };
 
@@ -423,7 +423,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             minCalcLevel = in.extractInt(2);
             maxCalcLevel = in.extractInt(2);
             speed = in.extractInt(2);
-            dispositionBase = in.extractInt(2);
+            dispositionBase = in.extractIntSigned(2);
             templateFlags.set(in.extract(2));
             healthOffset = in.extractIntSigned(2);
             bleedout = in.extractInt(2);
