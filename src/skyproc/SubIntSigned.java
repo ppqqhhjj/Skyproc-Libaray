@@ -15,10 +15,10 @@ import skyproc.exceptions.BadRecord;
  *
  * @author Justin Swanson
  */
-class SubIntSigned extends SubRecordTyped<Integer> {
+class SubIntSigned extends SubInt {
 
-    private Integer data;
-    int length = 4;
+    //private Integer data;
+    //int length = 4;
 
     SubIntSigned(String type) {
 	super(type);
@@ -29,6 +29,7 @@ class SubIntSigned extends SubRecordTyped<Integer> {
 	this.length = length;
     }
 
+    /*
     @Override
     SubRecord getNew(String type) {
 	return new SubIntSigned(type, length);
@@ -39,26 +40,40 @@ class SubIntSigned extends SubRecordTyped<Integer> {
 	return length;
     }
 
+    @Override
     public void set(int in) {
 	data = in;
     }
 
+    @Override
     public int get() {
 	if (data == null) {
 	    data = 0;
 	}
 	return data;
     }
+    */
 
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
-	data = in.extractIntSigned(length);
+//	data = in.extractIntSigned(length);
+        if (length < 4) {
+            int value = get();
+            boolean isNeg = (value & (0x80 << (length-1))) != 0;
+            if (isNeg) {
+                for (int i = length; i < 4; i++) {
+                    int high = 0xFF << i * 8;
+                    value |= high;
+                }
+                set(value);
+            }
+        }
 	if (logging()) {
 	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }
-
+/*
     @Override
     public String print() {
 	if (isValid()) {
@@ -111,4 +126,5 @@ class SubIntSigned extends SubRecordTyped<Integer> {
 	out.set(in);
 	return out;
     }
+    */
 }

@@ -221,7 +221,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             protected void addRecords() {
                 add(new SubInt("TINI", 2));
                 add(new SubRGBshort("TINC"));
-                add(new SubFloat("TINV"));
+                add(new SubInt("TINV"));
                 add(new SubIntSigned("TIAS", 2));
             }
         };
@@ -233,6 +233,16 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
         @Override
         SubRecord getNew(String type_) {
             return new TintLayer();
+        }
+        
+        /**
+         *
+         * @param tini Tint Index
+         */
+        
+        public TintLayer(int tini){
+            super(tintPrototype);
+            setIndex(tini);
         }
 
         /**
@@ -274,7 +284,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
          * @param value
          */
         public void setInterpolation(float value) {
-            subRecords.setSubFloat("TINV", value);
+            int val = (int) (value * 100);
+            subRecords.setSubInt("TINV", val);
         }
 
         /**
@@ -282,7 +293,8 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
          * @return
          */
         public float getInterpolation() {
-            return subRecords.getSubFloat("TINV").get();
+            float val = ( (float) subRecords.getSubInt("TINV").get()) / 100.0f;
+            return val;
         }
 
         /**
