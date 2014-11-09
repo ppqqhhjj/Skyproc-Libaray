@@ -40,11 +40,24 @@ public class Mod implements Comparable, Iterable<GRUP> {
      * @see ModListing
      * @param info ModListing object containing name and master flag.
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public Mod(ModListing info) {
         init(info);
         SPDatabase.add(this);
     }
+    
+    /**
+     * Creates an empty Mod with the name and master flag set to parameters.
+     *
+     * @param name String to set the Mod name to.
+     * @param master Sets the Mod's master flag (which appends ".esp" and ".esm"
+     * to the modname as appropriate)
+     */
+    public Mod(String name, Boolean master) {
+        this(new ModListing(name, master));
+    }
 
+    @SuppressWarnings("LeakingThisInConstructor")
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
         this(info, true);
         SPGlobal.logMod(this, "MOD", "Parsing header");
@@ -130,17 +143,6 @@ public class Mod implements Comparable, Iterable<GRUP> {
         addGRUP(new DLBR());
         addGRUP(new DLVW());
         addGRUP(new OTFT());
-    }
-
-    /**
-     * Creates an empty Mod with the name and master flag set to parameters.
-     *
-     * @param name String to set the Mod name to.
-     * @param master Sets the Mod's master flag (which appends ".esp" and ".esm"
-     * to the modname as appropriate)
-     */
-    public Mod(String name, Boolean master) {
-        this(new ModListing(name, master));
     }
 
     /**
@@ -665,6 +667,14 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
         ModExporter out = new ModExporter(outPath, this);
 
+        // check leveled lists don't have more than 255 entries
+        // and reduces and split as needed
+        GRUP<LVLI> lvli = GRUPs.get(GRUP_TYPE.LVLI);
+        validateListEntries(lvli);
+        GRUP<LVLN> lvln = GRUPs.get(GRUP_TYPE.LVLN);
+        validateListEntries(lvln);
+        
+        
         ArrayList<GRUP> exportGRUPs = new ArrayList<>();
 
         // Progress Bar Setup
@@ -888,6 +898,18 @@ public class Mod implements Comparable, Iterable<GRUP> {
 
         list.clear();
         out.close();
+    }
+    
+    void validateListEntries(GRUP g){
+        ArrayList<MajorRecord> records = new ArrayList<>(g.getRecords());
+        for(MajorRecord record : records){
+            LeveledRecord leveledRec = (LeveledRecord) record;
+            if(leveledRec != null){
+                if(leveledRec.numEntries() > 255) {
+                    leveledRec.splitEntries();
+                }
+            }
+        }
     }
 
     /**
