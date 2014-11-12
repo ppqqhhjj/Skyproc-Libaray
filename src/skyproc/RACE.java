@@ -254,7 +254,7 @@ public class RACE extends MajorRecordDescription {
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    for (int i = 0; i < 7; i++) {
-		skillBoosts.add(ActorValue.values()[in.extractIntSigned(1)]);
+		skillBoosts.add(ActorValue.values()[in.extractInt(1)]);
 		skillBoostValues.add(in.extractIntSigned(1));
 	    }
 	    in.skip(2);
