@@ -28,7 +28,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class SUMprogram implements SUM {
 
-    String version = "1.3";
+    String version = "1.3.1";
     ArrayList<String> exclude = new ArrayList<>(2);
     ArrayList<PatcherLink> links = new ArrayList<>();
     ArrayList<File> blockedLinks = new ArrayList<>();
