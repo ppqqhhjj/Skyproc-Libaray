@@ -1038,7 +1038,7 @@ public enum ActorValue {
     /**
      *
      */
-    UNKNOWN255,
+    NONE,
     /**
      *
      */
@@ -1051,7 +1051,7 @@ public enum ActorValue {
      */
     static public int value(ActorValue in) {
 	if (in == UNKNOWN) {
-	    return -1;
+	    return NONE.ordinal();
 	} else {
 	    return in.ordinal();
 	}
@@ -1066,7 +1066,7 @@ public enum ActorValue {
 	if (in < ActorValue.values().length - 2 && in >= 0) {
 	    return ActorValue.values()[in];
 	} else {
-	    return UNKNOWN;
+	    return NONE;
 	}
     }
 
