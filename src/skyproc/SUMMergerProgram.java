@@ -137,6 +137,7 @@ public class SUMMergerProgram implements SUM {
 
     @Override
     public void runChangesToPatch() throws Exception {
+        SPGlobal.setAllModsAsMasters(false);
 	Mod patch = SPGlobal.getGlobalPatch();
 
 	// Get SUM patch names

@@ -28,7 +28,7 @@ import skyproc.exceptions.BadRecord;
  */
 public class SUMprogram implements SUM {
 
-    String version = "1.3.1";
+    String version = "1.3.2";
     ArrayList<String> exclude = new ArrayList<>(2);
     ArrayList<PatcherLink> links = new ArrayList<>();
     ArrayList<File> blockedLinks = new ArrayList<>();
@@ -370,6 +370,7 @@ public class SUMprogram implements SUM {
     class OptionsMenu extends SPSettingPanel {
 
 	LCheckBox runBoss;
+        LCheckBox runLoot;
         LCheckBox AllModsAsMasters;
 	LCheckBox mergePatches;
 	LNumericSetting maxMem;
@@ -397,6 +398,13 @@ public class SUMprogram implements SUM {
 	    runBoss.tie(SUMSettings.RUN_BOSS, SUMsave, SUMGUI.helpPanel, true);
 	    setPlacement(runBoss);
 	    AddSetting(runBoss);
+            
+            runLoot = new LCheckBox("Run LOOT", settingFont, SUMGUI.light);
+	    runLoot.setOffset(-3);
+	    runLoot.addShadow();
+	    runLoot.tie(SUMSettings.RUN_LOOT, SUMsave, SUMGUI.helpPanel, true);
+	    setPlacement(runLoot);
+	    AddSetting(runLoot);
             
             AllModsAsMasters = new LCheckBox("All Mods As Masters For Patches", settingFont, SUMGUI.light);
 	    AllModsAsMasters.setOffset(-3);
@@ -631,6 +639,7 @@ public class SUMprogram implements SUM {
 	    Add(SUMSettings.MERGE_PATCH, false, true);
 	    Add(SUMSettings.DISABLED, new ArrayList<String>(0), true);
 	    Add(SUMSettings.RUN_BOSS, false, false);
+            Add(SUMSettings.RUN_LOOT, true, false);
             Add(SUMSettings.ALL_AS_MASTERS, false, false);
 	    Add(SUMSettings.MAX_MEM, 750, false);
 	    Add(SUMSettings.LANGUAGE, 0, true);
@@ -640,14 +649,21 @@ public class SUMprogram implements SUM {
 	protected void initHelp() {
 	    helpInfo.put(SUMSettings.MERGE_PATCH, "This will merge all of your SkyProc patches into one patch.  "
 		    + "This helps if you're hitting the max number of mods.\n\n"
+                    + "Mergeing REQUIRES either BOSS or LOOT to be run by SUM since it adds and removes plugins from your load order.\n\n"
 		    + "WARNING:  This is an experimental setting.  In addition, existing savegames may break when switching this setting on/off, as all the references the savegame uses to the patches will be broken.  It is recommended you start new savegames when changing this setting.");
 	    helpInfo.put(SUMSettings.RUN_BOSS, "SUM will run BOSS before running the patchers to confirm that "
-		    + "they are all in the correct load order.  It is highly recommended you leave this setting on.\n\n"
+		    + "they are all in the correct load order.  BOSS has been replaced by LOOT by most users.\n\n"
 		    + "NOTE:  Be aware that BOSS reserves the right to change load ordering as it sees fit.  "
 		    + "If it adjusts its load order and shuffles SkyProc patchers around "
 		    + "to be in a different order, your savegame may or may not function with the new ordering.  This is "
 		    + "most likely to occur if the SkyProc patcher is brand new, and hasn't been processed yet by BOSS.\n\n"
 		    + "SUM does not update BOSS before running it.");
+            helpInfo.put(SUMSettings.RUN_LOOT, "SUM will run LOOT before running the patchers to confirm that "
+		    + "they are all in the correct load order.  It is highly recommended you leave this setting on.\n\n"
+		    + "NOTE:  Be aware that LOOT reserves the right to change load ordering as it sees fit.  "
+		    + "If it adjusts its load order and shuffles SkyProc patchers around "
+		    + "to be in a different order, your savegame may or may not function with the new ordering.  This is "
+		    + "most likely to occur if the SkyProc patcher is brand new, and hasn't been processed yet by LOOT.\n\n");
             helpInfo.put(SUMSettings.ALL_AS_MASTERS, "This will attempt to use all active plugins as the masters for generated patches.\n\n" 
                     + "This can significantly reduce patching time on large load orders.\n\n"
                     + "This is still an experimental setting.");
@@ -669,6 +685,7 @@ public class SUMprogram implements SUM {
 	MERGE_PATCH,
 	DISABLED,
 	RUN_BOSS,
+        RUN_LOOT,
         ALL_AS_MASTERS,
 	LANGUAGE;
     }
@@ -855,6 +872,9 @@ public class SUMprogram implements SUM {
     @Override
     public void runChangesToPatch() throws Exception {
 
+        if ( SUMsave.getBool(SUMSettings.MERGE_PATCH) && !(SUMsave.getBool(SUMSettings.RUN_BOSS) || SUMsave.getBool(SUMSettings.RUN_LOOT) ) ){
+            throw new Exception("Merging requires running either BOSS or LOOT");
+        }
 	// Setup
 	ArrayList<PatcherLink> activeLinks = getActiveLinks();
 	setupProgress(activeLinks);
@@ -896,6 +916,9 @@ public class SUMprogram implements SUM {
 	SUMGUI.progress.setBar(0);
 	int progressMax = activeLinks.size();
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
+	    progressMax++;
+	}
+        if (SUMsave.getBool(SUMSettings.RUN_LOOT)) {
 	    progressMax++;
 	}
 	if (SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
@@ -944,6 +967,11 @@ public class SUMprogram implements SUM {
 	if (SUMsave.getBool(SUMSettings.RUN_BOSS)) {
 	    SUMGUI.bossWarning();
 	    NiftyFunc.runBOSS(true);
+	    SUMGUI.progress.incrementBar();
+	}
+        if (SUMsave.getBool(SUMSettings.RUN_LOOT)) {
+	    SUMGUI.lootWarning();
+	    NiftyFunc.runLOOT(true);
 	    SUMGUI.progress.incrementBar();
 	}
     }
