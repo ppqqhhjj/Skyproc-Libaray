@@ -246,6 +246,7 @@ public class SUMprogram implements SUM {
 	    try {
 		SPGlobal.logSpecial(SUMlogs.JarHook, "Jar Load", "Loading jar " + jar);
 		ArrayList<Class> classes = Ln.loadClasses(jar, true);
+                // FIXME: use class.getInterfaces to check for SUM
 		for (Class c : classes) {
 		    //Skip skyproc or lev classes
 		    if (c.toString().contains("lev.") || (c.toString().contains("skyproc."))) {
@@ -261,11 +262,11 @@ public class SUMprogram implements SUM {
 			    }
 			    break;
 			}
-		    } catch (IllegalAccessException | InstantiationException ex) {
+		    } catch (Throwable ex) { // intentionally catch anything from trying to create classes
 			SPGlobal.logSpecial(SUMlogs.JarHook, "Loading class", "   Skipped " + c + ": " + ex.getMessage());
 		    }
 		}
-	    } catch (IOException | ClassNotFoundException ex) {
+	    } catch (Throwable ex) { // intentionally catch anything from trying to load jars
 		SPGlobal.logSpecial(SUMlogs.JarHook, "Loading jar", "   Skipped jar " + jar + ": " + ex.getMessage());
 	    }
 	}
@@ -873,7 +874,7 @@ public class SUMprogram implements SUM {
     public void runChangesToPatch() throws Exception {
 
         if ( SUMsave.getBool(SUMSettings.MERGE_PATCH) && !(SUMsave.getBool(SUMSettings.RUN_BOSS) || SUMsave.getBool(SUMSettings.RUN_LOOT) ) ){
-            throw new Exception("Merging requires running either BOSS or LOOT");
+            throw new Exception("\n\nMerging requires running either BOSS or LOOT");
         }
 	// Setup
 	ArrayList<PatcherLink> activeLinks = getActiveLinks();
