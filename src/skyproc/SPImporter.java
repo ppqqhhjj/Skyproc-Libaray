@@ -74,20 +74,8 @@ public class SPImporter {
             SPGlobal.sync(true);
             SPGlobal.newSyncLog("Get Active Mod List.txt");
             String header = "IMPORT MODS";
-            ModListing globalPatchListing = SPGlobal.getGlobalPatch().getInfo();
             BufferedReader ModFile;
             String dataFolder = SPGlobal.getPluginsTxt();
-
-            ArrayList<String> loadOrderList = new ArrayList<>(0);
-            int loPatchIndex = -1;
-            try {
-                String loadOrder = SPGlobal.getLoadOrderTxt();
-                loadOrderList = Ln.loadFileToStrings(loadOrder, false);
-                loPatchIndex = Ln.indexOfIgnoreCase(loadOrderList, globalPatchListing.print());
-            } catch (IOException ex){
-                // cannot get load order
-            }
-            
 
             //Open Plugin file
             ModFile = new BufferedReader(new FileReader(dataFolder));
@@ -113,8 +101,7 @@ public class SPImporter {
                     if (!line.equals("")) {
                         pluginName = new File(SPGlobal.pathToData + line);
                         ModListing nextMod = new ModListing(line);
-                        if (SPGlobal.noModsAfter && (nextMod.equals(globalPatchListing)) 
-                                || ( (loPatchIndex != -1) && (Ln.indexOfIgnoreCase(loadOrderList, line) > loPatchIndex) )) {
+                        if (SPGlobal.noModsAfter && nextMod.equals(SPGlobal.getGlobalPatch().getInfo())) {
                             SPGlobal.logSync(header, "Skipping the remaining mods as they were after the patch.");
                             break;
                         } else if (SPGlobal.shouldImport(nextMod)
