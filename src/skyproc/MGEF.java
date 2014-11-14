@@ -97,8 +97,16 @@ public class MGEF extends MajorRecordDescription {
 	    out.write(flags.export(), 4);
 	    out.write(baseCost);
 	    relatedID.export(out);
-	    out.write(ActorValue.value(skillType));
-	    out.write(ActorValue.value(resistanceAV));
+            if (skillType == ActorValue.NONE){
+                out.write(-1); // 4 bytes on disk
+            } else {
+                out.write(ActorValue.value(skillType));
+            }
+            if (resistanceAV == ActorValue.NONE){
+                out.write(-1); // 4 bytes on disk
+            } else {
+                out.write(ActorValue.value(resistanceAV));
+            }
 	    out.write(unknown, 4);
 	    lightID.export(out);
 	    out.write(taperWeight);
@@ -111,12 +119,20 @@ public class MGEF extends MajorRecordDescription {
 	    out.write(taperDuration);
 	    out.write(secondAVWeight);
 	    out.write(effectType);
-	    out.write(ActorValue.value(primaryAV));
+            if (primaryAV == ActorValue.NONE){
+                out.write(-1); // 4 bytes on disk
+            } else {
+                out.write(ActorValue.value(primaryAV));
+            }
 	    projectileID.export(out);
 	    explosionID.export(out);
 	    out.write(castType.ordinal());
 	    out.write(deliveryType.ordinal());
-	    out.write(ActorValue.value(secondAV));
+            if (secondAV == ActorValue.NONE){
+                out.write(-1); // 4 bytes on disk
+            } else {
+                out.write(ActorValue.value(secondAV));
+            }
 	    castingArt.export(out);
 	    hitEffectArt.export(out);
 	    impactData.export(out);
