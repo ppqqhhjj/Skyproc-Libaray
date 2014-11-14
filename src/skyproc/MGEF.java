@@ -51,8 +51,8 @@ public class MGEF extends MajorRecordDescription {
 	LFlags flags = new LFlags(4);
 	float baseCost = 0;
 	FormID relatedID = new FormID();
-	ActorValue skillType = ActorValue.UNKNOWN;
-	ActorValue resistanceAV = ActorValue.UNKNOWN;
+	ActorValue skillType = ActorValue.NONE;
+	ActorValue resistanceAV = ActorValue.NONE;
 	byte[] unknown = {0x00, 0x00, 0x00, (byte) 0x80};
 	FormID lightID = new FormID();
 	float taperWeight = 0;
@@ -70,7 +70,7 @@ public class MGEF extends MajorRecordDescription {
 	FormID explosionID = new FormID();
 	CastType castType = CastType.ConstantEffect;
 	DeliveryType deliveryType = DeliveryType.Self;
-	ActorValue secondAV = ActorValue.UNKNOWN;
+	ActorValue secondAV = ActorValue.NONE;
 	FormID castingArt = new FormID();
 	FormID hitEffectArt = new FormID();
 	FormID impactData = new FormID();
