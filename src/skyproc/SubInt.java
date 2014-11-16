@@ -56,7 +56,7 @@ class SubInt extends SubRecordTyped<Integer> {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	data = in.extractInt(length);
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }

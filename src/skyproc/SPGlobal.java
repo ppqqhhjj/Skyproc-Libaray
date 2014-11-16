@@ -18,6 +18,7 @@ public class SPGlobal {
     static String pathToDebug = "SkyProcDebug/";
     static Mod globalPatchOut;
     static SPLogger log;
+    static boolean logMods = true;
     static SPDatabase globalDatabase = new SPDatabase();
     static boolean testing = false;
     static boolean streamMode = true;
@@ -588,9 +589,29 @@ public class SPGlobal {
 	    SPGlobal.log.addSpecial(e, logName);
 	}
     }
+    /**
+     * 
+     * @return if mod specific log files will be written
+     */
+    public static boolean logMods(){
+        return logMods;
+    }
+    
+    /**
+     * 
+     * @param on set mod specific logging
+     */
+    public static void logMods(boolean on){
+        logMods = on;
+        if(on){
+            logging(true);
+        }
+    }
 
     static void logMod(Mod m, String h, String ... data) {
-	log.logMod(m, h, data);
+        if (logMods && log != null){
+            log.logMod(m, h, data);
+        }
     }
 
     static void newSyncLog(String fileName) {

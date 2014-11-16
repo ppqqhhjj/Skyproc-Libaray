@@ -69,7 +69,7 @@ class SubIntSigned extends SubInt {
                 set(value);
             }
         }
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }

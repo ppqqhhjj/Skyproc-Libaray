@@ -48,7 +48,7 @@ class SubRGB extends SubRecordTyped {
 	r = in.extractFloat();
 	g = in.extractFloat();
 	b = in.extractFloat();
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }

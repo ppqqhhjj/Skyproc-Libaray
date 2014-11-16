@@ -66,7 +66,7 @@ public class IMGS extends MajorRecord {
 	    skyScale = in.extractFloat();
 	    eyeAdaptStrength = in.extractFloat();
 
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "HNAM record: ");
 		logMod(srcMod, "", "  " + "Eye Adapt Speed: " + eyeAdaptSpeed + ", Bloom Radius: " + bloomRadius);
 		logMod(srcMod, "", "  " + "Bloom Threshold: " + bloomThreshold + ", Bloom Scale: " + bloomScale + ", Target Lum #1: " + targetLum1);
@@ -138,7 +138,7 @@ public class IMGS extends MajorRecord {
 	    brightness = in.extractFloat();
 	    contrast = in.extractFloat();
 
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "CNAM record: ");
 		logMod(srcMod, "", "  " + "Saturation: " + saturation + ", Brightness: " + brightness + ", Contrast: " + contrast);
 	    }
@@ -203,7 +203,7 @@ public class IMGS extends MajorRecord {
 	    green = in.extractFloat();
 	    blue = in.extractFloat();
 
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "TNAM record: RWX Format");
 		logMod(srcMod, "", "  " + "Red: " + red + ", Green: " + green);
 		logMod(srcMod, "", "  " + "Blue: " + blue + ", Alpha: " + alpha);

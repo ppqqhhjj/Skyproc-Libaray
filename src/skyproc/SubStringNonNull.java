@@ -26,7 +26,7 @@ public class SubStringNonNull extends SubString {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	in.skip(getIdentifierLength() + getSizeLength());
 	string = Ln.arrayToString(in.extractInts(in.available()));
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, getType().toString(), "Setting " + toString() + " to " + print());
 	}
     }

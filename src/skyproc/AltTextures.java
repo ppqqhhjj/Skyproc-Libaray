@@ -48,7 +48,7 @@ public class AltTextures extends SubRecordTyped {
 	    int strLength = Ln.arrayToInt(in.getInts(0, 4));
 	    AltTexture newText = new AltTexture(new LShrinkArray(in.extract(12 + strLength)), srcMod);
 	    altTextures.add(newText);
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "New Texture Alt -- Name: " + newText.name + ", texture: " + newText.texture + ", index: " + newText.index);
 	    }
 	}

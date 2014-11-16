@@ -40,7 +40,7 @@ class SubString extends SubRecordTyped<String> {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
 	string = Ln.arrayToString(in.extractInts(in.available() - 1));
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, getType().toString(), "Setting " + toString() + " to " + print());
 	}
     }

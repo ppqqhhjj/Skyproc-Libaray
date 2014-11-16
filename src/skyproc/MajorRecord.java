@@ -165,7 +165,9 @@ public abstract class MajorRecord extends Record implements Serializable {
         if (get(MajorFlags.Compressed)) {
             set(MajorFlags.Compressed, false);
             in = in.correctForCompression();
-            logMod(srcMod, getTypes().toString(), "Decompressed");
+            if (SPGlobal.logMods){
+                logMod(srcMod, getTypes().toString(), "Decompressed");
+            }
         }
 
         if (!in.isDone() && "EDID".equals(getNextType(in))) {
