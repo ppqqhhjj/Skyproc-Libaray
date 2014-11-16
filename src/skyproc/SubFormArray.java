@@ -49,7 +49,7 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 	if (size != 0) {
 	    for (int i = 0; i < size; i++) {
 		IDs.get(i).parseData(in, srcMod);
-		if (logging()) {
+		if (SPGlobal.logMods){
 		    logMod(srcMod, toString(), "Setting " + toString() + " FormID[" + i + "]: " + IDs.get(i));
 		}
 	    }

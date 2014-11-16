@@ -371,7 +371,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             farAwayDistance = in.extractFloat();
             gearedUpWeapons = in.extractInt(1);
             fluff2 = in.extract(3);
-            if (logging()) {
+            if (SPGlobal.logMods){
                 logMod(srcMod, "", "DNAM record: ");
                 String temp;
                 for (Skill s : Skill.NPC_Skills()) {
@@ -439,7 +439,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             templateFlags.set(in.extract(2));
             healthOffset = in.extractIntSigned(2);
             bleedout = in.extractInt(2);
-            if (logging()) {
+            if (SPGlobal.logMods){
                 logMod(srcMod, "", "ACBS record: ");
                 logMod(srcMod, "", "  " + "Base Spell Points: " + magickaOffset + ", Base Fatigue: " + fatigueOffset);
                 logMod(srcMod, "", "  " + "Level: " + level + ", Min Calculated Level: " + minCalcLevel + ", Max Calculated Level: " + maxCalcLevel);
@@ -516,7 +516,7 @@ public class NPC_ extends MajorRecordNamed implements Serializable {
             aggroWarn = in.extractInt(4);
             aggroWarnAttack = in.extractInt(4);
             aggroAttack = in.extractInt(4);
-            if (logging()) {
+            if (SPGlobal.logMods){
                 logMod(srcMod, "", "AIDT record: ");
                 logMod(srcMod, "", "  Aggression: " + aggression + ", Confidence: " + confidence + ", Morality: " + morality);
                 logMod(srcMod, "", "  Assistance: " + assistance + ", Mood: " + mood + ", AggroRadiusBehavior: " + aggroRadiusBehavior);

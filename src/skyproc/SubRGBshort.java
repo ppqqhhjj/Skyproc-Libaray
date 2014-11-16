@@ -50,7 +50,7 @@ class SubRGBshort extends SubRecordTyped {
 	g = (short) in.extractInt(1);
 	b = (short) in.extractInt(1);
 	a = (short) in.extractInt(1);
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Setting " + toString() + " to : " + print());
 	}
     }

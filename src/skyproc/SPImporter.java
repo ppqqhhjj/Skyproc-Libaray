@@ -529,7 +529,9 @@ public class SPImporter {
         try {
             RecordFileChannel input = new RecordFileChannel(path + listing.print());
             Mod plugin = new Mod(listing, extractHeaderInfo(input));
-            SPGlobal.logMod(plugin, header, "Opened filestream to mod: " + listing.print());
+            if (SPGlobal.logMods){
+                SPGlobal.logMod(plugin, header, "Opened filestream to mod: " + listing.print());
+            }
             if (SPGlobal.checkMissingMasters) {
                 checkMissingMasters(plugin);
             }
@@ -547,7 +549,9 @@ public class SPImporter {
             while (iter.hasNext()) {
                 String result = iter.loading();
                 SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": " + result);
-                SPGlobal.logMod(plugin, header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
+                if (SPGlobal.logMods){
+                    SPGlobal.logMod(plugin, header, "================== Loading in GRUP " + result + ": ", plugin.getName(), " ===================");
+                }
                 plugin.parseData(result, iter.next());
                 SPGlobal.flush();
             }
@@ -878,7 +882,7 @@ public class SPImporter {
 
     static void importStringLocations(Mod mod) {
         String header = "Importing Strings";
-        if (SPGlobal.logging()) {
+        if (SPGlobal.logMods){
             SPGlobal.logMod(mod, header, "Importing Strings");
         }
         for (Files f : SubStringPointer.Files.values()) {
@@ -967,7 +971,7 @@ public class SPImporter {
 
         if (in == null) {
             SPGlobal.logError(header, plugin.toString() + " did not have Strings files (loose or in BSA).");
-        } else {
+        } else if (SPGlobal.logMods){
             SPGlobal.logMod(plugin, header, "Loaded " + file + " from language: " + plugin.language);
         }
     }

@@ -45,7 +45,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
         init(info);
         SPDatabase.add(this);
     }
-    
+
     /**
      * Creates an empty Mod with the name and master flag set to parameters.
      *
@@ -60,7 +60,9 @@ public class Mod implements Comparable, Iterable<GRUP> {
     @SuppressWarnings("LeakingThisInConstructor")
     Mod(ModListing info, ByteBuffer headerInfo) throws Exception {
         this(info, true);
-        SPGlobal.logMod(this, "MOD", "Parsing header");
+        if (SPGlobal.logMods) {
+            SPGlobal.logMod(this, "MOD", "Parsing header");
+        }
         if (!headerInfo.hasRemaining()) {
             throw new BadMod(info.print() + " did not have a TES4 header.");
         }
@@ -362,17 +364,21 @@ public class Mod implements Comparable, Iterable<GRUP> {
         SPGlobal.newSyncLog("Mod Export/" + getName() + ".txt");
 
         if (!getMastersStrings().isEmpty()) {
-            SPGlobal.logMod(this, getName(), "=======================================================================");
-            SPGlobal.logMod(this, getName(), "======================= Printing Mod Masters ==========================");
-            SPGlobal.logMod(this, getName(), "=======================================================================");
-            for (String s : getMastersStrings()) {
-                SPGlobal.logMod(this, getName(), s);
+            if (SPGlobal.logMods) {
+                SPGlobal.logMod(this, getName(), "=======================================================================");
+                SPGlobal.logMod(this, getName(), "======================= Printing Mod Masters ==========================");
+                SPGlobal.logMod(this, getName(), "=======================================================================");
+                for (String s : getMastersStrings()) {
+                    SPGlobal.logMod(this, getName(), s);
+                }
             }
         }
         for (GRUP g : GRUPs.values()) {
             g.toString();
         }
-        SPGlobal.logMod(this, getName(), "------------------------  DONE PRINTING -------------------------------");
+        if (SPGlobal.logMods) {
+            SPGlobal.logMod(this, getName(), "------------------------  DONE PRINTING -------------------------------");
+        }
     }
 
     /**
@@ -425,11 +431,11 @@ public class Mod implements Comparable, Iterable<GRUP> {
                 return;
             }
 
-            if (SPGlobal.logging()) {
+            if (SPGlobal.logMods) {
                 SPGlobal.logMod(this, getName(), "No strings file for " + file);
             }
         } catch (IOException | DataFormatException ex) {
-            SPGlobal.logMod(this, getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
+            SPGlobal.log(getName(), "Could not open a strings stream for mod " + getName() + " to type: " + file);
         }
     }
 
@@ -673,8 +679,7 @@ public class Mod implements Comparable, Iterable<GRUP> {
         validateListEntries(lvli);
         GRUP<LVLN> lvln = GRUPs.get(GRUP_TYPE.LVLN);
         validateListEntries(lvln);
-        
-        
+
         ArrayList<GRUP> exportGRUPs = new ArrayList<>();
 
         // Progress Bar Setup
@@ -899,13 +904,13 @@ public class Mod implements Comparable, Iterable<GRUP> {
         list.clear();
         out.close();
     }
-    
-    void validateListEntries(GRUP g){
+
+    void validateListEntries(GRUP g) {
         ArrayList<MajorRecord> records = new ArrayList<>(g.getRecords());
-        for(MajorRecord record : records){
+        for (MajorRecord record : records) {
             LeveledRecord leveledRec = (LeveledRecord) record;
-            if(leveledRec != null){
-                if(leveledRec.numEntries() > 255) {
+            if (leveledRec != null) {
+                if (leveledRec.numEntries() > 255) {
                     leveledRec.splitEntries();
                 }
             }

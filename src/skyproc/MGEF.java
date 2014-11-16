@@ -191,7 +191,7 @@ public class MGEF extends MajorRecordDescription {
 	    vol = SoundVolume.values()[in.extractInt(4)];
 	    scriptAIDataScore = in.extractFloat();
 	    scriptAIDataDelayTime = in.extractFloat();
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "DATA:");
 		logMod(srcMod, "", "  Flags: " + flags);
 		logMod(srcMod, "", "  Base Cost: " + baseCost);

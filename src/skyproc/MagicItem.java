@@ -69,7 +69,7 @@ public abstract class MagicItem extends MajorRecordDescription {
 	    range = in.extractFloat();
 	    perkType.parseData(in, srcMod);
 
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "SPIT record: ");
 		logMod(srcMod, "", "  " + "Base Spell Cost: " + baseCost + ", flags: " + flags
 			+ ", Base Type: " + baseType + ", Spell Charge Time: " + chargeTime);

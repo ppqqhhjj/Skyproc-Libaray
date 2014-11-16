@@ -88,7 +88,7 @@ class ConditionBase extends SubRecord {
 	option = ConditionOption.getOption(in.extractInt(2));
 	padding = in.extract(2);
 
-	if (SPGlobal.logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, "", "New Condition.  Function: " + option.script.toString() + ", index: " + option.index);
 	    logMod(srcMod, "", "  Operator: " + operator + ", flags: " + flags + " useGlobal: " + get(Condition.CondFlag.UseGlobal));
 	    logMod(srcMod, "", "  Comparison Val: " + comparisonValueForm + "|" + comparisonValueFloat);

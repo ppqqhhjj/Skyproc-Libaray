@@ -81,7 +81,7 @@ class SubRecordsStream extends SubRecordsDerived {
 	// Print compressed summary
 	int counter = 0;
 	String print = "";
-	if (SPGlobal.logging()) {
+	if (SPGlobal.logMods){
 	    for (String type : getTypes()) {
 		RecordLocation r = pos.get(type);
 		if (r != null) {
@@ -138,7 +138,9 @@ class SubRecordsStream extends SubRecordsDerived {
 		    major.srcMod.input.pos(position.pos);
 		    if (SPGlobal.debugStream && SPGlobal.logging()) {
 			if (!major.equals(SPGlobal.lastStreamed)) {
-			    SPGlobal.logMod(major.srcMod, "Stream", "Streaming from " + major);
+                            if (SPGlobal.logMods){
+                                SPGlobal.logMod(major.srcMod, "Stream", "Streaming from " + major);
+                            }
 			    SPGlobal.lastStreamed = major;
 			}
 		    }

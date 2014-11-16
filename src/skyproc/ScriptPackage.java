@@ -74,7 +74,7 @@ public class ScriptPackage extends SubRecord implements Serializable {
 	version = in.extractInt(2);
 	unknown = in.extractInt(2);
 	int scriptCount = in.extractInt(2);
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Importing VMAD record with " + scriptCount + " scripts.  Version: " + version + ", unknown: " + unknown);
 	}
 	for (int i = 0; i < scriptCount; i++) {

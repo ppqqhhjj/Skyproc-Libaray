@@ -93,7 +93,7 @@ class ConditionOption implements Serializable {
 	runType = RunOnType.values()[in.extractInt(4)];
 	reference.parseData(in, srcMod);
 	parseParam3(in, srcMod);
-	if (SPGlobal.logging()) {
+	if (SPGlobal.logMods){
 	    SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Run Type: " + runType + ", Reference: " + reference);
 	}
     }
@@ -162,7 +162,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    in.skip(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
 	}
@@ -229,7 +229,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    axis = Axis.get(in.extractString(1));
 	    in.skip(7);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Axis: " + axis);
 	    }
 	}
@@ -306,7 +306,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    source = CastingSource.values()[in.extractInt(4)];
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Casting Source: " + source);
 	    }
 	}
@@ -387,7 +387,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    p2.parseData(in, srcMod);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Casting Source: " + source + ", FormID: " + p2);
 	    }
 	}
@@ -468,7 +468,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    p2 = in.extractInt(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Int: " + p2);
 	    }
 	}
@@ -551,7 +551,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    p2.parseData(in, srcMod);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID 1: " + p1 + ", FormID 2: " + p2);
 	    }
 	}
@@ -622,7 +622,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    g = Gender.values()[in.extractInt(4)];
 	    in.skip(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Gender: " + g);
 	    }
 	}
@@ -689,7 +689,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    source = CastingSource.values()[in.extractInt(4)];
 	    in.skip(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Casting Source: " + source);
 	    }
 	}
@@ -773,7 +773,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1 = in.extractInt(4);
 	    p2.parseData(in, srcMod);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int 1: " + p1 + ", FormID: " + p1 + ", Int 2: " + p3);
 	    }
 	}
@@ -863,7 +863,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1 = in.extractInt(4);
 	    p2.parseData(in, srcMod);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int: " + p1 + ", FormID: " + p2);
 	    }
 	}
@@ -934,7 +934,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    state = WardState.values()[in.extractInt(4)];
 	    in.skip(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Ward State: " + state);
 	    }
 	}
@@ -1001,7 +1001,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1 = in.extractInt(4);
 	    in.skip(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int: " + p1);
 	    }
 	}
@@ -1078,7 +1078,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    p2 = in.extract(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1);
 	    }
 	}
@@ -1160,7 +1160,7 @@ class ConditionOption implements Serializable {
 	    p1.parseData(in, srcMod);
 	    a = Axis.get(in.extractString(1));
 	    in.skip(3);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Axis: " + a);
 	    }
 	}
@@ -1241,7 +1241,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    c = CrimeType.values()[in.extractInt(4)];
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Crime Type: " + c);
 	    }
 	}
@@ -1322,7 +1322,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    p1.parseData(in, srcMod);
 	    f = in.extractFloat();
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  FormID: " + p1 + ", Float: " + f);
 	    }
 	}
@@ -1395,7 +1395,7 @@ class ConditionOption implements Serializable {
 	public void parseParam1(LImport in, Mod srcMod){
 	    i1 = in.extractInt(4);
 	    i2 = in.extractInt(4);
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		SPGlobal.logMod(srcMod, this.getClass().getSimpleName(), "  Int 1: " + i1 + ", Int 2: " + i2);
 	    }
 	}

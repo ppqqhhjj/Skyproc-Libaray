@@ -158,7 +158,7 @@ public class WEAP extends MajorRecordDescription {
 	    resist = in.extract(4);
 	    unknown8 = in.extract(4);
 	    stagger = in.extractFloat();
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "WType: " + wtype + ", speed: " + speed + ", reach: " + reach);
 		logMod(srcMod, "", "SightFOV: " + sightFOV + ", vats: " + vats + ", numProjectiles: " + numProjectiles);
 		logMod(srcMod, "", "EmbeddedWeapActorVal: " + embeddedWeapActorValue + ", MinRange: " + minRange + ", MaxRange: " + maxRange);
@@ -244,7 +244,7 @@ public class WEAP extends MajorRecordDescription {
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
 	    damage = in.extractInt(2);
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "Value: " + value + ", weight: " + weight + ", damage: " + damage);
 	    }
 	}
@@ -302,7 +302,7 @@ public class WEAP extends MajorRecordDescription {
 	    onDeath = in.extractInt(1);
 	    unknown = in.extract(3);
 	    critEffect.parseData(in, srcMod);
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "critDmg: " + critDmg + ", critMult: " + critMult + ", crit effect: " + critEffect);
 	    }
 	}
