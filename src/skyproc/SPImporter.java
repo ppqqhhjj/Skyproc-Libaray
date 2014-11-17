@@ -483,6 +483,7 @@ public class SPImporter {
         if (SPGlobal.logging()) {
             SPGlobal.logMain(header, "Done Importing Mods.");
         }
+        System.gc();
         return outSet;
     }
 
@@ -565,7 +566,7 @@ public class SPImporter {
             }
             SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
             
-            System.gc();
+            
 
             return plugin;
         } catch (MissingMaster m) {

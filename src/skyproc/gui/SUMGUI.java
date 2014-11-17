@@ -448,7 +448,7 @@ public class SUMGUI extends JFrame {
 
     static void logStatus() {
 	SPGlobal.logMain("Status", hook.getName() + " version: " + hook.getVersion());
-	SPGlobal.logMain("Status", "Available Memory: " + Ln.toMB(Runtime.getRuntime().totalMemory()) + "MB");
+	SPGlobal.logMain("Status", "Used Memory: " + Ln.toMB((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())) + "MB");
 	SPGlobal.logMain("Status", "Max Memory: " + Ln.toMB(Runtime.getRuntime().maxMemory()) + "MB");
     }
 
