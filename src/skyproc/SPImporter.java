@@ -564,6 +564,8 @@ public class SPImporter {
                 input.close();
             }
             SPProgressBarPlug.setStatusNumbered(genStatus(listing) + ": Done");
+            
+            System.gc();
 
             return plugin;
         } catch (MissingMaster m) {
