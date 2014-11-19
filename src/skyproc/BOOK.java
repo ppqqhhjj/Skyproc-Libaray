@@ -37,7 +37,7 @@ public class BOOK extends MajorRecordDescription {
 	    super.export(out);
 	    out.write(flags.export());
 	    if (flags.get(BookFlag.TeachesSkill.ordinal())) {
-		out.write(teachesAV.ordinal());
+		out.write(ActorValue.value(teachesAV));
 	    } else if (flags.get(BookFlag.TeachesSpell.ordinal())) {
 		teachesSpell.export(out);
 	    } else {
