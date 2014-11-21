@@ -120,7 +120,7 @@ class ScriptProperty extends Record implements Serializable {
 	name.set(in.extractString(in.extractInt(2)));
 	ScriptPropertyType type = ScriptPropertyType.value(in.extractInt(1));
 	unknown = in.extractInt(1);
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, "VMAD", "    Property " + name + " with type " + type + ", unknown: " + unknown);
 	}
 	switch (type) {
@@ -156,15 +156,17 @@ class ScriptProperty extends Record implements Serializable {
 		break;
 	    default:
 		if (logging()) {
-		    logMod(srcMod, "VMAD", "    Importing property with UNKNOWN TYPE!");
 		    logError("VMAD", "    Importing property with UNKNOWN TYPE!");
 		}
+                if (SPGlobal.logMods){
+                    logMod(srcMod, "VMAD", "    Importing property with UNKNOWN TYPE!");
+                }
 		in.extractInts(1000);  // break extraction to exclude NPC from database
 	}
 	if (data != null) {
 	    data.parseData(in, srcMod);
 	}
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, "VMAD", "      Data: " + data.print());
 	}
     }

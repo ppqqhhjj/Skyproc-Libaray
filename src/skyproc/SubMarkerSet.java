@@ -56,7 +56,9 @@ class SubMarkerSet<T extends SubRecord> extends SubRecord {
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	String next = Record.getNextType(in);
 	if (markers.contains(next)) {
-	    logMod(srcMod, "", "Loaded Marker " + next);
+            if (SPGlobal.logMods){
+                logMod(srcMod, "", "Loaded Marker " + next);
+            }
 	    loadedMarker = next;
 	} else {
 	    if (!set.containsKey(loadedMarker)) {

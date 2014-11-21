@@ -213,7 +213,7 @@ public class RACE extends MajorRecordDescription {
 	void export(ModExporter out) throws IOException {
 	    super.export(out);
 	    for (int i = 0; i < 7; i++) {
-		out.write(skillBoosts.get(i).ordinal(), 1);
+		out.write(ActorValue.value(skillBoosts.get(i)), 1);
 		out.write(skillBoostValues.get(i), 1);
 	    }
 	    out.write(0, 2);
@@ -254,7 +254,7 @@ public class RACE extends MajorRecordDescription {
 	void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	    super.parseData(in, srcMod);
 	    for (int i = 0; i < 7; i++) {
-		skillBoosts.add(ActorValue.values()[in.extractInt(1)]);
+		skillBoosts.add(ActorValue.value(in.extractInt(1)));
 		skillBoostValues.add(in.extractIntSigned(1));
 	    }
 	    in.skip(2);

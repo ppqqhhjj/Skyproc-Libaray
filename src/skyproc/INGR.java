@@ -60,7 +60,7 @@ public class INGR extends MagicItem {
 	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "Setting DATA:    Weight: " + weight);
 	    }
 	}
@@ -102,7 +102,7 @@ public class INGR extends MagicItem {
 	    super.parseData(in, srcMod);
 	    baseCost = in.extractInt(4);
 	    flags.set(in.extract(4));
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "Base cost: " + baseCost + ", flags: " + flags);
 	    }
 	}

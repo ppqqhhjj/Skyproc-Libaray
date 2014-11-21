@@ -83,13 +83,13 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	while (!in.isDone()) {
 	    extractMajor(in, srcMod);
 	}
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "Data exhausted");
 	}
     }
 
     MajorRecord extractMajor(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, toString(), "============== Extracting Next " + getContainedType() + " =============");
 	}
 	T item = (T) prototype.getNew();
@@ -102,7 +102,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
 	    // Add to GRUP
 	    if (item.isValid()) {
 		addRecord(item);
-	    } else if (logging()) {
+	    } else if (SPGlobal.logMods){
 		logMod(srcMod, toString(), "Did not add " + getContainedType().toString() + " " + item.toString() + " because it was not valid.");
 	    }
 
@@ -204,7 +204,7 @@ public class GRUP<T extends MajorRecord> extends SubRecord implements Iterable<T
     }
 
     void handleBadRecord(MajorRecord r, String reason) {
-	if (logging()) {
+	if (SPGlobal.logMods){
 	    if (r.isValid()) {
 		logMod(r.srcMod, toString(), "Caught a bad record: " + r + ", reason: " + reason);
 		logSpecial(SPLogger.SpecialTypes.BLOCKED, toString(), "Caught a bad record: " + r + " from " + r.srcMod + ", reason: " + reason);

@@ -60,7 +60,7 @@ public class ECZN extends MajorRecord {
 		flags.set(in.extract(1));
 		maxLevel = in.extractInt(1);
 	    }
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "DATA record: ");
 		logMod(srcMod, "", "  " + "Owner: " + owner.getFormStr() + ", Location: " + location.getFormStr());
 		logMod(srcMod, "", "  " + "Required Rank: " + rank + ", Minimum Level: " + minLevel);

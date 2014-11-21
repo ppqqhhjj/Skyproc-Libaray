@@ -95,7 +95,7 @@ public class ARMO extends MajorRecordDescription {
 	    super.parseData(in, srcMod);
 	    value = in.extractInt(4);
 	    weight = in.extractFloat();
-	    if (logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "Value: " + value + ", weight " + weight);
 	    }
 	}

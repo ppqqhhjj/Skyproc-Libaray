@@ -753,4 +753,8 @@ public class NiftyFunc {
         }
         return in;
     }
+    
+    public static void logMem(String header){
+        SPGlobal.logMain(header, "Used Memory: " + Ln.toMB((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())) + "MB");
+    }
 }

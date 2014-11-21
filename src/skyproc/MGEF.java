@@ -97,16 +97,16 @@ public class MGEF extends MajorRecordDescription {
 	    out.write(flags.export(), 4);
 	    out.write(baseCost);
 	    relatedID.export(out);
-            if (skillType == ActorValue.NONE){
-                out.write(-1); // 4 bytes on disk
-            } else {
+//            if (skillType == ActorValue.NONE){
+//                out.write(-1); // 4 bytes on disk
+//            } else {
                 out.write(ActorValue.value(skillType));
-            }
-            if (resistanceAV == ActorValue.NONE){
-                out.write(-1); // 4 bytes on disk
-            } else {
+//            }
+//            if (resistanceAV == ActorValue.NONE){
+//                out.write(-1); // 4 bytes on disk
+//            } else {
                 out.write(ActorValue.value(resistanceAV));
-            }
+//            }
 	    out.write(unknown, 4);
 	    lightID.export(out);
 	    out.write(taperWeight);
@@ -119,20 +119,20 @@ public class MGEF extends MajorRecordDescription {
 	    out.write(taperDuration);
 	    out.write(secondAVWeight);
 	    out.write(effectType);
-            if (primaryAV == ActorValue.NONE){
-                out.write(-1); // 4 bytes on disk
-            } else {
+//            if (primaryAV == ActorValue.NONE){
+//                out.write(-1); // 4 bytes on disk
+//            } else {
                 out.write(ActorValue.value(primaryAV));
-            }
+//            }
 	    projectileID.export(out);
 	    explosionID.export(out);
 	    out.write(castType.ordinal());
 	    out.write(deliveryType.ordinal());
-            if (secondAV == ActorValue.NONE){
-                out.write(-1); // 4 bytes on disk
-            } else {
+//            if (secondAV == ActorValue.NONE){
+//                out.write(-1); // 4 bytes on disk
+//            } else {
                 out.write(ActorValue.value(secondAV));
-            }
+//            }
 	    castingArt.export(out);
 	    hitEffectArt.export(out);
 	    impactData.export(out);
@@ -191,7 +191,7 @@ public class MGEF extends MajorRecordDescription {
 	    vol = SoundVolume.values()[in.extractInt(4)];
 	    scriptAIDataScore = in.extractFloat();
 	    scriptAIDataDelayTime = in.extractFloat();
-	    if (SPGlobal.logging()) {
+	    if (SPGlobal.logMods){
 		logMod(srcMod, "", "DATA:");
 		logMod(srcMod, "", "  Flags: " + flags);
 		logMod(srcMod, "", "  Base Cost: " + baseCost);

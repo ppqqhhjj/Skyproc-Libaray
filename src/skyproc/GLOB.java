@@ -125,7 +125,7 @@ public class GLOB extends MajorRecord {
     @Override
     void parseData(LImport in, Mod srcMod) throws BadRecord, DataFormatException, BadParameter {
 	super.parseData(in, srcMod);
-	if (SPGlobal.logging()) {
+	if (SPGlobal.logMods){
 	    logMod(srcMod, "GLOB", "Constant: " + get(MajorFlags.RelatedToShields));
 	}
     }

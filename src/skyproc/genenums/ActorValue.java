@@ -1050,8 +1050,8 @@ public enum ActorValue {
      * @return
      */
     static public int value(ActorValue in) {
-	if (in == UNKNOWN) {
-	    return NONE.ordinal();
+	if (in == UNKNOWN || in == NONE) {
+	    return -1;
 	} else {
 	    return in.ordinal();
 	}
