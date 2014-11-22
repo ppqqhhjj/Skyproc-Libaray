@@ -641,6 +641,58 @@ public class NiftyFunc {
     }
 
     /**
+     * Runs LOOT and sorts the load order. Does not update LOOT before running
+     * it.
+     *
+     * @param errorMessages
+     */
+    public static void runLOOT(boolean errorMessages) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                SUMGUI.progress.setStatusNumbered("Running LOOT");
+            }
+        });
+        // Find LOOT
+        SPGlobal.logMain("LOOT", "Looking for LOOT.");
+        int response = JOptionPane.YES_OPTION;
+        String lootPath = WinRegistry.WinRegistry.getRegistryEntry("LOOT", "Installed Path");
+        File lootExe = new File(".");
+        if (lootPath != null) {
+            lootExe = new File(lootPath + "\\LOOT.exe");
+        }
+        if (!lootExe.isFile()) {
+            try {
+                lootExe = Ln.manualFindFile("LOOT.exe", new File(SPGlobal.pathToInternalFiles + "LOOT location"));
+            } catch (IOException ex) {
+                SPGlobal.logException(ex);
+            }
+        }
+
+        // Run LOOT
+        if (lootExe != null && lootExe.isFile()) {
+            SPGlobal.logMain("LOOT", "Running LOOT.");
+            if (!NiftyFunc.startProcess(lootExe.getParentFile(), new String[]{lootExe.getPath(), "--game=Skyrim"})) {
+                SPGlobal.logMain("LOOT", "LOOT failed to run.");
+                if (errorMessages) {
+                    response = JOptionPane.showConfirmDialog(null, "LOOT failed to run. Do you want to continue?", "LOOT failed", JOptionPane.YES_NO_OPTION);
+                }
+            }
+        } else if (errorMessages) {
+            SPGlobal.logMain("LOOT", "LOOT could not be found.");
+            response = JOptionPane.showConfirmDialog(null, "LOOT could not be located.\n"
+                    + "It is highly recommended you download LOOT so that it can be used.\n\n"
+                    + "Do you want to continue patching without LOOT?", "Cannot locate LOOT", JOptionPane.YES_NO_OPTION);
+        }
+        if (response == JOptionPane.NO_OPTION) {
+            SPGlobal.logMain("LOOT", "Exiting program due to LOOT failure.");
+            SUMGUI.exitProgram(false, true);
+        }
+        SPGlobal.logMain("LOOT", "LOOT complete.");
+    }
+    
+    /**
      * Copies each major record from the target mod that is referenced in the
      * major record. This makes the major record "self contained" from the
      * target mod.

@@ -472,10 +472,10 @@ public class SUMGUI extends JFrame {
 	} else {
 	    // Create a placeholder for people to see
 	    try {
-		BufferedWriter out = new BufferedWriter(new FileWriter(path));
-		out.write("==MOD BLOCKS==\n");
-		out.write("//Add a mod names or keywords to look for to block\n//One per line");
-		out.close();
+                try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
+                    out.write("==MOD BLOCKS==\n");
+                    out.write("//Add a mod names or keywords to look for to block\n//One per line");
+                }
 	    } catch (IOException ex) {
 		SPGlobal.logException(ex);
 	    }
@@ -742,9 +742,8 @@ public class SUMGUI extends JFrame {
 		// Compile old and new Master lists
 		ArrayList<String> oldMasterList = save.getStrings(SUMGUISettings.LastMasterlist);
 
-		SPDatabase db = SPGlobal.getDB();
 		ArrayList<String> curImportedMods = new ArrayList<>();
-		for (ModListing m : db.getImportedModListings()) {
+		for (ModListing m : SPDatabase.getImportedModListings()) {
 		    curImportedMods.add(m.print().toUpperCase());
 		}
 		curImportedMods.remove(SPGlobal.getGlobalPatch().getName().toUpperCase());
@@ -786,7 +785,7 @@ public class SUMGUI extends JFrame {
 
 		//Check new mods for any records patcher is interested in.  If interesting records found, need patch.
 		for (String curString : curImportedMods) {
-		    Mod curMaster = SPGlobal.getDB().getMod(new ModListing(curString));
+		    Mod curMaster = SPDatabase.getMod(new ModListing(curString));
 		    ArrayList<GRUP_TYPE> contained = curMaster.getContainedTypes();
 		    for (GRUP_TYPE g : hook.importRequests()) {
 			if (contained.contains(g)) {
@@ -881,7 +880,7 @@ public class SUMGUI extends JFrame {
     static public void exitProgram(boolean generatedPatch, boolean forceClose) {
 	SPGlobal.log(header, "Exit requested.");
 	if (generatedPatch) {
-	    save.setStrings(SUMGUISettings.LastModlist, Ln.toUpper(SPGlobal.getDB().getModListDates()));
+	    save.setStrings(SUMGUISettings.LastModlist, Ln.toUpper(SPDatabase.getModListDates()));
 	    save.setStrings(SUMGUISettings.LastMasterlist, Ln.toUpper(SPGlobal.getGlobalPatch().getMastersStrings()));
 	    save.setBool(SUMGUISettings.CrashState, false);
 	    save.setInt(SUMGUISettings.PrevVersion, NiftyFunc.versionToNum(hook.getVersion()));
@@ -938,7 +937,7 @@ public class SUMGUI extends JFrame {
 
 			// Check if required mods are loaded
 			for (ModListing m : hook.requiredMods()) {
-			    if (!SPGlobal.getDB().hasMod(m)) {
+			    if (!SPDatabase.hasMod(m)) {
 				String modNames = "";
 				for (ModListing m2 : hook.requiredMods()) {
 				    modNames += "\n" + m2.toString();
@@ -1027,6 +1026,25 @@ public class SUMGUI extends JFrame {
 		response = JOptionPane.showConfirmDialog(null, "Do you want to see this warning next time?", "Running BOSS", JOptionPane.YES_NO_OPTION);
 		if (response == JOptionPane.NO_OPTION) {
 		    save.setBool(SUMGUISettings.BOSSWarning, false);
+		}
+	    } else {
+		SUMGUI.exitProgram(false, true);
+	    }
+	}
+    }
+    
+    static void lootWarning() {
+	if (save.getBool(SUMGUISettings.LOOTWarning)) {
+	    String message = "<html>This patcher is going to run LOOT first to standardize ordering.<br><br>"
+		    + "To turn LOOT execution off, download <a href=\"http://skyrim.nexusmods.com/mods/29865\">SUM</a> and adjust its settings.<br>"
+		    + "However, running LOOT is recommended.  "
+		    + "<a href=\"http://afterimagemetal.com/SkyProc/SUM%20Readme.html#BOSS\">Read this article why.</a><br><br>"
+		    + "Do you want to continue patching?</html>";
+	    int response = JOptionPane.showConfirmDialog(null, Lg.getQuickHTMLPane(message), "Running LOOT", JOptionPane.YES_NO_OPTION);
+	    if (response == JOptionPane.YES_OPTION) {
+		response = JOptionPane.showConfirmDialog(null, "Do you want to see this warning next time?", "Running LOOT", JOptionPane.YES_NO_OPTION);
+		if (response == JOptionPane.NO_OPTION) {
+		    save.setBool(SUMGUISettings.LOOTWarning, false);
 		}
 	    } else {
 		SUMGUI.exitProgram(false, true);
@@ -1184,7 +1202,8 @@ public class SUMGUI extends JFrame {
 	LastModlist,
 	PrevVersion,
 	CrashState,
-	BOSSWarning;
+	BOSSWarning,
+        LOOTWarning;
     }
 
     static class SUMGUISave extends LSaveFile {
@@ -1200,6 +1219,7 @@ public class SUMGUI extends JFrame {
 	    Add(SUMGUISettings.LastModlist, new ArrayList<String>(), false);
 	    Add(SUMGUISettings.CrashState, false, false);
 	    Add(SUMGUISettings.BOSSWarning, true, false);
+            Add(SUMGUISettings.LOOTWarning, true, false);
 	}
 
 	@Override
