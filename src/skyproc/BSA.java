@@ -7,6 +7,8 @@ package skyproc;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.zip.DataFormatException;
 import lev.LInChannel;
@@ -441,7 +443,7 @@ public class BSA {
                         BSA bsa = new BSA(bsaPath, false);
                         resourceLoadOrder.add(bsa);
                     } catch (BadParameter | FileNotFoundException ex) {
-                        SPGlobal.logException(ex);
+                        logBSAError(s, ex);
                     }
                 } else if (SPGlobal.logging()) {
                     SPGlobal.logSpecial(LogTypes.BSA, header, "  BSA skipped because it didn't exist: " + bsaPath);
@@ -622,7 +624,7 @@ public class BSA {
      * @param types Types to load in.
      * @return List of all BSA files that contain any of the filetypes.
      */
-    public static ArrayList<BSA> loadInBSAs(FileType... types) {        
+    public static ArrayList<BSA> loadInBSAs(FileType... types) {
         ArrayList<BSA> out = new ArrayList<>();
         Iterator<BSA> bsas = iterator();
         while (bsas.hasNext()) {
@@ -659,21 +661,21 @@ public class BSA {
         loadResourceLoadOrder();
         loadPluginLoadOrder();
         deleteOverlap();
-        
+
         ArrayList<BSA> order = new ArrayList<>(resourceLoadOrder.size() + pluginLoadOrder.size());
         order.addAll(resourceLoadOrder);
         order.addAll(pluginLoadOrder.values());
         return order;
     }
-    
-    static ArrayList<BSA> getResourceBSAa(){
+
+    static ArrayList<BSA> getResourceBSAa() {
         loadResourceLoadOrder();
         ArrayList<BSA> resources = new ArrayList<>(resourceLoadOrder.size());
         resources.addAll(resourceLoadOrder);
         return resources;
     }
-    
-    static ArrayList<BSA> getPluginBSAs(){
+
+    static ArrayList<BSA> getPluginBSAs() {
         loadPluginLoadOrder();
         ArrayList<BSA> resources = new ArrayList<>(pluginLoadOrder.size());
         resources.addAll(pluginLoadOrder.values());
@@ -698,7 +700,7 @@ public class BSA {
                 pluginLoadOrder.put(m, bsa);
                 return bsa;
             } catch (IOException | BadParameter ex) {
-                SPGlobal.logException(ex);
+                logBSAError(m.printNoSuffix() + ".bsa", ex);
                 return null;
             }
         }
@@ -794,6 +796,17 @@ public class BSA {
     @Override
     public String toString() {
         return filePath;
+    }
+
+    static void logBSAError(String source, Exception ex) {
+        String error = "Could not get " + source + ". Strings files or ini changes in it will not be availible.";
+        SPGlobal.logError(header, error);
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw, true);
+        ex.printStackTrace(pw);
+        pw.flush();
+        sw.flush();
+        SPGlobal.log(sw.toString());
     }
 
     /**
