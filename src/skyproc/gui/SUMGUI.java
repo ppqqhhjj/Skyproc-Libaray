@@ -501,8 +501,8 @@ public class SUMGUI extends JFrame {
 	// Progress Bar Location
 	int index = arguments.indexOf("-PROGRESSLOCATION");
 	if (index != -1) {
-	    Dimension progressLoc = new Dimension(Integer.valueOf(arguments.get(index + 1).substring(1)),
-		    Integer.valueOf(arguments.get(index + 2).substring(1)));
+	    Dimension progressLoc = new Dimension(Integer.valueOf(arguments.get(index + 1)),
+		    Integer.valueOf(arguments.get(index + 2)));
 	    SUMGUI.progress.setCorrectLocation(progressLoc.width, progressLoc.height);
 	}
 
@@ -510,7 +510,7 @@ public class SUMGUI extends JFrame {
 
 	index = arguments.indexOf("-LANGUAGE");
 	if (index != -1) {
-	    String lang = arguments.get(index + 1).substring(1);
+	    String lang = arguments.get(index + 1);
 	    for (Language l : Language.values()) {
 		if (lang.equalsIgnoreCase(l.toString())) {
 		    SPGlobal.language = l;

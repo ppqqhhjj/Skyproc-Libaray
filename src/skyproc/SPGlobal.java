@@ -27,7 +27,7 @@ public class SPGlobal {
     static boolean noModsAfter = true;
     static boolean checkMissingMasters = true;
     static MajorRecord lastStreamed;
-    
+
     /*
      * Customizable Strings
      */
@@ -61,30 +61,42 @@ public class SPGlobal {
      */
     public static enum Language {
 
-	/**
-	 *
-	 */
-	English,
-	/**
-	 *
-	 */
-	Spanish,
-	/**
-	 *
-	 */
-	Italian,
-	/**
-	 *
-	 */
-	French,
-	/**
-	 *
-	 */
-	German,
-	/**
-	 *
-	 */
-	Russian;
+        /**
+         *
+         */
+        English,
+        /**
+         *
+         */
+        Spanish,
+        /**
+         *
+         */
+        Italian,
+        /**
+         *
+         */
+        French,
+        /**
+         *
+         */
+        German,
+        /**
+         *
+         */
+        Russian,
+        /**
+         *
+         */
+        Czech,
+        /**
+         *
+         */
+        Polish,
+        /**
+         *
+         */
+        Japanes;
     }
     /**
      * The path from the .jar location to create/look for the file used to
@@ -102,12 +114,12 @@ public class SPGlobal {
      * @throws IOException
      */
     public static File getSkyProcDocuments() throws FileNotFoundException, IOException {
-	if (skyProcDocuments == null) {
-	    File myDocs = SPGlobal.getMyDocumentsSkyrimFolder();
-	    skyProcDocuments = new File(myDocs.getPath() + "\\SkyProc\\");
-	    skyProcDocuments.mkdirs();
-	}
-	return skyProcDocuments;
+        if (skyProcDocuments == null) {
+            File myDocs = SPGlobal.getMyDocumentsSkyrimFolder();
+            skyProcDocuments = new File(myDocs.getPath() + "\\SkyProc\\");
+            skyProcDocuments.mkdirs();
+        }
+        return skyProcDocuments;
     }
 
     /**
@@ -115,7 +127,7 @@ public class SPGlobal {
      * @return The database defined as the Global Database
      */
     public static SPDatabase getDB() {
-	return globalDatabase;
+        return globalDatabase;
     }
 
     /**
@@ -125,11 +137,11 @@ public class SPGlobal {
      * @param patch Mod to set as the global patch.
      */
     public static void setGlobalPatch(Mod patch) {
-	if (globalPatchOut != null) {
-	    modsToSkip.remove(globalPatchOut.getInfo());
-	}
-	globalPatchOut = patch;
-	modsToSkip.add(globalPatchOut.getInfo());
+        if (globalPatchOut != null) {
+            modsToSkip.remove(globalPatchOut.getInfo());
+        }
+        globalPatchOut = patch;
+        modsToSkip.add(globalPatchOut.getInfo());
     }
 
     /**
@@ -137,7 +149,7 @@ public class SPGlobal {
      * @return the set Global Patch, or null if one hasn' been set.
      */
     public static Mod getGlobalPatch() {
-	return globalPatchOut;
+        return globalPatchOut;
     }
     static ArrayList<ModListing> modsToSkip = new ArrayList<>();
     static ArrayList<String> modsToSkipStr = new ArrayList<>();
@@ -149,7 +161,7 @@ public class SPGlobal {
      * @param m Mod to skip when importing.
      */
     public static void addModToSkip(ModListing m) {
-	modsToSkip.add(m);
+        modsToSkip.add(m);
     }
 
     /**
@@ -157,12 +169,12 @@ public class SPGlobal {
      * @param s
      */
     public static void addModToSkip(String s) {
-	s = s.toUpperCase();
-	if (s.contains(".ESP") || s.contains(".ESM")) {
-	    addModToSkip(new ModListing(s));
-	} else {
-	    modsToSkipStr.add(s);
-	}
+        s = s.toUpperCase();
+        if (s.contains(".ESP") || s.contains(".ESM")) {
+            addModToSkip(new ModListing(s));
+        } else {
+            modsToSkipStr.add(s);
+        }
     }
 
     /**
@@ -171,7 +183,7 @@ public class SPGlobal {
      * @return
      */
     public static boolean isModToSkip(ModListing m) {
-	return modsToSkip.contains(m) || isModToSkip(m.print());
+        return modsToSkip.contains(m) || isModToSkip(m.print());
     }
 
     /**
@@ -180,7 +192,7 @@ public class SPGlobal {
      * @return
      */
     public static boolean isModToSkip(String name) {
-	return Ln.hasAnyKeywords(name, modsToSkipStr);
+        return Ln.hasAnyKeywords(name, modsToSkipStr);
     }
 
     /**
@@ -189,8 +201,8 @@ public class SPGlobal {
      * @return
      */
     public static boolean isWhiteListed(ModListing m) {
-	return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
-		|| modsWhiteList.contains(m) || isWhiteListed(m.print());
+        return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
+                || modsWhiteList.contains(m) || isWhiteListed(m.print());
     }
 
     /**
@@ -199,26 +211,30 @@ public class SPGlobal {
      * @return
      */
     public static boolean isWhiteListed(String name) {
-	return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
-		|| Ln.hasAnyKeywords(name, modsWhiteListStr);
+        return (modsWhiteList.isEmpty() && modsWhiteListStr.isEmpty())
+                || Ln.hasAnyKeywords(name, modsWhiteListStr);
     }
 
     /**
-     * True if not blacklisted and if white listed (if there are any white listings)
+     * True if not blacklisted and if white listed (if there are any white
+     * listings)
+     *
      * @param m
      * @return
      */
     public static boolean shouldImport(ModListing m) {
-	return !SPGlobal.isModToSkip(m) && SPGlobal.isWhiteListed(m);
+        return !SPGlobal.isModToSkip(m) && SPGlobal.isWhiteListed(m);
     }
 
     /**
-     * True if not blacklisted and if white listed (if there are any white listings)
+     * True if not blacklisted and if white listed (if there are any white
+     * listings)
+     *
      * @param name
      * @return
      */
     public static boolean shouldImport(String name) {
-	return !SPGlobal.isModToSkip(name) && SPGlobal.isWhiteListed(name);
+        return !SPGlobal.isModToSkip(name) && SPGlobal.isWhiteListed(name);
     }
 
     /**
@@ -228,7 +244,7 @@ public class SPGlobal {
      * @param m
      */
     public static void addModToWhiteList(ModListing m) {
-	modsWhiteList.add(m);
+        modsWhiteList.add(m);
     }
 
     /**
@@ -238,11 +254,11 @@ public class SPGlobal {
      * @param s
      */
     public static void addModToWhiteList(String s) {
-	if (s.contains(".ESP") || s.contains(".ESM")) {
-	    addModToWhiteList(new ModListing(s));
-	} else {
-	    modsWhiteListStr.add(s);
-	}
+        if (s.contains(".ESP") || s.contains(".ESM")) {
+            addModToWhiteList(new ModListing(s));
+        } else {
+            modsWhiteListStr.add(s);
+        }
     }
 
     /**
@@ -254,7 +270,7 @@ public class SPGlobal {
      * @return True if FormID exists in the database.
      */
     static public boolean queryMajor(FormID query) {
-	return SPDatabase.queryMajor(query, SPGlobal.getDB());
+        return SPDatabase.queryMajor(query, SPGlobal.getDB());
     }
 
     /**
@@ -266,7 +282,7 @@ public class SPGlobal {
      * @return True if FormID exists in the database.
      */
     static public boolean queryMajor(FormID query, GRUP_TYPE... grup_types) {
-	return SPDatabase.queryMajor(query, SPGlobal.getDB(), grup_types);
+        return SPDatabase.queryMajor(query, SPGlobal.getDB(), grup_types);
     }
 
     /**
@@ -277,7 +293,7 @@ public class SPGlobal {
      * @throws IOException
      */
     static public File getMyDocumentsSkyrimFolder() throws FileNotFoundException, IOException {
-	return getSkyrimINI().getParentFile();
+        return getSkyrimINI().getParentFile();
     }
 
     /**
@@ -288,30 +304,30 @@ public class SPGlobal {
      * @throws IOException
      */
     static public File getSkyrimINI() throws FileNotFoundException, IOException {
-	File myDocuments = Ln.getMyDocuments();
-	File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
+        File myDocuments = Ln.getMyDocuments();
+        File ini = new File(myDocuments.getPath() + "//My Games//Skyrim//Skyrim.ini");
 
-	// See if there's a manual override
-	File override = new File(SPGlobal.pathToInternalFiles + "Skyrim-INI-Location.txt");
-	if (override.exists()) {
-	    SPGlobal.log(header, "Skyrim.ini override file exists: " + override);
-	    BufferedReader in = new BufferedReader(new FileReader(override));
-	    File iniTmp = new File(in.readLine());
-	    if (iniTmp.exists()) {
-		SPGlobal.log(header, "Skyrim.ini location override: " + iniTmp);
-		ini = iniTmp;
-	    } else {
-		SPGlobal.log(header, "Skyrim.ini location override thought to be in: " + iniTmp + ", but it did not exist.");
-	    }
-	}
+        // See if there's a manual override
+        File override = new File(SPGlobal.pathToInternalFiles + "Skyrim-INI-Location.txt");
+        if (override.exists()) {
+            SPGlobal.log(header, "Skyrim.ini override file exists: " + override);
+            BufferedReader in = new BufferedReader(new FileReader(override));
+            File iniTmp = new File(in.readLine());
+            if (iniTmp.exists()) {
+                SPGlobal.log(header, "Skyrim.ini location override: " + iniTmp);
+                ini = iniTmp;
+            } else {
+                SPGlobal.log(header, "Skyrim.ini location override thought to be in: " + iniTmp + ", but it did not exist.");
+            }
+        }
 
-	if (!ini.exists()) {
-	    SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
-	    ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
-	} else if (SPGlobal.logging()) {
-	    SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
-	}
-	return ini;
+        if (!ini.exists()) {
+            SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". But it does not exist.  Locating manually.");
+            ini = Ln.manualFindFile("your Skyrim.ini file.", new File(SPGlobal.pathToInternalFiles + "SkyrimINIlocation.txt"));
+        } else if (SPGlobal.logging()) {
+            SPGlobal.logMain(header, "Skyrim.ini believed to be in: " + ini + ". File exists.");
+        }
+        return ini;
     }
     static String appDataFolder;
 
@@ -321,35 +337,35 @@ public class SPGlobal {
      * @throws IOException
      */
     static public String getSkyrimAppData() throws IOException {
-	if (appDataFolder == null) {
-	    appDataFolder = System.getenv("LOCALAPPDATA");
+        if (appDataFolder == null) {
+            appDataFolder = System.getenv("LOCALAPPDATA");
 
-	    // If XP
-	    if (appDataFolder == null) {
-		SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
-		appDataFolder = System.getenv("APPDATA");
+            // If XP
+            if (appDataFolder == null) {
+                SPGlobal.logError(header, "Can't locate local app data folder directly, probably running XP.");
+                appDataFolder = System.getenv("APPDATA");
 
-		// If Messed Up
-		if (appDataFolder == null) {
-		    SPGlobal.logError(header, "Can't locate local app data folder.");
-		    appDataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
-			    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
+                // If Messed Up
+                if (appDataFolder == null) {
+                    SPGlobal.logError(header, "Can't locate local app data folder.");
+                    appDataFolder = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+                            + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
                     SPGlobal.logMain(header, "Plugin.txt returned: ", appDataFolder, "     Shaving off the \\Plugins.txt.");
-		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
+                    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
                     // remove \\Skyrim so it can be added again below. Yep
                     appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
-		} else {
-		    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
-		    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
-		    SPGlobal.logMain(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
-		    appDataFolder = appDataFolder + "\\Local Settings\\Application Data";
-		    SPGlobal.logMain(header, "path now reads: ", appDataFolder);
-		}
-	    }
-	    appDataFolder += "\\Skyrim";
-	    SPGlobal.logMain(header, SPGlobal.gameName + " App data thought to be found at: ", appDataFolder);
-	}
-	return appDataFolder;
+                } else {
+                    SPGlobal.logMain(header, "APPDATA returned: ", appDataFolder, "     Shaving off the \\Application Data.");
+                    appDataFolder = appDataFolder.substring(0, appDataFolder.lastIndexOf("\\"));
+                    SPGlobal.logMain(header, "path now reads: ", appDataFolder, "     appending \\Local Settings\\Application Data");
+                    appDataFolder = appDataFolder + "\\Local Settings\\Application Data";
+                    SPGlobal.logMain(header, "path now reads: ", appDataFolder);
+                }
+            }
+            appDataFolder += "\\Skyrim";
+            SPGlobal.logMain(header, SPGlobal.gameName + " App data thought to be found at: ", appDataFolder);
+        }
+        return appDataFolder;
     }
 
     /**
@@ -360,14 +376,14 @@ public class SPGlobal {
      * @throws IOException
      */
     static public String getPluginsTxt() throws FileNotFoundException, IOException {
-	String pluginsFile = getSkyrimAppData() + "\\plugins.txt";
-	File pluginListPath = new File(pluginsFile);
-	if (!pluginListPath.exists()) {
-	    SPGlobal.logMain(header, SPGlobal.gameName + " Plugin file location wrong. Locating manually.");
-	    pluginsFile = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
-		    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
-	}
-	return pluginsFile;
+        String pluginsFile = getSkyrimAppData() + "\\plugins.txt";
+        File pluginListPath = new File(pluginsFile);
+        if (!pluginListPath.exists()) {
+            SPGlobal.logMain(header, SPGlobal.gameName + " Plugin file location wrong. Locating manually.");
+            pluginsFile = Ln.manualFindFile("your Plugins.txt file.\nThis is usually found in your Local Application Data folder.\n"
+                    + "You may need to turn on hidden folders to see it.", new File(SPGlobal.pathToInternalFiles + "PluginsListLocation.txt")).getPath();
+        }
+        return pluginsFile;
     }
 
     /**
@@ -376,12 +392,12 @@ public class SPGlobal {
      * @throws IOException
      */
     static public String getLoadOrderTxt() throws IOException {
-	String loadorderFile = getSkyrimAppData() + "\\loadorder.txt";
-	File loadorderPath = new File(loadorderFile);
-	if (!loadorderPath.exists()) {
-	    throw new FileNotFoundException("Load Order Text file does not exist at: " + loadorderFile);
-	}
-	return loadorderFile;
+        String loadorderFile = getSkyrimAppData() + "\\loadorder.txt";
+        File loadorderPath = new File(loadorderFile);
+        if (!loadorderPath.exists()) {
+            throw new FileNotFoundException("Load Order Text file does not exist at: " + loadorderFile);
+        }
+        return loadorderFile;
     }
 
     /**
@@ -390,7 +406,7 @@ public class SPGlobal {
      * want it to all be imported at once.
      */
     static public void setStreamMode(boolean on) {
-	streamMode = on;
+        streamMode = on;
     }
 
     /**
@@ -399,7 +415,7 @@ public class SPGlobal {
      * in the load order.
      */
     static public void setNoModsAfter(boolean on) {
-	noModsAfter = on;
+        noModsAfter = on;
     }
 
     /**
@@ -409,7 +425,7 @@ public class SPGlobal {
      * @param message
      */
     static public void setSUMerrorMessage(String message) {
-	SUMGUI.setErrorMessage(message);
+        SUMGUI.setErrorMessage(message);
     }
 
     /*
@@ -420,7 +436,7 @@ public class SPGlobal {
      * print messages to them.<br> Do this step early in your program.
      */
     public static void createGlobalLog() {
-	createGlobalLog("SkyProcDebug/");
+        createGlobalLog("SkyProcDebug/");
     }
 
     /**
@@ -430,14 +446,14 @@ public class SPGlobal {
      * @param path The path to create the "SkyProcDebug/" folder.
      */
     public static void createGlobalLog(String path) {
-	pathToDebug = path;
-	log = new SPLogger(path);
+        pathToDebug = path;
+        log = new SPLogger(path);
     }
 
     static void logSync(String header, String... print) {
-	if (log != null) {
-	    log.logSync(header, print);
-	}
+        if (log != null) {
+            log.logSync(header, print);
+        }
     }
 
     /**
@@ -448,9 +464,9 @@ public class SPGlobal {
      * @param print
      */
     public static void logMain(String header, String... print) {
-	if (log != null) {
-	    SPGlobal.log.logMain(header, print);
-	}
+        if (log != null) {
+            SPGlobal.log.logMain(header, print);
+        }
     }
 
     /**
@@ -461,7 +477,7 @@ public class SPGlobal {
      * @param m Record that was blocked.
      */
     public static void logBlocked(String header, String reason, MajorRecord m) {
-	log.logSpecial(SPLogger.SpecialTypes.BLOCKED, header, "Blocked " + m + " for reason: " + reason);
+        log.logSpecial(SPLogger.SpecialTypes.BLOCKED, header, "Blocked " + m + " for reason: " + reason);
     }
 
     /**
@@ -469,11 +485,11 @@ public class SPGlobal {
      * @return True if the logger is currently on.
      */
     public static boolean logging() {
-	if (log != null) {
-	    return SPGlobal.log.logging();
-	} else {
-	    return false;
-	}
+        if (log != null) {
+            return SPGlobal.log.logging();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -481,9 +497,9 @@ public class SPGlobal {
      * @param on Turns the logger on/off.
      */
     public static void logging(Boolean on) {
-	if (log != null) {
-	    SPGlobal.log.logging(on);
-	}
+        if (log != null) {
+            SPGlobal.log.logging(on);
+        }
     }
 
     /**
@@ -491,11 +507,11 @@ public class SPGlobal {
      * @return True if the logger is currently on.
      */
     public static boolean loggingSync() {
-	if (log != null) {
-	    return SPGlobal.log.loggingSync();
-	} else {
-	    return false;
-	}
+        if (log != null) {
+            return SPGlobal.log.loggingSync();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -503,9 +519,9 @@ public class SPGlobal {
      * @param on Turns the logger on/off.
      */
     public static void loggingSync(Boolean on) {
-	if (log != null) {
-	    SPGlobal.log.loggingSync(on);
-	}
+        if (log != null) {
+            SPGlobal.log.loggingSync(on);
+        }
     }
 
     /**
@@ -514,9 +530,9 @@ public class SPGlobal {
      * @param on
      */
     public static void loggingAsync(Boolean on) {
-	if (log != null) {
-	    SPGlobal.log.loggingAsync(on);
-	}
+        if (log != null) {
+            SPGlobal.log.loggingAsync(on);
+        }
     }
 
     /**
@@ -524,20 +540,20 @@ public class SPGlobal {
      * @return Whether the LLogger's async log is on/off.
      */
     public static boolean loggingAsync() {
-	if (log != null) {
-	    return SPGlobal.log.loggingAsync();
-	} else {
-	    return false;
-	}
+        if (log != null) {
+            return SPGlobal.log.loggingAsync();
+        } else {
+            return false;
+        }
     }
 
     /**
      * Flushes the Debug buffers to the files.
      */
     public static void flush() {
-	if (log != null) {
-	    SPGlobal.log.flush();
-	}
+        if (log != null) {
+            SPGlobal.log.flush();
+        }
     }
 
     /**
@@ -548,9 +564,9 @@ public class SPGlobal {
      * @param print
      */
     public static void logError(String header, String... print) {
-	if (log != null) {
-	    SPGlobal.log.logError(header, print);
-	}
+        if (log != null) {
+            SPGlobal.log.logError(header, print);
+        }
     }
 
     /**
@@ -559,9 +575,9 @@ public class SPGlobal {
      * @param e Exception to print.
      */
     public static void logException(Throwable e) {
-	if (log != null) {
-	    SPGlobal.log.logException(e);
-	}
+        if (log != null) {
+            SPGlobal.log.logException(e);
+        }
     }
 
     /**
@@ -573,9 +589,9 @@ public class SPGlobal {
      * @param print
      */
     public static void logSpecial(Enum e, String header, String... print) {
-	if (log != null) {
-	    SPGlobal.log.logSpecial(e, header, print);
-	}
+        if (log != null) {
+            SPGlobal.log.logSpecial(e, header, print);
+        }
     }
 
     /**
@@ -585,39 +601,40 @@ public class SPGlobal {
      * @param logName
      */
     public static void newSpecialLog(Enum e, String logName) {
-	if (log != null) {
-	    SPGlobal.log.addSpecial(e, logName);
-	}
+        if (log != null) {
+            SPGlobal.log.addSpecial(e, logName);
+        }
     }
+
     /**
-     * 
+     *
      * @return if mod specific log files will be written
      */
-    public static boolean logMods(){
+    public static boolean logMods() {
         return logMods;
     }
-    
+
     /**
-     * 
+     *
      * @param on set mod specific logging
      */
-    public static void logMods(boolean on){
+    public static void logMods(boolean on) {
         logMods = on;
-        if(on){
+        if (on) {
             logging(true);
         }
     }
 
-    static void logMod(Mod m, String h, String ... data) {
-        if (logMods && log != null){
+    static void logMod(Mod m, String h, String... data) {
+        if (logMods && log != null) {
             log.logMod(m, h, data);
         }
     }
 
     static void newSyncLog(String fileName) {
-	if (log != null) {
-	    SPGlobal.log.newSyncLog(fileName);
-	}
+        if (log != null) {
+            SPGlobal.log.newSyncLog(fileName);
+        }
     }
 
     /**
@@ -627,9 +644,9 @@ public class SPGlobal {
      * @param print
      */
     public static void log(String header, String... print) {
-	if (log != null) {
-	    SPGlobal.log.log(header, print);
-	}
+        if (log != null) {
+            SPGlobal.log.log(header, print);
+        }
     }
 
     /**
@@ -638,23 +655,23 @@ public class SPGlobal {
      * @param fileName Name of the log.
      */
     public static void newLog(String fileName) {
-	if (log != null) {
-	    SPGlobal.log.newLog(fileName);
-	}
+        if (log != null) {
+            SPGlobal.log.newLog(fileName);
+        }
     }
 
     static void sync(boolean flag) {
-	if (log != null) {
-	    log.sync(flag);
-	}
+        if (log != null) {
+            log.sync(flag);
+        }
     }
 
     static boolean sync() {
-	if (log != null) {
-	    return log.sync();
-	} else {
-	    return false;
-	}
+        if (log != null) {
+            return log.sync();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -664,47 +681,47 @@ public class SPGlobal {
      * @throws IOException
      */
     public static void redirectSystemOutStream() throws FileNotFoundException, IOException {
-	if (log == null) {
-	    createGlobalLog();
-	}
-	OutputStream outToDebug = new OutputStream() {
-	    @Override
-	    public void write(final int b) throws IOException {
-		if (b != 116) {
-		    log("", String.valueOf((char) b));
-		}
-	    }
+        if (log == null) {
+            createGlobalLog();
+        }
+        OutputStream outToDebug = new OutputStream() {
+            @Override
+            public void write(final int b) throws IOException {
+                if (b != 116) {
+                    log("", String.valueOf((char) b));
+                }
+            }
 
-	    @Override
-	    public void write(byte[] b, int off, int len) throws IOException {
-		String output = new String(b, off, len);
-		if (output.length() > 2) {
-		    log("", output);
-		}
-	    }
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                String output = new String(b, off, len);
+                if (output.length() > 2) {
+                    log("", output);
+                }
+            }
 
-	    @Override
-	    public void write(byte[] b) throws IOException {
-		write(b, 0, b.length);
-	    }
-	};
+            @Override
+            public void write(byte[] b) throws IOException {
+                write(b, 0, b.length);
+            }
+        };
 
-	System.setOut(new PrintStream(outToDebug, true));
+        System.setOut(new PrintStream(outToDebug, true));
     }
 
     static void reset() {
-	SPDatabase.activePlugins.clear();
-	SPDatabase.addedPlugins.clear();
-	SPDatabase.modLookup.clear();
-	FormID.allIDs.clear();
-	Consistency.clear();
+        SPDatabase.activePlugins.clear();
+        SPDatabase.addedPlugins.clear();
+        SPDatabase.modLookup.clear();
+        FormID.allIDs.clear();
+        Consistency.clear();
     }
 
     /**
      * Closes all logs.
      */
     public static void closeDebug() {
-	LDebug.wrapUp();
+        LDebug.wrapUp();
     }
 
     /**
@@ -713,7 +730,7 @@ public class SPGlobal {
      * @return
      */
     public static String pathToDebug() {
-	return pathToDebug;
+        return pathToDebug;
     }
     // Debug Globals
     /**
@@ -738,22 +755,22 @@ public class SPGlobal {
      * sync log<br>
      */
     public static boolean debugModMerge = false;
-    
+
     /*
      * Toggle to force to processing exactly like vanilla files for validation.
      * Switches MajorRecord with flag DELETED to print full contents.
      * Needed because TesVEdit now removes all subrecords of DELETED majorRecords.
      */
     public static boolean forceValidateMode = false;
-    
+
     private static boolean allModsAsMasters = false;
-    
-    public static boolean getAllModsAsMasters(){
+
+    public static boolean getAllModsAsMasters() {
         return allModsAsMasters;
     }
-    
-    public static void setAllModsAsMasters(boolean b){
+
+    public static void setAllModsAsMasters(boolean b) {
         allModsAsMasters = b;
     }
-    
+
 }

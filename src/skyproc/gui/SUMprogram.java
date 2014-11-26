@@ -1037,13 +1037,13 @@ public class SUMprogram implements SUM {
 	args.add("-NONEW");
 	args.add("-NOMODSAFTER");
 	args.add("-LANGUAGE");
-	args.add("-" + Language.values()[SUMsave.getInt(SUMSettings.LANGUAGE)]);
+	args.add("" + Language.values()[SUMsave.getInt(SUMSettings.LANGUAGE)]);
 	if (forceAllPatches.isSelected() || SUMsave.getBool(SUMSettings.MERGE_PATCH)) {
 	    args.add("-FORCE");
 	}
 	args.add("-PROGRESSLOCATION");
-	args.add("-" + (SUMGUI.progress.getX() + SUMGUI.progress.getWidth() + 10));
-	args.add("-" + SUMGUI.progress.getY());
+	args.add("" + (SUMGUI.progress.getX() + SUMGUI.progress.getWidth() + 10));
+	args.add("" + SUMGUI.progress.getY());
 	args.add("-SUMBLOCK");
 	args.add("-NOBOSS");
         if (SUMsave.getBool(SUMSettings.ALL_AS_MASTERS)){

@@ -144,7 +144,8 @@ public class ScriptPackage extends SubRecord implements Serializable {
      * @return
      */
     public ScriptRef getScript(ScriptRef script) {
-	return scripts.get(scripts.indexOf(script));
+        int index = scripts.indexOf(script);
+	return (index != -1) ? scripts.get(index) : null;
     }
 
     /**

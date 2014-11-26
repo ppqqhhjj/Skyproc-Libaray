@@ -34,8 +34,7 @@ public class KeywordSet extends SubRecord {
 
     @Override
     boolean isValid() {
-        return counter.isValid()
-                && keywords.isValid();
+        return keywords.isValid();
     }
 
     @Override
@@ -52,6 +51,7 @@ public class KeywordSet extends SubRecord {
     @Override
     void export(ModExporter out) throws IOException {
         if (isValid()) {
+            counter.setData(keywords.size(), 4);
             counter.export(out);
             keywords.export(out);
         }
@@ -62,7 +62,7 @@ public class KeywordSet extends SubRecord {
         switch (getNextType(in)) {
             case "KSIZ":
                 counter.parseData(in, srcMod);
-                keywords = new SubFormArray("KWDA", counter.toInt());
+//                keywords = new SubFormArray("KWDA", counter.toInt());
                 break;
             case "KWDA":
                 keywords.parseData(in, srcMod);
@@ -92,7 +92,7 @@ public class KeywordSet extends SubRecord {
     public void addKeywordRef(FormID keywordRef) {
         if (!keywords.contains(keywordRef)) {
             keywords.add(keywordRef);
-            counter.modValue(1);
+            //counter.modValue(1);
         }
     }
 
@@ -103,7 +103,7 @@ public class KeywordSet extends SubRecord {
      */
     public void removeKeywordRef(FormID keywordRef) {
         if (keywords.remove(keywordRef)) {
-            counter.modValue(-1);
+            //counter.modValue(-1);
         }
     }
 

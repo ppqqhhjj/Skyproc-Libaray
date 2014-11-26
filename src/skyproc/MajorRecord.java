@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.DataFormatException;
 import lev.LFlags;
@@ -19,6 +20,8 @@ import skyproc.exceptions.BadRecord;
  */
 public abstract class MajorRecord extends Record implements Serializable {
 
+    static final HashMap<FormID, ArrayList<MajorRecord>> recordHistory = new HashMap<>();
+    
     static final SubPrototype majorProto = new SubPrototype() {
 
         @Override
@@ -176,6 +179,13 @@ public abstract class MajorRecord extends Record implements Serializable {
         }
 
         importSubRecords(in);
+        
+        ArrayList<MajorRecord> versions = recordHistory.get(ID);
+        if(versions == null){
+            versions = new ArrayList<>();
+            recordHistory.put(ID, versions);
+        }
+        versions.add(this);
     }
 
     void importSubRecords(LImport in) throws BadRecord, DataFormatException, BadParameter {
@@ -320,6 +330,15 @@ public abstract class MajorRecord extends Record implements Serializable {
      */
     public ModListing getFormMaster() {
         return ID.getMaster();
+    }
+    
+    /**
+     * 
+     * @return The mod (file) this Major Record was imported from. Does not need 
+     * to be the same mod that this Major Record originates from.
+     */
+    public ModListing getModImportedFrom(){
+        return srcMod.getInfo();
     }
 
     /**
@@ -502,5 +521,13 @@ public abstract class MajorRecord extends Record implements Serializable {
 
     boolean shouldExportGRUP() {
         return false;
+    }
+    
+    /**
+     * 
+     * @return A copy of a list of this Major Record as it appears in all imported plugins.
+     */
+    public ArrayList<MajorRecord> getRecordHistory(){
+        return new ArrayList<>(recordHistory.get(ID));
     }
 }

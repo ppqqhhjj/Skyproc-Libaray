@@ -58,6 +58,10 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
 		FormID id = new FormID();
 		id.parseData(in, srcMod);
 		add(id);
+                size++;
+                if (SPGlobal.logMods){
+		    logMod(srcMod, toString(), "Setting " + toString() + " FormID[" + size + "]: " + id);
+		}
 	    }
 	}
     }
@@ -77,11 +81,11 @@ class SubFormArray extends SubRecordTyped implements Iterable<FormID> {
     @Override
     boolean isValid() {
 	for (FormID ID : IDs) {
-	    if (ID.isValid()) {
-		return true;
+	    if (!ID.isValid()) {
+		return false;
 	    }
 	}
-	return false;
+	return true;
     }
 
     @Override
