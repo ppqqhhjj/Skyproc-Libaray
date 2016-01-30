@@ -107,6 +107,34 @@ public class SPGlobal {
     static File skyProcDocuments;
 
     /**
+     * Fetch the language of the game from the Skyrim.ini.
+     * Any exceptions encountered while reading the config-file are logged in 
+     * the debug logs and not passed to the caller.
+     * @return the fetched language or the previously defined one (defaults to
+     * English)
+     */
+    public static Language getLanguageFromSkyrimIni() {
+        try (FileReader fstream = new FileReader(SPGlobal.getSkyrimINI());
+                BufferedReader reader = new BufferedReader(fstream)) {
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.contains("sLanguage")) {
+                    String iniLanguage = line.substring(line.indexOf("=") + 1);
+                    for (SPGlobal.Language lang : SPGlobal.Language.values()) {
+                        if (lang.name().equalsIgnoreCase(iniLanguage)) {
+                            return lang;
+                        }
+                    }
+                }
+                line = reader.readLine();
+            }
+        } catch (IOException ex) {
+            SPGlobal.logException(ex);
+        }
+        return language;
+    }
+
+    /**
      * Returns a File path to the SkyProc Documents folder.
      *
      * @return
