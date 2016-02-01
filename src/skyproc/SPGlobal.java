@@ -96,7 +96,7 @@ public class SPGlobal {
         /**
          *
          */
-        Japanes;
+        Japanese;
     }
     /**
      * The path from the .jar location to create/look for the file used to
@@ -110,8 +110,7 @@ public class SPGlobal {
      * Fetch the language of the game from the Skyrim.ini.
      * Any exceptions encountered while reading the config-file are logged in 
      * the debug logs and not passed to the caller.
-     * @return the fetched language or the previously defined one (defaults to
-     * English)
+     * @return the fetched language or null if no language was found in the ini
      */
     public static Language getLanguageFromSkyrimIni() {
         try (FileReader fstream = new FileReader(SPGlobal.getSkyrimINI());
@@ -120,6 +119,7 @@ public class SPGlobal {
             while (line != null) {
                 if (line.contains("sLanguage")) {
                     String iniLanguage = line.substring(line.indexOf("=") + 1);
+                    iniLanguage = iniLanguage.trim();
                     for (SPGlobal.Language lang : SPGlobal.Language.values()) {
                         if (lang.name().equalsIgnoreCase(iniLanguage)) {
                             return lang;
@@ -131,7 +131,7 @@ public class SPGlobal {
         } catch (IOException ex) {
             SPGlobal.logException(ex);
         }
-        return language;
+        return null;
     }
 
     /**

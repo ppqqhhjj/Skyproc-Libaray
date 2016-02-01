@@ -508,7 +508,10 @@ public class SUMGUI extends JFrame {
 
 	justSettings = arguments.contains("-JUSTSETTINGS");
 
-        SPGlobal.language = SPGlobal.getLanguageFromSkyrimIni();
+        Language ini_lang = SPGlobal.getLanguageFromSkyrimIni();
+        if (ini_lang != null) {
+            SPGlobal.language = ini_lang; 
+        }
 	index = arguments.indexOf("-LANGUAGE");
 	if (index != -1) {
 	    String lang = arguments.get(index + 1);
