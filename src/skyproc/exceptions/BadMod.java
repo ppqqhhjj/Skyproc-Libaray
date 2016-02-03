@@ -4,23 +4,25 @@
  */
 package skyproc.exceptions;
 
+import skyproc.ModListing;
+
 /**
  *
  * @author Justin Swanson
  */
 public class BadMod extends Exception {
 
-    /**
-     * 
-     */
-    public BadMod() {
-    }
+    public final ModListing failedmod;
 
     /**
-     * 
-     * @param msg
+     * Create a new BadMod exception to indicate that importing the specified
+     * mod has failed.
+     * @param msg a message about the error
+     * @param cause the underlying exception that triggered the error, if any
+     * @param failedmod the name of the mod
      */
-    public BadMod(String msg) {
-        super(msg);
+    public BadMod(String msg, Throwable cause, ModListing failedmod) {
+        super(msg, cause);
+        this.failedmod = failedmod;
     }
 }

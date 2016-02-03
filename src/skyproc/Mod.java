@@ -64,7 +64,8 @@ public class Mod implements Comparable, Iterable<GRUP> {
             SPGlobal.logMod(this, "MOD", "Parsing header");
         }
         if (!headerInfo.hasRemaining()) {
-            throw new BadMod(info.print() + " did not have a TES4 header.");
+            throw new BadMod(info.print() + " did not have a TES4 header.",
+                    null, info);
         }
         tes.parseData(headerInfo, this);
         if (tes.flags.get(Mod_Flags.MASTER.value) && (!info.getMasterTag())) {
