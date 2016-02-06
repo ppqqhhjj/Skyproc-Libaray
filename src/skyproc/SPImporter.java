@@ -615,28 +615,56 @@ public class SPImporter {
         return importMod(listing, SPGlobal.pathToData, grup_targets);
     }
 
-    static void checkMissingMasters(Mod plugin) throws MissingMaster {
-        ArrayList<ModListing> missingMasters = new ArrayList<>();
+        static void checkMissingMasters(Mod plugin) throws MissingMaster, IOException {
+        ArrayList<ModListing> notinstalled = new ArrayList<>();
+        ArrayList<ModListing> inactive = new ArrayList<>();
+        ArrayList<ModListing> loadedafter = new ArrayList<>();
+        int failedmasters = 0;
         for (ModListing master : plugin.getMasters()) {
+            Mod masterMod;
             try {
-                RecordFileChannel input = new RecordFileChannel(SPGlobal.pathToData + master.print());
+                RecordFileChannel input = new RecordFileChannel(
+                        SPGlobal.pathToData + master.print());
                 ModListing tempListing = new ModListing(master.print());
-                Mod masterMod = new Mod(tempListing, extractHeaderInfo(input));
-                if (SPDatabase.getMod(tempListing) == null && SPGlobal.shouldImport(master)) {
-                    missingMasters.add(master);
-                }
+                /*we need to fetch the header because ModListing comparisons
+                    include both file name and master-flag, but the masters-list
+                    of a plugin only includes the name
+                */
+                masterMod = new Mod(tempListing, extractHeaderInfo(input));
             } catch (Exception exception) {
-                missingMasters.add(master);
+                notinstalled.add(master);
+                failedmasters += 1;
+                continue;
+            }
+            if (!getActiveModList().contains(masterMod.modInfo)) {
+                inactive.add(master);
+                failedmasters += 1;
+            }
+            else if (SPDatabase.getMod(masterMod.modInfo) == null) {
+                loadedafter.add(master);
+                failedmasters += 1;
             }
         }
-        if (!missingMasters.isEmpty()) {
-            String error = "\n" + plugin.toString() + " has some missing masters:";
-            for (ModListing m : missingMasters) {
-                error += "\n  - " + m.toString();
+        if (failedmasters > 0) {
+            String errormessage = "The plugin '" + plugin.getName() + "' has "
+                    + "missing masters:\r\n\r\n";
+            for (ModListing failedmod: notinstalled) {
+                errormessage += "    -'" + failedmod.print() +
+                        "' is not installed\r\n";
             }
-            throw new MissingMaster(error);
+            for (ModListing failedmod: inactive) {
+                errormessage += "    -'" + failedmod.print() +
+                        "' is installed, but not activated\r\n";
+            }
+            for (ModListing failedmod: loadedafter) {
+                errormessage += "    -'" + failedmod.print() +
+                        "' is loaded after the mod depending on it\r\n";
+            }
+            throw new MissingMaster(errormessage, plugin.getInfo(),
+                    notinstalled, inactive, loadedafter);
         }
     }
+
 
     /**
      * A rudimentary mod data Iterator that returns data of subrecords matching
