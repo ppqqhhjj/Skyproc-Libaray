@@ -101,6 +101,11 @@ public class SUMGUI extends JFrame {
     static Font SUMSmallFont = new Font("SansSerif", Font.PLAIN, 10);
     static String errorMessage = "Please contact the author.";
 
+    /**This boolean flag distinguishes between a window-close event caused by
+     * the patch button and the X button.
+     */
+    private static boolean patchrequested = false;
+
     SUMGUI() {
 	super(hook.getName());
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -172,6 +177,7 @@ public class SUMGUI extends JFrame {
 		    if (SPGlobal.logging()) {
 			SPGlobal.logMain(header, "Starting patch because user pressed patch.");
 		    }
+                    patchrequested = true;
 		    closeWindow();
 		}
 	    });
@@ -192,8 +198,7 @@ public class SUMGUI extends JFrame {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 		    helpPanel.setDefaultPos();
-		    helpPanel.setContent("This will create a patch if necessary and then exit the program.\n\n"
-			    + "NOTE: The big red exit button has the same effect.");
+		    helpPanel.setContent("This will create a patch if necessary and then exit the program.");
 		    helpPanel.setTitle("Start Patch and Exit");
 		    helpPanel.hideArrow();
 		}
@@ -851,7 +856,7 @@ public class SUMGUI extends JFrame {
 
     static void closingGUIwindow() {
 	SPGlobal.logMain(header, "Window Closing.");
-	if (justSettings) {
+	if (justSettings || !patchrequested) {
 	    exitProgram(false, true);
 	}
 	exitRequested = true;
