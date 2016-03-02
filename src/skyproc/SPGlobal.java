@@ -2,6 +2,8 @@ package skyproc;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.gui.SUMGUI;
@@ -115,16 +117,30 @@ public class SPGlobal {
     public static Language getLanguageFromSkyrimIni() {
         try (FileReader fstream = new FileReader(SPGlobal.getSkyrimINI());
                 BufferedReader reader = new BufferedReader(fstream)) {
+            String category = "";
             String line = reader.readLine();
+            Pattern pattern_category = Pattern.compile("\\[([A-z]+)\\]");
+            Pattern pattern_lang = Pattern.compile("sLanguage *= *([A-z]+)",
+                    Pattern.CASE_INSENSITIVE);
             while (line != null) {
-                if (line.contains("sLanguage")) {
-                    String iniLanguage = line.substring(line.indexOf("=") + 1);
-                    iniLanguage = iniLanguage.trim();
+                Matcher match = pattern_category.matcher(line.trim());
+                if (match.matches()) {
+                    category = match.group(1).toLowerCase();
+                }
+                if (!category.equals("general")) {
+                    line = reader.readLine();
+                    continue;
+                }
+                match = pattern_lang.matcher(line.trim());
+                if (match.matches()) {
+                    String iniLanguage = match.group(1);
                     for (SPGlobal.Language lang : SPGlobal.Language.values()) {
                         if (lang.name().equalsIgnoreCase(iniLanguage)) {
                             return lang;
                         }
                     }
+                    //oops, the specified language is not known
+                    return null;
                 }
                 line = reader.readLine();
             }
