@@ -2,6 +2,8 @@ package skyproc;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lev.Ln;
 import lev.debug.LDebug;
 import skyproc.gui.SUMGUI;
@@ -96,7 +98,7 @@ public class SPGlobal {
         /**
          *
          */
-        Japanes;
+        Japanese;
     }
     /**
      * The path from the .jar location to create/look for the file used to
@@ -105,6 +107,48 @@ public class SPGlobal {
      */
     public static String pluginListBackupPath = "SkyProc-PluginListLocation.txt";
     static File skyProcDocuments;
+
+    /**
+     * Fetch the language of the game from the Skyrim.ini.
+     * Any exceptions encountered while reading the config-file are logged in 
+     * the debug logs and not passed to the caller.
+     * @return the fetched language or null if no language was found in the ini
+     */
+    public static Language getLanguageFromSkyrimIni() {
+        try (FileReader fstream = new FileReader(SPGlobal.getSkyrimINI());
+                BufferedReader reader = new BufferedReader(fstream)) {
+            String category = "";
+            String line = reader.readLine();
+            Pattern pattern_category = Pattern.compile("\\[([A-z]+)\\]");
+            Pattern pattern_lang = Pattern.compile("sLanguage *= *([A-z]+)",
+                    Pattern.CASE_INSENSITIVE);
+            while (line != null) {
+                Matcher match = pattern_category.matcher(line.trim());
+                if (match.matches()) {
+                    category = match.group(1).toLowerCase();
+                }
+                if (!category.equals("general")) {
+                    line = reader.readLine();
+                    continue;
+                }
+                match = pattern_lang.matcher(line.trim());
+                if (match.matches()) {
+                    String iniLanguage = match.group(1);
+                    for (SPGlobal.Language lang : SPGlobal.Language.values()) {
+                        if (lang.name().equalsIgnoreCase(iniLanguage)) {
+                            return lang;
+                        }
+                    }
+                    //oops, the specified language is not known
+                    return null;
+                }
+                line = reader.readLine();
+            }
+        } catch (IOException ex) {
+            SPGlobal.logException(ex);
+        }
+        return null;
+    }
 
     /**
      * Returns a File path to the SkyProc Documents folder.

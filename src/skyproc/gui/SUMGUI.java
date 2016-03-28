@@ -513,6 +513,10 @@ public class SUMGUI extends JFrame {
 
 	justSettings = arguments.contains("-JUSTSETTINGS");
 
+        Language ini_lang = SPGlobal.getLanguageFromSkyrimIni();
+        if (ini_lang != null) {
+            SPGlobal.language = ini_lang; 
+        }
 	index = arguments.indexOf("-LANGUAGE");
 	if (index != -1) {
 	    String lang = arguments.get(index + 1);
@@ -523,6 +527,11 @@ public class SUMGUI extends JFrame {
 		}
 	    }
 	}
+        if (SPGlobal.logging()) {
+            SPGlobal.logMain("Language", "Language set to " + 
+                    SPGlobal.language);
+        }
+
 
 	if (arguments.contains("-SUMBLOCK")) {
 	    try {
