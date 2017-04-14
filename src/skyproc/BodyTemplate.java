@@ -6,9 +6,12 @@ package skyproc;
 
 import skyproc.genenums.FirstPersonFlags;
 import skyproc.genenums.ArmorType;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.DataFormatException;
+
 import lev.LImport;
 import lev.LOutFile;
 import lev.LFlags;
@@ -245,5 +248,43 @@ public class BodyTemplate extends SubShell {
             subRecords.add(new BodyTemplateMain("BODT") );
         }
     }
+    
+	BodyTemplateMain getMain(BodyTemplateType type) {
+		return (BodyTemplateMain) subRecords.get(type.type);
+	}
+	public ArmorType getArmorType() {
+		BodyTemplateMain main = getMain(BodyTemplateType.Normal);
+		if (main.armorType == null) {
+			main = getMain(BodyTemplateType.Biped);
+		}
+		main.valid = true;
+		return main.armorType;
+	}
+	
+	public List<FirstPersonFlags> getFirstPersonFlags() {
+		BodyTemplateMain main = getMain(BodyTemplateType.Normal);
+		if (main.armorType == null) {
+			main = getMain(BodyTemplateType.Biped);
+		}
+		main.valid = true;
+		List<FirstPersonFlags> flags = new ArrayList<>();
+		for (FirstPersonFlags flag : FirstPersonFlags.values()) {
+			if (flag != FirstPersonFlags.NONE) {
+				if (main.bodyParts.get(flag.ordinal())) {
+					flags.add(flag);
+				}
+			}
+		}
 
+		return flags;
+
+	}
+	public void set(FirstPersonFlags flag, boolean on) {
+		BodyTemplateMain main = getMain(BodyTemplateType.Normal);
+		if (main.armorType == null) {
+			main = getMain(BodyTemplateType.Biped);
+		}
+		main.bodyParts.set(flag.ordinal(), on);
+		main.valid = true;
+	}
 }
