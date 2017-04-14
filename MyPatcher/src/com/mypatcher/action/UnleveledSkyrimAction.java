@@ -19,7 +19,7 @@ public class UnleveledSkyrimAction extends Action {
 
 	@Override
 	public void doAction() {
-//		this.unLeveledNPC();
+		this.unLeveledNPC();
 		this.unLeveledItem();
 
 	}

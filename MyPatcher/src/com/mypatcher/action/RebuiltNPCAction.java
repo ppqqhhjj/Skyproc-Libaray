@@ -37,15 +37,17 @@ public class RebuiltNPCAction extends Action {
 
 			// Log.console(npc.getEDID());
 			if (npc.getName() != null
-					&& !npc.getName().trim().equals("<NO TEXT>")
-					&& this.isHumanBeing(npc)) {
+					&& !npc.getName().trim().equals("<NO TEXT>")) {
 
 				Log.console(npc.getEDID() + " : " + npc.getName());
 
 				npc.set(Skill.LIGHTARMOR, 100);
 				npc.set(Skill.HEAVYARMOR, 100);
-				npc.setHealthOffset(0);
-
+				
+//				if(this.isHumanBeing(npc)){
+//					npc.setHealthOffset(0);
+//				}
+				
 				this.patch.addRecord(npc);
 			}
 		}

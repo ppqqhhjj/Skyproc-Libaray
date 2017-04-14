@@ -10,6 +10,7 @@ import skyproc.KYWD;
 import skyproc.KeywordSet;
 import skyproc.LVLI;
 import skyproc.MajorRecord;
+import skyproc.WEAP;
 import skyproc.genenums.ArmorType;
 
 import com.mypatcher.Context;
@@ -31,6 +32,14 @@ public class DistributeNewItemsAction extends Action {
 	private List<LVLI> gauntletLight = new ArrayList<>();
 	private List<LVLI> bootLight = new ArrayList<>();
 	private List<LVLI> shieldLight = new ArrayList<>();
+	
+	private List<LVLI> Warhammer = new ArrayList<>();
+	private List<LVLI> WarAxe = new ArrayList<>();
+	private List<LVLI> Sword = new ArrayList<>();
+	private List<LVLI> Mace = new ArrayList<>();
+	private List<LVLI> Greatsword = new ArrayList<>();
+	private List<LVLI> Dagger = new ArrayList<>();
+	private List<LVLI> Battleaxe = new ArrayList<>();
 
 	public DistributeNewItemsAction(Context context) {
 		super(context);
@@ -59,7 +68,56 @@ public class DistributeNewItemsAction extends Action {
 	}
 
 	private void distributeWeapon() {
+		
+		
+		for (WEAP weapon : this.merger.getWeapons()) {
+			if (this.isIgnore(weapon)) {
+				continue;
+			}
+			this.addWeaponToList(weapon);
 
+		}
+		
+	}
+	
+	private void addWeaponToList(WEAP weapon){
+		KYWD WeapTypeWarhammer = (KYWD) this.merger
+				.getMajor("WeapTypeWarhammer", GRUP_TYPE.KYWD);
+		KYWD WeapTypeWarAxe = (KYWD) this.merger.getMajor("WeapTypeWarAxe",
+				GRUP_TYPE.KYWD);
+		KYWD WeapTypeSword = (KYWD) this.merger.getMajor("WeapTypeSword",
+				GRUP_TYPE.KYWD);
+		KYWD WeapTypeMace = (KYWD) this.merger.getMajor("WeapTypeMace", GRUP_TYPE.KYWD);
+
+		KYWD WeapTypeGreatsword = (KYWD) this.merger
+				.getMajor("WeapTypeGreatsword", GRUP_TYPE.KYWD);
+		
+		KYWD WeapTypeDagger = (KYWD) this.merger.getMajor("WeapTypeDagger", GRUP_TYPE.KYWD);
+
+		KYWD WeapTypeBattleaxe = (KYWD) this.merger
+				.getMajor("WeapTypeBattleaxe", GRUP_TYPE.KYWD);
+		
+		ArrayList<FormID> keys = weapon.getKeywordSet().getKeywordRefs();
+		
+		if(keys.contains(WeapTypeBattleaxe)){
+			this.addToList(weapon, this.Battleaxe);
+		}else if(keys.contains(WeapTypeDagger)){
+			this.addToList(weapon, this.Dagger);
+		}else if(keys.contains(WeapTypeGreatsword)){
+			this.addToList(weapon, this.Greatsword);
+		}else if(keys.contains(WeapTypeMace)){
+			this.addToList(weapon, this.Mace);
+		}else if(keys.contains(WeapTypeSword)){
+			this.addToList(weapon, this.Sword);
+		}else if(keys.contains(WeapTypeWarAxe)){
+			this.addToList(weapon, this.WarAxe);
+		}else if(keys.contains(WeapTypeWarhammer)){
+			this.addToList(weapon, this.Warhammer);
+		}else{
+			Log.console("Item: " + weapon.getEDID()
+					+ " has no valid keyword");
+		}
+		
 	}
 
 	private void getOriginalMod() {
@@ -135,13 +193,13 @@ public class DistributeNewItemsAction extends Action {
 
 	private void InitLevledList() {
 
-		FormID helmetLight = this.merger.getMajor("ArmorLeatherHelmet",
+		FormID helmetLight = this.merger.getMajor("ArmorHideHelmet",
 				GRUP_TYPE.ARMO).getForm();
-		FormID cuirassLight = this.merger.getMajor("ArmorLeatherCuirass",
+		FormID cuirassLight = this.merger.getMajor("ArmorHideCuirass",
 				GRUP_TYPE.ARMO).getForm();
-		FormID gauntletLight = this.merger.getMajor("ArmorLeatherGauntlets",
+		FormID gauntletLight = this.merger.getMajor("ArmorHideGauntlets",
 				GRUP_TYPE.ARMO).getForm();
-		FormID bootLight = this.merger.getMajor("ArmorLeatherBoots",
+		FormID bootLight = this.merger.getMajor("ArmorHideBoots",
 				GRUP_TYPE.ARMO).getForm();
 		FormID shieldLight = this.merger.getMajor("ArmorHideShield",
 				GRUP_TYPE.ARMO).getForm();
@@ -156,6 +214,22 @@ public class DistributeNewItemsAction extends Action {
 				GRUP_TYPE.ARMO).getForm();
 		FormID shieldHeavy = this.merger.getMajor("ArmorIronShield",
 				GRUP_TYPE.ARMO).getForm();
+		
+		FormID SteelWarhammer = this.merger.getMajor("SteelWarhammer",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelWarAxe = this.merger.getMajor("SteelWarAxe",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelSword = this.merger.getMajor("SteelSword",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelMace = this.merger.getMajor("SteelMace",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelGreatsword = this.merger.getMajor("SteelGreatsword",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelDagger = this.merger.getMajor("SteelDagger",
+				GRUP_TYPE.WEAP).getForm();
+		FormID SteelBattleaxe = this.merger.getMajor("SteelBattleaxe",
+				GRUP_TYPE.WEAP).getForm();
+		
 
 		for (LVLI leveledItems : this.merger.getLeveledItems()) {
 
@@ -195,14 +269,38 @@ public class DistributeNewItemsAction extends Action {
 			if (leveledItems.getEntryForms().contains(shieldHeavy)) {
 				this.shieldHeavy.add(leveledItems);
 			}
+			
+			
+			if (leveledItems.getEntryForms().contains(SteelWarhammer)) {
+				this.Warhammer.add(leveledItems);
+			}
+			if (leveledItems.getEntryForms().contains(SteelWarAxe)) {
+				this.WarAxe.add(leveledItems);
+			}
+
+			if (leveledItems.getEntryForms().contains(SteelSword)) {
+				this.Sword.add(leveledItems);
+			}
+			if (leveledItems.getEntryForms().contains(SteelMace)) {
+				this.Mace.add(leveledItems);
+			}
+			if (leveledItems.getEntryForms().contains(SteelGreatsword)) {
+				this.Greatsword.add(leveledItems);
+			}
+			if (leveledItems.getEntryForms().contains(SteelDagger)) {
+				this.Dagger.add(leveledItems);
+			}
+			if (leveledItems.getEntryForms().contains(SteelBattleaxe)) {
+				this.Battleaxe.add(leveledItems);
+			}
 
 		}
 	}
 
-	private void addToList(ARMO armor, List<LVLI> list) {
+	private void addToList(MajorRecord record, List<LVLI> list) {
 		for (LVLI leveledItem : list) {
-			if (!leveledItem.contains(armor)) {
-				leveledItem.addEntry(armor.getForm(), 1, 1);
+			if (!leveledItem.contains(record)) {
+				leveledItem.addEntry(record.getForm(), 1, 1);
 				this.patch.addRecord(leveledItem);
 			}
 		}

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,13 @@ public class Main implements SUM {
 	private Mod patch;
 
 	public static void main(String[] args) {
+
+			try {
+				Files.delete(new File("../../"+myPatchName+".esp").toPath());
+			} catch (IOException e1) {
+				throw new RuntimeException(e1); 
+			}
+
 		try {
 			SPGlobal.createGlobalLog();
 			SUMGUI.open(new Main(), args);
@@ -201,8 +209,8 @@ public class Main implements SUM {
 			// new ReplaceArmorModelAction(c).doAction();
 			// new ReplaceWeaponModelAction(c).doAction();
 			// new RemoveFantasticItemsAction(c).doAction();
-			// new DistributeNewItemsAction(c).doAction();
-//			 new UnleveledSkyrimAction(c).doAction();
+			 new DistributeNewItemsAction(c).doAction();
+			 new UnleveledSkyrimAction(c).doAction();
 			new RebuiltNPCAction(c).doAction();
 
 			// for (ARMO armor : armors) {
