@@ -54,7 +54,7 @@ public class Main implements SUM {
 	GRUP_TYPE[] importRequests = new GRUP_TYPE[] { GRUP_TYPE.LVLI,
 			GRUP_TYPE.ARMO, GRUP_TYPE.ARMA, GRUP_TYPE.WEAP, GRUP_TYPE.FLST,
 			GRUP_TYPE.KYWD, GRUP_TYPE.OTFT, GRUP_TYPE.ENCH, GRUP_TYPE.LVLN,GRUP_TYPE
-			.NPC_,GRUP_TYPE.RACE};
+			.NPC_,GRUP_TYPE.RACE,GRUP_TYPE.PERK};
 
 	private static String myPatchName = "Woody";
 	private static String version = "0.1";

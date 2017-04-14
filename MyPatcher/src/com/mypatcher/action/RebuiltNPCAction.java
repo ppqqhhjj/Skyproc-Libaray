@@ -32,6 +32,10 @@ public class RebuiltNPCAction extends Action {
 	}
 
 	private void rebuiltNPC() {
+		
+		FormID HeavyArmor1=this.merger.getPerks().get("Juggernaut00").getForm();
+		FormID lightArmor1 = this.merger.getPerks().get("AgileDefender00").getForm();
+		
 		GRUP<NPC_> npcs = this.merger.getNPCs();
 		for (NPC_ npc : npcs.getRecords()) {
 
@@ -44,18 +48,24 @@ public class RebuiltNPCAction extends Action {
 				npc.set(Skill.LIGHTARMOR, 100);
 				npc.set(Skill.HEAVYARMOR, 100);
 				
-//				if(this.isHumanBeing(npc)){
+				npc.addPerk(HeavyArmor1, 1);
+				npc.addPerk(lightArmor1, 1);
+
+				if (this.isHumanBeing(npc)) {
 //					npc.setHealthOffset(0);
-//				}
+				}
+
 				String name = npc.getName();
-				if(name.contains("Bear")||name.contains("Troll")||name.contains("Giant")||name.contains("Sabre Cat")){
-					npc.setHealthOffset(100*npc.get(NPCStat.LEVEL));
+				if (name.contains("Bear") || name.contains("Troll")
+						|| name.contains("Giant") || name.contains("Sabre Cat")
+						|| name.contains("Mammoth")) {
+					npc.setHealthOffset(50 * npc.get(NPCStat.LEVEL));
 				}
-				
-				if(name.contains("Dragon")){
-					npc.setHealthOffset(1000*npc.get(NPCStat.LEVEL));
+
+				if (name.contains("Dragon")) {
+					npc.setHealthOffset(500 * npc.get(NPCStat.LEVEL));
 				}
-				
+
 				this.patch.addRecord(npc);
 			}
 		}
