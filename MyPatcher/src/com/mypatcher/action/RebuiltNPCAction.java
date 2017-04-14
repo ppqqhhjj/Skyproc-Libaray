@@ -47,6 +47,14 @@ public class RebuiltNPCAction extends Action {
 //				if(this.isHumanBeing(npc)){
 //					npc.setHealthOffset(0);
 //				}
+				String name = npc.getName();
+				if(name.contains("Bear")||name.contains("Troll")||name.contains("Giant")||name.contains("Sabre Cat")){
+					npc.setHealthOffset(100*npc.get(NPCStat.LEVEL));
+				}
+				
+				if(name.contains("Dragon")){
+					npc.setHealthOffset(1000*npc.get(NPCStat.LEVEL));
+				}
 				
 				this.patch.addRecord(npc);
 			}
