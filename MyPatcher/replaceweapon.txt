@@ -1,0 +1,1 @@
+skyrim.esm:SteelSword|skyrim.esm:Imperialsword

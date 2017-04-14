@@ -1,0 +1,2 @@
+Female: skyrim.esm:                               ArmorSteelCuirassA:       |Hothtrooper44_ArmorCompilation_orig.esp: IAImperialKnightCuirass,IAImperialKnightCape,IAImperialKnightGreaves
+Both:   Hothtrooper44_ArmorCompilation_orig.esp:  IAImperialKnightCuirass:  |skyrim.esm:                               ArmorIronCuirass,ArmorIronGauntlets
