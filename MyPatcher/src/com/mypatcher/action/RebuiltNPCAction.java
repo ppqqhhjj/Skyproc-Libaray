@@ -1,7 +1,9 @@
 package com.mypatcher.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import skyproc.FormID;
 import skyproc.GRUP;
@@ -14,6 +16,7 @@ import skyproc.NPC_.NPCFlag;
 import skyproc.NPC_.NPCStat;
 import skyproc.NPC_.TemplateFlag;
 import skyproc.RACE;
+import skyproc.genenums.ActorValue;
 import skyproc.genenums.Skill;
 
 import com.mypatcher.Context;
@@ -28,61 +31,111 @@ public class RebuiltNPCAction extends Action {
 	@Override
 	public void doAction() {
 		this.rebuiltNPC();
+		this.rebuiltRace();
 
 	}
 
+	private void rebuiltRace() {
+
+		GRUP<RACE> races = this.merger.getRaces();
+
+		for (RACE race : races) {
+			boolean hasHeavyArmor = false;
+			boolean hasLightArmor = false;
+
+			List<Integer> uselessSkill = new ArrayList<>();
+
+			for (int i = 0; i < 7; i++) {
+				ActorValue skill = race.getSkillBoostSkill(i);
+				Integer value = Integer.valueOf(race.getSkillBoostValue(i));
+
+				if (skill == ActorValue.HeavyArmor) {
+					value = 100;
+					hasHeavyArmor = true;
+					race.setSkillBoost(i, skill, value);
+				}
+
+				if (skill == ActorValue.LightArmor) {
+					value = 100;
+					hasLightArmor = true;
+					race.setSkillBoost(i, skill, value);
+				}
+
+				if (skill == ActorValue.NONE) {
+					uselessSkill.add(0, Integer.valueOf(i));
+				}
+
+				if (skill == ActorValue.Speechcraft || skill == ActorValue.Alchemy || skill == ActorValue.Smithing
+						|| skill == ActorValue.Pickpocket || skill == ActorValue.Lockpicking
+						|| skill == ActorValue.Enchanting) {
+					uselessSkill.add(Integer.valueOf(i));
+				}
+
+			}
+
+			if (!hasHeavyArmor && !hasLightArmor) {
+				race.setSkillBoost(uselessSkill.get(0), ActorValue.HeavyArmor, 100);
+				race.setSkillBoost(uselessSkill.get(1), ActorValue.LightArmor, 100);
+			}
+
+			if (!hasHeavyArmor && hasLightArmor) {
+				race.setSkillBoost(uselessSkill.get(0), ActorValue.HeavyArmor, 100);
+			}
+
+			if (hasHeavyArmor && !hasLightArmor) {
+				race.setSkillBoost(uselessSkill.get(0), ActorValue.LightArmor, 100);
+			}
+
+			this.patch.addRecord(race);
+		}
+	}
+
 	private void rebuiltNPC() {
-		
-		FormID HeavyArmor1=this.merger.getPerks().get("Juggernaut00").getForm();
+
+		FormID HeavyArmor1 = this.merger.getPerks().get("Juggernaut00").getForm();
 		FormID lightArmor1 = this.merger.getPerks().get("AgileDefender00").getForm();
-		
+
 		GRUP<NPC_> npcs = this.merger.getNPCs();
 		for (NPC_ npc : npcs.getRecords()) {
 
 			// Log.console(npc.getEDID());
-			if (npc.getName() != null
-					&& !npc.getName().trim().equals("<NO TEXT>")) {
 
-				Log.console(npc.getEDID() + " : " + npc.getName());
+			// Log.console(npc.getEDID() + " : " + npc.getName());
 
-				npc.set(Skill.LIGHTARMOR, 100);
-				npc.set(Skill.HEAVYARMOR, 100);
-				
-				npc.addPerk(HeavyArmor1, 1);
-				npc.addPerk(lightArmor1, 1);
+			npc.addPerk(HeavyArmor1, 1);
+			npc.addPerk(lightArmor1, 1);
+			
+			npc.set(Skill.HEAVYARMOR, 100);
+			npc.set(Skill.LIGHTARMOR, 100);
 
-				if (this.isHumanBeing(npc)) {
-//					npc.setHealthOffset(0);
-				}
+			if (this.isHumanBeing(npc)) {
+				// npc.setHealthOffset(0);
+			}
 
+			if (npc.getName() != null && !npc.getName().trim().equals("<NO TEXT>")) {
 				String name = npc.getName();
-				if (name.contains("Bear") || name.contains("Troll")
-						|| name.contains("Giant") || name.contains("Sabre Cat")
-						|| name.contains("Mammoth")) {
+				if (name.contains("Bear") || name.contains("Troll") || name.contains("Giant")
+						|| name.contains("Sabre Cat") || name.contains("Mammoth")) {
 					npc.setHealthOffset(50 * npc.get(NPCStat.LEVEL));
 				}
 
 				if (name.contains("Dragon")) {
 					npc.setHealthOffset(500 * npc.get(NPCStat.LEVEL));
 				}
-
-				this.patch.addRecord(npc);
 			}
+			this.patch.addRecord(npc);
 		}
 	}
 
 	private boolean isHumanBeing(NPC_ npc) {
-		KYWD actorTypeNPC = (KYWD) this.merger.getMajor("ActorTypeNPC",
-				GRUP_TYPE.KYWD);
-		KYWD actorTypeUndead = (KYWD) this.merger.getMajor("ActorTypeUndead",
-				GRUP_TYPE.KYWD);
+		KYWD actorTypeNPC = (KYWD) this.merger.getMajor("ActorTypeNPC", GRUP_TYPE.KYWD);
+		KYWD actorTypeUndead = (KYWD) this.merger.getMajor("ActorTypeUndead", GRUP_TYPE.KYWD);
 
 		RACE race = (RACE) this.merger.getMajor(npc.getRace(), GRUP_TYPE.RACE);
 
 		ArrayList<FormID> keys = race.getKeywordSet().getKeywordRefs();
 
-		if (keys.contains(actorTypeNPC.getForm())
-				&& !keys.contains(actorTypeUndead.getForm())) {
+		if (keys.contains(actorTypeNPC.getForm()) && !keys.contains(actorTypeUndead.getForm())) {
 			return true;
 		}
 

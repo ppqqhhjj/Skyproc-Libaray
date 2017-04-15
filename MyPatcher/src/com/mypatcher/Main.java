@@ -51,10 +51,9 @@ import skyproc.gui.SUMGUI;
 
 public class Main implements SUM {
 
-	GRUP_TYPE[] importRequests = new GRUP_TYPE[] { GRUP_TYPE.LVLI,
-			GRUP_TYPE.ARMO, GRUP_TYPE.ARMA, GRUP_TYPE.WEAP, GRUP_TYPE.FLST,
-			GRUP_TYPE.KYWD, GRUP_TYPE.OTFT, GRUP_TYPE.ENCH, GRUP_TYPE.LVLN,GRUP_TYPE
-			.NPC_,GRUP_TYPE.RACE,GRUP_TYPE.PERK};
+	GRUP_TYPE[] importRequests = new GRUP_TYPE[] { GRUP_TYPE.LVLI, GRUP_TYPE.ARMO, GRUP_TYPE.ARMA, GRUP_TYPE.WEAP,
+			GRUP_TYPE.FLST, GRUP_TYPE.KYWD, GRUP_TYPE.OTFT, GRUP_TYPE.ENCH, GRUP_TYPE.LVLN, GRUP_TYPE.NPC_,
+			GRUP_TYPE.RACE, GRUP_TYPE.PERK };
 
 	private static String myPatchName = "Woody";
 	private static String version = "0.1";
@@ -64,21 +63,22 @@ public class Main implements SUM {
 
 	public static void main(String[] args) {
 
-			try {
-				Files.delete(new File("../../"+myPatchName+".esp").toPath());
-			} catch (IOException e1) {
-				throw new RuntimeException(e1); 
+		File esp = new File("../../" + myPatchName + ".esp");
+		try {
+			if (esp.exists()) {
+				Files.delete(esp.toPath());
 			}
+		} catch (IOException e1) {
+			throw new RuntimeException(e1);
+		}
 
 		try {
 			SPGlobal.createGlobalLog();
 			SUMGUI.open(new Main(), args);
 		} catch (Exception e) {
 			SPGlobal.logException(e);
-			JOptionPane.showMessageDialog(null,
-					"There was an exception thrown during program execution: '"
-							+ e
-							+ "'  Check the debug logs or contact the author.");
+			JOptionPane.showMessageDialog(null, "There was an exception thrown during program execution: '" + e
+					+ "'  Check the debug logs or contact the author.");
 			SPGlobal.closeDebug();
 		}
 	}
@@ -209,8 +209,8 @@ public class Main implements SUM {
 			// new ReplaceArmorModelAction(c).doAction();
 			// new ReplaceWeaponModelAction(c).doAction();
 			// new RemoveFantasticItemsAction(c).doAction();
-			 new DistributeNewItemsAction(c).doAction();
-			 new UnleveledSkyrimAction(c).doAction();
+//			new DistributeNewItemsAction(c).doAction();
+			new UnleveledSkyrimAction(c).doAction();
 			new RebuiltNPCAction(c).doAction();
 
 			// for (ARMO armor : armors) {
