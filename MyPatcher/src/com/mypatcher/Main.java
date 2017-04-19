@@ -1,50 +1,29 @@
 package com.mypatcher;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.mypatcher.action.DistributeNewItemsAction;
 import com.mypatcher.action.RebuiltNPCAction;
-import com.mypatcher.action.RemoveFantasticItemsAction;
-import com.mypatcher.action.ReplaceArmorModelAction;
-import com.mypatcher.action.ReplaceWeaponModelAction;
+import com.mypatcher.action.RebuiltWeaponAction;
+import com.mypatcher.action.RebuitArmorAction;
 import com.mypatcher.action.UnleveledSkyrimAction;
-import com.mypatcher.data.ReplaceItem;
-import com.mypatcher.type.GenderType;
 import com.mypatcher.utility.Log;
 
-import lev.LImport;
 import lev.gui.LSaveFile;
-import skyproc.ARMA;
 import skyproc.ARMO;
-import skyproc.AltTextures.AltTexture;
-import skyproc.BodyTemplate;
-import skyproc.BodyTemplate.BodyTemplateType;
-import skyproc.BodyTemplate.GeneralFlags;
-import skyproc.ECZN;
-import skyproc.FormID;
 import skyproc.GRUP;
 import skyproc.GRUP_TYPE;
-import skyproc.MajorRecord;
 import skyproc.Mod;
 import skyproc.ModListing;
 import skyproc.SPGlobal;
 import skyproc.SPImporter;
-import skyproc.genenums.FirstPersonFlags;
-import skyproc.genenums.Gender;
-import skyproc.genenums.Perspective;
 import skyproc.gui.SPMainMenuPanel;
 import skyproc.gui.SUM;
 import skyproc.gui.SUMGUI;
@@ -212,6 +191,8 @@ public class Main implements SUM {
 //			new DistributeNewItemsAction(c).doAction();
 			new UnleveledSkyrimAction(c).doAction();
 			new RebuiltNPCAction(c).doAction();
+			new RebuitArmorAction(c).doAction();
+			new RebuiltWeaponAction(c).doAction();
 
 			// for (ARMO armor : armors) {
 			// print(armor.getEDID());

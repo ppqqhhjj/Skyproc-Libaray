@@ -27,11 +27,16 @@ public class UnleveledSkyrimAction extends Action {
 	private void unLeveledItem() {
 		GRUP<LVLI> leveledItems = this.merger.getLeveledItems();
 		for (LVLI lvli : leveledItems.getRecords()) {
+			boolean needChange = false;
 			for (LeveledEntry entry : lvli.getEntries()) {
 				if (entry.getLevel() > 1) {
 					entry.setLevel(1);
-					this.patch.addRecord(lvli);
+					needChange = true;
 				}
+			}
+
+			if (needChange) {
+				this.patch.addRecord(lvli);
 			}
 		}
 	}
@@ -39,11 +44,16 @@ public class UnleveledSkyrimAction extends Action {
 	private void unLeveledNPC() {
 		GRUP<LVLN> leveledNPCs = this.merger.getLeveledCreatures();
 		for (LVLN lvln : leveledNPCs.getRecords()) {
+			boolean needChange = false;
 			for (LeveledEntry entry : lvln.getEntries()) {
 				if (entry.getLevel() > 1) {
 					entry.setLevel(1);
-					this.patch.addRecord(lvln);
+					needChange = true;
 				}
+			}
+
+			if (needChange) {
+				this.patch.addRecord(lvln);
 			}
 		}
 	}

@@ -92,18 +92,42 @@ public class RebuiltNPCAction extends Action {
 
 	private void rebuiltNPC() {
 
-		FormID HeavyArmor1 = this.merger.getPerks().get("Juggernaut00").getForm();
-		FormID lightArmor1 = this.merger.getPerks().get("AgileDefender00").getForm();
+		FormID BoneBreaker90 = this.merger.getPerks().get("BoneBreaker90").getForm();
+		FormID HackAndSlash90 = this.merger.getPerks().get("HackAndSlash90").getForm();
+		
+		FormID Skullcrusher90 = this.merger.getPerks().get("Skullcrusher90").getForm();
+		FormID Limbsplitter90 = this.merger.getPerks().get("Limbsplitter90").getForm();
+		
+		FormID DeflectArrows = this.merger.getPerks().get("DeflectArrows").getForm();
+		FormID PowerBashPerk = this.merger.getPerks().get("PowerBashPerk").getForm();
+		FormID ElementalProtection = this.merger.getPerks().get("ElementalProtection").getForm();
+		
+		FormID Conditioning = this.merger.getPerks().get("Conditioning").getForm();
+		
 
 		GRUP<NPC_> npcs = this.merger.getNPCs();
 		for (NPC_ npc : npcs.getRecords()) {
+			
+			if(npc.getEDID().equals("Player")){
+				continue;
+			}
 
 			// Log.console(npc.getEDID());
 
 			// Log.console(npc.getEDID() + " : " + npc.getName());
 
-			npc.addPerk(HeavyArmor1, 1);
-			npc.addPerk(lightArmor1, 1);
+			npc.addPerk(BoneBreaker90, 1);
+			npc.addPerk(HackAndSlash90, 1);
+			
+			npc.addPerk(Skullcrusher90, 1);
+			npc.addPerk(Limbsplitter90, 1);
+			
+			npc.addPerk(DeflectArrows, 1);
+//			npc.addPerk(PowerBashPerk, 1);
+			npc.addPerk(ElementalProtection, 1);
+			
+			npc.addPerk(Conditioning, 1);
+			
 			
 			npc.set(Skill.HEAVYARMOR, 100);
 			npc.set(Skill.LIGHTARMOR, 100);
@@ -114,13 +138,13 @@ public class RebuiltNPCAction extends Action {
 
 			if (npc.getName() != null && !npc.getName().trim().equals("<NO TEXT>")) {
 				String name = npc.getName();
-				if (name.contains("Bear") || name.contains("Troll") || name.contains("Giant")
-						|| name.contains("Sabre Cat") || name.contains("Mammoth")) {
-					npc.setHealthOffset(50 * npc.get(NPCStat.LEVEL));
-				}
+//				if (name.contains("Bear") || name.contains("Troll") || name.contains("Giant")
+//						|| name.contains("Sabre Cat") || name.contains("Mammoth")) {
+//					npc.setHealthOffset(50 * npc.get(NPCStat.LEVEL));
+//				}
 
 				if (name.contains("Dragon")) {
-					npc.setHealthOffset(500 * npc.get(NPCStat.LEVEL));
+					npc.setHealthOffset(200 * npc.get(NPCStat.LEVEL));
 				}
 			}
 			this.patch.addRecord(npc);

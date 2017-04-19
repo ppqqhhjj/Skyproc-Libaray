@@ -20,6 +20,7 @@ public class DistributeNewItemsAction extends Action {
 
 	private List<String> originalMods = new ArrayList<>();
 	private List<String> ignoreItem = new ArrayList<>();
+	private List<String> allowedMods = new ArrayList<>();
 
 	private List<LVLI> helmetHeavy = new ArrayList<>();
 	private List<LVLI> cuirassHeavy = new ArrayList<>();
@@ -32,7 +33,7 @@ public class DistributeNewItemsAction extends Action {
 	private List<LVLI> gauntletLight = new ArrayList<>();
 	private List<LVLI> bootLight = new ArrayList<>();
 	private List<LVLI> shieldLight = new ArrayList<>();
-	
+
 	private List<LVLI> Warhammer = new ArrayList<>();
 	private List<LVLI> WarAxe = new ArrayList<>();
 	private List<LVLI> Sword = new ArrayList<>();
@@ -43,7 +44,7 @@ public class DistributeNewItemsAction extends Action {
 
 	public DistributeNewItemsAction(Context context) {
 		super(context);
-		getOriginalMod();
+		InitModList();
 		getIgnoreItem();
 		InitLevledList();
 
@@ -62,70 +63,70 @@ public class DistributeNewItemsAction extends Action {
 				continue;
 			}
 
-			this.addArmorToList(armor);
+			if (this.isAllowed(armor)) {
+				this.addArmorToList(armor);
+			}
 
 		}
 	}
 
 	private void distributeWeapon() {
-		
-		
+
 		for (WEAP weapon : this.merger.getWeapons()) {
 			if (this.isIgnore(weapon)) {
 				continue;
 			}
-			this.addWeaponToList(weapon);
+
+			if (this.isAllowed(weapon)) {
+				this.addWeaponToList(weapon);
+			}
 
 		}
-		
+
 	}
-	
-	private void addWeaponToList(WEAP weapon){
-		KYWD WeapTypeWarhammer = (KYWD) this.merger
-				.getMajor("WeapTypeWarhammer", GRUP_TYPE.KYWD);
-		KYWD WeapTypeWarAxe = (KYWD) this.merger.getMajor("WeapTypeWarAxe",
-				GRUP_TYPE.KYWD);
-		KYWD WeapTypeSword = (KYWD) this.merger.getMajor("WeapTypeSword",
-				GRUP_TYPE.KYWD);
+
+	private void addWeaponToList(WEAP weapon) {
+		KYWD WeapTypeWarhammer = (KYWD) this.merger.getMajor("WeapTypeWarhammer", GRUP_TYPE.KYWD);
+		KYWD WeapTypeWarAxe = (KYWD) this.merger.getMajor("WeapTypeWarAxe", GRUP_TYPE.KYWD);
+		KYWD WeapTypeSword = (KYWD) this.merger.getMajor("WeapTypeSword", GRUP_TYPE.KYWD);
 		KYWD WeapTypeMace = (KYWD) this.merger.getMajor("WeapTypeMace", GRUP_TYPE.KYWD);
 
-		KYWD WeapTypeGreatsword = (KYWD) this.merger
-				.getMajor("WeapTypeGreatsword", GRUP_TYPE.KYWD);
-		
+		KYWD WeapTypeGreatsword = (KYWD) this.merger.getMajor("WeapTypeGreatsword", GRUP_TYPE.KYWD);
+
 		KYWD WeapTypeDagger = (KYWD) this.merger.getMajor("WeapTypeDagger", GRUP_TYPE.KYWD);
 
-		KYWD WeapTypeBattleaxe = (KYWD) this.merger
-				.getMajor("WeapTypeBattleaxe", GRUP_TYPE.KYWD);
-		
+		KYWD WeapTypeBattleaxe = (KYWD) this.merger.getMajor("WeapTypeBattleaxe", GRUP_TYPE.KYWD);
+
 		ArrayList<FormID> keys = weapon.getKeywordSet().getKeywordRefs();
-		
-		if(keys.contains(WeapTypeBattleaxe)){
+
+		if (keys.contains(WeapTypeBattleaxe)) {
 			this.addToList(weapon, this.Battleaxe);
-		}else if(keys.contains(WeapTypeDagger)){
+		} else if (keys.contains(WeapTypeDagger)) {
 			this.addToList(weapon, this.Dagger);
-		}else if(keys.contains(WeapTypeGreatsword)){
+		} else if (keys.contains(WeapTypeGreatsword)) {
 			this.addToList(weapon, this.Greatsword);
-		}else if(keys.contains(WeapTypeMace)){
+		} else if (keys.contains(WeapTypeMace)) {
 			this.addToList(weapon, this.Mace);
-		}else if(keys.contains(WeapTypeSword)){
+		} else if (keys.contains(WeapTypeSword)) {
 			this.addToList(weapon, this.Sword);
-		}else if(keys.contains(WeapTypeWarAxe)){
+		} else if (keys.contains(WeapTypeWarAxe)) {
 			this.addToList(weapon, this.WarAxe);
-		}else if(keys.contains(WeapTypeWarhammer)){
+		} else if (keys.contains(WeapTypeWarhammer)) {
 			this.addToList(weapon, this.Warhammer);
-		}else{
-			Log.console("Item: " + weapon.getEDID()
-					+ " has no valid keyword");
+		} else {
+			Log.console("Item: " + weapon.getEDID() + " has no valid keyword");
 		}
-		
+
 	}
 
-	private void getOriginalMod() {
+	private void InitModList() {
 		this.originalMods.add("Skyrim.esm");
 		this.originalMods.add("Update.esm");
 		this.originalMods.add("Dawnguard.esm");
 		this.originalMods.add("HearthFires.esm");
 		this.originalMods.add("Dragonborn.esm");
+
+		this.allowedMods.add("");
 
 	}
 
@@ -143,17 +144,22 @@ public class DistributeNewItemsAction extends Action {
 		return false;
 	}
 
+	// do not distribute original items.
+	private boolean isAllowed(MajorRecord record) {
+		if (this.allowedMods.contains(record.getFormStr().substring(6))) {
+			return true;
+		}
+
+		return false;
+	}
+
 	private void addArmorToList(ARMO armor) {
-		KYWD helmet = (KYWD) this.merger
-				.getMajor("ArmorHelmet", GRUP_TYPE.KYWD);
-		KYWD cuirass = (KYWD) this.merger.getMajor("ArmorCuirass",
-				GRUP_TYPE.KYWD);
-		KYWD gauntlet = (KYWD) this.merger.getMajor("ArmorGauntlets",
-				GRUP_TYPE.KYWD);
+		KYWD helmet = (KYWD) this.merger.getMajor("ArmorHelmet", GRUP_TYPE.KYWD);
+		KYWD cuirass = (KYWD) this.merger.getMajor("ArmorCuirass", GRUP_TYPE.KYWD);
+		KYWD gauntlet = (KYWD) this.merger.getMajor("ArmorGauntlets", GRUP_TYPE.KYWD);
 		KYWD boot = (KYWD) this.merger.getMajor("ArmorBoots", GRUP_TYPE.KYWD);
 
-		KYWD shield = (KYWD) this.merger
-				.getMajor("ArmorShield", GRUP_TYPE.KYWD);
+		KYWD shield = (KYWD) this.merger.getMajor("ArmorShield", GRUP_TYPE.KYWD);
 
 		ArrayList<FormID> keys = armor.getKeywordSet().getKeywordRefs();
 
@@ -169,8 +175,7 @@ public class DistributeNewItemsAction extends Action {
 			} else if (keys.contains(shield.getForm())) {
 				this.addToList(armor, this.shieldHeavy);
 			} else {
-				Log.console("Item: " + armor.getEDID()
-						+ " has no valid keyword");
+				Log.console("Item: " + armor.getEDID() + " has no valid keyword");
 			}
 
 		} else {
@@ -185,57 +190,38 @@ public class DistributeNewItemsAction extends Action {
 			} else if (keys.contains(shield.getForm())) {
 				this.addToList(armor, this.shieldLight);
 			} else {
-				Log.console("Item: " + armor.getEDID()
-						+ " has no valid keyword");
+				Log.console("Item: " + armor.getEDID() + " has no valid keyword");
 			}
 		}
 	}
 
 	private void InitLevledList() {
 
-		FormID helmetLight = this.merger.getMajor("ArmorHideHelmet",
-				GRUP_TYPE.ARMO).getForm();
-		FormID cuirassLight = this.merger.getMajor("ArmorHideCuirass",
-				GRUP_TYPE.ARMO).getForm();
-		FormID gauntletLight = this.merger.getMajor("ArmorHideGauntlets",
-				GRUP_TYPE.ARMO).getForm();
-		FormID bootLight = this.merger.getMajor("ArmorHideBoots",
-				GRUP_TYPE.ARMO).getForm();
-		FormID shieldLight = this.merger.getMajor("ArmorHideShield",
-				GRUP_TYPE.ARMO).getForm();
+		FormID helmetLight = this.merger.getMajor("ArmorHideHelmet", GRUP_TYPE.ARMO).getForm();
+		FormID cuirassLight = this.merger.getMajor("ArmorHideCuirass", GRUP_TYPE.ARMO).getForm();
+		FormID gauntletLight = this.merger.getMajor("ArmorHideGauntlets", GRUP_TYPE.ARMO).getForm();
+		FormID bootLight = this.merger.getMajor("ArmorHideBoots", GRUP_TYPE.ARMO).getForm();
+		FormID shieldLight = this.merger.getMajor("ArmorHideShield", GRUP_TYPE.ARMO).getForm();
 
-		FormID helmetHeavy = this.merger.getMajor("ArmorIronHelmet",
-				GRUP_TYPE.ARMO).getForm();
-		FormID cuirassHeavy = this.merger.getMajor("ArmorIronCuirass",
-				GRUP_TYPE.ARMO).getForm();
-		FormID gauntletHeavy = this.merger.getMajor("ArmorIronGauntlets",
-				GRUP_TYPE.ARMO).getForm();
-		FormID bootHeavy = this.merger.getMajor("ArmorIronBoots",
-				GRUP_TYPE.ARMO).getForm();
-		FormID shieldHeavy = this.merger.getMajor("ArmorIronShield",
-				GRUP_TYPE.ARMO).getForm();
-		
-		FormID SteelWarhammer = this.merger.getMajor("SteelWarhammer",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelWarAxe = this.merger.getMajor("SteelWarAxe",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelSword = this.merger.getMajor("SteelSword",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelMace = this.merger.getMajor("SteelMace",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelGreatsword = this.merger.getMajor("SteelGreatsword",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelDagger = this.merger.getMajor("SteelDagger",
-				GRUP_TYPE.WEAP).getForm();
-		FormID SteelBattleaxe = this.merger.getMajor("SteelBattleaxe",
-				GRUP_TYPE.WEAP).getForm();
-		
+		FormID helmetHeavy = this.merger.getMajor("ArmorIronHelmet", GRUP_TYPE.ARMO).getForm();
+		FormID cuirassHeavy = this.merger.getMajor("ArmorIronCuirass", GRUP_TYPE.ARMO).getForm();
+		FormID gauntletHeavy = this.merger.getMajor("ArmorIronGauntlets", GRUP_TYPE.ARMO).getForm();
+		FormID bootHeavy = this.merger.getMajor("ArmorIronBoots", GRUP_TYPE.ARMO).getForm();
+		FormID shieldHeavy = this.merger.getMajor("ArmorIronShield", GRUP_TYPE.ARMO).getForm();
+
+		FormID SteelWarhammer = this.merger.getMajor("SteelWarhammer", GRUP_TYPE.WEAP).getForm();
+		FormID SteelWarAxe = this.merger.getMajor("SteelWarAxe", GRUP_TYPE.WEAP).getForm();
+		FormID SteelSword = this.merger.getMajor("SteelSword", GRUP_TYPE.WEAP).getForm();
+		FormID SteelMace = this.merger.getMajor("SteelMace", GRUP_TYPE.WEAP).getForm();
+		FormID SteelGreatsword = this.merger.getMajor("SteelGreatsword", GRUP_TYPE.WEAP).getForm();
+		FormID SteelDagger = this.merger.getMajor("SteelDagger", GRUP_TYPE.WEAP).getForm();
+		FormID SteelBattleaxe = this.merger.getMajor("SteelBattleaxe", GRUP_TYPE.WEAP).getForm();
 
 		for (LVLI leveledItems : this.merger.getLeveledItems()) {
 
 			// Only add items to original leveled list, not mod.
-			if (!this.originalMods.contains(leveledItems.getFormStr()
-					.substring(6)) || !leveledItems.getEDID().contains("LItem")) {
+			if (!this.originalMods.contains(leveledItems.getFormStr().substring(6))
+					|| !leveledItems.getEDID().contains("LItem")) {
 				continue;
 			}
 			if (leveledItems.getEntryForms().contains(helmetLight)) {
@@ -269,8 +255,7 @@ public class DistributeNewItemsAction extends Action {
 			if (leveledItems.getEntryForms().contains(shieldHeavy)) {
 				this.shieldHeavy.add(leveledItems);
 			}
-			
-			
+
 			if (leveledItems.getEntryForms().contains(SteelWarhammer)) {
 				this.Warhammer.add(leveledItems);
 			}

@@ -1719,6 +1719,10 @@ public class RACE extends MajorRecordDescription {
 	    return null;
 	}
     }
+    
+    public ArrayList<ActorValue> getSkillBoosts(){
+    	return getDATA().skillBoosts;
+    }
 
     /**
      *
